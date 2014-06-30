@@ -217,9 +217,32 @@
         {
             var v = Vector2D.Parse(vs);
             var angle = Angle.Parse(@as);
-            var rv = v.Rotate(angle);
+            var actuals = new[]
+                          {
+                              v.Rotate(angle),
+                              v.Rotate(angle.Degrees, AngleUnit.Degrees)
+                          };
             var expected = Vector2D.Parse(evs);
-            AssertGemoetry.AreEqual(expected, rv, 0.1);
+            foreach (var actual in actuals)
+            {
+                AssertGemoetry.AreEqual(expected, actual, 0.01);
+            }
+        }
+
+        [TestCase("1, 2", "3, 4", 11)]
+        public void DotProduct(string vs, string evs, double expected)
+        {
+            var v1 = Vector2D.Parse(vs);
+            var v2 = Vector2D.Parse(evs);
+            Assert.AreEqual(expected, v1.DotProduct(v2));
+        }
+
+        [TestCase("2, 3", "0.55470019, 0.83205029")]
+        public void Normalize(string vs, string evs)
+        {
+            var v1 = Vector2D.Parse(vs);
+            var expected = Vector2D.Parse(evs);
+            AssertGemoetry.AreEqual(expected, v1.Normalize());
         }
 
         [TestCase("1,0", "0,1", "270°", "-90°")]
