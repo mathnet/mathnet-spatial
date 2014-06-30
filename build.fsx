@@ -71,6 +71,7 @@ let tags = "math spatial geometry"
 
 let libnet35 = "lib/net35"
 let libnet40 = "lib/net40"
+let libnet45 = "lib/net45"
 let libpcl47 = "lib/portable-net45+sl5+netcore45+MonoAndroid1+MonoTouch1"
 let libpcl344 = "lib/portable-net45+sl5+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1"
 
@@ -85,7 +86,7 @@ let spatialPack =
       Authors = [ "Christoph Ruegg"; "Johan Larsson" ]
       Dependencies = []
       Files = [ @"..\..\out\lib\Net35\MathNet.Spatial.*", Some libnet35, None;
-                @"..\..\out\lib\Net40\MathNet.Spatial.*", Some libnet40, None;
+                @"..\..\out\lib\Net45\MathNet.Spatial.*", Some libnet45, None;
                 @"..\..\out\lib\Profile47\MathNet.Spatial.*", Some libpcl47, None;
                 @"..\..\out\lib\Profile344\MathNet.Spatial.*", Some libpcl344, None;
                 @"..\..\src\Spatial\**\*.cs", Some "src/Common", None ] }
@@ -108,8 +109,8 @@ Target "Start" DoNothing
 Target "Clean" (fun _ ->
     CleanDirs [ "obj" ]
     CleanDirs [ "out/api"; "out/docs"; "out/packages" ]
-    CleanDirs [ "out/lib/Net35"; "out/lib/Net40"; "out/lib/Profile47"; "out/lib/Profile344" ]
-    CleanDirs [ "out/test/Net35"; "out/test/Net40"; "out/test/Profile47"; "out/test/Profile344" ])
+    CleanDirs [ "out/lib/Net35"; "out/lib/Net45"; "out/lib/Profile47"; "out/lib/Profile344" ]
+    CleanDirs [ "out/test/Net35"; "out/test/Net45"; "out/test/Profile47"; "out/test/Profile344" ])
 
 Target "RestorePackages" RestorePackages
 
@@ -138,9 +139,9 @@ Target "Prepare" DoNothing
 let buildConfig config subject = MSBuild "" (if hasBuildParam "incremental" then "Build" else "Rebuild") [ "Configuration", config ] subject |> ignore
 let build subject = buildConfig "Release" subject
 
-Target "BuildMain" (fun _ -> build !! "MathNet.Numerics.sln")
-Target "BuildNet35" (fun _ -> build !! "MathNet.Numerics.Net35Only.sln")
-Target "BuildAll" (fun _ -> build !! "MathNet.Numerics.All.sln")
+Target "BuildMain" (fun _ -> build !! "MathNet.Spatial.sln")
+Target "BuildNet35" (fun _ -> build !! "MathNet.Spatial.Net35Only.sln")
+Target "BuildAll" (fun _ -> build !! "MathNet.Spatial.All.sln")
 
 Target "Build" DoNothing
 "Prepare"
