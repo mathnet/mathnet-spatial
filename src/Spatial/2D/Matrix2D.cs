@@ -31,7 +31,7 @@
         /// <returns></returns>
         public static DenseMatrix Create(double m11, double m12, double m21, double m22)
         {
-            return DenseMatrix.OfColumnMajor(2, 2, new[] { m11, m21, m12, m22 });
+            return new DenseMatrix(2, 2, new[] { m11, m21, m12, m22 });
         }
     }
 }
