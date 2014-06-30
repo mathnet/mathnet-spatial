@@ -61,15 +61,67 @@ namespace MathNet.Spatial
             }
         }
 
-        public DenseVector ToDenseVector()
+        public static Point2D Origin
         {
-            return new DenseVector(new[] { this.X, this.Y });
+            get
+            {
+                return new Point2D(0, 0);
+            }
         }
 
         public static Point2D Parse(string value)
         {
             var doubles = Parser.ParseItem2D(value);
             return new Point2D(doubles);
+        }
+
+        public static Point2D ReadFrom(XmlReader reader)
+        {
+            var v = new Point2D();
+            v.ReadXml(reader);
+            return v;
+        }
+
+        public static Point2D Centroid(IEnumerable<Point2D> points)
+        {
+            return Centroid(points.ToArray());
+        }
+
+        public static Point2D Centroid(params Point2D[] points)
+        {
+            return new Point2D(
+                points.Average(point => point.X),
+                points.Average(point => point.Y));
+        }
+
+        public static Point2D MidPoint(Point2D point1, Point2D point2)
+        {
+            return Centroid(point1, point2);
+        }
+
+        public static Point2D operator +(Point2D point, Vector2D vector)
+        {
+            return new Point2D(point.X + vector.X, point.Y + vector.Y);
+        }
+
+        public static Point3D operator +(Point2D point, Vector3D vector)
+        {
+            return new Point3D(point.X + vector.X, point.Y + vector.Y, vector.Z);
+        }
+
+        public static Point2D operator -(Point2D point, Vector2D vector)
+        {
+            return new Point2D(point.X - vector.X, point.Y - vector.Y);
+        }
+
+        public static Point3D operator -(Point2D point, Vector3D vector)
+        {
+            return new Point3D(point.X - vector.X, point.Y - vector.Y, -1 * vector.Z);
+        }
+
+        public static Vector2D operator -(Point2D lhs, Point2D rhs)
+        {
+            return new Vector2D(lhs.X - rhs.X, lhs.Y - rhs.Y);
         }
 
         public static bool operator ==(Point2D left, Point2D right)
@@ -86,6 +138,11 @@ namespace MathNet.Spatial
         {
             var transformed = m.Multiply(this.ToDenseVector());
             return new Point2D(transformed);
+        }
+
+        public DenseVector ToDenseVector()
+        {
+            return new DenseVector(new[] { this.X, this.Y });
         }
 
         public override string ToString()
@@ -184,53 +241,6 @@ namespace MathNet.Spatial
             }
         }
 
-        public static Point2D ReadFrom(XmlReader reader)
-        {
-            var v = new Point2D();
-            v.ReadXml(reader);
-            return v;
-        }
-
-        public static Point2D Origin
-        {
-            get
-            {
-                return new Point2D(0, 0);
-            }
-        }
-
-        public static Point2D Centroid(IEnumerable<Point2D> points)
-        {
-            return Centroid(points.ToArray());
-        }
-
-        public static Point2D Centroid(params Point2D[] points)
-        {
-            return new Point2D(
-                points.Average(point => point.X),
-                points.Average(point => point.Y));
-        }
-
-        public static Point2D MidPoint(Point2D point1, Point2D point2)
-        {
-            return Centroid(point1, point2);
-        }
-
-        public static Point2D operator +(Point2D point, Vector3D vector)
-        {
-            return new Point2D(point.X + vector.X, point.Y + vector.Y);
-        }
-
-        public static Point2D operator -(Point2D point, Vector3D vector)
-        {
-            return new Point2D(point.X - vector.X, point.Y - vector.Y);
-        }
-
-        public static Vector2D operator -(Point2D lhs, Point2D rhs)
-        {
-            return new Vector2D(lhs.X - rhs.X, lhs.Y - rhs.Y);
-        }
-
         public Vector2D VectorTo(Point2D otherPoint)
         {
             return otherPoint - this;
@@ -246,7 +256,7 @@ namespace MathNet.Spatial
         {
             return new Vector2D(this.X, this.Y);
         }
-       
+
         /// <summary>
         /// return new Point3D(X, Y, 0);
         /// </summary>

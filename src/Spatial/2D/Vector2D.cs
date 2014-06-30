@@ -84,6 +84,12 @@
             }
         }
 
+        public static Vector2D Parse(string value)
+        {
+            var doubles = Parser.ParseItem2D(value);
+            return new Vector2D(doubles);
+        }
+
         public static Vector2D ReadFrom(XmlReader reader)
         {
             var v = new Vector2D();
@@ -130,13 +136,6 @@
         {
             return new DenseVector(new[] { this.X, this.Y });
         }
-
-        public static Vector2D Parse(string value)
-        {
-            var doubles = Parser.ParseItem2D(value);
-            return new Vector2D(doubles);
-        }
-
 
         public Vector2D TransformBy(Matrix<double> m)
         {
@@ -290,8 +289,8 @@
         public Angle AngleTo(Vector2D toVector2D)
         {
             var @this = this.Normalize();
-            var @other = toVector2D.Normalize();
-            return new Angle(Math.Acos(@this.DotProduct(@other)), AngleUnit.Radians);
+            var other = toVector2D.Normalize();
+            return new Angle(Math.Acos(@this.DotProduct(other)), AngleUnit.Radians);
         }
 
         public Vector2D Rotate<T>(double angle, T angleUnit) where T : IAngleUnit
