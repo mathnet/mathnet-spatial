@@ -19,7 +19,7 @@
             var av = Angle.Parse(avs);
             var p = new Point2D(r, av);
             var ep = Point2D.Parse(eps);
-            AssertGemoetry.AreEqual(ep, p, 1e-2);
+            AssertGeometry.AreEqual(ep, p, 1e-2);
         }
 
         [Test]
@@ -91,7 +91,7 @@
             var expected = Point2D.Parse(eps);
             foreach (var centroid in centroids)
             {
-                AssertGemoetry.AreEqual(expected, centroid);
+                AssertGeometry.AreEqual(expected, centroid);
             }
         }
 
@@ -108,7 +108,7 @@
             var expected = Point2D.Parse(eps);
             var rm = Matrix2D.Rotation(av);
             var actual = p.TransformBy(rm);
-            AssertGemoetry.AreEqual(expected, actual, 1e-2);
+            AssertGeometry.AreEqual(expected, actual, 1e-2);
         }
 
         [TestCase("-1, -2", "1, 2", "0, 0")]
@@ -186,7 +186,7 @@
         {
             var p = Point2D.Parse(vs);
             p.SerializeAsElements = asElements;
-            AssertXml.XmlRoundTrips(p, xml, (e, a) => AssertGemoetry.AreEqual(e, a));
+            AssertXml.XmlRoundTrips(p, xml, (e, a) => AssertGeometry.AreEqual(e, a));
         }
     }
 }

@@ -30,10 +30,10 @@
             };
             foreach (var cs in css)
             {
-                AssertGemoetry.AreEqual(origin, cs.Origin);
-                AssertGemoetry.AreEqual(xAxis, cs.XAxis);
-                AssertGemoetry.AreEqual(yAxis, cs.YAxis);
-                AssertGemoetry.AreEqual(zAxis, cs.ZAxis);
+                AssertGeometry.AreEqual(origin, cs.Origin);
+                AssertGeometry.AreEqual(xAxis, cs.XAxis);
+                AssertGeometry.AreEqual(yAxis, cs.YAxis);
+                AssertGeometry.AreEqual(zAxis, cs.ZAxis);
             }
         }
 
@@ -41,10 +41,10 @@
         public void ParseTests(string s, double[] ops, double[] xs, double[] ys, double[] zs)
         {
             var cs = CoordinateSystem.Parse(s);
-            AssertGemoetry.AreEqual(new Point3D(ops), cs.Origin);
-            AssertGemoetry.AreEqual(new Vector3D(xs), cs.XAxis);
-            AssertGemoetry.AreEqual(new Vector3D(ys), cs.YAxis);
-            AssertGemoetry.AreEqual(new Vector3D(zs), cs.ZAxis);
+            AssertGeometry.AreEqual(new Point3D(ops), cs.Origin);
+            AssertGeometry.AreEqual(new Vector3D(xs), cs.XAxis);
+            AssertGeometry.AreEqual(new Vector3D(ys), cs.YAxis);
+            AssertGeometry.AreEqual(new Vector3D(zs), cs.ZAxis);
         }
 
 
@@ -63,7 +63,7 @@
             var rcs = CoordinateSystem.Rotation(a, AngleUnit.Degrees, UnitVector3D.Parse(uvs));
             var rp = rcs.Transform(p);
             Console.WriteLine(rcs.ToString());
-            AssertGemoetry.AreEqual(Point3D.Parse(evs), rp);
+            AssertGeometry.AreEqual(Point3D.Parse(evs), rp);
         }
 
         [TestCase("2, 0, 0", "0, 0, 1", "2, 0, 1")]
@@ -79,7 +79,7 @@
             var cs = CoordinateSystem.Translation(Vector3D.Parse(vs));
             var tp = cs.Transform(p);
             Console.WriteLine(cs.ToString());
-            AssertGemoetry.AreEqual(Point3D.Parse(eps), tp);
+            AssertGeometry.AreEqual(Point3D.Parse(eps), tp);
         }
 
         [TestCase(X, X, null)]
@@ -108,10 +108,10 @@
             CoordinateSystem actual = CoordinateSystem.RotateTo(v1, v2, axis);
             Console.WriteLine(actual);
             var rv = actual.Transform(v1);
-            AssertGemoetry.AreEqual(v2, rv);
+            AssertGeometry.AreEqual(v2, rv);
             actual = CoordinateSystem.RotateTo(v2, v1, axis);
             rv = actual.Transform(v2);
-            AssertGemoetry.AreEqual(v1, rv);
+            AssertGeometry.AreEqual(v1, rv);
         }
 
         [TestCase(0, 0, 0, "1, 1, 1", "1, 1, 1", TestName = "No rotation")]
@@ -128,7 +128,7 @@
             var v = Vector3D.Parse(vs);
             var actual = cs.Transform(v);
             var expected = Vector3D.Parse(evs);
-            AssertGemoetry.AreEqual(expected, actual);
+            AssertGeometry.AreEqual(expected, actual);
         }
 
         [Test]
@@ -144,7 +144,7 @@
             CoordinateSystem cs = CoordinateSystem.Parse(css);
             Point3D actual = p.TransformBy(cs);
             var expected = Point3D.Parse(eps);
-            AssertGemoetry.AreEqual(expected, actual, float.Epsilon);
+            AssertGeometry.AreEqual(expected, actual, float.Epsilon);
         }
 
         [TestCase("1; -5; 3", "1; -5; 3", "o:{0, 0, 0} x:{1, 0, 0} y:{0, 1, 0} z:{0, 0, 1}")]
@@ -154,7 +154,7 @@
             CoordinateSystem cs = CoordinateSystem.Parse(css);
             Vector3D actual = cs.Transform(v);
             var expected = Vector3D.Parse(evs);
-            AssertGemoetry.AreEqual(expected, actual);
+            AssertGeometry.AreEqual(expected, actual);
         }
 
         [TestCase("o:{0, 0, 0} x:{1, 0, 0} y:{0, 1, 0} z:{0, 0, 1}", "o:{0, 0, 0} x:{1, 0, 0} y:{0, 1, 0} z:{0, 0, 1}")]
@@ -175,13 +175,13 @@
             foreach (var cs in css)
             {
                 var aligned = cs.Transform(fcs);
-                AssertGemoetry.AreEqual(tcs.Origin, aligned.Origin);
+                AssertGeometry.AreEqual(tcs.Origin, aligned.Origin);
 
-                AssertGemoetry.AreEqual(tcs.XAxis, aligned.XAxis);
+                AssertGeometry.AreEqual(tcs.XAxis, aligned.XAxis);
 
-                AssertGemoetry.AreEqual(tcs.YAxis, aligned.YAxis);
+                AssertGeometry.AreEqual(tcs.YAxis, aligned.YAxis);
 
-                AssertGemoetry.AreEqual(tcs.ZAxis, aligned.ZAxis);
+                AssertGeometry.AreEqual(tcs.ZAxis, aligned.ZAxis);
             }
         }
 
@@ -204,15 +204,15 @@
             }
             CoordinateSystem cs = CoordinateSystem.RotateTo(v, vt, axis);
             var rv = cs.Transform(v);
-            AssertGemoetry.AreEqual(vt, rv);
+            AssertGeometry.AreEqual(vt, rv);
 
             CoordinateSystem invert = cs.Invert();
             Vector3D rotateBack = invert.Transform(rv);
-            AssertGemoetry.AreEqual(v, rotateBack);
+            AssertGeometry.AreEqual(v, rotateBack);
 
             cs = CoordinateSystem.RotateTo(vt, v, axis);
             rotateBack = cs.Transform(rv);
-            AssertGemoetry.AreEqual(v, rotateBack);
+            AssertGeometry.AreEqual(v, rotateBack);
         }
 
         [Test]
@@ -221,7 +221,7 @@
             var cs = CoordinateSystem.Rotation(90, AngleUnit.Degrees, UnitVector3D.ZAxis);
             var uv = UnitVector3D.XAxis;
             var actual = cs.Transform(uv);
-            AssertGemoetry.AreEqual(UnitVector3D.YAxis, actual);
+            AssertGeometry.AreEqual(UnitVector3D.YAxis, actual);
         }
 
         [TestCase("o:{1, 2, -7} x:{10, 0, 0} y:{0, 1, 0} z:{0, 0, 1}", "o:{0, 0, 0} x:{1, 0, 0} y:{0, 1, 0} z:{0, 0, 1}")]
@@ -231,7 +231,7 @@
             var cs2 = CoordinateSystem.Parse(cs2s);
             var actual = cs1.Transform(cs2);
             var expected = new CoordinateSystem(cs1.Multiply(cs2));
-            AssertGemoetry.AreEqual(expected, actual);
+            AssertGeometry.AreEqual(expected, actual);
         }
 
         [Test]
@@ -245,7 +245,7 @@
     <YAxis X=""0"" Y=""0"" Z=""1"" />
     <ZAxis X=""1"" Y=""0"" Z=""0"" />
 </CoordinateSystem>";
-            AssertXml.XmlRoundTrips(cs, expected, (e, a) => AssertGemoetry.AreEqual(e, a));
+            AssertXml.XmlRoundTrips(cs, expected, (e, a) => AssertGeometry.AreEqual(e, a));
         }
     }
 }

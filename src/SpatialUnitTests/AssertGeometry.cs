@@ -4,7 +4,7 @@ namespace MathNet.SpatialUnitTests
     using Numerics.LinearAlgebra;
     using NUnit.Framework;
 
-    public static class AssertGemoetry
+    public static class AssertGeometry
     {
         public static void AreEqual(CoordinateSystem coordinateSystem, Point3D origin, Vector3D xAxis, Vector3D yAxis, Vector3D zAxis, double tolerance = 1e-6)
         {
@@ -27,7 +27,7 @@ namespace MathNet.SpatialUnitTests
             Assert.AreEqual(expected.Y, actual.Y, tolerance, message);
             Assert.AreEqual(expected.Z, actual.Z, tolerance, message);
         }
-        
+
         public static void AreEqual(Vector3D expected, Vector3D actual, double tolerance = 1e-6, string message = "")
         {
             if (string.IsNullOrEmpty(message))
@@ -54,7 +54,7 @@ namespace MathNet.SpatialUnitTests
             Assert.AreEqual(expected.X, actual.X, tolerance, message);
             Assert.AreEqual(expected.Y, actual.Y, tolerance, message);
         }
-        
+
         public static void AreEqual(Point3D expected, Point3D actual, double tolerance = 1e-6, string message = "")
         {
             if (string.IsNullOrEmpty(message))
@@ -63,7 +63,7 @@ namespace MathNet.SpatialUnitTests
             Assert.AreEqual(expected.Y, actual.Y, tolerance, message);
             Assert.AreEqual(expected.Z, actual.Z, tolerance, message);
         }
-        
+
         public static void AreEqual(CoordinateSystem expected, CoordinateSystem actual, double tolerance = 1e-6, string message = "")
         {
             if (string.IsNullOrEmpty(message))
@@ -75,7 +75,7 @@ namespace MathNet.SpatialUnitTests
                 Assert.AreEqual(expected.Values[i], actual.Values[i], tolerance);
             }
         }
-        
+
         public static void AreEqual(double[] expected, double[] actual, double tolerance = 1e-6, string message = "")
         {
             if (string.IsNullOrEmpty(message))
@@ -87,19 +87,19 @@ namespace MathNet.SpatialUnitTests
                 Assert.AreEqual(expected[i], actual[i], tolerance);
             }
         }
-        
+
         public static void AreEqual(Line3D expected, Line3D actual, double tolerance = 1e-6)
         {
             AreEqual(expected.StartPoint, actual.StartPoint, tolerance);
             AreEqual(expected.EndPoint, actual.EndPoint, tolerance);
         }
-        
+
         public static void AreEqual(Ray3D expected, Ray3D actual, double tolerance = 1e-6, string message = "")
         {
             AreEqual(expected.ThroughPoint, actual.ThroughPoint, tolerance, message);
             AreEqual(expected.Direction, actual.Direction, tolerance, message);
         }
-        
+
         public static void AreEqual(Plane expected, Plane actual, double tolerance = 1e-6, string message = "")
         {
             AreEqual(expected.Normal, actual.Normal, tolerance, message);
@@ -118,7 +118,7 @@ namespace MathNet.SpatialUnitTests
                 Assert.AreEqual(expectedRowWiseArray[i], actualRowWiseArray[i], tolerance);
             }
         }
-        
+
         public static void AreEqual(Point2D expected, Point2D actual, double tolerance = 1e-6, string message = "")
         {
             if (string.IsNullOrEmpty(message))

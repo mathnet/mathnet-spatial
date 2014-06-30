@@ -21,7 +21,7 @@
             var av = Angle.Parse(avs);
             var p = new Vector2D(r, av);
             var ep = Vector2D.Parse(eps);
-            AssertGemoetry.AreEqual(ep, p, 1e-2);
+            AssertGeometry.AreEqual(ep, p, 1e-2);
         }
 
         [Test]
@@ -225,7 +225,7 @@
             var expected = Vector2D.Parse(evs);
             foreach (var actual in actuals)
             {
-                AssertGemoetry.AreEqual(expected, actual, 0.01);
+                AssertGeometry.AreEqual(expected, actual, 0.01);
             }
         }
 
@@ -242,7 +242,7 @@
         {
             var v1 = Vector2D.Parse(vs);
             var expected = Vector2D.Parse(evs);
-            AssertGemoetry.AreEqual(expected, v1.Normalize());
+            AssertGeometry.AreEqual(expected, v1.Normalize());
         }
 
         [TestCase("1,0", "0,1", "270°", "-90°")]
@@ -271,7 +271,7 @@
         {
             var p = Vector2D.Parse(vs);
             p.SerializeAsElements = asElements;
-            AssertXml.XmlRoundTrips(p, xml, (e, a) => AssertGemoetry.AreEqual(e, a));
+            AssertXml.XmlRoundTrips(p, xml, (e, a) => AssertGeometry.AreEqual(e, a));
         }
 
         [Test]
@@ -285,7 +285,7 @@
                 ms.Flush();
                 ms.Position = 0;
                 var roundTrip = (Vector2D)formatter.Deserialize(ms);
-                AssertGemoetry.AreEqual(v, roundTrip);
+                AssertGeometry.AreEqual(v, roundTrip);
             }
         }
     }
