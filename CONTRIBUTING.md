@@ -13,12 +13,6 @@ Math.NET Spatial is driven by the community and contributors like you. I'm excit
 
 We use the [Fork & Pull Model](https://help.github.com/articles/using-pull-requests/), as common for GitHub projects. If you've already contributed to another GitHub project then you're all set. If not, [here is another  introduction](https://gun.io/blog/how-to-github-fork-branch-and-pull-request/).
 
-**C# Solutions, Projects and Files**  
-We have two kind of C# projects: primary (*Spatial.csproj, UnitTests.csproj*) and secondary (*Spatial-xy.csproj, UnitTests-xy.csproj*). The primary ones are the common VisualStudio project files you usually work with. The secondary projects on the other hand are not intended to be modified and include all files automatically. Whenever you need to add, remove or move a file, please do so in the primary projects only. In most cases we recommend to work with the `MathNet.Spatial.sln` solution which only includes primary projects anyway - except when working on and testing portability/compatibility.
-
-**F# Projects**  
-F# does not support the wildcard approach of the C# projects by design, so whenever you add, remove or move an F# file please manually update all F# projects accordingly, including the secondary platform specific ones in the `MathNet.Spatial.All.sln` solution. This is a bit tedious but we have not found a better solution yet.
-
 **Separate Branch per Pull Request**  
 We recommend that you create a separate branch for each pull request, as opposed to using master. This makes it much easier to continue working on a pull request even after it has been opened on GitHub. Remember that GitHub automatically includes all future commits of the same branch to the pull request.
 

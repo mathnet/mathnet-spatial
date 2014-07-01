@@ -16,3 +16,4 @@ The Math.NET project is a community effort. We accept contributions and pull req
 Feel free to add a link to your personal site/blog and/or twitter handle.*
 
 - Johan Larsson
+- [Christoph Rüegg](http://christoph.ruegg.name/) (@cdrnet)
