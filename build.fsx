@@ -296,7 +296,7 @@ Target "DocsDev" (fun _ ->
 Target "CleanApi" (fun _ -> CleanDirs ["out/api"])
 
 Target "Api" (fun _ ->
-    !! "out/lib/Net40/MathNet.Spatial.dll"
+    !! "out/lib/Net45/MathNet.Spatial.dll"
     |> Docu (fun p ->
         { p with
             ToolPath = "tools/docu/docu.exe"
@@ -337,8 +337,8 @@ Target "PublishDocs" (fun _ ->
 Target "PublishApi" (fun _ ->
     let repo = "../mathnet-websites"
     Git.Branches.pull repo "origin" "master"
-    CleanDir "../mathnet-websites/api-spatial"
-    CopyRecursive "out/api" "../mathnet-websites/api-spatial" true |> printfn "%A"
+    CleanDir "../mathnet-websites/spatial/api"
+    CopyRecursive "out/api" "../mathnet-websites/spatial/api" true |> printfn "%A"
     Git.Staging.StageAll repo
     Git.Commit.Commit repo (sprintf "Spatial: %s api update" packageVersion)
     Git.Branches.pushBranch repo "origin" "master")
