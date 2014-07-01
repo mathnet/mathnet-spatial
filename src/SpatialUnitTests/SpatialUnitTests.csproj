@@ -23,9 +23,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <OutputPath>..\..\out\test-debug\Net40\</OutputPath>
-    <IntermediateOutputPath>..\..\obj\test-debug\Net40\</IntermediateOutputPath>
-    <BaseIntermediateOutputPath>..\..\obj\test-debug\Net40\</BaseIntermediateOutputPath>
+    <OutputPath>..\..\out\test-debug\Net45\</OutputPath>
+    <IntermediateOutputPath>..\..\obj\test-debug\Net45\</IntermediateOutputPath>
+    <BaseIntermediateOutputPath>..\..\obj\test-debug\Net45\</BaseIntermediateOutputPath>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>

@@ -10,13 +10,30 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{5DFFCA1B-44E9-4A2F-824D-24AFC1D24465}"
 	ProjectSection(SolutionItems) = preProject
 		build.fsx = build.fsx
+		build\MathNet.Spatial.Extension.nuspec = build\MathNet.Spatial.Extension.nuspec
+		build\MathNet.Spatial.nuspec = build\MathNet.Spatial.nuspec
 		build\packages.config = build\packages.config
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Readme", "Readme", "{1AA0731C-23C9-470A-883C-AFFB97ABDB11}"
 	ProjectSection(SolutionItems) = preProject
+		CONTRIBUTING.md = CONTRIBUTING.md
+		CONTRIBUTORS.md = CONTRIBUTORS.md
+		LICENSE.md = LICENSE.md
 		README.md = README.md
 		RELEASENOTES.md = RELEASENOTES.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{EE2B5EB3-FBB7-447B-9FC8-E0802F01093F}"
+	ProjectSection(SolutionItems) = preProject
+		docs\tools\build-docs.fsx = docs\tools\build-docs.fsx
+		docs\tools\packages.config = docs\tools\packages.config
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{4A482849-FD4F-47D4-9AA7-B8530BF1C730}"
+	ProjectSection(SolutionItems) = preProject
+		docs\content\index.fsx = docs\content\index.fsx
+		docs\tools\templates\template.cshtml = docs\tools\templates\template.cshtml
 	EndProjectSection
 EndProject
 Global
@@ -36,5 +53,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{EE2B5EB3-FBB7-447B-9FC8-E0802F01093F} = {5DFFCA1B-44E9-4A2F-824D-24AFC1D24465}
 	EndGlobalSection
 EndGlobal

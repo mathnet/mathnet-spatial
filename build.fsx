@@ -122,7 +122,7 @@ Target "ApplyVersion" (fun _ ->
                 AssemblyFileVersion = assemblyVersion
                 AssemblyInformationalVersion = packageVersion })
     patchAssemblyInfo "src/Spatial" assemblyVersion packageVersion
-    patchAssemblyInfo "src/UnitTests" assemblyVersion packageVersion)
+    patchAssemblyInfo "src/SpatialUnitTests" assemblyVersion packageVersion)
 
 Target "Prepare" DoNothing
 "Start"
@@ -173,12 +173,12 @@ Target "Test" (fun _ -> test !! "out/test/**/*UnitTests*.dll")
 
 let provideLicense path =
     ReadFileAsString "LICENSE.md"
-    |> ConvertTextToWindowsLineBreaks 
+    |> ConvertTextToWindowsLineBreaks
     |> ReplaceFile (path @@ "license.txt")
 
 let provideReadme title releasenotes path =
     String.concat Environment.NewLine [header; " " + title; ""; ReadFileAsString releasenotes]
-    |> ConvertTextToWindowsLineBreaks 
+    |> ConvertTextToWindowsLineBreaks
     |> ReplaceFile (path @@ "readme.txt")
 
 let provideFsLoader includes path =
@@ -211,11 +211,11 @@ let zip zipDir filesDir filesFilter bundle =
     provideZipExtraFiles workPath bundle
     Zip "obj/Zip/" (zipDir @@ sprintf "%s-%s.zip" bundle.Id bundle.Version) !! (workPath + "/**/*.*")
     CleanDir "obj/Zip"
-    
+
 Target "Zip" (fun _ ->
     CleanDir "out/packages/Zip"
     if not (hasBuildParam "signed") || hasBuildParam "release" then
-        coreBundle |> zip "out/packages/Zip" "out/lib" (fun f -> f.Contains("MathNet.Numerics.")))
+        coreBundle |> zip "out/packages/Zip" "out/lib" (fun f -> f.Contains("MathNet.Spatial.")))
 "Build" ==> "Zip"
 
 
@@ -248,9 +248,9 @@ let nugetPack bundle outPath =
                                   | (s, t, None) -> Some (s, t, Some ("**/*.pdb"))
                                   | (s, t, Some e) -> Some (s, t, Some (e + ";**/*.pdb"))) f
         // first pass - generates symbol + normal package. NuGet does drop the symbols from the normal package, but unfortunately not the sources.
-        NuGet (updateNuspec pack outPath NugetSymbolPackage.Nuspec withLicenseReadme) "build/MathNet.Numerics.nuspec"
+        NuGet (updateNuspec pack outPath NugetSymbolPackage.Nuspec withLicenseReadme) "build/MathNet.Spatial.nuspec"
         // second pass - generate only normal package, again, but this time explicitly drop the sources (and the debug symbols)
-        NuGet (updateNuspec pack outPath NugetSymbolPackage.None (withLicenseReadme >> withoutSymbolsSources)) "build/MathNet.Numerics.nuspec"
+        NuGet (updateNuspec pack outPath NugetSymbolPackage.None (withLicenseReadme >> withoutSymbolsSources)) "build/MathNet.Spatial.nuspec"
         CleanDir "obj/NuGet"
 
 let nugetPackExtension bundle outPath =
@@ -258,7 +258,7 @@ let nugetPackExtension bundle outPath =
     for pack in bundle.Packages do
         provideNuGetExtraFiles "obj/NuGet" bundle pack
         let withLicenseReadme f = [ "license.txt", None, None; "readme.txt", None, None; ] @ f
-        NuGet (updateNuspec pack outPath NugetSymbolPackage.None withLicenseReadme) "build/MathNet.Numerics.Extension.nuspec"
+        NuGet (updateNuspec pack outPath NugetSymbolPackage.None withLicenseReadme) "build/MathNet.Spatial.Extension.nuspec"
         CleanDir "obj/NuGet"
 
 Target "NuGet" (fun _ ->
