@@ -7,8 +7,8 @@
     <ProjectGuid>{79785508-B059-4DFA-B408-15588C551DC6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MathNet.SpatialUnitTests</RootNamespace>
-    <AssemblyName>MathNet.SpatialUnitTests</AssemblyName>
+    <RootNamespace>MathNet.Spatial.UnitTests</RootNamespace>
+    <AssemblyName>MathNet.Spatial.UnitTests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
