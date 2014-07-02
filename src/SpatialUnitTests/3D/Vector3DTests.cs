@@ -14,6 +14,48 @@ namespace MathNet.Spatial.UnitTests
         const string NegativeY = "0; -1; 0";
         const string NegativeZ = "0; 0; -1";
 
+        [Test]
+        public void Ctor()
+        {
+            var actuals = new[]
+            {
+                new Vector3D(1, 2, 3),
+                new Vector3D(new[] {1, 2, 3.0}),
+            };
+            foreach (var actual in actuals)
+            {
+                Assert.AreEqual(1, actual.X, 1e-6);
+                Assert.AreEqual(2, actual.Y, 1e-6);
+                Assert.AreEqual(3, actual.Z, 1e-6);
+            }
+            Assert.Throws<ArgumentException>(() => new Vector3D(new[] { 1.0, 2, 3, 4 }));
+        }
+
+        [Test]
+        public void ToDenseVector()
+        {
+            var v = new Vector3D(1, 2, 3);
+            var denseVector = v.ToDenseVector();
+            Assert.AreEqual(3, denseVector.Count);
+            Assert.AreEqual(1, denseVector[0], 1e-6);
+            Assert.AreEqual(2, denseVector[1], 1e-6);
+            Assert.AreEqual(3, denseVector[2], 1e-6);
+        }
+
+        [TestCase("1, 2, 3", "1, 2, 3", 1e-4, true)]
+        [TestCase("1, 2, 3", "4, 5, 6", 1e-4, false)]
+        public void Equals(string p1s, string p2s, double tol, bool expected)
+        {
+            var v1 = Vector3D.Parse(p1s);
+            var v2 = Vector3D.Parse(p2s);
+            Assert.AreEqual(expected, v1 == v2);
+            Assert.AreEqual(expected, v1.Equals(v2));
+            Assert.AreEqual(expected, v1.Equals((object)v2));
+            Assert.AreEqual(expected, Equals(v1, v2));
+            Assert.AreEqual(expected, v1.Equals(v2, tol));
+            Assert.AreNotEqual(expected, v1 != v2);
+        }
+
         [TestCase("1; 0 ; 0")]
         [TestCase("1; 1 ; 0")]
         [TestCase("1; -1 ; 0")]

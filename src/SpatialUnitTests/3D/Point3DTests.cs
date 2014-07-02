@@ -4,9 +4,53 @@ using NUnit.Framework;
 
 namespace MathNet.Spatial.UnitTests
 {
+    using System;
+
     [TestFixture]
     public class Point3DTests
     {
+        [Test]
+        public void Ctor()
+        {
+            var actuals = new[]
+            {
+                new Point3D(1, 2, 3),
+                new Point3D(new[] {1, 2, 3.0}),
+            };
+            foreach (var actual in actuals)
+            {
+                Assert.AreEqual(1, actual.X, 1e-6);
+                Assert.AreEqual(2, actual.Y, 1e-6);
+                Assert.AreEqual(3, actual.Z, 1e-6);
+            }
+            Assert.Throws<ArgumentException>(() => new Point3D(new[] { 1.0, 2, 3, 4 }));
+        }
+
+        [Test]
+        public void ToDenseVector()
+        {
+            var p = new Point3D(1, 2, 3);
+            var denseVector = p.ToDenseVector();
+            Assert.AreEqual(3, denseVector.Count);
+            Assert.AreEqual(1, denseVector[0], 1e-6);
+            Assert.AreEqual(2, denseVector[1], 1e-6);
+            Assert.AreEqual(3, denseVector[2], 1e-6);
+        }
+
+        [TestCase("1, 2, 3", "1, 2, 3", 1e-4, true)]
+        [TestCase("1, 2, 3", "4, 5, 6", 1e-4, false)]
+        public void Equals(string p1s, string p2s, double tol, bool expected)
+        {
+            var p1 = Point3D.Parse(p1s);
+            var p2 = Point3D.Parse(p2s);
+            Assert.AreEqual(expected, p1 == p2);
+            Assert.AreEqual(expected, p1.Equals(p2));
+            Assert.AreEqual(expected, p1.Equals((object)p2));
+            Assert.AreEqual(expected, Equals(p1, p2));
+            Assert.AreEqual(expected, p1.Equals(p2, tol));
+            Assert.AreNotEqual(expected, p1 != p2);
+        }
+
         [TestCase("0, 0, 0", "0, 0, 1", "0, 0, 0.5")]
         [TestCase("0, 0, 1", "0, 0, 0", "0, 0, 0.5")]
         [TestCase("0, 0, 0", "0, 0, 0", "0, 0, 0")]

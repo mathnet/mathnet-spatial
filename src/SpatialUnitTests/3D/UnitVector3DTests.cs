@@ -4,16 +4,70 @@ using NUnit.Framework;
 
 namespace MathNet.Spatial.UnitTests
 {
+    using System;
+
     [TestFixture]
     public class UnitVector3DTests
     {
-        const string X = "1; 0 ; 0";
-        const string Y = "0; 1; 0";
-        const string Z = "0; 0; 1";
-        const string NegativeX = "-1; 0; 0";
-        const string NegativeY = "0; -1; 0";
-        const string NegativeZ = "0; 0; -1";
-        const string ZeroPoint = "0; 0; 0";
+        [Test]
+        public void Ctor()
+        {
+            var l = Math.Sqrt(1 * 1 + 2 * 2 + 3 * 3);
+            var actuals = new[]
+            {
+                new UnitVector3D(1/l, 2/l, 3/l),
+                new UnitVector3D(1, 2, 3), // Ctor normalizes
+                new UnitVector3D(new[] {1, 2, 3.0}),
+                new UnitVector3D(new[] {1/l, 2/l, 3.0/l}),
+            };
+            foreach (var actual in actuals)
+            {
+                Assert.AreEqual(1 / l, actual.X, 1e-6);
+                Assert.AreEqual(2 / l, actual.Y, 1e-6);
+                Assert.AreEqual(3 / l, actual.Z, 1e-6);
+            }
+            Assert.Throws<ArgumentException>(() => new UnitVector3D(new[] { 1.0, 2, 3, 4 }));
+        }
+
+        [Test]
+        public void ToDenseVector()
+        {
+            var l = Math.Sqrt(1 * 1 + 2 * 2 + 3 * 3);
+
+            var uv = new UnitVector3D(1 / l, 2 / l, 3 / l);
+            var denseVector = uv.ToDenseVector();
+            Assert.AreEqual(3, denseVector.Count);
+            Assert.AreEqual(1 / l, denseVector[0], 1e-6);
+            Assert.AreEqual(2 / l, denseVector[1], 1e-6);
+            Assert.AreEqual(3 / l, denseVector[2], 1e-6);
+        }
+
+        [TestCase("1, 2, 3", "1, 2, 3", 1e-4, true)]
+        [TestCase("1, 2, 3", "4, 5, 6", 1e-4, false)]
+        public void Equals(string p1s, string p2s, double tol, bool expected)
+        {
+            var v1 = UnitVector3D.Parse(p1s);
+            var v2 = UnitVector3D.Parse(p2s);
+            var vector3D = v1.ToVector3D();
+            Assert.AreEqual(expected, v1 == v2);
+            Assert.IsTrue(v1 == vector3D);
+            Assert.IsTrue(vector3D == v1);
+
+            Assert.AreEqual(expected, v1.Equals(v2));
+            Assert.IsTrue(v1.Equals(vector3D));
+            Assert.IsTrue(vector3D.Equals(v1));
+            Assert.AreEqual(expected, v1.Equals(v2.ToVector3D()));
+            Assert.AreEqual(expected, v2.ToVector3D().Equals(v1));
+
+            Assert.AreEqual(expected, v1.Equals((object)v2));
+            Assert.AreEqual(expected, Equals(v1, v2));
+
+            Assert.AreEqual(expected, v1.Equals(v2, tol));
+            Assert.AreNotEqual(expected, v1 != v2);
+            Assert.AreNotEqual(expected, v1 != v2.ToVector3D());
+            Assert.AreNotEqual(expected, v2.ToVector3D() != v1);
+        }
+
         [TestCase("1; 0; 0", 5, "5; 0; 0")]
         [TestCase("1; 0; 0", -5, "-5; 0; 0")]
         [TestCase("-1; 0; 0", 5, "-5; 0; 0")]
