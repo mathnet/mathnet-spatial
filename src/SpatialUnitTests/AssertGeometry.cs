@@ -1,9 +1,8 @@
-namespace MathNet.SpatialUnitTests
-{
-    using Spatial;
-    using Numerics.LinearAlgebra;
-    using NUnit.Framework;
+using MathNet.Numerics.LinearAlgebra;
+using NUnit.Framework;
 
+namespace MathNet.Spatial.UnitTests
+{
     public static class AssertGeometry
     {
         public static void AreEqual(CoordinateSystem coordinateSystem, Point3D origin, Vector3D xAxis, Vector3D yAxis, Vector3D zAxis, double tolerance = 1e-6)

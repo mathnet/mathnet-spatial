@@ -1,11 +1,11 @@
-﻿namespace MathNet.SpatialUnitTests.Unts
-{
-    using System;
-    using System.Globalization;
-    using System.Reflection;
-    using Spatial.Units;
-    using NUnit.Framework;
+﻿using System;
+using System.Globalization;
+using System.Reflection;
+using MathNet.Spatial.Units;
+using NUnit.Framework;
 
+namespace MathNet.Spatial.UnitTests.Units
+{
     public class AngleTests
     {
         private const double Tolerance = 1e-6;

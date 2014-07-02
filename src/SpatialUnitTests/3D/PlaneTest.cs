@@ -1,11 +1,10 @@
-﻿namespace MathNet.SpatialUnitTests
-{
-    using System;
-    using System.IO;
-    using System.Runtime.Serialization.Formatters.Binary;
-    using Spatial;
-    using NUnit.Framework;
+﻿using System;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using NUnit.Framework;
 
+namespace MathNet.Spatial.UnitTests
+{
     [TestFixture]
     public class PlaneTest
     {
@@ -45,7 +44,6 @@
             AssertGeometry.AreEqual(expected, projectedPoint, float.Epsilon);
         }
 
-        [Test]
         private void ProjectPoint(Point3D pointToProject, Point3D planeRootPoint, UnitVector3D planeNormal, Point3D projectedresult)
         {
             var plane = new Plane(planeNormal, planeRootPoint);

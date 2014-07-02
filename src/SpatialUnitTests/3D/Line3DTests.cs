@@ -1,12 +1,10 @@
-﻿namespace MathNet.SpatialUnitTests
-{
-    using System;
-    using System.Diagnostics;
-    using System.IO;
-    using System.Runtime.Serialization.Formatters.Binary;
-    using Spatial;
-    using NUnit.Framework;
+﻿using System;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using NUnit.Framework;
 
+namespace MathNet.Spatial.UnitTests
+{
     [TestFixture]
     public class Line3DTests
     {

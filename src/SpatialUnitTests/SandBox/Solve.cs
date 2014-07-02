@@ -1,13 +1,12 @@
-﻿namespace MathNet.SpatialUnitTests.SandBox
+﻿using System;
+using System.Linq;
+using System.Text;
+using MathNet.Numerics.LinearAlgebra;
+using MathNet.Numerics.LinearAlgebra.Double;
+using NUnit.Framework;
+
+namespace MathNet.Spatial.UnitTests.SandBox
 {
-    using System;
-    using System.Linq;
-    using System.Runtime.InteropServices;
-    using System.Text;
-    using Spatial;
-    using Numerics.LinearAlgebra;
-    using Numerics.LinearAlgebra.Double;
-    using NUnit.Framework;
     [Explicit]
     public class Solve
     {

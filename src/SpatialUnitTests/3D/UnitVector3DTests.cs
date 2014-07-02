@@ -1,10 +1,9 @@
-﻿namespace MathNet.SpatialUnitTests
-{
-    using System.IO;
-    using System.Xml;
-    using Spatial;
-    using NUnit.Framework;
+﻿using System.IO;
+using System.Xml;
+using NUnit.Framework;
 
+namespace MathNet.Spatial.UnitTests
+{
     [TestFixture]
     public class UnitVector3DTests
     {

@@ -1,13 +1,12 @@
-﻿namespace MathNet.SpatialUnitTests
-{
-    using System;
-    using System.IO;
-    using System.Runtime.Serialization.Formatters.Binary;
-    using Numerics.LinearAlgebra.Double;
-    using NUnit.Framework;
-    using Spatial;
-    using Spatial.Units;
+﻿using System;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using MathNet.Numerics.LinearAlgebra.Double;
+using MathNet.Spatial.Units;
+using NUnit.Framework;
 
+namespace MathNet.Spatial.UnitTests
+{
     public class Vector2DTests
     {
         [TestCase(5, "90 °", "0, 5")]

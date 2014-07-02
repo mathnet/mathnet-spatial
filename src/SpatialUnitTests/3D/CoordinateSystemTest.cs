@@ -1,10 +1,9 @@
-﻿namespace MathNet.SpatialUnitTests
-{
-    using System;
-    using Spatial;
-    using Spatial.Units;
-    using NUnit.Framework;
+﻿using System;
+using MathNet.Spatial.Units;
+using NUnit.Framework;
 
+namespace MathNet.Spatial.UnitTests
+{
     [TestFixture]
     public class CoordinateSystemTest
     {

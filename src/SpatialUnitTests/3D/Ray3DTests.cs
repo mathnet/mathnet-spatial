@@ -1,10 +1,9 @@
-﻿namespace MathNet.SpatialUnitTests
-{
-    using System.IO;
-    using System.Runtime.Serialization.Formatters.Binary;
-    using Spatial;
-    using NUnit.Framework;
+﻿using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using NUnit.Framework;
 
+namespace MathNet.Spatial.UnitTests
+{
     [TestFixture]
     public class Ray3DTests
     {

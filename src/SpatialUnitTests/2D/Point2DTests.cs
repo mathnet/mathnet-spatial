@@ -1,11 +1,10 @@
-﻿namespace MathNet.SpatialUnitTests
-{
-    using System;
-    using Numerics.LinearAlgebra.Double;
-    using Spatial;
-    using Spatial.Units;
-    using NUnit.Framework;
+﻿using System;
+using MathNet.Numerics.LinearAlgebra.Double;
+using MathNet.Spatial.Units;
+using NUnit.Framework;
 
+namespace MathNet.Spatial.UnitTests
+{
     public class Point2DTests
     {
         [TestCase(5, "90 °", "0, 5")]
