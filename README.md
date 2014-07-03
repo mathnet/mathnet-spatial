@@ -1,7 +1,7 @@
 Math.NET Spatial
 ================
 
-Math.NET Numerics is an opensource **geometry library for .Net, Silverlight and Mono**.
+Math.NET Spatial is an opensource **geometry library for .Net, Silverlight and Mono**.
 
 Supports Mono and .NET 4.0 and 3.5 on Linux, Mac and Windows, the portable build (PCL) also Windows 8, Silverlight 5, Windows Phone/SL 8, Windows Phone 8.1, and Xamarin Android/iOS.
 
@@ -75,7 +75,7 @@ Quick Links
 * [API Reference](http://spatial.mathdotnet.com/api/)
 * [Work Items and Bug Tracker](http://github.com/mathnet/mathnet-spatial/issues)
 
-Math.NET Spatial on other sites:
+Math.NET on other sites:
 
 * [Twitter @MathDotNet](http://twitter.com/MathDotNet)
 * [Google+](https://plus.google.com/112484567926928665204)

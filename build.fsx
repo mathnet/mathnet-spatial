@@ -84,7 +84,7 @@ let spatialPack =
       ReleaseNotes = releaseNotes
       Tags = tags
       Authors = [ "Christoph Ruegg"; "Johan Larsson" ]
-      Dependencies = []
+      Dependencies = getDependencies "src/Spatial/packages.config"
       Files = [ @"..\..\out\lib\Net35\MathNet.Spatial.*", Some libnet35, None;
                 @"..\..\out\lib\Net45\MathNet.Spatial.*", Some libnet45, None;
                 @"..\..\out\lib\Profile47\MathNet.Spatial.*", Some libpcl47, None;
@@ -147,7 +147,7 @@ Target "Build" DoNothing
 "Prepare"
   =?> ("BuildNet35", hasBuildParam "net35")
   =?> ("BuildAll", hasBuildParam "all" || hasBuildParam "release")
-  =?> ("BuildMain", not (hasBuildParam "all" || hasBuildParam "release" || hasBuildParam "net35" || hasBuildParam "signed"))
+  =?> ("BuildMain", not (hasBuildParam "all" || hasBuildParam "release" || hasBuildParam "net35"))
   ==> "Build"
 
 
@@ -214,8 +214,7 @@ let zip zipDir filesDir filesFilter bundle =
 
 Target "Zip" (fun _ ->
     CleanDir "out/packages/Zip"
-    if not (hasBuildParam "signed") || hasBuildParam "release" then
-        coreBundle |> zip "out/packages/Zip" "out/lib" (fun f -> f.Contains("MathNet.Spatial.")))
+    coreBundle |> zip "out/packages/Zip" "out/lib" (fun f -> f.Contains("MathNet.Spatial.") || f.Contains("MathNet.Numerics.")))
 "Build" ==> "Zip"
 
 
