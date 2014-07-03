@@ -1,20 +1,19 @@
+using System;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Xml;
+using System.Xml.Linq;
+using System.Xml.Schema;
+using System.Xml.Serialization;
+using MathNet.Numerics.LinearAlgebra;
+using MathNet.Spatial.Units;
+
 namespace MathNet.Spatial
 {
-    using System;
-    using System.Linq;
-    using System.Text.RegularExpressions;
-    using System.Xml;
-    using System.Xml.Linq;
-    using System.Xml.Schema;
-    using System.Xml.Serialization;
-    using MathNet.Numerics.LinearAlgebra;
-    using MathNet.Numerics.LinearAlgebra.Double;
-    using Units;
-
     [Serializable]
-    public class CoordinateSystem : DenseMatrix, IEquatable<CoordinateSystem>, IXmlSerializable
+    public class CoordinateSystem : Numerics.LinearAlgebra.Double.DenseMatrix, IEquatable<CoordinateSystem>, IXmlSerializable
     {
-        private static string _item3DPattern = Parser.Vector3DPattern.Trim('^', '$');
+        static string _item3DPattern = Parser.Vector3DPattern.Trim('^', '$');
 
         public static readonly string CsPattern = string.Format(@"^ *o: *{{(?<op>{0})}} *x: *{{(?<xv>{0})}} *y: *{{(?<yv>{0})}} *z: *{{(?<zv>{0})}} *$", _item3DPattern);
 
@@ -62,55 +61,37 @@ namespace MathNet.Spatial
 
         public Vector3D XAxis
         {
-            get
-            {
-                return new Vector3D(this.SubMatrix(0, 3, 0, 1).ToRowWiseArray());
-            }
+            get { return new Vector3D(this.SubMatrix(0, 3, 0, 1).ToRowWiseArray()); }
         }
 
         public Vector3D YAxis
         {
-            get
-            {
-                return new Vector3D(this.SubMatrix(0, 3, 1, 1).ToRowWiseArray());
-            }
+            get { return new Vector3D(this.SubMatrix(0, 3, 1, 1).ToRowWiseArray()); }
         }
 
         public Vector3D ZAxis
         {
-            get
-            {
-                return new Vector3D(this.SubMatrix(0, 3, 2, 1).ToRowWiseArray());
-            }
+            get { return new Vector3D(this.SubMatrix(0, 3, 2, 1).ToRowWiseArray()); }
         }
 
         public Point3D Origin
         {
-            get
-            {
-                return new Point3D(this.SubMatrix(0, 3, 3, 1).ToRowWiseArray());
-            }
+            get { return new Point3D(this.SubMatrix(0, 3, 3, 1).ToRowWiseArray()); }
         }
 
         public Vector3D OffsetToBase
         {
-            get
-            {
-                return this.Origin.ToVector();
-            }
+            get { return this.Origin.ToVector3D(); }
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public CoordinateSystem BaseChangeMatrix
         {
             get
             {
-                var matrix = new DenseMatrix(3);
-                matrix.SetColumn(0, this.XAxis.ToDenseVector());
-                matrix.SetColumn(1, this.YAxis.ToDenseVector());
-                matrix.SetColumn(2, this.ZAxis.ToDenseVector());
+                var matrix = Build.DenseOfColumnVectors(XAxis.ToVector(), YAxis.ToVector(), ZAxis.ToVector());
                 var cs = new CoordinateSystem(this);
                 cs.SetRotationSubMatrix(matrix.Transpose());
                 return cs;
@@ -128,7 +109,7 @@ namespace MathNet.Spatial
         }
 
         /// <summary>
-        /// Sets to the matrix of rotation that aligns the 'from' vector with the 'to' vector. 
+        /// Sets to the matrix of rotation that aligns the 'from' vector with the 'to' vector.
         /// The optional Axis argument may be used when the two vectors are perpendicular and in opposite directions to specify a specific solution, but is otherwise ignored.
         /// </summary>
         /// <param name="fromVector3D">Input Vector object to align from.</param>
@@ -154,7 +135,7 @@ namespace MathNet.Spatial
 
         public static CoordinateSystem Rotation(Angle av, UnitVector3D v)
         {
-            var m = new DenseMatrix(4, 4);
+            var m = Matrix<double>.Build.Dense(4, 4);
             m.SetSubMatrix(0, 3, 0, 3, Matrix3D.RotationAroundArbitraryVector(v, av));
             m[3, 3] = 1;
             return new CoordinateSystem(m);
@@ -271,7 +252,7 @@ namespace MathNet.Spatial
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="r">A 3×3 matrix with the rotation portion</param>
         /// <param name="coordinateSystem"></param>
@@ -308,15 +289,15 @@ namespace MathNet.Spatial
         ////        throw new ArgumentException("Not a 4x4 matrix!");
         ////    return new CoordinateSystem(matrix);
         ////}
-       
+
         /// <summary>
         /// Resets rotations preserves scales
         /// </summary>
         public CoordinateSystem ResetRotations()
         {
-            var x = this.XAxis.Length * UnitVector3D.XAxis;
-            var y = this.YAxis.Length * UnitVector3D.YAxis;
-            var z = this.ZAxis.Length * UnitVector3D.ZAxis;
+            var x = this.XAxis.Length*UnitVector3D.XAxis;
+            var y = this.YAxis.Length*UnitVector3D.YAxis;
+            var z = this.ZAxis.Length*UnitVector3D.ZAxis;
             return new CoordinateSystem(x, y, z, this.Origin);
         }
 
@@ -386,17 +367,17 @@ namespace MathNet.Spatial
 
         public Vector3D Transform(Vector3D v)
         {
-            return new Vector3D(this.Transform3DItem(v.ToDenseVector()));
+            return new Vector3D(this.Transform3DItem(v.ToVector()));
         }
 
         public Vector3D Transform(UnitVector3D v)
         {
-            return new Vector3D(this.Transform3DItem(v.ToDenseVector()));
+            return new Vector3D(this.Transform3DItem(v.ToVector()));
         }
 
         public Point3D Transform(Point3D p)
         {
-            return new Point3D(this.Transform3DItem(p.ToDenseVector()));
+            return new Point3D(this.Transform3DItem(p.ToVector()));
         }
 
         public CoordinateSystem Transform(CoordinateSystem cs)
@@ -468,7 +449,7 @@ namespace MathNet.Spatial
                 return true;
             }
 
-            if (obj.GetType() != typeof(CoordinateSystem))
+            if (obj.GetType() != typeof (CoordinateSystem))
             {
                 return false;
             }
@@ -481,9 +462,9 @@ namespace MathNet.Spatial
             unchecked
             {
                 int result = this.XAxis.GetHashCode();
-                result = (result * 397) ^ this.YAxis.GetHashCode();
-                result = (result * 397) ^ this.ZAxis.GetHashCode();
-                result = (result * 397) ^ this.OffsetToBase.GetHashCode();
+                result = (result*397) ^ this.YAxis.GetHashCode();
+                result = (result*397) ^ this.ZAxis.GetHashCode();
+                result = (result*397) ^ this.OffsetToBase.GetHashCode();
                 return result;
             }
         }
@@ -527,16 +508,16 @@ namespace MathNet.Spatial
             writer.WriteElement("ZAxis", this.ZAxis);
         }
 
-        private double[] Transform3DItem(DenseVector item)
+        double[] Transform3DItem(Vector<double> item)
         {
             if (item.Count != 3)
             {
                 throw new ArgumentException();
             }
 
-            var v4 = new DenseVector(new[] { item[0], item[1], item[2], 1 });
-            var tv4 = Multiply(v4);
-            return new[] { tv4[0], tv4[1], tv4[2] };
+            var v4 = Vector<double>.Build.Dense(new[] { item[0], item[1], item[2], 1 });
+            Multiply(v4, v4);
+            return new[] { v4[0], v4[1], v4[2] };
         }
     }
 }

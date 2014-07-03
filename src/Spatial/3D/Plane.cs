@@ -1,15 +1,14 @@
-﻿namespace MathNet.Spatial
-{
-    using System;
-    using System.Text.RegularExpressions;
-    using System.Xml;
-    using System.Xml.Linq;
-    using System.Xml.Schema;
-    using System.Xml.Serialization;
-    using MathNet.Numerics.LinearAlgebra;
-    using MathNet.Numerics.LinearAlgebra.Double;
-    using Units;
+﻿using System;
+using System.Xml;
+using System.Xml.Linq;
+using System.Xml.Schema;
+using System.Xml.Serialization;
+using MathNet.Numerics.LinearAlgebra;
+using MathNet.Numerics.LinearAlgebra.Double;
+using MathNet.Spatial.Units;
 
+namespace MathNet.Spatial
+{
     [Serializable]
     public struct Plane : IEquatable<Plane>, IXmlSerializable
     {
@@ -18,15 +17,15 @@
         public readonly double D;
 
         public Plane(double a, double b, double c, double d)
-            : this(new UnitVector3D(a, b, c), -1 * d)
+            : this(new UnitVector3D(a, b, c), -1*d)
         {
         }
 
         public Plane(UnitVector3D normal, double offset = 0)
         {
             this.Normal = normal;
-            this.RootPoint = (offset * normal).ToPoint3D();
-            this.D = -1 * offset;
+            this.RootPoint = (offset*normal).ToPoint3D();
+            this.D = -1*offset;
         }
 
         public Plane(UnitVector3D normal, Point3D rootPoint)
@@ -38,7 +37,7 @@
         {
             this.RootPoint = rootPoint;
             this.Normal = normal;
-            this.D = -this.RootPoint.ToVector().DotProduct(this.Normal);
+            this.D = -this.RootPoint.ToVector3D().DotProduct(this.Normal);
         }
 
         public static Plane Parse(string s)
@@ -48,26 +47,17 @@
 
         public double A
         {
-            get
-            {
-                return this.Normal.X;
-            }
+            get { return this.Normal.X; }
         }
 
         public double B
         {
-            get
-            {
-                return this.Normal.Y;
-            }
+            get { return this.Normal.Y; }
         }
 
         public double C
         {
-            get
-            {
-                return this.Normal.Z;
-            }
+            get { return this.Normal.Z; }
         }
 
         public static bool operator ==(Plane left, Plane right)
@@ -91,7 +81,7 @@
         {
             if (!this.Normal.IsParallelTo(otherPlane.Normal, tolerance: 1E-15))
             {
-                throw new ArgumentException("Planes are not paralell");
+                throw new ArgumentException("Planes are not parallel");
             }
 
             return SignedDistanceTo(otherPlane.RootPoint);
@@ -114,9 +104,9 @@
 
         public Point3D Project(Point3D p, UnitVector3D? projectionDirection = null)
         {
-            double dotProduct = this.Normal.DotProduct(p.ToVector());
+            double dotProduct = this.Normal.DotProduct(p.ToVector3D());
             var projectiononNormal = projectionDirection == null ? this.Normal : projectionDirection.Value;
-            var projectionVector = (dotProduct + this.D) * projectiononNormal;
+            var projectionVector = (dotProduct + this.D)*projectiononNormal;
             return p - projectionVector;
         }
 
@@ -147,7 +137,7 @@
         }
 
         /// <summary>
-        /// Finds the intersection of the two planes, throws if they are paralell
+        /// Finds the intersection of the two planes, throws if they are parallel
         /// http://mathworld.wolfram.com/Plane-PlaneIntersection.html
         /// </summary>
         /// <param name="intersectingPlane"></param>
@@ -156,8 +146,8 @@
         public Ray3D IntersectionWith(Plane intersectingPlane, double tolerance = float.Epsilon)
         {
             var a = new DenseMatrix(2, 3);
-            a.SetRow(0, this.Normal.ToDenseVector());
-            a.SetRow(1, intersectingPlane.Normal.ToDenseVector());
+            a.SetRow(0, this.Normal.ToVector());
+            a.SetRow(1, intersectingPlane.Normal.ToVector());
             var svd = a.Svd(true);
             if (svd.S[1] < tolerance)
             {
@@ -165,8 +155,8 @@
             }
 
             var y = new DenseMatrix(2, 1);
-            y[0, 0] = -1 * this.D;
-            y[1, 0] = -1 * intersectingPlane.D;
+            y[0, 0] = -1*this.D;
+            y[1, 0] = -1*intersectingPlane.D;
 
             Matrix<double> pointOnIntersectionLine = svd.Solve(y);
             var throughPoint = new Point3D(pointOnIntersectionLine.Column(0));
@@ -185,15 +175,15 @@
         public Point3D IntersectionWith(Ray3D ray, double tolerance = float.Epsilon)
         {
             var d = SignedDistanceTo(ray.ThroughPoint);
-            var t = -1 * d / ray.Direction.DotProduct(this.Normal);
-            return ray.ThroughPoint + (t * ray.Direction);
+            var t = -1*d/ray.Direction.DotProduct(this.Normal);
+            return ray.ThroughPoint + (t*ray.Direction);
         }
 
         public Point3D MirrorAbout(Point3D p)
         {
             Point3D p2 = Project(p);
             double d = SignedDistanceTo(p);
-            return p2 - (1 * d * this.Normal);
+            return p2 - (1*d*this.Normal);
         }
 
         public Plane Rotate(UnitVector3D aboutVector, Angle angle)
@@ -234,7 +224,7 @@
         }
 
         /// <summary>
-        /// Serves as a hash function for a particular type. 
+        /// Serves as a hash function for a particular type.
         /// </summary>
         /// <returns>
         /// A hash code for the current <see cref="T:System.Object"/>.
@@ -245,9 +235,9 @@
             unchecked
             {
                 int result = this.A.GetHashCode();
-                result = (result * 397) ^ this.C.GetHashCode();
-                result = (result * 397) ^ this.B.GetHashCode();
-                result = (result * 397) ^ this.D.GetHashCode();
+                result = (result*397) ^ this.C.GetHashCode();
+                result = (result*397) ^ this.B.GetHashCode();
+                result = (result*397) ^ this.D.GetHashCode();
                 return result;
             }
         }
@@ -273,7 +263,7 @@
             var e = (XElement)XNode.ReadFrom(reader);
             XmlExt.SetReadonlyField(ref this, l => l.RootPoint, Point3D.ReadFrom(e.SingleElement("RootPoint").CreateReader()));
             XmlExt.SetReadonlyField(ref this, l => l.Normal, UnitVector3D.ReadFrom(e.SingleElement("Normal").CreateReader()));
-            XmlExt.SetReadonlyField(ref this, l => l.D, -this.RootPoint.ToVector().DotProduct(this.Normal));
+            XmlExt.SetReadonlyField(ref this, l => l.D, -this.RootPoint.ToVector3D().DotProduct(this.Normal));
         }
 
         public void WriteXml(XmlWriter writer)

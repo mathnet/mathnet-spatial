@@ -156,7 +156,7 @@ namespace MathNet.Spatial.UnitTests
         public void ToDenseVector()
         {
             var v = new Vector2D(1, 2);
-            var actual = v.ToDenseVector();
+            var actual = v.ToVector();
             Assert.AreEqual(2, actual.Count);
             Assert.AreEqual(1, actual[0]);
             Assert.AreEqual(2, actual[1]);

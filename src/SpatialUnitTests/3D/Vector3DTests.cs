@@ -35,7 +35,7 @@ namespace MathNet.Spatial.UnitTests
         public void ToDenseVector()
         {
             var v = new Vector3D(1, 2, 3);
-            var denseVector = v.ToDenseVector();
+            var denseVector = v.ToVector();
             Assert.AreEqual(3, denseVector.Count);
             Assert.AreEqual(1, denseVector[0], 1e-6);
             Assert.AreEqual(2, denseVector[1], 1e-6);
@@ -133,7 +133,7 @@ namespace MathNet.Spatial.UnitTests
         {
             var vector = Vector3D.Parse(vectorDoubles);
             Angle angle = Angle.FromDegrees(rotationInDegrees);
-            Vector3D rotated = new Vector3D(Matrix3D.RotationAroundZAxis(angle).Multiply(vector.ToDenseVector()));
+            Vector3D rotated = new Vector3D(Matrix3D.RotationAroundZAxis(angle).Multiply(vector.ToVector()));
             var actual = vector.SignedAngleTo(rotated, Vector3D.Parse(Z).Normalize());
             Assert.AreEqual(rotationInDegrees, actual.Degrees, 1E-6);
         }

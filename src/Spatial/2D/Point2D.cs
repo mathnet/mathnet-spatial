@@ -1,17 +1,16 @@
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Xml;
+using System.Xml.Linq;
+using System.Xml.Schema;
+using System.Xml.Serialization;
+using MathNet.Numerics.LinearAlgebra;
+using MathNet.Spatial.Units;
+
 namespace MathNet.Spatial
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Globalization;
-    using System.Linq;
-    using System.Xml;
-    using System.Xml.Linq;
-    using System.Xml.Schema;
-    using System.Xml.Serialization;
-    using MathNet.Numerics.LinearAlgebra;
-    using MathNet.Numerics.LinearAlgebra.Double;
-    using Units;
-
     [Serializable]
     public struct Point2D : IXmlSerializable, IEquatable<Point2D>, IFormattable
     {
@@ -43,7 +42,7 @@ namespace MathNet.Spatial
         /// <param name="r"></param>
         /// <param name="a"></param>
         public Point2D(double r, Angle a)
-            : this(r * Math.Cos(a.Radians), r * Math.Sin(a.Radians))
+            : this(r*Math.Cos(a.Radians), r*Math.Sin(a.Radians))
         {
         }
 
@@ -63,10 +62,7 @@ namespace MathNet.Spatial
 
         public static Point2D Origin
         {
-            get
-            {
-                return new Point2D(0, 0);
-            }
+            get { return new Point2D(0, 0); }
         }
 
         public static Point2D Parse(string value)
@@ -116,7 +112,7 @@ namespace MathNet.Spatial
 
         public static Point3D operator -(Point2D point, Vector3D vector)
         {
-            return new Point3D(point.X - vector.X, point.Y - vector.Y, -1 * vector.Z);
+            return new Point3D(point.X - vector.X, point.Y - vector.Y, -1*vector.Z);
         }
 
         public static Vector2D operator -(Point2D lhs, Point2D rhs)
@@ -136,13 +132,8 @@ namespace MathNet.Spatial
 
         public Point2D TransformBy(Matrix<double> m)
         {
-            var transformed = m.Multiply(this.ToDenseVector());
+            var transformed = m.Multiply(this.ToVector());
             return new Point2D(transformed);
-        }
-
-        public DenseVector ToDenseVector()
-        {
-            return new DenseVector(new[] { this.X, this.Y });
         }
 
         public override string ToString()
@@ -194,7 +185,7 @@ namespace MathNet.Spatial
         {
             unchecked
             {
-                return (this.X.GetHashCode() * 397) ^ this.Y.GetHashCode();
+                return (this.X.GetHashCode()*397) ^ this.Y.GetHashCode();
             }
         }
 
@@ -252,7 +243,7 @@ namespace MathNet.Spatial
             return vector.Length;
         }
 
-        public Vector2D ToVector()
+        public Vector2D ToVector2D()
         {
             return new Vector2D(this.X, this.Y);
         }
@@ -267,13 +258,34 @@ namespace MathNet.Spatial
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="cs"></param>
         /// <returns>return cs.Transform(this.ToPoint3D());</returns>
         public Point3D TransformBy(CoordinateSystem cs)
         {
             return cs.Transform(this.ToPoint3D());
+        }
+
+        /// <summary>
+        /// Create a new Point2D from a Math.NET Numerics vector of length 2.
+        /// </summary>
+        public static Point2D OfVector(Vector<double> vector)
+        {
+            if (vector.Count != 2)
+            {
+                throw new ArgumentException("The vector length must be 2 in order to convert it to a Point2D");
+            }
+
+            return new Point2D(vector.At(0), vector.At(1));
+        }
+
+        /// <summary>
+        /// Convert to a Math.NET Numerics dense vector of length 2.
+        /// </summary>
+        public Vector<double> ToVector()
+        {
+            return Vector<double>.Build.Dense(new[] { X, Y });
         }
     }
 }

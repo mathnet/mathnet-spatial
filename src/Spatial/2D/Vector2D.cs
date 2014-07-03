@@ -1,17 +1,16 @@
-﻿namespace MathNet.Spatial
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Globalization;
-    using System.Linq;
-    using System.Xml;
-    using System.Xml.Linq;
-    using System.Xml.Schema;
-    using System.Xml.Serialization;
-    using MathNet.Numerics.LinearAlgebra;
-    using MathNet.Numerics.LinearAlgebra.Double;
-    using Units;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Xml;
+using System.Xml.Linq;
+using System.Xml.Schema;
+using System.Xml.Serialization;
+using MathNet.Numerics.LinearAlgebra;
+using MathNet.Spatial.Units;
 
+namespace MathNet.Spatial
+{
     [Serializable]
     public struct Vector2D : IXmlSerializable, IEquatable<Vector2D>, IFormattable
     {
@@ -30,8 +29,8 @@
         /// </summary>
         public bool SerializeAsElements;
 
-        private static readonly Vector2D CachedXAxis = new Vector2D(1, 0);
-        private static readonly Vector2D CachedYAxis = new Vector2D(0, 1);
+        static readonly Vector2D CachedXAxis = new Vector2D(1, 0);
+        static readonly Vector2D CachedYAxis = new Vector2D(0, 1);
 
         public Vector2D(double x, double y)
         {
@@ -46,7 +45,7 @@
         /// <param name="r">The radius</param>
         /// <param name="a">The angle</param>
         public Vector2D(double r, Angle a)
-            : this(r * Math.Cos(a.Radians), r * Math.Sin(a.Radians))
+            : this(r*Math.Cos(a.Radians), r*Math.Sin(a.Radians))
         {
             if (r < 0)
             {
@@ -70,18 +69,12 @@
 
         public static Vector2D XAxis
         {
-            get
-            {
-                return CachedXAxis;
-            }
+            get { return CachedXAxis; }
         }
 
         public static Vector2D YAxis
         {
-            get
-            {
-                return CachedYAxis;
-            }
+            get { return CachedYAxis; }
         }
 
         public static Vector2D Parse(string value)
@@ -124,22 +117,17 @@
 
         public static Vector2D operator *(double d, Vector2D v)
         {
-            return new Vector2D(d * v.X, d * v.Y);
+            return new Vector2D(d*v.X, d*v.Y);
         }
 
         public static Vector2D operator /(Vector2D v, double d)
         {
-            return new Vector2D(v.X / d, v.Y / d);
-        }
-
-        public DenseVector ToDenseVector()
-        {
-            return new DenseVector(new[] { this.X, this.Y });
+            return new Vector2D(v.X/d, v.Y/d);
         }
 
         public Vector2D TransformBy(Matrix<double> m)
         {
-            var transformed = m.Multiply(this.ToDenseVector());
+            var transformed = m.Multiply(this.ToVector());
             return new Vector2D(transformed);
         }
 
@@ -192,7 +180,7 @@
         {
             unchecked
             {
-                return (this.X.GetHashCode() * 397) ^ this.Y.GetHashCode();
+                return (this.X.GetHashCode()*397) ^ this.Y.GetHashCode();
             }
         }
 
@@ -255,7 +243,7 @@
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="v2"></param>
         /// <param name="clockWise">Positive in clockwisedirection</param>
@@ -267,21 +255,21 @@
             double a1 = Math.Atan2(this.Y, this.X);
             if (a1 < 0)
             {
-                a1 += 2 * Math.PI;
+                a1 += 2*Math.PI;
             }
             double a2 = Math.Atan2(v2.Y, v2.X);
             if (a2 < 0)
             {
-                a2 += 2 * Math.PI;
+                a2 += 2*Math.PI;
             }
-            double a = sign * (a2 - a1);
+            double a = sign*(a2 - a1);
             if (a < 0 && !returnNegative)
             {
-                a += 2 * Math.PI;
+                a += 2*Math.PI;
             }
             if (a > Math.PI && returnNegative)
             {
-                a -= 2 * Math.PI;
+                a -= 2*Math.PI;
             }
             return new Angle(a, AngleUnit.Radians);
         }
@@ -302,38 +290,35 @@
         {
             var cs = Math.Cos(angle.Radians);
             var sn = Math.Sin(angle.Radians);
-            var x = (this.X * cs) - (this.Y * sn);
-            var y = (this.X * sn) + (this.Y * cs);
+            var x = (this.X*cs) - (this.Y*sn);
+            var y = (this.X*sn) + (this.Y*cs);
             return new Vector2D(x, y);
         }
 
         public double Length
         {
-            get
-            {
-                return Math.Sqrt((this.X * this.X) + (this.Y * this.Y));
-            }
+            get { return Math.Sqrt((this.X*this.X) + (this.Y*this.Y)); }
         }
 
         public double DotProduct(Vector2D other)
         {
-            return (this.X * other.X) + (this.Y * other.Y);
+            return (this.X*other.X) + (this.Y*other.Y);
         }
 
         public Vector2D Normalize()
         {
             var l = this.Length;
-            return new Vector2D(this.X / l, this.Y / l);
+            return new Vector2D(this.X/l, this.Y/l);
         }
 
         public Vector2D ScaleBy(double d)
         {
-            return new Vector2D(d * this.X, d * this.Y);
+            return new Vector2D(d*this.X, d*this.Y);
         }
 
         public Vector2D Negate()
         {
-            return new Vector2D(-1 * this.X, -1 * this.Y);
+            return new Vector2D(-1*this.X, -1*this.Y);
         }
 
         public Vector2D Subtract(Vector2D v)
@@ -344,6 +329,27 @@
         public Vector2D Add(Vector2D v)
         {
             return new Vector2D(this.X + v.X, this.Y + v.Y);
+        }
+
+        /// <summary>
+        /// Create a new Vector2D from a Math.NET Numerics vector of length 2.
+        /// </summary>
+        public static Vector2D OfVector(Vector<double> vector)
+        {
+            if (vector.Count != 2)
+            {
+                throw new ArgumentException("The vector length must be 2 in order to convert it to a Vector2D");
+            }
+
+            return new Vector2D(vector.At(0), vector.At(1));
+        }
+
+        /// <summary>
+        /// Convert to a Math.NET Numerics dense vector of length 2.
+        /// </summary>
+        public Vector<double> ToVector()
+        {
+            return Vector<double>.Build.Dense(new[] { X, Y });
         }
     }
 }

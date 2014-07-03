@@ -1,17 +1,16 @@
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Xml;
+using System.Xml.Linq;
+using System.Xml.Schema;
+using System.Xml.Serialization;
+using MathNet.Numerics.LinearAlgebra;
+using MathNet.Spatial.Units;
+
 namespace MathNet.Spatial
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Globalization;
-    using System.Linq;
-    using System.Xml;
-    using System.Xml.Linq;
-    using System.Xml.Schema;
-    using System.Xml.Serialization;
-    using MathNet.Numerics.LinearAlgebra;
-    using MathNet.Numerics.LinearAlgebra.Double;
-    using Units;
-
     [Serializable]
     public struct Vector3D : IXmlSerializable, IEquatable<Vector3D>, IEquatable<UnitVector3D>, IFormattable
     {
@@ -73,14 +72,6 @@ namespace MathNet.Spatial
             }
         }
 
-        /// <summary>
-        /// Returns a copy of the inner dense vector
-        /// </summary>
-        public DenseVector ToDenseVector()
-        {
-            return new DenseVector(new[] { this.X, this.Y, this.Z });
-        }
-
         public static Vector3D Parse(string value)
         {
             var doubles = Parser.ParseItem3D(value);
@@ -100,13 +91,13 @@ namespace MathNet.Spatial
         [Obsolete("Not sure this is nice")]
         public static Vector<double> operator *(Matrix<double> left, Vector3D right)
         {
-            return left * right.ToDenseVector();
+            return left*right.ToVector();
         }
 
         [Obsolete("Not sure this is nice")]
         public static Vector<double> operator *(Vector3D left, Matrix<double> right)
         {
-            return left.ToDenseVector() * right;
+            return left.ToVector()*right;
         }
 
         public static double operator *(Vector3D left, Vector3D right)
@@ -182,7 +173,7 @@ namespace MathNet.Spatial
             }
 
             return (obj is UnitVector3D && this.Equals((UnitVector3D)obj)) ||
-                (obj is Vector3D && this.Equals((Vector3D)obj));
+                   (obj is Vector3D && this.Equals((Vector3D)obj));
         }
 
         public override int GetHashCode()
@@ -190,8 +181,8 @@ namespace MathNet.Spatial
             unchecked
             {
                 var hashCode = this.X.GetHashCode();
-                hashCode = (hashCode * 397) ^ this.Y.GetHashCode();
-                hashCode = (hashCode * 397) ^ this.Z.GetHashCode();
+                hashCode = (hashCode*397) ^ this.Y.GetHashCode();
+                hashCode = (hashCode*397) ^ this.Z.GetHashCode();
                 return hashCode;
             }
         }
@@ -251,27 +242,12 @@ namespace MathNet.Spatial
 
         public static Vector3D NaN
         {
-            get
-            {
-                return new Vector3D(double.NaN, double.NaN, double.NaN);
-            }
+            get { return new Vector3D(double.NaN, double.NaN, double.NaN); }
         }
 
         internal Matrix<double> CrossProductMatrix
         {
-            get
-            {
-                var matrix = new DenseMatrix(3, 3);
-                matrix[0, 1] = -this.Z;
-                matrix[0, 2] = this.Y;
-
-                matrix[1, 0] = this.Z;
-                matrix[1, 2] = -this.X;
-
-                matrix[2, 0] = -this.Y;
-                matrix[2, 1] = this.X;
-                return matrix;
-            }
+            get { return Matrix<double>.Build.Dense(3, 3, new[] { 0d, Z, -Y, -Z, 0d, X, Y, -X, 0d }); }
         }
 
         /// <summary>
@@ -279,10 +255,7 @@ namespace MathNet.Spatial
         /// </summary>
         public double Length
         {
-            get
-            {
-                return Math.Sqrt((this.X * this.X) + (this.Y * this.Y) + (this.Z * this.Z));
-            }
+            get { return Math.Sqrt((this.X*this.X) + (this.Y*this.Y) + (this.Z*this.Z)); }
         }
 
         public static Vector3D operator +(Vector3D v1, Vector3D v2)
@@ -302,10 +275,10 @@ namespace MathNet.Spatial
 
         public static Vector3D operator *(double d, Vector3D v)
         {
-            return new Vector3D(d * v.X, d * v.Y, d * v.Z);
+            return new Vector3D(d*v.X, d*v.Y, d*v.Z);
         }
 
-        // Commented out because the d * v reads nicer than v *d 
+        // Commented out because the d * v reads nicer than v *d
         ////public static Vector3D operator *(Vector3D v,double d)
         ////{
         ////    return d*v;
@@ -313,7 +286,7 @@ namespace MathNet.Spatial
 
         public static Vector3D operator /(Vector3D v, double d)
         {
-            return new Vector3D(v.X / d, v.Y / d, v.Z / d);
+            return new Vector3D(v.X/d, v.Y/d, v.Z/d);
         }
 
         ////public static explicit operator Vector3D(System.Windows.Media.Media3D.Vector3D v)
@@ -333,7 +306,7 @@ namespace MathNet.Spatial
 
         public Vector3D ScaleBy(double scaleFactor)
         {
-            return scaleFactor * this;
+            return scaleFactor*this;
         }
 
         public Ray3D ProjectOn(Plane planeToProjectOn)
@@ -344,7 +317,7 @@ namespace MathNet.Spatial
         public Vector3D ProjectOn(UnitVector3D uv)
         {
             double pd = DotProduct(uv);
-            return pd * this;
+            return pd*this;
         }
 
         public bool IsParallelTo(Vector3D othervector, double tolerance = 1e-6)
@@ -377,17 +350,17 @@ namespace MathNet.Spatial
 
         public Vector3D Negate()
         {
-            return new Vector3D(-1 * this.X, -1 * this.Y, -1 * this.Z);
+            return new Vector3D(-1*this.X, -1*this.Y, -1*this.Z);
         }
 
         public double DotProduct(Vector3D v)
         {
-            return (this.X * v.X) + (this.Y * v.Y) + (this.Z * v.Z);
+            return (this.X*v.X) + (this.Y*v.Y) + (this.Z*v.Z);
         }
 
         public double DotProduct(UnitVector3D v)
         {
-            return (this.X * v.X) + (this.Y * v.Y) + (this.Z * v.Z);
+            return (this.X*v.X) + (this.Y*v.Y) + (this.Z*v.Z);
         }
 
         [Obsolete("Use - instead")]
@@ -404,18 +377,18 @@ namespace MathNet.Spatial
 
         public Vector3D CrossProduct(Vector3D inVector3D)
         {
-            var x = (this.Y * inVector3D.Z) - (this.Z * inVector3D.Y);
-            var y = (this.Z * inVector3D.X) - (this.X * inVector3D.Z);
-            var z = (this.X * inVector3D.Y) - (this.Y * inVector3D.X);
+            var x = (this.Y*inVector3D.Z) - (this.Z*inVector3D.Y);
+            var y = (this.Z*inVector3D.X) - (this.X*inVector3D.Z);
+            var z = (this.X*inVector3D.Y) - (this.Y*inVector3D.X);
             var v = new Vector3D(x, y, z);
             return v;
         }
 
         public Vector3D CrossProduct(UnitVector3D inVector3D)
         {
-            var x = (this.Y * inVector3D.Z) - (this.Z * inVector3D.Y);
-            var y = (this.Z * inVector3D.X) - (this.X * inVector3D.Z);
-            var z = (this.X * inVector3D.Y) - (this.Y * inVector3D.X);
+            var x = (this.Y*inVector3D.Z) - (this.Z*inVector3D.Y);
+            var y = (this.Z*inVector3D.X) - (this.X*inVector3D.Z);
+            var z = (this.X*inVector3D.Y) - (this.Y*inVector3D.X);
             var v = new Vector3D(x, y, z);
             return v;
         }
@@ -423,23 +396,14 @@ namespace MathNet.Spatial
         public Matrix<double> GetUnitTensorProduct()
         {
             // unitTensorProduct:matrix([ux^2,ux*uy,ux*uz],[ux*uy,uy^2,uy*uz],[ux*uz,uy*uz,uz^2]),
-            var matrix = new DenseMatrix(3, 3);
-            matrix[0, 0] = this.X * this.X;
-            matrix[0, 1] = this.X * this.Y;
-            matrix[0, 2] = this.X * this.Z;
-
-            matrix[1, 0] = this.X * this.Y;
-            matrix[1, 1] = this.Y * this.Y;
-            matrix[1, 2] = this.Y * this.Z;
-
-            matrix[2, 0] = this.X * this.Z;
-            matrix[2, 1] = this.Y * this.Z;
-            matrix[2, 2] = this.Z * this.Z;
-            return matrix;
+            double xy = X*Y;
+            double xz = X*Z;
+            double yz = Y*Z;
+            return Matrix<double>.Build.Dense(3, 3, new[] { X*X, xy, xz, xy, Y*Y, yz, xz, yz, Z*Z });
         }
 
         /// <summary>
-        /// Returns signed angle in radians 
+        /// Returns signed angle in radians
         /// </summary>
         /// <param name="toVector3D">The fromVector3D to calculate the signed angle to </param>
         /// <param name="aboutVector3D">The fromVector3D around which to rotate </param>
@@ -491,7 +455,28 @@ namespace MathNet.Spatial
 
         public Vector3D TransformBy(Matrix<double> m)
         {
-            return new Vector3D(m.Multiply(this.ToDenseVector()));
+            return new Vector3D(m.Multiply(this.ToVector()));
+        }
+
+        /// <summary>
+        /// Create a new Vector3D from a Math.NET Numerics vector of length 3.
+        /// </summary>
+        public static Vector3D OfVector(Vector<double> vector)
+        {
+            if (vector.Count != 3)
+            {
+                throw new ArgumentException("The vector length must be 3 in order to convert it to a Vector3D");
+            }
+
+            return new Vector3D(vector.At(0), vector.At(1), vector.At(2));
+        }
+
+        /// <summary>
+        /// Convert to a Math.NET Numerics dense vector of length 3.
+        /// </summary>
+        public Vector<double> ToVector()
+        {
+            return Vector<double>.Build.Dense(new[] { X, Y, Z });
         }
     }
 }

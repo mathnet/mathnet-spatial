@@ -30,7 +30,7 @@ namespace MathNet.Spatial.UnitTests
         public void ToDenseVector()
         {
             var p = new Point3D(1, 2, 3);
-            var denseVector = p.ToDenseVector();
+            var denseVector = p.ToVector();
             Assert.AreEqual(3, denseVector.Count);
             Assert.AreEqual(1, denseVector[0], 1e-6);
             Assert.AreEqual(2, denseVector[1], 1e-6);
@@ -145,7 +145,7 @@ namespace MathNet.Spatial.UnitTests
         public void ToVectorAndBack(string ps)
         {
             Point3D p = Point3D.Parse(ps);
-            AssertGeometry.AreEqual(p, p.ToVector().ToPoint3D(), 1e-9);
+            AssertGeometry.AreEqual(p, p.ToVector3D().ToPoint3D(), 1e-9);
         }
 
         [TestCase("-2, 0, 1e-4", null, "(-2, 0, 0.0001)", 1e-4)]

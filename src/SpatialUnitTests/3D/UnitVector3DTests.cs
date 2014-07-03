@@ -35,7 +35,7 @@ namespace MathNet.Spatial.UnitTests
             var l = Math.Sqrt(1 * 1 + 2 * 2 + 3 * 3);
 
             var uv = new UnitVector3D(1 / l, 2 / l, 3 / l);
-            var denseVector = uv.ToDenseVector();
+            var denseVector = uv.ToVector();
             Assert.AreEqual(3, denseVector.Count);
             Assert.AreEqual(1 / l, denseVector[0], 1e-6);
             Assert.AreEqual(2 / l, denseVector[1], 1e-6);

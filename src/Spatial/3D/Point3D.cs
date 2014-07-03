@@ -1,18 +1,17 @@
+using System;
+using System.Collections.Generic;
+using System.Diagnostics.Contracts;
+using System.Globalization;
+using System.Linq;
+using System.Xml;
+using System.Xml.Linq;
+using System.Xml.Schema;
+using System.Xml.Serialization;
+using MathNet.Numerics.LinearAlgebra;
+using MathNet.Spatial.Units;
+
 namespace MathNet.Spatial
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
-    using System.Globalization;
-    using System.Linq;
-    using System.Xml;
-    using System.Xml.Linq;
-    using System.Xml.Schema;
-    using System.Xml.Serialization;
-    using MathNet.Numerics.LinearAlgebra;
-    using MathNet.Numerics.LinearAlgebra.Double;
-    using Units;
-
     [Serializable]
     public struct Point3D : IXmlSerializable, IEquatable<Point3D>, IFormattable
     {
@@ -58,14 +57,6 @@ namespace MathNet.Spatial
             }
         }
 
-        /// <summary>
-        /// Returns a copy of the inner dense vector
-        /// </summary>
-        public DenseVector ToDenseVector()
-        {
-            return new DenseVector(new[] { this.X, this.Y, this.Z });
-        }
-
         public static Point3D Parse(string value)
         {
             var doubles = Parser.ParseItem3D(value);
@@ -85,13 +76,13 @@ namespace MathNet.Spatial
         [Obsolete("Not sure this is nice")]
         public static Vector<double> operator *(Matrix<double> left, Point3D right)
         {
-            return left * right.ToDenseVector();
+            return left*right.ToVector();
         }
 
         [Obsolete("Not sure this is nice")]
         public static Vector<double> operator *(Point3D left, Matrix<double> right)
         {
-            return left.ToDenseVector() * right;
+            return left.ToVector()*right;
         }
 
         public override string ToString()
@@ -108,7 +99,7 @@ namespace MathNet.Spatial
         {
             var numberFormatInfo = provider != null ? NumberFormatInfo.GetInstance(provider) : CultureInfo.InvariantCulture.NumberFormat;
             string separator = numberFormatInfo.NumberDecimalSeparator == "," ? ";" : ",";
-            return string.Format("({0}{1} {2}{1} {3})",  this.X.ToString(format, numberFormatInfo), separator, this.Y.ToString(format, numberFormatInfo), this.Z.ToString(format, numberFormatInfo));
+            return string.Format("({0}{1} {2}{1} {3})", this.X.ToString(format, numberFormatInfo), separator, this.Y.ToString(format, numberFormatInfo), this.Z.ToString(format, numberFormatInfo));
         }
 
         public bool Equals(Point3D other)
@@ -145,8 +136,8 @@ namespace MathNet.Spatial
             unchecked
             {
                 var hashCode = this.X.GetHashCode();
-                hashCode = (hashCode * 397) ^ this.Y.GetHashCode();
-                hashCode = (hashCode * 397) ^ this.Z.GetHashCode();
+                hashCode = (hashCode*397) ^ this.Y.GetHashCode();
+                hashCode = (hashCode*397) ^ this.Z.GetHashCode();
                 return hashCode;
             }
         }
@@ -208,18 +199,12 @@ namespace MathNet.Spatial
 
         public static Point3D Origin
         {
-            get
-            {
-                return new Point3D(0, 0, 0);
-            }
+            get { return new Point3D(0, 0, 0); }
         }
 
         public static Point3D NaN
         {
-            get
-            {
-                return new Point3D(double.NaN, double.NaN, double.NaN);
-            }
+            get { return new Point3D(double.NaN, double.NaN, double.NaN); }
         }
 
         public static Point3D Centroid(IEnumerable<Point3D> points)
@@ -320,7 +305,7 @@ namespace MathNet.Spatial
             return vector.Length;
         }
 
-        public Vector3D ToVector()
+        public Vector3D ToVector3D()
         {
             return new Vector3D(this.X, this.Y, this.Z);
         }
@@ -332,7 +317,28 @@ namespace MathNet.Spatial
 
         public Point3D TransformBy(Matrix<double> m)
         {
-            return new Point3D(m.Multiply(this.ToDenseVector()));
+            return new Point3D(m.Multiply(this.ToVector()));
+        }
+
+        /// <summary>
+        /// Create a new Point3D from a Math.NET Numerics vector of length 3.
+        /// </summary>
+        public static Point3D OfVector(Vector<double> vector)
+        {
+            if (vector.Count != 3)
+            {
+                throw new ArgumentException("The vector length must be 3 in order to convert it to a Point3D");
+            }
+
+            return new Point3D(vector.At(0), vector.At(1), vector.At(2));
+        }
+
+        /// <summary>
+        /// Convert to a Math.NET Numerics dense vector of length 3.
+        /// </summary>
+        public Vector<double> ToVector()
+        {
+            return Vector<double>.Build.Dense(new[] { X, Y, Z });
         }
     }
 }

@@ -58,7 +58,7 @@ namespace MathNet.Spatial.UnitTests
         public void ToDenseVector()
         {
             var p = new Point2D(1, 2);
-            var v = p.ToDenseVector();
+            var v = p.ToVector();
             Assert.AreEqual(2, v.Count);
             Assert.AreEqual(1, v[0]);
             Assert.AreEqual(2, v[1]);
@@ -174,7 +174,7 @@ namespace MathNet.Spatial.UnitTests
         public void ToVector(string ps, string evs)
         {
             var p1 = Point2D.Parse(ps);
-            var actual = p1.ToVector();
+            var actual = p1.ToVector2D();
             var expected = Vector2D.Parse(evs);
             Assert.AreEqual(expected, actual);
         }
