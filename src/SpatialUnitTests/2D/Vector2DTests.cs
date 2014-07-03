@@ -7,6 +7,9 @@ using NUnit.Framework;
 
 namespace MathNet.Spatial.UnitTests
 {
+    using System.Xml;
+    using System.Xml.Serialization;
+
     public class Vector2DTests
     {
         [TestCase(5, "90 °", "0, 5")]
@@ -264,13 +267,29 @@ namespace MathNet.Spatial.UnitTests
             Assert.AreEqual(360 - expected.Degrees, ccw.Degrees, 1e-3);
         }
 
-        [TestCase("1, 2", false, @"<Vector2D X=""1"" Y=""2"" />")]
-        [TestCase("1, 2", true, @"<Vector2D><X>1</X><Y>2</Y></Vector2D>")]
-        public void XmlRoundtrip(string vs, bool asElements, string xml)
+        [Test]
+        public void XmlRoundtrip()
         {
-            var p = Vector2D.Parse(vs);
-            p.SerializeAsElements = asElements;
-            AssertXml.XmlRoundTrips(p, xml, (e, a) => AssertGeometry.AreEqual(e, a));
+            const string Xml = @"<Vector2D X=""1"" Y=""2"" />";
+            const string ElementXml = @"<Vector2D><X>1</X><Y>2</Y></Vector2D>";
+            var v = new Vector2D(1,2);
+
+            AssertXml.XmlRoundTrips(v, Xml, (e, a) => AssertGeometry.AreEqual(e, a));
+
+            var serializer = new XmlSerializer(typeof(Vector2D));
+
+
+            var actuals = new[]
+                          {
+                              Vector2D.ReadFrom(XmlReader.Create(new StringReader(Xml))),
+                              Vector2D.ReadFrom(XmlReader.Create(new StringReader(ElementXml))),
+                              (Vector2D)serializer.Deserialize(new StringReader(Xml)),
+                              (Vector2D)serializer.Deserialize(new StringReader(ElementXml))
+                          };
+            foreach (var actual in actuals)
+            {
+                AssertGeometry.AreEqual(v, actual);
+            }
         }
 
         [Test]

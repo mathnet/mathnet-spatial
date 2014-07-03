@@ -5,6 +5,7 @@ using NUnit.Framework;
 namespace MathNet.Spatial.UnitTests
 {
     using System;
+    using System.Xml.Serialization;
 
     [TestFixture]
     public class UnitVector3DTests
@@ -91,15 +92,25 @@ namespace MathNet.Spatial.UnitTests
             AssertGeometry.AreEqual(v, UnitVector3D.Parse(actual), tolerance);
         }
 
-        [TestCase("1, -2, 3", false, @"<UnitVector3D X=""0.2672612419124244"" Y=""-0.53452248382484879"" Z=""0.80178372573727319"" />")]
-        [TestCase("1, -2, 3", true, @"<UnitVector3D><X>0.267261241912424</X><Y>-0.534522483824849</Y><Z>0.801783725737273</Z></UnitVector3D>")]
-        public void XmlRoundTrips(string uvs, bool asElements, string xml)
+        [Test]
+        public void XmlRoundTrips()
         {
-            var uv = UnitVector3D.Parse(uvs);
-            uv.SerializeAsElements = asElements;
+            var uv = new UnitVector3D(0.2672612419124244, -0.53452248382484879, 0.80178372573727319);
+            var xml = @"<UnitVector3D X=""0.2672612419124244"" Y=""-0.53452248382484879"" Z=""0.80178372573727319"" />";
+            var elementXml = @"<UnitVector3D><X>0.2672612419124244</X><Y>-0.53452248382484879</Y><Z>0.80178372573727319</Z></UnitVector3D>";
+
             AssertXml.XmlRoundTrips(uv, xml, (e, a) => AssertGeometry.AreEqual(e, a));
-            var actual = UnitVector3D.ReadFrom(XmlReader.Create(new StringReader(xml)));
-            AssertGeometry.AreEqual(uv, actual);
+            var serializer = new XmlSerializer(typeof (UnitVector3D));
+            var actuals = new[]
+                                {
+                                    UnitVector3D.ReadFrom(XmlReader.Create(new StringReader(xml))),
+                                    (UnitVector3D)serializer.Deserialize(new StringReader(xml)),
+                                    (UnitVector3D)serializer.Deserialize(new StringReader(elementXml))
+                                };
+            foreach (var actual in actuals)
+            {
+                AssertGeometry.AreEqual(uv, actual);
+            }
         }
 
         [Test]

@@ -5,6 +5,8 @@ using NUnit.Framework;
 namespace MathNet.Spatial.UnitTests
 {
     using System;
+    using System.Xml;
+    using System.Xml.Serialization;
 
     [TestFixture]
     public class Point3DTests
@@ -56,7 +58,7 @@ namespace MathNet.Spatial.UnitTests
         [TestCase("0, 0, 0", "0, 0, 0", "0, 0, 0")]
         [TestCase("1, 1, 1", "3, 3, 3", "2, 2, 2")]
         [TestCase("-3, -3, -3", "3, 3, 3", "0, 0, 0")]
-        public void MidPointTest(string p1s, string p2s, string eps)
+        public void MidPoint(string p1s, string p2s, string eps)
         {
             var p1 = Point3D.Parse(p1s);
             var p2 = Point3D.Parse(p2s);
@@ -69,7 +71,7 @@ namespace MathNet.Spatial.UnitTests
 
         [TestCase("p:{0, 0, 0} v:{0, 0, 1}", "p:{0, 0, 0} v:{0, 1, 0}", "p:{0, 0, 0} v:{1, 0, 0}", "0, 0, 0")]
         [TestCase("p:{0, 0, 5} v:{0, 0, 1}", "p:{0, 4, 0} v:{0, 1, 0}", "p:{3, 0, 0} v:{1, 0, 0}", "3, 4, 5")]
-        public void FromPlanesTests(string pl1s, string pl2s, string pl3s, string eps)
+        public void FromPlanes(string pl1s, string pl2s, string pl3s, string eps)
         {
             var plane1 = Plane.Parse(pl1s);
             var plane2 = Plane.Parse(pl2s);
@@ -88,7 +90,7 @@ namespace MathNet.Spatial.UnitTests
 
         [TestCase("0, 0, 0", "p:{0, 0, 0} v:{0, 0, 1}", "0, 0, 0")]
         [TestCase("0, 0, 1", "p:{0, 0, 0} v:{0, 0, 1}", "0, 0, -1")]
-        public void MirrorAboutTests(string ps, string pls, string eps)
+        public void MirrorAbout(string ps, string pls, string eps)
         {
             var p = Point3D.Parse(ps);
             var p2 = Plane.Parse(pls);
@@ -111,17 +113,55 @@ namespace MathNet.Spatial.UnitTests
             AssertGeometry.AreEqual(ep, actual);
         }
 
-        [TestCase("0,0,0", "1,0,0", "1,0,0")]
-        public void AddVectorTest(string ps, string vs, string expected)
+        [TestCase("1, 2, 3", "1, 0, 0", "2, 2, 3")]
+        [TestCase("1, 2, 3", "0, 1, 0", "1, 3, 3")]
+        [TestCase("1, 2, 3", "0, 0, 1", "1, 2, 4")]
+        public void AddVector(string ps, string vs, string eps)
         {
-            Point3D point3D = Point3D.Parse(ps);
-            Vector3D vector3D = Vector3D.Parse(vs);
-            Assert.AreEqual(Point3D.Parse(expected), point3D + vector3D);
+            Point3D p = Point3D.Parse(ps);
+            var actuals = new[]
+                          {
+                              p + Vector3D.Parse(vs),
+                              p + UnitVector3D.Parse(vs)
+                          };
+            var expected = Point3D.Parse(eps);
+            foreach (var actual in actuals)
+            {
+                Assert.AreEqual(expected, actual);
+            }
+        }
+
+        [TestCase("1, 2, 3", "1, 0, 0", "0, 2, 3")]
+        [TestCase("1, 2, 3", "0, 1, 0", "1, 1, 3")]
+        [TestCase("1, 2, 3", "0, 0, 1", "1, 2, 2")]
+        public void SubtractVector(string ps, string vs, string eps)
+        {
+            Point3D p = Point3D.Parse(ps);
+            var actuals = new[]
+                          {
+                              p - Vector3D.Parse(vs),
+                              p - UnitVector3D.Parse(vs)
+                          };
+            var expected = Point3D.Parse(eps);
+            foreach (var actual in actuals)
+            {
+                Assert.AreEqual(expected, actual);
+            }
+        }
+
+        [TestCase("1, 2, 3", "4, 8, 16", "-3, -6, -13")]
+        public void SubtractPoint(string p1s, string p2s, string evs)
+        {
+            Point3D p1 = Point3D.Parse(p1s);
+            Point3D p2 = Point3D.Parse(p2s);
+
+            var expected = Vector3D.Parse(evs);
+            Assert.AreEqual(expected, p1 - p2);
         }
 
         [TestCase("0,0,0", "1,0,0", 1)]
         [TestCase("1,1,1", "2,1,1", 1)]
-        public void DistanceToTest(string p1s, string p2s, double d)
+        public void DistanceTo(string p1s, string p2s, double d)
         {
             var p1 = Point3D.Parse(p1s);
             var p2 = Point3D.Parse(p2s);
@@ -158,13 +198,26 @@ namespace MathNet.Spatial.UnitTests
             AssertGeometry.AreEqual(p, Point3D.Parse(actual), tolerance);
         }
 
-        [TestCase("1, -2, 3", false, @"<Point3D X=""1"" Y=""-2"" Z=""3"" />")]
-        [TestCase("1, -2, 3", true, "<Point3D><X>1</X><Y>-2</Y><Z>3</Z></Point3D>")]
-        public void XmlRoundtrip(string vs, bool asElements, string xml)
+        [Test]
+        public void XmlRoundtrip()
         {
-            var p = Point3D.Parse(vs);
-            p.SerializeAsElements = asElements;
-            AssertXml.XmlRoundTrips(p, xml, (expected, actual) => AssertGeometry.AreEqual(expected, actual));
+            var p = new Point3D(1, -2, 3);
+            const string Xml = @"<Point3D X=""1"" Y=""-2"" Z=""3"" />";
+            const string ElementXml = @"<Point3D><X>1</X><Y>-2</Y><Z>3</Z></Point3D>";
+            AssertXml.XmlRoundTrips(p, Xml, (expected, actual) => AssertGeometry.AreEqual(expected, actual));
+            var serializer = new XmlSerializer(typeof (Point3D));
+
+            var actuals = new[]
+                          {
+                              Point3D.ReadFrom(XmlReader.Create(new StringReader(Xml))),
+                              Point3D.ReadFrom(XmlReader.Create(new StringReader(ElementXml))),
+                              (Point3D)serializer.Deserialize(new StringReader(Xml)),
+                              (Point3D)serializer.Deserialize(new StringReader(ElementXml))
+                          };
+            foreach (var actual in actuals)
+            {
+                AssertGeometry.AreEqual(p, actual);
+            }
         }
 
         [Test]

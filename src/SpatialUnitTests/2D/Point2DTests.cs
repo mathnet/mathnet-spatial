@@ -5,6 +5,10 @@ using NUnit.Framework;
 
 namespace MathNet.Spatial.UnitTests
 {
+    using System.IO;
+    using System.Xml;
+    using System.Xml.Serialization;
+
     public class Point2DTests
     {
         [TestCase(5, "90 °", "0, 5")]
@@ -179,13 +183,27 @@ namespace MathNet.Spatial.UnitTests
             Assert.AreEqual(expected, actual);
         }
 
-        [TestCase("1,2", false, @"<Point2D X=""1"" Y=""2"" />")]
-        [TestCase("1,2", true, @"<Point2D><X>1</X><Y>2</Y></Point2D>")]
-        public void XmlRountrip(string vs, bool asElements, string xml)
+        [Test]
+        public void XmlRountrip()
         {
-            var p = Point2D.Parse(vs);
-            p.SerializeAsElements = asElements;
-            AssertXml.XmlRoundTrips(p, xml, (e, a) => AssertGeometry.AreEqual(e, a));
+            var p = new Point2D(1, 2);
+            const string Xml = @"<Point2D X=""1"" Y=""2"" />";
+            const string ElementXml = @"<Point2D><X>1</X><Y>2</Y></Point2D>";
+
+            AssertXml.XmlRoundTrips(p, Xml, (e, a) => AssertGeometry.AreEqual(e, a));
+            var serializer = new XmlSerializer(typeof(Point2D));
+
+            var actuals = new[]
+                          {
+                              Point2D.ReadFrom(XmlReader.Create(new StringReader(Xml))),
+                              Point2D.ReadFrom(XmlReader.Create(new StringReader(ElementXml))),
+                              (Point2D)serializer.Deserialize(new StringReader(Xml)),
+                              (Point2D)serializer.Deserialize(new StringReader(ElementXml))
+                          };
+            foreach (var actual in actuals)
+            {
+                AssertGeometry.AreEqual(p, actual);
+            }
         }
     }
 }

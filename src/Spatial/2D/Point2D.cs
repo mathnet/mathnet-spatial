@@ -24,16 +24,10 @@ namespace MathNet.Spatial
         /// </summary>
         public readonly double Y;
 
-        /// <summary>
-        /// Default is serializing as attributes, set to true for elements
-        /// </summary>
-        public bool SerializeAsElements;
-
         public Point2D(double x, double y)
         {
             this.X = x;
             this.Y = y;
-            this.SerializeAsElements = false;
         }
 
         /// <summary>
@@ -202,6 +196,7 @@ namespace MathNet.Spatial
 
         /// <summary>
         /// Generates an object from its XML representation.
+        /// Handles both attribute and element style
         /// </summary>
         /// <param name="reader">The <see cref="T:System.Xml.XmlReader"/> stream from which the object is deserialized. </param>
         public void ReadXml(XmlReader reader)
@@ -220,16 +215,8 @@ namespace MathNet.Spatial
         /// <param name="writer">The <see cref="T:System.Xml.XmlWriter"/> stream to which the object is serialized. </param>
         public void WriteXml(XmlWriter writer)
         {
-            if (this.SerializeAsElements)
-            {
-                writer.WriteElementString("X", this.X.ToString(CultureInfo.InvariantCulture));
-                writer.WriteElementString("Y", this.Y.ToString(CultureInfo.InvariantCulture));
-            }
-            else
-            {
-                writer.WriteAttribute("X", this.X);
-                writer.WriteAttribute("Y", this.Y);
-            }
+            writer.WriteAttribute("X", this.X);
+            writer.WriteAttribute("Y", this.Y);
         }
 
         public Vector2D VectorTo(Point2D otherPoint)

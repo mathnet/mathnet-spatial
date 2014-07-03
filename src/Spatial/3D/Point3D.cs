@@ -30,17 +30,11 @@ namespace MathNet.Spatial
         /// </summary>
         public readonly double Z;
 
-        /// <summary>
-        /// Default is serializing as attributes, set to true for elements
-        /// </summary>
-        public bool SerializeAsElements;
-
         public Point3D(double x, double y, double z)
         {
             this.X = x;
             this.Y = y;
             this.Z = z;
-            this.SerializeAsElements = false;
         }
 
         public Point3D(IEnumerable<double> data)
@@ -176,18 +170,9 @@ namespace MathNet.Spatial
         /// <param name="writer">The <see cref="T:System.Xml.XmlWriter"/> stream to which the object is serialized. </param>
         public void WriteXml(XmlWriter writer)
         {
-            if (this.SerializeAsElements)
-            {
-                writer.WriteElementString("X", this.X.ToString(CultureInfo.InvariantCulture));
-                writer.WriteElementString("Y", this.Y.ToString(CultureInfo.InvariantCulture));
-                writer.WriteElementString("Z", this.Z.ToString(CultureInfo.InvariantCulture));
-            }
-            else
-            {
-                writer.WriteAttribute("X", this.X);
-                writer.WriteAttribute("Y", this.Y);
-                writer.WriteAttribute("Z", this.Z);
-            }
+            writer.WriteAttribute("X", this.X);
+            writer.WriteAttribute("Y", this.Y);
+            writer.WriteAttribute("Z", this.Z);
         }
 
         public static Point3D ReadFrom(XmlReader reader)
