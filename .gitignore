@@ -52,6 +52,7 @@ Desktop.ini
 packages/*
 !packages/.gitattributes
 !packages/repositories.config
+!packages/MathNet.*
 !packages/NUnit.*
 !packages/FsUnit.*
 !packages/TaskParallelLibrary.*
