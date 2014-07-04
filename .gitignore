@@ -56,4 +56,5 @@ packages/*
 !packages/NUnit.*
 !packages/FsUnit.*
 !packages/TaskParallelLibrary.*
+!packages/StyleCop.MSBuild.*
 packages/NUnit.Runners.*
