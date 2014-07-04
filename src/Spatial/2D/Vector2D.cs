@@ -244,20 +244,24 @@ namespace MathNet.Spatial
             {
                 a1 += 2*Math.PI;
             }
+
             double a2 = Math.Atan2(v2.Y, v2.X);
             if (a2 < 0)
             {
                 a2 += 2*Math.PI;
             }
+
             double a = sign*(a2 - a1);
             if (a < 0 && !returnNegative)
             {
                 a += 2*Math.PI;
             }
+
             if (a > Math.PI && returnNegative)
             {
                 a -= 2*Math.PI;
             }
+
             return new Angle(a, AngleUnit.Radians);
         }
 
