@@ -84,7 +84,7 @@ let spatialPack =
       ReleaseNotes = releaseNotes
       Tags = tags
       Authors = [ "Christoph Ruegg"; "Johan Larsson" ]
-      Dependencies = getDependencies "src/Spatial/packages.config"
+      Dependencies = getDependencies "src/Spatial/packages.config" |> List.filter (fun (p,_) -> not (p.StartsWith("StyleCop.")))
       Files = [ @"..\..\out\lib\Net35\MathNet.Spatial.*", Some libnet35, None;
                 @"..\..\out\lib\Net45\MathNet.Spatial.*", Some libnet45, None;
                 @"..\..\out\lib\Profile47\MathNet.Spatial.*", Some libpcl47, None;

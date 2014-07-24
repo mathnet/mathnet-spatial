@@ -57,6 +57,7 @@
     <Compile Include="3D\Line3D.cs" />
     <Compile Include="3D\Plane.cs" />
     <Compile Include="3D\Point3D.cs" />
+    <Compile Include="3D\Quaternion.cs" />
     <Compile Include="3D\Ray3D.cs" />
     <Compile Include="3D\Matrix3D.cs" />
     <Compile Include="3D\UnitVector3D.cs" />
