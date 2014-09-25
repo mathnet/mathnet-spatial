@@ -11,35 +11,26 @@ namespace MathNet.Spatial.Units
     public struct Angle : IComparable<Angle>, IEquatable<Angle>, IFormattable, IXmlSerializable
     {
         public readonly double Radians;
-      
-        /// <summary>
-        /// Default is serializing as attributes, set to true for elements
-        /// </summary>
-        public bool SerializeAsElements;
 
         private Angle(double radians)
         {
             this.Radians = radians;
-            this.SerializeAsElements = false;
         }
 
         public Angle(double radians, Radians unit)
         {
             this.Radians = radians;
-            this.SerializeAsElements = false;
         }
 
-        public Angle(double radians, Degrees unit)
+        public Angle(double value, Degrees unit)
         {
-            this.Radians = UnitConverter.ConvertFrom(radians, unit);
-            this.SerializeAsElements = false;
+            this.Radians = UnitConverter.ConvertFrom(value, unit);
         }
 
         [Obsolete("This boxes, use Angle.From() instead")]
-        public Angle(double radians, IAngleUnit unit)
+        public Angle(double value, IAngleUnit unit)
         {
-            this.Radians = UnitConverter.ConvertFrom(radians, unit);
-            this.SerializeAsElements = false;
+            this.Radians = UnitConverter.ConvertFrom(value, unit);
         }
 
         public double Degrees
@@ -131,7 +122,7 @@ namespace MathNet.Spatial.Units
             return new Angle(left.Radians - right.Radians);
         }
 
-        ////[Obsolete("Will sweet when doing Math.Cos(angle) but opens the door for 1 + angle, prolly remove")]
+        ////[Obsolete("Will be sweet when doing Math.Cos(angle) but opens the door for 1 + angle, prolly remove")]
 
         ////public static implicit operator double(Angle a)
         ////{
@@ -228,14 +219,7 @@ namespace MathNet.Spatial.Units
         /// <param name="writer">The <see cref="T:System.Xml.XmlWriter"/> stream to which the object is serialized. </param>
         public void WriteXml(XmlWriter writer)
         {
-            if (this.SerializeAsElements)
-            {
-                writer.WriteElementString("Value", this.Radians.ToString(CultureInfo.InvariantCulture));
-            }
-            else
-            {
-                writer.WriteAttribute("Value", this.Radians);
-            }
+            writer.WriteAttribute("Value", this.Radians);
         }
 
         public static Angle ReadFrom(XmlReader reader)
