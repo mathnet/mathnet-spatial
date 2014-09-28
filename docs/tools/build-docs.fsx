@@ -104,7 +104,7 @@ let buildDocumentation() =
         let sub = if dir.Length > content.Length then dir.Substring(content.Length + 1) else "."
         Literate.ProcessDirectory
             (dir, docTemplate, output @@ sub, replacements = ("root", root) :: info, layoutRoots = layoutRoots,
-             references = false, lineNumbers = true)
+             references = false, lineNumbers = true, generateAnchors = true)
 
 let cleanup() =
     for (_, docName) in extraDocs do DeleteFile (content @@ docName)
