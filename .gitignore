@@ -32,6 +32,7 @@ _ReSharper*
 *.aps
 *.opensdf
 *.cachefile
+*.TMP
 
 # Upgrades
 _UpgradeReport_Files/
@@ -51,10 +52,14 @@ Desktop.ini
 # NOTE: we do NOT use package restore in the core projects, but do use it with FAKE builds.
 packages/*
 !packages/.gitattributes
-!packages/repositories.config
-!packages/MathNet.*
-!packages/NUnit.*
-!packages/FsUnit.*
-!packages/TaskParallelLibrary.*
-!packages/StyleCop.MSBuild.*
-packages/NUnit.Runners.*
+!packages/NUnit
+!packages/FsUnit
+!packages/StyleCop.MSBuild
+!packages/TaskParallelLibrary
+!packages/FSharp.Core.Microsoft.Signed
+!packages/FSharp.Core.4.3.0.0.Microsoft.Signed
+!packages/MathNet.Numerics
+
+# FAKE & Paket
+packages/FAKE
+tools/paket/paket.exe
