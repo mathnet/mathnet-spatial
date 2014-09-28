@@ -1,10 +1,14 @@
 source http://nuget.org/api/v2
 
-nuget NUnit.Runners 2.6.3
-nuget FSharp.Formatting 2.4.4
-nuget Microsoft.AspNet.Razor 2.0.30506.0
-nuget RazorEngine 3.3.0
-nuget FSharp.Compiler.Service 0.0.44
+# Core Dependencies
 nuget MathNet.Numerics 3.0.2
-nuget StyleCop.MSBuild 4.7.49.0
-nuget NUnit 2.6.3
+
+# Development Dependencies
+nuget NUnit ~> 2.6
+
+# Tools
+nuget FAKE ~> 3.5
+nuget NUnit.Runners ~> 2.6
+nuget FSharp.Formatting !~> 2.4
+nuget StyleCop.MSBuild !~> 4.7
+nuget NuGet.CommandLine

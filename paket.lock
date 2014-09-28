@@ -1,13 +1,15 @@
 NUGET
   remote: http://nuget.org/api/v2
   specs:
-    FSharp.Compiler.Service (0.0.44)
-    FSharp.Formatting (2.4.4)
-      Microsoft.AspNet.Razor (>= 2.0.30506.0)
-      RazorEngine (>= 3.3.0)
-      FSharp.Compiler.Service (>= 0.0.44)
+    FAKE (3.5.5)
+    FSharp.Compiler.Service (0.0.59)
+    FSharp.Formatting (2.4.25)
+      Microsoft.AspNet.Razor (2.0.30506.0)
+      RazorEngine (3.3.0)
+      FSharp.Compiler.Service (>= 0.0.59)
     MathNet.Numerics (3.0.2)
     Microsoft.AspNet.Razor (2.0.30506.0)
+    NuGet.CommandLine (2.8.2)
     NUnit (2.6.3)
     NUnit.Runners (2.6.3)
     RazorEngine (3.3.0)

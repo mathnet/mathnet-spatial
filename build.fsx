@@ -34,6 +34,17 @@ trace header
 // PROJECT INFO
 // --------------------------------------------------------------------------------------
 
+// VERSION OVERVIEW
+
+let release = LoadReleaseNotes "RELEASENOTES.md"
+let buildPart = "0"
+let assemblyVersion = release.AssemblyVersion + "." + buildPart
+let packageVersion = release.NugetVersion
+let releaseNotes = release.Notes |> List.map (fun l -> l.Replace("*","").Replace("`","")) |> toLines
+trace (sprintf " Math.NET Spatial  v%s" packageVersion)
+trace ""
+
+
 // CORE PACKAGES
 
 type Package =
@@ -56,14 +67,6 @@ type Bundle =
       FsLoader: bool
       Packages: Package list }
 
-let release = LoadReleaseNotes "RELEASENOTES.md"
-let buildPart = "0"
-let assemblyVersion = release.AssemblyVersion + "." + buildPart
-let packageVersion = release.NugetVersion
-let releaseNotes = release.Notes |> List.map (fun l -> l.Replace("*","").Replace("`","")) |> toLines
-trace (sprintf " Math.NET Spatial  v%s" packageVersion)
-trace ""
-
 let summary = "Math.NET Spatial, providing methods and algorithms for geometry computations in science, engineering and every day use."
 let description = "Math.NET Spatial. "
 let support = "Supports .Net 4.0, .Net 3.5 and Mono on Windows, Linux and Mac; Silverlight 5, WindowsPhone/SL 8, WindowsPhone 8.1 and Windows 8 with PCL Portable Profiles 47 and 344; Android/iOS with Xamarin."
@@ -84,12 +87,14 @@ let spatialPack =
       ReleaseNotes = releaseNotes
       Tags = tags
       Authors = [ "Christoph Ruegg"; "Johan Larsson" ]
-      Dependencies = getDependencies "src/Spatial/packages.config" |> List.filter (fun (p,_) -> not (p.StartsWith("StyleCop.")))
-      Files = [ @"..\..\out\lib\Net35\MathNet.Spatial.*", Some libnet35, None;
-                @"..\..\out\lib\Net45\MathNet.Spatial.*", Some libnet45, None;
-                @"..\..\out\lib\Profile47\MathNet.Spatial.*", Some libpcl47, None;
-                @"..\..\out\lib\Profile344\MathNet.Spatial.*", Some libpcl344, None;
-                @"..\..\src\Spatial\**\*.cs", Some "src/Common", None ] }
+      Dependencies =
+        [ "MathNet.Numerics", GetPackageVersion "packages" "MathNet.Numerics" ]
+      Files =
+        [ @"..\..\out\lib\Net35\MathNet.Spatial.*", Some libnet35, None;
+          @"..\..\out\lib\Net45\MathNet.Spatial.*", Some libnet45, None;
+          @"..\..\out\lib\Profile47\MathNet.Spatial.*", Some libpcl47, None;
+          @"..\..\out\lib\Profile344\MathNet.Spatial.*", Some libpcl344, None;
+          @"..\..\src\Spatial\**\*.cs", Some "src/Common", None ] }
 
 let coreBundle =
     { Id = spatialPack.Id
@@ -112,8 +117,6 @@ Target "Clean" (fun _ ->
     CleanDirs [ "out/lib/Net35"; "out/lib/Net45"; "out/lib/Profile47"; "out/lib/Profile344" ]
     CleanDirs [ "out/test/Net35"; "out/test/Net45"; "out/test/Profile47"; "out/test/Profile344" ])
 
-Target "RestorePackages" RestorePackages
-
 Target "ApplyVersion" (fun _ ->
     let patchAssemblyInfo path assemblyVersion packageVersion =
         BulkReplaceAssemblyInfoVersions path (fun f ->
@@ -127,7 +130,6 @@ Target "ApplyVersion" (fun _ ->
 Target "Prepare" DoNothing
 "Start"
   =?> ("Clean", not (hasBuildParam "incremental"))
-  ==> "RestorePackages"
   ==> "ApplyVersion"
   ==> "Prepare"
 
@@ -221,7 +223,7 @@ Target "Zip" (fun _ ->
 // NUGET
 
 let updateNuspec (pack:Package) outPath symbols updateFiles spec =
-    { spec with ToolPath = "tools/NuGet/NuGet.exe"
+    { spec with ToolPath = "packages/NuGet.CommandLine/tools/NuGet.exe"
                 OutputPath = outPath
                 WorkingDir = "obj/NuGet"
                 Version = pack.Version
@@ -350,7 +352,7 @@ let publishNuGet packageFiles =
             let args = sprintf "push \"%s\"" (FullName file)
             let result =
                 ExecProcess (fun info ->
-                    info.FileName <- "tools/NuGet/NuGet.exe"
+                    info.FileName <- "packages/NuGet.CommandLine/tools/NuGet.exe"
                     info.WorkingDirectory <- FullName "obj/NuGet"
                     info.Arguments <- args) (TimeSpan.FromMinutes 10.)
             if result <> 0 then failwith "Error during NuGet push."
