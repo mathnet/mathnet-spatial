@@ -6,6 +6,9 @@ using NUnit.Framework;
 
 namespace MathNet.Spatial.UnitTests.Units
 {
+    using System.IO;
+    using System.Xml.Serialization;
+
     public class AngleTests
     {
         private const double Tolerance = 1e-6;
@@ -177,17 +180,21 @@ namespace MathNet.Spatial.UnitTests.Units
             var exception = Assert.Throws<ArgumentException>(() => add.Invoke(angle, new object[] { angle, d }));
         }
 
-        [TestCase("15 °", false, @"<Angle Value=""0.26179938779914941"" />")]
-        [TestCase("15 °", true, @"<Angle><Value>0.261799387799149</Value></Angle>")]
-        public void XmlTest(string vs, bool asElements, string xml)
+        [TestCase("15 °", @"<Angle Value=""0.26179938779914941"" />")]
+        public void XmlTest(string vs, string xml)
         {
             var angle = Angle.Parse(vs);
-            angle.SerializeAsElements = asElements;
             AssertXml.XmlRoundTrips(angle, xml, (e, a) =>
             {
                 Assert.AreEqual(e.Radians, a.Radians, Tolerance);
                 Assert.IsInstanceOf<Angle>(a);
             });
+            var serializer = new XmlSerializer(typeof(Angle));
+            using (var reader = new StringReader(@"<Angle><Value>0.261799387799149</Value></Angle>"))
+            {
+                var fromElements = (Angle)serializer.Deserialize(reader);
+                Assert.AreEqual(angle.Radians, fromElements.Radians, 1e-6);
+            }
         }
     }
 }
