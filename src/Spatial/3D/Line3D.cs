@@ -80,6 +80,12 @@
             }
         }
 
+        /// <summary>
+        /// Creates a Line from its string representation
+        /// </summary>
+        /// <param name="startPoint">The string representation of the startpoint</param>
+        /// <param name="endPoint">The string representation of the endpoint</param>
+        /// <returns></returns>
         public static Line3D Parse(string startPoint, string endPoint)
         {
             return new Line3D(Point3D.Parse(startPoint), Point3D.Parse(endPoint));
@@ -193,8 +199,10 @@
         {
             reader.MoveToContent();
             var e = (XElement)XNode.ReadFrom(reader);
-            XmlExt.SetReadonlyField(ref this, l => l.StartPoint, Point3D.ReadFrom(e.SingleElement("StartPoint").CreateReader()));
-            XmlExt.SetReadonlyField(ref this, l => l.EndPoint, Point3D.ReadFrom(e.SingleElement("EndPoint").CreateReader()));
+            var startPoint = Point3D.ReadFrom(e.SingleElement("StartPoint").CreateReader());
+            XmlExt.SetReadonlyField(ref this, l => l.StartPoint, startPoint);
+            var endPoint = Point3D.ReadFrom(e.SingleElement("EndPoint").CreateReader());
+            XmlExt.SetReadonlyField(ref this, l => l.EndPoint, endPoint);
         }
         
         public void WriteXml(XmlWriter writer)

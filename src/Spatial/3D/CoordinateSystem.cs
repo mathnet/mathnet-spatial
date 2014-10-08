@@ -495,18 +495,6 @@ namespace MathNet.Spatial
             return cs.Transform(this);
         }
 
-        /////// <summary>
-        /////// Rotates a straight coordinate system around Z then around Y and then around X
-        /////// </summary>
-        /////// <param name="yaw">Rotates around Z</param>
-        /////// <param name="pitch">Rotates around Y</param>
-        /////// <param name="roll">Rotates around X</param>
-        /////// <param name="angleUnit"></param>
-        ////public CoordinateSystem Rotate(double yaw, double pitch, double roll, AngleUnit angleUnit)
-        ////{
-        ////    //ResetRotations();
-        ////    return RotateNoReset(yaw, pitch, roll, angleUnit);
-        ////}
         public CoordinateSystem Invert()
         {
             return new CoordinateSystem(this.Inverse());

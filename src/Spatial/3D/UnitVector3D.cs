@@ -12,6 +12,9 @@ using MathNet.Spatial.Units;
 
 namespace MathNet.Spatial
 {
+    /// <summary>
+    /// A unit vector, this is used to describe a direction in 3D
+    /// </summary>
     [Serializable]
     public struct UnitVector3D : IXmlSerializable, IEquatable<UnitVector3D>, IEquatable<Vector3D>, IFormattable
     {
@@ -73,9 +76,14 @@ namespace MathNet.Spatial
             }
         }
 
-        public static UnitVector3D Parse(string value)
+        /// <summary>
+        /// Creates a UnitVector3D from its string representation
+        /// </summary>
+        /// <param name="s">The string representation of the UnitVector3D</param>
+        /// <returns></returns>
+        public static UnitVector3D Parse(string s)
         {
-            var doubles = Parser.ParseItem3D(value);
+            var doubles = Parser.ParseItem3D(s);
             return new UnitVector3D(doubles);
         }
 
@@ -438,31 +446,36 @@ namespace MathNet.Spatial
             return Matrix<double>.Build.Dense(3, 3, new[] { X*X, xy, xz, xy, Y*Y, yz, xz, yz, Z*Z });
         }
 
-        public Angle SignedAngleTo(Vector3D toVector3D, UnitVector3D aboutVector3D)
+        /// <summary>
+        /// Returns signed angle
+        /// </summary>
+        /// <param name="v">The fromVector3D to calculate the signed angle to </param>
+        /// <param name="about">The vector around which to rotate to get the correct sign</param>
+        public Angle SignedAngleTo(Vector3D v, UnitVector3D about)
         {
-            return SignedAngleTo(toVector3D.Normalize(), aboutVector3D);
+            return SignedAngleTo(v.Normalize(), about);
         }
 
         /// <summary>
-        /// Returns signed angle in radians 
+        /// Returns signed angle
         /// </summary>
-        /// <param name="toVector3D">The fromVector3D to calculate the signed angle to </param>
-        /// <param name="aboutVector3D">The fromVector3D around which to rotate </param>
-        public Angle SignedAngleTo(UnitVector3D toVector3D, UnitVector3D aboutVector3D)
+        /// <param name="v">The fromVector3D to calculate the signed angle to </param>
+        /// <param name="about">The vector around which to rotate to get the correct sign</param>
+        public Angle SignedAngleTo(UnitVector3D v, UnitVector3D about)
         {
-            if (IsParallelTo(aboutVector3D))
+            if (IsParallelTo(about))
             {
                 throw new ArgumentException("FromVector paralell to aboutVector");
             }
 
-            if (toVector3D.IsParallelTo(aboutVector3D))
+            if (v.IsParallelTo(about))
             {
                 throw new ArgumentException("FromVector paralell to aboutVector");
             }
 
-            var rp = new Plane(new Point3D(0, 0, 0), aboutVector3D);
+            var rp = new Plane(new Point3D(0, 0, 0), about);
             var pfv = ProjectOn(rp).Direction;
-            var ptv = toVector3D.ProjectOn(rp).Direction;
+            var ptv = v.ProjectOn(rp).Direction;
             var dp = pfv.DotProduct(ptv);
             if (Math.Abs(dp - 1) < 1E-15)
             {
@@ -481,11 +494,21 @@ namespace MathNet.Spatial
             return new Angle(signedAngle, AngleUnit.Radians);
         }
 
+        /// <summary>
+        /// The nearest angle between the vectors
+        /// </summary>
+        /// <param name="v">The other vector</param>
+        /// <returns>The angle</returns>
         public Angle AngleTo(Vector3D v)
         {
             return AngleTo(v.Normalize());
         }
 
+        /// <summary>
+        /// The nearest angle between the vectors
+        /// </summary>
+        /// <param name="v">The other vector</param>
+        /// <returns>The angle</returns>
         public Angle AngleTo(UnitVector3D v)
         {
             var dp = this.DotProduct(v);
@@ -493,18 +516,29 @@ namespace MathNet.Spatial
             return new Angle(angle, AngleUnit.Radians);
         }
 
-        public UnitVector3D Rotate<T>(UnitVector3D aboutVector, double angle, T angleUnit) where T : IAngleUnit
+        /// <summary>
+        /// Returns a vector that is this vector rotated the signed angle around the about vector
+        /// </summary>
+        /// <param name="about"></param>
+        /// <param name="angle"></param>
+        /// <returns></returns>
+        public UnitVector3D Rotate<T>(UnitVector3D about, double angle, T angleUnit) where T : IAngleUnit
         {
-            return this.Rotate(aboutVector, Angle.From(angle, angleUnit));
+            return this.Rotate(about, Angle.From(angle, angleUnit));
         }
 
-        public UnitVector3D Rotate(UnitVector3D aboutVector, Angle angle)
+        /// <summary>
+        /// Returns a vector that is this vector rotated the signed angle around the about vector
+        /// </summary>
+        /// <param name="about"></param>
+        /// <param name="angle"></param>
+        /// <returns></returns>
+        public UnitVector3D Rotate(UnitVector3D about, Angle angle)
         {
-            var cs = CoordinateSystem.Rotation(angle, aboutVector);
+            var cs = CoordinateSystem.Rotation(angle, about);
             return cs.Transform(this).Normalize();
         }
 
-        [Pure]
         public Point3D ToPoint3D()
         {
             return new Point3D(this.X, this.Y, this.Z);

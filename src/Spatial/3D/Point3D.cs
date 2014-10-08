@@ -51,9 +51,14 @@ namespace MathNet.Spatial
             }
         }
 
-        public static Point3D Parse(string value)
+        /// <summary>
+        /// Creates a Point3D from its string representation
+        /// </summary>
+        /// <param name="s">The string representation of the Point3D</param>
+        /// <returns></returns>
+        public static Point3D Parse(string s)
         {
-            var doubles = Parser.ParseItem3D(value);
+            var doubles = Parser.ParseItem3D(s);
             return new Point3D(doubles);
         }
 

@@ -7,9 +7,15 @@ namespace MathNet.Spatial.Units
     using System.Xml.Schema;
     using System.Xml.Serialization;
 
+    /// <summary>
+    /// An angle
+    /// </summary>
     [Serializable]
     public struct Angle : IComparable<Angle>, IEquatable<Angle>, IFormattable, IXmlSerializable
     {
+        /// <summary>
+        /// The value in radians
+        /// </summary>
         public readonly double Radians;
 
         private Angle(double radians)
@@ -17,22 +23,40 @@ namespace MathNet.Spatial.Units
             this.Radians = radians;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the Angle.
+        /// </summary>
+        /// <param name="radians"></param>
+        /// <param name="unit"></param>
         public Angle(double radians, Radians unit)
         {
             this.Radians = radians;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the Angle.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="unit"></param>
         public Angle(double value, Degrees unit)
         {
             this.Radians = UnitConverter.ConvertFrom(value, unit);
         }
 
+        /// <summary>
+        /// Initializes a new instance of the Angle.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="unit"></param>
         [Obsolete("This boxes, use Angle.From() instead")]
         public Angle(double value, IAngleUnit unit)
         {
             this.Radians = UnitConverter.ConvertFrom(value, unit);
         }
 
+        /// <summary>
+        /// The value in degrees
+        /// </summary>
         public double Degrees
         {
             get
@@ -42,7 +66,7 @@ namespace MathNet.Spatial.Units
         }
 
         /// <summary>
-        /// Creates an Angle from it's string representation
+        /// Creates an Angle from its string representation
         /// </summary>
         /// <param name="s">The string representation of the angle</param>
         /// <returns></returns>
@@ -51,16 +75,29 @@ namespace MathNet.Spatial.Units
             return UnitParser.Parse(s, From);
         }
 
+        /// <summary>
+        /// Creates a new instance of Angle.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="unit"></param>
         public static Angle From<T>(double value, T unit) where T : IAngleUnit
         {
             return new Angle(UnitConverter.ConvertFrom(value, unit));
         }
 
+        /// <summary>
+        /// Creates a new instance of Angle.
+        /// </summary>
+        /// <param name="value"></param>
         public static Angle FromDegrees(double value)
         {
             return new Angle(UnitConverter.ConvertFrom(value, AngleUnit.Degrees));
         }
 
+        /// <summary>
+        /// Creates a new instance of Angle.
+        /// </summary>
+        /// <param name="value"></param>
         public static Angle FromRadians(double value)
         {
             return new Angle(value);

@@ -40,6 +40,11 @@ namespace MathNet.Spatial
             this.D = -this.RootPoint.ToVector3D().DotProduct(this.Normal);
         }
 
+        /// <summary>
+        /// Creates a Plane from its string representation
+        /// </summary>
+        /// <param name="s">The string representation of the Plane</param>
+        /// <returns></returns>
         public static Plane Parse(string s)
         {
             return Parser.ParsePlane(s);

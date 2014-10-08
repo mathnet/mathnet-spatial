@@ -50,6 +50,20 @@ namespace MathNet.Spatial
             }
         }
 
+
+        public static Vector3D NaN
+        {
+            get { return new Vector3D(double.NaN, double.NaN, double.NaN); }
+        }
+
+        /// <summary>
+        /// The length of the vector not the count of elements
+        /// </summary>
+        public double Length
+        {
+            get { return Math.Sqrt((this.X * this.X) + (this.Y * this.Y) + (this.Z * this.Z)); }
+        }
+
         /// <summary>
         /// A vector orthogonbal to this
         /// </summary>
@@ -66,9 +80,19 @@ namespace MathNet.Spatial
             }
         }
 
-        public static Vector3D Parse(string value)
+        internal Matrix<double> CrossProductMatrix
         {
-            var doubles = Parser.ParseItem3D(value);
+            get { return Matrix<double>.Build.Dense(3, 3, new[] { 0d, Z, -Y, -Z, 0d, X, Y, -X, 0d }); }
+        }
+
+        /// <summary>
+        /// Creates a Vector3D from its string representation
+        /// </summary>
+        /// <param name="s">The string representation of the Vector3D</param>
+        /// <returns></returns>
+        public static Vector3D Parse(string s)
+        {
+            var doubles = Parser.ParseItem3D(s);
             return new Vector3D(doubles);
         }
 
@@ -225,24 +249,6 @@ namespace MathNet.Spatial
             return v;
         }
 
-        public static Vector3D NaN
-        {
-            get { return new Vector3D(double.NaN, double.NaN, double.NaN); }
-        }
-
-        internal Matrix<double> CrossProductMatrix
-        {
-            get { return Matrix<double>.Build.Dense(3, 3, new[] { 0d, Z, -Y, -Z, 0d, X, Y, -X, 0d }); }
-        }
-
-        /// <summary>
-        /// The length of the vector not the count of elements
-        /// </summary>
-        public double Length
-        {
-            get { return Math.Sqrt((this.X*this.X) + (this.Y*this.Y) + (this.Z*this.Z)); }
-        }
-
         public static Vector3D operator +(Vector3D v1, Vector3D v2)
         {
             return new Vector3D(v1.X + v2.X, v1.Y + v2.Y, v1.Z + v2.Z);
@@ -388,51 +394,95 @@ namespace MathNet.Spatial
         }
 
         /// <summary>
-        /// Returns signed angle in radians
+        /// Returns signed angle
         /// </summary>
-        /// <param name="toVector3D">The fromVector3D to calculate the signed angle to </param>
-        /// <param name="aboutVector3D">The fromVector3D around which to rotate </param>
-        public Angle SignedAngleTo(Vector3D toVector3D, UnitVector3D aboutVector3D)
+        /// <param name="v">The vector to calculate the signed angle to </param>
+        /// <param name="about">The vector around which to rotate to get the correct sign</param>
+        public Angle SignedAngleTo(Vector3D v, UnitVector3D about)
         {
-            return this.Normalize().SignedAngleTo(toVector3D.Normalize(), aboutVector3D);
+            return this.Normalize().SignedAngleTo(v.Normalize(), about);
         }
 
-        public Angle SignedAngleTo(UnitVector3D toVector3D, UnitVector3D aboutVector3D)
+        /// <summary>
+        /// Returns signed angle
+        /// </summary>
+        /// <param name="v">The vector to calculate the signed angle to </param>
+        /// <param name="about">The vector around which to rotate to get the correct sign</param>
+        public Angle SignedAngleTo(UnitVector3D v, UnitVector3D about)
         {
-            return this.Normalize().SignedAngleTo(toVector3D, aboutVector3D);
+            return this.Normalize().SignedAngleTo(v, about);
         }
 
+        /// <summary>
+        /// The nearest angle between the vectors
+        /// </summary>
+        /// <param name="v">The other vector</param>
+        /// <returns>The angle</returns>
         public Angle AngleTo(Vector3D v)
         {
             return this.Normalize().AngleTo(v.Normalize());
         }
 
+        /// <summary>
+        /// The nearest angle between the vectors
+        /// </summary>
+        /// <param name="v">The other vector</param>
+        /// <returns>The angle</returns>
         public Angle AngleTo(UnitVector3D v)
         {
             return this.Normalize().AngleTo(v);
         }
 
-        public Vector3D Rotate<T>(UnitVector3D aboutVector, double angle, T angleUnit) where T : IAngleUnit
+        /// <summary>
+        /// Returns a vector that is this vector rotated the signed angle around the about vector
+        /// </summary>
+        /// <typeparam name="T">Constraining it like this does not box</typeparam>
+        /// <param name="about"></param>
+        /// <param name="angle"></param>
+        /// <param name="angleUnit"></param>
+        /// <returns></returns>
+        public Vector3D Rotate<T>(UnitVector3D about, double angle, T angleUnit) where T : IAngleUnit
         {
-            return Rotate(aboutVector, Angle.From(angle, angleUnit));
+            return Rotate(about, Angle.From(angle, angleUnit));
         }
 
-        public Vector3D Rotate(Vector3D aboutVector, Angle angle)
+        /// <summary>
+        /// Returns a vector that is this vector rotated the signed angle around the about vector
+        /// </summary>
+        /// <param name="about"></param>
+        /// <param name="angle"></param>
+        /// <returns></returns>
+        public Vector3D Rotate(Vector3D about, Angle angle)
         {
-            return Rotate(aboutVector.Normalize(), angle);
+            return Rotate(about.Normalize(), angle);
         }
 
-        public Vector3D Rotate(UnitVector3D aboutVector, Angle angle)
+        /// <summary>
+        /// Returns a vector that is this vector rotated the signed angle around the about vector
+        /// </summary>
+        /// <param name="about"></param>
+        /// <param name="angle"></param>
+        /// <returns></returns>
+        public Vector3D Rotate(UnitVector3D about, Angle angle)
         {
-            var cs = CoordinateSystem.Rotation(angle, aboutVector);
+            var cs = CoordinateSystem.Rotation(angle, about);
             return cs.Transform(this);
         }
 
+        /// <summary>
+        /// return new Point3D(this.X, this.Y, this.Z);
+        /// </summary>
+        /// <returns></returns>
         public Point3D ToPoint3D()
         {
             return new Point3D(this.X, this.Y, this.Z);
         }
 
+        /// <summary>
+        /// Transforms the vector by a coordinate system and returns the transformed.
+        /// </summary>
+        /// <param name="coordinateSystem"></param>
+        /// <returns></returns>
         public Vector3D TransformBy(CoordinateSystem coordinateSystem)
         {
             return coordinateSystem.Transform(this);
