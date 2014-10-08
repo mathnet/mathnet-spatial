@@ -123,26 +123,57 @@ namespace MathNet.Spatial
             return cs;
         }
 
+        /// <summary>
+        /// Creates a coordinate system that rotates 
+        /// </summary>
+        /// <param name="a">Angle to rotate</param>
+        /// <param name="unit">The unit of the angle</param>
+        /// <param name="v">Vector to rotate about</param>
+        /// <returns></returns>
         public static CoordinateSystem Rotation<T>(double a, T unit, UnitVector3D v) where T : IAngleUnit
         {
             return Rotation(Angle.From(a, unit), v);
         }
 
+        /// <summary>
+        /// Creates a coordinate system that rotates 
+        /// </summary>
+        /// <param name="a">Angle to rotate</param>
+        /// <param name="unit">The unit of the angle</param>
+        /// <param name="v">Vector to rotate about</param>
+        /// <returns></returns>
         public static CoordinateSystem Rotation<T>(double a, T unit, Vector3D v) where T : IAngleUnit
         {
             return Rotation(Angle.From(a, unit), v.Normalize());
         }
 
-        public static CoordinateSystem Rotation(Angle av, UnitVector3D v)
+        /// <summary>
+        /// Creates a coordinate system that rotates 
+        /// </summary>
+        /// <param name="angle">Angle to rotate</param>
+        /// <param name="v">Vector to rotate about</param>
+        /// <returns></returns>
+        public static CoordinateSystem Rotation(Angle angle, UnitVector3D v)
         {
             var m = Matrix<double>.Build.Dense(4, 4);
-            m.SetSubMatrix(0, 3, 0, 3, Matrix3D.RotationAroundArbitraryVector(v, av));
+            m.SetSubMatrix(0, 3, 0, 3, Matrix3D.RotationAroundArbitraryVector(v, angle));
             m[3, 3] = 1;
             return new CoordinateSystem(m);
         }
 
         /// <summary>
-        /// Rotates a straight coordinate system around Z then around Y and then around X
+        /// Creates a coordinate system that rotates 
+        /// </summary>
+        /// <param name="angle">Angle to rotate</param>
+        /// <param name="v">Vector to rotate about</param>
+        /// <returns></returns>
+        public static CoordinateSystem Rotation(Angle angle, Vector3D v)
+        {
+            return Rotation(angle, v.Normalize());
+        }
+
+        /// <summary>
+        /// Rotation around Z (yaw) then around Y (pitch) and then around X (roll)
         /// </summary>
         /// <param name="yaw">Rotates around Z</param>
         /// <param name="pitch">Rotates around Y</param>
@@ -150,13 +181,24 @@ namespace MathNet.Spatial
         /// <param name="unit"></param>
         public static CoordinateSystem Rotation<T>(double yaw, double pitch, double roll, T unit) where T : IAngleUnit
         {
-            var cs = new CoordinateSystem();
             var ya = Angle.From(yaw, unit);
             var ra = Angle.From(roll, unit);
             var pa = Angle.From(pitch, unit);
-            var yt = Yaw(ya);
-            var pt = Pitch(pa);
-            var rt = Roll(ra);
+            return Rotation(ya, pa, ra);
+        }
+
+        /// <summary>
+        /// Rotation around Z (yaw) then around Y (pitch) and then around X (roll)
+        /// </summary>
+        /// <param name="yaw">Rotates around Z</param>
+        /// <param name="pitch">Rotates around Y</param>
+        /// <param name="roll">Rotates around X</param>
+        public static CoordinateSystem Rotation(Angle yaw, Angle pitch, Angle roll)
+        {
+            var cs = new CoordinateSystem();
+            var yt = Yaw(yaw);
+            var pt = Pitch(pitch);
+            var rt = Roll(roll);
             return rt.Transform(pt.Transform(yt.Transform(cs)));
         }
 

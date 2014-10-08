@@ -46,23 +46,62 @@ namespace MathNet.Spatial.UnitTests
             AssertGeometry.AreEqual(new Vector3D(zs), cs.ZAxis);
         }
 
-
-        [TestCase("2, 0, 0", 90, "0, 0, 1", "0, 2, 0")]
-        [TestCase("2, 0, 0", -90, "0, 0, 1", "0, -2, 0")]
-        [TestCase("2, 0, 0", 180, "0, 0, 1", "-2, 0, 0")]
-        [TestCase("2, 0, 0", 270, "0, 0, 1", "0, -2, 0")]
-        [TestCase("2, 0, 0", 90, "1, 0, 0", "2, 0, 0")]
-        [TestCase("0, 2, 0", 90, "1, 0, 0", "0, 0, 2")]
-        [TestCase("0, 2, 0", -90, "1, 0, 0", "0, 0, -2")]
-        [TestCase("2, 0, 0", 90, "0, 1, 0", "0, 0, -2")]
-        [TestCase("2, 0, 0", -90, "0, 1, 0", "0, 0, 2")]
-        public void RotationTests(string ps, double a, string uvs, string evs)
+        [TestCase("1, 2, 3", "90°", "0, 0, 1", "-2, 1, 3")]
+        [TestCase("1, 2, 3", "90°", "0, 0, -1", "2, -1, 3")]
+        [TestCase("1, 2, 3", "-90°", "0, 0, 1", "2, -1, 3")]
+        [TestCase("1, 2, 3", "180°", "0, 0, 1", "-1, -2, 3")]
+        [TestCase("1, 2, 3", "270°", "0, 0, 1", "2, -1, 3")]
+        [TestCase("1, 2, 3", "90°", "1, 0, 0", "1, -3, 2")]
+        [TestCase("1, 2, 3", "-90°", "1, 0, 0", "1, 3, -2")]
+        [TestCase("1, 2, 3", "90°", "-1, 0, 0", "1, 3, -2")]
+        [TestCase("1, 2, 3", "90°", "0, 1, 0", "3, 2, -1")]
+        [TestCase("1, 2, 3", "-90°", "0, 1, 0", "-3, 2, 1")]
+        public void RotationAroundVector(string ps, string @as, string vs, string eps)
         {
             var p = Point3D.Parse(ps);
-            var rcs = CoordinateSystem.Rotation(a, AngleUnit.Degrees, UnitVector3D.Parse(uvs));
-            var rp = rcs.Transform(p);
-            Console.WriteLine(rcs.ToString());
-            AssertGeometry.AreEqual(Point3D.Parse(evs), rp);
+            var angle = Angle.Parse(@as);
+            var coordinateSystems = new[]
+                {
+                    CoordinateSystem.Rotation(angle, UnitVector3D.Parse(vs)),
+                    CoordinateSystem.Rotation(angle, Vector3D.Parse(vs)),
+                    CoordinateSystem.Rotation(angle.Degrees, AngleUnit.Degrees, Vector3D.Parse(vs)),
+                    CoordinateSystem.Rotation(angle.Radians, AngleUnit.Radians, Vector3D.Parse(vs)),
+                };
+            var expected = Point3D.Parse(eps);
+            foreach (var coordinateSystem in coordinateSystems)
+            {
+                var rotatedPoint = coordinateSystem.Transform(p);
+                //Console.WriteLine(coordinateSystem.ToString());
+                AssertGeometry.AreEqual(expected, rotatedPoint);
+            }
+        }
+
+        [TestCase("0°", "0°", "0°", "1, 2, 3", "1, 2, 3")]
+        [TestCase("90°", "0°", "0°", "1, 2, 3", "-2, 1, 3")]
+        [TestCase("-90°", "0°", "0°", "1, 2, 3", "2, -1, 3")]
+        [TestCase("0°", "90°", "0°", "1, 2, 3", "3, 2, -1")]
+        [TestCase("0°", "-90°", "0°", "1, 2, 3", "-3, 2, 1")]
+        [TestCase("0°", "0°", "90°", "1, 2, 3", "1, -3, 2")]
+        [TestCase("0°", "0°", "-90°", "1, 2, 3", "1, 3, -2")]
+        public void RotationYawPitchRoll(string yaws, string pitchs, string rolls, string ps, string eps)
+        {
+            var p = Point3D.Parse(ps);
+            var yaw = Angle.Parse(yaws);
+            var pitch = Angle.Parse(pitchs);
+            var roll = Angle.Parse(rolls);
+            var coordinateSystems = new[]
+                {
+                    CoordinateSystem.Rotation(yaw, pitch, roll),
+                    CoordinateSystem.Rotation(yaw.Degrees, pitch.Degrees, roll.Degrees, AngleUnit.Degrees),
+                    CoordinateSystem.Rotation(yaw.Radians, pitch.Radians, roll.Radians, AngleUnit.Radians),
+                };
+            var expected = Point3D.Parse(eps);
+            foreach (var coordinateSystem in coordinateSystems)
+            {
+                var rotatedPoint = coordinateSystem.Transform(p);
+                //Console.WriteLine(coordinateSystem.ToString());
+                AssertGeometry.AreEqual(expected, rotatedPoint);
+            }
         }
 
         [TestCase("2, 0, 0", "0, 0, 1", "2, 0, 1")]
@@ -111,23 +150,6 @@ namespace MathNet.Spatial.UnitTests
             actual = CoordinateSystem.RotateTo(v2, v1, axis);
             rv = actual.Transform(v2);
             AssertGeometry.AreEqual(v1, rv);
-        }
-
-        [TestCase(0, 0, 0, "1, 1, 1", "1, 1, 1", TestName = "No rotation")]
-        [TestCase(90, 0, 0, "2, 0, 0", "0, 2, 0", TestName = "yaw = +90")]
-        [TestCase(-90, 0, 0, "1, 0, 0", "0, -1, 0", TestName = "yaw = -90")]
-        [TestCase(0, 90, 0, "1, 0, 0", "0, 0, -1", TestName = "pitch = +90")]
-        [TestCase(0, -90, 0, "1, 0, 0", "0, 0, 1", TestName = "pitch = -90")]
-        [TestCase(0, 0, 90, "1, 0, 0", "1, 0, 0", TestName = "roll = +90")]
-        [TestCase(0, 0, 90, "0, 1, 0", "0, 0, 1", TestName = "roll = +90")]
-        [TestCase(0, 0, -90, "1, 0, 0", "1, 0, 0", TestName = "roll = +90")]
-        public void RotationYawPitchRoll(double yaw, double pitch, double roll, string vs, string evs)
-        {
-            var cs = CoordinateSystem.Rotation(yaw, pitch, roll, AngleUnit.Degrees);
-            var v = Vector3D.Parse(vs);
-            var actual = cs.Transform(v);
-            var expected = Vector3D.Parse(evs);
-            AssertGeometry.AreEqual(expected, actual);
         }
 
         [Test]
