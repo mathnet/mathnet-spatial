@@ -7,10 +7,20 @@
     using System.Xml.Schema;
     using System.Xml.Serialization;
 
+    /// <summary>
+    /// A line between two points
+    /// </summary>
     [Serializable]
     public struct Line3D : IEquatable<Line3D>, IXmlSerializable
     {
+        /// <summary>
+        /// The startpoint of the line
+        /// </summary>
         public readonly Point3D StartPoint;
+
+        /// <summary>
+        /// The endpoint of the line
+        /// </summary>
         public readonly Point3D EndPoint;
         private double _length;
         private UnitVector3D _direction;
@@ -33,6 +43,9 @@
             this._direction = new UnitVector3D();
         }
 
+        /// <summary>
+        /// Distance from startpoint to endpoint, the length of the line
+        /// </summary>
         public double Length
         {
             get
@@ -51,6 +64,9 @@
             }
         }
 
+        /// <summary>
+        /// The direction from the startpoint to the endpoint
+        /// </summary>
         public UnitVector3D Direction
         {
             get
@@ -107,6 +123,11 @@
             return new Line3D(this.StartPoint + alongVector, p);
         }
 
+        /// <summary>
+        /// The line projected on a plane
+        /// </summary>
+        /// <param name="plane"></param>
+        /// <returns></returns>
         public Line3D ProjectOn(Plane plane)
         {
             return plane.Project(this);

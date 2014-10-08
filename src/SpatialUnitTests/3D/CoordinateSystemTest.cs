@@ -104,13 +104,13 @@ namespace MathNet.Spatial.UnitTests
             }
         }
 
-        [TestCase("2, 0, 0", "0, 0, 1", "2, 0, 1")]
-        [TestCase("2, 0, 0", "0, 0, -1", "2, 0, -1")]
-        [TestCase("2, 0, 0", "0, 0, 0", "2, 0, 0")]
-        [TestCase("2, 0, 0", "0, 1, 0", "2, 1, 0")]
-        [TestCase("2, 0, 0", "0, -1, 0", "2, -1, 0")]
-        [TestCase("2, 0, 0", "1, 0, 0", "3, 0, 0")]
-        [TestCase("2, 0, 0", "-1, 0, 0", "1, 0, 0")]
+        [TestCase("1, 2, 3", "0, 0, 1", "1, 2, 4")]
+        [TestCase("1, 2, 3", "0, 0, -1", "1, 2, 2")]
+        [TestCase("1, 2, 3", "0, 0, 0", "1, 2, 3")]
+        [TestCase("1, 2, 3", "0, 1, 0", "1, 3, 3")]
+        [TestCase("1, 2, 3", "0, -1, 0", "1, 1, 3")]
+        [TestCase("1, 2, 3", "1, 0, 0", "2, 2, 3")]
+        [TestCase("1, 2, 3", "-1, 0, 0", "0, 2, 3")]
         public void Translation(string ps, string vs, string eps)
         {
             var p = Point3D.Parse(ps);
@@ -168,7 +168,8 @@ namespace MathNet.Spatial.UnitTests
             AssertGeometry.AreEqual(expected, actual, float.Epsilon);
         }
 
-        [TestCase("1; -5; 3", "1; -5; 3", "o:{0, 0, 0} x:{1, 0, 0} y:{0, 1, 0} z:{0, 0, 1}")]
+        [TestCase("1; 2; 3", "1; 2; 3", "o:{0, 0, 0} x:{1, 0, 0} y:{0, 1, 0} z:{0, 0, 1}")]
+        [TestCase("1; 2; 3", "1; 2; 3", "o:{3, 4, 5} x:{1, 0, 0} y:{0, 1, 0} z:{0, 0, 1}")]
         public void TransformVector(string vs, string evs, string css)
         {
             var v = Vector3D.Parse(vs);
@@ -176,6 +177,15 @@ namespace MathNet.Spatial.UnitTests
             Vector3D actual = cs.Transform(v);
             var expected = Vector3D.Parse(evs);
             AssertGeometry.AreEqual(expected, actual);
+        }
+
+        [Test]
+        public void TransformUnitVector()
+        {
+            var cs = CoordinateSystem.Rotation(90, AngleUnit.Degrees, UnitVector3D.ZAxis);
+            var uv = UnitVector3D.XAxis;
+            var actual = cs.Transform(uv);
+            AssertGeometry.AreEqual(UnitVector3D.YAxis, actual);
         }
 
         [TestCase("o:{0, 0, 0} x:{1, 0, 0} y:{0, 1, 0} z:{0, 0, 1}", "o:{0, 0, 0} x:{1, 0, 0} y:{0, 1, 0} z:{0, 0, 1}")]
@@ -234,15 +244,6 @@ namespace MathNet.Spatial.UnitTests
             cs = CoordinateSystem.RotateTo(vt, v, axis);
             rotateBack = cs.Transform(rv);
             AssertGeometry.AreEqual(v, rotateBack);
-        }
-
-        [Test]
-        public void TransformUnitVector()
-        {
-            var cs = CoordinateSystem.Rotation(90, AngleUnit.Degrees, UnitVector3D.ZAxis);
-            var uv = UnitVector3D.XAxis;
-            var actual = cs.Transform(uv);
-            AssertGeometry.AreEqual(UnitVector3D.YAxis, actual);
         }
 
         [TestCase("o:{1, 2, -7} x:{10, 0, 0} y:{0, 1, 0} z:{0, 0, 1}", "o:{0, 0, 0} x:{1, 0, 0} y:{0, 1, 0} z:{0, 0, 1}")]

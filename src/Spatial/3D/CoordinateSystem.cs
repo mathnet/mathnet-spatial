@@ -162,7 +162,7 @@ namespace MathNet.Spatial
         }
 
         /// <summary>
-        /// Creates a coordinate system that rotates 
+        /// Creates a coordinate system that rotates
         /// </summary>
         /// <param name="angle">Angle to rotate</param>
         /// <param name="v">Vector to rotate about</param>
@@ -174,6 +174,7 @@ namespace MathNet.Spatial
 
         /// <summary>
         /// Rotation around Z (yaw) then around Y (pitch) and then around X (roll)
+        /// http://en.wikipedia.org/wiki/Aircraft_principal_axes
         /// </summary>
         /// <param name="yaw">Rotates around Z</param>
         /// <param name="pitch">Rotates around Y</param>
@@ -189,6 +190,7 @@ namespace MathNet.Spatial
 
         /// <summary>
         /// Rotation around Z (yaw) then around Y (pitch) and then around X (roll)
+        /// http://en.wikipedia.org/wiki/Aircraft_principal_axes
         /// </summary>
         /// <param name="yaw">Rotates around Z</param>
         /// <param name="pitch">Rotates around Y</param>
@@ -288,6 +290,11 @@ namespace MathNet.Spatial
             return mcs;
         }
 
+        /// <summary>
+        /// Creates a translation
+        /// </summary>
+        /// <param name="translation"></param>
+        /// <returns></returns>
         public static CoordinateSystem Translation(Vector3D translation)
         {
             return new CoordinateSystem(translation.ToPoint3D(), UnitVector3D.XAxis, UnitVector3D.YAxis, UnitVector3D.ZAxis);
@@ -337,9 +344,9 @@ namespace MathNet.Spatial
         /// </summary>
         public CoordinateSystem ResetRotations()
         {
-            var x = this.XAxis.Length*UnitVector3D.XAxis;
-            var y = this.YAxis.Length*UnitVector3D.YAxis;
-            var z = this.ZAxis.Length*UnitVector3D.ZAxis;
+            var x = this.XAxis.Length * UnitVector3D.XAxis;
+            var y = this.YAxis.Length * UnitVector3D.YAxis;
+            var z = this.ZAxis.Length * UnitVector3D.ZAxis;
             return new CoordinateSystem(x, y, z, this.Origin);
         }
 
@@ -407,29 +414,70 @@ namespace MathNet.Spatial
             return GetRotationSubMatrix(this);
         }
 
+        /// <summary>
+        /// Transforms a vector and returns the transformed vector
+        /// </summary>
+        /// <param name="v"></param>
+        /// <returns></returns>
         public Vector3D Transform(Vector3D v)
         {
-            return new Vector3D(this.Transform3DItem(v.ToVector()));
+            var v3 = Vector<double>.Build.Dense(new[] { v.X, v.Y, v.Z });
+            this.GetRotationSubMatrix().Multiply(v3, v3);
+            return new Vector3D(v3[0], v3[1], v3[2]);
         }
 
+        /// <summary>
+        /// Transforms a vector and returns the transformed vector
+        /// </summary>
+        /// <param name="v"></param>
+        /// <returns></returns>
         public Vector3D Transform(UnitVector3D v)
         {
-            return new Vector3D(this.Transform3DItem(v.ToVector()));
+            var v3 = Vector<double>.Build.Dense(new[] { v.X, v.Y, v.Z });
+            this.GetRotationSubMatrix().Multiply(v3, v3);
+            return new Vector3D(v3[0], v3[1], v3[2]);
         }
 
+        /// <summary>
+        /// Transforms a point and returns the transformed point
+        /// </summary>
+        /// <param name="p"></param>
+        /// <returns></returns>
         public Point3D Transform(Point3D p)
         {
-            return new Point3D(this.Transform3DItem(p.ToVector()));
+            var v4 = Vector<double>.Build.Dense(new[] { p.X, p.Y, p.Z, 1 });
+            Multiply(v4, v4);
+            return new Point3D(v4[0], v4[1], v4[2]);
         }
 
+        /// <summary>
+        /// Transforms a coordinate system and returns the transformed
+        /// </summary>
+        /// <param name="cs"></param>
+        /// <returns></returns>
         public CoordinateSystem Transform(CoordinateSystem cs)
         {
             return new CoordinateSystem(this.Multiply(cs));
         }
 
+        /// <summary>
+        /// Transforms a line and returns the transformed.
+        /// </summary>
+        /// <param name="l"></param>
+        /// <returns></returns>
         public Line3D Transform(Line3D l)
         {
             return new Line3D(this.Transform(l.StartPoint), this.Transform(l.EndPoint));
+        }
+
+        /// <summary>
+        /// Transforms a ray and returns the transformed.
+        /// </summary>
+        /// <param name="ray"></param>
+        /// <returns></returns>
+        public Ray3D Transform(Ray3D ray)
+        {
+            return new Ray3D(this.Transform(ray.ThroughPoint), this.Transform(ray.Direction));
         }
 
         public CoordinateSystem TransformBy(Matrix<double> matrix)
@@ -437,6 +485,11 @@ namespace MathNet.Spatial
             return new CoordinateSystem(matrix.Multiply(this));
         }
 
+        /// <summary>
+        /// Transfomes this by the coordinate system and returns the tranformed.
+        /// </summary>
+        /// <param name="cs"></param>
+        /// <returns></returns>
         public CoordinateSystem TransformBy(CoordinateSystem cs)
         {
             return cs.Transform(this);
@@ -491,7 +544,7 @@ namespace MathNet.Spatial
                 return true;
             }
 
-            if (obj.GetType() != typeof (CoordinateSystem))
+            if (obj.GetType() != typeof(CoordinateSystem))
             {
                 return false;
             }
@@ -504,9 +557,9 @@ namespace MathNet.Spatial
             unchecked
             {
                 int result = this.XAxis.GetHashCode();
-                result = (result*397) ^ this.YAxis.GetHashCode();
-                result = (result*397) ^ this.ZAxis.GetHashCode();
-                result = (result*397) ^ this.OffsetToBase.GetHashCode();
+                result = (result * 397) ^ this.YAxis.GetHashCode();
+                result = (result * 397) ^ this.ZAxis.GetHashCode();
+                result = (result * 397) ^ this.OffsetToBase.GetHashCode();
                 return result;
             }
         }
@@ -548,18 +601,6 @@ namespace MathNet.Spatial
             writer.WriteElement("XAxis", this.XAxis);
             writer.WriteElement("YAxis", this.YAxis);
             writer.WriteElement("ZAxis", this.ZAxis);
-        }
-
-        double[] Transform3DItem(Vector<double> item)
-        {
-            if (item.Count != 3)
-            {
-                throw new ArgumentException();
-            }
-
-            var v4 = Vector<double>.Build.Dense(new[] { item[0], item[1], item[2], 1 });
-            Multiply(v4, v4);
-            return new[] { v4[0], v4[1], v4[2] };
         }
     }
 }

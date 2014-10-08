@@ -1,5 +1,8 @@
 ﻿namespace MathNet.Spatial
 {
+    using System;
+
+    [Serializable]
     public struct Circle3D
     {
         public readonly Point3D CenterPoint;

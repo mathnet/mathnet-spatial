@@ -25,16 +25,35 @@ namespace MathNet.Spatial
         {
         }
 
+        /// <summary>
+        /// The intersection of the two planes
+        /// </summary>
+        /// <param name="plane1"></param>
+        /// <param name="plane2"></param>
+        /// <returns></returns>
         public static Ray3D IntersectionOf(Plane plane1, Plane plane2)
         {
             return plane1.IntersectionWith(plane2);
         }
 
+        /// <summary>
+        /// Parses string representation of throughpoint and direction
+        /// This is mainly meant for tests
+        /// </summary>
+        /// <param name="point"></param>
+        /// <param name="direction"></param>
+        /// <returns></returns>
         public static Ray3D Parse(string point, string direction)
         {
             return new Ray3D(Point3D.Parse(point), UnitVector3D.Parse(direction));
         }
 
+        /// <summary>
+        /// Parses a string in the format: 'p:{1, 2, 3} v:{0, 0, 1}' to a Ray3D
+        /// This is mainly meant for tests
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
         public static Ray3D Parse(string s)
         {
             return Parser.ParseRay3D(s);
