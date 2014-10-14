@@ -7,7 +7,7 @@
 
     public static class Parser
     {
-        public const string DoublePattern = @"[+-]?\d+([eE][+-]\d+)?([.,]\d+)?";
+        public static readonly string DoublePattern = @"[+-]?\d*(?:[.,]\d+)?(?:[eE][+-]?\d+)?";
         public const string SeparatorPattern = @" *[,;] *";
         public static readonly string Vector3DPattern = string.Format(@"^ *\(?(?<x>{0}){1}(?<y>{0}){1}(?<z>{0})\)? *$", DoublePattern, SeparatorPattern);
         public static readonly string Vector2DPattern = string.Format(@"^ *\(?(?<x>{0}){1}(?<y>{0})?\)? *$", DoublePattern, SeparatorPattern);

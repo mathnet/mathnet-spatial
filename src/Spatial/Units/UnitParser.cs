@@ -5,7 +5,7 @@
 
     public static class UnitParser
     {
-        public const string UnitValuePattern = @"^(?: *)(?<Value>[+-]?\d+([eE][+-]\d+)?([.,]\d+)?) *(?<Unit>.+) *$";
+        public static readonly string UnitValuePattern = string.Format(@"^(?: *)(?<Value>{0}) *(?<Unit>.+) *$",Parser.DoublePattern);
 
         public static T Parse<T>(string s, Func<double, IAngleUnit, T> creator)
         {

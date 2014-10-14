@@ -57,6 +57,7 @@
     <Compile Include="AssertXml.cs" />
     <Compile Include="AssertXmlTests.cs" />
     <Compile Include="AssertGeometry.cs" />
+    <Compile Include="ParserTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Units\AngleTests.cs" />
     <Compile Include="XmlSerializableDummy.cs" />
