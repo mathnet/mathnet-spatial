@@ -12,12 +12,12 @@ namespace MathNet.Spatial.UnitTests.Units
     public class AngleTests
     {
         private const double Tolerance = 1e-6;
-        private const double degToRad = Math.PI / 180;
+        private const double DegToRad = Math.PI / 180;
         [Test]
         public void Ctor()
         {
             const double deg = 90;
-            const double rad = deg * degToRad;
+            const double rad = deg * DegToRad;
             var angles = new Angle[]
             {
                 new Angle(deg, AngleUnit.Degrees),
@@ -35,12 +35,12 @@ namespace MathNet.Spatial.UnitTests.Units
             }
         }
 
-        [TestCase("5 °", 5 * degToRad)]
-        [TestCase("5°", 5 * degToRad)]
+        [TestCase("5 °", 5 * DegToRad)]
+        [TestCase("5°", 5 * DegToRad)]
         [TestCase("-5.34 rad", -5.34)]
         [TestCase("-5,34 rad", -5.34)]
         [TestCase("1e-4 rad", 0.0001)]
-        [TestCase("1e-4 °", 0.0001 * degToRad)]
+        [TestCase("1e-4 °", 0.0001 * DegToRad)]
         public void ParseTest(string s, double expected)
         {
             var angle = Angle.Parse(s);
@@ -86,7 +86,7 @@ namespace MathNet.Spatial.UnitTests.Units
         }
 
         [TestCase("1.5707 rad", "1.5707 rad", 1.5707 + 1.5707)]
-        [TestCase("1.5707 rad", "2 °", 1.5707 + 2 * degToRad)]
+        [TestCase("1.5707 rad", "2 °", 1.5707 + 2 * DegToRad)]
         public void Addition(string lvs, string rvs, double ev)
         {
             var lv = Angle.Parse(lvs);
@@ -97,7 +97,7 @@ namespace MathNet.Spatial.UnitTests.Units
         }
 
         [TestCase("1.5707 rad", "1.5706 rad", 1.5707 - 1.5706)]
-        [TestCase("1.5707 rad", "2 °", 1.5707 - 2 * degToRad)]
+        [TestCase("1.5707 rad", "2 °", 1.5707 - 2 * DegToRad)]
         public void Subtraction(string lvs, string rvs, double ev)
         {
             var lv = Angle.Parse(lvs);
@@ -107,9 +107,9 @@ namespace MathNet.Spatial.UnitTests.Units
             Assert.IsInstanceOf<Angle>(diff);
         }
 
-        [TestCase("15 °", 5, 15 * 5 * degToRad)]
+        [TestCase("15 °", 5, 15 * 5 * DegToRad)]
         [TestCase("-10 °", 0, 0)]
-        [TestCase("-10 °", 2, -10 * 2 * degToRad)]
+        [TestCase("-10 °", 2, -10 * 2 * DegToRad)]
         [TestCase("1 rad", 2, 2)]
         public void Multiplication(string lvs, double rv, double ev)
         {

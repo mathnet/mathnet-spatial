@@ -18,14 +18,9 @@ namespace MathNet.Spatial.Units
         /// </summary>
         public readonly double Radians;
 
-        /// <summary>
-        /// The value in degrees
-        /// </summary>
-        public readonly double Degrees;
         private Angle(double radians)
         {
             Radians = radians;
-            Degrees = UnitConverter.ConvertTo(radians, AngleUnit.Degrees);
         }
 
         /// <summary>
@@ -36,7 +31,6 @@ namespace MathNet.Spatial.Units
         public Angle(double radians, Radians unit)
         {
             Radians = radians;
-            Degrees = UnitConverter.ConvertTo(radians, AngleUnit.Degrees);
         }
 
         /// <summary>
@@ -47,7 +41,17 @@ namespace MathNet.Spatial.Units
         public Angle(double value, Degrees unit)
         {
             Radians = UnitConverter.ConvertFrom(value, unit);
-            Degrees = value;
+        }
+
+        /// <summary>
+        /// The value in degrees
+        /// </summary>
+        public double Degrees
+        {
+            get
+            {
+               return UnitConverter.ConvertTo(Radians, AngleUnit.Degrees);
+            }
         }
 
         /// <summary>

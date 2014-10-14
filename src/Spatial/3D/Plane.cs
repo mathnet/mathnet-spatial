@@ -142,6 +142,16 @@ namespace MathNet.Spatial
         }
 
         /// <summary>
+        /// Project Vector3D onto this plane
+        /// </summary>
+        /// <param name="vector3DToProject">The Vector3D to project</param>
+        /// <returns>The projected Vector3D</returns>
+        public Ray3D Project(UnitVector3D vector3DToProject)
+        {
+            return Project(vector3DToProject.ToVector3D());
+        }
+
+        /// <summary>
         /// Finds the intersection of the two planes, throws if they are parallel
         /// http://mathworld.wolfram.com/Plane-PlaneIntersection.html
         /// </summary>

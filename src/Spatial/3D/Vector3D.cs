@@ -441,7 +441,8 @@ namespace MathNet.Spatial
         /// <param name="angle"></param>
         /// <param name="angleUnit"></param>
         /// <returns></returns>
-        public Vector3D Rotate<T>(UnitVector3D about, double angle, T angleUnit) where T : IAngleUnit
+        public Vector3D Rotate<T>(UnitVector3D about, double angle, T angleUnit)
+            where T : IAngleUnit
         {
             return Rotate(about, Angle.From(angle, angleUnit));
         }
