@@ -363,6 +363,16 @@ namespace MathNet.Spatial
             return rcs.Transform(this);
         }
 
+        public CoordinateSystem OffsetBy(Vector3D v)
+        {
+            return new CoordinateSystem(this.Origin + v, this.XAxis, this.YAxis, this.ZAxis);
+        }
+
+        public CoordinateSystem OffsetBy(UnitVector3D v)
+        {
+            return new CoordinateSystem(this.Origin + v, this.XAxis, this.YAxis, this.ZAxis);
+        }
+
         public Ray3D TransformToCoordSys(Ray3D r)
         {
             var p = r.ThroughPoint;
