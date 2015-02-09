@@ -48,6 +48,9 @@
     <Compile Include="2D\Matrix2D.cs" />
     <Compile Include="2D\Point2D.cs" />
     <Compile Include="2D\Vector2D.cs" />
+    <Compile Include="3DHomogeneous\Matrix3DHomogeneous.cs" />
+    <Compile Include="3DHomogeneous\Point3DHomogeneous.cs" />
+    <Compile Include="3DHomogeneous\Vector3DHomogeneous.cs" />
     <Compile Include="3D\Circle3D.cs" />
     <Compile Include="3D\CoordinateSystem.cs" />
     <Compile Include="3D\Line3D.cs" />
