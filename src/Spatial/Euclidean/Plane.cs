@@ -7,7 +7,7 @@ using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
 using MathNet.Spatial.Units;
 
-namespace MathNet.Spatial
+namespace MathNet.Spatial.Euclidean
 {
     [Serializable]
     public struct Plane : IEquatable<Plane>, IXmlSerializable

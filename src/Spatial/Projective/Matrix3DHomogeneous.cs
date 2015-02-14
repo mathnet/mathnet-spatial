@@ -1,16 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Xml;
-using System.Xml.Linq;
-using System.Xml.Schema;
-using System.Xml.Serialization;
-using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
 using MathNet.Spatial.Units;
 
-namespace MathNet.Spatial
+namespace MathNet.Spatial.Projective
 {
     class Matrix3DHomogeneous
     {
@@ -18,7 +10,7 @@ namespace MathNet.Spatial
 
         public Matrix3DHomogeneous()
         {
-            Matrix = DenseMatrix.CreateIdentity(4);           
+            Matrix = DenseMatrix.CreateIdentity(4);
         }
 
         public Matrix3DHomogeneous(double m00, double m01, double m02, double m03,
@@ -170,21 +162,21 @@ namespace MathNet.Spatial
         // Create a reflection matrix across the X-Y plane
         public static Matrix3DHomogeneous ReflectionXY()
         {
-            Matrix3DHomogeneous result = Matrix3DHomogeneous.CreateScale(1, 1, -1);
+            Matrix3DHomogeneous result = CreateScale(1, 1, -1);
             return result;
         }
 
         // Create a reflection matrix across the X-Z plane
         public static Matrix3DHomogeneous ReflectionXZ()
         {
-            Matrix3DHomogeneous result = Matrix3DHomogeneous.CreateScale(1, -1, 1);
+            Matrix3DHomogeneous result = CreateScale(1, -1, 1);
             return result;
         }
 
         // Create a reflection matrix across the Y-Z plane
         public static Matrix3DHomogeneous ReflectionYZ()
         {
-            Matrix3DHomogeneous result = Matrix3DHomogeneous.CreateScale(-1, 1, 1);
+            Matrix3DHomogeneous result = CreateScale(-1, 1, 1);
             return result;
         }
 

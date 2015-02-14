@@ -1,12 +1,11 @@
-﻿namespace MathNet.Spatial
-{
-    using System;
-    using System.Linq;
-    using System.Xml;
-    using System.Xml.Linq;
-    using System.Xml.Schema;
-    using System.Xml.Serialization;
+﻿using System;
+using System.Xml;
+using System.Xml.Linq;
+using System.Xml.Schema;
+using System.Xml.Serialization;
 
+namespace MathNet.Spatial.Euclidean
+{
     /// <summary>
     /// A line between two points
     /// </summary>

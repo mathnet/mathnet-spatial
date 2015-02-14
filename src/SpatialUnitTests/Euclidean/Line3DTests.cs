@@ -1,9 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using MathNet.Spatial.Euclidean;
 using NUnit.Framework;
 
-namespace MathNet.Spatial.UnitTests
+namespace MathNet.Spatial.UnitTests.Euclidean
 {
     [TestFixture]
     public class Line3DTests

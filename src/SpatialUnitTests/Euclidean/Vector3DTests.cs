@@ -1,13 +1,13 @@
 ﻿using System;
+using System.IO;
+using System.Xml;
+using System.Xml.Serialization;
+using MathNet.Spatial.Euclidean;
 using MathNet.Spatial.Units;
 using NUnit.Framework;
 
-namespace MathNet.Spatial.UnitTests
+namespace MathNet.Spatial.UnitTests.Euclidean
 {
-    using System.IO;
-    using System.Xml;
-    using System.Xml.Serialization;
-
     [TestFixture]
     public class Vector3DTests
     {

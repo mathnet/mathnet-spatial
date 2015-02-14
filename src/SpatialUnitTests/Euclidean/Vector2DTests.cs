@@ -1,15 +1,15 @@
 ﻿using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Xml;
+using System.Xml.Serialization;
 using MathNet.Numerics.LinearAlgebra.Double;
+using MathNet.Spatial.Euclidean;
 using MathNet.Spatial.Units;
 using NUnit.Framework;
 
-namespace MathNet.Spatial.UnitTests
+namespace MathNet.Spatial.UnitTests.Euclidean
 {
-    using System.Xml;
-    using System.Xml.Serialization;
-
     public class Vector2DTests
     {
         [TestCase(5, "90 °", "0, 5")]

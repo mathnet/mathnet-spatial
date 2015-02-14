@@ -8,7 +8,7 @@ using System.Xml.Serialization;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Spatial.Units;
 
-namespace MathNet.Spatial
+namespace MathNet.Spatial.Euclidean
 {
     [Serializable]
     public class CoordinateSystem : Numerics.LinearAlgebra.Double.DenseMatrix, IEquatable<CoordinateSystem>, IXmlSerializable

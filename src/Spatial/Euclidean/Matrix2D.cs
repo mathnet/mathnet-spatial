@@ -1,9 +1,9 @@
-﻿namespace MathNet.Spatial
-{
-    using System;
-    using Numerics.LinearAlgebra.Double;
-    using Units;
+﻿using System;
+using MathNet.Numerics.LinearAlgebra.Double;
+using MathNet.Spatial.Units;
 
+namespace MathNet.Spatial.Euclidean
+{
     /// <summary>
     /// Helper class for creating matrices for manipulating 2D-elements
     /// </summary>

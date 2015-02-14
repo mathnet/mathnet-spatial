@@ -1,4 +1,6 @@
-﻿namespace MathNet.Spatial
+﻿using MathNet.Spatial.Euclidean;
+
+namespace MathNet.Spatial
 {
     using System;
     using System.Globalization;

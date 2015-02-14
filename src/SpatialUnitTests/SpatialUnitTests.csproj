@@ -45,15 +45,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="2D\Point2DTests.cs" />
-    <Compile Include="2D\Vector2DTests.cs" />
-    <Compile Include="3D\CoordinateSystemTest.cs" />
-    <Compile Include="3D\Line3DTests.cs" />
-    <Compile Include="3D\PlaneTest.cs" />
-    <Compile Include="3D\Point3DTests.cs" />
-    <Compile Include="3D\Ray3DTests.cs" />
-    <Compile Include="3D\UnitVector3DTests.cs" />
-    <Compile Include="3D\Vector3DTests.cs" />
+    <Compile Include="Euclidean\Point2DTests.cs" />
+    <Compile Include="Euclidean\Vector2DTests.cs" />
+    <Compile Include="Euclidean\CoordinateSystemTest.cs" />
+    <Compile Include="Euclidean\Line3DTests.cs" />
+    <Compile Include="Euclidean\PlaneTest.cs" />
+    <Compile Include="Euclidean\Point3DTests.cs" />
+    <Compile Include="Euclidean\Ray3DTests.cs" />
+    <Compile Include="Euclidean\UnitVector3DTests.cs" />
+    <Compile Include="Euclidean\Vector3DTests.cs" />
     <Compile Include="AssertXml.cs" />
     <Compile Include="AssertXmlTests.cs" />
     <Compile Include="AssertGeometry.cs" />

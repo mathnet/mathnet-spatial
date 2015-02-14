@@ -1,14 +1,13 @@
-﻿using MathNet.Numerics.LinearAlgebra;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using MathNet.Numerics.LinearAlgebra;
+using MathNet.Spatial.Euclidean;
 
-namespace MathNet.Spatial
+namespace MathNet.Spatial.Projective
 {
-    class Point3DHomogeneous
+    class Vector3DHomogeneous
     {
         /// <summary>
         /// Using public fields cos: http://blogs.msdn.com/b/ricom/archive/2006/08/31/performance-quiz-11-ten-questions-on-value-based-programming.aspx
@@ -29,12 +28,8 @@ namespace MathNet.Spatial
         /// Using public fields cos: http://blogs.msdn.com/b/ricom/archive/2006/08/31/performance-quiz-11-ten-questions-on-value-based-programming.aspx
         /// </summary>
         public readonly double W;
-        
-        public Point3DHomogeneous()
-        {
-        }
 
-        public Point3DHomogeneous(double x, double y, double z, double w)
+        public Vector3DHomogeneous(double x, double y, double z, double w)
         {
             this.X = x;
             this.Y = y;
@@ -42,17 +37,23 @@ namespace MathNet.Spatial
             this.W = w;
         }
 
-        public Point3DHomogeneous(IEnumerable<double> data)
+        public Vector3DHomogeneous(IEnumerable<double> data)
             : this(data.ToArray())
         {
         }
 
-        public Point3DHomogeneous(double[] data) : this(data[0], data[1], data[2], data[3])
+        public Vector3DHomogeneous(double[] data)
+            : this(data[0], data[1], data[2], data[3])
         {
             if (data.Length != 4)
             {
                 throw new ArgumentException("Size must be 4");
             }
+        }
+
+        public static Vector3DHomogeneous NaN
+        {
+            get { return new Vector3DHomogeneous(double.NaN, double.NaN, double.NaN, double.NaN); }
         }
 
         public override string ToString()
@@ -69,15 +70,23 @@ namespace MathNet.Spatial
         {
             var numberFormatInfo = provider != null ? NumberFormatInfo.GetInstance(provider) : CultureInfo.InvariantCulture.NumberFormat;
             string separator = numberFormatInfo.NumberDecimalSeparator == "," ? ";" : ",";
-            return string.Format("({0}{1} {2}{1} {3}{1} {4})", this.X.ToString(format, numberFormatInfo), separator, this.Y.ToString(format, numberFormatInfo), this.Z.ToString(format, numberFormatInfo), this.W.ToString(format, numberFormatInfo));
+            return string.Format(
+                "({1}{0} {2}{0} {3}{0} {4})",
+                separator,
+                this.X.ToString(format, numberFormatInfo),
+                this.Y.ToString(format, numberFormatInfo),
+                this.Z.ToString(format, numberFormatInfo),
+                this.W.ToString(format, numberFormatInfo));
         }
 
-        public bool Equals(Point3DHomogeneous other)
+        public bool Equals(Vector3DHomogeneous other)
         {
+            // ReSharper disable CompareOfFloatsByEqualityOperator
             return this.X == other.X && this.Y == other.Y && this.Z == other.Z && this.W == other.W;
+            // ReSharper restore CompareOfFloatsByEqualityOperator
         }
 
-        public bool Equals(Point3DHomogeneous other, double tolerance)
+        public bool Equals(Vector3DHomogeneous other, double tolerance)
         {
             if (tolerance < 0)
             {
@@ -97,7 +106,7 @@ namespace MathNet.Spatial
                 return false;
             }
 
-            return obj is Point3DHomogeneous && this.Equals((Point3DHomogeneous)obj);
+            return (obj is Vector3DHomogeneous && this.Equals((Vector3DHomogeneous)obj));
         }
 
         public override int GetHashCode()
@@ -112,26 +121,35 @@ namespace MathNet.Spatial
             }
         }
 
-        public static Point3DHomogeneous NaN
+        /// <summary>
+        /// return new Point3DHomogeneous(this.X, this.Y, this.Z, this.W);
+        /// </summary>
+        /// <returns></returns>
+        public Point3DHomogeneous ToPoint3DHomogeneous()
         {
-            get { return new Point3DHomogeneous(double.NaN, double.NaN, double.NaN, double.NaN); }
+            return new Point3DHomogeneous(this.X, this.Y, this.Z, this.W);
+        }
+
+        public Vector3DHomogeneous TransformBy(Matrix<double> m)
+        {
+            return new Vector3DHomogeneous(m.Multiply(this.ToVector()));
         }
 
         /// <summary>
-        /// Create a new Point3D from a Math.NET Numerics vector of length 3.
+        /// Create a new Vector3DHomogeneous from a Math.NET Numerics vector of length 4.
         /// </summary>
-        public static Point3DHomogeneous OfVector(Vector<double> vector)
+        public static Vector3DHomogeneous OfVector(Vector<double> vector)
         {
             if (vector.Count != 4)
             {
-                throw new ArgumentException("The vector length must be 3 in order to convert it to a Point3D");
+                throw new ArgumentException("The vector length must be 4 in order to convert it to a Vector3D");
             }
 
-            return new Point3DHomogeneous(vector.At(0), vector.At(1), vector.At(2), vector.At(3));
+            return new Vector3DHomogeneous(vector.At(0), vector.At(1), vector.At(2), vector.At(2));
         }
 
         /// <summary>
-        /// Convert to a Math.NET Numerics dense vector of length 3.
+        /// Convert to a Math.NET Numerics dense vector of length 4.
         /// </summary>
         public Vector<double> ToVector()
         {
@@ -145,17 +163,6 @@ namespace MathNet.Spatial
                 return new Vector3D(this.X / this.W, this.X / this.W, this.X / this.W);
             }
             return Vector3D.NaN;
-        }
-
-        public Vector3DHomogeneous ToVector3DHomogeneous()
-        {
-            return new Vector3DHomogeneous(this.X, this.Y, this.Z, this.W);
-        }
-
-        // Apply a transformation to a point
-        public Point3DHomogeneous TransformBy(Matrix<double> m)
-        {
-           return new Point3DHomogeneous(m.Multiply(this.ToVector()));
         }
     }
 }

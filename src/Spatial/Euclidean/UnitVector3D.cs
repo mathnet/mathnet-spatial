@@ -10,7 +10,7 @@ using System.Xml.Serialization;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Spatial.Units;
 
-namespace MathNet.Spatial
+namespace MathNet.Spatial.Euclidean
 {
     /// <summary>
     /// A unit vector, this is used to describe a direction in 3D

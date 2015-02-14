@@ -1,7 +1,7 @@
 ﻿using System;
 using MathNet.Numerics;
 
-namespace MathNet.Spatial
+namespace MathNet.Spatial.Euclidean
 {
     /// <summary>Quaternion Number</summary>
     /// <remarks>

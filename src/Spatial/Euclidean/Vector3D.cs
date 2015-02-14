@@ -9,7 +9,7 @@ using System.Xml.Serialization;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Spatial.Units;
 
-namespace MathNet.Spatial
+namespace MathNet.Spatial.Euclidean
 {
     [Serializable]
     public struct Vector3D : IXmlSerializable, IEquatable<Vector3D>, IEquatable<UnitVector3D>, IFormattable

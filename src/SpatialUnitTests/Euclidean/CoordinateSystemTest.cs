@@ -1,8 +1,9 @@
 ﻿using System;
+using MathNet.Spatial.Euclidean;
 using MathNet.Spatial.Units;
 using NUnit.Framework;
 
-namespace MathNet.Spatial.UnitTests
+namespace MathNet.Spatial.UnitTests.Euclidean
 {
     [TestFixture]
     public class CoordinateSystemTest
