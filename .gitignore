@@ -63,3 +63,11 @@ packages/*
 # FAKE & Paket
 packages/FAKE
 tools/paket/paket.exe
+
+# Generated Doc Files
+docs/content/License.md
+docs/content/Contributing.md
+docs/content/Contributors.md
+docs/content/ReleaseNotes.md
+docs/content/ReleaseNotes-*.md
+

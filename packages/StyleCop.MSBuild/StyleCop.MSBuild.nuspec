@@ -2,8 +2,8 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2013/01/nuspec.xsd">
   <metadata minClientVersion="2.7">
     <id>StyleCop.MSBuild</id>
-    <version>4.7.49.0</version>
-    <authors>Andy Reeves, Adam Ralph</authors>
+    <version>4.7.49.1</version>
+    <authors>Andy Reeves,  Adam Ralph</authors>
     <owners>Adam Ralph</owners>
     <licenseUrl>https://bitbucket.org/adamralph/stylecop-msbuild/src/f067e2091562/license.txt</licenseUrl>
     <projectUrl>https://bitbucket.org/adamralph/stylecop-msbuild</projectUrl>
@@ -16,11 +16,15 @@ Adds official StyleCop MSBuild targets to your project for running StyleCop anal
     <summary>NOTE: if you are using 4.7.48.0 or earlier, uninstall, then reinstall this version. DO NOT perform an update.
 
 Adds official StyleCop MSBuild targets to your project for running StyleCop analysis with every build. Includes official StyleCop binaries. Works both on a developer workstation (with or without Visual Studio) and on a build server. Does not require installation of StyleCop on any machine.</summary>
-    <releaseNotes>NOTE: if you are using 4.7.48.0 or earlier, uninstall, then reinstall this version. DO NOT perform an update.
+    <releaseNotes>Many thanks to Gareth Budden (https://bitbucket.org/gareth_budden) for contributing to this release.
+
+NOTE: if you are using 4.7.48.0 or earlier, uninstall, then reinstall this version. DO NOT perform an update.
 
 For StyleCop release notes see http://stylecop.codeplex.com/.
 
 StyleCop.MSBuild release notes:-
+
+4.7.49.1 New: StyleCopOverrideSettingsFile will look in %AppData% if not set - https://bitbucket.org/adamralph/stylecop-msbuild/pull-request/1/
 
 4.7.48.1 New: Switch to using /build NuGet feature - https://bitbucket.org/adamralph/stylecop-msbuild/issue/12/
 

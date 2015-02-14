@@ -34,7 +34,7 @@ If you do not want to use the official binaries, or if you like to modify, debug
 ### How to build with MSBuild/XBuild
 
     [lang=sh]
-    msbuild MathNet.Spatial.sln             # only build for .Net 4 (main solution)
+    msbuild MathNet.Spatial.sln            # only build for .Net 4 (main solution)
     msbuild MathNet.Spatial.Net35Only.sln  # only build for .Net 3.5
     msbuild MathNet.Spatial.All.sln        # full build with .Net 4, 3.5 and PCL profiles
     xbuild MathNet.Spatial.sln             # build with Mono, e.g. on Linux or Mac
