@@ -6,7 +6,7 @@
 // Binaries that have XML documentation (in a corresponding generated XML file)
 let referenceBinaries = [ "MathNet.Spatial.dll"; "MathNet.Numerics.dll" ]
 // Web site location for the generated documentation
-let website = "http://spatial.mathdotnet.com/docs"
+let website = "http://spatial.mathdotnet.com"
 let githubLink = "http://github.com/mathnet/mathnet-spatial"
 
 // Specify more information about your project

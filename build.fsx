@@ -370,8 +370,7 @@ Target "PublishTag" (fun _ -> publishReleaseTag "Math.NET Spatial" "" packageVer
 Target "PublishDocs" (fun _ ->
     let repo = "../mathnet-websites"
     Git.Branches.pull repo "origin" "master"
-    CleanDir "../mathnet-websites/spatial/docs"
-    CopyRecursive "out/docs" "../mathnet-websites/spatial/docs" true |> printfn "%A"
+    CopyRecursive "out/docs" "../mathnet-websites/spatial" true |> printfn "%A"
     Git.Staging.StageAll repo
     Git.Commit.Commit repo (sprintf "Spatial: %s docs update" packageVersion)
     Git.Branches.pushBranch repo "origin" "master")
