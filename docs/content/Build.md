@@ -31,29 +31,22 @@ FAKE itself is not included in the repository but it will download and bootstrap
 itself automatically when build.cmd is run the first time. Note that this step
 is *not* required when using Visual Studio or `msbuild` directly.
 
-    build.cmd    # normal build (.Net 4.0), run unit tests
-    ./build.sh   # normal build (.Net 4.0), run unit tests - on Linux or Mac
-    ./buildn.sh  # normal build (.Net 4.0), run unit tests - bash on Windows (.Net instead of mono)
+    build.cmd    # normal build (.Net 4.0), run unit tests (.Net on Windows)
+    ./build.sh   # normal build (.Net 4.0), run unit tests (Mono on Linux/Mac, .Net on Windows)
     
     build.cmd Build              # normal build (.Net 4.0)
     build.cmd Build incremental  # normal build, incremental (.Net 4.0)
-    build.cmd Build all          # full build (.Net 4.0, 3.5, PCL)
-    build.cmd Build net35        # compatibility build (.Net 3.5
     
     build.cmd Test        # normal build (.Net 4.0), run unit tests
     build.cmd Test quick  # normal build (.Net 4.0), run unit tests except long running ones
-    build.cmd Test all    # full build (.Net 4.0, 3.5, PCL), run all unit tests
-    build.cmd Test net35  # compatibility build (.Net 3.5), run unit tests
     
     build.cmd Clean  # cleanup build artifacts
-    build.cmd Docs   # generate documentation
+    build.cmd Docs   # generate documentation (also DocsDev, DocsWatch)
     build.cmd Api    # generate api reference
+    build.cmd Zip    # generate zip packages (.Net 4.0)
+    build.cmd NuGet  # generate NuGet packages (.Net 4.0)
     
-    build.cmd NuGet all     # generate normal NuGet packages (.Net 4.0, 3.5, PCL)
-    build.cmd NuGet signed  # generate signed/strong named NuGet packages (.Net 4.0)
-
-    build.cmd All          # build, test, docs, api reference (.Net 4.0)
-    build.cmd All release  # release build
+    build.cmd All    # build, test, docs, api reference (.Net 4.0)
 
 If the build or tests fail claiming that FSharp.Core was not be found, see
 [fsharp.org](http://fsharp.org/use/windows/) or install the
@@ -103,24 +96,22 @@ Official Release Process (Maintainers only)
 
 *   Build Release:
 
-        buildn.sh All release
+        build.sh All release
 
 *   Commit and push release notes and (auto-updated) assembly info files with new "Release: v1.2.3" commit
 
 *   Publish Release:
 
-        buildn.sh PublishDocs
-        buildn.sh PublishApi
-        buildn.sh PublishTag
-        buildn.sh PublishMirrors
-        buildn.sh PublishNuGet
+        build.sh PublishDocs
+        build.sh PublishApi
+        build.sh PublishTag
+        build.sh PublishMirrors
+        build.sh PublishNuGet
 
     In theory there is also a `Publish` target to do this in one step, unfortunately
     publishing to the NuGet gallery is quite unreliable.
 
 *   Create new Codeplex and GitHub release, attach Zip files (to be automated)
+*   Copy artifacts to [release archive](http://1drv.ms/1uZ5IF0) (to be automated)
 *   Consider a tweet via [@MathDotNet](https://twitter.com/MathDotNet)
 *   Consider a post to the [Google+ site](https://plus.google.com/112484567926928665204)
-*   Update Wikipedia release version and date for the
-    [Math.NET Numerics](http://en.wikipedia.org/wiki/Math.NET_Numerics) and
-    [Comparison of numerical analysis software](http://en.wikipedia.org/wiki/Comparison_of_numerical_analysis_software) articles.
