@@ -169,31 +169,41 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             var ninetyDegAngle = new Vector3D(0, 1, 0);
         }
 
-        [TestCase(X, Y, 90)]
-        [TestCase(Y, X, 90)]
-        [TestCase(X, Z, 90)]
-        [TestCase(Z, X, 90)]
-        [TestCase(Y, Z, 90)]
-        [TestCase(Z, Y, 90)]
-        [TestCase(X, X, 0)]
-        [TestCase(Y, Y, 0)]
-        [TestCase(Z, Z, 0)]
-        [TestCase(X, NegativeY, 90)]
-        [TestCase(Y, NegativeY, 180)]
-        [TestCase(Z, NegativeZ, 180)]
-        [TestCase("1; 1; 0", X, 45)]
-        [TestCase("1; 1; 0", Y, 45)]
-        [TestCase("1; 1; 0", Z, 90)]
-        [TestCase("2; 2; 0", "0; 0; 2", 90)]
-        [TestCase("1; 1; 1", X, 54.74)]
-        [TestCase("1; 1; 1", Y, 54.74)]
-        [TestCase("1; 1; 1", Z, 54.74)]
-        public void AngleToTest(string v1s, string v2s, double expected)
+        [TestCase(X, Y, "90°")]
+        [TestCase(Y, X, "90°")]
+        [TestCase(X, Z, "90°")]
+        [TestCase(Z, X, "90°")]
+        [TestCase(Y, Z, "90°")]
+        [TestCase(Z, Y, "90°")]
+        [TestCase(X, X, "0°")]
+        [TestCase(Y, Y, "0°")]
+        [TestCase(Z, Z, "0°")]
+        [TestCase(X, NegativeY, "90°")]
+        [TestCase(Y, NegativeY, "180°")]
+        [TestCase(Z, NegativeZ, "180°")]
+        [TestCase("1; 1; 0", X, "45°")]
+        [TestCase("1; 1; 0", Y, "45°")]
+        [TestCase("1; 1; 0", Z, "90°")]
+        [TestCase("2; 2; 0", "0; 0; 2", "90°")]
+        [TestCase("1; 1; 1", X, "54.74°")]
+        [TestCase("1; 1; 1", Y, "54.74°")]
+        [TestCase("1; 1; 1", Z, "54.74°")]
+        [TestCase("1; 0; 0", "1; 0; 0", "0°")]
+        [TestCase("-1; -1; 1", "-1; -1; 1", "0°")]
+        public void AngleToTest(string v1s, string v2s, string ea)
         {
             var v1 = Vector3D.Parse(v1s);
             var v2 = Vector3D.Parse(v2s);
-            var angle = v1.AngleTo(v2);
-            Assert.AreEqual(expected, angle.Degrees, 1E-2);
+            var angles = new[]
+                {
+                    v1.AngleTo(v2),
+                    v2.AngleTo(v1)
+                };
+            var expected = Angle.Parse(ea);
+            foreach (var angle in angles)
+            {
+                Assert.AreEqual(expected.Radians, angle.Radians, 1E-2);
+            }
         }
 
         [TestCase("5; 0; 0", "1; 0 ; 0")]

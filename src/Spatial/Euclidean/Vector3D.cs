@@ -420,7 +420,9 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>The angle</returns>
         public Angle AngleTo(Vector3D v)
         {
-            return this.Normalize().AngleTo(v.Normalize());
+            var uv1 = this.Normalize();
+            var uv2 = v.Normalize();
+            return uv1.AngleTo(uv2);
         }
 
         /// <summary>
@@ -430,7 +432,8 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>The angle</returns>
         public Angle AngleTo(UnitVector3D v)
         {
-            return this.Normalize().AngleTo(v);
+            var uv = this.Normalize();
+            return uv.AngleTo(v);
         }
 
         /// <summary>
