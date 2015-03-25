@@ -190,6 +190,7 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         [TestCase("1; 1; 1", Z, "54.74°")]
         [TestCase("1; 0; 0", "1; 0; 0", "0°")]
         [TestCase("-1; -1; 1", "-1; -1; 1", "0°")]
+        [TestCase("1; 1; 1", "-1; -1; -1", "180°")]
         public void AngleToTest(string v1s, string v2s, string ea)
         {
             var v1 = Vector3D.Parse(v1s);

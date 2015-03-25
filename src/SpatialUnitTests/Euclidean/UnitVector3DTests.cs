@@ -82,6 +82,20 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             AssertGeometry.AreEqual(Vector3D.Parse(exs), v, float.Epsilon);
         }
 
+        [TestCase("1; 0; 0", "1; 0; 0", 1)]
+        [TestCase("1; 0; 0", "-1; 0; 0", -1)]
+        [TestCase("1; 0; 0", "0; -1; 0", 0)]
+        [TestCase("1; 0; 0", "0; -1; 0", 0)]
+        public void DotProduct(string v1s, string v2s, double expected)
+        {
+            var uv1 = UnitVector3D.Parse(v1s);
+            var uv2 = UnitVector3D.Parse(v2s);
+            var dp = uv1.DotProduct(uv2);
+            Assert.AreEqual(dp, expected, 1e-9);
+            Assert.IsTrue(dp <= 1);
+            Assert.IsTrue(dp >= -1);
+        }
+
         [TestCase("-1, 0, 0", null, "(-1, 0, 0)", 1e-4)]
         [TestCase("-1, 0, 1e-4", "F2", "(-1.00, 0.00, 0.00)", 1e-3)]
         public void ToString(string vs, string format, string expected, double tolerance)
@@ -100,7 +114,7 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             var elementXml = @"<UnitVector3D><X>0.2672612419124244</X><Y>-0.53452248382484879</Y><Z>0.80178372573727319</Z></UnitVector3D>";
 
             AssertXml.XmlRoundTrips(uv, xml, (e, a) => AssertGeometry.AreEqual(e, a));
-            var serializer = new XmlSerializer(typeof (UnitVector3D));
+            var serializer = new XmlSerializer(typeof(UnitVector3D));
             var actuals = new[]
                                 {
                                     UnitVector3D.ReadFrom(XmlReader.Create(new StringReader(xml))),

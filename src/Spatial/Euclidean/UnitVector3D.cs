@@ -405,7 +405,7 @@ namespace MathNet.Spatial.Euclidean
         public double DotProduct(UnitVector3D v)
         {
             var dp = (this.X*v.X) + (this.Y*v.Y) + (this.Z*v.Z);
-            return Math.Min(dp, 1);
+            return Math.Max(-1, Math.Min(dp, 1));
         }
 
         [Obsolete("Use - instead")]
