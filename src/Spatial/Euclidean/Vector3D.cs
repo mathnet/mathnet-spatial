@@ -308,7 +308,7 @@ namespace MathNet.Spatial.Euclidean
         public Vector3D ProjectOn(UnitVector3D uv)
         {
             double pd = DotProduct(uv);
-            return pd*this;
+            return pd*uv;
         }
 
         public bool IsParallelTo(Vector3D othervector, double tolerance = 1e-6)
