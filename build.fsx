@@ -27,7 +27,7 @@ open System
 open System.IO
 
 Environment.CurrentDirectory <- __SOURCE_DIRECTORY__
-let header = ReadFile(__SOURCE_DIRECTORY__ @@ "build.fsx") |> Seq.take 10 |> Seq.map (fun s -> s.Substring(2)) |> toLines
+let header = ReadFile(__SOURCE_DIRECTORY__ </> "build.fsx") |> Seq.take 10 |> Seq.map (fun s -> s.Substring(2)) |> toLines
 trace header
 
 
@@ -57,7 +57,7 @@ type Package =
       ReleaseNotes: string
       Tags: string
       Authors: string list
-      Dependencies: (string*string) list
+      Dependencies: NugetFrameworkDependencies list
       Files: (string * string option * string option) list }
 
 type Bundle =
@@ -70,14 +70,17 @@ type Bundle =
 
 let summary = "Math.NET Spatial, providing methods and algorithms for geometry computations in science, engineering and every day use."
 let description = "Math.NET Spatial. "
-let support = "Supports .Net 4.0, .Net 3.5 and Mono on Windows, Linux and Mac; Silverlight 5, WindowsPhone/SL 8, WindowsPhone 8.1 and Windows 8 with PCL Portable Profiles 47 and 344; Android/iOS with Xamarin."
-let tags = "math spatial geometry"
+let support = "Supports .Net 4.0 and Mono on Windows, Linux and Mac."
+let tags = "math spatial geometry 2D 3D"
 
 let libnet35 = "lib/net35"
 let libnet40 = "lib/net40"
 let libnet45 = "lib/net45"
+let libpcl7 = "lib/portable-net45+netcore45+MonoAndroid1+MonoTouch1"
 let libpcl47 = "lib/portable-net45+sl5+netcore45+MonoAndroid1+MonoTouch1"
-let libpcl344 = "lib/portable-net45+sl5+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1"
+let libpcl78 = "lib/portable-net45+netcore45+wp8+MonoAndroid1+MonoTouch1"
+let libpcl259 = "lib/portable-net45+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1"
+let libpcl328 = "lib/portable-net4+sl5+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1"
 
 let spatialPack =
     { Id = "MathNet.Spatial"
@@ -89,12 +92,10 @@ let spatialPack =
       Tags = tags
       Authors = [ "Christoph Ruegg"; "Johan Larsson" ]
       Dependencies =
-        [ "MathNet.Numerics", GetPackageVersion "packages" "MathNet.Numerics" ]
+        [ { FrameworkVersion=""
+            Dependencies=[ "MathNet.Numerics", GetPackageVersion "packages" "MathNet.Numerics" ] } ]
       Files =
-        [ @"..\..\out\lib\Net35\MathNet.Spatial.*", Some libnet35, None;
-          @"..\..\out\lib\Net45\MathNet.Spatial.*", Some libnet45, None;
-          @"..\..\out\lib\Profile47\MathNet.Spatial.*", Some libpcl47, None;
-          @"..\..\out\lib\Profile344\MathNet.Spatial.*", Some libpcl344, None;
+        [ @"..\..\out\lib\Net40\MathNet.Spatial.*", Some libnet40, None;
           @"..\..\src\Spatial\**\*.cs", Some "src/Common", None ] }
 
 let coreBundle =
@@ -115,8 +116,8 @@ Target "Start" DoNothing
 Target "Clean" (fun _ ->
     CleanDirs [ "obj" ]
     CleanDirs [ "out/api"; "out/docs"; "out/packages" ]
-    CleanDirs [ "out/lib/Net35"; "out/lib/Net45"; "out/lib/Profile47"; "out/lib/Profile344" ]
-    CleanDirs [ "out/test/Net35"; "out/test/Net45"; "out/test/Profile47"; "out/test/Profile344" ])
+    CleanDirs [ "out/lib/Net40" ]
+    CleanDirs [ "out/test/Net40" ])
 
 Target "ApplyVersion" (fun _ ->
     let patchAssemblyInfo path assemblyVersion packageVersion =
@@ -143,12 +144,10 @@ let buildConfig config subject = MSBuild "" (if hasBuildParam "incremental" then
 let build subject = buildConfig "Release" subject
 
 Target "BuildMain" (fun _ -> build !! "MathNet.Spatial.sln")
-Target "BuildNet35" (fun _ -> build !! "MathNet.Spatial.Net35Only.sln")
 Target "BuildAll" (fun _ -> build !! "MathNet.Spatial.All.sln")
 
 Target "Build" DoNothing
 "Prepare"
-  =?> ("BuildNet35", hasBuildParam "net35")
   =?> ("BuildAll", hasBuildParam "all" || hasBuildParam "release")
   =?> ("BuildMain", not (hasBuildParam "all" || hasBuildParam "release" || hasBuildParam "net35"))
   ==> "Build"
@@ -177,12 +176,12 @@ Target "Test" (fun _ -> test !! "out/test/**/*UnitTests*.dll")
 let provideLicense path =
     ReadFileAsString "LICENSE.md"
     |> ConvertTextToWindowsLineBreaks
-    |> ReplaceFile (path @@ "license.txt")
+    |> ReplaceFile (path </> "license.txt")
 
 let provideReadme title releasenotes path =
     String.concat Environment.NewLine [header; " " + title; ""; ReadFileAsString releasenotes]
     |> ConvertTextToWindowsLineBreaks
-    |> ReplaceFile (path @@ "readme.txt")
+    |> ReplaceFile (path </> "readme.txt")
 
 let provideFsLoader includes path =
     // inspired by FsLab/tpetricek
@@ -192,7 +191,7 @@ let provideFsLoader includes path =
     let assemblies = [ "MathNet.Spatial.dll" ]
     let nowarn = ["#nowarn \"211\""]
     let references = [ for assembly in assemblies -> sprintf "#r \"%s\"" assembly ]
-    ReplaceFile (path @@ "MathNet.Spatial.fsx") (nowarn @ includes @ references @ extraScript |> toLines)
+    ReplaceFile (path </> "MathNet.Spatial.fsx") (nowarn @ includes @ references @ extraScript |> toLines)
 
 let provideZipExtraFiles path (bundle:Bundle) =
     provideLicense path
@@ -212,7 +211,7 @@ let zip zipDir filesDir filesFilter bundle =
     let workPath = "obj/Zip/" + bundle.Id
     CopyDir workPath filesDir filesFilter
     provideZipExtraFiles workPath bundle
-    Zip "obj/Zip/" (zipDir @@ sprintf "%s-%s.zip" bundle.Id bundle.Version) !! (workPath + "/**/*.*")
+    Zip "obj/Zip/" (zipDir </> sprintf "%s-%s.zip" bundle.Id bundle.Version) !! (workPath + "/**/*.*")
     CleanDir "obj/Zip"
 
 Target "Zip" (fun _ ->
@@ -235,7 +234,7 @@ let updateNuspec (pack:Package) outPath symbols updateFiles spec =
                 Description = pack.Description
                 Tags = pack.Tags
                 Authors = pack.Authors
-                Dependencies = pack.Dependencies
+                DependenciesByFramework = pack.Dependencies
                 SymbolPackage = symbols
                 Files = updateFiles pack.Files
                 Publish = false }
@@ -287,14 +286,14 @@ let releaseNotesDocs =
     [ "RELEASENOTES.md", "ReleaseNotes.md", "Release Notes" ]
 
 let provideDocExtraFiles() =
-    for (fileName, docName) in extraDocs do CopyFile ("docs/content" @@ docName) fileName
+    for (fileName, docName) in extraDocs do CopyFile ("docs/content" </> docName) fileName
     for (fileName, docName, title) in releaseNotesDocs do
         String.concat Environment.NewLine
           [ "# " + title
             "[Math.NET Spatial](ReleaseNotes.html)"
             ""
             ReadFileAsString fileName ]
-        |> ReplaceFile ("docs/content" @@ docName)
+        |> ReplaceFile ("docs/content" </> docName)
 
 let generateDocs fail local =
     let args = if local then [] else ["--define:RELEASE"]

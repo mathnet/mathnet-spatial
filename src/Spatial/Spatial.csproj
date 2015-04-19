@@ -9,14 +9,15 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MathNet.Spatial</RootNamespace>
     <AssemblyName>MathNet.Spatial</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <OutputPath>..\..\out\lib\Net45\</OutputPath>
-    <IntermediateOutputPath>..\..\obj\lib\Net45\</IntermediateOutputPath>
-    <BaseIntermediateOutputPath>..\..\obj\lib\Net45\</BaseIntermediateOutputPath>
-    <DocumentationFile>..\..\out\lib\Net45\MathNet.Spatial.xml</DocumentationFile>
+    <OutputPath>..\..\out\lib\Net40\</OutputPath>
+    <IntermediateOutputPath>..\..\obj\lib\Net40\</IntermediateOutputPath>
+    <BaseIntermediateOutputPath>..\..\obj\lib\Net40\</BaseIntermediateOutputPath>
+    <DocumentationFile>..\..\out\lib\Net40\MathNet.Spatial.xml</DocumentationFile>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <DefineConstants>TRACE</DefineConstants>
@@ -24,9 +25,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <OutputPath>..\..\out\lib-debug\Net45\</OutputPath>
-    <IntermediateOutputPath>..\..\obj\lib-debug\Net45\</IntermediateOutputPath>
-    <BaseIntermediateOutputPath>..\..\obj\lib-debug\Net45\</BaseIntermediateOutputPath>
+    <OutputPath>..\..\out\lib-debug\Net40\</OutputPath>
+    <IntermediateOutputPath>..\..\obj\lib-debug\Net40\</IntermediateOutputPath>
+    <BaseIntermediateOutputPath>..\..\obj\lib-debug\Net40\</BaseIntermediateOutputPath>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
