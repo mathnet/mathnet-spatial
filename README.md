@@ -3,7 +3,7 @@ Math.NET Spatial
 
 Math.NET Spatial is an opensource **geometry library for .Net, Silverlight and Mono**.
 
-Supports Mono and .NET 4.0 and 3.5 on Linux, Mac and Windows, the portable build (PCL) also Windows 8, Silverlight 5, Windows Phone/SL 8, Windows Phone 8.1, and Xamarin Android/iOS.
+Supports Mono and .NET 4.0 on Linux, Mac and Windows.
 
 Math.NET Spatial is covered under the terms of the [MIT/X11](LICENSE.md) license. You may therefore link to it and use it in both opensource and proprietary software projects.
 
@@ -18,9 +18,7 @@ The recommended way to get Math.NET Spatial is to use NuGet. The following packa
 
 Supported Platforms:
 
-- .Net 4.0, .Net 3.5 and Mono: Windows, Linux and Mac.
-- PCL Portable Profiles 47 and 344: Windows 8, Silverlight 5, Windows Phone/SL 8, Windows Phone 8.1.
-- Xamarin: Android, iOS
+- .Net 4.0 and Mono: Windows, Linux and Mac.
 
 Building Math.NET Spatial
 -------------------------
