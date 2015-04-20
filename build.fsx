@@ -337,7 +337,7 @@ Target "DocsWatch" (fun _ ->
 Target "CleanApi" (fun _ -> CleanDirs ["out/api"])
 
 Target "Api" (fun _ ->
-    !! "out/lib/Net45/MathNet.Spatial.dll"
+    !! "out/lib/Net40/MathNet.Spatial.dll"
     |> Docu (fun p ->
         { p with
             ToolPath = "tools/docu/docu.exe"
