@@ -76,11 +76,11 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             var plane1 = Plane.Parse(pl1s);
             var plane2 = Plane.Parse(pl2s);
             var plane3 = Plane.Parse(pl3s);
-            var p1 = Point3D.ItersectionOf(plane1, plane2, plane3);
-            var p2 = Point3D.ItersectionOf(plane2, plane1, plane3);
-            var p3 = Point3D.ItersectionOf(plane2, plane3, plane1);
-            var p4 = Point3D.ItersectionOf(plane3, plane1, plane2);
-            var p5 = Point3D.ItersectionOf(plane3, plane2, plane1);
+            var p1 = Point3D.IntersectionOf(plane1, plane2, plane3);
+            var p2 = Point3D.IntersectionOf(plane2, plane1, plane3);
+            var p3 = Point3D.IntersectionOf(plane2, plane3, plane1);
+            var p4 = Point3D.IntersectionOf(plane3, plane1, plane2);
+            var p5 = Point3D.IntersectionOf(plane3, plane2, plane1);
             var ep = Point3D.Parse(eps);
             foreach (var p in new[] { p1, p2, p3, p4, p5 })
             {
