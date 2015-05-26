@@ -259,7 +259,7 @@ namespace MathNet.Spatial.Euclidean
 
         public static Point3D PointFromPlanes(Plane plane1, Plane plane2, Plane plane3)
         {
-            return Point3D.ItersectionOf(plane1, plane2, plane3);
+            return Point3D.IntersectionOf(plane1, plane2, plane3);
         }
 
         public override string ToString()

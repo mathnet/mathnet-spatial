@@ -215,13 +215,13 @@ namespace MathNet.Spatial.Euclidean
             return Centroid(p1, p2);
         }
 
-        public static Point3D ItersectionOf(Plane plane1, Plane plane2, Plane plane3)
+        public static Point3D IntersectionOf(Plane plane1, Plane plane2, Plane plane3)
         {
             var ray = plane1.IntersectionWith(plane2);
             return plane3.IntersectionWith(ray);
         }
 
-        public static Point3D ItersectionOf(Plane plane, Ray3D ray)
+        public static Point3D IntersectionOf(Plane plane, Ray3D ray)
         {
             return plane.IntersectionWith(ray);
         }
