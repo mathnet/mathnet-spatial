@@ -111,7 +111,12 @@ namespace MathNet.Spatial.Euclidean
 
         public static Vector2D operator *(double d, Vector2D v)
         {
-            return new Vector2D(d*v.X, d*v.Y);
+            return new Vector2D(d * v.X, d * v.Y);
+        }
+
+        public static Vector2D operator *(Vector2D v, double d)
+        {
+            return d*v;
         }
 
         public static Vector2D operator /(Vector2D v, double d)
@@ -302,6 +307,11 @@ namespace MathNet.Spatial.Euclidean
             // scalar magnitude of the resulting vector.  Though the cross product is undefined in 2D space, this is 
             // a useful mathematical operation to determine direction and compute the area of 2D shapes
             return this.X*other.Y - this.Y*other.X;
+        }
+
+        public Vector2D ProjectOn(Vector2D other)
+        {
+            return other*(this.DotProduct(other)/(other.DotProduct(other)));
         }
 
         public Vector2D Normalize()
