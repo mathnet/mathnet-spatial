@@ -296,6 +296,14 @@ namespace MathNet.Spatial.Euclidean
             return (this.X*other.X) + (this.Y*other.Y);
         }
 
+        public double CrossProduct(Vector2D other)
+        {
+            // Perform the 2D "cross product" as if the 2D vectors were really 3D vectors on the z=0 plane, returning the 
+            // scalar magnitude of the resulting vector.  Though the cross product is undefined in 2D space, this is 
+            // a useful mathematical operation to determine direction and compute the area of 2D shapes
+            return this.X*other.Y - this.Y*other.X;
+        }
+
         public Vector2D Normalize()
         {
             var l = this.Length;
