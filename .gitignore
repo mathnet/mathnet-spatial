@@ -21,6 +21,7 @@ coverage.*
 *.psess
 *.vsp
 *.vspx
+*.boltdata
 
 # Caches
 _ReSharper*

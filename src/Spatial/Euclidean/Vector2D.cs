@@ -301,14 +301,24 @@ namespace MathNet.Spatial.Euclidean
             return (this.X*other.X) + (this.Y*other.Y);
         }
 
+        /// <summary>
+        /// Performs the 2D 'cross product' as if the 2D vectors were really 3D vectors in the z=0 plane, returning
+        /// the scalar magnitude and direction of the resulting z value.
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
         public double CrossProduct(Vector2D other)
         {
-            // Perform the 2D "cross product" as if the 2D vectors were really 3D vectors on the z=0 plane, returning the 
-            // scalar magnitude of the resulting vector.  Though the cross product is undefined in 2D space, this is 
-            // a useful mathematical operation to determine direction and compute the area of 2D shapes
+            // Though the cross product is undefined in 2D space, this is a useful mathematical operation to 
+            // determine angular direction and to compute the area of 2D shapes
             return this.X*other.Y - this.Y*other.X;
         }
 
+        /// <summary>
+        /// Projects this vector onto another vector
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
         public Vector2D ProjectOn(Vector2D other)
         {
             return other*(this.DotProduct(other)/(other.DotProduct(other)));
