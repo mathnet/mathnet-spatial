@@ -127,6 +127,22 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             }
         }
 
+        [TestCase("-1, -2", 2, "-2, -4")]
+        public void FlippedMultiplyAndScaleBy(string vs, double d, string evs)
+        {
+            var v = Vector2D.Parse(vs);
+            var actuals = new[]
+                          {
+                              v * d,
+                              v.ScaleBy(d)
+                          };
+            var expected = Vector2D.Parse(evs);
+            foreach (var actual in actuals)
+            {
+                Assert.AreEqual(expected, actual);
+            }
+        }
+
         [TestCase("-1, -2", 2, "-0.5, -1")]
         public void Divide(string vs, double d, string evs)
         {
@@ -306,5 +322,90 @@ namespace MathNet.Spatial.UnitTests.Euclidean
                 AssertGeometry.AreEqual(v, roundTrip);
             }
         }
+
+        [Test]
+        public void PolarConstructorThrowsArgumentException()
+        {
+            Assert.Throws<ArgumentException>(() => { new Vector2D(-1.0, new Angle(0, new Radians())); });
+        }
+
+        [Test]
+        public void CheckCachedXAxis()
+        {
+            AssertGeometry.AreEqual(new Vector2D(1, 0), Vector2D.XAxis);
+        }
+
+        [Test]
+        public void CheckCachedYAxis()
+        {
+            AssertGeometry.AreEqual(new Vector2D(0, 1), Vector2D.YAxis);
+        }
+
+        [Test]
+        public void EqualityComparerThrowsExceptionOnNegativeTolerance()
+        {
+            var v1 = new Vector2D(0, 0);
+            var v2 = new Vector2D(1, 1);
+            Assert.Throws<ArgumentException>(() => v1.Equals(v2, -0.01));
+        }
+
+        [Test]
+        public void EqualityComparerReturnsFalseOnNullReference()
+        {
+            Assert.IsFalse((new Vector2D()).Equals(null));
+        }
+
+
+        [TestCase("1,0", "0,1", "90°")]
+        [TestCase("0,1", "1,0", "90°", "90°")]
+        [TestCase("-0.99985, 0.01745", "-1, 0", "1°")]
+        [TestCase("-0.99985, -0.01745", "-1, 0", "1°")]
+        [TestCase("0.99985, 0.01745", "1, 0","1°")]
+        [TestCase("0.99985, -0.01745", "1, 0", "1°")]
+        public void UnSignedAngleTo(string v1s, string v2s, string expectedAngle)
+        {
+            var v1 = Vector2D.Parse(v1s);
+            var v2 = Vector2D.Parse(v2s);
+            var expected = Angle.Parse(expectedAngle);
+
+            var angle = v1.AngleTo(v2);
+
+            Assert.AreEqual(expected.Degrees, angle.Degrees, 1e-3);
+        }
+
+        [TestCase("1,0", "0,1", 1)]
+        [TestCase("-1,0", "0,1", -1)]
+        [TestCase("0.5003,-0.7066", "0.0739,0.7981", 0.452)]
+        [TestCase("0.7097,0.6059", "0.0142,-0.7630", -0.550)]
+        [TestCase("-0.6864,0.7036", "-0.8541,-0.1124", 0.678)]
+        [TestCase("-0.2738,0.6783", "0.1695,0.9110", -0.364)]
+        public void CrossProducts(string v1s, string v2s, double expected)
+        {
+            // Generated test data from http://calculator.tutorvista.com/math/8/cross-product-calculator.html
+            var v1 = Vector2D.Parse(v1s);
+            var v2 = Vector2D.Parse(v2s);
+
+            double cross = v1.CrossProduct(v2);
+
+            Assert.AreEqual(expected, cross, 1e-3);
+        }
+
+        [TestCase("1,0", "2,0", "1,0")]
+        [TestCase("1,1", "2,0", "1,0")]
+        [TestCase("1,0", "-2,0", "1,0")]
+        [TestCase("-1,1", "2,0", "-1,0")]
+        [TestCase("-0.0563,-0.2904", "-0.3671,-0.7945", "-0.120,-0.261")]
+        [TestCase("0.4610,0.9067", "-0.7948,-0.7748", "0.690,0.672")]
+        [TestCase("0.3916,-0.9644", "-0.0873,0.0978", "0.653,-0.731")]
+        public void VectorProjection(string v1s, string v2s, string exs)
+        {
+            var v1 = Vector2D.Parse(v1s);
+            var v2 = Vector2D.Parse(v2s);
+            var ex = Vector2D.Parse(exs);
+
+            AssertGeometry.AreEqual(ex, v1.ProjectOn(v2), 1e-3);
+        }
+
+
     }
 }
