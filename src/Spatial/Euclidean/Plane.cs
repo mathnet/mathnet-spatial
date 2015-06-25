@@ -41,6 +41,25 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
+        /// http://www.had2know.com/academics/equation-plane-through-3-points.html
+        /// </summary>
+        /// <param name="p1"></param>
+        /// <param name="p2"></param>
+        /// <param name="p3"></param>
+        public Plane(Point3D p1, Point3D p2, Point3D p3)
+        {
+            if (p1 == p2 || p1 == p3 || p2 == p3)
+            {
+                throw new Exception("Must use three different points");
+            }
+            Vector3D v1 = new Vector3D(p2.X - p1.X, p2.Y - p1.Y, p2.Z - p1.Z);
+            Vector3D v2 = new Vector3D(p3.X - p1.X, p3.Y - p1.Y, p3.Z - p1.Z);
+            this.RootPoint = p1;
+            this.Normal = v1.CrossProduct(v2).Normalize();
+            this.D = -this.RootPoint.ToVector3D().DotProduct(this.Normal);
+        }
+
+        /// <summary>
         /// Creates a Plane from its string representation
         /// </summary>
         /// <param name="s">The string representation of the Plane</param>
@@ -179,6 +198,36 @@ namespace MathNet.Spatial.Euclidean
             var direction = new UnitVector3D(svd.VT.Row(2));
 
             return new Ray3D(throughPoint, direction);
+        }
+
+        /// <summary>
+        /// Find intersection between Line3D and Plane
+        /// http://geomalgorithms.com/a05-_intersect-1.html
+        /// </summary>
+        /// <param name="line"></param>
+        /// <param name="tolerance"></param>
+        /// <returns>Intersection Point or null</returns>
+        public Point3D? IntersectionWith(Line3D line, double tolerance = float.Epsilon)
+        {
+            if (line.Direction.IsParallelTo(this.Normal)) //either parallel or lies in the plane
+            {
+                Point3D projectedPoint = this.Project(line.StartPoint, line.Direction);
+                if (projectedPoint == line.StartPoint) //Line lies in the plane
+                {
+                    throw new Exception("Line lies in the plane"); //Not sure what should be done here
+                }
+                else // Line and plane are parallel
+                {
+                    return null;
+                }
+            }
+            var d = SignedDistanceTo(line.StartPoint);
+            var t = -1 * d / line.Direction.DotProduct(this.Normal);
+            if (t > 1) // They are not intersected
+            {
+                return null;
+            }
+            return line.StartPoint + (t * line.Direction);
         }
 
         /// <summary>
