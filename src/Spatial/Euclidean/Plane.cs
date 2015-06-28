@@ -50,10 +50,14 @@ namespace MathNet.Spatial.Euclidean
         {
             if (p1 == p2 || p1 == p3 || p2 == p3)
             {
-                throw new Exception("Must use three different points");
+                throw new ArgumentException("Must use three different points");
             }
             Vector3D v1 = new Vector3D(p2.X - p1.X, p2.Y - p1.Y, p2.Z - p1.Z);
             Vector3D v2 = new Vector3D(p3.X - p1.X, p3.Y - p1.Y, p3.Z - p1.Z);
+            if (v1.Normalize().Equals(v2.Normalize()))
+            {
+                throw new ArgumentException("the 3 points should not be in the same line");
+            }
             this.RootPoint = p1;
             this.Normal = v1.CrossProduct(v2).Normalize();
             this.D = -this.RootPoint.ToVector3D().DotProduct(this.Normal);
@@ -214,7 +218,7 @@ namespace MathNet.Spatial.Euclidean
                 Point3D projectedPoint = this.Project(line.StartPoint, line.Direction);
                 if (projectedPoint == line.StartPoint) //Line lies in the plane
                 {
-                    throw new Exception("Line lies in the plane"); //Not sure what should be done here
+                    throw new InvalidOperationException("Line lies in the plane"); //Not sure what should be done here
                 }
                 else // Line and plane are parallel
                 {
