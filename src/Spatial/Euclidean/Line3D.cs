@@ -139,6 +139,17 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
+        /// Find the intersection between the line and a plane
+        /// </summary>
+        /// <param name="plane"></param>
+        /// <param name="tolerance"></param>
+        /// <returns></returns>
+        public Point3D? IntersectionWith(Plane plane, double tolerance = double.Epsilon)
+        {
+            return plane.IntersectionWith(this, tolerance);
+        }
+
+        /// <summary>
         /// Indicates whether the current object is equal to another object of the same type.
         /// </summary>
         /// <returns>
