@@ -213,7 +213,7 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>Intersection Point or null</returns>
         public Point3D? IntersectionWith(Line3D line, double tolerance = float.Epsilon)
         {
-            if (line.Direction.IsParallelTo(this.Normal)) //either parallel or lies in the plane
+            if (line.Direction.IsPerpendicularTo(this.Normal)) //either parallel or lies in the plane
             {
                 Point3D projectedPoint = this.Project(line.StartPoint, line.Direction);
                 if (projectedPoint == line.StartPoint) //Line lies in the plane
@@ -226,12 +226,13 @@ namespace MathNet.Spatial.Euclidean
                 }
             }
             var d = SignedDistanceTo(line.StartPoint);
-            var t = -1 * d / line.Direction.DotProduct(this.Normal);
-            if (t > 1) // They are not intersected
+            var u = line.StartPoint.VectorTo(line.EndPoint);
+            var t = -1 * d / u.DotProduct(this.Normal);
+            if (t > 1 || t < 0) // They are not intersected
             {
                 return null;
             }
-            return line.StartPoint + (t * line.Direction);
+            return line.StartPoint + (t * u);
         }
 
         /// <summary>
