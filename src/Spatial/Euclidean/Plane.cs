@@ -54,12 +54,14 @@ namespace MathNet.Spatial.Euclidean
             }
             Vector3D v1 = new Vector3D(p2.X - p1.X, p2.Y - p1.Y, p2.Z - p1.Z);
             Vector3D v2 = new Vector3D(p3.X - p1.X, p3.Y - p1.Y, p3.Z - p1.Z);
-            if (v1.Normalize().Equals(v2.Normalize()))
+            Vector3D cross = v1.CrossProduct(v2);
+
+            if (cross.Length <= float.Epsilon)
             {
-                throw new ArgumentException("the 3 points should not be in the same line");
+                throw new ArgumentException("The 3 points should not be on the same line");
             }
             this.RootPoint = p1;
-            this.Normal = v1.CrossProduct(v2).Normalize();
+            this.Normal = cross.Normalize();
             this.D = -this.RootPoint.ToVector3D().DotProduct(this.Normal);
         }
 
