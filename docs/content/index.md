@@ -15,7 +15,7 @@ NuGet Packages
 
 The recommended way to get Math.NET Spatial is to use NuGet. The following packages are provided and maintained in the public [NuGet Gallery](https://nuget.org/profiles/mathnet/):
 
-- [**MathNet.Spatial**](https://www.nuget.org/packages/MathNet.Spatial/) - core package, including .Net 4, .Net 3.5 and portable/PCL builds.
+- [**MathNet.Spatial**](https://www.nuget.org/packages/MathNet.Spatial/)
 
 Supported Platforms:
 
