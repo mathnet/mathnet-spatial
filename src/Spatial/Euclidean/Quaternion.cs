@@ -1,6 +1,7 @@
 ﻿using System;
 using MathNet.Numerics;
 using MathNet.Numerics.LinearAlgebra.Double;
+using MathNet.Spatial.Units;
 
 namespace MathNet.Spatial.Euclidean
 {
@@ -152,6 +153,22 @@ namespace MathNet.Spatial.Euclidean
         public bool IsRotation
         {
             get { return _norm.AlmostEqual(1.0, Precision.DoublePrecision); }
+        }
+
+        /// <summary>
+        /// The quaternion expresses a relationship between two coordinate frames, A and B say. This relationship, if
+        /// expressed using Euler angles, is as follows:
+        /// 1) Rotate frame A about its z axis by angle gamma;
+        /// 2) Rotate the resulting frame about its (new) y axis by angle beta;
+        /// 3) Rotate the resulting frame about its (new) x axis by angle alpha, to arrive at frame B.
+        /// </summary>
+        /// <returns></returns>
+        public EulerAngles ToEulerAngles()
+        {
+            return new EulerAngles(
+                Angle.FromRadians(Math.Atan2(2*(_w*_x + _y*_z), ((_w*_w) + (_z*_z) - (_x*_x) - (_y*_y)))),
+                Angle.FromRadians(Math.Asin(2*(_w*_y - _x*_z))),
+                Angle.FromRadians(Math.Atan2(2*(_w*_z + _x*_y), ((_w*_w) + (_x*_x) - (_y*_y) - (_z*_z)))));
         }
 
         /// <summary>
