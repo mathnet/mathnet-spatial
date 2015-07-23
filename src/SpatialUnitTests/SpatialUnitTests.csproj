@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Euclidean\Line2DTests.cs" />
     <Compile Include="Euclidean\Point2DTests.cs" />
+    <Compile Include="Euclidean\QuaternionTests.cs" />
     <Compile Include="Euclidean\Vector2DTests.cs" />
     <Compile Include="Euclidean\CoordinateSystemTest.cs" />
     <Compile Include="Euclidean\Line3DTests.cs" />
