@@ -7,7 +7,7 @@ namespace MathNet.Spatial.Units
     public struct Degrees : IAngleUnit
     {
         private const double Conv = Math.PI / 180.0;
-        internal const string Name = "°";
+        internal const string Name = "\u00B0";
 
         public double Conversionfactor
         {
