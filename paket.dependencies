@@ -1,13 +1,13 @@
-source http://nuget.org/api/v2
+source http://www.nuget.org/api/v2
 
 # Core Dependencies
-nuget MathNet.Numerics 3.0.2
+nuget MathNet.Numerics ~> 3.8
 
 # Development Dependencies
 nuget NUnit ~> 2.6
 
 # Tools
-nuget FAKE ~> 3.5
+nuget FAKE ~> 4.1
 nuget NUnit.Runners ~> 2.6
 nuget FSharp.Formatting !~> 2.4
 nuget StyleCop.MSBuild !~> 4.7
