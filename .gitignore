@@ -8,7 +8,8 @@ out/
 *.suo
 *.sln.docstates
 *.userprefs
-.vagrant/
+.vagrant
+.vs
 
 # Test & Analysis Results
 [Tt]est[Rr]esult*/
@@ -22,9 +23,12 @@ coverage.*
 *.vsp
 *.vspx
 *.boltdata
+*.lnt
+*.svclog
 
 # Caches
 _ReSharper*
+_TeamCity*
 *.[Rr]e[Ss]harper
 *.ide/
 *.[Cc]ache
@@ -41,6 +45,7 @@ Backup*/
 UpgradeLog*.XML
 UpgradeLog*.htm
 *.bak
+*.orig
 
 # OS
 $RECYCLE.BIN/
@@ -53,17 +58,18 @@ Desktop.ini
 # NOTE: we do NOT use package restore in the core projects, but do use it with FAKE builds.
 packages/*
 !packages/.gitattributes
+!packages/repositories.config
 !packages/NUnit
 !packages/FsUnit
 !packages/StyleCop.MSBuild
 !packages/TaskParallelLibrary
-!packages/FSharp.Core.Microsoft.Signed
-!packages/FSharp.Core.4.3.0.0.Microsoft.Signed
+!packages/FSharp.Core
 !packages/MathNet.Numerics
 
 # FAKE & Paket
 packages/FAKE
-tools/paket/paket.exe
+.paket/paket.exe
+.fake
 
 # Generated Doc Files
 docs/content/License.md
