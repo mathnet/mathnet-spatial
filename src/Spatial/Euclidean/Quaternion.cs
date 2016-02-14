@@ -1,537 +1,211 @@
-﻿using System;
-using MathNet.Numerics;
-using MathNet.Numerics.LinearAlgebra.Double;
-using MathNet.Spatial.Units;
+﻿
 
 namespace MathNet.Spatial.Euclidean
 {
-    /// <summary>Quaternion Number</summary>
-    /// <remarks>
-    /// http://en.wikipedia.org/wiki/Quaternion
-    /// </remarks>
-    public struct Quaternion
+    using System;
+    using Numerics;
+    using Numerics.LinearAlgebra.Single;
+
+    public struct Quaternion32 : IFormattable, IEquatable<Quaternion32>
     {
-        readonly double _w; // real part
-        readonly double _x, _y, _z; // imaginary part
-        readonly double _abs, _norm; // norm
-        readonly double _arg; // polar notation
-
+        private readonly float a1, a2, a3, a4;
+        #region constructors and creators
         /// <summary>
-        /// Initializes a new instance of the Quaternion.
+        /// Initializes a new instance of the Quaternion. From algebraic numbers.
         /// </summary>
-        public Quaternion(double real, double imagX, double imagY, double imagZ)
+        public Quaternion32(float real, float imagX, float imagY, float imagZ)
         {
-            _x = imagX;
-            _y = imagY;
-            _z = imagZ;
-            _w = real;
-            _norm = ToNorm(real, imagX, imagY, imagZ);
-            _abs = Math.Sqrt(_norm);
-            _arg = Math.Acos(real/_abs);
+            a1 = real;
+            a2 = imagX;
+            a3 = imagY;
+            a4 = imagZ;
         }
-
         /// <summary>
         /// Given a Vector (x,y,z,w), transforms it into a Quaternion
         /// </summary>
         /// <param name="v">The vector to transform into a Quaternion</param>
         /// <returns></returns>
-        public static Quaternion From4Vector(DenseVector v)
+        public static Quaternion32 From4Vector(DenseVector v)
         {
-            return new Quaternion(v[3],v[0],v[1],v[2]);
+            return new Quaternion32(v[3], v[0], v[1], v[2]);
         }
-
-        /// <summary>
-        /// Given a quaternion (x, y, z, w), returns the quaternion (0, 0, 0, 1)
-        /// </summary>
-        /// <returns>A Quaternion structure that represents the identity quaternion.</returns>
-        public static Quaternion Identity()
-        {
-            return 1.0;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the Quaternion.
-        /// </summary>
-        internal Quaternion(double real, double imagX, double imagY, double imagZ, double abs, double norm, double arg)
-        {
-            _x = imagX;
-            _y = imagY;
-            _z = imagZ;
-            _w = real;
-            _norm = norm;
-            _abs = abs;
-            _arg = arg;
-        }
-
-        static double ToNorm(double real, double imagX, double imagY, double imagZ)
-        {
-            return (imagX*imagX) + (imagY*imagY) + (imagZ*imagZ) + (real*real);
-        }
-
-        static Quaternion ToUnitQuaternion(double real, double imagX, double imagY, double imagZ)
-        {
-            double abs = Math.Sqrt(ToNorm(real, imagX, imagY, imagZ));
-            return new Quaternion(real/abs, imagX/abs, imagY/abs, imagZ/abs, 1, 1, Math.Acos(real/abs));
-        }
-
-        /// <summary>
-        /// Gets the real part of the quaternion.
-        /// </summary>
-        public double Real
-        {
-            get { return _w; }
-        }
-
-        /// <summary>
-        /// Gets the imaginary X part (coefficient of complex I) of the quaternion.
-        /// </summary>
-        public double ImagX
-        {
-            get { return _x; }
-        }
-
-        /// <summary>
-        /// Gets the imaginary Y part (coefficient of complex J) of the quaternion.
-        /// </summary>
-        public double ImagY
-        {
-            get { return _y; }
-        }
-
-        /// <summary>
-        /// Gets the imaginary Z part (coefficient of complex K) of the quaternion.
-        /// </summary>
-        public double ImagZ
-        {
-            get { return _z; }
-        }
-
-        /// <summary>
-        /// Gets the standard euclidean length |q| = sqrt(||q||) of the quaternion q: the
-        /// square root of the sum of the squares of the four components. Q may then be
-        /// represented as q = r*(cos(phi) + u * sin(phi)) = r*exp(phi*u) where u is the
-        /// unit vector and phi the argument of q.
-        /// </summary>
-        public double Abs
-        {
-            get { return _abs; }
-        }
-
-        /// <summary>
-        /// Gets the norm ||q|| = |q|^2 of the quaternion q: the sum of the squares of the four components.
-        /// </summary>
-        public double Norm
-        {
-            get { return _norm; }
-        }
-
-        /// <summary>
-        /// Gets the argument phi = arg(q) of the quaternion q, such that q = r*(cos(phi) +
-        /// u * sin(phi)) = r*exp(phi*u) where r is the absolute and u the unit vector of
-        /// q.
-        /// </summary>
-        public double Arg
-        {
-            get { return _arg; }
-        }
-
-        /// <summary>
-        /// True if the quaternion q is of length |q| = 1.
+        #endregion
+        #region operations
+        /// <summary> 
+        /// Squared norm of a quaternion
         /// </summary>
         /// <remarks>
-        /// To normalize a quaternion to a length of 1, use the <see cref="Sign"/> method.
-        /// All unit quaternions form a 3-sphere.
+        /// http://mathworld.wolfram.com/QuaternionNorm.html
         /// </remarks>
-        public bool IsUnitQuaternion
+        public float NormSquared
         {
-            get { return _abs.AlmostEqual(1); }
+            get { return a1 * a1 + a2 * a2 + a3 * a3 + a4 * a4; }
+        }
+        /// <summary> 
+        /// Norm of a quaternion
+        /// </summary>
+        /// <remarks>
+        /// http://mathworld.wolfram.com/QuaternionNorm.html
+        /// </remarks>
+        public float Norm
+        {
+            //TODO : create more robust norm - possible overflow
+            get { return (float)Math.Sqrt(NormSquared); }
+        }
+
+        public static float DotProduct(Quaternion32 q1, Quaternion32 q2)
+        {
+            return q1.a2 * q2.a2 + q1.a3 * q2.a3 + q1.a4 * q2.a4 + q1.a1 * q2.a1;
+        }
+        public Quaternion32 Inverse()
+        {
+            return Conjugated / NormSquared;
+        }
+        public Quaternion32 Normalize()
+        {
+            var norm = Norm;
+            return new Quaternion32(a1 / norm, a2 / norm, a3 / norm, a4 / norm);
+        }
+        public static Quaternion32 Normalize(Quaternion32 quat)
+        {
+            return quat.Normalize();
         }
 
         /// <summary>
-        /// True if the norm of the quaternion is around 1
+        /// Conjugation of quaternion
         /// </summary>
-        public bool IsRotation
+        /// <remarks>
+        /// http://mathworld.wolfram.com/QuaternionConjugate.html
+        /// </remarks>
+        public Quaternion32 Conjugated
         {
-            get { return _norm.AlmostEqual(1.0, Precision.DoublePrecision); }
+            get { return new Quaternion32(a1, -a2, -a3, -a4); }
         }
 
         /// <summary>
-        /// The quaternion expresses a relationship between two coordinate frames, A and B say. This relationship, if
-        /// expressed using Euler angles, is as follows:
-        /// 1) Rotate frame A about its z axis by angle gamma;
-        /// 2) Rotate the resulting frame about its (new) y axis by angle beta;
-        /// 3) Rotate the resulting frame about its (new) x axis by angle alpha, to arrive at frame B.
+        /// Conjugation of quaternion
         /// </summary>
-        /// <returns></returns>
-        public EulerAngles ToEulerAngles()
+        /// <remarks>
+        /// http://mathworld.wolfram.com/QuaternionConjugate.html
+        /// </remarks>
+        public static Quaternion32 Conjugate(Quaternion32 quat)
         {
-            return new EulerAngles(
-                Angle.FromRadians(Math.Atan2(2*(_w*_x + _y*_z), ((_w*_w) + (_z*_z) - (_x*_x) - (_y*_y)))),
-                Angle.FromRadians(Math.Asin(2*(_w*_y - _x*_z))),
-                Angle.FromRadians(Math.Atan2(2*(_w*_z + _x*_y), ((_w*_w) + (_x*_x) - (_y*_y) - (_z*_z)))));
+            return quat.Conjugated;
+        }
+        #endregion
+        #region operators
+        public static Quaternion32 operator +(Quaternion32 q1, Quaternion32 q2)
+        {
+            return new Quaternion32(q1.a1 + q2.a1, q1.a2 + q2.a2, q1.a3 + q2.a3, q1.a4 + q2.a4);
         }
 
+        public static Quaternion32 operator +(Quaternion32 q1, float f)
+        {
+            return new Quaternion32(q1.a1 + f, q1.a2, q1.a3, q1.a4);
+        }
+
+        public static Quaternion32 operator +(float f, Quaternion32 q1)
+        {
+            return q1 + f;
+        }
+        public static Quaternion32 operator -(Quaternion32 q1, Quaternion32 q2)
+        {
+            return new Quaternion32(q1.a1 - q2.a1, q1.a2 - q2.a2, q1.a3 - q2.a3, q1.a4 - q2.a4);
+        }
+
+        public static Quaternion32 operator -(Quaternion32 q1, float f)
+        {
+            return new Quaternion32(q1.a1 - f, q1.a2, q1.a3, q1.a4);
+        }
+
+        public static Quaternion32 operator -(float f, Quaternion32 q1)
+        {
+            return new Quaternion32(f - q1.a1, q1.a2, q1.a3, q1.a4);
+        }
+        public static Quaternion32 operator *(Quaternion32 q1, Quaternion32 q2)
+        {
+            return new Quaternion32(
+                 q1.a1 * q2.a1 - q1.a2 * q2.a2 - q1.a3 * q2.a3 - q1.a4 * q2.a4,
+                q1.a1 * q2.a2 + q1.a2 * q2.a1 + q1.a3 * q2.a4 - q1.a4 * q2.a3,
+                q1.a1 * q2.a3 - q1.a2 * q2.a4 + q1.a3 * q2.a1 + q1.a4 * q2.a2,
+                q1.a1 * q2.a4 + q1.a2 * q2.a3 - q1.a3 * q2.a2 + q1.a4 * q2.a1
+                );
+        }
+        public static Quaternion32 operator *(Quaternion32 q1, float f)
+        {
+            return new Quaternion32(q1.a1 * f, q1.a2 * f, q1.a3 * f, q1.a4 * f);
+        }
+        public static Quaternion32 operator *(float f, Quaternion32 q1)
+        {
+            return q1 * f;
+        }
+
+        public static Quaternion32 operator /(Quaternion32 q1, float f)
+        {
+            return new Quaternion32(q1.a1 / f, q1.a2 / f, q1.a3 / f, q1.a4 / f);
+        }
+        public static Quaternion32 operator /(float f, Quaternion32 q1)
+        {
+            //TODO : More robust division - possible overflow
+            return f * q1.Inverse();
+        }
+        public static bool operator ==(Quaternion32 q1, Quaternion32 q2)
+        {
+            return q1.Equals(q2);
+        }
+
+        public static bool operator !=(Quaternion32 q1, Quaternion32 q2)
+        {
+            return !(q1 == q2);
+        }
+
+        public static Quaternion32 operator -(Quaternion32 q)
+        {
+            return new Quaternion32(-q.a1, -q.a2, -q.a3, -q.a4);
+        }
+        #endregion
+        #region static members
+        /// <summary>
+        /// Neutral element for multiplication
+        /// </summary>
+        public static readonly Quaternion32 One = new Quaternion32(1, 0, 0, 0);
+        /// <summary>
+        /// Neutral element for sum
+        /// </summary>
+        public static readonly Quaternion32 Zero = new Quaternion32(0, 0, 0, 0);
+        #endregion
+        #region getters
+        public float Real { get { return a1; } }
+        public float ImagX { get { return a2; } }
+        public float ImagY { get { return a3; } }
+        public float ImagZ { get { return a4; } }
         /// <summary>
         /// Returns a new Quaternion q with the Scalar part only.
         /// If you need a Double, use the Real-Field instead.
         /// </summary>
-        public Quaternion Scalar()
+        public Quaternion32 Scalar { get { return new Quaternion32(a1, 0, 0, 0); } }
+        #endregion
+        public bool IsNan
         {
-            return new Quaternion(_w, 0, 0, 0);
+            get { return float.IsNaN(a1) || float.IsNaN(a2) || float.IsNaN(a3) || float.IsNaN(a4); }
+        }
+        public bool IsInfinity
+        {
+            get { return float.IsInfinity(a1) || float.IsInfinity(a2) || float.IsInfinity(a3) || float.IsInfinity(a4); }
+        }
+        public string ToString(string format, IFormatProvider formatProvider)
+        {
+            return string.Format(formatProvider, "({0}, {1}, {2}, {3})",
+                a1.ToString(format, formatProvider),
+                a2.ToString(format, formatProvider),
+                a3.ToString(format, formatProvider),
+                a4.ToString(format, formatProvider));
         }
 
-        /// <summary>
-        /// Returns a new Quaternion q with the Vector part only.
-        /// </summary>
-        public Quaternion Vector()
+        public bool Equals(Quaternion32 other)
         {
-            return new Quaternion(0, _x, _y, _z);
-        }
-
-        /// <summary>
-        /// Returns a new normalized Quaternion u with the Vector part only, such that ||u|| = 1.
-        /// Q may then be represented as q = r*(cos(phi) + u * sin(phi)) = r*exp(phi*u) where r is the absolute and phi the argument of q.
-        /// </summary>
-        public Quaternion UnitVector()
-        {
-            return ToUnitQuaternion(0, _x, _y, _z);
-        }
-
-        /// <summary>
-        /// Returns a new normalized Quaternion q with the direction of this quaternion.
-        /// </summary>
-        public Quaternion Sign()
-        {
-            return ToUnitQuaternion(_w, _x, _y, _z);
-        }
-
-        /// <summary>
-        /// Roatates the provided rotation quaternion with this quaternion
-        /// </summary>
-        /// <param name="rotation">The rotation quaternion to rotate</param>
-        /// <returns></returns>
-        public Quaternion RotateRotationQuaternion(Quaternion rotation)
-        {
-            if (!rotation.IsRotation) throw new ArgumentException("The quaternion provided is not a rotation", "rotation");
-
-            return rotation*this;
-        }
-
-        /// <summary>
-        /// Roatates the provided unit quaternion with this quaternion
-        /// </summary>
-        /// <param name="unitQuaternion">The unit quaternion to rotate</param>
-        /// <returns></returns>
-        public Quaternion RotateUnitQuaternion(Quaternion unitQuaternion)
-        {
-            if (!IsRotation) throw new InvalidOperationException("You cannot rotate with this quaternion as it is not a rotation");
-            if (!unitQuaternion.IsUnitQuaternion) throw new ArgumentException("The quaternion provided is not a Unit Quaternion");
-            
-            return (this*unitQuaternion)*Conjugate();
-        }
-
-        /////// <summary>
-        /////// Returns a new Quaternion q with the Sign of the components.
-        /////// </summary>
-        /////// <returns>
-        /////// <list type="bullet">
-        /////// <item>1 if Positive</item>
-        /////// <item>0 if Neutral</item>
-        /////// <item>-1 if Negative</item>
-        /////// </list>
-        /////// </returns>
-        ////public Quaternion ComponentSigns()
-        ////{
-        ////    return new Quaternion(
-        ////        Math.Sign(_x),
-        ////        Math.Sign(_y),
-        ////        Math.Sign(_z),
-        ////        Math.Sign(_w));
-        ////}
-
-        /// <summary>
-        /// (nop)
-        /// </summary>
-        public static Quaternion operator +(Quaternion q)
-        {
-            return q;
-        }
-
-        /// <summary>
-        /// Negate a quaternion.
-        /// </summary>
-        public static Quaternion operator -(Quaternion q)
-        {
-            return q.Negate();
-        }
-
-        /// <summary>
-        /// Add a quaternion to a quaternion.
-        /// </summary>
-        public static Quaternion operator +(Quaternion q1, Quaternion q2)
-        {
-            return q1.Add(q2);
-        }
-
-        /// <summary>
-        /// Add a floating point number to a quaternion.
-        /// </summary>
-        public static Quaternion operator +(Quaternion q1, double d)
-        {
-            return q1.Add(d);
-        }
-
-        /// <summary>
-        /// Subtract a quaternion from a quaternion.
-        /// </summary>
-        public static Quaternion operator -(Quaternion q1, Quaternion q2)
-        {
-            return q1.Subtract(q2);
-        }
-
-        /// <summary>
-        /// Subtract a floating point number from a quaternion.
-        /// </summary>
-        public static Quaternion operator -(Quaternion q1, double d)
-        {
-            return q1.Subtract(d);
-        }
-
-        /// <summary>
-        /// Multiply a quaternion with a quaternion.
-        /// </summary>
-        public static Quaternion operator *(Quaternion q1, Quaternion q2)
-        {
-            return q1.Multiply(q2);
-        }
-
-        /// <summary>
-        /// Multiply a floating point number with a quaternion.
-        /// </summary>
-        public static Quaternion operator *(Quaternion q1, double d)
-        {
-            return q1.Multiply(d);
-        }
-
-        /// <summary>
-        /// Divide a quaternion by a quaternion.
-        /// </summary>
-        public static Quaternion operator /(Quaternion q1, Quaternion q2)
-        {
-            return q1.Divide(q2);
-        }
-
-        /// <summary>
-        /// Divide a quaternion by a floating point number.
-        /// </summary>
-        public static Quaternion operator /(Quaternion q1, double d)
-        {
-            return q1.Divide(d);
-        }
-
-        /// <summary>
-        /// Raise a quaternion to a quaternion.
-        /// </summary>
-        public static Quaternion operator ^(Quaternion q1, Quaternion q2)
-        {
-            return q1.Pow(q2);
-        }
-
-        /// <summary>
-        /// Raise a quaternion to a floating point number.
-        /// </summary>
-        public static Quaternion operator ^(Quaternion q1, double d)
-        {
-            return q1.Pow(d);
-        }
-
-        /// <summary>
-        /// Convert a floating point number to a quaternion.
-        /// </summary>
-        public static implicit operator Quaternion(double d)
-        {
-            return new Quaternion(d, 0, 0, 0);
-        }
-
-        /// <summary>
-        /// Add a quaternion to this quaternion.
-        /// </summary>
-        public Quaternion Add(Quaternion q)
-        {
-            return new Quaternion(_w + q._w, _x + q._x, _y + q._y, _z + q._z);
-        }
-
-        /// <summary>
-        /// Add a floating point number to this quaternion.
-        /// </summary>
-        public Quaternion Add(double r)
-        {
-            return new Quaternion(_w + r, _x, _y, _z);
-        }
-
-        /// <summary>
-        /// Subtract a quaternion from this quaternion.
-        /// </summary>
-        public Quaternion Subtract(Quaternion q)
-        {
-            return new Quaternion(_w - q._w, _x - q._x, _y - q._y, _z - q._z);
-        }
-
-        /// <summary>
-        /// Subtract a floating point number from this quaternion.
-        /// </summary>
-        public Quaternion Subtract(double r)
-        {
-            return new Quaternion(_w - r, _x, _y, _z);
-        }
-
-        /// <summary>
-        /// Negate this quaternion.
-        /// </summary>
-        public Quaternion Negate()
-        {
-            return new Quaternion(-_w, -_x, -_y, -_z, _abs, _norm, Math.PI - _arg);
-        }
-
-        /// <summary>
-        /// Multiply a quaternion with this quaternion.
-        /// </summary>
-        public Quaternion Multiply(Quaternion q)
-        {
-            double ci = (+_x*q._w) + (_y*q._z) - (_z*q._y) + (_w*q._x);
-            double cj = (-_x*q._z) + (_y*q._w) + (_z*q._x) + (_w*q._y);
-            double ck = (+_x*q._y) - (_y*q._x) + (_z*q._w) + (_w*q._z);
-            double cr = (-_x*q._x) - (_y*q._y) - (_z*q._z) + (_w*q._w);
-            return new Quaternion(cr, ci, cj, ck);
-        }
-
-        /// <summary>
-        /// Multiply a floating point number to this quaternion.
-        /// </summary>
-        public Quaternion Multiply(double d)
-        {
-            return new Quaternion(d*_w, d*_x, d*_y, d*_z);
-        }
-
-        /// <summary>
-        /// Multiplies a Quaternion with the inverse of another
-        /// Quaternion (q*q<sup>-1</sup>). Note that for Quaternions
-        /// q*q<sup>-1</sup> is not the same then q<sup>-1</sup>*q,
-        /// because this will lead to a rotation in the other direction.
-        /// </summary>
-        public Quaternion Divide(Quaternion q)
-        {
-            return Multiply(q.Inverse());
-        }
-
-        /// <summary>
-        /// Multiplies a Quaternion with the inverse of a real number.
-        /// </summary>
-        /// <remarks>
-        /// Its also possible to cast a double to a Quaternion and make the division
-        /// afterward, but that would be more expensive.
-        /// </remarks>
-        public Quaternion Divide(double d)
-        {
-            return new Quaternion(_w/d, _x/d, _y/d, _z/d);
-        }
-
-        /// <summary>
-        /// Inverts this quaternion.
-        /// </summary>
-        public Quaternion Inverse()
-        {
-            if (_abs.AlmostEqual(1))
-            {
-                return new Quaternion(_w, -_x, -_y, -_z);
-            }
-
-            return new Quaternion(_w/_norm, -_x/_norm, -_y/_norm, -_z/_norm);
-        }
-
-        /// <summary>
-        /// Returns the distance |a-b| of two quaternions, forming a metric space.
-        /// </summary>
-        public static double Distance(Quaternion a, Quaternion b)
-        {
-            return a.Subtract(b).Abs;
-        }
-
-        /// <summary>
-        /// Conjugate this quaternion.
-        /// </summary>
-        public Quaternion Conjugate()
-        {
-            return new Quaternion(_w, -_x, -_y, -_z, _abs, _norm, _arg);
-        }
-
-        /// <summary>
-        /// Logarithm to a given base.
-        /// </summary>
-        public Quaternion Log(double lbase)
-        {
-            return Ln().Divide(Math.Log(lbase));
-        }
-
-        /// <summary>
-        /// Natural Logarithm to base E.
-        /// </summary>
-        public Quaternion Ln()
-        {
-            return UnitVector().Multiply(_arg).Add(Math.Log(_abs));
-        }
-
-        /// <summary>
-        /// Common Logarithm to base 10.
-        /// </summary>
-        public Quaternion Lg()
-        {
-            return Ln().Divide(Math.Log(10));
-        }
-
-        /// <summary>
-        /// Exponential Function.
-        /// </summary>
-        /// <returns></returns>
-        public Quaternion Exp()
-        {
-            double vabs = Math.Sqrt(ToNorm(0, _x, _y, _z));
-            return UnitVector().Multiply(Math.Sin(vabs)).Add(Math.Cos(vabs)).Multiply(Math.Exp(_w));
-        }
-
-        /// <summary>
-        /// Raise the quaternion to a given power.
-        /// </summary>
-        public Quaternion Pow(double power)
-        {
-            double arg = power*_arg;
-            return UnitVector().Multiply(Math.Sin(arg)).Add(Math.Cos(arg)).Multiply(Math.Pow(_w, power));
-        }
-
-        /// <summary>
-        /// Raise the quaternion to a given power.
-        /// </summary>
-        public Quaternion Pow(Quaternion power)
-        {
-            return power.Multiply(Ln()).Exp();
-        }
-
-        /// <summary>
-        /// Square of the Quaternion q: q^2.
-        /// </summary>
-        public Quaternion Sqr()
-        {
-            double arg = _arg*2;
-            return UnitVector().Multiply(Math.Sin(arg)).Add(Math.Cos(arg)).Multiply(_w*_w);
-        }
-
-        /// <summary>
-        /// Square root of the Quaternion: q^(1/2).
-        /// </summary>
-        public Quaternion Sqrt()
-        {
-            double arg = _arg*0.5;
-            return UnitVector().Multiply(Math.Sin(arg)).Add(Math.Cos(arg)).Multiply(Math.Sqrt(_w));
+            return a1.AlmostEqual(other.a1) && a2.AlmostEqual(other.a2) && a3.AlmostEqual(other.a3) && a4.AlmostEqual(other.a4);
         }
     }
 }
+

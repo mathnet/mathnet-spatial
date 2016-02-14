@@ -1,24 +1,53 @@
-﻿using System;
-using MathNet.Spatial.Euclidean;
-using MathNet.Spatial.Units;
-using NUnit.Framework;
-
-namespace MathNet.Spatial.UnitTests.Euclidean
+﻿namespace MathNet.Spatial.UnitTests.Euclidean
 {
+    using NUnit.Framework;
+    using Spatial.Euclidean;
+
+    /// <summary>
+    /// Complex32 tests.
+    /// </summary>
+    /// <remarks>
+    /// Tests are based on http://web.cs.iastate.edu/~cs577/handouts/quaternion.pdf and my own calculations
+    /// </remarks>
     [TestFixture]
-    public class QuaternionTests
+    public class Quaternions32Tests
     {
-        [TestCase(1.0, 1.0, 1.0, 1.0, new[] { Numerics.Constants.PiOver2, 0.0, Numerics.Constants.PiOver2 })]
-        [TestCase(0.0, 1.0, 0.0, 0.0, new[] { Numerics.Constants.Pi, 0.0, 0.0 })]
-        [TestCase(0.0, 1.0, 0.5, 0.0, new[] { Numerics.Constants.Pi, 0.0, 0.92729522 })]
-        [TestCase(0.0, 0.0, 0.0, 0.0, new[] { 0.0, 0.0, 0.0 })]
-        [TestCase(0.0, 1.0, 0.5, 0.5, new[] { 2.67794504, -Numerics.Constants.PiOver2, 1.10714872 })]
-        public void ToEulerAnglesTest(double real, double x, double y, double z, double[] expectedAsArray)
+        //TODO : dotproduct, equality operator,infs,nans,tostring,norm,conjugation
+        /// <summary>
+        /// Can add a quaternions using operator.
+        /// </summary>
+        [Test]
+        public void CanAddQuaternionsAndFloatUsingOperator()
         {
-            var quat = new Quaternion(real, x, y, z);
-            var eulerAngles = quat.ToEulerAngles();
-            var expected = new EulerAngles(Angle.FromRadians(expectedAsArray[0]), Angle.FromRadians(expectedAsArray[1]), Angle.FromRadians(expectedAsArray[2]));
-            Assert.AreEqual(expected,eulerAngles);
+            Assert.AreEqual(new Quaternion32(1, 2, 3, 4) + new Quaternion32(1, 2, 3, 4), new Quaternion32(2, 4, 6, 8));
+            Assert.AreEqual(new Quaternion32(0, 0, 0, 0) + new Quaternion32(1, 2, 3, 4), new Quaternion32(1, 2, 3, 4));
+            Assert.AreEqual(1 + new Quaternion32(1, 2, 3, 4), new Quaternion32(2, 2, 3, 4));
+            Assert.AreEqual(new Quaternion32(1, 2, 3, 4) + 1, new Quaternion32(2, 2, 3, 4));
+            Assert.AreEqual(new Quaternion32(0, 0, 0, 0) + Quaternion32.Zero, Quaternion32.Zero);
+            Assert.AreEqual(new Quaternion32(0, 0, 0, 0) + Quaternion32.One, Quaternion32.One);
         }
+        /// <summary>
+        /// Can substract quaternions using operator.
+        /// </summary>
+        [Test]
+        public void CanSubstractQuaternionsAndFloatUsingOperator()
+        {
+            Assert.AreEqual(Quaternion32.Zero, new Quaternion32(1, 2, 3, 4) - new Quaternion32(1, 2, 3, 4));
+            Assert.AreEqual(new Quaternion32(-1, -2, -3, -4), new Quaternion32(0, 0, 0, 0) - new Quaternion32(1, 2, 3, 4));
+            Assert.AreEqual(Quaternion32.Zero, new Quaternion32(0, 0, 0, 0) - Quaternion32.Zero);
+            Assert.AreEqual(new Quaternion32(0, 0, 0, 0) - Quaternion32.One, -Quaternion32.One);
+            Assert.AreEqual(1 - new Quaternion32(1, 2, 3, 4), new Quaternion32(0, 2, 3, 4));
+            Assert.AreEqual(new Quaternion32(1, 2, 3, 4) - 1, new Quaternion32(0, 2, 3, 4));
+        }
+
+        [Test]
+        public void CanMultiplyQuaternionsAndFloatUsingOperator()
+        {
+            Assert.AreEqual(new Quaternion32(8, -9, -2, 11), new Quaternion32(3, 1, -2, 1) * new Quaternion32(2, -1, 2, 3));
+            Assert.AreEqual(new Quaternion32(3, 1, -2, 1), new Quaternion32(3, 1, -2, 1) * 1);
+            Assert.AreEqual(new Quaternion32(6, 2, -4, 2), new Quaternion32(3, 1, -2, 1) * 2);
+            Assert.AreEqual(new Quaternion32(1.5f, 0.5f, -1, 0.5f), new Quaternion32(3, 1, -2, 1) * 0.5f);
+        }
+
     }
 }
