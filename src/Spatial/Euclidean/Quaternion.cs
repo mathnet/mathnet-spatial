@@ -31,12 +31,22 @@ namespace MathNet.Spatial.Euclidean
         }
         #endregion
         #region operations
-
+        /// <summary> 
+        /// Squared norm of a quaternion
+        /// </summary>
+        /// <remarks>
+        /// http://mathworld.wolfram.com/QuaternionNorm.html
+        /// </remarks>
         public float NormSquared
         {
             get { return a1 * a1 + a2 * a2 + a3 * a3 + a4 * a4; }
         }
-
+        /// <summary> 
+        /// Norm of a quaternion
+        /// </summary>
+        /// <remarks>
+        /// http://mathworld.wolfram.com/QuaternionNorm.html
+        /// </remarks>
         public float Norm
         {
             //TODO : create more robust norm - possible overflow
@@ -49,7 +59,7 @@ namespace MathNet.Spatial.Euclidean
         }
         public Quaternion32 Inverse()
         {
-            return Conjugate() / NormSquared;
+            return Conjugated / NormSquared;
         }
         public Quaternion32 Normalize()
         {
@@ -60,13 +70,27 @@ namespace MathNet.Spatial.Euclidean
         {
             return quat.Normalize();
         }
-        public Quaternion32 Conjugate()
+
+        /// <summary>
+        /// Conjugation of quaternion
+        /// </summary>
+        /// <remarks>
+        /// http://mathworld.wolfram.com/QuaternionConjugate.html
+        /// </remarks>
+        public Quaternion32 Conjugated
         {
-            return new Quaternion32(a1, -a2, -a3, -a4);
+            get { return new Quaternion32(a1, -a2, -a3, -a4); }
         }
+
+        /// <summary>
+        /// Conjugation of quaternion
+        /// </summary>
+        /// <remarks>
+        /// http://mathworld.wolfram.com/QuaternionConjugate.html
+        /// </remarks>
         public static Quaternion32 Conjugate(Quaternion32 quat)
         {
-            return quat.Conjugate();
+            return quat.Conjugated;
         }
         #endregion
         #region operators
@@ -165,7 +189,6 @@ namespace MathNet.Spatial.Euclidean
         {
             get { return float.IsNaN(a1) || float.IsNaN(a2) || float.IsNaN(a3) || float.IsNaN(a4); }
         }
-
         public bool IsInfinity
         {
             get { return float.IsInfinity(a1) || float.IsInfinity(a2) || float.IsInfinity(a3) || float.IsInfinity(a4); }
