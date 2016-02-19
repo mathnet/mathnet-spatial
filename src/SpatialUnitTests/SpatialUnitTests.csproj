@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Euclidean\Circle3DTests.cs" />
     <Compile Include="Euclidean\Line2DTests.cs" />
     <Compile Include="Euclidean\Point2DTests.cs" />
     <Compile Include="Euclidean\QuaternionTests.cs" />
