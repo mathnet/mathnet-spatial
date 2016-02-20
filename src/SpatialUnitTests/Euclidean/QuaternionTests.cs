@@ -1,8 +1,9 @@
 ﻿namespace MathNet.Spatial.UnitTests.Euclidean
 {
-    using System; 
-    using System.Collections;  
+    using System;
+    using System.Collections;
     using NUnit.Framework;
+    using NUnit.Framework.Constraints;
     using Spatial.Euclidean;
     using Spatial.Units;
 
@@ -26,7 +27,7 @@
             Assert.AreEqual(3, a1.ImagY);
             Assert.AreEqual(4, a1.ImagZ);
             // From DenseVector : 
-            var v1 = new Quaternion(new Numerics.LinearAlgebra.Double.DenseVector(new double[] { 1, 2, 3, 4 }));
+            var v1 = new Quaternion(new MathNet.Numerics.LinearAlgebra.Double.DenseVector(new double[] { 1, 2, 3, 4 }));
             Assert.AreEqual(1, v1.Real);
             Assert.AreEqual(2, v1.ImagX);
             Assert.AreEqual(3, v1.ImagY);
@@ -40,19 +41,18 @@
             Assert.AreEqual(1, q.Real);
             Assert.AreEqual(2, q.ImagX);
             Assert.AreEqual(3, q.ImagY);
-            Assert.AreEqual(4, q.ImagZ); 
-            var norm = Math.Sqrt(1 + 2*2 + 3*3 + 4*4);
+            Assert.AreEqual(4, q.ImagZ);
+            var norm = Math.Sqrt(1 + 2 * 2 + 3 * 3 + 4 * 4);
             Assert.AreEqual(norm, q.Norm);
-            Assert.AreEqual(norm*norm, q.NormSquared);
+            Assert.AreEqual(norm * norm, q.NormSquared);
             Assert.AreEqual(new Quaternion(0, 2, 3, 4), q.Vector);
             Assert.AreEqual(new Quaternion(1, 0, 0, 0), q.Scalar);
-            var norm2 = Math.Sqrt(2*2 + 3*3 + 4*4);   
+            var norm2 = Math.Sqrt(2 * 2 + 3 * 3 + 4 * 4);
             Assert.AreEqual(new Quaternion(1 / norm, 2 / norm, 3 / norm, 4 / norm), q.Normalized);
             Assert.AreEqual(new Quaternion(0, 2 / norm2, 3 / norm2, 4 / norm2), q.NormalizedVector);
-            var arg = Math.Acos(q.Real / q.NormSquared);
+            var arg = Math.Acos(q.Real / q.Norm);
             Assert.AreEqual(arg, q.Arg);
-            Assert.IsTrue(new Quaternion(0.5, 0.5, 0.5, 0.5).IsUnitQuaternion); 
-            Assert.IsTrue(new Quaternion(0, 0, 0, 1).IsRotation); 
+            Assert.IsTrue(new Quaternion(0.5, 0.5, 0.5, 0.5).IsUnitQuaternion);
         }
         /// <summary>
         /// Can add a quaternions using operator.
@@ -84,11 +84,11 @@
         [Test]
         public void CanMultiplyQuaternionsAndFloatUsingOperator()
         {
-            Assert.AreEqual(new Quaternion(8, -9, -2, 11), new Quaternion(3, 1, -2, 1)*new Quaternion(2, -1, 2, 3));
-            Assert.AreEqual(new Quaternion(3, 1, -2, 1), new Quaternion(3, 1, -2, 1)*1);
-            Assert.AreEqual(new Quaternion(6, 2, -4, 2), 2*new Quaternion(3, 1, -2, 1));
-            Assert.AreEqual(new Quaternion(3, 1, -2, 1)*2, 2*new Quaternion(3, 1, -2, 1));
-            Assert.AreEqual(new Quaternion(1.5d, 0.5d, -1, 0.5d), new Quaternion(3, 1, -2, 1)*0.5d);
+            Assert.AreEqual(new Quaternion(8, -9, -2, 11), new Quaternion(3, 1, -2, 1) * new Quaternion(2, -1, 2, 3));
+            Assert.AreEqual(new Quaternion(3, 1, -2, 1), new Quaternion(3, 1, -2, 1) * 1);
+            Assert.AreEqual(new Quaternion(6, 2, -4, 2), 2 * new Quaternion(3, 1, -2, 1));
+            Assert.AreEqual(new Quaternion(3, 1, -2, 1) * 2, 2 * new Quaternion(3, 1, -2, 1));
+            Assert.AreEqual(new Quaternion(1.5d, 0.5d, -1, 0.5d), new Quaternion(3, 1, -2, 1) * 0.5d);
         }
 
         [Test]
@@ -129,11 +129,11 @@
             Assert.IsTrue(new Quaternion(1, 1, 1, 1) != new Quaternion(0, 2, 2, 2) / 2);
 
         }
-        [TestCase(1.0, 1.0, 1.0, 1.0, new[] { Numerics.Constants.PiOver2, 0.0, Numerics.Constants.PiOver2 })]
-        [TestCase(0.0, 1.0, 0.0, 0.0, new[] { Numerics.Constants.Pi, 0.0, 0.0 })]
-        [TestCase(0.0, 1.0, 0.5, 0.0, new[] { Numerics.Constants.Pi, 0.0, 0.92729522 })]
+        [TestCase(1.0, 1.0, 1.0, 1.0, new[] { MathNet.Numerics.Constants.PiOver2, 0.0, MathNet.Numerics.Constants.PiOver2 })]
+        [TestCase(0.0, 1.0, 0.0, 0.0, new[] { MathNet.Numerics.Constants.Pi, 0.0, 0.0 })]
+        [TestCase(0.0, 1.0, 0.5, 0.0, new[] { MathNet.Numerics.Constants.Pi, 0.0, 0.92729522 })]
         [TestCase(0.0, 0.0, 0.0, 0.0, new[] { 0.0, 0.0, 0.0 })]
-        [TestCase(0.0, 1.0, 0.5, 0.5, new[] { 2.67794504, -Numerics.Constants.PiOver2, 1.10714872 })]
+        [TestCase(0.0, 1.0, 0.5, 0.5, new[] { 2.67794504, -MathNet.Numerics.Constants.PiOver2, 1.10714872 })]
         public void ToEulerAnglesTest(double real, double x, double y, double z, double[] expectedAsArray)
         {
             var quat = new Quaternion(real, x, y, z);
@@ -159,7 +159,7 @@
                     yield return new TestCaseData(1, 1, 1, 0).Returns(Math.Sqrt(3));
                     yield return new TestCaseData(1, 2, 3, 4).Returns(Math.Sqrt(30));
                     yield return new TestCaseData(5, 6, 7, 8).Returns(Math.Sqrt(174));
-                    yield return new TestCaseData(smallNumber, smallNumber, smallNumber, smallNumber).Returns(2*smallNumber);
+                    yield return new TestCaseData(smallNumber, smallNumber, smallNumber, smallNumber).Returns(2 * smallNumber);
                 }
             }
 
@@ -205,6 +205,42 @@
                     yield return new TestCaseData(1, 1, 0, 0).Returns(new Quaternion(0.5, -0.5, 0, 0));
                 }
             }
+
+            public static IEnumerable CanCalculateDistance
+            {
+                get
+                {
+                    var q1 = new Quaternion(0, 0, 0, 1);
+                    var q2 = new Quaternion(1, 1, 1, 0);
+                    var q3 = Quaternion.Zero;
+                    var q4 = new Quaternion(9, 9, 9, 1);
+                    var q5 = new Quaternion(2, 3, 4, 5);
+                    yield return new TestCaseData(q1, q2).Returns(2);
+                    yield return new TestCaseData(q2, q1).Returns(2);
+                    yield return new TestCaseData(q3, q1).Returns(q1.Norm);
+                    yield return new TestCaseData(q3, q2).Returns(q2.Norm);
+                    yield return new TestCaseData(q4, q2).Returns(Math.Sqrt(8 * 8 + 8 * 8 + 8 * 8 + 1));
+                    yield return new TestCaseData(q5, q2).Returns(Math.Sqrt(1 + 2 * 2 + 3 * 3 + 5 * 5));
+                }
+            }
+
+            public static IEnumerable CanCalculatePower
+            {
+                get
+                {
+                    var q0 = new Quaternion(0, 0, 0, 0).Normalized;
+                    var q1 = new Quaternion(1, 0, 0, 0).Normalized;
+                    var q2 = new Quaternion(1, 1, 1, 1).Normalized;
+                    var q3 = new Quaternion(2, 2, 2, 2).Normalized;
+                    var q4 = new Quaternion(3, 3, 3, 3).Normalized;
+                    yield return new TestCaseData(q0, 3.981).Returns(q0);
+                    yield return new TestCaseData(q1, 3.981).Returns(q1);
+                    yield return new TestCaseData(q2, 9).Returns(q2 * q2 * q2 * q2 * q2 * q2 * q2 * q2 * q2);
+                    yield return new TestCaseData(q3, 9).Returns(q3 * q3 * q3 * q3 * q3 * q3 * q3 * q3 * q3);
+                    yield return new TestCaseData(q4, 9).Returns(q4 * q4 * q4 * q4 * q4 * q4 * q4 * q4 * q4);
+                    yield return new TestCaseData(q4, 9).Returns(q4 * q4 * q4 * q4 * q4 * q4 * q4 * q4 * q4);
+                }
+            }
         }
         [Test, TestCaseSource(typeof(QuaternionCalculationTestClass), "NormTests")]
         public double CanCalculateNorm(double real, double x, double y, double z)
@@ -228,6 +264,23 @@
         {
             return new Quaternion(a, b, c, d).Inversed;
         }
+        [Test, TestCaseSource(typeof(QuaternionCalculationTestClass), "CanCalculateDistance")]
+        public double CaculateDistance(Quaternion q1, Quaternion q2)
+        {
+            return Quaternion.Distance(q1, q2);
+        }
+        [Test, TestCaseSource(typeof(QuaternionCalculationTestClass), "CanCalculatePower")]
+        public Quaternion CanCalculatePower(Quaternion q1, double k)
+        {
+            return q1.Pow(k);
+        }
+
+        [Test, TestCaseSource(typeof(QuaternionCalculationTestClass), "CanCalculatePower")]
+        public Quaternion CanCalculatePowerUsingOperator(Quaternion q1, double k)
+        {
+            return q1 ^ k;
+        }
+
 
         [Test]
         public void CanEqualsEqualityMethod()
@@ -246,13 +299,13 @@
         }
 
         [TestCase(1, 1, 1, 1, "1+1i+1j+1k")]
-        [TestCase(1, -1, -1, -1, "1-1i-1j-1k")] 
-        [TestCase(-2, -3, -4, -5, "-2-3i-4j-5k")] 
+        [TestCase(1, -1, -1, -1, "1-1i-1j-1k")]
+        [TestCase(-2, -3, -4, -5, "-2-3i-4j-5k")]
         public void CanToString(double a, double b, double c, double d, string propperoutput)
         {
             Assert.AreEqual(propperoutput, new Quaternion(a, b, c, d).ToString());
         }
- 
+
         [TestCase(1, 1, 1, 1)]
         [TestCase(1, 2, 3, 4)]
         [TestCase(0, 0, 0, 0)]
@@ -267,12 +320,12 @@
             var nonRotation = new Quaternion(0, 0, 0, 0);
             var oneRotation = Quaternion.One;
 
-            Assert.AreEqual(quat180*quat, quat.RotateRotationQuaternion(quat180));
-            Assert.AreEqual(oneRotation*quat, quat.RotateRotationQuaternion(oneRotation));
+            Assert.AreEqual(quat180 * quat, quat.RotateRotationQuaternion(quat180));
+            Assert.AreEqual(oneRotation * quat, quat.RotateRotationQuaternion(oneRotation));
             if (quat.IsUnitQuaternion)
             {
-                Assert.AreEqual(quat*quat180*quat.Conjugate(), quat.RotateUnitQuaternion(quat180));
-                Assert.AreEqual(quat*oneRotation*quat.Conjugate(), quat.RotateUnitQuaternion(oneRotation));
+                Assert.AreEqual(quat * quat180 * quat.Conjugate(), quat.RotateUnitQuaternion(quat180));
+                Assert.AreEqual(quat * oneRotation * quat.Conjugate(), quat.RotateUnitQuaternion(oneRotation));
                 Assert.Throws<ArgumentException>(delegate { quat.RotateUnitQuaternion(nonRotation); });
                 Assert.Throws<ArgumentException>(delegate { quat.RotateRotationQuaternion(nonRotation); });
             }
@@ -283,7 +336,6 @@
                 Assert.Throws<InvalidOperationException>(delegate { quat.RotateUnitQuaternion(nonRotation); });
 
             }
-        } 
- 
+        }
     }
 }

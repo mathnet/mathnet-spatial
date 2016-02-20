@@ -10,6 +10,7 @@
     /// http://en.wikipedia.org/wiki/Quaternion
     /// http://mathworld.wolfram.com/Quaternion.html
     /// http://web.cs.iastate.edu/~cs577/handouts/quaternion.pdf
+    /// http://www.lce.hut.fi/~ssarkka/pub/quat.pdf
     /// </remarks>
     public struct Quaternion : IEquatable<Quaternion>, IFormattable
     {
@@ -22,9 +23,9 @@
         {
             _x = imagX;
             _y = imagY;
-            _z = imagZ; 
+            _z = imagZ;
             _w = real;
-        } 
+        }
         /// <summary>
         /// Given a Vector (w,x,y,z), transforms it into a Quaternion = w+xi+yj+zk
         /// </summary>
@@ -49,9 +50,9 @@
         /// <summary>
         /// Creates unit quaternion (it's norm == 1) from it's algebraical notation
         /// </summary> 
-        private static Quaternion ToUnitQuaternion(double real, double imagX, double imagY, double imagZ) 
-		{
-            double norm = Math.Sqrt(ToNormSquared(real, imagX, imagY, imagZ));  
+        private static Quaternion ToUnitQuaternion(double real, double imagX, double imagY, double imagZ)
+        {
+            double norm = Math.Sqrt(ToNormSquared(real, imagX, imagY, imagZ));
             return new Quaternion(real / norm, imagX / norm, imagY / norm, imagZ / norm);
         }
 
@@ -88,18 +89,15 @@
         }
 
         /// <summary>
-        /// Gets the standard euclidean length |q| = sqrt(||q||) of the quaternion q: the
-        /// square root of the sum of the squares of the four components. Q may then be
-        /// represented as q = r*(cos(phi) + u*sin(phi)) = r*exp(phi*u) where u is the
-        /// unit vector and phi the argument of q.
+        /// Gets the the sum of the squares of the four components.
         /// </summary>
-        public double NormSquared 
-        { 
-            get { return ToNormSquared(Real, ImagX, ImagY, ImagZ); }  
+        public double NormSquared
+        {
+            get { return ToNormSquared(Real, ImagX, ImagY, ImagZ); }
         }
 
         /// <summary>
-        /// Gets the norm ||q|| = |q|^2 of the quaternion q: the sum of the squares of the four components.
+        /// Gets the norm of the quaternion q: square root of the sum of the squares of the four components.
         /// </summary>
         public double Norm
         {
@@ -113,7 +111,7 @@
         /// </summary>
         public double Arg
         {
-            get { return Math.Acos(Real / NormSquared); }
+            get { return Math.Acos(Real / Norm); }
         }
 
         /// <summary>
@@ -126,7 +124,7 @@
         public bool IsUnitQuaternion
         {
             get { return NormSquared.AlmostEqual(1); }
-        } 
+        }
         /// <summary>
         /// The quaternion expresses a relationship between two coordinate frames, A and B say. This relationship, if
         /// expressed using Euler angles, is as follows:
@@ -186,8 +184,8 @@
         /// <param name="rotation">The rotation quaternion to rotate</param>
         /// <returns></returns>
         public Quaternion RotateRotationQuaternion(Quaternion rotation)
-        { 
-            if (!rotation.IsUnitQuaternion) throw new ArgumentException("The quaternion provided is not a rotation", "rotation"); 
+        {
+            if (!rotation.IsUnitQuaternion) throw new ArgumentException("The quaternion provided is not a rotation", "rotation");
             return rotation * this;
         }
 
@@ -426,7 +424,7 @@
         /// </summary>
         public static double Distance(Quaternion a, Quaternion b)
         {
-            return (a - b).NormSquared;
+            return (a - b).Norm;
         }
 
         /// <summary>
@@ -442,42 +440,59 @@
         /// </summary>
         public Quaternion Log(double lbase)
         {
-            return Ln() / Math.Log(lbase);
+            return Log() / Math.Log(lbase);
         }
 
         /// <summary>
         /// Natural Logarithm to base E.
         /// </summary>
-        public Quaternion Ln()
+        public Quaternion Log()
         {
-            return NormalizedVector / ((Arg) + Math.Log(NormSquared));
+            var quat = Normalized * Arg;
+            return new Quaternion(Math.Log(Norm), quat.ImagX, quat.ImagY, quat.ImagZ);
         }
 
         /// <summary>
         /// Common Logarithm to base 10.
         /// </summary>
-        public Quaternion Lg()
+        public Quaternion Log10()
         {
-            return Ln() / Math.Log(10);
+            return Log() / Math.Log(10);
         }
 
         /// <summary>
         /// Exponential Function.
         /// </summary>
         /// <returns></returns>
-        public Quaternion Exp() 
-        { 
-            double vabs = Math.Sqrt(ToNormSquared(0, _x, _y, _z));   
-            return NormalizedVector / ((Math.Sin(vabs)) + (Math.Cos(vabs)) * (Math.Exp(_w)));
+        public Quaternion Exp()
+        {
+            double real = Math.Pow(Math.E, Real);
+            var vector = Vector;
+            double vectorNorm = vector.Norm;
+            double cos = Math.Cos(vectorNorm);
+            var sgn = vector == Zero ? Zero : vector / vectorNorm;
+            double sin = Math.Sin(vectorNorm);
+            return real * (cos + sgn * sin);
         }
 
         /// <summary>
         /// Raise the quaternion to a given power.
         /// </summary>
+        /// <remarks>
+        /// This algorithm is not very accurate and works only for normalized quaternions
+        /// </remarks>
         public Quaternion Pow(double power)
-        { 
+        {
+            if (this == Zero)
+                return Zero;
+            if (this == One)
+                return One;
             double arg = power * Arg;
-            return NormalizedVector * ((Math.Sin(arg)) + (Math.Cos(arg)) * (Math.Pow(_w, power)));
+            var u = Normalized;
+            var cos = Math.Cos(arg);
+            var sin = Math.Sin(arg);
+            var output = Math.Pow(Norm, power) * (cos + this / Norm * sin);
+            return output;
         }
 
         /// <summary>
@@ -485,17 +500,8 @@
         /// </summary>
         public Quaternion Pow(Quaternion power)
         {
-            return power * (Ln()).Exp();
-        }
-
-        /// <summary>
-        /// Square of the Quaternion q: q^2.
-        /// </summary>
-        public Quaternion Sqr()
-        {
-            double arg = Arg * 2;
-            return NormalizedVector * ((Math.Sin(arg)) + (Math.Cos(arg)) * (_w * _w));
-        }
+            return power * (Log()).Exp();
+        } 
 
         /// <summary>
         /// Square root of the Quaternion: q^(1/2).
@@ -529,7 +535,7 @@
                     double.IsInfinity(ImagY) ||
                     double.IsInfinity(ImagZ);
             }
-        } 
+        }
         /// <summary>
         /// returns quaternion as real+ImagXi+ImagYj+ImagZk based on format provided 
         /// </summary> 
@@ -542,8 +548,8 @@
                 (ImagY < 0) ? "" : "+",
                 ImagY.ToString(format, formatProvider),
                 (ImagZ < 0) ? "" : "+",
-                ImagZ.ToString(format, formatProvider)); 
-        }  
+                ImagZ.ToString(format, formatProvider));
+        }
         /// <summary>
         /// returns quaternion as real+ImagXi+ImagYj+ImagZk 
         /// </summary>
