@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Reflection;
 using System.Resources;
 using System.Runtime.InteropServices;
@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Math.NET Project")]
 [assembly: AssemblyProduct("Math.NET Spatial")]
-[assembly: AssemblyCopyright("Copyright © Math.NET Project")]
+[assembly: AssemblyCopyright("Copyright (c) Math.NET Project")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: CLSCompliant(false)]

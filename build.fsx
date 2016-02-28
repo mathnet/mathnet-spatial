@@ -15,8 +15,8 @@
 // PRELUDE
 // --------------------------------------------------------------------------------------
 
-#I "packages/FAKE/tools"
-#r "packages/FAKE/tools/FakeLib.dll"
+#I "packages/build/FAKE/tools"
+#r "packages/build/FAKE/tools/FakeLib.dll"
 
 open Fake
 open Fake.DocuHelper
@@ -223,7 +223,7 @@ Target "Zip" (fun _ ->
 // NUGET
 
 let updateNuspec (pack:Package) outPath symbols updateFiles spec =
-    { spec with ToolPath = "packages/NuGet.CommandLine/tools/NuGet.exe"
+    { spec with ToolPath = "packages/build/NuGet.CommandLine/tools/NuGet.exe"
                 OutputPath = outPath
                 WorkingDir = "obj/NuGet"
                 Version = pack.Version

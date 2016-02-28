@@ -1,2 +1,4 @@
 MathNet.Numerics
-NUnit
+
+group Test
+    NUnit
