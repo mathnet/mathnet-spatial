@@ -114,8 +114,12 @@ namespace MathNet.Spatial.Euclidean
             return this.StartPoint + alongVector;
         }
 
-
-        public Point2D IntersectWith(Line2D other)
+        /// <summary>
+        /// Compute the intersection between two lines
+        /// </summary>
+        /// <param name="other">The other line to compute the intersection with</param>
+        /// <returns>The point at the intersection of two lines, or null if the lines are parallelnu.</returns>
+        public Point2D? IntersectWith(Line2D other)
         {
             // http://stackoverflow.com/questions/563198/how-do-you-detect-where-two-line-segments-intersect
             Point2D p = this.StartPoint;
@@ -124,6 +128,9 @@ namespace MathNet.Spatial.Euclidean
             Vector2D s = other.StartPoint.VectorTo(other.EndPoint);
 
             double t = (q - p).CrossProduct(s) / (r.CrossProduct(s));
+
+            if (double.IsPositiveInfinity(t) || double.IsNegativeInfinity(t))
+                return null;
 
             return p + t * r;
         }

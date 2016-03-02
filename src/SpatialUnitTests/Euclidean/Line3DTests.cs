@@ -81,6 +81,34 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             AssertXml.XmlRoundTrips(l, xml, (e, a) => AssertGeometry.AreEqual(e, a));
         }
 
+        [TestCase("0,0,0", "0,0,1", "0,0,0", "0,0,0")]  // start point
+        [TestCase("0,0,0", "0,0,1", "0,0,1", "0,0,1")]  // end point
+        [TestCase("0,0,0", "0,0,1", "1,0,.25", "0,0,.25")]
+        [TestCase("0,0,0", "0,0,1", "0,0,-1", "0,0,0")]
+        [TestCase("0,0,0", "0,0,1", "0,0,3", "0,0,1")]
+        public void ClosestPointToWithinSegment(string start, string end, string point, string expected)
+        {
+            var line = Line3D.Parse(start, end);
+            var p = Point3D.Parse(point);
+            var e = Point3D.Parse(expected);
+
+            Assert.AreEqual(e, line.ClosestPointTo(p, true));
+        }
+
+        [TestCase("0,0,0", "0,0,1", "0,0,0", "0,0,0")]  // start point
+        [TestCase("0,0,0", "0,0,1", "0,0,1", "0,0,1")]  // end point
+        [TestCase("0,0,0", "0,0,1", "1,0,.25", "0,0,.25")]
+        [TestCase("0,0,0", "0,0,1", "0,0,-1", "0,0,-1")]
+        [TestCase("0,0,0", "0,0,1", "0,0,3", "0,0,3")]
+        public void ClosestPointToOutsideSegment(string start, string end, string point, string expected)
+        {
+            var line = Line3D.Parse(start, end);
+            var p = Point3D.Parse(point);
+            var e = Point3D.Parse(expected);
+
+            Assert.AreEqual(e, line.ClosestPointTo(p, false));
+        }
+
         [Test]
         public void BinaryRountrip()
         {
