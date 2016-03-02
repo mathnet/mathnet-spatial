@@ -101,32 +101,39 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Returns the shortes line to a point
+        /// Returns the shortest line to a point
         /// </summary>
         /// <param name="p"></param>
         /// <param name="mustStartBetweenStartAndEnd">If false the startpoint can be on the line extending beyond the start and endpoint of the line</param>
         /// <returns></returns>
         public Line3D LineTo(Point3D p, bool mustStartBetweenStartAndEnd)
         {
-            Vector3D v = this.StartPoint.VectorTo(p);
+            return new Line3D(this.ClosestPointTo(p, mustStartBetweenStartAndEnd), p);
+        }
+
+        /// <summary>
+        /// Returns the closest point on the line to the given point.
+        /// </summary>
+        /// <param name="p">The point which the returned point is the closest point on the line to</param>
+        /// <param name="mustBeOnSegment">If true the returned point is contained by the segment ends, otherwise it can be anywhere on the projected line.</param>
+        /// <returns></returns>
+        public Point3D ClosestPointTo(Point3D p, bool mustBeOnSegment)
+        {
+            Vector3D v = (p - this.StartPoint);
             double dotProduct = v.DotProduct(this.Direction);
-            if (mustStartBetweenStartAndEnd)
+            if (mustBeOnSegment)
             {
                 if (dotProduct < 0)
-                {
                     dotProduct = 0;
-                }
 
-                var l = this.Length;
-                if (dotProduct > l)
-                {
-                    dotProduct = l;
-                }
+                if (dotProduct > this.Length)
+                    dotProduct = this.Length;
             }
 
-            var alongVector = dotProduct * this.Direction;
-            return new Line3D(this.StartPoint + alongVector, p);
+            Vector3D alongVector = dotProduct*this.Direction;
+            return this.StartPoint + alongVector;
         }
+        
 
         /// <summary>
         /// The line projected on a plane
