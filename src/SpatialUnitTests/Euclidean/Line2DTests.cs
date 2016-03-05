@@ -137,6 +137,47 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             Assert.AreEqual(expLine, line.LineTo(point, false));
         }
 
+        [TestCase("0,0", "1,0", "0,0", "0,0")]
+        [TestCase("0,0", "1,0", "1,0", "1,0")]
+        [TestCase("0,0", "1,0", ".25,1", ".25,0")]
+        [TestCase("0,0", "1,0", "-1,0", "0,0")]
+        [TestCase("0,0", "1,0", "3,0", "1,0")]
+        public void ClosestPointToWithinSegment(string start, string end, string point, string expected)
+        {
+            var line = Line2D.Parse(start, end);
+            var p = Point2D.Parse(point);
+            var e = Point2D.Parse(expected);
+
+            Assert.AreEqual(e, line.ClosestPointTo(p, true));
+        }
+
+        [TestCase("0,0", "1,0", "0,0", "0,0")]
+        [TestCase("0,0", "1,0", "1,0", "1,0")]
+        [TestCase("0,0", "1,0", ".25,1", ".25,0")]
+        [TestCase("0,0", "1,0", "-1,1", "-1,0")]
+        [TestCase("0,0", "1,0", "3,0", "3,0")]
+        public void ClosestPointToOutsideSegment(string start, string end, string point, string expected)
+        {
+            var line = Line2D.Parse(start, end);
+            var p = Point2D.Parse(point);
+            var e = Point2D.Parse(expected);
+
+            Assert.AreEqual(e, line.ClosestPointTo(p, false));
+        }
+
+        [TestCase("0,0", "2,2", "1,0", "1,2", "1,1")]
+        [TestCase("0,0", "2,2", "0,1", "2,1", "1,1")]
+        [TestCase("0,0", "2,2", "-1,-5", "-1,0", "-1,-1")]
+        [TestCase("0,0", "2,2", "0,1", "1,2", null)]
+        public void IntersectWithTest(string s1, string e1, string s2, string e2, string expected)
+        {
+            var line1 = Line2D.Parse(s1, e1);
+            var line2 = Line2D.Parse(s2, e2);
+            Point2D? e = string.IsNullOrEmpty(expected) ? (Point2D?)null : Point2D.Parse(expected);
+
+            Assert.AreEqual(e, line1.IntersectWith(line2));
+        }
+
         [Test]
         public void ToStringCheck()
         {
