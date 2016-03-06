@@ -118,7 +118,6 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             AssertGeometry.AreEqual(new Point3D(0, 0, 1), projectOn.ThroughPoint, float.Epsilon);
         }
 
-        [TestCase("p:{0, 0, 0} v:{0, 0, 1}", "p:{0, 0, 0} v:{0, 0, 1}", "0, 0, 0", "0, 0, 0", ExpectedException = typeof(ArgumentException))]
         [TestCase("p:{0, 0, 0} v:{0, 0, 1}", "p:{0, 0, 0} v:{0, 1, 0}", "0, 0, 0", "-1, 0, 0")]
         [TestCase("p:{0, 0, 2} v:{0, 0, 1}", "p:{0, 0, 0} v:{0, 1, 0}", "0, 0, 2", "-1, 0, 0")]
         public void InterSectionWithPlaneTest(string pl1s, string pl2s, string eps, string evs)
@@ -135,6 +134,16 @@ namespace MathNet.Spatial.UnitTests.Euclidean
                 AssertGeometry.AreEqual(Point3D.Parse(eps), intersection.ThroughPoint);
                 AssertGeometry.AreEqual(UnitVector3D.Parse(evs), intersection.Direction);
             }
+        }
+
+        [TestCase("p:{0, 0, 0} v:{0, 0, 1}", "p:{0, 0, 0} v:{0, 0, 1}", "0, 0, 0", "0, 0, 0")]
+        public void InterSectionWithPlaneTest_BadArgument(string pl1s, string pl2s, string eps, string evs)
+        {
+            var plane1 = Plane.Parse(pl1s);
+            var plane2 = Plane.Parse(pl2s);
+
+            Assert.Throws<ArgumentException>(() => plane1.IntersectionWith(plane2));
+            Assert.Throws<ArgumentException>(() => plane2.IntersectionWith(plane1));
         }
 
         [Test]

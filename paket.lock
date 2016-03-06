@@ -17,10 +17,20 @@ NUGET
     FSharpVSPowerTools.Core (2.3.0)
       FSharp.Compiler.Service (>= 2.0.0.3)
     NuGet.CommandLine (3.3.0)
-    NUnit.Runners (2.6.4)
+    NUnit.ConsoleRunner (3.2.0)
+    NUnit.Extension.NUnitProjectLoader (3.2.0)
+    NUnit.Extension.NUnitV2Driver (3.2.0)
+    NUnit.Extension.NUnitV2ResultWriter (3.2.0)
+    NUnit.Extension.VSProjectLoader (3.2.0)
+    NUnit.Runners (3.2.0)
+      NUnit.ConsoleRunner (3.2.0)
+      NUnit.Extension.NUnitProjectLoader (3.2.0)
+      NUnit.Extension.NUnitV2Driver (3.2.0)
+      NUnit.Extension.NUnitV2ResultWriter (3.2.0)
+      NUnit.Extension.VSProjectLoader (3.2.0)
 
 GROUP Test
 NUGET
   remote: http://www.nuget.org/api/v2
   specs:
-    NUnit (2.6.4)
+    NUnit (3.2.0)

@@ -63,12 +63,18 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         [TestCase("1; 0 ; 0")]
         [TestCase("1; 1 ; 0")]
         [TestCase("1; -1 ; 0")]
-        [TestCase("0; 0 ; 0", ExpectedException = typeof(ArgumentException))]
         public void Orthogonal(string vs)
         {
             Vector3D v = Vector3D.Parse(vs);
             UnitVector3D orthogonal = v.Orthogonal;
             Assert.IsTrue(orthogonal.DotProduct(v) < 1e-6);
+        }
+
+        [TestCase("0; 0 ; 0")]
+        public void Orthogonal_BadArgument(string vs)
+        {
+            Vector3D v = Vector3D.Parse(vs);
+            Assert.Throws<ArgumentException>(() => { UnitVector3D orthogonal = v.Orthogonal; });
         }
 
         [TestCase("-2, 0, 1e-4", null, "(-2, 0, 0.0001)", 1e-4)]
@@ -215,13 +221,19 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         [TestCase("0; 0; -5", "0; 0 ; -1")]
         [TestCase("2; 2; 2", "0,577350269189626; 0,577350269189626; 0,577350269189626")]
         [TestCase("-2; 15; 2", "-0,131024356416084; 0,982682673120628; 0,131024356416084")]
-        [TestCase("0; 0; 0", "0; 0 ; 0", ExpectedException = typeof(ArgumentException))]
         public void Normalize(string vs, string evs)
         {
             var vector = Vector3D.Parse(vs);
             var uv = vector.Normalize();
             var expected = UnitVector3D.Parse(evs);
             AssertGeometry.AreEqual(expected, uv, 1E-6);
+        }
+
+        [TestCase("0; 0; 0", "0; 0 ; 0")]
+        public void Normalize_BadArgument(string vs, string evs)
+        {
+            var vector = Vector3D.Parse(vs);
+            Assert.Throws<ArgumentException>(() => vector.Normalize());
         }
 
         [TestCase("1, -1, 10", 5, "5, -5, 50")]
