@@ -357,7 +357,7 @@ namespace MathNet.Spatial.UnitTests.Euclidean
 
 
         [TestCase("1,0", "0,1", "90°")]
-        [TestCase("0,1", "1,0", "90°", "90°")]
+        [TestCase("0,1", "1,0", "90°")]
         [TestCase("-0.99985, 0.01745", "-1, 0", "1°")]
         [TestCase("-0.99985, -0.01745", "-1, 0", "1°")]
         [TestCase("0.99985, 0.01745", "1, 0","1°")]
