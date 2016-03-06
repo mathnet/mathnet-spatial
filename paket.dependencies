@@ -1,6 +1,5 @@
 source http://www.nuget.org/api/v2
 nuget MathNet.Numerics ~> 3.8
-nuget StyleCop.MSBuild !~> 4.7
 
 group Build
     source http://www.nuget.org/api/v2

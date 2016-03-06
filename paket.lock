@@ -3,7 +3,6 @@ NUGET
   specs:
     MathNet.Numerics (3.8.0)
       TaskParallelLibrary (>= 1.0.2856.0) - framework: net35
-    StyleCop.MSBuild (4.7.50)
     TaskParallelLibrary (1.0.2856) - framework: net35
 
 GROUP Build
