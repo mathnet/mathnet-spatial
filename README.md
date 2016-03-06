@@ -23,6 +23,10 @@ Supported Platforms:
 Building Math.NET Spatial
 -------------------------
 
+Windows (.Net): [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/b0v856pd85i6a3hg/branch/master)](https://ci.appveyor.com/project/cdrnet/mathnet-spatial)  
+Linux (Mono): [![Travis Build Status](https://travis-ci.org/mathnet/mathnet-spatial.svg?branch=master)](https://travis-ci.org/mathnet/mathnet-spatial)
+
+
 If you do not want to use the official binaries, or if you like to modify, debug or contribute, you can compile Math.NET Spatial locally either using Visual Studio or manually with the build scripts.
 
 * The Visual Studio solutions should build out of the box, without any preparation steps or package restores.
