@@ -227,7 +227,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="othervector"></param>
         /// <param name="tolerance"></param>
         /// <returns>True if the vector dot product is within the given double tolerance of unity, false if not</returns>
-        public bool IsParallelTo(Vector2D othervector, double tolerance = 1.40129846432482E-45)
+        public bool IsParallelTo(Vector2D othervector, double tolerance = 1e-6)
         {
             var @this = this.Normalize();
             var other = othervector.Normalize();
@@ -253,7 +253,7 @@ namespace MathNet.Spatial.Euclidean
             return ((angle < opposite) ? angle : opposite) < angleTolerance;
         }
 
-        public bool IsPerpendicularTo(Vector2D othervector, double tolerance = 1.40129846432482E-45)
+        public bool IsPerpendicularTo(Vector2D othervector, double tolerance = 1e-6)
         {
             var @this = this.Normalize();
             var other = othervector.Normalize();
