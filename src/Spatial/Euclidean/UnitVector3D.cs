@@ -506,10 +506,10 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// The nearest angle between the vectors
+        /// Compute the angle between this vector and a unit vector using the arccosine of the dot product.
         /// </summary>
         /// <param name="v">The other vector</param>
-        /// <returns>The angle</returns>
+        /// <returns>The angle between the vectors, with a range between 0° and 180°</returns>
         public Angle AngleTo(UnitVector3D v)
         {
             var dp = this.DotProduct(v);

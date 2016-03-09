@@ -1,5 +1,6 @@
 ﻿using System;
 using MathNet.Spatial.Euclidean;
+using MathNet.Spatial.Units;
 using NUnit.Framework;
 
 namespace MathNet.Spatial.UnitTests.Euclidean
@@ -174,8 +175,35 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             var line1 = Line2D.Parse(s1, e1);
             var line2 = Line2D.Parse(s2, e2);
             Point2D? e = string.IsNullOrEmpty(expected) ? (Point2D?)null : Point2D.Parse(expected);
+            Point2D? intersection = line1.IntersectWith(line2);
 
-            Assert.AreEqual(e, line1.IntersectWith(line2));
+            Assert.AreEqual(e, intersection);
+        }
+
+
+        [TestCase("0,0", "0,1", "1,1", "1,2", true)]
+        [TestCase("0,0", "0,-1", "1,1", "1,2", true)]
+        [TestCase("0,0", "0.5,-1", "1,1", "1,2", false)]
+        [TestCase("0,0", "0.00001,-1.0000", "1,1", "1,2", false)]
+        public void IsParallelToWithinDoubleTol(string s1, string e1, string s2, string e2, bool expected)
+        {
+            var line1 = Line2D.Parse(s1, e1);
+            var line2 = Line2D.Parse(s2, e2);
+            
+            Assert.AreEqual(expected, line1.IsParallelTo(line2));
+        }
+
+        [TestCase("0,0", "0,1", "1,1", "1,2", 0.01, true)]
+        [TestCase("0,0", "0,-1", "1,1", "1,2", 0.01, true)]
+        [TestCase("0,0", "0.5,-1", "1,1", "1,2", 0.01, false)]
+        [TestCase("0,0", "0.001,-1.0000", "1,1", "1,2", 0.05, false)]
+        [TestCase("0,0", "0.001,-1.0000", "1,1", "1,2", 0.06, true)]
+        public void IsParallelToWithinAngleTol(string s1, string e1, string s2, string e2, double degreesTol, bool expected)
+        {
+            var line1 = Line2D.Parse(s1, e1);
+            var line2 = Line2D.Parse(s2, e2);
+
+            Assert.AreEqual(expected, line1.IsParallelTo(line2, Angle.FromDegrees(degreesTol)));
         }
 
         [Test]
