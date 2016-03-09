@@ -50,6 +50,7 @@
     <Compile Include="Euclidean\Line2D.cs" />
     <Compile Include="Euclidean\Matrix2D.cs" />
     <Compile Include="Euclidean\Point2D.cs" />
+    <Compile Include="Euclidean\PolyLine2D.cs" />
     <Compile Include="Euclidean\Vector2D.cs" />
     <Compile Include="Projective\Matrix3DHomogeneous.cs" />
     <Compile Include="Projective\Point3DHomogeneous.cs" />
