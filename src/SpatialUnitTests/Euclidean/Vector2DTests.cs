@@ -194,13 +194,14 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             Assert.AreEqual(expected, v2.IsPerpendicularTo(v1, tol));
         }
 
-        [TestCase("1, 0", "1, 0", 1e-4, true)]
-        [TestCase("1, 0", "-1, 0", 1e-4, true)]
-        [TestCase("1, 0", "1, 1", 1e-4, false)]
-        [TestCase("1, 1", "1, 1", 1e-4, true)]
-        [TestCase("1, -1", "-1, 1", 1e-4, true)]
-        [TestCase("1, 0.5", "-1, -0.5", 1e-4, true)]
-        [TestCase("1, 0.5", "-1, 0.5000000005", 1e-4, false)]
+        [TestCase("1, 0", "1, 0", 1e-10, true)]
+        [TestCase("1, 0", "-1, 0", 1e-10, true)]
+        [TestCase("1, 0", "1, 1", 1e-10, false)]
+        [TestCase("1, 1", "1, 1", 1e-10, true)]
+        [TestCase("1, -1", "-1, 1", 1e-10, true)]
+        [TestCase("1, 0.5", "-1, -0.5", 1e-10, true)]
+        [TestCase("1, 0.5", "1, 0.5001", 1e-10, false)]
+        [TestCase("1, 0.5", "1, 0.5001", 1e-8, true)] // Demonstration of the effect of tolerance
         public void IsParallelToByDoubleTolerance(string v1s, string v2s, double tol, bool expected)
         {
             var v1 = Vector2D.Parse(v1s);

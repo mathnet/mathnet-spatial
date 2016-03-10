@@ -322,7 +322,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="othervector"></param>
         /// <param name="tolerance">A tolerance value for the dot product method.  Values below 2*Precision.DoublePrecision may cause issues.</param>
         /// <returns>true if the vector dot product is within the given tolerance of unity, false if it is not</returns>
-        public bool IsParallelTo(Vector3D othervector, double tolerance = 1e-6)
+        public bool IsParallelTo(Vector3D othervector, double tolerance = 1e-10)
         {
             var @this = this.Normalize();
             return @this.IsParallelTo(othervector, tolerance);
@@ -335,7 +335,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="othervector"></param>
         /// <param name="tolerance">A tolerance value for the dot product method.  Values below 2*Precision.DoublePrecision may cause issues.</param>
         /// <returns>true if the vector dot product is within the given tolerance of unity, false if not</returns>
-        public bool IsParallelTo(UnitVector3D othervector, double tolerance = 1e-6)
+        public bool IsParallelTo(UnitVector3D othervector, double tolerance = 1e-10)
         {
             var @this = this.Normalize();
             return @this.IsParallelTo(othervector, tolerance);
@@ -349,14 +349,20 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>true if the vectors are parallel within the angle tolerance, false if they are not</returns>
         public bool IsParallelTo(Vector3D othervector, Angle angleTolerance)
         {
-            // Compute the angle between these vectors 
-            var angle = this.AngleTo(othervector);
+            var @this = this.Normalize();
+            return @this.IsParallelTo(othervector, angleTolerance);
+        }
 
-            // Compute the 180° opposite of the angle
-            var opposite = Angle.FromDegrees(180) - angle;
-
-            // Check against the smaller of the two
-            return ((angle < opposite) ? angle : opposite) < angleTolerance;
+        /// <summary>
+        /// Determine whether or not this vector is parallel to a unit vector within a given angle tolerance.
+        /// </summary>
+        /// <param name="othervector"></param>
+        /// <param name="angleTolerance"></param>
+        /// <returns>true if the vectors are parallel within the angle tolerance, false if they are not</returns>
+        public bool IsParallelTo(UnitVector3D othervector, Angle angleTolerance)
+        {
+            var @this = this.Normalize();
+            return @this.IsParallelTo(othervector, angleTolerance);
         }
 
         /// <summary>

@@ -369,7 +369,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="tolerance">A tolerance value for the dot product method.  Values below 2*Precision.DoublePrecision may cause issues.</param>
         /// <returns>True if the vector dot product is within the given double tolerance of unity, false if not</returns>
         [Pure]
-        public bool IsParallelTo(Vector3D othervector, double tolerance = 1e-6)
+        public bool IsParallelTo(Vector3D othervector, double tolerance = 1e-10)
         {
             var other = othervector.Normalize();
             return IsParallelTo(other, tolerance);
@@ -383,7 +383,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="tolerance">A tolerance value for the dot product method.  Values below 2*Precision.DoublePrecision may cause issues.</param>
         /// <returns>True if the vector dot product is within the given double tolerance of unity, false if not</returns>
         [Pure]
-        public bool IsParallelTo(UnitVector3D othervector, double tolerance = 1e-6)
+        public bool IsParallelTo(UnitVector3D othervector, double tolerance = 1e-10)
         {
             // This is the master method for all Vector3D and UnitVector3D IsParallelTo comparisons.  Everything else 
             // ends up here sooner or later.
@@ -424,14 +424,14 @@ namespace MathNet.Spatial.Euclidean
         }
 
         [Pure]
-        public bool IsPerpendicularTo(Vector3D othervector, double tolerance = 1e-6)
+        public bool IsPerpendicularTo(Vector3D othervector, double tolerance = 1e-10)
         {
             var other = othervector.Normalize();
             return Math.Abs(this.DotProduct(other)) < tolerance;
         }
 
         [Pure]
-        public bool IsPerpendicularTo(UnitVector3D othervector, double tolerance = 1e-6)
+        public bool IsPerpendicularTo(UnitVector3D othervector, double tolerance = 1e-10)
         {
             return Math.Abs(this.DotProduct(othervector)) < tolerance;
         }

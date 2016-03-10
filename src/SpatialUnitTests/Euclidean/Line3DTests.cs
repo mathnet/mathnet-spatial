@@ -2,6 +2,7 @@
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using MathNet.Spatial.Euclidean;
+using MathNet.Spatial.Units;
 using NUnit.Framework;
 
 namespace MathNet.Spatial.UnitTests.Euclidean
@@ -122,6 +123,31 @@ namespace MathNet.Spatial.UnitTests.Euclidean
                 var roundTrip = (Line3D)formatter.Deserialize(ms);
                 AssertGeometry.AreEqual(line, roundTrip);
             }
+        }
+
+        [TestCase("0,0,0", "0,0,1", "0,1,1", "0,1,2", true)]
+        [TestCase("0,0,0", "0,0,-1", "0,1,1", "0,1,2", true)]
+        [TestCase("0,0,0", "0,0.5,-1", "0,1,1", "0,1,2", false)]
+        [TestCase("0,0,0", "0,0.00001,-1.0000", "0,1,1", "0,1,2", false)]
+        public void IsParallelToWithinDoubleTol(string s1, string e1, string s2, string e2, bool expected)
+        {
+            var line1 = Line3D.Parse(s1, e1);
+            var line2 = Line3D.Parse(s2, e2);
+
+            Assert.AreEqual(expected, line1.IsParallelTo(line2));
+        }
+
+        [TestCase("0,0,0", "0,0,1", "0,1,1", "0,1,2", 0.01, true)]
+        [TestCase("0,0,0", "0,0,-1", "0,1,1", "0,1,2", 0.01, true)]
+        [TestCase("0,0,0", "0,0.5,-1", "0,1,1", "0,1,2", 0.01, false)]
+        [TestCase("0,0,0", "0,0.001,-1.0000", "0,1,1", "0,1,2", 0.05, false)]
+        [TestCase("0,0,0", "0,0.001,-1.0000", "0,1,1", "0,1,2", 0.06, true)]
+        public void IsParallelToWithinAngleTol(string s1, string e1, string s2, string e2, double degreesTol, bool expected)
+        {
+            var line1 = Line3D.Parse(s1, e1);
+            var line2 = Line3D.Parse(s2, e2);
+
+            Assert.AreEqual(expected, line1.IsParallelTo(line2, Angle.FromDegrees(degreesTol)));
         }
     }
 }
