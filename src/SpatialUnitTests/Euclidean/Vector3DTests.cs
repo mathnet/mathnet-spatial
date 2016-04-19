@@ -281,6 +281,96 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             Assert.AreEqual(isParalell, firstVector.IsParallelTo(secondVector, 1E-6));
         }
 
+        [TestCase("0,1,0", "0,1, 0", 1e-10, true)]
+        [TestCase("0,1,0", "0,-1, 0", 1e-10, true)]
+        [TestCase("0,1,0", "0,1, 1", 1e-10, false)]
+        [TestCase("0,1,1", "0,1, 1", 1e-10, true)]
+        [TestCase("0,1,-1", "0,-1, 1", 1e-10, true)]
+        [TestCase("0,1,0", "0,1, 0.001", 1e-10, false)]
+        [TestCase("0,1,0", "0,1, -0.001", 1e-10, false)]
+        [TestCase("0,-1,0", "0,1, 0.001", 1e-10, false)]
+        [TestCase("0,-1,0", "0,1, -0.001", 1e-10, false)]
+        [TestCase("0,1,0", "0,1, 0.001", 1e-6, true)]   // These test cases demonstrate the effect of the tolerance
+        [TestCase("0,1,0", "0,1, -0.001", 1e-6, true)]  // These test cases demonstrate the effect of the tolerance
+        [TestCase("0,-1,0", "0,1, 0.001", 1e-6, true)]  // These test cases demonstrate the effect of the tolerance
+        [TestCase("0,-1,0", "0,1, -0.001", 1e-6, true)] // These test cases demonstrate the effect of the tolerance
+        [TestCase("0,1,0.5", "0,-1, -0.5", 1e-10, true)]
+        public void IsParallelToByDoubleTolerance(string v1s, string v2s, double tolerance, bool expected)
+        {
+            var v1 = Vector3D.Parse(v1s);
+            var v2 = Vector3D.Parse(v2s);
+            Assert.AreEqual(expected, v1.IsParallelTo(v2, tolerance));
+            Assert.AreEqual(expected, v2.IsParallelTo(v1, tolerance));
+        }
+
+        [TestCase("0,1,0", "0,1, 0", 1e-10, true)]
+        [TestCase("0,1,0", "0,-1, 0", 1e-10, true)]
+        [TestCase("0,1,0", "0,1, 1", 1e-10, false)]
+        [TestCase("0,1,1", "0,1, 1", 1e-10, true)]
+        [TestCase("0,1,-1", "0,-1, 1", 1e-10, true)]
+        [TestCase("0,1,0", "0,1, 0.001", 1e-10, false)]
+        [TestCase("0,1,0", "0,1, -0.001", 1e-10, false)]
+        [TestCase("0,-1,0", "0,1, 0.001", 1e-10, false)]
+        [TestCase("0,-1,0", "0,1, -0.001", 1e-10, false)]
+        [TestCase("0,1,0", "0,1, 0.001", 1e-6, true)]   // These test cases demonstrate the effect of the tolerance
+        [TestCase("0,1,0", "0,1, -0.001", 1e-6, true)]  // These test cases demonstrate the effect of the tolerance
+        [TestCase("0,-1,0", "0,1, 0.001", 1e-6, true)]  // These test cases demonstrate the effect of the tolerance
+        [TestCase("0,-1,0", "0,1, -0.001", 1e-6, true)] // These test cases demonstrate the effect of the tolerance
+        [TestCase("0,1,0.5", "0,-1, -0.5", 1e-10, true)]
+        public void IsParallelToUnitVectorByDoubleTolerance(string v1s, string v2s, double tolerance, bool expected)
+        {
+            var v1 = Vector3D.Parse(v1s);
+            var v2 = Vector3D.Parse(v2s).Normalize();
+            Assert.AreEqual(expected, v1.IsParallelTo(v2, tolerance));
+            Assert.AreEqual(expected, v2.IsParallelTo(v1, tolerance));
+        }
+
+        [TestCase("0,1,0", "0,1, 0", 1e-4, true)]
+        [TestCase("0,1,0", "0,-1, 0", 1e-4, true)]
+        [TestCase("0,1,0", "0,1, 1", 1e-4, false)]
+        [TestCase("0,1,1", "0,1, 1", 1e-4, true)]
+        [TestCase("0,1,-1", "0,-1, 1", 1e-4, true)]
+        [TestCase("0,1,0", "0,1, 0.001", 0.06, true)]
+        [TestCase("0,1,0", "0,1, -0.001", 0.06, true)]
+        [TestCase("0,-1,0", "0,1, 0.001", 0.06, true)]
+        [TestCase("0,-1,0", "0,1, -0.001", 0.06, true)]
+        [TestCase("0,1,0", "0,1, 0.001", 0.05, false)]
+        [TestCase("0,1,0", "0,1, -0.001", 0.05, false)]
+        [TestCase("0,-1,0", "0,1, 0.001", 0.05, false)]
+        [TestCase("0,-1,0", "0,1, -0.001", 0.05, false)]
+        [TestCase("0,1,0.5", "0,-1, -0.5", 1e-4, true)]
+        public void IsParallelToByAngleTolerance(string v1s, string v2s, double degreesTolerance, bool expected)
+        {
+            var v1 = Vector3D.Parse(v1s);
+            var v2 = Vector3D.Parse(v2s);
+            Assert.AreEqual(expected, v1.IsParallelTo(v2, Angle.FromDegrees(degreesTolerance)));
+            Assert.AreEqual(expected, v2.IsParallelTo(v1, Angle.FromDegrees(degreesTolerance)));
+        }
+
+        [TestCase("0,1,0", "0,1, 0", 1e-4, true)]
+        [TestCase("0,1,0", "0,-1, 0", 1e-4, true)]
+        [TestCase("0,1,0", "0,1, 1", 1e-4, false)]
+        [TestCase("0,1,1", "0,1, 1", 1e-4, true)]
+        [TestCase("0,1,-1", "0,-1, 1", 1e-4, true)]
+        [TestCase("0,1,0", "0,1, 0.001", 0.06, true)]
+        [TestCase("0,1,0", "0,1, -0.001", 0.06, true)]
+        [TestCase("0,-1,0", "0,1, 0.001", 0.06, true)]
+        [TestCase("0,-1,0", "0,1, -0.001", 0.06, true)]
+        [TestCase("0,1,0", "0,1, 0.001", 0.05, false)]
+        [TestCase("0,1,0", "0,1, -0.001", 0.05, false)]
+        [TestCase("0,-1,0", "0,1, 0.001", 0.05, false)]
+        [TestCase("0,-1,0", "0,1, -0.001", 0.05, false)]
+        [TestCase("0,1,0.5", "0,-1, -0.5", 1e-4, true)]
+        public void IsParallelToUnitVectorByAngleTolerance(string v1s, string v2s, double degreesTolerance, bool expected)
+        {
+            var v1 = Vector3D.Parse(v1s);
+            var v2 = Vector3D.Parse(v2s).Normalize();
+            Assert.AreEqual(expected, v1.IsParallelTo(v2, Angle.FromDegrees(degreesTolerance)));
+            Assert.AreEqual(expected, v2.IsParallelTo(v1, Angle.FromDegrees(degreesTolerance)));
+        }
+
+
+
         [TestCase(X, X, false)]
         [TestCase(NegativeX, X, false)]
         [TestCase("-11;0;0", X, false)]
@@ -291,7 +381,7 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         [TestCase(Y, Z, true)]
         [TestCase(Z, Y, true)]
         [TestCase(Z, X, true)]
-        public void IsPerpendicilarToTest(string v1s, string v2s, bool expected)
+        public void IsPerpendicularToTest(string v1s, string v2s, bool expected)
         {
             var v1 = Vector3D.Parse(v1s);
             var v2 = Vector3D.Parse(v2s);

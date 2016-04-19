@@ -290,6 +290,10 @@ namespace MathNet.Spatial.Euclidean
         ////    return new System.Windows.Media.Media3D.Vector3D(p.X, p.Y, p.Z);
         ////}
 
+        /// <summary>
+        /// Compute and return a unit vector from this vector
+        /// </summary>
+        /// <returns></returns>
         public UnitVector3D Normalize()
         {
             return new UnitVector3D(this.X, this.Y, this.Z);
@@ -311,21 +315,63 @@ namespace MathNet.Spatial.Euclidean
             return pd*uv;
         }
 
-        public bool IsParallelTo(Vector3D othervector, double tolerance = 1e-6)
+        /// <summary>
+        /// Computes whether or not this vector is parallel to another vector using the dot product method and comparing it
+        /// to within a specified tolerance.
+        /// </summary>
+        /// <param name="othervector"></param>
+        /// <param name="tolerance">A tolerance value for the dot product method.  Values below 2*Precision.DoublePrecision may cause issues.</param>
+        /// <returns>true if the vector dot product is within the given tolerance of unity, false if it is not</returns>
+        public bool IsParallelTo(Vector3D othervector, double tolerance = 1e-10)
         {
             var @this = this.Normalize();
-            var other = othervector.Normalize();
-            var dp = Math.Abs(@this.DotProduct(other));
-            return Math.Abs(1 - dp) < tolerance;
+            return @this.IsParallelTo(othervector, tolerance);
         }
 
-        public bool IsParallelTo(UnitVector3D othervector, double tolerance = 1e-6)
+        /// <summary>
+        /// Computes whether or not this vector is parallel to a unit vector using the dot product method and comparing it
+        /// to within a specified tolerance.
+        /// </summary>
+        /// <param name="othervector"></param>
+        /// <param name="tolerance">A tolerance value for the dot product method.  Values below 2*Precision.DoublePrecision may cause issues.</param>
+        /// <returns>true if the vector dot product is within the given tolerance of unity, false if not</returns>
+        public bool IsParallelTo(UnitVector3D othervector, double tolerance = 1e-10)
         {
             var @this = this.Normalize();
-            var dp = Math.Abs(@this.DotProduct(othervector));
-            return Math.Abs(1 - dp) < tolerance;
+            return @this.IsParallelTo(othervector, tolerance);
         }
 
+        /// <summary>
+        /// Determine whether or not this vector is parallel to another vector within a given angle tolerance.
+        /// </summary>
+        /// <param name="othervector"></param>
+        /// <param name="angleTolerance"></param>
+        /// <returns>true if the vectors are parallel within the angle tolerance, false if they are not</returns>
+        public bool IsParallelTo(Vector3D othervector, Angle angleTolerance)
+        {
+            var @this = this.Normalize();
+            return @this.IsParallelTo(othervector, angleTolerance);
+        }
+
+        /// <summary>
+        /// Determine whether or not this vector is parallel to a unit vector within a given angle tolerance.
+        /// </summary>
+        /// <param name="othervector"></param>
+        /// <param name="angleTolerance"></param>
+        /// <returns>true if the vectors are parallel within the angle tolerance, false if they are not</returns>
+        public bool IsParallelTo(UnitVector3D othervector, Angle angleTolerance)
+        {
+            var @this = this.Normalize();
+            return @this.IsParallelTo(othervector, angleTolerance);
+        }
+
+        /// <summary>
+        /// Computes whether or not this vector is perpendicular to another vector using the dot product method and
+        /// comparing it to within a specified tolerance
+        /// </summary>
+        /// <param name="othervector"></param>
+        /// <param name="tolerance"></param>
+        /// <returns>true if the vector dot product is within the given tolerance of zero, false if not</returns>
         public bool IsPerpendicularTo(Vector3D othervector, double tolerance = 1e-6)
         {
             var @this = this.Normalize();
@@ -333,12 +379,23 @@ namespace MathNet.Spatial.Euclidean
             return Math.Abs(@this.DotProduct(other)) < tolerance;
         }
 
+        /// <summary>
+        /// Computes whether or not this vector is perpendicular to another vector using the dot product method and
+        /// comparing it to within a specified tolerance
+        /// </summary>
+        /// <param name="othervector"></param>
+        /// <param name="tolerance"></param>
+        /// <returns>true if the vector dot product is within the given tolerance of zero, false if not</returns>
         public bool IsPerpendicularTo(UnitVector3D othervector, double tolerance = 1e-6)
         {
             var @this = this.Normalize();
             return Math.Abs(@this.DotProduct(othervector)) < tolerance;
         }
 
+        /// <summary>
+        /// Inverses the direction of the vector, equivalent to multiplying by -1
+        /// </summary>
+        /// <returns></returns>
         public Vector3D Negate()
         {
             return new Vector3D(-1*this.X, -1*this.Y, -1*this.Z);
@@ -414,10 +471,10 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// The nearest angle between the vectors
+        /// Compute the angle between this vector and another using the arccosine of the dot product.
         /// </summary>
         /// <param name="v">The other vector</param>
-        /// <returns>The angle</returns>
+        /// <returns>The angle between the vectors, with a range between 0° and 180°</returns>
         public Angle AngleTo(Vector3D v)
         {
             var uv1 = this.Normalize();
@@ -426,10 +483,10 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// The nearest angle between the vectors
+        /// Compute the angle between this vector and a unit vector using the arccosine of the dot product.
         /// </summary>
         /// <param name="v">The other vector</param>
-        /// <returns>The angle</returns>
+        /// <returns>The angle between the vectors, with a range between 0° and 180°</returns>
         public Angle AngleTo(UnitVector3D v)
         {
             var uv = this.Normalize();

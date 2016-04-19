@@ -3,6 +3,8 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
 using System.Xml.Serialization;
+using MathNet.Numerics;
+using MathNet.Spatial.Units;
 
 namespace MathNet.Spatial.Euclidean
 {
@@ -154,6 +156,28 @@ namespace MathNet.Spatial.Euclidean
         public Point3D? IntersectionWith(Plane plane, double tolerance = double.Epsilon)
         {
             return plane.IntersectionWith(this, tolerance);
+        }
+
+        /// <summary>
+        /// Checks to determine whether or not two lines are parallel to each other, using the dot product within 
+        /// the double precision specified in the MathNet.Numerics package.
+        /// </summary>
+        /// <param name="other">The other line to check this one against</param>
+        /// <returns>True if the lines are parallel, false if they are not</returns>
+        public bool IsParallelTo(Line3D other)
+        {
+            return this.Direction.IsParallelTo(other.Direction, Precision.DoublePrecision * 2);
+        }
+
+        /// <summary>
+        /// Checks to determine whether or not two lines are parallel to each other within a specified angle tolerance
+        /// </summary>
+        /// <param name="other">The other line to check this one against</param>
+        /// <param name="angleTolerance">If the angle between line directions is less than this value, the method returns true</param>
+        /// <returns>True if the lines are parallel within the angle tolerance, false if they are not</returns>
+        public bool IsParallelTo(Line3D other, Angle angleTolerance)
+        {
+            return this.Direction.IsParallelTo(other.Direction, angleTolerance);
         }
 
         /// <summary>
