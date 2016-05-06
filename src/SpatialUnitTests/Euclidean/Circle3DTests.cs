@@ -28,5 +28,19 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             AssertGeometry.AreEqual(circle3D.CenterPoint, Point3D.Parse(centers));
             Assert.AreEqual(circle3D.Radius, radius, 1e-6);
         }
+
+        [TestCase("-1,0,0", "0,1,0", "1,0,0", "0,0,0", 1)]
+        public void CircleFromThreePoints(string p1s, string p2s, string p3s, string centers, double radius)
+        {
+            var p1 = Point3D.Parse(p1s);
+            var p2 = Point3D.Parse(p2s);
+            var p3 = Point3D.Parse(p3s);
+            var center = Point3D.Parse(centers);
+
+            var circle = new Circle3D(p1, p2, p3);
+
+            Assert.AreEqual(center, circle.CenterPoint);
+            Assert.AreEqual(radius, circle.Radius);
+        }
     }
 }
