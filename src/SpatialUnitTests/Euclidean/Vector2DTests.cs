@@ -194,17 +194,42 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             Assert.AreEqual(expected, v2.IsPerpendicularTo(v1, tol));
         }
 
-        [TestCase("1, 0", "1, 0", 1e-4, true)]
-        [TestCase("1, 0", "-1, 0", 1e-4, true)]
-        [TestCase("1, 0", "1, 1", 1e-4, false)]
-        [TestCase("1, 1", "1, 1", 1e-4, true)]
-        [TestCase("1, -1", "-1, 1", 1e-4, true)]
-        public void IsParallelTo(string v1s, string v2s, double tol, bool expected)
+        [TestCase("1, 0", "1, 0", 1e-10, true)]
+        [TestCase("1, 0", "-1, 0", 1e-10, true)]
+        [TestCase("1, 0", "1, 1", 1e-10, false)]
+        [TestCase("1, 1", "1, 1", 1e-10, true)]
+        [TestCase("1, -1", "-1, 1", 1e-10, true)]
+        [TestCase("1, 0.5", "-1, -0.5", 1e-10, true)]
+        [TestCase("1, 0.5", "1, 0.5001", 1e-10, false)]
+        [TestCase("1, 0.5", "1, 0.5001", 1e-8, true)] // Demonstration of the effect of tolerance
+        public void IsParallelToByDoubleTolerance(string v1s, string v2s, double tol, bool expected)
         {
             var v1 = Vector2D.Parse(v1s);
             var v2 = Vector2D.Parse(v2s);
             Assert.AreEqual(expected, v1.IsParallelTo(v2, tol));
             Assert.AreEqual(expected, v2.IsParallelTo(v1, tol));
+        }
+
+        [TestCase("1, 0", "1, 0", 1e-4, true)]
+        [TestCase("1, 0", "-1, 0", 1e-4, true)]
+        [TestCase("1, 0", "1, 1", 1e-4, false)]
+        [TestCase("1, 1", "1, 1", 1e-4, true)]
+        [TestCase("1, -1", "-1, 1", 1e-4, true)]
+        [TestCase("1, 0", "1, 0.001", 0.06, true)]
+        [TestCase("1, 0", "1, -0.001", 0.06, true)]
+        [TestCase("-1, 0", "1, 0.001", 0.06, true)]
+        [TestCase("-1, 0", "1, -0.001", 0.06, true)]
+        [TestCase("1, 0", "1, 0.001", 0.05, false)]
+        [TestCase("1, 0", "1, -0.001", 0.05, false)]
+        [TestCase("-1, 0", "1, 0.001", 0.05, false)]
+        [TestCase("-1, 0", "1, -0.001", 0.05, false)]
+        [TestCase("1, 0.5", "-1, -0.5", 1e-4, true)]
+        public void IsParallelToByAngleTolerance(string v1s, string v2s, double degreesTolerance, bool expected)
+        {
+            var v1 = Vector2D.Parse(v1s);
+            var v2 = Vector2D.Parse(v2s);
+            Assert.AreEqual(expected, v1.IsParallelTo(v2, Angle.FromDegrees(degreesTolerance)));
+            Assert.AreEqual(expected, v2.IsParallelTo(v1, Angle.FromDegrees(degreesTolerance)));
         }
 
         [TestCase("1, 0", "0, 1", false, 90)]
@@ -215,7 +240,7 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         [TestCase("1, 0", "-1, 0", false, 180)]
         [TestCase("1, 0", "1, 0", false, 0)]
         [TestCase("0, 1", "1, 0", true, 90)]
-        public void AngleToTest(string v1s, string v2s, bool clockWise, float expected)
+        public void SignedAngleToTest(string v1s, string v2s, bool clockWise, float expected)
         {
             var v1 = Vector2D.Parse(v1s);
             var v2 = Vector2D.Parse(v2s);
@@ -362,6 +387,8 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         [TestCase("-0.99985, -0.01745", "-1, 0", "1°")]
         [TestCase("0.99985, 0.01745", "1, 0","1°")]
         [TestCase("0.99985, -0.01745", "1, 0", "1°")]
+        [TestCase("-0.99985, -0.01745", "1, 0", "179°")]
+        [TestCase("-0.99985, 0.01745", "1, 0", "179°")]
         public void UnSignedAngleTo(string v1s, string v2s, string expectedAngle)
         {
             var v1 = Vector2D.Parse(v1s);

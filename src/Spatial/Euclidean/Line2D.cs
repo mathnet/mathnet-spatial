@@ -1,4 +1,6 @@
 ﻿using System;
+using MathNet.Numerics;
+using MathNet.Spatial.Units;
 
 namespace MathNet.Spatial.Euclidean
 {
@@ -115,12 +117,16 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Compute the intersection between two lines
+        /// Compute the intersection between two lines with parallelism considered by the double floating point precision
+        /// on the cross product of the two directions. 
         /// </summary>
         /// <param name="other">The other line to compute the intersection with</param>
-        /// <returns>The point at the intersection of two lines, or null if the lines are parallelnu.</returns>
+        /// <returns>The point at the intersection of two lines, or null if the lines are parallel.</returns>
         public Point2D? IntersectWith(Line2D other)
         {
+            if (this.IsParallelTo(other))
+                return null;
+
             // http://stackoverflow.com/questions/563198/how-do-you-detect-where-two-line-segments-intersect
             Point2D p = this.StartPoint;
             Point2D q = other.StartPoint;
@@ -129,10 +135,51 @@ namespace MathNet.Spatial.Euclidean
 
             double t = (q - p).CrossProduct(s) / (r.CrossProduct(s));
 
-            if (double.IsPositiveInfinity(t) || double.IsNegativeInfinity(t))
+            return p + t * r;
+        }
+
+        /// <summary>
+        /// Compute the intersection between two lines if the angle between them is greater than a specified 
+        /// angle tolerance.
+        /// </summary>
+        /// <param name="other">The other line to compute the intersection with</param>
+        /// <returns>The point at the intersection of two lines, or null if the lines are parallel.</returns>
+        public Point2D? IntersectWith(Line2D other, Angle parallelTolerance)
+        {
+            if (this.IsParallelTo(other, parallelTolerance))
                 return null;
 
+            // http://stackoverflow.com/questions/563198/how-do-you-detect-where-two-line-segments-intersect
+            Point2D p = this.StartPoint;
+            Point2D q = other.StartPoint;
+            Vector2D r = this.StartPoint.VectorTo(this.EndPoint);
+            Vector2D s = other.StartPoint.VectorTo(other.EndPoint);
+
+            double t = (q - p).CrossProduct(s) / (r.CrossProduct(s));
+
             return p + t * r;
+        }
+
+        /// <summary>
+        /// Checks to determine whether or not two lines are parallel to each other, using the dot product within 
+        /// the double precision specified in the MathNet.Numerics package.
+        /// </summary>
+        /// <param name="other">The other line to check this one against</param>
+        /// <returns>True if the lines are parallel, false if they are not</returns>
+        public bool IsParallelTo(Line2D other)
+        {
+            return this.Direction.IsParallelTo(other.Direction, Precision.DoublePrecision * 2);
+        }
+
+        /// <summary>
+        /// Checks to determine whether or not two lines are parallel to each other within a specified angle tolerance
+        /// </summary>
+        /// <param name="other">The other line to check this one against</param>
+        /// <param name="angleTolerance">If the angle between line directions is less than this value, the method returns true</param>
+        /// <returns>True if the lines are parallel within the angle tolerance, false if they are not</returns>
+        public bool IsParallelTo(Line2D other, Angle angleTolerance)
+        {
+            return this.Direction.IsParallelTo(other.Direction, angleTolerance);
         }
 
         # region Operators 

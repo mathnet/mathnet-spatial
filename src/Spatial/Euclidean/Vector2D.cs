@@ -6,6 +6,7 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
 using System.Xml.Serialization;
+using MathNet.Numerics.Financial;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Spatial.Units;
 
@@ -219,15 +220,40 @@ namespace MathNet.Spatial.Euclidean
             writer.WriteAttribute("Y", this.Y);
         }
 
-        public bool IsParallelTo(Vector2D othervector, double tolerance = 1.40129846432482E-45)
+        /// <summary>
+        /// Computes whether or not this vector is parallel to another vector using the dot product method
+        /// and comparing to within a specified tolerance
+        /// </summary>
+        /// <param name="othervector"></param>
+        /// <param name="tolerance"></param>
+        /// <returns>True if the vector dot product is within the given double tolerance of unity, false if not</returns>
+        public bool IsParallelTo(Vector2D othervector, double tolerance = 1e-10)
         {
             var @this = this.Normalize();
             var other = othervector.Normalize();
             var dp = Math.Abs(@this.DotProduct(other));
-            return Math.Abs(1 - dp) < tolerance;
+            return Math.Abs(1 - dp) <= tolerance;
         }
 
-        public bool IsPerpendicularTo(Vector2D othervector, double tolerance = 1.40129846432482E-45)
+        /// <summary>
+        /// Computes whether or not this vector is parallel to another vector within a given angle tolerance.
+        /// </summary>
+        /// <param name="othervector"></param>
+        /// <param name="angleTolerance"></param>
+        /// <returns>True if the vectors are parallel within the angle tolerance, false if they are not</returns>
+        public bool IsParallelTo(Vector2D othervector, Angle angleTolerance)
+        {
+            // Compute the angle between these vectors 
+            var angle = this.AngleTo(othervector);
+
+            // Compute the 180° opposite of the angle
+            var opposite = Angle.FromDegrees(180) - angle;
+
+            // Check against the smaller of the two
+            return ((angle < opposite) ? angle : opposite) < angleTolerance;
+        }
+
+        public bool IsPerpendicularTo(Vector2D othervector, double tolerance = 1e-10)
         {
             var @this = this.Normalize();
             var other = othervector.Normalize();
@@ -270,6 +296,11 @@ namespace MathNet.Spatial.Euclidean
             return new Angle(a, AngleUnit.Radians);
         }
 
+        /// <summary>
+        /// Compute the angle between this vector and another using the arccosine of the dot product.
+        /// </summary>
+        /// <param name="toVector2D"></param>
+        /// <returns>The angle between vectors, with a range between 0° and 180°</returns>
         public Angle AngleTo(Vector2D toVector2D)
         {
             var @this = this.Normalize();
