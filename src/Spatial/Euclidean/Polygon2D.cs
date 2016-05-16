@@ -10,21 +10,11 @@ namespace MathNet.Spatial.Euclidean
     /// <summary>
     /// Class to represent a closed polygon. If the 
     /// </summary>
-    public class Polygon2D : IEnumerable<Point2D>
+    public struct Polygon2D : IEnumerable<Point2D>
     {
         private List<Point2D> _points;
 
-        public int Count
-        {
-            get { return this._points.Count; }
-        }
-
-        // Constructors
-        public Polygon2D()
-            : this(Enumerable.Empty<Point2D>())
-        {
-
-        }
+        public int Count => this._points.Count;
 
         public Polygon2D(IEnumerable<Point2D> points)
         {
@@ -106,8 +96,8 @@ namespace MathNet.Spatial.Euclidean
 
             // Perform basic validation of the input point cloud for cases of less than
             // four points being given
-            if (points.Count <= 1)
-                return null;
+            if (points.Count <= 2)
+                throw new ArgumentException("Must have at least 3 points in the polygon to compute the convex hull");
             if (points.Count <= 3)
                 return new Polygon2D(points);
 

@@ -10,11 +10,8 @@ namespace MathNet.Spatial.Euclidean
     /// The PolyLine2D class represents a 2D curve in space made up of line segments joined end-to-end, and is 
     /// stored as a sequential list of 2D points.
     /// </summary>
-    public class PolyLine2D : IEnumerable<Point2D>
+    public struct PolyLine2D : IEnumerable<Point2D>
     {
-        // Internal storage for the points
-        private List<Point2D> _points;
-
         /// <summary>
         /// Returns the number of points in the polyline
         /// </summary>
@@ -26,22 +23,6 @@ namespace MathNet.Spatial.Euclidean
         public double Length => this.GetPolyLineLength();
 
         /// <summary>
-        /// Default constructor, creates an empty PolyLine2D
-        /// </summary>
-        public PolyLine2D() : this(Enumerable.Empty<Point2D>())
-        {
-        }
-
-        /// <summary>
-        /// Constructor which creates a PolyLine2D off of a pre-existing IEnumerable of Point2Ds
-        /// </summary>
-        /// <param name="points"></param>
-        public PolyLine2D(IEnumerable<Point2D> points)
-        {
-            this._points = new List<Point2D>(points);
-        }
-
-        /// <summary>
         /// Access a point in the polyline by index number
         /// </summary>
         /// <param name="key"></param>
@@ -50,6 +31,18 @@ namespace MathNet.Spatial.Euclidean
         {
             get { return this._points[key]; }
             set { this._points[key] = value; }
+        }
+
+        // Internal storage for the points
+        private List<Point2D> _points;
+
+        /// <summary>
+        /// Constructor which creates a PolyLine2D off of a pre-existing IEnumerable of Point2Ds
+        /// </summary>
+        /// <param name="points"></param>
+        public PolyLine2D(IEnumerable<Point2D> points)
+        {
+            this._points = new List<Point2D>(points);
         }
 
         /// <summary>
@@ -72,6 +65,8 @@ namespace MathNet.Spatial.Euclidean
         /// <returns></returns>
         public Point2D GetPointAtFractionAlongCurve(double fraction)
         {
+            if (fraction > 1 || fraction < 0)
+                throw new ArgumentException("fraction must be between 0 and 1");
             return this.GetPointAtLengthFromStart(fraction * this.Length);
         }
 

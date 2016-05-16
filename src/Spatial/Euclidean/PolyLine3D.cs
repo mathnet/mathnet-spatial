@@ -9,10 +9,8 @@ namespace MathNet.Spatial.Euclidean
     /// <summary>
     /// A PolyLine is an ordered series of line segments in space represented as list of connected Point3Ds.
     /// </summary>
-    public class PolyLine3D : IEnumerable<Point3D>
+    public struct PolyLine3D : IEnumerable<Point3D>
     {
-        private List<Point3D> _points;
-
         /// <summary>
         /// An integer representing the number of Point3D objects in the polyline
         /// </summary>
@@ -38,11 +36,7 @@ namespace MathNet.Spatial.Euclidean
             get { throw new NotImplementedException();}
         }
 
-        // Constructors 
-        public PolyLine3D()
-            : this(Enumerable.Empty<Point3D>())
-        {
-        }
+        private List<Point3D> _points;
 
         public PolyLine3D(IEnumerable<Point3D> points)
         {
