@@ -10,7 +10,7 @@ namespace MathNet.Spatial.Euclidean
     /// <summary>
     /// Class to represent a closed polygon. If the 
     /// </summary>
-    public struct Polygon2D : IEnumerable<Point2D>
+    public class Polygon2D : IEnumerable<Point2D>
     {
         private List<Point2D> _points;
 
@@ -24,11 +24,7 @@ namespace MathNet.Spatial.Euclidean
         }
 
         // Methods
-        public Point2D this[int key]
-        {
-            get { return this._points[key]; }
-            set { this._points[key] = value; }
-        }
+        public Point2D this[int key] => this._points[key];
 
         /// <summary>
         /// Test whether a point is enclosed within a polygon. Points on the polygon edges are not

@@ -10,7 +10,7 @@ namespace MathNet.Spatial.Euclidean
     /// The PolyLine2D class represents a 2D curve in space made up of line segments joined end-to-end, and is 
     /// stored as a sequential list of 2D points.
     /// </summary>
-    public struct PolyLine2D : IEnumerable<Point2D>
+    public class PolyLine2D : IEnumerable<Point2D>
     {
         /// <summary>
         /// Returns the number of points in the polyline
@@ -27,11 +27,7 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public Point2D this[int key]
-        {
-            get { return this._points[key]; }
-            set { this._points[key] = value; }
-        }
+        public Point2D this[int key] => this._points[key];
 
         // Internal storage for the points
         private List<Point2D> _points;
