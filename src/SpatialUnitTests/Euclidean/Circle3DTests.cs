@@ -53,5 +53,15 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             AssertGeometry.AreEqual(center, circle.CenterPoint);
             Assert.AreEqual(radius, circle.Radius, 1e-6);
         }
+
+        [Test]
+        public void CircleFromThreePointsArgumentException()
+        {
+            var p1 = new Point3D(0, 0, 0);
+            var p2 = new Point3D(-1, 0, 0);
+            var p3 = new Point3D(1, 0, 0);
+
+            Assert.Throws<ArgumentException>(() => { new Circle3D(p1, p2, p3); });
+        }
     }
 }
