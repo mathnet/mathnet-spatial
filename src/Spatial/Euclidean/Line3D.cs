@@ -181,6 +181,40 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
+        /// Computes the pair of points which represent the closest distance between this Line3D and another Line3D, with the first
+        /// point being the point on this Line3D, and the second point being the corresponding point on the other Line3D.  If the lines
+        /// intersect the points will be identical, if the lines are parallel the first point will be the start point of this line.
+        /// </summary>
+        /// <param name="other">line to compute the closest points with</param>
+        /// <returns>A tuple of two points representing the endpoints of the shortest distance between the two lines</returns>
+        public Tuple<Point3D, Point3D> ClosestPointsBetween(Line3D other)
+        {
+            if (this.IsParallelTo(other))
+            {
+                return Tuple.Create(this.StartPoint, other.ClosestPointTo(this.StartPoint, false));
+            }
+
+            // http://geomalgorithms.com/a07-_distance.html
+            var P0 = this.StartPoint;
+            var u = this.Direction;
+            var Q0 = other.StartPoint;
+            var v = other.Direction;
+
+            var w0 = P0 - Q0;
+            var a = u.DotProduct(u);
+            var b = u.DotProduct(v);
+            var c = v.DotProduct(v);
+            var d = u.DotProduct(w0);
+            var e = v.DotProduct(w0);
+
+            double sc = (b*e - c*d)/(a*c - b*b);
+            double tc = (a*e - b*d)/(a*c - b*b);
+
+            return Tuple.Create(sc*u + P0, tc*v + Q0);
+
+        }
+
+        /// <summary>
         /// Indicates whether the current object is equal to another object of the same type.
         /// </summary>
         /// <returns>
