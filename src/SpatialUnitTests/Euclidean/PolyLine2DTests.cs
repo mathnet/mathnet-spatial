@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using MathNet.Spatial.Euclidean;
 using NUnit.Framework;
 
@@ -29,9 +30,7 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         }
 
         [TestCase("0,-1.5;0,1;1,1", 1.0, "1,1")]
-        [TestCase("0,-1.5;0,1;1,1", 2.0, "1,1")]
         [TestCase("0,-1.5;0,1;1,1", 0.0, "0,-1.5")]
-        [TestCase("0,-1.5;0,1;1,1", -5,  "0,-1.5")]
         [TestCase("0,0;0,1;1,1", 0.25, "0,0.5")]
         [TestCase("0,0;0,1;1,1", 0.5, "0,1")]
         [TestCase("0,0;0,1;1,1", 0.75, "0.5,1")]
@@ -43,6 +42,17 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             var checkElement = Point2D.Parse(expected);
 
             Assert.AreEqual(checkElement, testElement.GetPointAtFractionAlongCurve(fraction));
+        }
+
+
+        [TestCase("0,-1.5;0,1;1,1", 2.0, "1,1")]
+        [TestCase("0,-1.5;0,1;1,1", -5,  "0,-1.5")]
+        public void GetPointAtFractionAlongCurveThrowsArgumentException(string points, double fraction, string expected)
+        {
+            var testElement = new PolyLine2D(from x in points.Split(';') select Point2D.Parse(x));
+            var checkElement = Point2D.Parse(expected);
+
+            Assert.Throws<ArgumentException>(() => { testElement.GetPointAtFractionAlongCurve(fraction); });
         }
 
         [TestCase("0,0;0,1;1,1", "0,-1", "0,0")] // Off Endpoint
