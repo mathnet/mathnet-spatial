@@ -81,6 +81,11 @@ namespace MathNet.Spatial.Euclidean
             return new Line3D(this.ThroughPoint + alongVector, point3D);
         }
 
+        public Point3D? IntersectionWith(Plane plane)
+        {
+            return plane.IntersectionWith(this);
+        }
+
         public bool IsCollinear(Ray3D otherRay, double tolerance = float.Epsilon)
         {
             return this.Direction.IsParallelTo(otherRay.Direction, tolerance);
