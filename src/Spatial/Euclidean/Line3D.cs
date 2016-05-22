@@ -214,6 +214,13 @@ namespace MathNet.Spatial.Euclidean
             return Tuple.Create(sc*u + P0, tc*v + Q0);
         }
 
+        /// <summary>
+        /// Computes the pair of points which represents the closest distance between this Line3D and another Line3D, with the option
+        /// of treating the lines as segments bounded by their start and end points.
+        /// </summary>
+        /// <param name="other">line to compute the closest points with</param>
+        /// <param name="mustBeOnSegments">if true, the lines are treated as segments bounded by the start and end point</param>
+        /// <returns>A tuple of two points representing the endpoints of the shortest distance between the two lines or segments</returns>
         public Tuple<Point3D, Point3D> ClosestPointsBetween(Line3D other, bool mustBeOnSegments)
         {
             // If the segments are parallel and the answer must be on the segments, we can skip directly to the ending
