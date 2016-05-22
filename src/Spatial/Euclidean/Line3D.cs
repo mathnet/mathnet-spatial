@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
@@ -250,20 +249,40 @@ namespace MathNet.Spatial.Euclidean
             // of the two closest span points is outside of the segment of the line it was projected on.  In either
             // case we project each of the four endpoints onto the opposite segments and select the one with the 
             // smallest projected distance.
-            var r1 = other.ClosestPointTo(this.StartPoint, true);
-            var r2 = other.ClosestPointTo(this.EndPoint, true);
-            var r3 = this.ClosestPointTo(other.StartPoint, true);
-            var r4 = this.ClosestPointTo(other.EndPoint, true);
+            Point3D checkPoint;
+            Tuple<Point3D, Point3D> closestPair;
+            double distance;
 
-            var fourChecks = new Tuple<double, Tuple<Point3D, Point3D>>[]
+            checkPoint = other.ClosestPointTo(this.StartPoint, true);
+            distance = checkPoint.DistanceTo(this.StartPoint);
+            closestPair = Tuple.Create(this.StartPoint, checkPoint);
+            double minDistance = distance;
+            
+
+            checkPoint = other.ClosestPointTo(this.EndPoint, true);
+            distance = checkPoint.DistanceTo(this.EndPoint);
+            if (distance < minDistance)
             {
-                Tuple.Create(r1.DistanceTo(this.StartPoint), Tuple.Create(r1, this.StartPoint)),
-                Tuple.Create(r2.DistanceTo(this.EndPoint), Tuple.Create(r2, this.EndPoint)),
-                Tuple.Create(r3.DistanceTo(other.StartPoint), Tuple.Create(r3, other.StartPoint)),
-                Tuple.Create(r4.DistanceTo(other.EndPoint), Tuple.Create(r4, other.EndPoint))
-            };
+                closestPair = Tuple.Create(this.EndPoint, checkPoint);
+                minDistance = distance;
+            }
 
-            return fourChecks.Aggregate((i1, i2) => i1.Item1 < i2.Item1 ? i1 : i2).Item2;
+            checkPoint = this.ClosestPointTo(other.StartPoint, true);
+            distance = checkPoint.DistanceTo(other.StartPoint);
+            if (distance < minDistance)
+            {
+                closestPair = Tuple.Create(checkPoint, other.StartPoint);
+                minDistance = distance;
+            }
+
+            checkPoint = this.ClosestPointTo(other.EndPoint, true);
+            distance = checkPoint.DistanceTo(other.EndPoint);
+            if (distance < minDistance)
+            {
+                closestPair = Tuple.Create(checkPoint, other.EndPoint);
+            }
+
+            return closestPair;
         }
 
         /// <summary>
