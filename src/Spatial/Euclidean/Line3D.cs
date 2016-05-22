@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
@@ -211,7 +212,51 @@ namespace MathNet.Spatial.Euclidean
             double tc = (a*e - b*d)/(a*c - b*b);
 
             return Tuple.Create(sc*u + P0, tc*v + Q0);
+        }
 
+        public Tuple<Point3D, Point3D> ClosestPointsBetween(Line3D other, bool mustBeOnSegments)
+        {
+            // If the segments are parallel and the answer must be on the segments, we can skip directly to the ending
+            // algorithm where the endpoints are projected onto the opposite segment and the smallest distance is 
+            // taken.  Otherwise we must first check if the infinite length line solution is valid.
+            if (!this.IsParallelTo(other) || !mustBeOnSegments)  // If the lines aren't parallel OR it doesn't have to be constrained to the segments
+            {
+                // Compute the unbounded result, and if mustBeOnSegments is false we can directly return the results
+                // since this is the same as calling the other method.
+                var result = this.ClosestPointsBetween(other);
+                if (!mustBeOnSegments)
+                    return result;
+
+                // A point that is known to be colinear with the line start and end points is on the segment if
+                // its distance to both endpoints is less than the segment length.  If both projected points lie 
+                // within their segment, we can directly return the result.
+                if (result.Item1.DistanceTo(this.StartPoint) <= this.Length &&
+                    result.Item1.DistanceTo(this.EndPoint) <= this.Length &&
+                    result.Item2.DistanceTo(other.StartPoint) <= other.Length &&
+                    result.Item2.DistanceTo(other.EndPoint) <= other.Length)
+                {
+                    return result;
+                }
+            }
+
+            // If we got here, we know that either we're doing a bounded distance on two parallel segments or one 
+            // of the two closest span points is outside of the segment of the line it was projected on.  In either
+            // case we project each of the four endpoints onto the opposite segments and select the one with the 
+            // smallest projected distance.
+            var r1 = other.ClosestPointTo(this.StartPoint, true);
+            var r2 = other.ClosestPointTo(this.EndPoint, true);
+            var r3 = this.ClosestPointTo(other.StartPoint, true);
+            var r4 = this.ClosestPointTo(other.EndPoint, true);
+
+            var fourChecks = new Tuple<double, Tuple<Point3D, Point3D>>[]
+            {
+                Tuple.Create(r1.DistanceTo(this.StartPoint), Tuple.Create(r1, this.StartPoint)),
+                Tuple.Create(r2.DistanceTo(this.EndPoint), Tuple.Create(r2, this.EndPoint)),
+                Tuple.Create(r3.DistanceTo(other.StartPoint), Tuple.Create(r3, other.StartPoint)),
+                Tuple.Create(r4.DistanceTo(other.EndPoint), Tuple.Create(r4, other.EndPoint))
+            };
+
+            return fourChecks.Aggregate((i1, i2) => i1.Item1 < i2.Item1 ? i1 : i2).Item2;
         }
 
         /// <summary>

@@ -172,5 +172,29 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             AssertGeometry.AreEqual(Point3D.Parse(cp1), result.Item1);
             AssertGeometry.AreEqual(Point3D.Parse(cp2), result.Item2);
         }
+
+        [TestCase("0,0,0", "1,0,0", "0.5,1,0", "1.5,1,0", "0.5,0,0", "0.5,1,0")] // Parallel case
+        [TestCase("0,0,0", "1,0,0", "3,1,0", "3,2,0", "1,0,0", "3,1,0")] // Endpoint Case
+        [TestCase("1,0,0", "0,0,0", "3,1,0", "3,2,0", "1,0,0", "3,1,0")] // Endpoint Case
+        [TestCase("0,0,0", "1,0,0", "3,2,0", "3,1,0", "1,0,0", "3,1,0")] // Endpoint Case
+        [TestCase("1,0,0", "0,0,0", "3,2,0", "3,1,0", "1,0,0", "3,1,0")] // Endpoint Case
+        [TestCase("3.0803549,8.1101503,4.2072541", "0.9167489,5.4057168,0.0942629", "3.6443155,1.9841677,2.1280020", "4.0865344,8.8738039,9.2944797", "3.8982350,5.9401568,6.2429519", "3.0803549,8.1101503,4.2072541")] // projection from endpoint, generated in GOM Inspect Professional V8
+        [TestCase("2.0809966,9.3100446,9.4661138", "6.0883386,5.5240161,2.7490910", "8.4523738,2.6004881,8.8473518", "5.5868380,5.4932213,1.1649868", "6.0992239,4.9759722,2.5386692", "6.0883386,5.5240161,2.7490910")] // projection from endpoint, generated in GOM Inspect Professional V8
+        [TestCase("6.5771629,2.8557455,9.8087521", "5.4359776,8.6172816,5.7508093", "7.8904712,4.3099454,2.4107493", "8.1402295,0.9894932,3.8694855", "5.7508984,7.0273316,6.8706367", "7.8904712,4.3099454,2.4107493")] // projection from endpoint, generated in GOM Inspect Professional V82
+        [TestCase("0.8765316,4.0262533,7.1988316", "4.3383388,7.0189039,1.4430865", "1.9687345,6.4066677,1.9041603", "0.6533722,5.3636394,1.3877450", "3.5259020,6.3165714,2.7938779", "1.9687345,6.4066677,1.9041603")] // projection from endpoint, generated in GOM Inspect Professional V8
+        [TestCase("7.5543831,9.7934598,9.5348209", "6.5205418,0.3092162,8.7907210", "0.4877286,0.3419443,2.5644342", "8.6578287,6.1098998,5.8827401", "7.1211660,5.8192172,9.2230160", "8.4262398,5.9464019,5.7886797")] // projection between segments, generated in GOM Inspect Professional V8
+        [TestCase("1.1294829,5.4847586,8.1420946", "7.2489863,0.3206420,0.8259188", "5.8457205,6.7040761,3.0411085", "8.9017428,0.9704561,3.8471667", "5.7071649,1.6217517,2.6692442", "7.8717570,2.9028855,3.5754970")] // projection between segments, generated in GOM Inspect Professional V8
+        [TestCase("0.3580051,9.3271145,8.5768069", "2.3779489,4.3772771,1.6443451", "1.0661185,9.0362165,3.9415240", "7.6388414,1.7341324,0.4120660", "1.8279811,5.7249636,3.5318384", "2.9136360,6.9836839,2.9494336")] // projection between segments, generated in GOM Inspect Professional V8
+        [TestCase("6.1264627,6.5812576,3.9222538", "1.5068838,5.6589456,0.0446154", "0.8368111,1.7808290,7.1053143", "8.6670395,3.8812950,1.4077528", "5.4376749,6.4437392,3.3440907", "6.1998837,3.2194782,3.2029458")] // projection between segments, generated in GOM Inspect Professional V8
+        public void ClosestPointsBetweenOnSegment(string s1, string e1, string s2, string e2, string cp1, string cp2)
+        {
+            var l1 = Line3D.Parse(s1, e1);
+            var l2 = Line3D.Parse(s2, e2);
+
+            var result = l1.ClosestPointsBetween(l2, true);
+
+            AssertGeometry.AreEqual(Point3D.Parse(cp1), result.Item1);
+            AssertGeometry.AreEqual(Point3D.Parse(cp2), result.Item2);
+        }
     }
 }
