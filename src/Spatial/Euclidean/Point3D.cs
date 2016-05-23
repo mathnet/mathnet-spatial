@@ -226,6 +226,16 @@ namespace MathNet.Spatial.Euclidean
             return plane.IntersectionWith(ray);
         }
 
+        public static Point3D operator +(Vector3D v, Point3D p)
+        {
+            return p + v;
+        }
+
+        public static Point3D operator +(UnitVector3D v, Point3D p)
+        {
+            return p + v;
+        }
+
         public static Point3D operator +(Point3D p, Vector3D v)
         {
             return new Point3D(p.X + v.X, p.Y + v.Y, p.Z + v.Z);
