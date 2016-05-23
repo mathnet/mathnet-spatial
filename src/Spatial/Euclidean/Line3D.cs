@@ -181,6 +181,111 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
+        /// Computes the pair of points which represent the closest distance between this Line3D and another Line3D, with the first
+        /// point being the point on this Line3D, and the second point being the corresponding point on the other Line3D.  If the lines
+        /// intersect the points will be identical, if the lines are parallel the first point will be the start point of this line.
+        /// </summary>
+        /// <param name="other">line to compute the closest points with</param>
+        /// <returns>A tuple of two points representing the endpoints of the shortest distance between the two lines</returns>
+        public Tuple<Point3D, Point3D> ClosestPointsBetween(Line3D other)
+        {
+            if (this.IsParallelTo(other))
+            {
+                return Tuple.Create(this.StartPoint, other.ClosestPointTo(this.StartPoint, false));
+            }
+
+            // http://geomalgorithms.com/a07-_distance.html
+            var P0 = this.StartPoint;
+            var u = this.Direction;
+            var Q0 = other.StartPoint;
+            var v = other.Direction;
+
+            var w0 = P0 - Q0;
+            var a = u.DotProduct(u);
+            var b = u.DotProduct(v);
+            var c = v.DotProduct(v);
+            var d = u.DotProduct(w0);
+            var e = v.DotProduct(w0);
+
+            double sc = (b*e - c*d)/(a*c - b*b);
+            double tc = (a*e - b*d)/(a*c - b*b);
+
+            return Tuple.Create(P0 + sc*u, Q0 + tc*v);
+        }
+
+        /// <summary>
+        /// Computes the pair of points which represents the closest distance between this Line3D and another Line3D, with the option
+        /// of treating the lines as segments bounded by their start and end points.
+        /// </summary>
+        /// <param name="other">line to compute the closest points with</param>
+        /// <param name="mustBeOnSegments">if true, the lines are treated as segments bounded by the start and end point</param>
+        /// <returns>A tuple of two points representing the endpoints of the shortest distance between the two lines or segments</returns>
+        public Tuple<Point3D, Point3D> ClosestPointsBetween(Line3D other, bool mustBeOnSegments)
+        {
+            // If the segments are parallel and the answer must be on the segments, we can skip directly to the ending
+            // algorithm where the endpoints are projected onto the opposite segment and the smallest distance is 
+            // taken.  Otherwise we must first check if the infinite length line solution is valid.
+            if (!this.IsParallelTo(other) || !mustBeOnSegments)  // If the lines aren't parallel OR it doesn't have to be constrained to the segments
+            {
+                // Compute the unbounded result, and if mustBeOnSegments is false we can directly return the results
+                // since this is the same as calling the other method.
+                var result = this.ClosestPointsBetween(other);
+                if (!mustBeOnSegments)
+                    return result;
+
+                // A point that is known to be colinear with the line start and end points is on the segment if
+                // its distance to both endpoints is less than the segment length.  If both projected points lie 
+                // within their segment, we can directly return the result.
+                if (result.Item1.DistanceTo(this.StartPoint) <= this.Length &&
+                    result.Item1.DistanceTo(this.EndPoint) <= this.Length &&
+                    result.Item2.DistanceTo(other.StartPoint) <= other.Length &&
+                    result.Item2.DistanceTo(other.EndPoint) <= other.Length)
+                {
+                    return result;
+                }
+            }
+
+            // If we got here, we know that either we're doing a bounded distance on two parallel segments or one 
+            // of the two closest span points is outside of the segment of the line it was projected on.  In either
+            // case we project each of the four endpoints onto the opposite segments and select the one with the 
+            // smallest projected distance.
+            Point3D checkPoint;
+            Tuple<Point3D, Point3D> closestPair;
+            double distance;
+
+            checkPoint = other.ClosestPointTo(this.StartPoint, true);
+            distance = checkPoint.DistanceTo(this.StartPoint);
+            closestPair = Tuple.Create(this.StartPoint, checkPoint);
+            double minDistance = distance;
+            
+
+            checkPoint = other.ClosestPointTo(this.EndPoint, true);
+            distance = checkPoint.DistanceTo(this.EndPoint);
+            if (distance < minDistance)
+            {
+                closestPair = Tuple.Create(this.EndPoint, checkPoint);
+                minDistance = distance;
+            }
+
+            checkPoint = this.ClosestPointTo(other.StartPoint, true);
+            distance = checkPoint.DistanceTo(other.StartPoint);
+            if (distance < minDistance)
+            {
+                closestPair = Tuple.Create(checkPoint, other.StartPoint);
+                minDistance = distance;
+            }
+
+            checkPoint = this.ClosestPointTo(other.EndPoint, true);
+            distance = checkPoint.DistanceTo(other.EndPoint);
+            if (distance < minDistance)
+            {
+                closestPair = Tuple.Create(checkPoint, other.EndPoint);
+            }
+
+            return closestPair;
+        }
+
+        /// <summary>
         /// Indicates whether the current object is equal to another object of the same type.
         /// </summary>
         /// <returns>
