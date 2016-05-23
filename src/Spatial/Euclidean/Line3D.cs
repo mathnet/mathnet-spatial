@@ -210,7 +210,7 @@ namespace MathNet.Spatial.Euclidean
             double sc = (b*e - c*d)/(a*c - b*b);
             double tc = (a*e - b*d)/(a*c - b*b);
 
-            return Tuple.Create(sc*u + P0, tc*v + Q0);
+            return Tuple.Create(P0 + sc*u, Q0 + tc*v);
         }
 
         /// <summary>
