@@ -12,10 +12,17 @@ The Math.NET project is a community effort. We accept contributions and pull req
 
 ### Code Contributors
 
-*Essentially the output of `git shortlog -sn` in original order.  
+*Essentially the output of `git shortlog -sn` in original order.
 Feel free to add a link to your personal site/blog and/or twitter handle.*
 
 - Johan Larsson
 - [Christoph Rüegg](http://christoph.ruegg.name/) (@cdrnet)
+- Matt Jarvis
+- Mostafa Ali
+- MaLiN22223
+- David Watts
+- csjune
+- Mehran Maghoumi
 - Ralle
+- ippei
 - luisllamasbinaburo
