@@ -1,3 +1,6 @@
+### 0.3.0 - 2016-11-05
+* Various additions and fixes
+
 ### 0.2.0-alpha - 2015-04-20
 * Coordinate System: Rotation overloads
 * Coordinate System: OffsetBy
