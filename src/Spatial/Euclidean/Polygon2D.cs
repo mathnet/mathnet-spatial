@@ -133,7 +133,7 @@ namespace MathNet.Spatial.Euclidean
             // Order the hull points by angle to the centroid
             Point2D centroid = Point2D.Centroid(hullPoints);
             Vector2D xAxis = new Vector2D(1, 0);
-            var results = (from x in hullPoints select new Tuple<Angle, Point2D>(centroid.VectorTo(x).AngleTo(xAxis), x)).ToList();
+            var results = (from x in hullPoints select new Tuple<Angle, Point2D>(centroid.VectorTo(x).SignedAngleTo(xAxis, true), x)).ToList();
             results.Sort((a, b) => a.Item1.CompareTo(b.Item1));
 
             return new Polygon2D(from x in results select x.Item2);
