@@ -83,8 +83,12 @@ namespace MathNet.Spatial.Euclidean
         /// two dimensional convex hull, returning it as a Polygon2D object.  
         /// </summary>
         /// <param name="pointList"></param>
+        /// <param name="clockWise">
+        /// In which direction to return the points on the convex hull.
+        /// If true, clockwise. Otherwise counter clockwise
+        /// </param>
         /// <returns></returns>
-        public static Polygon2D GetConvexHullFromPoints(IEnumerable<Point2D> pointList)
+        public static Polygon2D GetConvexHullFromPoints(IEnumerable<Point2D> pointList, bool clockWise = true)
         {
             // Use the Quickhull algorithm to compute the convex hull of the given points, 
             // making the assumption that the points were delivered in no particular order.
@@ -133,7 +137,7 @@ namespace MathNet.Spatial.Euclidean
             // Order the hull points by angle to the centroid
             Point2D centroid = Point2D.Centroid(hullPoints);
             Vector2D xAxis = new Vector2D(1, 0);
-            var results = (from x in hullPoints select new Tuple<Angle, Point2D>(centroid.VectorTo(x).SignedAngleTo(xAxis, true), x)).ToList();
+            var results = (from x in hullPoints select new Tuple<Angle, Point2D>(centroid.VectorTo(x).SignedAngleTo(xAxis, clockWise), x)).ToList();
             results.Sort((a, b) => a.Item1.CompareTo(b.Item1));
 
             return new Polygon2D(from x in results select x.Item2);
