@@ -3,7 +3,7 @@ Math.NET Spatial
 
 Math.NET Spatial is aiming to become a geometry library for .Net and Mono.
 
-Math.NET Spatial is part of the [Math.NET initiative](http://www.mathdotnet.com/).
+Math.NET Spatial is part of the [Math.NET initiative](https://www.mathdotnet.com/).
 Available for free under the [MIT/X11 License](License.html).
 
     [hide]

@@ -25,6 +25,7 @@ coverage.*
 *.boltdata
 *.lnt
 *.svclog
+*.log
 
 # Caches
 _ReSharper*

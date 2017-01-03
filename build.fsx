@@ -5,7 +5,7 @@
 // | |  | | (_| | |_| | | |_| |\  | |____   | |
 // |_|  |_|\__,_|\__|_| |_(_)_| \_|______|  |_|
 //
-// Math.NET Spatial - http://spatial.mathdotnet.com
+// Math.NET Spatial - https://spatial.mathdotnet.com
 // Copyright (c) Math.NET - Open Source MIT/X11 License
 //
 // FAKE build script, see http://fsharp.github.io/FAKE

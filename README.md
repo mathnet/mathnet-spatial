@@ -24,7 +24,7 @@ Supported Platforms:
 Building Math.NET Spatial
 -------------------------
 
-Windows (.Net): [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/b0v856pd85i6a3hg/branch/master)](https://ci.appveyor.com/project/cdrnet/mathnet-spatial)  
+Windows (.Net): [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/b0v856pd85i6a3hg/branch/master)](https://ci.appveyor.com/project/cdrnet/mathnet-spatial)
 Linux (Mono): [![Travis Build Status](https://travis-ci.org/mathnet/mathnet-spatial.svg?branch=master)](https://travis-ci.org/mathnet/mathnet-spatial)
 
 
@@ -47,24 +47,24 @@ If you do not want to use the official binaries, or if you like to modify, debug
     build.cmd    # normal build (.Net 4.0), run unit tests
     ./build.sh   # normal build (.Net 4.0), run unit tests - on Linux or Mac
     ./buildn.sh  # normal build (.Net 4.0), run unit tests - bash on Windows (.Net instead of mono)
-    
+
     build.cmd Build              # normal build (.Net 4.0)
     build.cmd Build incremental  # normal build, incremental (.Net 4.0)
     build.cmd Build all          # full build (.Net 4.0, 3.5, PCL)
     build.cmd Build net35        # compatibility build (.Net 3.5)
-    
+
     build.cmd Test        # normal build (.Net 4.0), run unit tests
     build.cmd Test quick  # normal build (.Net 4.0), run unit tests except long running ones
     build.cmd Test all    # full build (.Net 4.0, 3.5, PCL), run all unit tests
     build.cmd Test net35  # compatibility build (.Net 3.5), run unit testss
-    
+
     build.cmd Clean  # cleanup build artifacts
     build.cmd Docs   # generate documentation
     build.cmd Api    # generate api reference
-    
+
     build.cmd NuGet all     # generate normal NuGet packages (.Net 4.0, 3.5, PCL)
     build.cmd NuGet signed  # generate signed/strong named NuGet packages (.Net 4.0)
-    
+
     build.cmd All          # build, test, docs, api reference (.Net 4.0)
     build.cmd All release  # release build
 
@@ -73,15 +73,15 @@ FAKE itself is not included in the repository but it will download and bootstrap
 Quick Links
 -----------
 
-* [**Project Website**](http://spatial.mathdotnet.com)
-* [Source Code](http://github.com/mathnet/mathnet-spatial)
-* [Documentation](http://spatial.mathdotnet.com/docs/)
-* [API Reference](http://spatial.mathdotnet.com/api/)
-* [Work Items and Bug Tracker](http://github.com/mathnet/mathnet-spatial/issues)
+* [**Project Website**](https://spatial.mathdotnet.com)
+* [Source Code](https://github.com/mathnet/mathnet-spatial)
+* [Documentation](https://spatial.mathdotnet.com/docs/)
+* [API Reference](https://spatial.mathdotnet.com/api/)
+* [Work Items and Bug Tracker](https://github.com/mathnet/mathnet-spatial/issues)
 
 Math.NET on other sites:
 
-* [Twitter @MathDotNet](http://twitter.com/MathDotNet)
+* [Twitter @MathDotNet](https://twitter.com/MathDotNet)
 * [Google+](https://plus.google.com/112484567926928665204)
 * [Ohloh](https://www.ohloh.net/p/mathnet)
-* [Stack Overflow](http://stackoverflow.com/questions/tagged/mathdotnet)
+* [Stack Overflow](https://stackoverflow.com/questions/tagged/mathdotnet)

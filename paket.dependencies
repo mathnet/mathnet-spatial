@@ -1,13 +1,13 @@
-source http://www.nuget.org/api/v2
+source https://www.nuget.org/api/v2
 nuget MathNet.Numerics ~> 3.8
 
 group Build
-    source http://www.nuget.org/api/v2
+    source https://www.nuget.org/api/v2
     nuget FAKE ~> 4.1
     nuget NUnit.Runners ~> 3.0
     nuget FSharp.Formatting !~> 2.4
     nuget NuGet.CommandLine
 
 group Test
-    source http://www.nuget.org/api/v2
+    source https://www.nuget.org/api/v2
     nuget NUnit ~> 3.0

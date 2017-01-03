@@ -38,24 +38,24 @@ is *not* required when using Visual Studio or `msbuild` directly.
 
     build.cmd    # normal build (.Net 4.0), run unit tests (.Net on Windows)
     ./build.sh   # normal build (.Net 4.0), run unit tests (Mono on Linux/Mac, .Net on Windows)
-    
+
     build.cmd Build              # normal build (.Net 4.0)
     build.cmd Build incremental  # normal build, incremental (.Net 4.0)
-    
+
     build.cmd Test        # normal build (.Net 4.0), run unit tests
     build.cmd Test quick  # normal build (.Net 4.0), run unit tests except long running ones
-    
+
     build.cmd Clean  # cleanup build artifacts
     build.cmd Docs   # generate documentation (also DocsDev, DocsWatch)
     build.cmd Api    # generate api reference
     build.cmd Zip    # generate zip packages (.Net 4.0)
     build.cmd NuGet  # generate NuGet packages (.Net 4.0)
-    
+
     build.cmd All    # build, test, docs, api reference (.Net 4.0)
 
 If the build or tests fail claiming that FSharp.Core was not be found, see
 [fsharp.org](http://fsharp.org/use/windows/) or install the
-[Visual F# 3.0 Tools](http://go.microsoft.com/fwlink/?LinkId=261286) directly.
+[Visual F# 3.0 Tools](https://go.microsoft.com/fwlink/?LinkId=261286) directly.
 
 Creating a Release
 ------------------
@@ -85,10 +85,10 @@ Example:
     // | |\/| |/ _` | __| '_ \  | . ` |  __|    | |
     // | |  | | (_| | |_| | | |_| |\  | |____   | |
     // |_|  |_|\__,_|\__|_| |_(_)_| \_|______|  |_|
-    // 
-    // Math.NET Spatial - http://spatial.mathdotnet.com
+    //
+    // Math.NET Spatial - https://spatial.mathdotnet.com
     // Copyright (c) Math.NET - Open Source MIT/X11 License
-    // 
+    //
     // Math.NET Spatial  v2.3.0-beta1
 
 The artifacts are then ready in the `out/packages` directory.
@@ -117,6 +117,6 @@ Official Release Process (Maintainers only)
     publishing to the NuGet gallery is quite unreliable.
 
 *   Create new Codeplex and GitHub release, attach Zip files (to be automated)
-*   Copy artifacts to [release archive](http://1drv.ms/1uZ5IF0) (to be automated)
+*   Copy artifacts to [release archive](https://1drv.ms/1uZ5IF0) (to be automated)
 *   Consider a tweet via [@MathDotNet](https://twitter.com/MathDotNet)
 *   Consider a post to the [Google+ site](https://plus.google.com/112484567926928665204)
