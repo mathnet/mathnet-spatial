@@ -1,5 +1,6 @@
 source https://www.nuget.org/api/v2
 nuget MathNet.Numerics ~> 3.8
+nuget MathNet.Numerics.Signed ~> 3.8
 
 group Build
     source https://www.nuget.org/api/v2

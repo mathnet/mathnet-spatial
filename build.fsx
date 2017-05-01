@@ -43,6 +43,7 @@ traceHeader releases
 let summary = "Math.NET Spatial, providing methods and algorithms for geometry computations in science, engineering and every day use."
 let description = "Math.NET Spatial. "
 let support = "Supports .Net 4.0 and Mono on Windows, Linux and Mac."
+let supportSigned = "Supports .Net 4.0. This package contains strong-named assemblies for legacy use cases."
 let tags = "math spatial geometry 2D 3D"
 
 let libnet35 = "lib/net35"
@@ -70,11 +71,30 @@ let spatialPack =
         [ @"..\..\out\lib\Net40\MathNet.Spatial.*", Some libnet40, None;
           @"..\..\src\Spatial\**\*.cs", Some "src/Common", None ] }
 
+let spatialSignedPack =
+  { spatialPack with
+      Id = spatialPack.Id + ".Signed"
+      Title = spatialPack.Title + " - Signed Edition"
+      Description = description + supportSigned
+      Tags = spatialPack.Tags + " signed"
+      Dependencies =
+        [ { FrameworkVersion=""
+            Dependencies=[ "MathNet.Numerics.Signed", GetPackageVersion "packages" "MathNet.Numerics.Signed" ] } ]
+      Files =
+        [ @"..\..\out\lib-signed\Net40\MathNet.Spatial.*", Some libnet40, None;
+          @"..\..\src\Spatial\**\*.cs", Some "src/Common", None ] }
+
 let coreBundle =
     { Id = spatialPack.Id
       Release = spatialRelease
       Title = spatialPack.Title
       Packages = [ spatialPack ] }
+
+let coreSignedBundle =
+    { Id = spatialSignedPack.Id
+      Release = spatialRelease
+      Title = spatialSignedPack.Title
+      Packages = [ spatialSignedPack ] }
 
 
 // --------------------------------------------------------------------------------------
@@ -87,7 +107,8 @@ Target "Clean" (fun _ ->
     CleanDirs [ "obj" ]
     CleanDirs [ "out/api"; "out/docs"; "out/packages" ]
     CleanDirs [ "out/lib/Net40" ]
-    CleanDirs [ "out/test/Net40" ])
+    CleanDirs [ "out/test/Net40" ]
+    CleanDirs [ "out/lib-signed/Net40" ])
 
 Target "ApplyVersion" (fun _ ->
     patchVersionInAssemblyInfo "src/Spatial" spatialRelease
@@ -132,7 +153,8 @@ Target "Pack" DoNothing
 
 Target "Zip" (fun _ ->
     CleanDir "out/packages/Zip"
-    coreBundle |> zip "out/packages/Zip" "out/lib" (fun f -> f.Contains("MathNet.Spatial.") || f.Contains("MathNet.Numerics.")))
+    coreBundle |> zip "out/packages/Zip" "out/lib" (fun f -> f.Contains("MathNet.Spatial.") || f.Contains("MathNet.Numerics."))
+    coreSignedBundle |> zip "out/packages/Zip" "out/lib-signed" (fun f -> f.Contains("MathNet.Spatial.") || f.Contains("MathNet.Numerics.")))
 "Build" ==> "Zip" ==> "Pack"
 
 // NUGET
@@ -140,7 +162,8 @@ Target "Zip" (fun _ ->
 Target "NuGet" (fun _ ->
     CleanDir "out/packages/NuGet"
     if hasBuildParam "all" || hasBuildParam "release" then
-        nugetPack coreBundle "out/packages/NuGet")
+        nugetPack coreBundle "out/packages/NuGet"
+        nugetPack coreSignedBundle "out/packages/NuGet")
 "Build" ==> "NuGet" ==> "Pack"
 
 
@@ -211,7 +234,7 @@ Target "PublishMirrors" (fun _ -> publishMirrors ())
 Target "PublishDocs" (fun _ -> publishDocs spatialRelease)
 Target "PublishApi" (fun _ -> publishApi spatialRelease)
 
-Target "PublishArchive" (fun _ -> publishArchive "out/packages/Zip" "out/packages/NuGet" [coreBundle])
+Target "PublishArchive" (fun _ -> publishArchive "out/packages/Zip" "out/packages/NuGet" [coreBundle; coreSignedBundle])
 
 Target "PublishNuGet" (fun _ -> !! "out/packages/NuGet/*.nupkg" -- "out/packages/NuGet/*.symbols.nupkg" |> publishNuGet)
 

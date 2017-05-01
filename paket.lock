@@ -2,6 +2,7 @@ NUGET
   remote: https://www.nuget.org/api/v2
     MathNet.Numerics (3.8)
       TaskParallelLibrary (>= 1.0.2856) - framework: net35
+    MathNet.Numerics.Signed (3.8)
     TaskParallelLibrary (1.0.2856) - framework: net35
 
 GROUP Build
