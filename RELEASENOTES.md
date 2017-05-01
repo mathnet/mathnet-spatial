@@ -1,3 +1,7 @@
+### 0.4.0 - 2017-05-01
+* Build: extra *.Signed packages with strong named assemblies for legacy use cases
+* Polygon: order points on the convex hull clockwise *~Per Kuijpers*
+
 ### 0.3.0 - 2016-11-05
 * Various additions and fixes
 
