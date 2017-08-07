@@ -1,6 +1,7 @@
 Math.NET Spatial
 ================
-[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/mathnet/mathnet-spatial?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
+[![Join the chat at https://gitter.im/mathnet/mathnet-spatial](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/mathnet/mathnet-spatial?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 Math.NET Spatial is an opensource **geometry library for .Net, Silverlight and Mono**.
 
