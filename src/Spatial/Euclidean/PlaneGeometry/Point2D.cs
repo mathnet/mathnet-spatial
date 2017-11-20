@@ -9,7 +9,7 @@ using System.Xml.Serialization;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Spatial.Units;
 
-namespace MathNet.Spatial.Euclidean
+namespace MathNet.Spatial.Euclidean.PlaneGeometry
 {
     [Serializable]
     public struct Point2D : IXmlSerializable, IEquatable<Point2D>, IFormattable

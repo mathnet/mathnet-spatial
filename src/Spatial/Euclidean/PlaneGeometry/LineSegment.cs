@@ -2,13 +2,13 @@
 using MathNet.Numerics;
 using MathNet.Spatial.Units;
 
-namespace MathNet.Spatial.Euclidean
+namespace MathNet.Spatial.Euclidean.PlaneGeometry
 {
     /// <summary>
     /// This structure represents a line between two points in 2-space.  It allows for operations such as 
     /// computing the length, direction, projections to, compairisons, and shifting by a vector.  
     /// </summary>
-    public struct Line2D : IEquatable<Line2D>
+    public struct LineSegment : IEquatable<LineSegment>
     {
         private Vector2D _direction;
         private double _length;
@@ -55,7 +55,7 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         /// <param name="startPoint">the starting point of the line</param>
         /// <param name="endPoint">the ending point of the line</param>
-        public Line2D(Point2D startPoint, Point2D endPoint)
+        public LineSegment(Point2D startPoint, Point2D endPoint)
         {
             this.StartPoint = startPoint;
             this.EndPoint = endPoint;
@@ -87,9 +87,9 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="p">the point to create a line to</param>
         /// <param name="mustStartBetweenAndEnd">If false the startpoint can extend beyond the start and endpoint of the line</param>
         /// <returns></returns>
-        public Line2D LineTo(Point2D p, bool mustStartBetweenAndEnd)
+        public LineSegment LineTo(Point2D p, bool mustStartBetweenAndEnd)
         {
-            return new Line2D(this.ClosestPointTo(p, mustStartBetweenAndEnd), p);
+            return new LineSegment(this.ClosestPointTo(p, mustStartBetweenAndEnd), p);
         }
 
         /// <summary>
@@ -122,7 +122,7 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         /// <param name="other">The other line to compute the intersection with</param>
         /// <returns>The point at the intersection of two lines, or null if the lines are parallel.</returns>
-        public Point2D? IntersectWith(Line2D other)
+        public Point2D? IntersectWith(LineSegment other)
         {
             if (this.IsParallelTo(other))
                 return null;
@@ -144,7 +144,7 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         /// <param name="other">The other line to compute the intersection with</param>
         /// <returns>The point at the intersection of two lines, or null if the lines are parallel.</returns>
-        public Point2D? IntersectWith(Line2D other, Angle parallelTolerance)
+        public Point2D? IntersectWith(LineSegment other, Angle parallelTolerance)
         {
             if (this.IsParallelTo(other, parallelTolerance))
                 return null;
@@ -166,7 +166,7 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         /// <param name="other">The other line to check this one against</param>
         /// <returns>True if the lines are parallel, false if they are not</returns>
-        public bool IsParallelTo(Line2D other)
+        public bool IsParallelTo(LineSegment other)
         {
             return this.Direction.IsParallelTo(other.Direction, Precision.DoublePrecision * 2);
         }
@@ -177,34 +177,34 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="other">The other line to check this one against</param>
         /// <param name="angleTolerance">If the angle between line directions is less than this value, the method returns true</param>
         /// <returns>True if the lines are parallel within the angle tolerance, false if they are not</returns>
-        public bool IsParallelTo(Line2D other, Angle angleTolerance)
+        public bool IsParallelTo(LineSegment other, Angle angleTolerance)
         {
             return this.Direction.IsParallelTo(other.Direction, angleTolerance);
         }
 
         # region Operators 
 
-        public static bool operator ==(Line2D left, Line2D right)
+        public static bool operator ==(LineSegment left, LineSegment right)
         {
             return left.Equals(right);
         }
 
-        public static bool operator !=(Line2D left, Line2D right)
+        public static bool operator !=(LineSegment left, LineSegment right)
         {
             return !left.Equals(right);
         }
 
-        public static Line2D operator +(Vector2D offset, Line2D line)
+        public static LineSegment operator +(Vector2D offset, LineSegment line)
         {
-            return new Line2D(line.StartPoint + offset, line.EndPoint + offset);
+            return new LineSegment(line.StartPoint + offset, line.EndPoint + offset);
         }
 
-        public static Line2D operator +(Line2D line, Vector2D offset)
+        public static LineSegment operator +(LineSegment line, Vector2D offset)
         {
             return offset + line;
         }
 
-        public static Line2D operator -(Line2D line, Vector2D offset)
+        public static LineSegment operator -(LineSegment line, Vector2D offset)
         {
             return line + (-offset);
         }
@@ -218,9 +218,14 @@ namespace MathNet.Spatial.Euclidean
             return string.Format("StartPoint: {0}, EndPoint: {1}", this.StartPoint, this.EndPoint);
         }
 
-        public static Line2D Parse(string startPointString, string endPointString)
+        /// <summary>
+        /// Creates a LineSegment from the string representation of two points.
+        /// </summary>
+        /// <param name="startPointString">A string in the format (x,y)</param>
+        /// <param name="endPointString">A string in the format (x,y)</param>
+        public static LineSegment Parse(string startPointString, string endPointString)
         {
-            return new Line2D(Point2D.Parse(startPointString), Point2D.Parse(endPointString));
+            return new LineSegment(Point2D.Parse(startPointString), Point2D.Parse(endPointString));
         }
         
         # endregion
@@ -228,15 +233,25 @@ namespace MathNet.Spatial.Euclidean
 
         # region Equality and Hash Code
 
-        public bool Equals(Line2D other)
+        /// <summary>
+        /// Checks if the line segements are equal
+        /// </summary>
+        /// <param name="other">The line segment to be checked</param>
+        /// <returns>True if the lineSegements are equal</returns>
+        public bool Equals(LineSegment other)
         {
             return StartPoint.Equals(other.StartPoint) && EndPoint.Equals(other.EndPoint);
         }
 
+        /// <summary>
+        /// Checks if the objects are equal
+        /// </summary>
+        /// <param name="obj">The object to be checked</param>
+        /// <returns>True if the object is a LineSegment and it is equal to this one</returns>
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
-            return obj is Line2D && Equals((Line2D)obj);
+            return obj is LineSegment && Equals((LineSegment)obj);
         }
 
         /// <summary>

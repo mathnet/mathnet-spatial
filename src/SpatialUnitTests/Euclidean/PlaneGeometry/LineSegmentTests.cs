@@ -1,12 +1,12 @@
 ﻿using System;
-using MathNet.Spatial.Euclidean;
+using MathNet.Spatial.Euclidean.PlaneGeometry;
 using MathNet.Spatial.Units;
 using NUnit.Framework;
 
-namespace MathNet.Spatial.UnitTests.Euclidean
+namespace MathNet.Spatial.UnitTests.Euclidean.PlaneGeometry
 {
     [TestFixture]
-    public class Line2DTests
+    public class LineSegmentTests
     {
 
         [Test]
@@ -14,7 +14,7 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         {
             var p1 = new Point2D(0, 0);
             var p2 = new Point2D(1, 1);
-            var line = new Line2D(p1, p2);
+            var line = new LineSegment(p1, p2);
 
             AssertGeometry.AreEqual(p1, line.StartPoint);
             AssertGeometry.AreEqual(p2, line.EndPoint);
@@ -25,7 +25,7 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         {
             var p1 = new Point2D(1, -1);
             var p2 = new Point2D(1, -1);
-            Assert.Throws<ArgumentException>(() => new Line2D(p1, p2));
+            Assert.Throws<ArgumentException>(() => new LineSegment(p1, p2));
         }
 
         [TestCase("0,0", "1,0", 1)]
@@ -37,7 +37,7 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         {
             var p1 = Point2D.Parse(p1s);
             var p2 = Point2D.Parse(p2s);
-            var line = new Line2D(p1, p2);
+            var line = new LineSegment(p1, p2);
             double len = line.Length;
 
             Assert.AreEqual(expected, len, 1e-7);
@@ -52,7 +52,7 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             var p1 = Point2D.Parse(p1s);
             var p2 = Point2D.Parse(p2s);
             var ex = Vector2D.Parse(exs);
-            var line = new Line2D(p1, p2);
+            var line = new LineSegment(p1, p2);
             
             AssertGeometry.AreEqual(ex, line.Direction);
         }
@@ -61,8 +61,8 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         [TestCase("0,0", "10,10", "0,0", "10,11", false)]
         public void EqualityOperator(string p1s, string p2s, string p3s, string p4s, bool expected)
         {
-            var l1 = Line2D.Parse(p1s, p2s);
-            var l2 = Line2D.Parse(p3s, p4s);
+            var l1 = LineSegment.Parse(p1s, p2s);
+            var l2 = LineSegment.Parse(p3s, p4s);
             
             Assert.AreEqual(expected, l1 == l2);
         }
@@ -71,8 +71,8 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         [TestCase("0,0", "10,10", "0,0", "10,11", true)]
         public void InequalityOperator(string p1s, string p2s, string p3s, string p4s, bool expected)
         {
-            var l1 = new Line2D(Point2D.Parse(p1s), Point2D.Parse(p2s));
-            var l2 = new Line2D(Point2D.Parse(p3s), Point2D.Parse(p4s));
+            var l1 = new LineSegment(Point2D.Parse(p1s), Point2D.Parse(p2s));
+            var l2 = new LineSegment(Point2D.Parse(p3s), Point2D.Parse(p4s));
          
             Assert.AreEqual(expected, l1 != l2);
         }
@@ -80,15 +80,15 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         [Test]
         public void EqualityComparisonFalseAgainstNull()
         {
-            var line = new Line2D(new Point2D(), new Point2D(1,1) );
+            var line = new LineSegment(new Point2D(), new Point2D(1,1) );
             Assert.IsFalse(line.Equals(null));
         }
 
         [Test]
         public void AdditionOperator()
         {
-            var l1 = Line2D.Parse("0,0", "1,1");
-            var ex = Line2D.Parse("-1,-1", "0,0");
+            var l1 = LineSegment.Parse("0,0", "1,1");
+            var ex = LineSegment.Parse("-1,-1", "0,0");
 
             Assert.AreEqual(ex, l1 + new Vector2D(-1, -1));
         }
@@ -96,8 +96,8 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         [Test]
         public void SubtractionOperator()
         {
-            var l1 = Line2D.Parse("0,0", "1,1");
-            var ex = Line2D.Parse("-1,-1", "0,0");
+            var l1 = LineSegment.Parse("0,0", "1,1");
+            var ex = LineSegment.Parse("-1,-1", "0,0");
 
             Assert.AreEqual(ex, l1 - new Vector2D(1, 1));
         }
@@ -112,10 +112,10 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         [TestCase("1.5,-2", "1.5,-1")]
         public void LineToBetweenEndPoints(string ptest, string exs)
         {
-            var line = Line2D.Parse("1,-1", "3,-1");
+            var line = LineSegment.Parse("1,-1", "3,-1");
             var point = Point2D.Parse(ptest);
             var expPoint = Point2D.Parse(exs);
-            var expLine = new Line2D(expPoint, point);
+            var expLine = new LineSegment(expPoint, point);
 
             Assert.AreEqual(expLine, line.LineTo(point, true));
         }
@@ -130,10 +130,10 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         [TestCase("1.5,-2", "1.5,-1")]
         public void LineToIgnoreEndPoints(string ptest, string exs)
         {
-            var line = Line2D.Parse("1,-1", "3,-1");
+            var line = LineSegment.Parse("1,-1", "3,-1");
             var point = Point2D.Parse(ptest);
             var expPoint = Point2D.Parse(exs);
-            var expLine = new Line2D(expPoint, point);
+            var expLine = new LineSegment(expPoint, point);
 
             Assert.AreEqual(expLine, line.LineTo(point, false));
         }
@@ -145,7 +145,7 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         [TestCase("0,0", "1,0", "3,0", "1,0")]
         public void ClosestPointToWithinSegment(string start, string end, string point, string expected)
         {
-            var line = Line2D.Parse(start, end);
+            var line = LineSegment.Parse(start, end);
             var p = Point2D.Parse(point);
             var e = Point2D.Parse(expected);
 
@@ -159,7 +159,7 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         [TestCase("0,0", "1,0", "3,0", "3,0")]
         public void ClosestPointToOutsideSegment(string start, string end, string point, string expected)
         {
-            var line = Line2D.Parse(start, end);
+            var line = LineSegment.Parse(start, end);
             var p = Point2D.Parse(point);
             var e = Point2D.Parse(expected);
 
@@ -172,8 +172,8 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         [TestCase("0,0", "2,2", "0,1", "1,2", null)]
         public void IntersectWithTest(string s1, string e1, string s2, string e2, string expected)
         {
-            var line1 = Line2D.Parse(s1, e1);
-            var line2 = Line2D.Parse(s2, e2);
+            var line1 = LineSegment.Parse(s1, e1);
+            var line2 = LineSegment.Parse(s2, e2);
             Point2D? e = string.IsNullOrEmpty(expected) ? (Point2D?)null : Point2D.Parse(expected);
             Point2D? intersection = line1.IntersectWith(line2);
 
@@ -187,8 +187,8 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         [TestCase("0,0", "0.00001,-1.0000", "1,1", "1,2", false)]
         public void IsParallelToWithinDoubleTol(string s1, string e1, string s2, string e2, bool expected)
         {
-            var line1 = Line2D.Parse(s1, e1);
-            var line2 = Line2D.Parse(s2, e2);
+            var line1 = LineSegment.Parse(s1, e1);
+            var line2 = LineSegment.Parse(s2, e2);
             
             Assert.AreEqual(expected, line1.IsParallelTo(line2));
         }
@@ -200,8 +200,8 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         [TestCase("0,0", "0.001,-1.0000", "1,1", "1,2", 0.06, true)]
         public void IsParallelToWithinAngleTol(string s1, string e1, string s2, string e2, double degreesTol, bool expected)
         {
-            var line1 = Line2D.Parse(s1, e1);
-            var line2 = Line2D.Parse(s2, e2);
+            var line1 = LineSegment.Parse(s1, e1);
+            var line2 = LineSegment.Parse(s2, e2);
 
             Assert.AreEqual(expected, line1.IsParallelTo(line2, Angle.FromDegrees(degreesTol)));
         }
@@ -209,7 +209,7 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         [Test]
         public void ToStringCheck()
         {
-            string check = Line2D.Parse("0,0", "1,1").ToString();
+            string check = LineSegment.Parse("0,0", "1,1").ToString();
 
             Assert.AreEqual("StartPoint: (0, 0), EndPoint: (1, 1)", check);
         }

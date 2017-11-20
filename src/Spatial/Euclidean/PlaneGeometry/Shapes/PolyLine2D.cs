@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 
-namespace MathNet.Spatial.Euclidean
+namespace MathNet.Spatial.Euclidean.PlaneGeometry.Shapes
 {
     /// <summary>
     /// The PolyLine2D class represents a 2D curve in space made up of line segments joined end-to-end, and is 
@@ -123,7 +123,7 @@ namespace MathNet.Spatial.Euclidean
                 var v0 = manifold[i - 1];
                 var v1 = manifold[i];
                 var v2 = manifold[i + 1];
-                var projected = new Line2D(v0, v2).ClosestPointTo(v1, true);
+                var projected = new LineSegment(v0, v2).ClosestPointTo(v1, true);
 
                 double error = v1.VectorTo(projected).Length;
                 errorByIndex[i] = error;
@@ -189,7 +189,7 @@ namespace MathNet.Spatial.Euclidean
 
             for (int i = 0; i < this.Count - 1; i++)
             {
-                var segment = new Line2D(this[i], this[i + 1]);
+                var segment = new LineSegment(this[i], this[i + 1]);
                 var projected = segment.ClosestPointTo(p, true);
                 double error = p.DistanceTo(projected);
                 if (error < minError)

@@ -10,7 +10,7 @@ using MathNet.Numerics.Financial;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Spatial.Units;
 
-namespace MathNet.Spatial.Euclidean
+namespace MathNet.Spatial.Euclidean.PlaneGeometry
 {
     [Serializable]
     public struct Vector2D : IXmlSerializable, IEquatable<Vector2D>, IFormattable

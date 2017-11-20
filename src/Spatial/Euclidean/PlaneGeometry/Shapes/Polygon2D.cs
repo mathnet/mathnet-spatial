@@ -5,7 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using MathNet.Spatial.Units;
 
-namespace MathNet.Spatial.Euclidean
+namespace MathNet.Spatial.Euclidean.PlaneGeometry.Shapes
 {
     /// <summary>
     /// Class to represent a closed polygon. If the 

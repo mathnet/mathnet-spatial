@@ -4,11 +4,11 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Xml;
 using System.Xml.Serialization;
 using MathNet.Numerics.LinearAlgebra.Double;
-using MathNet.Spatial.Euclidean;
+using MathNet.Spatial.Euclidean.PlaneGeometry;
 using MathNet.Spatial.Units;
 using NUnit.Framework;
 
-namespace MathNet.Spatial.UnitTests.Euclidean
+namespace MathNet.Spatial.UnitTests.Euclidean.PlaneGeometry
 {
     public class Vector2DTests
     {
@@ -252,7 +252,6 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         [TestCase("1, 0", "-270°", "0, 1")]
         [TestCase("1, 0", "-90°", "0, -1")]
         [TestCase("1, 0", "270°", "0, -1")]
-        [TestCase("1, 0", "180°", "-1, 0")]
         [TestCase("1, 0", "180°", "-1, 0")]
         [TestCase("1, 0", "0°", "1, 0")]
         [TestCase("0, 1", "-90°", "1, 0")]

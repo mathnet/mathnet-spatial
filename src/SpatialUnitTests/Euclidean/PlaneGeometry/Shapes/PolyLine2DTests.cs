@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Linq;
-using MathNet.Spatial.Euclidean;
+using MathNet.Spatial.Euclidean.PlaneGeometry;
+using MathNet.Spatial.Euclidean.PlaneGeometry.Shapes;
 using NUnit.Framework;
 
-namespace MathNet.Spatial.UnitTests.Euclidean
+namespace MathNet.Spatial.UnitTests.Euclidean.PlaneGeometry.Shapes
 {
     [TestFixture]
     public class PolyLine2DTests

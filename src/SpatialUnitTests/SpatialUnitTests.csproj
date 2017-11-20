@@ -48,13 +48,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Euclidean\Circle3DTests.cs" />
-    <Compile Include="Euclidean\Line2DTests.cs" />
-    <Compile Include="Euclidean\Point2DTests.cs" />
-    <Compile Include="Euclidean\Polygon2DTests.cs" />
-    <Compile Include="Euclidean\PolyLine2DTests.cs" />
+    <Compile Include="Euclidean\PlaneGeometry\LineSegmentTests.cs" />
+    <Compile Include="Euclidean\PlaneGeometry\Lines\LineTests.cs" />
+    <Compile Include="Euclidean\PlaneGeometry\Point2DTests.cs" />
+    <Compile Include="Euclidean\PlaneGeometry\Shapes\CircleTests.cs" />
+    <Compile Include="Euclidean\PlaneGeometry\Shapes\Polygon2DTests.cs" />
+    <Compile Include="Euclidean\PlaneGeometry\Shapes\PolyLine2DTests.cs" />
     <Compile Include="Euclidean\PolyLine3DTests.cs" />
     <Compile Include="Euclidean\QuaternionTests.cs" />
-    <Compile Include="Euclidean\Vector2DTests.cs" />
+    <Compile Include="Euclidean\PlaneGeometry\Vector2DTests.cs" />
     <Compile Include="Euclidean\CoordinateSystemTest.cs" />
     <Compile Include="Euclidean\Line3DTests.cs" />
     <Compile Include="Euclidean\PlaneTest.cs" />

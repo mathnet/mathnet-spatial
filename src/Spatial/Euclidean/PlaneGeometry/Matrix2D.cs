@@ -2,7 +2,7 @@
 using MathNet.Numerics.LinearAlgebra.Double;
 using MathNet.Spatial.Units;
 
-namespace MathNet.Spatial.Euclidean
+namespace MathNet.Spatial.Euclidean.PlaneGeometry
 {
     /// <summary>
     /// Helper class for creating matrices for manipulating 2D-elements
