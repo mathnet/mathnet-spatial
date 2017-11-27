@@ -48,15 +48,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Euclidean\EulerAngles.cs" />
+    <Compile Include="Euclidean\Line2D.cs" />
+    <Compile Include="Euclidean\PlaneGeometry\ILine.cs" />
     <Compile Include="Euclidean\PlaneGeometry\LineSegment.cs" />
-    <Compile Include="Euclidean\PlaneGeometry\Lines\Line.cs" />
-    <Compile Include="Euclidean\PlaneGeometry\Matrix2D.cs" />
-    <Compile Include="Euclidean\PlaneGeometry\Point2D.cs" />
-    <Compile Include="Euclidean\PlaneGeometry\Shapes\Polygon2D.cs" />
-    <Compile Include="Euclidean\PlaneGeometry\Shapes\PolyLine2D.cs" />
-    <Compile Include="Euclidean\PlaneGeometry\Shapes\Circle.cs" />
+    <Compile Include="Euclidean\PlaneGeometry\LineSegmentT.cs" />
+    <Compile Include="Euclidean\PlaneGeometry\StraightLine.cs" />
+    <Compile Include="Euclidean\Matrix2D.cs" />
+    <Compile Include="Euclidean\Point2D.cs" />
+    <Compile Include="Euclidean\Polygon2D.cs" />
+    <Compile Include="Euclidean\PolyLine2D.cs" />
+    <Compile Include="Euclidean\PlaneGeometry\Circle.cs" />
     <Compile Include="Euclidean\PolyLine3D.cs" />
-    <Compile Include="Euclidean\PlaneGeometry\Vector2D.cs" />
+    <Compile Include="Euclidean\Vector2D.cs" />
     <Compile Include="Projective\Matrix3DHomogeneous.cs" />
     <Compile Include="Projective\Point3DHomogeneous.cs" />
     <Compile Include="Projective\Vector3DHomogeneous.cs" />
@@ -85,6 +88,7 @@
   <ItemGroup>
     <None Include="Spatial.csproj.paket.references" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Choose>
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.0'">

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MathNet.Spatial.Euclidean.PlaneGeometry.Shapes
+namespace MathNet.Spatial.Euclidean
 {
     /// <summary>
     /// Describes a standard 2 dimentional circle

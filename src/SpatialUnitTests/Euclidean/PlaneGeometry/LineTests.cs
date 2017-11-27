@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using MathNet.Spatial.Euclidean.PlaneGeometry;
-using MathNet.Spatial.Euclidean.PlaneGeometry.Lines;
+using MathNet.Spatial.Euclidean;
 using NUnit.Framework;
 
-namespace MathNet.Spatial.UnitTests.Euclidean.PlaneGeometry.Lines
+namespace MathNet.Spatial.UnitTests.Euclidean
 {
     [TestFixture]
     public class LineTests
@@ -19,9 +18,9 @@ namespace MathNet.Spatial.UnitTests.Euclidean.PlaneGeometry.Lines
         {
             var first = Point2D.Parse(p1);
             var second = Point2D.Parse(p2);
-            Line l = new Line(first, second);
+            StraightLine l = new StraightLine(first, second);
             Assert.AreEqual(gradient, l.Gradient);
-            Assert.AreEqual(yintercept, l.YIntercept.Y);
+            Assert.AreEqual(yintercept, l.XIntercept().First().Y);
         }
 
         [TestCase("-1,3", 2, 5)]
@@ -30,9 +29,9 @@ namespace MathNet.Spatial.UnitTests.Euclidean.PlaneGeometry.Lines
         public void CreateFromPointGradient(string point, double gradient, double yintercept)
         {
             var p1 = Point2D.Parse(point);
-            Line l = new Line(p1, gradient);
+            StraightLine l = new StraightLine(p1, gradient);
             Assert.AreEqual(gradient, l.Gradient);
-            Assert.AreEqual(yintercept, l.YIntercept.Y);
+            Assert.AreEqual(yintercept, l.XIntercept().First().Y);
         }
 
         [TestCase("0,0;1,1", "1,0;2,1", true)]
@@ -40,8 +39,8 @@ namespace MathNet.Spatial.UnitTests.Euclidean.PlaneGeometry.Lines
         {
             var pointpair1 = line1.Split(';').Select(t => Point2D.Parse(t));
             var pointpair2 = line2.Split(';').Select(t => Point2D.Parse(t));
-            Line l1 = new Line(pointpair1);
-            Line l2 = new Line(pointpair2);
+            StraightLine l1 = new StraightLine(pointpair1);
+            StraightLine l2 = new StraightLine(pointpair2);
             Assert.AreEqual(expected, l1.IsParallel(l2));
         }
     }

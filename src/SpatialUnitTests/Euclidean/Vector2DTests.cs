@@ -4,11 +4,11 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Xml;
 using System.Xml.Serialization;
 using MathNet.Numerics.LinearAlgebra.Double;
-using MathNet.Spatial.Euclidean.PlaneGeometry;
+using MathNet.Spatial.Euclidean;
 using MathNet.Spatial.Units;
 using NUnit.Framework;
 
-namespace MathNet.Spatial.UnitTests.Euclidean.PlaneGeometry
+namespace MathNet.Spatial.UnitTests.Euclidean
 {
     public class Vector2DTests
     {

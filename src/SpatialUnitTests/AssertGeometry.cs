@@ -1,6 +1,6 @@
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Spatial.Euclidean;
-using MathNet.Spatial.Euclidean.PlaneGeometry;
+using MathNet.Spatial.Euclidean;
 using NUnit.Framework;
 
 namespace MathNet.Spatial.UnitTests

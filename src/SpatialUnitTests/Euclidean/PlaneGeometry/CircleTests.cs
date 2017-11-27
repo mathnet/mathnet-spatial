@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using MathNet.Spatial.Euclidean.PlaneGeometry;
-using MathNet.Spatial.Euclidean.PlaneGeometry.Shapes;
+using MathNet.Spatial.Euclidean;
 using NUnit.Framework;
 
-namespace MathNet.Spatial.UnitTests.Euclidean.PlaneGeometry.Shapes
+namespace MathNet.Spatial.UnitTests.Euclidean
 {
     [TestFixture]
     public class CircleTests
