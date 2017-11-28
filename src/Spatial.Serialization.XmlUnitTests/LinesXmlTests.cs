@@ -12,8 +12,19 @@ namespace MathNet.Spatial.Serialization.Xml.UnitTests
         [TestCase("1, 2, 3", "-1, 2, 3", false, @"<Ray3D><ThroughPoint X=""1"" Y=""2"" Z=""3"" /><Direction X=""-0.2672612419124244"" Y=""0.53452248382484879"" Z=""0.80178372573727319"" /></Ray3D>")]
         public void Ray3DXml(string ps, string vs, bool asElements, string xml)
         {
+            var ray = new Ray3D(Point3D.Parse(ps), UnitVector3D.Parse(vs));            
+            var result = AssertXml.XmlSerializerRoundTrip(ray, xml);
+            Assert.AreEqual(ray, result);
+            AssertGeometry.AreEqual(ray, result, 1e-6);
+        }
+
+        [TestCase("1, 2, 3", "-1, 2, 3", false, @"<Ray3D><Direction><X>-0.2672612419124244</X><Y>0.53452248382484879</Y><Z>0.80178372573727319</Z></Direction><ThroughPoint><X>1</X><Y>2</Y><Z>3</Z></ThroughPoint></Ray3D>")]
+        public void Ray3DDataContract(string ps, string vs, bool asElements, string xml)
+        {
             var ray = new Ray3D(Point3D.Parse(ps), UnitVector3D.Parse(vs));
-            AssertXml.XmlRoundTrips(ray, xml, (e, a) => AssertGeometry.AreEqual(e, a, 1e-6));
+            var result = AssertXml.DataContractRoundTrip(ray, xml);
+            Assert.AreEqual(ray, result);
+            AssertGeometry.AreEqual(ray, result, 1e-6);
         }
 
         [TestCase("1, 2, 3", "4, 5, 6", @"<Line3D><StartPoint X=""1"" Y=""2"" Z=""3"" /><EndPoint X=""4"" Y=""5"" Z=""6"" /></Line3D>")]
@@ -22,56 +33,54 @@ namespace MathNet.Spatial.Serialization.Xml.UnitTests
             Point3D p1 = Point3D.Parse(p1s);
             Point3D p2 = Point3D.Parse(p2s);
             var l = new Line3D(p1, p2);
-            AssertXml.XmlRoundTrips(l, xml, (e, a) => AssertGeometry.AreEqual(e, a));
+            var result = AssertXml.XmlSerializerRoundTrip(l, xml);
+            Assert.AreEqual(l, result);
+        }
+
+        [TestCase("1, 2, 3", "4, 5, 6", @"<Line3D><EndPoint><X>4</X><Y>5</Y><Z>6</Z></EndPoint><StartPoint><X>1</X><Y>2</Y><Z>3</Z></StartPoint></Line3D>")]
+        public void Line3DDataContract(string p1s, string p2s, string xml)
+        {
+            Point3D p1 = Point3D.Parse(p1s);
+            Point3D p2 = Point3D.Parse(p2s);
+            var l = new Line3D(p1, p2);
+            var result = AssertXml.DataContractRoundTrip(l, xml);
+            Assert.AreEqual(l, result);
         }
 
         [Test]
         public void Vector2DXml()
         {
-            const string Xml = @"<Vector2D X=""1"" Y=""2"" />";
-            const string ElementXml = @"<Vector2D><X>1</X><Y>2</Y></Vector2D>";
             var v = new Vector2D(1, 2);
-
-            AssertXml.XmlRoundTrips(v, Xml, (e, a) => AssertGeometry.AreEqual(e, a));
-
-            var serializer = new XmlSerializer(typeof(Vector2D));
-
-
-            var actuals = new[]
-                          {
-                              Vector2D.ReadFrom(XmlReader.Create(new StringReader(Xml))),
-                              Vector2D.ReadFrom(XmlReader.Create(new StringReader(ElementXml))),
-                              (Vector2D)serializer.Deserialize(new StringReader(Xml)),
-                              (Vector2D)serializer.Deserialize(new StringReader(ElementXml))
-                          };
-            foreach (var actual in actuals)
-            {
-                AssertGeometry.AreEqual(v, actual);
-            }
+            const string Xml = @"<Vector2D X=""1"" Y=""2"" />";
+            var result = AssertXml.XmlSerializerRoundTrip(v, Xml);
+            Assert.AreEqual(v, result);
         }
 
         [Test]
-        public void Vector3DXml ()
+        public void Vector2DDataContract()
+        {
+            var v = new Vector2D(1, 2);
+            const string ElementXml = @"<Vector2D><X>1</X><Y>2</Y></Vector2D>";
+            var result = AssertXml.DataContractRoundTrip(v, ElementXml);
+            Assert.AreEqual(v, result);
+        }
+
+        [Test]
+        public void Vector3DXml()
         {
             var v = new Vector3D(1, -2, 3);
             const string Xml = @"<Vector3D X=""1"" Y=""-2"" Z=""3"" />";
+            var result = AssertXml.XmlSerializerRoundTrip(v, Xml);
+            Assert.AreEqual(v, result);
+        }
+
+        [Test]
+        public void Vector3DDataContract()
+        {
+            var v = new Vector3D(1, -2, 3);
             const string ElementXml = @"<Vector3D><X>1</X><Y>-2</Y><Z>3</Z></Vector3D>";
-            var roundTrip = AssertXml.XmlSerializerRoundTrip(v, Xml);
-            AssertGeometry.AreEqual(v, roundTrip);
-
-            var serializer = new XmlSerializer(typeof(Vector3D));
-
-            var actuals = new[]
-                          {
-                              Vector3D.ReadFrom(XmlReader.Create(new StringReader(Xml))),
-                              Vector3D.ReadFrom(XmlReader.Create(new StringReader(ElementXml))),
-                              (Vector3D)serializer.Deserialize(new StringReader(Xml)),
-                              (Vector3D)serializer.Deserialize(new StringReader(ElementXml))
-                          };
-            foreach (var actual in actuals)
-            {
-                AssertGeometry.AreEqual(v, actual);
-            }
+            var result = AssertXml.DataContractRoundTrip(v, ElementXml);
+            Assert.AreEqual(v, result);
         }
     }
 }

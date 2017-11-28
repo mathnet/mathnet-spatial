@@ -45,7 +45,7 @@ namespace MathNet.Spatial.Serialization.Xml.UnitTests
 
         public static T XmlSerializerRoundTrip<T>(T item, string expected)
         {
-            var serializer2 = SerializerFactory.CreateSpatialSerializer().EnableImplicitTyping(typeof(XmlSerializableDummy)).Create();
+            var serializer2 = SerializerFactory.CreateSpatialSerializer().Create();
             var contents = serializer2.Serialize(item);
             AreEqual(expected, contents);
 
@@ -74,7 +74,7 @@ namespace MathNet.Spatial.Serialization.Xml.UnitTests
         }
         public static T DataContractRoundTrip<T>(T item, string expected)
         {
-            var serializer = new DataContractSerializer(item.GetType());
+            var serializer = SerializerFactory.CreateDataContractSerializer(item);
             string xml;
             using (var sw = new StringWriter())
             using (var writer = XmlWriter.Create(sw, Settings))

@@ -2,13 +2,24 @@
 using MathNet.Spatial.Euclidean;
 using System;
 using System.Globalization;
+using System.Runtime.Serialization;
 using System.Xml;
 using System.Xml.Linq;
-using MathNet.Spatial;
 
 namespace MathNet.Spatial.Serialization.Xml
 {
-    public class Vector3DSerializer : IExtendedXmlCustomSerializer<Vector3D>
+    [DataContract(Name = "Vector3D")]
+    public class Vector3DSurrogate
+    {
+        [DataMember]
+        public double X;
+        [DataMember]
+        public double Y;
+        [DataMember]
+        public double Z;
+    }
+
+    internal class Vector3DSerializer : IExtendedXmlCustomSerializer<Vector3D>, ISerializationSurrogate
     {
         public Vector3D Deserialize(XElement xElement)
         {
@@ -23,6 +34,32 @@ namespace MathNet.Spatial.Serialization.Xml
             xmlWriter.WriteAttributeString("X", obj.X.ToString("R", CultureInfo.InvariantCulture));
             xmlWriter.WriteAttributeString("Y", obj.Y.ToString("R", CultureInfo.InvariantCulture));
             xmlWriter.WriteAttributeString("Z", obj.Z.ToString("R", CultureInfo.InvariantCulture));
+        }
+
+        public void GetObjectData(object obj, SerializationInfo info, StreamingContext context)
+        {
+            Vector3D point = (Vector3D)obj;
+            info.AddValue("x", point.X);
+            info.AddValue("y", point.Y);
+            info.AddValue("z", point.Z);
+        }
+
+        public object SetObjectData(object obj, SerializationInfo info, StreamingContext context, ISurrogateSelector selector)
+        {
+            double x = info.GetDouble("x");
+            double y = info.GetDouble("y");
+            double z = info.GetDouble("z");
+            return new Vector3D(x, y, z);
+        }
+
+        public static Vector3DSurrogate TranslateToSurrogate(Vector3D source)
+        {
+            return new Vector3DSurrogate { X = source.X, Y = source.Y, Z = source.Z };
+        }
+
+        public static Vector3D TranslateToSource(Vector3DSurrogate surrogate)
+        {
+            return new Vector3D(surrogate.X, surrogate.Y, surrogate.Z);
         }
     }
 }

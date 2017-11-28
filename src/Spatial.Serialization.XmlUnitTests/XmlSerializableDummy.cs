@@ -6,9 +6,9 @@ using System.Xml.Serialization;
 
 namespace MathNet.Spatial.Serialization.Xml.UnitTests
 {
-    public class XmlSerializableDummy : IXmlSerializable
+    public class XmlSerializableDummy
     {
-        private readonly string _name;
+        private string _name;
         private XmlSerializableDummy()
         {
 
@@ -25,22 +25,12 @@ namespace MathNet.Spatial.Serialization.Xml.UnitTests
             {
                 return _name;
             }
+            set
+            {
+                _name = value;
+            }
         }
 
         public int Age { get; set; }
-
-        public XmlSchema GetSchema() { return null; }
-        public void ReadXml(XmlReader reader)
-        {
-            var e = (XElement)XNode.ReadFrom(reader);
-            Age = XmlConvert.ToInt32(e.Attribute("Age").Value);
-            var name = e.ReadAttributeOrElement("Name");
-            XmlExt.WriteValueToReadonlyField(this, name, () => _name);
-        }
-        public void WriteXml(XmlWriter writer)
-        {
-            writer.WriteAttributeString("Age", Age.ToString(CultureInfo.InvariantCulture));
-            writer.WriteElementString("Name", Name);
-        }
     }
 }
