@@ -44,7 +44,8 @@ namespace MathNet.Spatial.Serialization.Xml
             new ContractConvertor(typeof(Polygon2D), typeof(Polygon2DSurrogate), new Polygon2DSerializer(), (o) => Polygon2DSerializer.TranslateToSurrogate((Polygon2D)o), (o) => Polygon2DSerializer.TranslateToSource((Polygon2DSurrogate)o) ),
             new ContractConvertor(typeof(PolyLine2D), typeof(PolyLine2DSurrogate), new PolyLine2DSerializer(), (o) => PolyLine2DSerializer.TranslateToSurrogate((PolyLine2D)o), (o) => PolyLine2DSerializer.TranslateToSource((PolyLine2DSurrogate)o) ),
             new ContractConvertor(typeof(PolyLine3D), typeof(PolyLine3DSurrogate), new PolyLine3DSerializer(), (o) => PolyLine3DSerializer.TranslateToSurrogate((PolyLine3D)o), (o) => PolyLine3DSerializer.TranslateToSource((PolyLine3DSurrogate)o) ),
-            new ContractConvertor(typeof(Ray3D), typeof(Ray3DSurrogate), new Ray3DSerializer(), (o) => Ray3DSerializer.TranslateToSurrogate((Ray3D)o), (o) => Ray3DSerializer.TranslateToSource((Ray3DSurrogate)o) )
+            new ContractConvertor(typeof(Ray3D), typeof(Ray3DSurrogate), new Ray3DSerializer(), (o) => Ray3DSerializer.TranslateToSurrogate((Ray3D)o), (o) => Ray3DSerializer.TranslateToSource((Ray3DSurrogate)o) ),
+            new ContractConvertor(typeof(Plane), typeof(PlaneSurrogate), new PlaneSerializer(), (o) => PlaneSerializer.TranslateToSurrogate((Plane)o), (o) => PlaneSerializer.TranslateToSource((PlaneSurrogate)o) )
         };
 
         public static SurrogateSelector CreateSurrogateSelector()
