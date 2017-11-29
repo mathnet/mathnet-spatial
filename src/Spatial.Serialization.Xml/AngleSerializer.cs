@@ -1,5 +1,4 @@
-﻿using ExtendedXmlSerializer.ExtensionModel.Xml;
-using MathNet.Spatial.Euclidean;
+﻿using MathNet.Spatial.Euclidean;
 using MathNet.Spatial.Units;
 using System;
 using System.Globalization;
@@ -16,19 +15,8 @@ namespace MathNet.Spatial.Serialization.Xml
         public double Value;
     }
 
-    internal class AngleSerializer : IExtendedXmlCustomSerializer<Angle>, ISerializationSurrogate
+    internal class AngleSerializer : ISerializationSurrogate
     {
-        public Angle Deserialize(XElement xElement)
-        {
-            var rad = XmlConvert.ToDouble(xElement.ReadAttributeOrElementOrDefault("Value"));
-            return new Angle(rad, AngleUnit.Radians);
-        }
-
-        public void Serializer(XmlWriter xmlWriter, Angle obj)
-        {
-            xmlWriter.WriteAttributeString("Value", obj.Radians.ToString("R", CultureInfo.InvariantCulture));
-        }
-
         public void GetObjectData(object obj, SerializationInfo info, StreamingContext context)
         {
             Angle point = (Angle)obj;

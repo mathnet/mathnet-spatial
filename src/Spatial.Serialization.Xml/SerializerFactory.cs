@@ -1,8 +1,4 @@
-﻿using ExtendedXmlSerializer.Configuration;
-using ExtendedXmlSerializer.ExtensionModel.Content;
-using ExtendedXmlSerializer.ExtensionModel.Types;
-using ExtendedXmlSerializer.ExtensionModel.Xml;
-using MathNet.Spatial.Euclidean;
+﻿using MathNet.Spatial.Euclidean;
 using MathNet.Spatial.Units;
 using System;
 using System.Collections.Generic;
@@ -40,37 +36,16 @@ namespace MathNet.Spatial.Serialization.Xml
             new ContractConvertor(typeof(Vector3D), typeof(Vector3DSurrogate), new Vector3DSerializer(), (o) => Vector3DSerializer.TranslateToSurrogate((Vector3D)o), (o) => Vector3DSerializer.TranslateToSource((Vector3DSurrogate)o) ),
             new ContractConvertor(typeof(UnitVector3D), typeof(UnitVector3DSurrogate), new UnitVector3DSerializer(), (o) => UnitVector3DSerializer.TranslateToSurrogate((UnitVector3D)o), (o) => UnitVector3DSerializer.TranslateToSource((UnitVector3DSurrogate)o) ),
             new ContractConvertor(typeof(Angle), typeof(AngleSurrogate), new AngleSerializer(), (o) => AngleSerializer.TranslateToSurrogate((Angle)o), (o) => AngleSerializer.TranslateToSource((AngleSurrogate)o) ),
+            new ContractConvertor(typeof(EulerAngles), typeof(EulerAnglesSurrogate), new EulerAnglesSerializer(), (o) => EulerAnglesSerializer.TranslateToSurrogate((EulerAngles)o), (o) => EulerAnglesSerializer.TranslateToSource((EulerAnglesSurrogate)o) ),
+            new ContractConvertor(typeof(Line2D), typeof(Line2DSurrogate), new Line2DSerializer(), (o) => Line2DSerializer.TranslateToSurrogate((Line2D)o), (o) => Line2DSerializer.TranslateToSource((Line2DSurrogate)o) ),
             new ContractConvertor(typeof(Line3D), typeof(Line3DSurrogate), new Line3DSerializer(), (o) => Line3DSerializer.TranslateToSurrogate((Line3D)o), (o) => Line3DSerializer.TranslateToSource((Line3DSurrogate)o) ),
+            new ContractConvertor(typeof(Quaternion), typeof(QuaternionSurrogate), new QuaternionSerializer(), (o) => QuaternionSerializer.TranslateToSurrogate((Quaternion)o), (o) => QuaternionSerializer.TranslateToSource((QuaternionSurrogate)o) ),
+            new ContractConvertor(typeof(Circle3D), typeof(Circle3DSurrogate), new Circle3DSerializer(), (o) => Circle3DSerializer.TranslateToSurrogate((Circle3D)o), (o) => Circle3DSerializer.TranslateToSource((Circle3DSurrogate)o) ),
+            new ContractConvertor(typeof(Polygon2D), typeof(Polygon2DSurrogate), new Polygon2DSerializer(), (o) => Polygon2DSerializer.TranslateToSurrogate((Polygon2D)o), (o) => Polygon2DSerializer.TranslateToSource((Polygon2DSurrogate)o) ),
+            new ContractConvertor(typeof(PolyLine2D), typeof(PolyLine2DSurrogate), new PolyLine2DSerializer(), (o) => PolyLine2DSerializer.TranslateToSurrogate((PolyLine2D)o), (o) => PolyLine2DSerializer.TranslateToSource((PolyLine2DSurrogate)o) ),
+            new ContractConvertor(typeof(PolyLine3D), typeof(PolyLine3DSurrogate), new PolyLine3DSerializer(), (o) => PolyLine3DSerializer.TranslateToSurrogate((PolyLine3D)o), (o) => PolyLine3DSerializer.TranslateToSource((PolyLine3DSurrogate)o) ),
             new ContractConvertor(typeof(Ray3D), typeof(Ray3DSurrogate), new Ray3DSerializer(), (o) => Ray3DSerializer.TranslateToSurrogate((Ray3D)o), (o) => Ray3DSerializer.TranslateToSource((Ray3DSurrogate)o) )
         };
-
-        public static IConfigurationContainer CreateSpatialSerializer()
-        {
-            var serializer = new ConfigurationContainer().EnableAllConstructors().EnableParameterizedContent()
-                
-                .Type<Point2D>().CustomSerializer(new Point2DSerializer())
-                .Type<Point3D>().CustomSerializer<Point3D>(new Point3DSerializer())
-                .Type<Vector2D>().CustomSerializer(new Vector2DSerializer())
-                .Type<Vector3D>().CustomSerializer(new Vector3DSerializer())
-                .Type<UnitVector3D>().CustomSerializer(new UnitVector3DSerializer())
-                .Type<Angle>().CustomSerializer(new AngleSerializer())
-                .ConfigureType<Plane>()
-                    .OnlyConfiguredProperties()
-                    .Member(x => x.RootPoint)
-                    .Member(x => x.Normal)                    
-                .Type<Ray3D>()
-                    .Member(x => x.ThroughPoint)
-                    .Member(x => x.Direction)
-                .Type<Line3D>()
-                    .Member(x => x.StartPoint)
-                    .Member(x => x.EndPoint)
-                .Type<CoordinateSystem>()
-                    .Member(x => x.Origin)
-                    .Member(x => x.XAxis)
-                    .Member(x => x.YAxis)
-                    .Member(x => x.ZAxis);
-            return serializer;
-        }
 
         public static SurrogateSelector CreateSurrogateSelector()
         {

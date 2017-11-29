@@ -1,5 +1,4 @@
-﻿using ExtendedXmlSerializer.ExtensionModel.Xml;
-using MathNet.Spatial.Euclidean;
+﻿using MathNet.Spatial.Euclidean;
 using System;
 using System.Globalization;
 using System.Runtime.Serialization;
@@ -17,21 +16,8 @@ namespace MathNet.Spatial.Serialization.Xml
         public double Y;
     }
 
-    internal class Point2DSerializer : IExtendedXmlCustomSerializer<Point2D>, ISerializationSurrogate
+    internal class Point2DSerializer : ISerializationSurrogate
     {
-        public Point2D Deserialize(XElement xElement)
-        {
-            var x = XmlConvert.ToDouble(xElement.ReadAttributeOrElementOrDefault("X"));
-            var y = XmlConvert.ToDouble(xElement.ReadAttributeOrElementOrDefault("Y"));
-            return new Point2D(x, y);
-        }
-
-        public void Serializer(XmlWriter xmlWriter, Point2D obj)
-        {
-            xmlWriter.WriteAttributeString("X", obj.X.ToString("R", CultureInfo.InvariantCulture));
-            xmlWriter.WriteAttributeString("Y", obj.Y.ToString("R", CultureInfo.InvariantCulture));
-        }
-
         public void GetObjectData(object obj, SerializationInfo info, StreamingContext context)
         {
             Point2D point = (Point2D)obj;

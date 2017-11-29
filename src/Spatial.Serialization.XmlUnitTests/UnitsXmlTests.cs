@@ -14,6 +14,7 @@ namespace MathNet.Spatial.Serialization.Xml.UnitTests
     {
         private const double Tolerance = 1e-6;
 
+        /*
         [TestCase("15 °", @"<Angle Value=""0.26179938779914941"" />")]
         public void AngleXml(string vs, string xml)
         {
@@ -21,6 +22,7 @@ namespace MathNet.Spatial.Serialization.Xml.UnitTests
             var result = AssertXml.XmlSerializerRoundTrip(angle, xml);
             Assert.AreEqual(angle.Radians, result.Radians, Tolerance);
         }
+        */
 
         [TestCase("15 °", @"<Angle><Value>0.26179938779914941</Value></Angle>")]
         public void AngleDataContract(string vs, string xml)

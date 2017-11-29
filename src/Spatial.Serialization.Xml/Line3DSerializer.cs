@@ -1,5 +1,4 @@
-﻿using ExtendedXmlSerializer.ExtensionModel.Xml;
-using MathNet.Spatial.Euclidean;
+﻿using MathNet.Spatial.Euclidean;
 using System;
 using System.Globalization;
 using System.Runtime.Serialization;

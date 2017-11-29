@@ -34,7 +34,7 @@ namespace MathNet.Spatial.Serialization.Xml.UnitTests
         {
             var roundtrips = new[]
             {
-                XmlSerializerRoundTrip(item, expectedXml),
+                //XmlSerializerRoundTrip(item, expectedXml),
                 DataContractRoundTrip(item, expectedXml)
             };
             foreach (var roundtrip in roundtrips)
@@ -42,7 +42,7 @@ namespace MathNet.Spatial.Serialization.Xml.UnitTests
                 assert(item, roundtrip);
             }
         }
-
+        /*
         public static T XmlSerializerRoundTrip<T>(T item, string expected)
         {
             var serializer2 = SerializerFactory.CreateSpatialSerializer().Create();
@@ -70,8 +70,10 @@ namespace MathNet.Spatial.Serialization.Xml.UnitTests
             {
                 return (T)serializer.Deserialize(reader);
             }
-            */
+            
         }
+    */
+
         public static T DataContractRoundTrip<T>(T item, string expected)
         {
             var serializer = SerializerFactory.CreateDataContractSerializer(item);

@@ -14,19 +14,22 @@ namespace MathNet.Spatial.Serialization.Xml
         {
             if (SerializerFactory.SurrogateMap.Exists(t => t.Source == targetType))
                 return SerializerFactory.SurrogateMap.Where(t => t.Source == targetType).First().ConvertToSource(obj);
-            throw new SerializationException("Unable to Map " + nameof(targetType));
+            return obj;
         }
 
         public object GetObjectToSerialize(object obj, Type targetType)
         {
             if (SerializerFactory.SurrogateMap.Exists(t => t.Surrogate == targetType))
                 return SerializerFactory.SurrogateMap.Where(t => t.Surrogate == targetType).First().ConvertToSurrogate(obj);
-            throw new SerializationException("Unable to Map " + nameof(targetType));
+            return obj;
         }
 
         public Type GetSurrogateType(Type type)
         {
-            return SerializerFactory.SurrogateMap.Where(t => t.Source == type).First().Surrogate;
+            if (SerializerFactory.SurrogateMap.Exists(t => t.Source == type))
+                return SerializerFactory.SurrogateMap.Where(t => t.Source == type).First().Surrogate;
+            else
+                return type;
         }
 
     }
