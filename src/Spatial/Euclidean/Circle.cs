@@ -39,13 +39,13 @@ namespace MathNet.Spatial.Euclidean
         public Circle(Point2D pointA, Point2D pointB, Point2D pointC)
         {
             StraightLine lineAB = new StraightLine(pointA, pointB);
-            StraightLine lineBC = new StraightLine(pointB, pointA);
+            StraightLine lineBC = new StraightLine(pointB, pointC);
             var midpointAB = Point2D.MidPoint(pointA, pointB);
             var midpointBC = Point2D.MidPoint(pointB, pointC);
             var line1 = lineAB.PerpendicularAt(midpointAB);
             var line2 = lineBC.PerpendicularAt(midpointBC);
-            var centerpoint = lineAB.Intersection(lineBC);
-            if (!centerpoint.HasValue)
+            var centerpoint = line1.Intersection(line2);
+            if (!centerpoint.HasValue || double.IsNaN(centerpoint.Value.X) || double.IsNaN(centerpoint.Value.Y) || double.IsInfinity(centerpoint.Value.X) || double.IsInfinity(centerpoint.Value.Y))
                 throw new ArgumentException("Points cannot form a circle, are they colinnear?");
             Center = centerpoint.Value;
             Radius = Center.DistanceTo(pointA);

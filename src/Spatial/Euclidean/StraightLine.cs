@@ -136,7 +136,7 @@ namespace MathNet.Spatial.Euclidean
             if (IsParallel(line))
                 return null;
             var denominator = Gradient - line.Gradient;
-            var x = line.yoffset - yoffset / denominator;
+            var x = (line.yoffset - yoffset) / denominator;
             var y = Gradient * x + yoffset;
             return new Point2D(x, y);
         }
