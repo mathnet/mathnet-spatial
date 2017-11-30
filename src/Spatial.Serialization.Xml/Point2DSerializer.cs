@@ -8,12 +8,16 @@ using System.Xml.Linq;
 namespace MathNet.Spatial.Serialization.Xml
 {
     [DataContract(Name = "Point2D")]
+    [Serializable]
     public class Point2DSurrogate
     {
-        [DataMember]
+        [DataMember(Order=1)]
         public double X;
-        [DataMember]
+        [DataMember(Order=2)]
         public double Y;
+
+        public static implicit operator Point2DSurrogate(Point2D point) => new Point2DSurrogate { X = point.X, Y = point.Y };
+        public static implicit operator Point2D(Point2DSurrogate point) => new Point2D(point.X, point.Y);
     }
 
     internal class Point2DSerializer : ISerializationSurrogate
@@ -30,16 +34,6 @@ namespace MathNet.Spatial.Serialization.Xml
             double x = info.GetDouble("x");
             double y = info.GetDouble("y");
             return new Point2D(x, y);
-        }
-
-        public static Point2DSurrogate TranslateToSurrogate(Point2D source)
-        {
-            return new Point2DSurrogate { X = source.X, Y = source.Y };
-        }
-
-        public static Point2D TranslateToSource(Point2DSurrogate surrogate)
-        {
-            return new Point2D(surrogate.X, surrogate.Y);
         }
     }
 }

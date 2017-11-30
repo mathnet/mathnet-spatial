@@ -10,10 +10,13 @@ namespace MathNet.Spatial.Serialization.Xml
     [DataContract(Name = "Line3D")]
     public class Line3DSurrogate
     {
-        [DataMember]
+        [DataMember(Order = 1)]
         public Point3D StartPoint;
-        [DataMember]
+        [DataMember(Order = 2)]
         public Point3D EndPoint;
+
+        public static implicit operator Line3DSurrogate(Line3D line) => new Line3DSurrogate { StartPoint = line.StartPoint, EndPoint = line.EndPoint };
+        public static implicit operator Line3D(Line3DSurrogate line) => new Line3D(line.StartPoint, line.EndPoint);
     }
 
     internal class Line3DSerializer : ISerializationSurrogate
@@ -30,16 +33,6 @@ namespace MathNet.Spatial.Serialization.Xml
             Point3D start = (Point3D)info.GetValue("StartPoint", typeof(Point3D));
             Point3D end = (Point3D)info.GetValue("EndPoint", typeof(Point3D));
             return new Line3D(start, end);
-        }
-
-        public static Line3DSurrogate TranslateToSurrogate(Line3D source)
-        {
-            return new Line3DSurrogate { StartPoint = source.StartPoint, EndPoint = source.EndPoint };
-        }
-
-        public static Line3D TranslateToSource(Line3DSurrogate surrogate)
-        {
-            return new Line3D(surrogate.StartPoint, surrogate.EndPoint);
         }
     }
 }

@@ -10,10 +10,13 @@ namespace MathNet.Spatial.Serialization.Xml
     [DataContract(Name = "Vector2D")]
     public class Vector2DSurrogate
     {
-        [DataMember]
+        [DataMember(Order = 1)]
         public double X;
-        [DataMember]
+        [DataMember(Order = 2)]
         public double Y;
+
+        public static implicit operator Vector2DSurrogate(Vector2D vector) => new Vector2DSurrogate { X = vector.X, Y = vector.Y };
+        public static implicit operator Vector2D(Vector2DSurrogate vector) => new Vector2D(vector.X, vector.Y);
     }
 
     internal class Vector2DSerializer : ISerializationSurrogate
@@ -30,16 +33,6 @@ namespace MathNet.Spatial.Serialization.Xml
             double x = info.GetDouble("x");
             double y = info.GetDouble("y");
             return new Vector2D(x, y);
-        }
-
-        public static Vector2DSurrogate TranslateToSurrogate(Vector2D source)
-        {
-            return new Vector2DSurrogate { X = source.X, Y = source.Y };
-        }
-
-        public static Vector2D TranslateToSource(Vector2DSurrogate surrogate)
-        {
-            return new Vector2D(surrogate.X, surrogate.Y);
         }
     }
 }

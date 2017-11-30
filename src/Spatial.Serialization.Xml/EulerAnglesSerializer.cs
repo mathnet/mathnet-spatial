@@ -11,12 +11,15 @@ namespace MathNet.Spatial.Serialization.Xml
     [DataContract(Name = "EulerAngles")]
     public class EulerAnglesSurrogate
     {
-        [DataMember]
+        [DataMember(Order = 1)]
         public Angle Alpha;
-        [DataMember]
+        [DataMember(Order = 2)]
         public Angle Beta;
-        [DataMember]
+        [DataMember(Order = 3)]
         public Angle Gamma;
+
+        public static implicit operator EulerAnglesSurrogate(EulerAngles angles) => new EulerAnglesSurrogate { Alpha = angles.Alpha, Beta = angles.Beta, Gamma = angles.Gamma };
+        public static implicit operator EulerAngles(EulerAnglesSurrogate angles) => new EulerAngles(angles.Alpha, angles.Beta, angles.Gamma);
     }
 
     internal class EulerAnglesSerializer : ISerializationSurrogate
@@ -37,14 +40,5 @@ namespace MathNet.Spatial.Serialization.Xml
             return new EulerAngles(alpha, beta, gamma);
         }
 
-        public static EulerAnglesSurrogate TranslateToSurrogate(EulerAngles source)
-        {
-            return new EulerAnglesSurrogate { Alpha = source.Alpha, Beta = source.Beta, Gamma = source.Gamma };
-        }
-
-        public static EulerAngles TranslateToSource(EulerAnglesSurrogate surrogate)
-        {
-            return new EulerAngles(surrogate.Alpha, surrogate.Beta, surrogate.Gamma);
-        }
     }
 }

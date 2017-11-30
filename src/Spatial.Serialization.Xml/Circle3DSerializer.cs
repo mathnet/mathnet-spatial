@@ -10,12 +10,15 @@ namespace MathNet.Spatial.Serialization.Xml
     [DataContract(Name = "Circle3D")]
     public class Circle3DSurrogate
     {
-        [DataMember]
+        [DataMember(Order = 1)]
         public Point3D CenterPoint;
-        [DataMember]
+        [DataMember(Order = 2)]
         public UnitVector3D Axis;
-        [DataMember]
+        [DataMember(Order = 3)]
         public double Radius;
+
+        public static implicit operator Circle3DSurrogate(Circle3D circle) => new Circle3DSurrogate { CenterPoint = circle.CenterPoint, Axis = circle.Axis, Radius = circle.Radius };
+        public static implicit operator Circle3D(Circle3DSurrogate circle) => new Circle3D(circle.CenterPoint, circle.Axis, circle.Radius);
     }
 
     internal class Circle3DSerializer : ISerializationSurrogate
@@ -34,16 +37,6 @@ namespace MathNet.Spatial.Serialization.Xml
             UnitVector3D axis = (UnitVector3D)info.GetValue("Axis", typeof(UnitVector3D));
             double radius = info.GetDouble("Radius");
             return new Circle3D(center, axis, radius);
-        }
-
-        public static Circle3DSurrogate TranslateToSurrogate(Circle3D source)
-        {
-            return new Circle3DSurrogate { CenterPoint = source.CenterPoint, Axis = source.Axis, Radius = source.Radius };
-        }
-
-        public static Circle3D TranslateToSource(Circle3DSurrogate surrogate)
-        {
-            return new Circle3D(surrogate.CenterPoint, surrogate.Axis, surrogate.Radius);
         }
     }
 }

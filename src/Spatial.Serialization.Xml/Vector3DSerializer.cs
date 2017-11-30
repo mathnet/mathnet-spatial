@@ -10,12 +10,15 @@ namespace MathNet.Spatial.Serialization.Xml
     [DataContract(Name = "Vector3D")]
     public class Vector3DSurrogate
     {
-        [DataMember]
+        [DataMember(Order = 1)]
         public double X;
-        [DataMember]
+        [DataMember(Order = 2)]
         public double Y;
-        [DataMember]
+        [DataMember(Order = 3)]
         public double Z;
+
+        public static implicit operator Vector3DSurrogate(Vector3D vector) => new Vector3DSurrogate { X = vector.X, Y = vector.Y, Z = vector.Z };
+        public static implicit operator Vector3D(Vector3DSurrogate vector) => new Vector3D(vector.X, vector.Y, vector.Z);
     }
 
     internal class Vector3DSerializer : ISerializationSurrogate
@@ -34,16 +37,6 @@ namespace MathNet.Spatial.Serialization.Xml
             double y = info.GetDouble("y");
             double z = info.GetDouble("z");
             return new Vector3D(x, y, z);
-        }
-
-        public static Vector3DSurrogate TranslateToSurrogate(Vector3D source)
-        {
-            return new Vector3DSurrogate { X = source.X, Y = source.Y, Z = source.Z };
-        }
-
-        public static Vector3D TranslateToSource(Vector3DSurrogate surrogate)
-        {
-            return new Vector3D(surrogate.X, surrogate.Y, surrogate.Z);
         }
     }
 }

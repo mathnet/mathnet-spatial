@@ -3,7 +3,7 @@ using NUnit.Framework;
 
 namespace MathNet.Spatial.Serialization.Xml.UnitTests
 {
-    public class AssertXmlTests2
+    public class AssertXmlTests
     {
         /*
         [Test]

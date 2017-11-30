@@ -10,10 +10,13 @@ namespace MathNet.Spatial.Serialization.Xml
     [DataContract(Name = "Plane")]
     public class PlaneSurrogate
     {
-        [DataMember]
+        [DataMember(Order = 1)]
         public Point3D RootPoint;
-        [DataMember]
+        [DataMember(Order = 2)]
         public UnitVector3D Normal;
+
+        public static implicit operator PlaneSurrogate(Plane plane) => new PlaneSurrogate { RootPoint = plane.RootPoint, Normal = plane.Normal };
+        public static implicit operator Plane(PlaneSurrogate plane) => new Plane(plane.RootPoint, plane.Normal);
     }
 
     internal class PlaneSerializer : ISerializationSurrogate
@@ -30,16 +33,6 @@ namespace MathNet.Spatial.Serialization.Xml
             Point3D throughPoint = (Point3D)info.GetValue("RootPoint", typeof(Point3D));
             UnitVector3D direction = (UnitVector3D)info.GetValue("Normal", typeof(UnitVector3D));
             return new Plane(throughPoint, direction);
-        }
-
-        public static PlaneSurrogate TranslateToSurrogate(Plane source)
-        {
-            return new PlaneSurrogate { RootPoint = source.RootPoint, Normal = source.Normal };
-        }
-
-        public static Plane TranslateToSource(PlaneSurrogate surrogate)
-        {
-            return new Plane(surrogate.RootPoint, surrogate.Normal);
         }
     }
 }

@@ -8,14 +8,18 @@ using System.Xml.Linq;
 namespace MathNet.Spatial.Serialization.Xml
 {
     [DataContract(Name = "Point3D")]
+    [Serializable]
     public class Point3DSurrogate
     {
-        [DataMember]
+        [DataMember(Order = 1)]
         public double X;
-        [DataMember]
+        [DataMember(Order = 2)]
         public double Y;
-        [DataMember]
+        [DataMember(Order = 3)]
         public double Z;
+
+        public static implicit operator Point3DSurrogate(Point3D point) => new Point3DSurrogate { X = point.X, Y = point.Y, Z = point.Z };
+        public static implicit operator Point3D(Point3DSurrogate point) => new Point3D(point.X, point.Y, point.Z);
     }
 
     internal class Point3DSerializer : ISerializationSurrogate
@@ -34,16 +38,6 @@ namespace MathNet.Spatial.Serialization.Xml
             double y = info.GetDouble("y");
             double z = info.GetDouble("z");
             return new Point3D(x, y, z);
-        }
-
-        public static Point3DSurrogate TranslateToSurrogate(Point3D source)
-        {
-            return new Point3DSurrogate { X = source.X, Y = source.Y, Z = source.Z };
-        }
-
-        public static Point3D TranslateToSource(Point3DSurrogate surrogate)
-        {
-            return new Point3D(surrogate.X, surrogate.Y, surrogate.Z);
         }
     }
 }

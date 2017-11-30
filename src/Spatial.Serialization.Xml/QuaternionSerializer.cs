@@ -10,14 +10,18 @@ namespace MathNet.Spatial.Serialization.Xml
     [DataContract(Name = "Quaternion")]
     public class QuaternionSurrogate
     {
-        [DataMember]
+        [DataMember(Order = 1)]
         public double W;
-        [DataMember]
+        [DataMember(Order = 2)]
         public double X;
-        [DataMember]
+        [DataMember(Order = 3)]
         public double Y;
-        [DataMember]
+        [DataMember(Order = 4)]
         public double Z;
+
+        public static implicit operator QuaternionSurrogate(Quaternion quat) => new QuaternionSurrogate { W = quat.Real, X = quat.ImagX, Y = quat.ImagY, Z = quat.ImagZ };
+        public static implicit operator Quaternion(QuaternionSurrogate quat) => new Quaternion(quat.W, quat.X, quat.Y, quat.Z);
+
     }
 
     internal class QuaternionSerializer : ISerializationSurrogate
@@ -40,14 +44,5 @@ namespace MathNet.Spatial.Serialization.Xml
             return new Quaternion(w, x, y, z);
         }
 
-        public static QuaternionSurrogate TranslateToSurrogate(Quaternion source)
-        {
-            return new QuaternionSurrogate { W = source.Real, X = source.ImagX, Y = source.ImagY, Z = source.ImagZ };
-        }
-
-        public static Quaternion TranslateToSource(QuaternionSurrogate surrogate)
-        {
-            return new Quaternion(surrogate.W, surrogate.X, surrogate.Y, surrogate.Z);
-        }
     }
 }

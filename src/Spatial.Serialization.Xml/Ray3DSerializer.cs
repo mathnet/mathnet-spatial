@@ -10,10 +10,13 @@ namespace MathNet.Spatial.Serialization.Xml
     [DataContract(Name = "Ray3D")]
     public class Ray3DSurrogate
     {
-        [DataMember]
+        [DataMember(Order = 1)]
         public Point3D ThroughPoint;
-        [DataMember]
+        [DataMember(Order = 2)]
         public UnitVector3D Direction;
+
+        public static implicit operator Ray3DSurrogate(Ray3D ray) => new Ray3DSurrogate { ThroughPoint = ray.ThroughPoint, Direction = ray.Direction };
+        public static implicit operator Ray3D(Ray3DSurrogate ray) => new Ray3D(ray.ThroughPoint, ray.Direction);
     }
 
     internal class Ray3DSerializer : ISerializationSurrogate
@@ -30,16 +33,6 @@ namespace MathNet.Spatial.Serialization.Xml
             Point3D throughPoint = (Point3D)info.GetValue("ThroughPoint", typeof(Point3D));
             UnitVector3D direction = (UnitVector3D)info.GetValue("Direction", typeof(UnitVector3D));
             return new Ray3D(throughPoint, direction);
-        }
-
-        public static Ray3DSurrogate TranslateToSurrogate(Ray3D source)
-        {
-            return new Ray3DSurrogate { ThroughPoint = source.ThroughPoint, Direction = source.Direction };
-        }
-
-        public static Ray3D TranslateToSource(Ray3DSurrogate surrogate)
-        {
-            return new Ray3D(surrogate.ThroughPoint, surrogate.Direction);
         }
     }
 }

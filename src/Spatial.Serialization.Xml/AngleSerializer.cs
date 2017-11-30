@@ -8,11 +8,17 @@ using System.Xml.Linq;
 
 namespace MathNet.Spatial.Serialization.Xml
 {
+    /// <summary>
+    /// Surrogate for Angle
+    /// </summary>
     [DataContract(Name = "Angle")]
     public class AngleSurrogate
     {
-        [DataMember]
+        [DataMember(Order = 1)]
         public double Value;
+
+        public static implicit operator AngleSurrogate(Angle angle) => new AngleSurrogate { Value = angle.Radians };
+        public static implicit operator Angle(AngleSurrogate angle) => new Angle(angle.Value, AngleUnit.Radians);
     }
 
     internal class AngleSerializer : ISerializationSurrogate
@@ -27,16 +33,6 @@ namespace MathNet.Spatial.Serialization.Xml
         {
             double rad = info.GetDouble("Value");
             return new Angle(rad, AngleUnit.Radians);
-        }
-
-        public static AngleSurrogate TranslateToSurrogate(Angle source)
-        {
-            return new AngleSurrogate { Value = source.Radians };
-        }
-
-        public static Angle TranslateToSource(AngleSurrogate surrogate)
-        {
-            return new Angle(surrogate.Value, AngleUnit.Radians);
         }
     }
 }

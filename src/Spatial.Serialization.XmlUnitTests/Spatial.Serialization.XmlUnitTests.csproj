@@ -42,11 +42,10 @@
     <Compile Include="AssertGeometry.cs" />
     <Compile Include="AssertXml.cs" />
     <Compile Include="AssertXmlTests.cs" />
-    <Compile Include="CoordinateSystemXmlTests.cs" />
-    <Compile Include="PlaneXmlTests.cs" />
-    <Compile Include="LinesXmlTests.cs" />
-    <Compile Include="UnitsXmlTests.cs" />
-    <Compile Include="PointsXmlTests.cs" />
+    <Compile Include="ProtobufnetTests.cs" />
+    <Compile Include="BinaryFormatterTests.cs" />
+    <Compile Include="XmlSerializaerTests.cs" />
+    <Compile Include="DataContractTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="XmlSerializableDummy.cs" />
   </ItemGroup>
@@ -69,6 +68,9 @@
     </Reference>
     <Reference Include="JetBrains.Annotations, Version=10.4.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
       <HintPath>..\..\packages\JetBrains.Annotations.10.4.0\lib\net\JetBrains.Annotations.dll</HintPath>
+    </Reference>
+    <Reference Include="protobuf-net, Version=2.3.2.0, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\protobuf-net.2.3.2\lib\net40\protobuf-net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Collections.Immutable, Version=1.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
