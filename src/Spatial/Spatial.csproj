@@ -47,7 +47,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Euclidean\Circle.cs" />
     <Compile Include="Euclidean\EulerAngles.cs" />
+    <Compile Include="Euclidean\ILine.cs" />
     <Compile Include="Euclidean\Line2D.cs" />
     <Compile Include="Euclidean\PlaneGeometry\ILine.cs" />
     <Compile Include="Euclidean\PlaneGeometry\LineSegment.cs" />
@@ -59,6 +61,7 @@
     <Compile Include="Euclidean\PolyLine2D.cs" />
     <Compile Include="Euclidean\PlaneGeometry\Circle.cs" />
     <Compile Include="Euclidean\PolyLine3D.cs" />
+    <Compile Include="Euclidean\StraightLine.cs" />
     <Compile Include="Euclidean\Vector2D.cs" />
     <Compile Include="Projective\Matrix3DHomogeneous.cs" />
     <Compile Include="Projective\Point3DHomogeneous.cs" />
