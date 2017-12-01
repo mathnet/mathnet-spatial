@@ -47,7 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Euclidean\CircleTests.cs" />
+    <Compile Include="Euclidean\Circle2DTests.cs" />
     <Compile Include="Euclidean\Circle3DTests.cs" />
     <Compile Include="Euclidean\PlaneGeometry\LineSegmentTests.cs" />
     <Compile Include="Euclidean\PlaneGeometry\LineTests.cs" />

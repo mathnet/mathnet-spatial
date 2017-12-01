@@ -10,8 +10,8 @@ namespace MathNet.Spatial.Euclidean
     /// </summary>
     public class StraightLine : ILine
     {
-        private double yoffset;
-        private double xoffset;
+        private readonly double yoffset;
+        private readonly double xoffset;
 
         /// <summary>
         /// The gradient of the line
@@ -26,7 +26,7 @@ namespace MathNet.Spatial.Euclidean
         public StraightLine(Point2D point, double gradient)
         {
             Gradient = gradient;
-            setOffset(point.X, point.Y);
+            SetOffset(point.X, point.Y, out xoffset, out yoffset);
         }
 
         /// <summary>
@@ -37,20 +37,12 @@ namespace MathNet.Spatial.Euclidean
         public StraightLine(Point2D p1, Point2D p2)
         {
             if (p1 == p2)
-                throw new ArgumentException("A line cannot be formed from two identical points");
-            Gradient = (p2.Y - p1.Y) / (p2.X - p1.X);
-            setOffset(p1.X, p1.Y);
-        }
-
-        private void setOffset(double x, double y)
-        {
-            if (double.IsInfinity(Gradient))
             {
-                yoffset = double.NaN; // special case vertical line has no y-intercept
-                xoffset = x;
+                throw new ArgumentException("A line cannot be formed from two identical points");
             }
-            else
-                yoffset = y - (Gradient * x);
+
+            Gradient = (p2.Y - p1.Y) / (p2.X - p1.X);
+            SetOffset(p1.X, p1.Y, out xoffset, out yoffset);
         }
 
         /// <summary>
@@ -72,16 +64,32 @@ namespace MathNet.Spatial.Euclidean
         public StraightLine(Point2D[] points)
         {
             if (points.Length < 2)
+            {
                 throw new ArgumentException("A line must be constructed from at least two points");
+            }
 
             Gradient = (points[1].Y - points[0].Y) / (points[1].X - points[0].X);
-            setOffset(points[0].X, points[0].Y);
+            SetOffset(points[0].X, points[0].Y, out xoffset, out yoffset);
             for (int i = 2; i < points.Length; i++)
             {
-                if (!IsOnLine(points[i]))
+                if (!IsThrough(points[i]))
                 {
                     throw new ArgumentException("The points provided are not collinear");
                 }
+            }
+        }
+
+        private void SetOffset(double x, double y, out double offsetx, out double offsety)
+        {
+            if (double.IsInfinity(Gradient))
+            {
+                offsety = double.NaN; // special case vertical line has no y-intercept
+                offsetx = x;
+            }
+            else
+            {
+                offsety = y - (Gradient * x);
+                offsetx = double.NaN;
             }
         }
 
@@ -91,7 +99,7 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>True if the line is horizontal</returns>
         public bool IsHorizontal()
         {
-            return (Gradient == 0);
+            return Gradient == 0;
         }
 
         /// <summary>
@@ -100,7 +108,7 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>returns true if the line is vertical</returns>
         public bool IsVertical()
         {
-            return (double.IsInfinity(Gradient));
+            return double.IsInfinity(Gradient);
         }
 
         /// <summary>
@@ -110,7 +118,7 @@ namespace MathNet.Spatial.Euclidean
         public bool IsParallel(ILine otherLine)
         {
             var secondLine = otherLine as StraightLine;
-            return (secondLine?.Gradient == Gradient);
+            return secondLine?.Gradient == Gradient;
         }
 
         /// <summary>
@@ -142,19 +150,23 @@ namespace MathNet.Spatial.Euclidean
         public Point2D? Intersection(StraightLine line)
         {
             if (IsParallel(line))
+            {
                 return null;
+            }
+
             if (double.IsInfinity(Gradient))
             {
-                return new Point2D(xoffset, line.Gradient * xoffset + line.yoffset);
+                return new Point2D(xoffset, (line.Gradient * xoffset) + line.yoffset);
             }
             else if (double.IsInfinity(line.Gradient))
             {
-                return new Point2D(line.xoffset, Gradient * line.xoffset + yoffset);
+                return new Point2D(line.xoffset, (Gradient * line.xoffset) + yoffset);
             }
+
             var denominator = Gradient - line.Gradient;
 
             var x = (line.yoffset - yoffset) / denominator;
-            var y = Gradient * x + yoffset;
+            var y = (Gradient * x) + yoffset;
             return new Point2D(x, y);
         }
 
@@ -175,9 +187,9 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         /// <param name="point">The point to be checked</param>
         /// <returns>True if the point is on this line</returns>
-        public bool IsOnLine(Point2D point)
+        public bool IsThrough(Point2D point)
         {
-            return IsOnLine(point.X, point.Y);
+            return IsThrough(point.X, point.Y);
         }
 
         /// <summary>
@@ -186,9 +198,9 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="x">the x coordinate</param>
         /// <param name="y">the y coordinate</param>
         /// <returns>True if the point is on the line</returns>
-        public bool IsOnLine(double x, double y)
+        public bool IsThrough(double x, double y)
         {
-            return (y == (Gradient * x) + yoffset);
+            return y == (Gradient * x) + yoffset;
         }
 
         /// <summary>
@@ -208,7 +220,7 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>A list of points</returns>
         public IEnumerable<Point2D> YIntercept(double y = 0)
         {
-            return new List<Point2D>() { new Point2D(((y - yoffset) / Gradient), y) };
+            return new List<Point2D>() { new Point2D((y - yoffset) / Gradient, y) };
         }
 
         public static bool operator ==(StraightLine left, StraightLine right)
@@ -229,7 +241,7 @@ namespace MathNet.Spatial.Euclidean
         public bool Equals(ILine other)
         {
             var sline = other as StraightLine;
-            return (Gradient == sline?.Gradient && yoffset == sline?.yoffset);
+            return Gradient == sline?.Gradient && yoffset == sline?.yoffset;
         }
 
         /// <summary>
@@ -239,7 +251,11 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>True if the objects are the same</returns>
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+
             return obj is StraightLine && Equals((StraightLine)obj);
         }
 
@@ -251,7 +267,7 @@ namespace MathNet.Spatial.Euclidean
         {
             unchecked
             {
-                return (Gradient.GetHashCode() * 397) ^ yoffset.GetHashCode();
+                return (Gradient.GetHashCode() * 397) ^ (yoffset.GetHashCode() * 101) ^ xoffset.GetHashCode();
             }
         }
     }

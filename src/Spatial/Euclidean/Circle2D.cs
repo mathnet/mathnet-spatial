@@ -9,24 +9,14 @@ namespace MathNet.Spatial.Euclidean
     /// <summary>
     /// Describes a standard 2 dimentional circle
     /// </summary>
-    public class Circle : IEquatable<Circle>
+    public class Circle2D : IEquatable<Circle2D>
     {
-        /// <summary>
-        /// The center point of the circle
-        /// </summary>
-        public Point2D Center { get; }
-
-        /// <summary>
-        /// The radius of the circle
-        /// </summary>
-        public double Radius { get; }
-
         /// <summary>
         /// Creates a Circle of a given radius from a center point
         /// </summary>
         /// <param name="center">The location of the center</param>
         /// <param name="radius">The radius of the circle</param>
-        public Circle(Point2D center, double radius)
+        public Circle2D(Point2D center, double radius)
         {
             Center = center;
             Radius = radius;
@@ -38,7 +28,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="pointA">A point on the circle</param>
         /// <param name="pointB">A point on the circle</param>
         /// /// <param name="pointC">A point on the circle</param>
-        public Circle(Point2D pointA, Point2D pointB, Point2D pointC)
+        public Circle2D(Point2D pointA, Point2D pointB, Point2D pointC)
         {
             StraightLine lineAB = new StraightLine(pointA, pointB);
             StraightLine lineBC = new StraightLine(pointB, pointC);
@@ -48,10 +38,23 @@ namespace MathNet.Spatial.Euclidean
             var line2 = lineBC.PerpendicularAt(midpointBC);
             var centerpoint = line1.Intersection(line2);
             if (!centerpoint.HasValue || double.IsNaN(centerpoint.Value.X) || double.IsNaN(centerpoint.Value.Y) || double.IsInfinity(centerpoint.Value.X) || double.IsInfinity(centerpoint.Value.Y))
+            {
                 throw new ArgumentException("Points cannot form a circle, are they colinnear?");
+            }
+
             Center = centerpoint.Value;
             Radius = Center.DistanceTo(pointA);
         }
+
+        /// <summary>
+        /// The center point of the circle
+        /// </summary>
+        public Point2D Center { get; }
+
+        /// <summary>
+        /// The radius of the circle
+        /// </summary>
+        public double Radius { get; }
 
         /// <summary>
         /// Returns the circumference of the circle
@@ -100,12 +103,12 @@ namespace MathNet.Spatial.Euclidean
             return new StraightLine(pointA, pointB);
         }
 
-        public static bool operator ==(Circle left, Circle right)
+        public static bool operator ==(Circle2D left, Circle2D right)
         {
             return left.Equals(right);
         }
 
-        public static bool operator !=(Circle left, Circle right)
+        public static bool operator !=(Circle2D left, Circle2D right)
         {
             return !left.Equals(right);
         }
@@ -115,10 +118,10 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         /// <param name="other">The other circle</param>
         /// <returns>true if the circles have the same radius and center</returns>
-        public bool Equals(Circle other)
+        public bool Equals(Circle2D other)
         {
-            var circle = other as Circle;
-            return (Radius == circle?.Radius && Center == circle?.Center);
+            var circle = other as Circle2D;
+            return Radius == circle?.Radius && Center == circle?.Center;
         }
 
         /// <summary>
@@ -128,8 +131,12 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>True if the objects are the same</returns>
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj)) return false;
-            return obj is Circle && Equals((Circle)obj);
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+
+            return obj is Circle2D && Equals((Circle2D)obj);
         }
 
         /// <summary>

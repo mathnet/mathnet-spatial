@@ -29,7 +29,7 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         /// <param name="point">The point to be tested</param>
         /// <returns>True if the point is on the line</returns>
-        bool IsOnLine(Point2D point);
+        bool IsThrough(Point2D point);
 
         /// <summary>
         /// Determines if a given point is on the line
@@ -37,7 +37,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="x">The x coordinate of the point</param>
         /// <param name="y">The y coordinate of the point</param>
         /// <returns>True if the point is on the line</returns>
-        bool IsOnLine(double x, double y);
+        bool IsThrough(double x, double y);
 
         /// <summary>
         /// Determines if a line is parallel to another line

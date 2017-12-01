@@ -1,21 +1,21 @@
-﻿using System;
-using MathNet.Spatial.Euclidean;
-using NUnit.Framework;
-
-namespace MathNet.Spatial.UnitTests.Euclidean
+﻿namespace MathNet.Spatial.UnitTests.Euclidean
 {
+    using System;
+    using MathNet.Spatial.Euclidean;
+    using NUnit.Framework;
+
     [TestFixture]
-    public class CircleTests
+    public class Circle2DTests
     {
         [TestCase("0, 0", 2.5)]
         [TestCase("2, -4", 4.7)]
         public void CircleCenterRadius(string p1s, double radius)
         {
             var center = Point2D.Parse(p1s);
-            var circle = new Circle(center, radius);
+            var circle = new Circle2D(center, radius);
             Assert.AreEqual(2 * radius, circle.Diameter, double.Epsilon);
             Assert.AreEqual(2 * Math.PI * radius, circle.Circumference, double.Epsilon);
-            Assert.AreEqual( Math.PI * radius * radius, circle.Area, double.Epsilon);
+            Assert.AreEqual(Math.PI * radius * radius, circle.Area, double.Epsilon);
         }
 
         // Test cases randomly generated from GOM Inspect Professional v8
@@ -29,7 +29,7 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             var p3 = Point2D.Parse(p3s);
             var center = Point2D.Parse(centers);
 
-            var circle = new Circle(p1, p2, p3);
+            var circle = new Circle2D(p1, p2, p3);
 
             AssertGeometry.AreEqual(center, circle.Center);
             Assert.AreEqual(radius, circle.Radius, 1e-6);
@@ -42,7 +42,7 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             var p2 = new Point2D(-1, 0);
             var p3 = new Point2D(1, 0);
 
-            Assert.Throws<ArgumentException>(() => { new Circle(p1, p2, p3); });
+            Assert.Throws<ArgumentException>(() => { new Circle2D(p1, p2, p3); });
         }
 
         [TestCase("0, 0", 1)]
@@ -50,22 +50,21 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         public void CircleEquality(string center, double radius)
         {
             var cp = Point2D.Parse(center);
-            Circle c = new Circle(cp, radius);
-            Circle c2 = new Circle(cp, radius);
+            Circle2D c = new Circle2D(cp, radius);
+            Circle2D c2 = new Circle2D(cp, radius);
             Assert.True(c == c2);
             Assert.True(c.Equals(c2));
         }
-
 
         [TestCase("0,2", 2, "0,0", 0)]
         public void CircleTangent(string center, double radius, string pointa, double gradient)
         {
             var cp = Point2D.Parse(center);
-            Circle c = new Circle(cp, radius);
+            Circle2D c = new Circle2D(cp, radius);
 
-            var A = Point2D.Parse(pointa);    
-            var expected = new StraightLine(A, gradient);
-            var tangent = c.TangentAt(A);
+            var a = Point2D.Parse(pointa);    
+            var expected = new StraightLine(a, gradient);
+            var tangent = c.TangentAt(a);
             Assert.AreEqual(tangent, expected);
         }
 
@@ -73,12 +72,11 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         public void CircleNormal(string center, double radius, string pointa)
         {
             var cp = Point2D.Parse(center);
-            Circle c = new Circle(cp, radius);
-            var A = Point2D.Parse(pointa);
-            var expected = new StraightLine(cp, A);
-            var normal = c.NormalAt(A);
+            Circle2D c = new Circle2D(cp, radius);
+            var a = Point2D.Parse(pointa);
+            var expected = new StraightLine(cp, a);
+            var normal = c.NormalAt(a);
             Assert.AreEqual(normal, expected);
         }
-
     }
 }

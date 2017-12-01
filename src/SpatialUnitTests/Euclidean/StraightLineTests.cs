@@ -1,15 +1,13 @@
-﻿using System;
-using MathNet.Spatial.Euclidean;
-using MathNet.Spatial.Units;
-using NUnit.Framework;
-using System.Linq;
-
-namespace MathNet.Spatial.UnitTests.Euclidean
+﻿namespace MathNet.Spatial.UnitTests.Euclidean
 {
+    using System;
+    using System.Linq;
+    using MathNet.Spatial.Euclidean;
+    using NUnit.Framework;
+
     [TestFixture]
     public class StraightLineTests
-    {
-        
+    {       
         [Test]
         public void ConstructorThrowsErrorOnSamePoint()
         {
@@ -21,7 +19,7 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         [Test]
         public void EqualityComparisonFalseAgainstNull()
         {
-            var line = new StraightLine(new Point2D(), new Point2D(1,1) );
+            var line = new StraightLine(new Point2D(), new Point2D(1, 1));
             Assert.IsFalse(line.Equals(null));
         }
 
@@ -58,8 +56,7 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             StraightLine l2 = new StraightLine(pointpair2);
             Assert.AreEqual(expected, l1.IsParallel(l2));
         }
-
-        
+       
         [TestCase("0,0", "1,0", "0,0", "0,0")]
         [TestCase("0,0", "1,0", "1,0", "1,0")]
         [TestCase("0,0", "1,0", ".25,1", ".25,0")]
@@ -91,7 +88,6 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             Point2D? intersection = line1.Intersection(line2);
 
             Assert.AreEqual(e, intersection);
-        }
-        
+        }        
     }
 }
