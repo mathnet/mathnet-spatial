@@ -5,6 +5,9 @@ using System.Text;
 
 namespace MathNet.Spatial.Euclidean
 {
+    /// <summary>
+    /// This interface represents a line in cartesian space
+    /// </summary>
     public interface ILine : IEquatable<ILine>
     {
         /// <summary>

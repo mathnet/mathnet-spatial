@@ -44,5 +44,41 @@ namespace MathNet.Spatial.UnitTests.Euclidean
 
             Assert.Throws<ArgumentException>(() => { new Circle(p1, p2, p3); });
         }
+
+        [TestCase("0, 0", 1)]
+        [TestCase("2, -4", 4.7)]
+        public void CircleEquality(string center, double radius)
+        {
+            var cp = Point2D.Parse(center);
+            Circle c = new Circle(cp, radius);
+            Circle c2 = new Circle(cp, radius);
+            Assert.True(c == c2);
+            Assert.True(c.Equals(c2));
+        }
+
+
+        [TestCase("0,2", 2, "0,0", 0)]
+        public void CircleTangent(string center, double radius, string pointa, double gradient)
+        {
+            var cp = Point2D.Parse(center);
+            Circle c = new Circle(cp, radius);
+
+            var A = Point2D.Parse(pointa);    
+            var expected = new StraightLine(A, gradient);
+            var tangent = c.TangentAt(A);
+            Assert.AreEqual(tangent, expected);
+        }
+
+        [TestCase("0,2", 2, "2,2")]
+        public void CircleNormal(string center, double radius, string pointa)
+        {
+            var cp = Point2D.Parse(center);
+            Circle c = new Circle(cp, radius);
+            var A = Point2D.Parse(pointa);
+            var expected = new StraightLine(cp, A);
+            var normal = c.NormalAt(A);
+            Assert.AreEqual(normal, expected);
+        }
+
     }
 }

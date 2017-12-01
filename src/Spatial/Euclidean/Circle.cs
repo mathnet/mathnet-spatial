@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -34,8 +35,9 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// Creates a Circle from three points which are not colinnear
         /// </summary>
-        /// <param name="center">The location of the center</param>
-        /// <param name="radius">The radius of the circle</param>
+        /// <param name="pointA">A point on the circle</param>
+        /// <param name="pointB">A point on the circle</param>
+        /// /// <param name="pointC">A point on the circle</param>
         public Circle(Point2D pointA, Point2D pointB, Point2D pointC)
         {
             StraightLine lineAB = new StraightLine(pointA, pointB);
@@ -96,6 +98,16 @@ namespace MathNet.Spatial.Euclidean
         public StraightLine SecantAt(Point2D pointA, Point2D pointB)
         {
             return new StraightLine(pointA, pointB);
+        }
+
+        public static bool operator ==(Circle left, Circle right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(Circle left, Circle right)
+        {
+            return !left.Equals(right);
         }
 
         /// <summary>

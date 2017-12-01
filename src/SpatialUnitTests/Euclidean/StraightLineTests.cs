@@ -9,13 +9,7 @@ namespace MathNet.Spatial.UnitTests.Euclidean
     [TestFixture]
     public class StraightLineTests
     {
-        /*
-        [Test]
-        public void Constructor()
-        {
-        }
-        */
-
+        
         [Test]
         public void ConstructorThrowsErrorOnSamePoint()
         {
@@ -65,18 +59,18 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             Assert.AreEqual(expected, l1.IsParallel(l2));
         }
 
-        /*
+        
         [TestCase("0,0", "1,0", "0,0", "0,0")]
         [TestCase("0,0", "1,0", "1,0", "1,0")]
         [TestCase("0,0", "1,0", ".25,1", ".25,0")]
-        [TestCase("0,0", "1,0", "-1,0", "0,0")]
-        [TestCase("0,0", "1,0", "3,0", "1,0")]
+        [TestCase("0,0", "1,0", "-1,0", "-1,0")]
+        [TestCase("0,0", "1,0", "3,0", "3,0")]
         [TestCase("0,0", "1,0", "0,0", "0,0")]
         [TestCase("0,0", "1,0", "1,0", "1,0")]
         [TestCase("0,0", "1,0", ".25,1", ".25,0")]
         [TestCase("0,0", "1,0", "-1,1", "-1,0")]
         [TestCase("0,0", "1,0", "3,0", "3,0")]
-        public void ClosestPointToWithinSegment(string start, string end, string point, string expected)
+        public void ClosestPointTo(string start, string end, string point, string expected)
         {
             var line = new StraightLine(Point2D.Parse(start), Point2D.Parse(end));
             var p = Point2D.Parse(point);
@@ -98,6 +92,6 @@ namespace MathNet.Spatial.UnitTests.Euclidean
 
             Assert.AreEqual(e, intersection);
         }
-        */
+        
     }
 }
