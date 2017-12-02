@@ -85,7 +85,6 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         [TestCase("1; 0; 0", "1; 0; 0", 1)]
         [TestCase("1; 0; 0", "-1; 0; 0", -1)]
         [TestCase("1; 0; 0", "0; -1; 0", 0)]
-        [TestCase("1; 0; 0", "0; -1; 0", 0)]
         public void DotProduct(string v1s, string v2s, double expected)
         {
             var uv1 = UnitVector3D.Parse(v1s);

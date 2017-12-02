@@ -11,19 +11,28 @@ using MathNet.Spatial.Units;
 
 namespace MathNet.Spatial.Euclidean
 {
+    /// <summary>
+    /// Represents a point in 2 dimensional cartesian space 
+    /// </summary>
     [Serializable]
     public struct Point2D : IXmlSerializable, IEquatable<Point2D>, IFormattable
     {
-        /// <summary>
-        /// Using public fields cos: http://blogs.msdn.com/b/ricom/archive/2006/08/31/performance-quiz-11-ten-questions-on-value-based-programming.aspx
-        /// </summary>
-        public readonly double X;
 
         /// <summary>
-        /// Using public fields cos: http://blogs.msdn.com/b/ricom/archive/2006/08/31/performance-quiz-11-ten-questions-on-value-based-programming.aspx
+        /// The x coordinate
         /// </summary>
-        public readonly double Y;
+        public readonly double X; // Using public fields cos: http://blogs.msdn.com/b/ricom/archive/2006/08/31/performance-quiz-11-ten-questions-on-value-based-programming.aspx
 
+        /// <summary>
+        /// The y coordinate
+        /// </summary>
+        public readonly double Y; // Using public fields cos: http://blogs.msdn.com/b/ricom/archive/2006/08/31/performance-quiz-11-ten-questions-on-value-based-programming.aspx
+
+        /// <summary>
+        /// Creates a point for given coordinates (x, y)
+        /// </summary>
+        /// <param name="x">The x coordinate</param>
+        /// <param name="y">The y coordinate</param>
         public Point2D(double x, double y)
         {
             this.X = x;
@@ -33,18 +42,28 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// Creates a point r from origin rotated a counterclockwise from X-Axis
         /// </summary>
-        /// <param name="r"></param>
-        /// <param name="a"></param>
+        /// <param name="r">distance from origin</param>
+        /// <param name="a">the angle</param>
         public Point2D(double r, Angle a)
             : this(r*Math.Cos(a.Radians), r*Math.Sin(a.Radians))
         {
         }
 
+        /// <summary>
+        /// Creates a point from a list of coordinates (x, y)
+        /// </summary>
+        /// <param name="data">a pair of coordinates in the order x, y</param>
+        /// <exception cref="ArgumentException">Exception thrown if more than 2 coordinates are passed</exception>
         public Point2D(IEnumerable<double> data)
             : this(data.ToArray())
         {
         }
 
+        /// <summary>
+        /// Creates a point from a list of coordinates (x, y)
+        /// </summary>
+        /// <param name="data">a pair of coordinates in the order x, y</param>
+        /// <exception cref="ArgumentException">Exception thrown if more than 2 coordinates are passed</exception>
         public Point2D(double[] data)
             : this(data[0], data[1])
         {
@@ -54,17 +73,30 @@ namespace MathNet.Spatial.Euclidean
             }
         }
 
+        /// <summary>
+        /// Returns a point at the origin (0,0)
+        /// </summary>
         public static Point2D Origin
         {
             get { return new Point2D(0, 0); }
         }
 
+        /// <summary>
+        /// Attempts to convert a string of the form x,y into a point
+        /// </summary>
+        /// <param name="value">The string to be converted</param>
+        /// <returns>A point at the coordinates specified</returns>
         public static Point2D Parse(string value)
         {
             var doubles = Parser.ParseItem2D(value);
             return new Point2D(doubles);
         }
 
+        /// <summary>
+        /// Creates a point from xml with x and y coordinates either as attributes or elements 
+        /// </summary>
+        /// <param name="reader">an xml reader</param>
+        /// <returns>A point</returns>
         public static Point2D ReadFrom(XmlReader reader)
         {
             var v = new Point2D();
@@ -72,11 +104,21 @@ namespace MathNet.Spatial.Euclidean
             return v;
         }
 
+        /// <summary>
+        /// Returns the centeroid or center of mass of any set of points
+        /// </summary>
+        /// <param name="points">a list of points</param>
+        /// <returns>the centeroid point</returns>
         public static Point2D Centroid(IEnumerable<Point2D> points)
         {
             return Centroid(points.ToArray());
         }
 
+        /// <summary>
+        /// Returns the centeroid or center of mass of any set of points
+        /// </summary>
+        /// <param name="points">a list of points</param>
+        /// <returns>the centeroid point</returns>
         public static Point2D Centroid(params Point2D[] points)
         {
             return new Point2D(
@@ -84,6 +126,12 @@ namespace MathNet.Spatial.Euclidean
                 points.Average(point => point.Y));
         }
 
+        /// <summary>
+        /// Returns a point midway between the provided points <paramref name="point1"/> and <paramref name="point2"/>
+        /// </summary>
+        /// <param name="point1">point A</param>
+        /// <param name="point2">point B</param>
+        /// <returns>a new point midway between the provided points</returns>
         public static Point2D MidPoint(Point2D point1, Point2D point2)
         {
             return Centroid(point1, point2);
@@ -175,6 +223,9 @@ namespace MathNet.Spatial.Euclidean
             return obj is Point2D && this.Equals((Point2D)obj);
         }
 
+        /// <summary>
+        /// Returns a hashcode for the point
+        /// </summary>
         public override int GetHashCode()
         {
             unchecked
@@ -224,12 +275,21 @@ namespace MathNet.Spatial.Euclidean
             return otherPoint - this;
         }
 
+        /// <summary>
+        /// Finds the straightline distance to another point
+        /// </summary>
+        /// <param name="otherPoint">The other point</param>
+        /// <returns>a distance measure</returns>
         public double DistanceTo(Point2D otherPoint)
         {
             var vector = this.VectorTo(otherPoint);
             return vector.Length;
         }
 
+        /// <summary>
+        /// Converts this point into a vector from the origin
+        /// </summary>
+        /// <returns>A vector equivalent to thsi point</returns>
         public Vector2D ToVector2D()
         {
             return new Vector2D(this.X, this.Y);
@@ -244,11 +304,6 @@ namespace MathNet.Spatial.Euclidean
             return new Point3D(this.X, this.Y, 0);
         }
 
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="cs"></param>
-        /// <returns>return cs.Transform(this.ToPoint3D());</returns>
         public Point3D TransformBy(CoordinateSystem cs)
         {
             return cs.Transform(this.ToPoint3D());
