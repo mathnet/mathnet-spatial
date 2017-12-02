@@ -327,7 +327,7 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         public Vector<double> ToVector()
         {
-            return Vector<double>.Build.Dense(new[] { X, Y });
+            return Vector<double>.Build.Dense(new[] { this.X, this.Y });
         }
     }
 }

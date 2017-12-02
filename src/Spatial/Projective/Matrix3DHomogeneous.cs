@@ -10,7 +10,7 @@
 
         public Matrix3DHomogeneous()
         {
-            Matrix = DenseMatrix.CreateIdentity(4);
+            this.Matrix = DenseMatrix.CreateIdentity(4);
         }
 
         public Matrix3DHomogeneous(double m00, double m01, double m02, double m03,
@@ -18,28 +18,28 @@
                                    double m20, double m21, double m22, double m23,
                                    double m30, double m31, double m32, double m33)
         {
-            Matrix[0, 0] = m00;
-            Matrix[0, 1] = m01;
-            Matrix[0, 2] = m02;
-            Matrix[0, 3] = m03;
-            Matrix[1, 0] = m10;
-            Matrix[1, 1] = m11;
-            Matrix[1, 2] = m12;
-            Matrix[1, 3] = m13;
-            Matrix[2, 0] = m20;
-            Matrix[2, 1] = m21;
-            Matrix[2, 2] = m22;
-            Matrix[2, 3] = m23;
-            Matrix[3, 0] = m30;
-            Matrix[3, 1] = m31;
-            Matrix[3, 2] = m32;
-            Matrix[3, 3] = m33;
+            this.Matrix[0, 0] = m00;
+            this.Matrix[0, 1] = m01;
+            this.Matrix[0, 2] = m02;
+            this.Matrix[0, 3] = m03;
+            this.Matrix[1, 0] = m10;
+            this.Matrix[1, 1] = m11;
+            this.Matrix[1, 2] = m12;
+            this.Matrix[1, 3] = m13;
+            this.Matrix[2, 0] = m20;
+            this.Matrix[2, 1] = m21;
+            this.Matrix[2, 2] = m22;
+            this.Matrix[2, 3] = m23;
+            this.Matrix[3, 0] = m30;
+            this.Matrix[3, 1] = m31;
+            this.Matrix[3, 2] = m32;
+            this.Matrix[3, 3] = m33;
         }
 
         // Define a Identity matrix
         public void Identity3DHomegeneous()
         {
-            Matrix = DenseMatrix.CreateIdentity(4);
+            this.Matrix = DenseMatrix.CreateIdentity(4);
         }
 
         // Multiply two matrices together

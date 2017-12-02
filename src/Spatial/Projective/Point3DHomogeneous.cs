@@ -134,7 +134,7 @@
         /// </summary>
         public Vector<double> ToVector()
         {
-            return Vector<double>.Build.Dense(new[] { X, Y, Z, W });
+            return Vector<double>.Build.Dense(new[] { this.X, this.Y, this.Z, this.W });
         }
 
         public Vector3D ToVector3D()

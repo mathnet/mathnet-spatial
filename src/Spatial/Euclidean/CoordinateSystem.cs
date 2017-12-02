@@ -13,9 +13,9 @@ namespace MathNet.Spatial.Euclidean
     [Serializable]
     public class CoordinateSystem : Numerics.LinearAlgebra.Double.DenseMatrix, IEquatable<CoordinateSystem>, IXmlSerializable
     {
-        static string _item3DPattern = Parser.Vector3DPattern.Trim('^', '$');
+        private static readonly string Item3DPattern = Parser.Vector3DPattern.Trim('^', '$');
 
-        public static readonly string CsPattern = string.Format(@"^ *o: *{{(?<op>{0})}} *x: *{{(?<xv>{0})}} *y: *{{(?<yv>{0})}} *z: *{{(?<zv>{0})}} *$", _item3DPattern);
+        private static readonly string CsPattern = string.Format(@"^ *o: *{{(?<op>{0})}} *x: *{{(?<xv>{0})}} *y: *{{(?<yv>{0})}} *z: *{{(?<zv>{0})}} *$", Item3DPattern);
 
         public CoordinateSystem()
             : this(new Point3D(0, 0, 0), UnitVector3D.XAxis.ToVector3D(), UnitVector3D.YAxis.ToVector3D(), UnitVector3D.ZAxis.ToVector3D())
@@ -91,7 +91,7 @@ namespace MathNet.Spatial.Euclidean
         {
             get
             {
-                var matrix = Build.DenseOfColumnVectors(XAxis.ToVector(), YAxis.ToVector(), ZAxis.ToVector());
+                var matrix = Build.DenseOfColumnVectors(this.XAxis.ToVector(), this.YAxis.ToVector(), this.ZAxis.ToVector());
                 var cs = new CoordinateSystem(this);
                 cs.SetRotationSubMatrix(matrix.Transpose());
                 return cs;
@@ -456,7 +456,7 @@ namespace MathNet.Spatial.Euclidean
         public Point3D Transform(Point3D p)
         {
             var v4 = Vector<double>.Build.Dense(new[] { p.X, p.Y, p.Z, 1 });
-            Multiply(v4, v4);
+            this.Multiply(v4, v4);
             return new Point3D(v4[0], v4[1], v4[2]);
         }
 

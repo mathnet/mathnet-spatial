@@ -11,19 +11,19 @@
     /// </summary>
     public class Polygon2D : IEnumerable<Point2D>
     {
-        private List<Point2D> _points;
+        private readonly List<Point2D> points;
 
-        public int Count => this._points.Count;
+        public int Count => this.points.Count;
 
         public Polygon2D(IEnumerable<Point2D> points)
         {
-            this._points = new List<Point2D>(points);
-            if (this._points.First().Equals(this._points.Last()))
-                this._points.RemoveAt(0);
+            this.points = new List<Point2D>(points);
+            if (this.points.First().Equals(this.points.Last()))
+                this.points.RemoveAt(0);
         }
 
         // Methods
-        public Point2D this[int key] => this._points[key];
+        public Point2D this[int key] => this.points[key];
 
         /// <summary>
         /// Test whether a point is enclosed within a polygon. Points on the polygon edges are not
@@ -222,7 +222,7 @@
 
         public PolyLine2D ToPolyLine2D()
         {
-            var points = this._points.ToList();
+            var points = this.points.ToList();
             points.Add(points.First());
             return new PolyLine2D(points);
         }
@@ -241,12 +241,12 @@
 
         public IEnumerator<Point2D> GetEnumerator()
         {
-            return this._points.GetEnumerator();
+            return this.points.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return GetEnumerator();
+            return this.GetEnumerator();
         }
     }
 }

@@ -23,8 +23,8 @@
         /// The endpoint of the line
         /// </summary>
         public readonly Point3D EndPoint;
-        private double _length;
-        private UnitVector3D _direction;
+        private double length;
+        private UnitVector3D direction;
 
         /// <summary>
         /// Throws if StartPoint == EndPoint
@@ -40,8 +40,8 @@
                 throw new ArgumentException("StartPoint == EndPoint");
             }
 
-            this._length = -1.0;
-            this._direction = new UnitVector3D();
+            this.length = -1.0;
+            this.direction = new UnitVector3D();
         }
 
         /// <summary>
@@ -51,17 +51,17 @@
         {
             get
             {
-                if (this._length < 0)
+                if (this.length < 0)
                 {
                     var vectorTo = this.StartPoint.VectorTo(this.EndPoint);
-                    this._length = vectorTo.Length;
-                    if (this._length > 0)
+                    this.length = vectorTo.Length;
+                    if (this.length > 0)
                     {
-                        this._direction = vectorTo.Normalize();
+                        this.direction = vectorTo.Normalize();
                     }
                 }
 
-                return this._length;
+                return this.length;
             }
         }
 
@@ -72,12 +72,12 @@
         {
             get
             {
-                if (this._length < 0)
+                if (this.length < 0)
                 {
-                    this._length = this.Length; // Side effect hack
+                    this.length = this.Length; // Side effect hack
                 }
 
-                return this._direction;
+                return this.direction;
             }
         }
 

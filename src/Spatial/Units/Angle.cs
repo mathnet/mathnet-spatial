@@ -20,7 +20,7 @@ namespace MathNet.Spatial.Units
 
         private Angle(double radians)
         {
-            Radians = radians;
+            this.Radians = radians;
         }
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace MathNet.Spatial.Units
         /// <param name="unit"></param>
         public Angle(double radians, Radians unit)
         {
-            Radians = radians;
+            this.Radians = radians;
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace MathNet.Spatial.Units
         /// <param name="unit"></param>
         public Angle(double value, Degrees unit)
         {
-            Radians = UnitConverter.ConvertFrom(value, unit);
+            this.Radians = UnitConverter.ConvertFrom(value, unit);
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace MathNet.Spatial.Units
         {
             get
             {
-               return UnitConverter.ConvertTo(Radians, AngleUnit.Degrees);
+               return UnitConverter.ConvertTo(this.Radians, AngleUnit.Degrees);
             }
         }
 

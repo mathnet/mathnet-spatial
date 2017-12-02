@@ -14,7 +14,7 @@
         /// <summary>
         /// Returns the number of points in the polyline
         /// </summary>
-        public int Count => this._points.Count;
+        public int Count => this.points.Count;
 
         /// <summary>
         /// Returns the length of the polyline as the sum of the length of the individual segments
@@ -26,10 +26,10 @@
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public Point2D this[int key] => this._points[key];
+        public Point2D this[int key] => this.points[key];
 
         // Internal storage for the points
-        private List<Point2D> _points;
+        private readonly List<Point2D> points;
 
         /// <summary>
         /// Constructor which creates a PolyLine2D off of a pre-existing IEnumerable of Point2Ds
@@ -37,7 +37,7 @@
         /// <param name="points"></param>
         public PolyLine2D(IEnumerable<Point2D> points)
         {
-            this._points = new List<Point2D>(points);
+            this.points = new List<Point2D>(points);
         }
 
         /// <summary>
@@ -47,7 +47,7 @@
         private double GetPolyLineLength()
         {
             double length = 0;
-            for (int i = 0; i < this._points.Count - 1; ++i)
+            for (int i = 0; i < this.points.Count - 1; ++i)
                 length += this[i].DistanceTo(this[i + 1]);
             return length;
         }
@@ -205,12 +205,12 @@
         // IEnumerable<Point2D>
         public IEnumerator<Point2D> GetEnumerator()
         {
-            return this._points.GetEnumerator();
+            return this.points.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return GetEnumerator();
+            return this.GetEnumerator();
         }
     }
 }

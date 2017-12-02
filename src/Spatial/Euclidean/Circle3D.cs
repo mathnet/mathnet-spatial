@@ -41,7 +41,7 @@
         {
             this.CenterPoint = Point3D.MidPoint(p1, p2);
             this.Axis = axis;
-            this.Radius = p1.DistanceTo(CenterPoint);
+            this.Radius = p1.DistanceTo(this.CenterPoint);
         }
 
         /// <summary>
@@ -78,14 +78,14 @@
         /// <summary>
         /// Returns the diameter of the circle
         /// </summary>
-        public double Diameter => 2 * Radius;
+        public double Diameter => 2 * this.Radius;
         /// <summary>
         /// Returns the circumference of the circle
         /// </summary>
-        public double Circumference => 2 * Math.PI * Radius;
+        public double Circumference => 2 * Math.PI * this.Radius;
         /// <summary>
         /// returns the area of the circle
         /// </summary>
-        public double Area => Math.PI * Math.Pow(Radius, 2);
+        public double Area => Math.PI * Math.Pow(this.Radius, 2);
     }
 }

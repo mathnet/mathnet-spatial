@@ -104,7 +104,7 @@
 
         public double SignedDistanceTo(Point3D point)
         {
-            var point3D = Project(point);
+            var point3D = this.Project(point);
             var vectorTo = point3D.VectorTo(point);
             return vectorTo.DotProduct(this.Normal);
         }
@@ -116,14 +116,14 @@
                 throw new ArgumentException("Planes are not parallel");
             }
 
-            return SignedDistanceTo(otherPlane.RootPoint);
+            return this.SignedDistanceTo(otherPlane.RootPoint);
         }
 
         public double SignedDistanceTo(Ray3D ray)
         {
             if (Math.Abs(ray.Direction.DotProduct(this.Normal) - 0) < 1E-15)
             {
-                return SignedDistanceTo(ray.ThroughPoint);
+                return this.SignedDistanceTo(ray.ThroughPoint);
             }
 
             return 0;
@@ -131,7 +131,7 @@
 
         public double AbsoluteDistanceTo(Point3D point)
         {
-            return Math.Abs(SignedDistanceTo(point));
+            return Math.Abs(this.SignedDistanceTo(point));
         }
 
         public Point3D Project(Point3D p, UnitVector3D? projectionDirection = null)
@@ -144,15 +144,15 @@
 
         public Line3D Project(Line3D line3DToProject)
         {
-            var projectedStartPoint = Project(line3DToProject.StartPoint);
-            var projectedEndPoint = Project(line3DToProject.EndPoint);
+            var projectedStartPoint = this.Project(line3DToProject.StartPoint);
+            var projectedEndPoint = this.Project(line3DToProject.EndPoint);
             return new Line3D(projectedStartPoint, projectedEndPoint);
         }
 
         public Ray3D Project(Ray3D rayToProject)
         {
-            var projectedThroughPoint = Project(rayToProject.ThroughPoint);
-            var projectedDirection = Project(rayToProject.Direction.ToVector3D());
+            var projectedThroughPoint = this.Project(rayToProject.ThroughPoint);
+            var projectedDirection = this.Project(rayToProject.Direction.ToVector3D());
             return new Ray3D(projectedThroughPoint, projectedDirection.Direction);
         }
 
@@ -163,7 +163,7 @@
         /// <returns>The projected Vector3D</returns>
         public Ray3D Project(Vector3D vector3DToProject)
         {
-            var projectedEndPoint = Project(vector3DToProject.ToPoint3D());
+            var projectedEndPoint = this.Project(vector3DToProject.ToPoint3D());
             var projectedZero = this.Project(new Point3D(0, 0, 0));
             return new Ray3D(projectedZero, projectedZero.VectorTo(projectedEndPoint).Normalize());
         }
@@ -175,7 +175,7 @@
         /// <returns>The projected Vector3D</returns>
         public Ray3D Project(UnitVector3D vector3DToProject)
         {
-            return Project(vector3DToProject.ToVector3D());
+            return this.Project(vector3DToProject.ToVector3D());
         }
 
         /// <summary>
@@ -230,7 +230,7 @@
                 }
             }
 
-            var d = SignedDistanceTo(line.StartPoint);
+            var d = this.SignedDistanceTo(line.StartPoint);
             var u = line.StartPoint.VectorTo(line.EndPoint);
             var t = -1 * d / u.DotProduct(this.Normal);
             if (t > 1 || t < 0) // They are not intersected
@@ -249,15 +249,15 @@
         /// <returns></returns>
         public Point3D IntersectionWith(Ray3D ray, double tolerance = float.Epsilon)
         {
-            var d = SignedDistanceTo(ray.ThroughPoint);
+            var d = this.SignedDistanceTo(ray.ThroughPoint);
             var t = -1 * d / ray.Direction.DotProduct(this.Normal);
             return ray.ThroughPoint + (t * ray.Direction);
         }
 
         public Point3D MirrorAbout(Point3D p)
         {
-            Point3D p2 = Project(p);
-            double d = SignedDistanceTo(p);
+            Point3D p2 = this.Project(p);
+            double d = this.SignedDistanceTo(p);
             return p2 - (1 * d * this.Normal);
         }
 

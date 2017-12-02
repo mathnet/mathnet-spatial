@@ -14,8 +14,8 @@
         /// <param name="radius">The radius of the circle</param>
         public Circle2D(Point2D center, double radius)
         {
-            Center = center;
-            Radius = radius;
+            this.Center = center;
+            this.Radius = radius;
         }
 
         /// <summary>
@@ -31,17 +31,17 @@
         /// <summary>
         /// Returns the circumference of the circle
         /// </summary>
-        public double Circumference => 2 * Radius * Math.PI;
+        public double Circumference => 2 * this.Radius * Math.PI;
 
         /// <summary>
         /// Returns the diameter of the circle
         /// </summary>
-        public double Diameter => 2 * Radius;
+        public double Diameter => 2 * this.Radius;
 
         /// <summary>
         /// Returns the area of the circle
         /// </summary>
-        public double Area => Radius * Radius * Math.PI;
+        public double Area => this.Radius * this.Radius * Math.PI;
 
         public static bool operator ==(Circle2D left, Circle2D right)
         {
@@ -60,7 +60,7 @@
         /// <returns>true if the circles have the same radius and center</returns>
         public bool Equals(Circle2D other)
         {
-            return Radius == other.Radius && Center == other.Center;
+            return this.Radius == other.Radius && this.Center == other.Center;
         }
 
         /// <summary>
@@ -75,7 +75,7 @@
                 return false;
             }
 
-            return obj is Circle2D && Equals((Circle2D)obj);
+            return obj is Circle2D && this.Equals((Circle2D)obj);
         }
 
         /// <summary>
@@ -86,7 +86,7 @@
         {
             unchecked
             {
-                return (Center.GetHashCode() * 397) ^ Radius.GetHashCode();
+                return (this.Center.GetHashCode() * 397) ^ this.Radius.GetHashCode();
             }
         }
     }

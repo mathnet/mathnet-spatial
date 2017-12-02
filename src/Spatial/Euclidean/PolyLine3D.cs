@@ -13,7 +13,7 @@
         /// <summary>
         /// An integer representing the number of Point3D objects in the polyline
         /// </summary>
-        public int Count => this._points.Count;
+        public int Count => this.points.Count;
 
         /// <summary>
         /// The length of the polyline, computed as the sum of the lengths of every segment
@@ -29,15 +29,15 @@
             get { throw new NotImplementedException(); }
         }
 
-        private List<Point3D> _points;
+        private readonly List<Point3D> points;
 
         public PolyLine3D(IEnumerable<Point3D> points)
         {
-            this._points = new List<Point3D>(points);
+            this.points = new List<Point3D>(points);
         }
 
         // Operators
-        public Point3D this[int key] => this._points[key];
+        public Point3D this[int key] => this.points[key];
 
         // Methods
 
@@ -48,7 +48,7 @@
         private double GetPolyLineLength()
         {
             double length = 0;
-            for (int i = 0; i < this._points.Count - 1; ++i)
+            for (int i = 0; i < this.points.Count - 1; ++i)
                 length += this[i].DistanceTo(this[i + 1]);
             return length;
         }
@@ -130,12 +130,12 @@
         // IEnumerable<Point3D>
         public IEnumerator<Point3D> GetEnumerator()
         {
-            return this._points.GetEnumerator();
+            return this.points.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return GetEnumerator();
+            return this.GetEnumerator();
         }
     }
 }

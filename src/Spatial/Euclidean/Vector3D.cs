@@ -81,7 +81,7 @@ namespace MathNet.Spatial.Euclidean
 
         internal Matrix<double> CrossProductMatrix
         {
-            get { return Matrix<double>.Build.Dense(3, 3, new[] { 0d, Z, -Y, -Z, 0d, X, Y, -X, 0d }); }
+            get { return Matrix<double>.Build.Dense(3, 3, new[] { 0d, this.Z, -this.Y, -this.Z, 0d, this.X, this.Y, -this.X, 0d }); }
         }
 
         /// <summary>
@@ -310,7 +310,7 @@ namespace MathNet.Spatial.Euclidean
 
         public Vector3D ProjectOn(UnitVector3D uv)
         {
-            double pd = DotProduct(uv);
+            double pd = this.DotProduct(uv);
             return pd * uv;
         }
 
@@ -443,10 +443,10 @@ namespace MathNet.Spatial.Euclidean
         public Matrix<double> GetUnitTensorProduct()
         {
             // unitTensorProduct:matrix([ux^2,ux*uy,ux*uz],[ux*uy,uy^2,uy*uz],[ux*uz,uy*uz,uz^2]),
-            double xy = X * Y;
-            double xz = X * Z;
-            double yz = Y * Z;
-            return Matrix<double>.Build.Dense(3, 3, new[] { X * X, xy, xz, xy, Y * Y, yz, xz, yz, Z * Z });
+            double xy = this.X * this.Y;
+            double xz = this.X * this.Z;
+            double yz = this.Y * this.Z;
+            return Matrix<double>.Build.Dense(3, 3, new[] { this.X * this.X, xy, xz, xy, this.Y * this.Y, yz, xz, yz, this.Z * this.Z });
         }
 
         /// <summary>
@@ -503,7 +503,7 @@ namespace MathNet.Spatial.Euclidean
         public Vector3D Rotate<T>(UnitVector3D about, double angle, T angleUnit)
             where T : IAngleUnit
         {
-            return Rotate(about, Angle.From(angle, angleUnit));
+            return this.Rotate(about, Angle.From(angle, angleUnit));
         }
 
         /// <summary>
@@ -514,7 +514,7 @@ namespace MathNet.Spatial.Euclidean
         /// <returns></returns>
         public Vector3D Rotate(Vector3D about, Angle angle)
         {
-            return Rotate(about.Normalize(), angle);
+            return this.Rotate(about.Normalize(), angle);
         }
 
         /// <summary>
@@ -571,7 +571,7 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         public Vector<double> ToVector()
         {
-            return Vector<double>.Build.Dense(new[] { X, Y, Z });
+            return Vector<double>.Build.Dense(new[] { this.X, this.Y, this.Z });
         }
     }
 }

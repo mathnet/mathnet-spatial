@@ -10,8 +10,8 @@
     /// </summary>
     public struct Line2D : IEquatable<Line2D>
     {
-        private Vector2D _direction;
-        private double _length;
+        private Vector2D direction;
+        private double length;
 
         /// <summary>
         /// The starting point of the line
@@ -30,9 +30,9 @@
         {
             get
             {
-                if (this._length < 0)
-                    ComputeLengthAndDirection();
-                return this._length;
+                if (this.length < 0)
+                    this.ComputeLengthAndDirection();
+                return this.length;
             }
         }
 
@@ -43,9 +43,9 @@
         {
             get
             {
-                if (this._length < 0)
-                    ComputeLengthAndDirection();
-                return this._direction;
+                if (this.length < 0)
+                    this.ComputeLengthAndDirection();
+                return this.direction;
             }
         }
 
@@ -66,8 +66,8 @@
             }
 
             // Initialize the length and direction for lazy loading
-            this._length = -1.0;
-            this._direction = new Vector2D();
+            this.length = -1.0;
+            this.direction = new Vector2D();
         }
 
         /// <summary>
@@ -77,8 +77,8 @@
         private void ComputeLengthAndDirection()
         {
             var vectorBetween = this.StartPoint.VectorTo(this.EndPoint);
-            this._length = vectorBetween.Length;
-            this._direction = vectorBetween.Normalize();
+            this.length = vectorBetween.Length;
+            this.direction = vectorBetween.Normalize();
         }
 
         /// <summary>
@@ -229,13 +229,13 @@
 
         public bool Equals(Line2D other)
         {
-            return StartPoint.Equals(other.StartPoint) && EndPoint.Equals(other.EndPoint);
+            return this.StartPoint.Equals(other.StartPoint) && this.EndPoint.Equals(other.EndPoint);
         }
 
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
-            return obj is Line2D && Equals((Line2D)obj);
+            return obj is Line2D && this.Equals((Line2D)obj);
         }
 
         /// <summary>
@@ -246,7 +246,7 @@
         {
             unchecked
             {
-                return (StartPoint.GetHashCode() * 397) ^ EndPoint.GetHashCode();
+                return (this.StartPoint.GetHashCode() * 397) ^ this.EndPoint.GetHashCode();
             }
         }
         # endregion

@@ -274,7 +274,7 @@ namespace MathNet.Spatial.Euclidean
 
         public Point3D Rotate(Vector3D aboutVector, Angle angle)
         {
-            return Rotate(aboutVector.Normalize(), angle);
+            return this.Rotate(aboutVector.Normalize(), angle);
         }
 
         public Point3D Rotate(UnitVector3D aboutVector, Angle angle)
@@ -328,7 +328,7 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         public Vector<double> ToVector()
         {
-            return Vector<double>.Build.Dense(new[] { X, Y, Z });
+            return Vector<double>.Build.Dense(new[] { this.X, this.Y, this.Z });
         }
     }
 }
