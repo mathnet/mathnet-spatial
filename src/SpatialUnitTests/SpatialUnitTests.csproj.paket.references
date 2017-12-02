@@ -2,3 +2,6 @@ MathNet.Numerics
 
 group Test
     NUnit
+
+group Analyzers
+    StyleCop.Analyzers

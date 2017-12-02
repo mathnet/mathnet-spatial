@@ -9,6 +9,10 @@ group Build
     nuget FSharp.Formatting !~> 2.4
     nuget NuGet.CommandLine
 
+group Analyzers
+    source https://www.nuget.org/api/v2
+    nuget StyleCop.Analyzers
+
 group Test
     source https://www.nuget.org/api/v2
     nuget NUnit ~> 3.0
