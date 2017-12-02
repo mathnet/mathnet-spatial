@@ -1,17 +1,17 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using System.Globalization;
-using System.Linq;
-using System.Xml;
-using System.Xml.Linq;
-using System.Xml.Schema;
-using System.Xml.Serialization;
-using MathNet.Numerics.LinearAlgebra;
-using MathNet.Spatial.Units;
-
 namespace MathNet.Spatial.Euclidean
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.Contracts;
+    using System.Globalization;
+    using System.Linq;
+    using System.Xml;
+    using System.Xml.Linq;
+    using System.Xml.Schema;
+    using System.Xml.Serialization;
+    using MathNet.Numerics.LinearAlgebra;
+    using MathNet.Spatial.Units;
+
     /// <summary>
     /// A unit vector, this is used to describe a direction in 3D
     /// </summary>

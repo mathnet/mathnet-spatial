@@ -1,13 +1,12 @@
-﻿using System;
-using System.Globalization;
-using System.Reflection;
-using MathNet.Spatial.Units;
-using NUnit.Framework;
-
-namespace MathNet.Spatial.UnitTests.Units
+﻿namespace MathNet.Spatial.UnitTests.Units
 {
+    using System;
+    using System.Globalization;
     using System.IO;
+    using System.Reflection;
     using System.Xml.Serialization;
+    using MathNet.Spatial.Units;
+    using NUnit.Framework;
 
     public class AngleTests
     {

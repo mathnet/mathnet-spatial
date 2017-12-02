@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using System;
-using System.Linq;
-using MathNet.Spatial.Euclidean;
-using NUnit.Framework;
-
-namespace MathNet.Spatial.UnitTests.Euclidean
+﻿namespace MathNet.Spatial.UnitTests.Euclidean
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using MathNet.Spatial.Euclidean;
+    using NUnit.Framework;
+
     [TestFixture]
     public class Polygon2DTests
     {

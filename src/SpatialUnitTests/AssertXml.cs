@@ -1,14 +1,14 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Xml;
-using System.Xml.Linq;
-using System.Xml.Serialization;
-using NUnit.Framework;
-
-namespace MathNet.Spatial.UnitTests
+﻿namespace MathNet.Spatial.UnitTests
 {
+    using System;
+    using System.IO;
+    using System.Linq;
+    using System.Runtime.Serialization;
+    using System.Xml;
+    using System.Xml.Linq;
+    using System.Xml.Serialization;
+    using NUnit.Framework;
+
     public static class AssertXml
     {
         public static void AreEqual(string first, string other)

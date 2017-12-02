@@ -1,16 +1,16 @@
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Xml;
-using System.Xml.Linq;
-using System.Xml.Schema;
-using System.Xml.Serialization;
-using MathNet.Numerics.LinearAlgebra;
-using MathNet.Spatial.Units;
-
 namespace MathNet.Spatial.Euclidean
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Linq;
+    using System.Xml;
+    using System.Xml.Linq;
+    using System.Xml.Schema;
+    using System.Xml.Serialization;
+    using MathNet.Numerics.LinearAlgebra;
+    using MathNet.Spatial.Units;
+
     /// <summary>
     /// Represents a point in 2 dimensional cartesian space 
     /// </summary>

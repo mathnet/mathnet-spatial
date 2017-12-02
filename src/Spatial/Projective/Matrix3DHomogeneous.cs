@@ -1,9 +1,9 @@
-﻿using System;
-using MathNet.Numerics.LinearAlgebra.Double;
-using MathNet.Spatial.Units;
-
-namespace MathNet.Spatial.Projective
+﻿namespace MathNet.Spatial.Projective
 {
+    using System;
+    using MathNet.Numerics.LinearAlgebra.Double;
+    using MathNet.Spatial.Units;
+
     class Matrix3DHomogeneous
     {
         public DenseMatrix Matrix;

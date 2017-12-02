@@ -1,15 +1,15 @@
-using System;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Xml;
-using System.Xml.Linq;
-using System.Xml.Schema;
-using System.Xml.Serialization;
-using MathNet.Numerics.LinearAlgebra;
-using MathNet.Spatial.Units;
-
 namespace MathNet.Spatial.Euclidean
 {
+    using System;
+    using System.Linq;
+    using System.Text.RegularExpressions;
+    using System.Xml;
+    using System.Xml.Linq;
+    using System.Xml.Schema;
+    using System.Xml.Serialization;
+    using MathNet.Numerics.LinearAlgebra;
+    using MathNet.Spatial.Units;
+
     [Serializable]
     public class CoordinateSystem : Numerics.LinearAlgebra.Double.DenseMatrix, IEquatable<CoordinateSystem>, IXmlSerializable
     {

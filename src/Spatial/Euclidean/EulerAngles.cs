@@ -1,9 +1,9 @@
-﻿using System;
-using MathNet.Numerics;
-using MathNet.Spatial.Units;
-
-namespace MathNet.Spatial.Euclidean
+﻿namespace MathNet.Spatial.Euclidean
 {
+    using System;
+    using MathNet.Numerics;
+    using MathNet.Spatial.Units;
+
     /// <summary>
     /// A means of representing spatial orientation of any reference frame. 
     /// More information can be found https://en.wikipedia.org/wiki/Euler_angles

@@ -1,17 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Xml;
-using System.Xml.Linq;
-using System.Xml.Schema;
-using System.Xml.Serialization;
-using MathNet.Numerics.Financial;
-using MathNet.Numerics.LinearAlgebra;
-using MathNet.Spatial.Units;
-
-namespace MathNet.Spatial.Euclidean
+﻿namespace MathNet.Spatial.Euclidean
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Linq;
+    using System.Xml;
+    using System.Xml.Linq;
+    using System.Xml.Schema;
+    using System.Xml.Serialization;
+    using MathNet.Numerics.Financial;
+    using MathNet.Numerics.LinearAlgebra;
+    using MathNet.Spatial.Units;
+
     [Serializable]
     public struct Vector2D : IXmlSerializable, IEquatable<Vector2D>, IFormattable
     {

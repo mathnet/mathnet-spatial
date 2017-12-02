@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace MathNet.Spatial.Euclidean
+﻿namespace MathNet.Spatial.Euclidean
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
 
     /// <summary>
     /// A PolyLine is an ordered series of line segments in space represented as list of connected Point3Ds.

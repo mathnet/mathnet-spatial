@@ -1,12 +1,12 @@
-﻿using System;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-using MathNet.Spatial.Euclidean;
-using MathNet.Spatial.Units;
-using NUnit.Framework;
-
-namespace MathNet.Spatial.UnitTests.Euclidean
+﻿namespace MathNet.Spatial.UnitTests.Euclidean
 {
+    using System;
+    using System.IO;
+    using System.Runtime.Serialization.Formatters.Binary;
+    using MathNet.Spatial.Euclidean;
+    using MathNet.Spatial.Units;
+    using NUnit.Framework;
+
     [TestFixture]
     public class Line3DTests
     {

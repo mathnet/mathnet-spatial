@@ -1,13 +1,13 @@
-﻿using System;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Xml;
-using System.Xml.Serialization;
-using MathNet.Spatial.Euclidean;
-using NUnit.Framework;
-
-namespace MathNet.Spatial.UnitTests.Euclidean
+﻿namespace MathNet.Spatial.UnitTests.Euclidean
 {
+    using System;
+    using System.IO;
+    using System.Runtime.Serialization.Formatters.Binary;
+    using System.Xml;
+    using System.Xml.Serialization;
+    using MathNet.Spatial.Euclidean;
+    using NUnit.Framework;
+
     [TestFixture]
     public class Point3DTests
     {

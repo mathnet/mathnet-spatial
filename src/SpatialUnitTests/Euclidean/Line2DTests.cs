@@ -1,10 +1,10 @@
-﻿using System;
-using MathNet.Spatial.Euclidean;
-using MathNet.Spatial.Units;
-using NUnit.Framework;
-
-namespace MathNet.Spatial.UnitTests.Euclidean
+﻿namespace MathNet.Spatial.UnitTests.Euclidean
 {
+    using System;
+    using MathNet.Spatial.Euclidean;
+    using MathNet.Spatial.Units;
+    using NUnit.Framework;
+
     [TestFixture]
     public class Line2DTests
     {

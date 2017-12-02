@@ -1,9 +1,9 @@
-﻿using System;
-using MathNet.Numerics;
-using MathNet.Spatial.Units;
-
-namespace MathNet.Spatial.Euclidean
+﻿namespace MathNet.Spatial.Euclidean
 {
+    using System;
+    using MathNet.Numerics;
+    using MathNet.Spatial.Units;
+
     /// <summary>
     /// This structure represents a line between two points in 2-space.  It allows for operations such as 
     /// computing the length, direction, projections to, compairisons, and shifting by a vector.  

@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using MathNet.Numerics.LinearAlgebra;
-using MathNet.Spatial.Euclidean;
-
-namespace MathNet.Spatial.Projective
+﻿namespace MathNet.Spatial.Projective
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Linq;
+    using MathNet.Numerics.LinearAlgebra;
+    using MathNet.Spatial.Euclidean;
+
     class Point3DHomogeneous
     {
         /// <summary>

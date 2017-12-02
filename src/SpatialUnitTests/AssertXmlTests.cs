@@ -1,7 +1,7 @@
-using NUnit.Framework;
-
 namespace MathNet.Spatial.UnitTests
 {
+    using NUnit.Framework;
+
     public class AssertXmlTests
     {
         [Test]

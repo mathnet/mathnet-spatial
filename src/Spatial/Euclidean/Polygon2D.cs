@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using MathNet.Spatial.Units;
-
-namespace MathNet.Spatial.Euclidean
+﻿namespace MathNet.Spatial.Euclidean
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Runtime.CompilerServices;
+    using MathNet.Spatial.Units;
+
     /// <summary>
     /// Class to represent a closed polygon. If the 
     /// </summary>

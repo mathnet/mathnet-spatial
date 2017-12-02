@@ -1,11 +1,10 @@
-﻿using MathNet.Spatial.Euclidean;
-
-namespace MathNet.Spatial
+﻿namespace MathNet.Spatial
 {
     using System;
     using System.Globalization;
     using System.Linq;
     using System.Text.RegularExpressions;
+    using MathNet.Spatial.Euclidean;
 
     public static class Parser
     {

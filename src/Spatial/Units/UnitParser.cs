@@ -5,7 +5,7 @@
 
     public static class UnitParser
     {
-        public static readonly string UnitValuePattern = string.Format(@"^(?: *)(?<Value>{0}) *(?<Unit>.+) *$",Parser.DoublePattern);
+        public static readonly string UnitValuePattern = string.Format(@"^(?: *)(?<Value>{0}) *(?<Unit>.+) *$", Parser.DoublePattern);
 
         public static T Parse<T>(string s, Func<double, IAngleUnit, T> creator)
         {

@@ -1,11 +1,11 @@
-using System.Globalization;
-using System.Xml;
-using System.Xml.Linq;
-using System.Xml.Schema;
-using System.Xml.Serialization;
-
 namespace MathNet.Spatial.UnitTests
 {
+    using System.Globalization;
+    using System.Xml;
+    using System.Xml.Linq;
+    using System.Xml.Schema;
+    using System.Xml.Serialization;
+
     public class XmlSerializableDummy : IXmlSerializable
     {
         private readonly string _name;

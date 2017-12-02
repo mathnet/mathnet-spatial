@@ -1,13 +1,13 @@
-﻿using System;
-using System.Xml;
-using System.Xml.Linq;
-using System.Xml.Schema;
-using System.Xml.Serialization;
-using MathNet.Numerics;
-using MathNet.Spatial.Units;
-
-namespace MathNet.Spatial.Euclidean
+﻿namespace MathNet.Spatial.Euclidean
 {
+    using System;
+    using System.Xml;
+    using System.Xml.Linq;
+    using System.Xml.Schema;
+    using System.Xml.Serialization;
+    using MathNet.Numerics;
+    using MathNet.Spatial.Units;
+
     /// <summary>
     /// A line between two points
     /// </summary>

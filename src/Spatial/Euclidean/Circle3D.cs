@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace MathNet.Spatial.Euclidean
+﻿namespace MathNet.Spatial.Euclidean
 {
+    using System;
+
     [Serializable]
     public struct Circle3D
     {
