@@ -54,9 +54,8 @@
             var testElement = new PolyLine3D(from x in points.Split(';') select Point3D.Parse(x));
             var checkElement = Point3D.Parse(expected);
 
-            Assert.Throws<ArgumentException>(()=> { testElement.GetPointAtFractionAlongCurve(fraction); });
+            Assert.Throws<ArgumentException>(() => { testElement.GetPointAtFractionAlongCurve(fraction); });
         }
-
 
         [TestCase("0,0,0 ; 0,1,1 ; 1,1,2", "0,-1,0", "0,0,0")] // Off Endpoint
         [TestCase("0,0,0 ; 0,1,1 ; 1,1,2", "2,1,2", "1,1,2")] // Off Endpoint

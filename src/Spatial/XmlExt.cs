@@ -57,7 +57,7 @@
 
         /// <summary>
         /// Reads attribute if it exists
-        /// 
+        ///
         /// </summary>
         /// <param name="e"/><param name="localName"/>
         /// <returns/>

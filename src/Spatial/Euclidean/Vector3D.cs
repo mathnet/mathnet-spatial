@@ -50,7 +50,6 @@ namespace MathNet.Spatial.Euclidean
             }
         }
 
-
         public static Vector3D NaN
         {
             get { return new Vector3D(double.NaN, double.NaN, double.NaN); }
@@ -109,13 +108,13 @@ namespace MathNet.Spatial.Euclidean
         [Obsolete("Not sure this is nice")]
         public static Vector<double> operator *(Matrix<double> left, Vector3D right)
         {
-            return left*right.ToVector();
+            return left * right.ToVector();
         }
 
         [Obsolete("Not sure this is nice")]
         public static Vector<double> operator *(Vector3D left, Matrix<double> right)
         {
-            return left.ToVector()*right;
+            return left.ToVector() * right;
         }
 
         public static double operator *(Vector3D left, Vector3D right)
@@ -199,8 +198,8 @@ namespace MathNet.Spatial.Euclidean
             unchecked
             {
                 var hashCode = this.X.GetHashCode();
-                hashCode = (hashCode*397) ^ this.Y.GetHashCode();
-                hashCode = (hashCode*397) ^ this.Z.GetHashCode();
+                hashCode = (hashCode * 397) ^ this.Y.GetHashCode();
+                hashCode = (hashCode * 397) ^ this.Z.GetHashCode();
                 return hashCode;
             }
         }
@@ -266,7 +265,7 @@ namespace MathNet.Spatial.Euclidean
 
         public static Vector3D operator *(double d, Vector3D v)
         {
-            return new Vector3D(d*v.X, d*v.Y, d*v.Z);
+            return new Vector3D(d * v.X, d * v.Y, d * v.Z);
         }
 
         // Commented out because the d * v reads nicer than v *d
@@ -277,7 +276,7 @@ namespace MathNet.Spatial.Euclidean
 
         public static Vector3D operator /(Vector3D v, double d)
         {
-            return new Vector3D(v.X/d, v.Y/d, v.Z/d);
+            return new Vector3D(v.X / d, v.Y / d, v.Z / d);
         }
 
         ////public static explicit operator Vector3D(System.Windows.Media.Media3D.Vector3D v)
@@ -301,7 +300,7 @@ namespace MathNet.Spatial.Euclidean
 
         public Vector3D ScaleBy(double scaleFactor)
         {
-            return scaleFactor*this;
+            return scaleFactor * this;
         }
 
         public Ray3D ProjectOn(Plane planeToProjectOn)
@@ -312,7 +311,7 @@ namespace MathNet.Spatial.Euclidean
         public Vector3D ProjectOn(UnitVector3D uv)
         {
             double pd = DotProduct(uv);
-            return pd*uv;
+            return pd * uv;
         }
 
         /// <summary>
@@ -398,17 +397,17 @@ namespace MathNet.Spatial.Euclidean
         /// <returns></returns>
         public Vector3D Negate()
         {
-            return new Vector3D(-1*this.X, -1*this.Y, -1*this.Z);
+            return new Vector3D(-1 * this.X, -1 * this.Y, -1 * this.Z);
         }
 
         public double DotProduct(Vector3D v)
         {
-            return (this.X*v.X) + (this.Y*v.Y) + (this.Z*v.Z);
+            return (this.X * v.X) + (this.Y * v.Y) + (this.Z * v.Z);
         }
 
         public double DotProduct(UnitVector3D v)
         {
-            return (this.X*v.X) + (this.Y*v.Y) + (this.Z*v.Z);
+            return (this.X * v.X) + (this.Y * v.Y) + (this.Z * v.Z);
         }
 
         [Obsolete("Use - instead")]
@@ -425,18 +424,18 @@ namespace MathNet.Spatial.Euclidean
 
         public Vector3D CrossProduct(Vector3D inVector3D)
         {
-            var x = (this.Y*inVector3D.Z) - (this.Z*inVector3D.Y);
-            var y = (this.Z*inVector3D.X) - (this.X*inVector3D.Z);
-            var z = (this.X*inVector3D.Y) - (this.Y*inVector3D.X);
+            var x = (this.Y * inVector3D.Z) - (this.Z * inVector3D.Y);
+            var y = (this.Z * inVector3D.X) - (this.X * inVector3D.Z);
+            var z = (this.X * inVector3D.Y) - (this.Y * inVector3D.X);
             var v = new Vector3D(x, y, z);
             return v;
         }
 
         public Vector3D CrossProduct(UnitVector3D inVector3D)
         {
-            var x = (this.Y*inVector3D.Z) - (this.Z*inVector3D.Y);
-            var y = (this.Z*inVector3D.X) - (this.X*inVector3D.Z);
-            var z = (this.X*inVector3D.Y) - (this.Y*inVector3D.X);
+            var x = (this.Y * inVector3D.Z) - (this.Z * inVector3D.Y);
+            var y = (this.Z * inVector3D.X) - (this.X * inVector3D.Z);
+            var z = (this.X * inVector3D.Y) - (this.Y * inVector3D.X);
             var v = new Vector3D(x, y, z);
             return v;
         }
@@ -444,10 +443,10 @@ namespace MathNet.Spatial.Euclidean
         public Matrix<double> GetUnitTensorProduct()
         {
             // unitTensorProduct:matrix([ux^2,ux*uy,ux*uz],[ux*uy,uy^2,uy*uz],[ux*uz,uy*uz,uz^2]),
-            double xy = X*Y;
-            double xz = X*Z;
-            double yz = Y*Z;
-            return Matrix<double>.Build.Dense(3, 3, new[] { X*X, xy, xz, xy, Y*Y, yz, xz, yz, Z*Z });
+            double xy = X * Y;
+            double xz = X * Z;
+            double yz = Y * Z;
+            return Matrix<double>.Build.Dense(3, 3, new[] { X * X, xy, xz, xy, Y * Y, yz, xz, yz, Z * Z });
         }
 
         /// <summary>

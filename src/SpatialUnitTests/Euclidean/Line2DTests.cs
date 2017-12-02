@@ -53,7 +53,7 @@
             var p2 = Point2D.Parse(p2s);
             var ex = Vector2D.Parse(exs);
             var line = new Line2D(p1, p2);
-            
+
             AssertGeometry.AreEqual(ex, line.Direction);
         }
 
@@ -63,7 +63,7 @@
         {
             var l1 = Line2D.Parse(p1s, p2s);
             var l2 = Line2D.Parse(p3s, p4s);
-            
+
             Assert.AreEqual(expected, l1 == l2);
         }
 
@@ -73,14 +73,14 @@
         {
             var l1 = new Line2D(Point2D.Parse(p1s), Point2D.Parse(p2s));
             var l2 = new Line2D(Point2D.Parse(p3s), Point2D.Parse(p4s));
-         
+
             Assert.AreEqual(expected, l1 != l2);
         }
 
         [Test]
         public void EqualityComparisonFalseAgainstNull()
         {
-            var line = new Line2D(new Point2D(), new Point2D(1,1) );
+            var line = new Line2D(new Point2D(), new Point2D(1, 1) );
             Assert.IsFalse(line.Equals(null));
         }
 
@@ -102,13 +102,13 @@
             Assert.AreEqual(ex, l1 - new Vector2D(1, 1));
         }
 
-        [TestCase("0,0", "1,-1")]   // Check start point
+        [TestCase("0,0", "1,-1", Description = "Check start point")]
         [TestCase("1,0", "1,-1")]
         [TestCase("1,-2", "1,-1")]
-        [TestCase("4,0", "3,-1")]   // Check end point
+        [TestCase("4,0", "3,-1", Description = "Check end point")]
         [TestCase("3,0", "3,-1")]
         [TestCase("3,-3", "3,-1")]
-        [TestCase("1.5,0", "1.5,-1")]   // Check near middle
+        [TestCase("1.5,0", "1.5,-1", Description = "Check near middle")]
         [TestCase("1.5,-2", "1.5,-1")]
         public void LineToBetweenEndPoints(string ptest, string exs)
         {
@@ -120,13 +120,13 @@
             Assert.AreEqual(expLine, line.LineTo(point, true));
         }
 
-        [TestCase("0,0", "0,-1")]   // Check start point
+        [TestCase("0,0", "0,-1", Description = "Check start point")]
         [TestCase("1,0", "1,-1")]
         [TestCase("1,-2", "1,-1")]
-        [TestCase("4,0", "4,-1")]   // Check end point
+        [TestCase("4,0", "4,-1", Description = "Check end pointt")]
         [TestCase("3,0", "3,-1")]
         [TestCase("3,-3", "3,-1")]
-        [TestCase("1.5,0", "1.5,-1")]   // Check near middle
+        [TestCase("1.5,0", "1.5,-1", Description = "Check near middle")]
         [TestCase("1.5,-2", "1.5,-1")]
         public void LineToIgnoreEndPoints(string ptest, string exs)
         {
@@ -180,7 +180,6 @@
             Assert.AreEqual(e, intersection);
         }
 
-
         [TestCase("0,0", "0,1", "1,1", "1,2", true)]
         [TestCase("0,0", "0,-1", "1,1", "1,2", true)]
         [TestCase("0,0", "0.5,-1", "1,1", "1,2", false)]
@@ -189,7 +188,7 @@
         {
             var line1 = Line2D.Parse(s1, e1);
             var line2 = Line2D.Parse(s2, e2);
-            
+
             Assert.AreEqual(expected, line1.IsParallelTo(line2));
         }
 

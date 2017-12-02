@@ -132,10 +132,9 @@
                     dotProduct = this.Length;
             }
 
-            Vector3D alongVector = dotProduct*this.Direction;
+            Vector3D alongVector = dotProduct * this.Direction;
             return this.StartPoint + alongVector;
         }
-        
 
         /// <summary>
         /// The line projected on a plane
@@ -159,7 +158,7 @@
         }
 
         /// <summary>
-        /// Checks to determine whether or not two lines are parallel to each other, using the dot product within 
+        /// Checks to determine whether or not two lines are parallel to each other, using the dot product within
         /// the double precision specified in the MathNet.Numerics package.
         /// </summary>
         /// <param name="other">The other line to check this one against</param>
@@ -207,10 +206,10 @@
             var d = u.DotProduct(w0);
             var e = v.DotProduct(w0);
 
-            double sc = (b*e - c*d)/(a*c - b*b);
-            double tc = (a*e - b*d)/(a*c - b*b);
+            double sc = (b * e - c * d) / (a * c - b * b);
+            double tc = (a * e - b * d) / (a * c - b * b);
 
-            return Tuple.Create(P0 + sc*u, Q0 + tc*v);
+            return Tuple.Create(P0 + sc * u, Q0 + tc * v);
         }
 
         /// <summary>
@@ -223,7 +222,7 @@
         public Tuple<Point3D, Point3D> ClosestPointsBetween(Line3D other, bool mustBeOnSegments)
         {
             // If the segments are parallel and the answer must be on the segments, we can skip directly to the ending
-            // algorithm where the endpoints are projected onto the opposite segment and the smallest distance is 
+            // algorithm where the endpoints are projected onto the opposite segment and the smallest distance is
             // taken.  Otherwise we must first check if the infinite length line solution is valid.
             if (!this.IsParallelTo(other) || !mustBeOnSegments)  // If the lines aren't parallel OR it doesn't have to be constrained to the segments
             {
@@ -234,7 +233,7 @@
                     return result;
 
                 // A point that is known to be colinear with the line start and end points is on the segment if
-                // its distance to both endpoints is less than the segment length.  If both projected points lie 
+                // its distance to both endpoints is less than the segment length.  If both projected points lie
                 // within their segment, we can directly return the result.
                 if (result.Item1.DistanceTo(this.StartPoint) <= this.Length &&
                     result.Item1.DistanceTo(this.EndPoint) <= this.Length &&
@@ -245,9 +244,9 @@
                 }
             }
 
-            // If we got here, we know that either we're doing a bounded distance on two parallel segments or one 
+            // If we got here, we know that either we're doing a bounded distance on two parallel segments or one
             // of the two closest span points is outside of the segment of the line it was projected on.  In either
-            // case we project each of the four endpoints onto the opposite segments and select the one with the 
+            // case we project each of the four endpoints onto the opposite segments and select the one with the
             // smallest projected distance.
             Point3D checkPoint;
             Tuple<Point3D, Point3D> closestPair;
@@ -257,7 +256,6 @@
             distance = checkPoint.DistanceTo(this.StartPoint);
             closestPair = Tuple.Create(this.StartPoint, checkPoint);
             double minDistance = distance;
-            
 
             checkPoint = other.ClosestPointTo(this.EndPoint, true);
             distance = checkPoint.DistanceTo(this.EndPoint);
@@ -315,7 +313,7 @@
         }
 
         /// <summary>
-        /// Serves as a hash function for a particular type. 
+        /// Serves as a hash function for a particular type.
         /// </summary>
         /// <returns>
         /// A hash code for the current <see cref="T:System.Object"/>.
@@ -340,7 +338,7 @@
         {
             return null;
         }
-        
+
         public void ReadXml(XmlReader reader)
         {
             reader.MoveToContent();
@@ -350,7 +348,7 @@
             var endPoint = Point3D.ReadFrom(e.SingleElement("EndPoint").CreateReader());
             XmlExt.SetReadonlyField(ref this, l => l.EndPoint, endPoint);
         }
-        
+
         public void WriteXml(XmlWriter writer)
         {
             writer.WriteElement("StartPoint", this.StartPoint);

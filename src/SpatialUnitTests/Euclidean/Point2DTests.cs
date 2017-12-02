@@ -39,6 +39,7 @@
                 Assert.AreEqual(1, p.X);
                 Assert.AreEqual(2, p.Y);
             }
+
             Assert.Throws<ArgumentException>(() => new Point2D(new[] { 1, 2, 3.0 }));
             Assert.Throws<ArgumentException>(() => new Point2D(DenseVector.OfArray(new[] { 1, 2, 3.0 })));
         }

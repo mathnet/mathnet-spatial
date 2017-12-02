@@ -24,7 +24,7 @@
             var actuals = new[]
             {
                 new Vector3D(1, 2, 3),
-                new Vector3D(new[] {1, 2, 3.0}),
+                new Vector3D(new[] { 1, 2, 3.0 }),
             };
             foreach (var actual in actuals)
             {
@@ -32,6 +32,7 @@
                 Assert.AreEqual(2, actual.Y, 1e-6);
                 Assert.AreEqual(3, actual.Z, 1e-6);
             }
+
             Assert.Throws<ArgumentException>(() => new Vector3D(new[] { 1.0, 2, 3, 4 }));
         }
 
@@ -290,10 +291,10 @@
         [TestCase("0,1,0", "0,1, -0.001", 1e-10, false)]
         [TestCase("0,-1,0", "0,1, 0.001", 1e-10, false)]
         [TestCase("0,-1,0", "0,1, -0.001", 1e-10, false)]
-        [TestCase("0,1,0", "0,1, 0.001", 1e-6, true)]   // These test cases demonstrate the effect of the tolerance
-        [TestCase("0,1,0", "0,1, -0.001", 1e-6, true)]  // These test cases demonstrate the effect of the tolerance
-        [TestCase("0,-1,0", "0,1, 0.001", 1e-6, true)]  // These test cases demonstrate the effect of the tolerance
-        [TestCase("0,-1,0", "0,1, -0.001", 1e-6, true)] // These test cases demonstrate the effect of the tolerance
+        [TestCase("0,1,0", "0,1, 0.001", 1e-6, true, Description = "These test cases demonstrate the effect of the tolerance")]
+        [TestCase("0,1,0", "0,1, -0.001", 1e-6, true, Description = "These test cases demonstrate the effect of the tolerance")]
+        [TestCase("0,-1,0", "0,1, 0.001", 1e-6, true, Description = "These test cases demonstrate the effect of the tolerance")]
+        [TestCase("0,-1,0", "0,1, -0.001", 1e-6, true, Description = "These test cases demonstrate the effect of the tolerance")]
         [TestCase("0,1,0.5", "0,-1, -0.5", 1e-10, true)]
         public void IsParallelToByDoubleTolerance(string v1s, string v2s, double tolerance, bool expected)
         {
@@ -312,10 +313,10 @@
         [TestCase("0,1,0", "0,1, -0.001", 1e-10, false)]
         [TestCase("0,-1,0", "0,1, 0.001", 1e-10, false)]
         [TestCase("0,-1,0", "0,1, -0.001", 1e-10, false)]
-        [TestCase("0,1,0", "0,1, 0.001", 1e-6, true)]   // These test cases demonstrate the effect of the tolerance
-        [TestCase("0,1,0", "0,1, -0.001", 1e-6, true)]  // These test cases demonstrate the effect of the tolerance
-        [TestCase("0,-1,0", "0,1, 0.001", 1e-6, true)]  // These test cases demonstrate the effect of the tolerance
-        [TestCase("0,-1,0", "0,1, -0.001", 1e-6, true)] // These test cases demonstrate the effect of the tolerance
+        [TestCase("0,1,0", "0,1, 0.001", 1e-6, true, Description = "These test cases demonstrate the effect of the tolerance")]
+        [TestCase("0,1,0", "0,1, -0.001", 1e-6, true, Description = "These test cases demonstrate the effect of the tolerance")]
+        [TestCase("0,-1,0", "0,1, 0.001", 1e-6, true, Description = "These test cases demonstrate the effect of the tolerance")]
+        [TestCase("0,-1,0", "0,1, -0.001", 1e-6, true, Description = "These test cases demonstrate the effect of the tolerance")]
         [TestCase("0,1,0.5", "0,-1, -0.5", 1e-10, true)]
         public void IsParallelToUnitVectorByDoubleTolerance(string v1s, string v2s, double tolerance, bool expected)
         {
@@ -368,8 +369,6 @@
             Assert.AreEqual(expected, v1.IsParallelTo(v2, Angle.FromDegrees(degreesTolerance)));
             Assert.AreEqual(expected, v2.IsParallelTo(v1, Angle.FromDegrees(degreesTolerance)));
         }
-
-
 
         [TestCase(X, X, false)]
         [TestCase(NegativeX, X, false)]

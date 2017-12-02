@@ -57,8 +57,8 @@
             Vector3D p2p3 = p3 - p2;
             this.Axis = p1p2.CrossProduct(p2p3).Normalize();
 
-            Point3D midPointA = p1 + 0.5*p1p2;
-            Point3D midPointB = p2 + 0.5*p2p3;
+            Point3D midPointA = p1 + 0.5 * p1p2;
+            Point3D midPointB = p2 + 0.5 * p2p3;
 
             Vector3D directionA = p1p2.CrossProduct(this.Axis);
             Vector3D directionB = p2p3.CrossProduct(this.Axis);

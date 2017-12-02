@@ -16,10 +16,10 @@
             var l = Math.Sqrt(1 * 1 + 2 * 2 + 3 * 3);
             var actuals = new[]
             {
-                new UnitVector3D(1/l, 2/l, 3/l),
+                new UnitVector3D(1 / l, 2 / l, 3 / l),
                 new UnitVector3D(1, 2, 3), // Ctor normalizes
-                new UnitVector3D(new[] {1, 2, 3.0}),
-                new UnitVector3D(new[] {1/l, 2/l, 3.0/l}),
+                new UnitVector3D(new[] { 1, 2, 3.0 }),
+                new UnitVector3D(new[] { 1 / l, 2 / l, 3.0 / l }),
             };
             foreach (var actual in actuals)
             {
@@ -27,6 +27,7 @@
                 Assert.AreEqual(2 / l, actual.Y, 1e-6);
                 Assert.AreEqual(3 / l, actual.Z, 1e-6);
             }
+
             Assert.Throws<ArgumentException>(() => new UnitVector3D(new[] { 1.0, 2, 3, 4 }));
         }
 

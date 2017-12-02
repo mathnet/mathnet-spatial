@@ -55,9 +55,11 @@
                     {
                         element += m1.Matrix[i, k] * m2.Matrix[k, j];
                     }
+
                     result.Matrix[i, j] = element;
                 }
             }
+
             return result;
         }
 
@@ -98,7 +100,6 @@
         //    return VectorMultiply(_point);
         //}
 
-
         //Create a translation matrix
         public static Matrix3DHomogeneous CreateTraslation(double dx, double dy, double dz)
         {
@@ -108,7 +109,6 @@
             result.Matrix[2, 3] = dz;
             return result;
         }
-
 
         // Create a scaling matrix
         public static Matrix3DHomogeneous CreateScale(double sx, double sy, double sz)
@@ -125,7 +125,7 @@
         {
             Matrix3DHomogeneous result = new Matrix3DHomogeneous();
             double sinAngle = Math.Sin(angle.Radians);
-            double cosAngle = Math.Cos(angle.Radians);           
+            double cosAngle = Math.Cos(angle.Radians);
             result.Matrix[1, 1] = cosAngle;
             result.Matrix[1, 2] = -sinAngle;
             result.Matrix[2, 1] = sinAngle;
@@ -179,7 +179,6 @@
             Matrix3DHomogeneous result = CreateScale(-1, 1, 1);
             return result;
         }
-
 
         // Front view projection matrix
         public static Matrix3DHomogeneous FrontView()
@@ -243,7 +242,7 @@
         public static Matrix3DHomogeneous Euler(Angle alpha, Angle beta, Angle gamma)
         {
             Matrix3DHomogeneous result = new Matrix3DHomogeneous();
-            
+
             double sinAlpha = Math.Sin(alpha.Radians);
             double cosAlpha = Math.Cos(alpha.Radians);
             double sinBeta = Math.Sin(beta.Radians);
@@ -300,9 +299,9 @@
                 //Point3DHomogeneous perspective = Point3DHomogeneous.Perspective(1 / oneOverd);
                 //result = perspective * rotate;
             }
+
             return result;
         }
-
 
     }
 }

@@ -28,7 +28,7 @@
         /// Using public fields cos: http://blogs.msdn.com/b/ricom/archive/2006/08/31/performance-quiz-11-ten-questions-on-value-based-programming.aspx
         /// </summary>
         public readonly double W;
-        
+
         public Point3DHomogeneous()
         {
         }
@@ -143,6 +143,7 @@
             {
                 return new Vector3D(this.X / this.W, this.X / this.W, this.X / this.W);
             }
+
             return Vector3D.NaN;
         }
 

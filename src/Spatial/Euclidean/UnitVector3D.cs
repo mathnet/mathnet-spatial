@@ -35,15 +35,15 @@ namespace MathNet.Spatial.Euclidean
 
         public UnitVector3D(double x, double y, double z)
         {
-            var l = Math.Sqrt((x*x) + (y*y) + (z*z));
+            var l = Math.Sqrt((x * x) + (y * y) + (z * z));
             if (l < float.Epsilon)
             {
                 throw new ArgumentException("l < float.Epsilon");
             }
 
-            this.X = x/l;
-            this.Y = y/l;
-            this.Z = z/l;
+            this.X = x / l;
+            this.Y = y / l;
+            this.Z = z / l;
         }
 
         public UnitVector3D(IEnumerable<double> data)
@@ -120,13 +120,13 @@ namespace MathNet.Spatial.Euclidean
         [Obsolete("Not sure this is nice")]
         public static Vector<double> operator *(Matrix<double> left, UnitVector3D right)
         {
-            return left*right.ToVector();
+            return left * right.ToVector();
         }
 
         [Obsolete("Not sure this is nice")]
         public static Vector<double> operator *(UnitVector3D left, Matrix<double> right)
         {
-            return left.ToVector()*right;
+            return left.ToVector() * right;
         }
 
         public static double operator *(UnitVector3D left, UnitVector3D right)
@@ -205,8 +205,8 @@ namespace MathNet.Spatial.Euclidean
             unchecked
             {
                 var hashCode = this.X.GetHashCode();
-                hashCode = (hashCode*397) ^ this.Y.GetHashCode();
-                hashCode = (hashCode*397) ^ this.Z.GetHashCode();
+                hashCode = (hashCode * 397) ^ this.Y.GetHashCode();
+                hashCode = (hashCode * 397) ^ this.Z.GetHashCode();
                 return hashCode;
             }
         }
@@ -315,12 +315,12 @@ namespace MathNet.Spatial.Euclidean
 
         public static Vector3D operator -(UnitVector3D v)
         {
-            return new Vector3D(-1*v.X, -1*v.Y, -1*v.Z);
+            return new Vector3D(-1 * v.X, -1 * v.Y, -1 * v.Z);
         }
 
         public static Vector3D operator *(double d, UnitVector3D v)
         {
-            return new Vector3D(d*v.X, d*v.Y, d*v.Z);
+            return new Vector3D(d * v.X, d * v.Y, d * v.Z);
         }
 
         // Commented out because the d * v reads nicer than v *d
@@ -331,7 +331,7 @@ namespace MathNet.Spatial.Euclidean
 
         public static Vector3D operator /(UnitVector3D v, double d)
         {
-            return new Vector3D(v.X/d, v.Y/d, v.Z/d);
+            return new Vector3D(v.X / d, v.Y / d, v.Z / d);
         }
 
         ////public static explicit operator UnitVector3D(System.Windows.Media.Media3D.Vector3D v)
@@ -346,7 +346,7 @@ namespace MathNet.Spatial.Euclidean
 
         public Vector3D ScaleBy(double scaleFactor)
         {
-            return scaleFactor*this;
+            return scaleFactor * this;
         }
 
         [Pure]
@@ -358,7 +358,7 @@ namespace MathNet.Spatial.Euclidean
         public Vector3D ProjectOn(UnitVector3D uv)
         {
             double pd = DotProduct(uv);
-            return pd*this;
+            return pd * this;
         }
 
         /// <summary>
@@ -385,7 +385,7 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public bool IsParallelTo(UnitVector3D othervector, double tolerance = 1e-10)
         {
-            // This is the master method for all Vector3D and UnitVector3D IsParallelTo comparisons.  Everything else 
+            // This is the master method for all Vector3D and UnitVector3D IsParallelTo comparisons.  Everything else
             // ends up here sooner or later.
             var dp = Math.Abs(this.DotProduct(othervector));
             return Math.Abs(1 - dp) <= tolerance;
@@ -400,7 +400,7 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public bool IsParallelTo(UnitVector3D othervector, Angle angleTolerance)
         {
-            // Compute the angle between these vectors 
+            // Compute the angle between these vectors
             var angle = this.AngleTo(othervector);
 
             // Compute the 180° opposite of the angle
@@ -439,19 +439,19 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public UnitVector3D Negate()
         {
-            return new UnitVector3D(-1*this.X, -1*this.Y, -1*this.Z);
+            return new UnitVector3D(-1 * this.X, -1 * this.Y, -1 * this.Z);
         }
 
         [Pure]
         public double DotProduct(Vector3D v)
         {
-            return (this.X*v.X) + (this.Y*v.Y) + (this.Z*v.Z);
+            return (this.X * v.X) + (this.Y * v.Y) + (this.Z * v.Z);
         }
 
         [Pure]
         public double DotProduct(UnitVector3D v)
         {
-            var dp = (this.X*v.X) + (this.Y*v.Y) + (this.Z*v.Z);
+            var dp = (this.X * v.X) + (this.Y * v.Y) + (this.Z * v.Z);
             return Math.Max(-1, Math.Min(dp, 1));
         }
 
@@ -469,18 +469,18 @@ namespace MathNet.Spatial.Euclidean
 
         public UnitVector3D CrossProduct(UnitVector3D inVector3D)
         {
-            var x = (this.Y*inVector3D.Z) - (this.Z*inVector3D.Y);
-            var y = (this.Z*inVector3D.X) - (this.X*inVector3D.Z);
-            var z = (this.X*inVector3D.Y) - (this.Y*inVector3D.X);
+            var x = (this.Y * inVector3D.Z) - (this.Z * inVector3D.Y);
+            var y = (this.Z * inVector3D.X) - (this.X * inVector3D.Z);
+            var z = (this.X * inVector3D.Y) - (this.Y * inVector3D.X);
             var v = new UnitVector3D(x, y, z);
             return v;
         }
 
         public Vector3D CrossProduct(Vector3D inVector3D)
         {
-            var x = (this.Y*inVector3D.Z) - (this.Z*inVector3D.Y);
-            var y = (this.Z*inVector3D.X) - (this.X*inVector3D.Z);
-            var z = (this.X*inVector3D.Y) - (this.Y*inVector3D.X);
+            var x = (this.Y * inVector3D.Z) - (this.Z * inVector3D.Y);
+            var y = (this.Z * inVector3D.X) - (this.X * inVector3D.Z);
+            var z = (this.X * inVector3D.Y) - (this.Y * inVector3D.X);
             var v = new Vector3D(x, y, z);
             return v;
         }
@@ -488,10 +488,10 @@ namespace MathNet.Spatial.Euclidean
         public Matrix<double> GetUnitTensorProduct()
         {
             // unitTensorProduct:matrix([ux^2,ux*uy,ux*uz],[ux*uy,uy^2,uy*uz],[ux*uz,uy*uz,uz^2]),
-            double xy = X*Y;
-            double xz = X*Z;
-            double yz = Y*Z;
-            return Matrix<double>.Build.Dense(3, 3, new[] { X*X, xy, xz, xy, Y*Y, yz, xz, yz, Z*Z });
+            double xy = X * Y;
+            double xz = X * Z;
+            double yz = Y * Z;
+            return Matrix<double>.Build.Dense(3, 3, new[] { X * X, xy, xz, xy, Y * Y, yz, xz, yz, Z * Z });
         }
 
         /// <summary>
@@ -538,7 +538,7 @@ namespace MathNet.Spatial.Euclidean
             var angle = Math.Acos(dp);
             var cpv = pfv.CrossProduct(ptv);
             var sign = cpv.DotProduct(rp.Normal);
-            var signedAngle = sign*angle;
+            var signedAngle = sign * angle;
             return new Angle(signedAngle, AngleUnit.Radians);
         }
 

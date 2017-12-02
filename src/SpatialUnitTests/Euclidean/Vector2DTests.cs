@@ -40,6 +40,7 @@
                 Assert.AreEqual(1, p.X);
                 Assert.AreEqual(2, p.Y);
             }
+
             Assert.Throws<ArgumentException>(() => new Vector2D(new[] { 1, 2, 3.0 }));
             Assert.Throws<ArgumentException>(() => new Vector2D(DenseVector.OfArray(new[] { 1, 2, 3.0 })));
         }
@@ -312,12 +313,11 @@
         {
             const string Xml = @"<Vector2D X=""1"" Y=""2"" />";
             const string ElementXml = @"<Vector2D><X>1</X><Y>2</Y></Vector2D>";
-            var v = new Vector2D(1,2);
+            var v = new Vector2D(1, 2);
 
             AssertXml.XmlRoundTrips(v, Xml, (e, a) => AssertGeometry.AreEqual(e, a));
 
             var serializer = new XmlSerializer(typeof(Vector2D));
-
 
             var actuals = new[]
                           {
@@ -379,12 +379,11 @@
             Assert.IsFalse((new Vector2D()).Equals(null));
         }
 
-
         [TestCase("1,0", "0,1", "90°")]
         [TestCase("0,1", "1,0", "90°")]
         [TestCase("-0.99985, 0.01745", "-1, 0", "1°")]
         [TestCase("-0.99985, -0.01745", "-1, 0", "1°")]
-        [TestCase("0.99985, 0.01745", "1, 0","1°")]
+        [TestCase("0.99985, 0.01745", "1, 0", "1°")]
         [TestCase("0.99985, -0.01745", "1, 0", "1°")]
         [TestCase("-0.99985, -0.01745", "1, 0", "179°")]
         [TestCase("-0.99985, 0.01745", "1, 0", "179°")]
@@ -431,7 +430,6 @@
 
             AssertGeometry.AreEqual(ex, v1.ProjectOn(v2), 1e-3);
         }
-
 
     }
 }

@@ -122,7 +122,7 @@ namespace MathNet.Spatial.Units
         /// Indicates whether a specified <see cref="T:MathNet.Spatial.Units.Angle"/> is less than another specified <see cref="T:MathNet.Spatial.Units.Angle"/>.
         /// </summary>
         /// <returns>
-        /// true if the value of <paramref name="left"/> is less than the value of <paramref name="right"/>; otherwise, false. 
+        /// true if the value of <paramref name="left"/> is less than the value of <paramref name="right"/>; otherwise, false.
         /// </returns>
         /// <param name="left">An <see cref="T:MathNet.Spatial.Units.Angle"/>.</param>
         /// <param name="right">An <see cref="T:MathNet.Spatial.Units.Angle"/>.</param>
@@ -135,7 +135,7 @@ namespace MathNet.Spatial.Units
         /// Indicates whether a specified <see cref="T:MathNet.Spatial.Units.Angle"/> is greater than another specified <see cref="T:MathNet.Spatial.Units.Angle"/>.
         /// </summary>
         /// <returns>
-        /// true if the value of <paramref name="left"/> is greater than the value of <paramref name="right"/>; otherwise, false. 
+        /// true if the value of <paramref name="left"/> is greater than the value of <paramref name="right"/>; otherwise, false.
         /// </returns>
         /// <param name="left">An <see cref="T:MathNet.Spatial.Units.Angle"/>.</param>
         /// <param name="right">An <see cref="T:MathNet.Spatial.Units.Angle"/>.</param>
@@ -238,7 +238,7 @@ namespace MathNet.Spatial.Units
         /// <param name="angle">A <see cref="T:MathNet.Spatial.Units.Angle"/></param>
         public static Angle operator -(Angle angle)
         {
-            return new Angle(-1*angle.Radians);
+            return new Angle(-1 * angle.Radians);
         }
 
         /// <summary>
@@ -306,23 +306,23 @@ namespace MathNet.Spatial.Units
         /// </summary>
         /// <returns>
         /// A signed number indicating the relative values of this instance and <paramref name="value"/>.
-        /// 
+        ///
         ///                     Value
-        /// 
+        ///
         ///                     Description
-        /// 
+        ///
         ///                     A negative integer
-        /// 
+        ///
         ///                     This instance is smaller than <paramref name="value"/>.
-        /// 
+        ///
         ///                     Zero
-        /// 
+        ///
         ///                     This instance is equal to <paramref name="value"/>.
-        /// 
+        ///
         ///                     A positive integer
-        /// 
+        ///
         ///                     This instance is larger than <paramref name="value"/>.
-        /// 
+        ///
         /// </returns>
         /// <param name="value">A <see cref="T:MathNet.Spatial.Units.Angle"/> object to compare to this instance.</param>
         public int CompareTo(Angle value)
@@ -379,13 +379,13 @@ namespace MathNet.Spatial.Units
         }
 
         /// <summary>
-        /// This method is reserved and should not be used. When implementing the IXmlSerializable interface, 
-        /// you should return null (Nothing in Visual Basic) from this method, and instead, 
+        /// This method is reserved and should not be used. When implementing the IXmlSerializable interface,
+        /// you should return null (Nothing in Visual Basic) from this method, and instead,
         /// if specifying a custom schema is required, apply the <see cref="T:System.Xml.Serialization.XmlSchemaProviderAttribute"/> to the class.
         /// </summary>
         /// <returns>
         /// An <see cref="T:System.Xml.Schema.XmlSchema"/> that describes the XML representation of the object that is produced by the
-        ///  <see cref="M:System.Xml.Serialization.IXmlSerializable.WriteXml(System.Xml.XmlWriter)"/> 
+        ///  <see cref="M:System.Xml.Serialization.IXmlSerializable.WriteXml(System.Xml.XmlWriter)"/>
         /// method and consumed by the <see cref="M:System.Xml.Serialization.IXmlSerializable.ReadXml(System.Xml.XmlReader)"/> method.
         /// </returns>
         public XmlSchema GetSchema()

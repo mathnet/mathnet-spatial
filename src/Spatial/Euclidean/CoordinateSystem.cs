@@ -124,7 +124,7 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Creates a coordinate system that rotates 
+        /// Creates a coordinate system that rotates
         /// </summary>
         /// <param name="a">Angle to rotate</param>
         /// <param name="unit">The unit of the angle</param>
@@ -136,7 +136,7 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Creates a coordinate system that rotates 
+        /// Creates a coordinate system that rotates
         /// </summary>
         /// <param name="a">Angle to rotate</param>
         /// <param name="unit">The unit of the angle</param>
@@ -148,7 +148,7 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Creates a coordinate system that rotates 
+        /// Creates a coordinate system that rotates
         /// </summary>
         /// <param name="angle">Angle to rotate</param>
         /// <param name="v">Vector to rotate about</param>

@@ -8,7 +8,7 @@
     using MathNet.Spatial.Units;
 
     /// <summary>
-    /// Class to represent a closed polygon. If the 
+    /// Class to represent a closed polygon. If the
     /// </summary>
     public class Polygon2D : IEnumerable<Point2D>
     {
@@ -52,7 +52,7 @@
         }
 
         /// <summary>
-        /// Determine whether or not a point is inside a polygon using the intersection counting 
+        /// Determine whether or not a point is inside a polygon using the intersection counting
         /// method.  Return true if the point is contained, false if it is not. Points which lie
         /// on the edge are not counted as inside the polygon.
         /// </summary>
@@ -70,6 +70,7 @@
                     (p.X < (poly[j].X - poly[i].X) * (p.Y - poly[i].Y) / (poly[j].Y - poly[i].Y) + poly[i].X))
                     c = !c;
             }
+
             return c;
         }
 
@@ -79,8 +80,8 @@
         }
 
         /// <summary>
-        /// Using the recursive QuickHull algorithm, take an IEnumerable of Point2Ds and compute the 
-        /// two dimensional convex hull, returning it as a Polygon2D object.  
+        /// Using the recursive QuickHull algorithm, take an IEnumerable of Point2Ds and compute the
+        /// two dimensional convex hull, returning it as a Polygon2D object.
         /// </summary>
         /// <param name="pointList"></param>
         /// <param name="clockWise">
@@ -90,7 +91,7 @@
         /// <returns></returns>
         public static Polygon2D GetConvexHullFromPoints(IEnumerable<Point2D> pointList, bool clockWise = true)
         {
-            // Use the Quickhull algorithm to compute the convex hull of the given points, 
+            // Use the Quickhull algorithm to compute the convex hull of the given points,
             // making the assumption that the points were delivered in no particular order.
             var points = new List<Point2D>(pointList);
 

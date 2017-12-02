@@ -162,6 +162,7 @@
             {
                 return new Vector3D(this.X / this.W, this.X / this.W, this.X / this.W);
             }
+
             return Vector3D.NaN;
         }
     }

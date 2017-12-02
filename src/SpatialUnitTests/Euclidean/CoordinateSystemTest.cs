@@ -233,6 +233,7 @@
             {
                 axis = UnitVector3D.Parse(axisString);
             }
+
             CoordinateSystem cs = CoordinateSystem.RotateTo(v, vt, axis);
             var rv = cs.Transform(v);
             AssertGeometry.AreEqual(vt, rv);

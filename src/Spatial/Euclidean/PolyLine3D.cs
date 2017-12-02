@@ -26,7 +26,7 @@
         /// </summary>
         public bool IsPlanar
         {
-            get { throw new NotImplementedException();}
+            get { throw new NotImplementedException(); }
         }
 
         private List<Point3D> _points;
@@ -91,6 +91,7 @@
                     var direction = this[i].VectorTo(this[i + 1]).Normalize();
                     return this[i] + (leftover * direction);
                 }
+
                 cumulativeLength = nextLength;
                 i++;
             }
@@ -117,6 +118,7 @@
                     closest = projected;
                 }
             }
+
             return closest;
         }
 

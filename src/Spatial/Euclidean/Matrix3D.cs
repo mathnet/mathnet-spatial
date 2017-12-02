@@ -41,7 +41,7 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Sets to the matrix of rotation that would align the 'from' vector with the 'to' vector. 
+        /// Sets to the matrix of rotation that would align the 'from' vector with the 'to' vector.
         /// The optional Axis argument may be used when the two vectors are parallel and in opposite directions to specify a specific solution, but is otherwise ignored.
         /// </summary>
         /// <param name="fromVector">Input Vector object to align from.</param>
@@ -54,9 +54,9 @@ namespace MathNet.Spatial.Euclidean
         {
             return RotationTo(fromVector.Normalize(), toVector.Normalize(), axis);
         }
-        
+
         /// <summary>
-        /// Sets to the matrix of rotation that would align the 'from' vector with the 'to' vector. 
+        /// Sets to the matrix of rotation that would align the 'from' vector with the 'to' vector.
         /// The optional Axis argument may be used when the two vectors are parallel and in opposite directions to specify a specific solution, but is otherwise ignored.
         /// </summary>
         /// <param name="fromVector">Input Vector object to align from.</param>
@@ -86,7 +86,7 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="aboutVector"></param>
         /// <param name="angle">Angle in degrees</param>

@@ -5,7 +5,7 @@
     using MathNet.Spatial.Units;
 
     /// <summary>
-    /// A means of representing spatial orientation of any reference frame. 
+    /// A means of representing spatial orientation of any reference frame.
     /// More information can be found https://en.wikipedia.org/wiki/Euler_angles
     /// </summary>
     public struct EulerAngles : IEquatable<EulerAngles>
@@ -19,7 +19,7 @@
         /// </summary>
         public readonly Angle Beta; // theta
         /// <summary>
-        /// Gamma (or psi) is the rotation around the Z axis 
+        /// Gamma (or psi) is the rotation around the Z axis
         /// </summary>
         public readonly Angle Gamma; // psi
 

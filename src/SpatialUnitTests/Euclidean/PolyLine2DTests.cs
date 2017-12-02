@@ -44,7 +44,6 @@
             Assert.AreEqual(checkElement, testElement.GetPointAtFractionAlongCurve(fraction));
         }
 
-
         [TestCase("0,-1.5;0,1;1,1", 2.0, "1,1")]
         [TestCase("0,-1.5;0,1;1,1", -5,  "0,-1.5")]
         public void GetPointAtFractionAlongCurveThrowsArgumentException(string points, double fraction, string expected)
@@ -73,8 +72,6 @@
 
             Assert.AreEqual(expected, testCurve.ClosestPointTo(test));
         }
-
-
 
     }
 }

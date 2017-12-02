@@ -12,6 +12,7 @@ namespace MathNet.Spatial.UnitTests
             Assert.AreEqual(dummy.Name, roundTrip.Name);
             Assert.AreEqual(dummy.Age, roundTrip.Age);
         }
+
         [Test]
         public void DataContractRoundTripTest()
         {

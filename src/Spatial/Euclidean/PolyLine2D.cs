@@ -7,7 +7,7 @@
     using System.Linq;
 
     /// <summary>
-    /// The PolyLine2D class represents a 2D curve in space made up of line segments joined end-to-end, and is 
+    /// The PolyLine2D class represents a 2D curve in space made up of line segments joined end-to-end, and is
     /// stored as a sequential list of 2D points.
     /// </summary>
     public class PolyLine2D : IEnumerable<Point2D>
@@ -102,7 +102,7 @@
         /// <summary>
         /// Reduce the complexity of a manifold of points represented as an IEnumerable of Point2D objects.
         /// This algorithm goes through each point in the manifold and computes the error that would be introduced
-        /// from the original if that point were removed.  Then it removes nonadjacent points to produce a 
+        /// from the original if that point were removed.  Then it removes nonadjacent points to produce a
         /// reduced size manifold.
         /// </summary>
         /// <param name="points"></param>
@@ -113,7 +113,7 @@
             var manifold = points.ToList();
             var errorByIndex = new double[manifold.Count];
 
-            // At this point we will loop through the list of points (excluding the first and the last) and 
+            // At this point we will loop through the list of points (excluding the first and the last) and
             // examine every adjacent triplet.  The middle point is tested against the segment created by
             // the two end points, and the error that would result in its deletion is computed as the length
             // of the point's projection onto the segment.
@@ -146,6 +146,7 @@
                         thinnedPoints.Add(manifold[i]);
                 }
             }
+
             thinnedPoints.Add(manifold.Last());
 
             return thinnedPoints;
@@ -198,6 +199,7 @@
                     closest = projected;
                 }
             }
+
             return closest;
         }
 

@@ -17,15 +17,15 @@
         public readonly double D;
 
         public Plane(double a, double b, double c, double d)
-            : this(new UnitVector3D(a, b, c), -1*d)
+            : this(new UnitVector3D(a, b, c), -1 * d)
         {
         }
 
         public Plane(UnitVector3D normal, double offset = 0)
         {
             this.Normal = normal;
-            this.RootPoint = (offset*normal).ToPoint3D();
-            this.D = -1*offset;
+            this.RootPoint = (offset * normal).ToPoint3D();
+            this.D = -1 * offset;
         }
 
         public Plane(UnitVector3D normal, Point3D rootPoint)
@@ -52,6 +52,7 @@
             {
                 throw new ArgumentException("Must use three different points");
             }
+
             Vector3D v1 = new Vector3D(p2.X - p1.X, p2.Y - p1.Y, p2.Z - p1.Z);
             Vector3D v2 = new Vector3D(p3.X - p1.X, p3.Y - p1.Y, p3.Z - p1.Z);
             Vector3D cross = v1.CrossProduct(v2);
@@ -60,6 +61,7 @@
             {
                 throw new ArgumentException("The 3 points should not be on the same line");
             }
+
             this.RootPoint = p1;
             this.Normal = cross.Normalize();
             this.D = -this.RootPoint.ToVector3D().DotProduct(this.Normal);
@@ -136,7 +138,7 @@
         {
             double dotProduct = this.Normal.DotProduct(p.ToVector3D());
             var projectiononNormal = projectionDirection == null ? this.Normal : projectionDirection.Value;
-            var projectionVector = (dotProduct + this.D)*projectiononNormal;
+            var projectionVector = (dotProduct + this.D) * projectiononNormal;
             return p - projectionVector;
         }
 
@@ -195,8 +197,8 @@
             }
 
             var y = new DenseMatrix(2, 1);
-            y[0, 0] = -1*this.D;
-            y[1, 0] = -1*intersectingPlane.D;
+            y[0, 0] = -1 * this.D;
+            y[1, 0] = -1 * intersectingPlane.D;
 
             Matrix<double> pointOnIntersectionLine = svd.Solve(y);
             var throughPoint = new Point3D(pointOnIntersectionLine.Column(0));
@@ -227,6 +229,7 @@
                     return null;
                 }
             }
+
             var d = SignedDistanceTo(line.StartPoint);
             var u = line.StartPoint.VectorTo(line.EndPoint);
             var t = -1 * d / u.DotProduct(this.Normal);
@@ -234,6 +237,7 @@
             {
                 return null;
             }
+
             return line.StartPoint + (t * u);
         }
 
@@ -246,15 +250,15 @@
         public Point3D IntersectionWith(Ray3D ray, double tolerance = float.Epsilon)
         {
             var d = SignedDistanceTo(ray.ThroughPoint);
-            var t = -1*d/ray.Direction.DotProduct(this.Normal);
-            return ray.ThroughPoint + (t*ray.Direction);
+            var t = -1 * d / ray.Direction.DotProduct(this.Normal);
+            return ray.ThroughPoint + (t * ray.Direction);
         }
 
         public Point3D MirrorAbout(Point3D p)
         {
             Point3D p2 = Project(p);
             double d = SignedDistanceTo(p);
-            return p2 - (1*d*this.Normal);
+            return p2 - (1 * d * this.Normal);
         }
 
         public Plane Rotate(UnitVector3D aboutVector, Angle angle)
@@ -306,9 +310,9 @@
             unchecked
             {
                 int result = this.A.GetHashCode();
-                result = (result*397) ^ this.C.GetHashCode();
-                result = (result*397) ^ this.B.GetHashCode();
-                result = (result*397) ^ this.D.GetHashCode();
+                result = (result * 397) ^ this.C.GetHashCode();
+                result = (result * 397) ^ this.B.GetHashCode();
+                result = (result * 397) ^ this.D.GetHashCode();
                 return result;
             }
         }

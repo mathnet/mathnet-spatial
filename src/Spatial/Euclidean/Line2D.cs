@@ -5,8 +5,8 @@
     using MathNet.Spatial.Units;
 
     /// <summary>
-    /// This structure represents a line between two points in 2-space.  It allows for operations such as 
-    /// computing the length, direction, projections to, compairisons, and shifting by a vector.  
+    /// This structure represents a line between two points in 2-space.  It allows for operations such as
+    /// computing the length, direction, projections to, compairisons, and shifting by a vector.
     /// </summary>
     public struct Line2D : IEquatable<Line2D>
     {
@@ -50,7 +50,7 @@
         }
 
         /// <summary>
-        /// Constructor for the Line2D, throws an error if the startpoint is equal to the 
+        /// Constructor for the Line2D, throws an error if the startpoint is equal to the
         /// endpoint.
         /// </summary>
         /// <param name="startPoint">the starting point of the line</param>
@@ -118,7 +118,7 @@
 
         /// <summary>
         /// Compute the intersection between two lines with parallelism considered by the double floating point precision
-        /// on the cross product of the two directions. 
+        /// on the cross product of the two directions.
         /// </summary>
         /// <param name="other">The other line to compute the intersection with</param>
         /// <returns>The point at the intersection of two lines, or null if the lines are parallel.</returns>
@@ -139,7 +139,7 @@
         }
 
         /// <summary>
-        /// Compute the intersection between two lines if the angle between them is greater than a specified 
+        /// Compute the intersection between two lines if the angle between them is greater than a specified
         /// angle tolerance.
         /// </summary>
         /// <param name="other">The other line to compute the intersection with</param>
@@ -161,7 +161,7 @@
         }
 
         /// <summary>
-        /// Checks to determine whether or not two lines are parallel to each other, using the dot product within 
+        /// Checks to determine whether or not two lines are parallel to each other, using the dot product within
         /// the double precision specified in the MathNet.Numerics package.
         /// </summary>
         /// <param name="other">The other line to check this one against</param>
@@ -182,7 +182,7 @@
             return this.Direction.IsParallelTo(other.Direction, angleTolerance);
         }
 
-        # region Operators 
+        # region Operators
 
         public static bool operator ==(Line2D left, Line2D right)
         {
@@ -208,11 +208,11 @@
         {
             return line + (-offset);
         }
-        
+
         # endregion
 
         # region Serialization and Deserialization
-        
+
         public override string ToString()
         {
             return string.Format("StartPoint: {0}, EndPoint: {1}", this.StartPoint, this.EndPoint);
@@ -222,9 +222,8 @@
         {
             return new Line2D(Point2D.Parse(startPointString), Point2D.Parse(endPointString));
         }
-        
-        # endregion
 
+        # endregion
 
         # region Equality and Hash Code
 
@@ -240,7 +239,7 @@
         }
 
         /// <summary>
-        /// Serves as a hash function for a particular type. 
+        /// Serves as a hash function for a particular type.
         /// </summary>
         /// <returns>A hash code for the current <see cref="T:System.Object"/></returns>
         public override int GetHashCode()

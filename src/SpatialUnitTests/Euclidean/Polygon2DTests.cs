@@ -9,10 +9,10 @@
     [TestFixture]
     public class Polygon2DTests
     {
-        
+
         private Polygon2D TestPolygon1()
         {
-            var points = from x in new string[] {"0,0", "0.25,0.5", "1,1", "-1,1", "0.5,-0.5"} select Point2D.Parse(x);
+            var points = from x in new string[] { "0,0", "0.25,0.5", "1,1", "-1,1", "0.5,-0.5" } select Point2D.Parse(x);
             return new Polygon2D(points);
         }
 
@@ -66,7 +66,7 @@
         {
             var testPoint = new Point2D(x, y);
             var testPoly = this.TestPolygon3();
-            
+
             Assert.AreEqual(outcome, Polygon2D.IsPointInPolygon(testPoint, testPoly));
         }
 
@@ -100,10 +100,10 @@
             var expectedPoints = (from x in expected.Split(';') select Point2D.Parse(x)).ToList();
 
             Polygon2D hullClockwise = Polygon2D.GetConvexHullFromPoints(testPoints, true);
-            
-            for(var i=0;i<hullClockwise.Count;i++)
+
+            for(var i = 0;i < hullClockwise.Count;i++)
             {
-                Assert.That(hullClockwise[i],Is.EqualTo(expectedPoints[i]));
+                Assert.That(hullClockwise[i], Is.EqualTo(expectedPoints[i]));
             }
 
             Polygon2D hullCounterClockwise = Polygon2D.GetConvexHullFromPoints(testPoints, false);

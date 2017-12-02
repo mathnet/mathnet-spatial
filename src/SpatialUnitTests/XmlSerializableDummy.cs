@@ -13,6 +13,7 @@ namespace MathNet.Spatial.UnitTests
         {
 
         }
+
         public XmlSerializableDummy(string name, int age)
         {
             Age = age;
@@ -37,6 +38,7 @@ namespace MathNet.Spatial.UnitTests
             var name = e.ReadAttributeOrElement("Name");
             XmlExt.WriteValueToReadonlyField(this, name, () => _name);
         }
+
         public void WriteXml(XmlWriter writer)
         {
             writer.WriteAttributeString("Age", Age.ToString(CultureInfo.InvariantCulture));

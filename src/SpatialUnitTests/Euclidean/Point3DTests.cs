@@ -17,7 +17,7 @@
             var actuals = new[]
             {
                 new Point3D(1, 2, 3),
-                new Point3D(new[] {1, 2, 3.0}),
+                new Point3D(new[] { 1, 2, 3.0 }),
             };
             foreach (var actual in actuals)
             {
@@ -25,6 +25,7 @@
                 Assert.AreEqual(2, actual.Y, 1e-6);
                 Assert.AreEqual(3, actual.Z, 1e-6);
             }
+
             Assert.Throws<ArgumentException>(() => new Point3D(new[] { 1.0, 2, 3, 4 }));
         }
 
