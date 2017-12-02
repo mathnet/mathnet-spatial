@@ -253,26 +253,48 @@ namespace MathNet.Spatial.Units
             return angle;
         }
 
+        /// <summary>
+        /// Returns a string representation of the Angle using the default format
+        /// </summary>
         public override string ToString()
         {
             return this.ToString((string)null, (IFormatProvider)NumberFormatInfo.CurrentInfo);
         }
 
+        /// <summary>
+        /// Returns a string representation of the Angle using the provided format
+        /// </summary>
+        /// <param name="format">a string indicating the desired format</param>
         public string ToString(string format)
         {
             return this.ToString(format, (IFormatProvider)NumberFormatInfo.CurrentInfo);
         }
 
+        /// <summary>
+        /// Returns a string representation of the Angle using the provided formatprovider
+        /// </summary>
+        /// <param name="provider">a format provider</param>
         public string ToString(IFormatProvider provider)
         {
             return this.ToString((string)null, (IFormatProvider)NumberFormatInfo.GetInstance(provider));
         }
 
+        /// <summary>
+        /// Returns a string representation of the Angle using the provided formatprovider using the specified format
+        /// </summary>
+        /// <param name="format">A string indicating the desired format</param>
+        /// <param name="formatProvider">A formatprovider</param>
         public string ToString(string format, IFormatProvider formatProvider)
         {
             return this.ToString(format, formatProvider, AngleUnit.Radians);
         }
 
+        /// <summary>
+        /// Returns a string representation of the Angle using the provided formatprovider using the specified format for a given unit
+        /// </summary>
+        /// <param name="format">A string indicating the desired format</param>
+        /// <param name="formatProvider">A formatprovider</param>
+        /// <param name="unit">Degrees or Radians</param>
         public string ToString<T>(string format, IFormatProvider formatProvider, T unit) where T : IAngleUnit
         {
             var value = UnitConverter.ConvertTo(this.Radians, unit);
@@ -280,7 +302,7 @@ namespace MathNet.Spatial.Units
         }
 
         /// <summary>
-        /// Compares this instance to a specified <see cref="T:MathNet.Spatial.Units.Angle"/> object and returns an integer that indicates whether this <see cref="instance"/> is shorter than, equal to, or longer than the <see cref="T:MathNet.Spatial.Units.Angle"/> object.
+        /// Compares this instance to a specified <see cref="T:MathNet.Spatial.Units.Angle"/> object and returns an integer that indicates whether this is shorter than, equal to, or longer than the <see cref="T:MathNet.Spatial.Units.Angle"/> object.
         /// </summary>
         /// <returns>
         /// A signed number indicating the relative values of this instance and <paramref name="value"/>.
@@ -333,6 +355,11 @@ namespace MathNet.Spatial.Units
             return Math.Abs(this.Radians - other.Radians) < tolerance;
         }
 
+        /// <summary>
+        /// Returns a value indicating if this instance is equal to another object
+        /// </summary>
+        /// <param name="obj">an object to compare</param>
+        /// <returns>True if the object is an Angle and is equal to this one</returns>
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj))
@@ -343,6 +370,9 @@ namespace MathNet.Spatial.Units
             return obj is Angle && this.Equals((Angle)obj);
         }
 
+        /// <summary>
+        /// Returns a hashcode for an Angle
+        /// </summary>
         public override int GetHashCode()
         {
             return this.Radians.GetHashCode();

@@ -237,7 +237,7 @@
 
                     yield return new TestCaseData(q2, 9.0).Returns(q2 * q2 * q2 * q2 * q2 * q2 * q2 * q2 * q2);
                     yield return new TestCaseData(q2, 3.0).Returns(q2 * q2 * q2);
-                    yield return new TestCaseData(q3, 9.0).Returns(q3 * q3 * q3 * q3 * q3 * q3 * q3 * q3 * q3); 
+                   // yield return new TestCaseData(q3, 9.0).Returns(q3 * q3 * q3 * q3 * q3 * q3 * q3 * q3 * q3); //identical to q2
 
 
                 }
