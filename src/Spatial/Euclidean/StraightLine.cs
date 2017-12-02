@@ -8,7 +8,7 @@ namespace MathNet.Spatial.Euclidean
     /// <summary>
     /// Represents a line conforming to the equation y = mx + b where m is the gradient and b is the y-intercept
     /// </summary>
-    public class StraightLine : ILine
+    public struct StraightLine : ILine
     {
         private readonly double yoffset;
         private readonly double xoffset;
@@ -26,7 +26,16 @@ namespace MathNet.Spatial.Euclidean
         public StraightLine(Point2D point, double gradient)
         {
             Gradient = gradient;
-            SetOffset(point.X, point.Y, out xoffset, out yoffset);
+            if (double.IsInfinity(Gradient))
+            {
+                yoffset = double.NaN; // special case vertical line has no y-intercept
+                xoffset = point.X;
+            }
+            else
+            {
+                yoffset = point.Y - (Gradient * point.X);
+                xoffset = double.NaN;
+            }
         }
 
         /// <summary>
@@ -42,7 +51,16 @@ namespace MathNet.Spatial.Euclidean
             }
 
             Gradient = (p2.Y - p1.Y) / (p2.X - p1.X);
-            SetOffset(p1.X, p1.Y, out xoffset, out yoffset);
+            if (double.IsInfinity(Gradient))
+            {
+                yoffset = double.NaN; // special case vertical line has no y-intercept
+                xoffset = p1.X;
+            }
+            else
+            {
+                yoffset = p1.Y - (Gradient * p1.X);
+                xoffset = double.NaN;
+            }
         }
 
         /// <summary>
@@ -69,27 +87,23 @@ namespace MathNet.Spatial.Euclidean
             }
 
             Gradient = (points[1].Y - points[0].Y) / (points[1].X - points[0].X);
-            SetOffset(points[0].X, points[0].Y, out xoffset, out yoffset);
+            if (double.IsInfinity(Gradient))
+            {
+                yoffset = double.NaN; // special case vertical line has no y-intercept
+                xoffset = points[1].X;
+            }
+            else
+            {
+                yoffset = points[1].Y - (Gradient * points[1].X);
+                xoffset = double.NaN;
+            }
+
             for (int i = 2; i < points.Length; i++)
             {
                 if (!IsThrough(points[i]))
                 {
                     throw new ArgumentException("The points provided are not collinear");
                 }
-            }
-        }
-
-        private void SetOffset(double x, double y, out double offsetx, out double offsety)
-        {
-            if (double.IsInfinity(Gradient))
-            {
-                offsety = double.NaN; // special case vertical line has no y-intercept
-                offsetx = x;
-            }
-            else
-            {
-                offsety = y - (Gradient * x);
-                offsetx = double.NaN;
             }
         }
 
@@ -117,8 +131,21 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>Returns true if lines are parallel</returns>
         public bool IsParallel(ILine otherLine)
         {
-            var secondLine = otherLine as StraightLine;
-            return secondLine?.Gradient == Gradient;
+            if (otherLine is StraightLine)
+            {
+                IsParallel((StraightLine)otherLine);
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Tests if the other line is parallel to this one
+        /// </summary>
+        /// <returns>Returns true if lines are parallel</returns>
+        public bool IsParallel(StraightLine otherLine)
+        {
+            return otherLine.Gradient == Gradient;
         }
 
         /// <summary>
@@ -240,8 +267,22 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>true if the lines have the same equation</returns>
         public bool Equals(ILine other)
         {
-            var sline = other as StraightLine;
-            return Gradient == sline?.Gradient && yoffset == sline?.yoffset;
+            if (other is StraightLine)
+            {
+                return Equals((StraightLine)other);
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Determines if two lines are equal to each other
+        /// </summary>
+        /// <param name="other">The other line</param>
+        /// <returns>true if the lines have the same equation</returns>
+        public bool Equals(StraightLine other)
+        {
+            return Gradient == other.Gradient && yoffset == other.yoffset;
         }
 
         /// <summary>

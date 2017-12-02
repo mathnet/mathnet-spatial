@@ -9,7 +9,7 @@ namespace MathNet.Spatial.Euclidean
     /// <summary>
     /// Describes a standard 2 dimentional circle
     /// </summary>
-    public class Circle2D : IEquatable<Circle2D>
+    public struct Circle2D : IEquatable<Circle2D>
     {
         /// <summary>
         /// Creates a Circle of a given radius from a center point
@@ -120,8 +120,7 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>true if the circles have the same radius and center</returns>
         public bool Equals(Circle2D other)
         {
-            var circle = other as Circle2D;
-            return Radius == circle?.Radius && Center == circle?.Center;
+            return Radius == other.Radius && Center == other.Center;
         }
 
         /// <summary>
