@@ -72,6 +72,5 @@
 
             Assert.AreEqual(expected, testCurve.ClosestPointTo(test));
         }
-
     }
 }

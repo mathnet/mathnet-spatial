@@ -6,7 +6,8 @@ namespace MathNet.Spatial.Units
     /// <summary>
     /// A degree or degree of arc typically denoted by °.  It is defined such that a full rotation is 360 degrees.
     /// </summary>
-    [Serializable, EditorBrowsable(EditorBrowsableState.Never)]
+    [Serializable]
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public struct Degrees : IAngleUnit
     {
         private const double Conv = Math.PI / 180.0;

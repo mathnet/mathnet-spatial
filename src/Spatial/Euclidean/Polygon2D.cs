@@ -68,7 +68,7 @@
             for (int i = 0, j = poly.Count - 1; i < poly.Count; j = i++)
             {
                 if (((poly[i].Y > p.Y) != (poly[j].Y > p.Y)) &&
-                    (p.X < (poly[j].X - poly[i].X) * (p.Y - poly[i].Y) / (poly[j].Y - poly[i].Y) + poly[i].X))
+                    (p.X < ((poly[j].X - poly[i].X) * (p.Y - poly[i].Y) / (poly[j].Y - poly[i].Y)) + poly[i].X))
                 {
                     c = !c;
                 }
@@ -184,7 +184,7 @@
 
             // Find the furthest point from the line
             var chord = a.VectorTo(b);
-            Point2D maxPoint = new Point2D();
+            Point2D maxPoint = default(Point2D);
             double maxDistance = double.MinValue;
 
             foreach (var point2D in workingList)

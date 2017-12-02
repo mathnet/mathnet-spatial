@@ -92,7 +92,8 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="angle">Angle in degrees</param>
         /// <param name="angleUnit"></param>
         /// <returns></returns>
-        public static Matrix<double> RotationAroundArbitraryVector<T>(UnitVector3D aboutVector, double angle, T angleUnit) where T : IAngleUnit
+        public static Matrix<double> RotationAroundArbitraryVector<T>(UnitVector3D aboutVector, double angle, T angleUnit)
+            where T : IAngleUnit
         {
             return RotationAroundArbitraryVector(aboutVector, Angle.From(angle, angleUnit));
         }

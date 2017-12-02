@@ -8,7 +8,6 @@
     [TestFixture]
     public class Line2DTests
     {
-
         [Test]
         public void Constructor()
         {
@@ -80,7 +79,7 @@
         [Test]
         public void EqualityComparisonFalseAgainstNull()
         {
-            var line = new Line2D(new Point2D(), new Point2D(1, 1) );
+            var line = new Line2D(default(Point2D), new Point2D(1, 1));
             Assert.IsFalse(line.Equals(null));
         }
 

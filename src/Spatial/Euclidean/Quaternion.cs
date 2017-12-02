@@ -15,7 +15,9 @@
     public struct Quaternion : IEquatable<Quaternion>, IFormattable
     {
         readonly double w; // real part
-        readonly double x, y, z; // imaginary part
+        readonly double x;
+        readonly double y;
+        readonly double z; // imaginary part
         /// <summary>
         /// Initializes a new instance of the Quatpow
         ///
@@ -145,9 +147,9 @@
         public EulerAngles ToEulerAngles()
         {
             return new EulerAngles(
-                Angle.FromRadians(Math.Atan2(2 * (this.w * this.x + this.y * this.z), ((this.w * this.w) + (this.z * this.z) - (this.x * this.x) - (this.y * this.y)))),
-                Angle.FromRadians(Math.Asin(2 * (this.w * this.y - this.x * this.z))),
-                Angle.FromRadians(Math.Atan2(2 * (this.w * this.z + this.x * this.y), ((this.w * this.w) + (this.x * this.x) - (this.y * this.y) - (this.z * this.z)))));
+                Angle.FromRadians(Math.Atan2(2 * ((this.w * this.x) + (this.y * this.z)), (this.w * this.w) + (this.z * this.z) - (this.x * this.x) - (this.y * this.y))),
+                Angle.FromRadians(Math.Asin(2 * ((this.w * this.y) - (this.x * this.z)))),
+                Angle.FromRadians(Math.Atan2(2 * ((this.w * this.z) + (this.x * this.y)), (this.w * this.w) + (this.x * this.x) - (this.y * this.y) - (this.z * this.z))));
         }
 
         /// <summary>
@@ -262,7 +264,6 @@
         /// </summary>
         public static Quaternion operator +(Quaternion r, Quaternion q)
         {
-
             return new Quaternion(r.w + q.w, r.x + q.x, r.y + q.y, r.z + q.z);
         }
 
@@ -339,7 +340,6 @@
         /// </summary>
         public static Quaternion operator /(Quaternion q, Quaternion r)
         {
-
             if (r == Zero)
             {
                 if (q == Zero)
@@ -351,10 +351,10 @@
             }
 
             double normSquared = r.NormSquared;
-            var t0 = (r.w * q.w + r.x * q.x + r.y * q.y + r.z * q.z) / normSquared;
-            var t1 = (r.w * q.x - r.x * q.w - r.y * q.z + r.z * q.y) / normSquared;
-            var t2 = (r.w * q.y + r.x * q.z - r.y * q.w - r.z * q.x) / normSquared;
-            var t3 = (r.w * q.z - r.x * q.y + r.y * q.x - r.z * q.w) / normSquared;
+            var t0 = ((r.w * q.w) + (r.x * q.x) + (r.y * q.y) + (r.z * q.z)) / normSquared;
+            var t1 = ((r.w * q.x) - (r.x * q.w) - (r.y * q.z) + (r.z * q.y)) / normSquared;
+            var t2 = ((r.w * q.y) + (r.x * q.z) - (r.y * q.w) - (r.z * q.x)) / normSquared;
+            var t3 = ((r.w * q.z) - (r.x * q.y) + (r.y * q.x) - (r.z * q.w)) / normSquared;
             return new Quaternion(t0, t1, t2, t3);
         }
 
@@ -527,7 +527,7 @@
             double cos = Math.Cos(vectorNorm);
             var sgn = vector == Zero ? Zero : vector / vectorNorm;
             double sin = Math.Sin(vectorNorm);
-            return real * (cos + sgn * sin);
+            return real * (cos + (sgn * sin));
         }
 
         /// <summary>
@@ -587,7 +587,7 @@
                 return x;
             }
 
-            return 2 * ChybyshevCosPoli(n - 1, x) * x - ChybyshevCosPoli(n - 2, x);
+            return (2 * ChybyshevCosPoli(n - 1, x) * x) - ChybyshevCosPoli(n - 2, x);
         }
 
         /// <summary>
@@ -605,7 +605,7 @@
                 return 2 * x;
             }
 
-            return 2 * x * ChybyshevSinPoli(n - 1, x) - ChybyshevSinPoli(n - 2, x);
+            return (2 * x * ChybyshevSinPoli(n - 1, x)) - ChybyshevSinPoli(n - 2, x);
         }
 
         /// <summary>
@@ -632,7 +632,7 @@
         public Quaternion Sqrt()
         {
             double arg = this.Arg * 0.5;
-            return this.NormalizedVector * ((Math.Sin(arg)) + (Math.Cos(arg)) * (Math.Sqrt(this.w)));
+            return this.NormalizedVector * (Math.Sin(arg) + (Math.Cos(arg) * Math.Sqrt(this.w)));
         }
 
         public bool IsNan
@@ -644,7 +644,6 @@
                     double.IsNaN(this.ImagX) ||
                     double.IsNaN(this.ImagY) ||
                     double.IsNaN(this.ImagZ);
-
             }
         }
 
@@ -665,7 +664,9 @@
         /// </summary>
         public string ToString(string format, IFormatProvider formatProvider)
         {
-            return string.Format(formatProvider, "{0}{1}{2}i{3}{4}j{5}{6}k",
+            return string.Format(
+                formatProvider,
+                "{0}{1}{2}i{3}{4}j{5}{6}k",
                 this.Real.ToString(format, formatProvider),
                 (this.ImagX < 0) ? string.Empty : "+",
                 this.ImagX.ToString(format, formatProvider),
@@ -697,7 +698,8 @@
         /// </summary>
         public bool Equals(Quaternion other)
         {
-            if (other.IsNan && this.IsNan || other.IsInfinity && this.IsInfinity)
+            if ((other.IsNan && this.IsNan) ||
+                (other.IsInfinity && this.IsInfinity))
             {
                 return true;
             }

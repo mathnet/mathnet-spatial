@@ -69,7 +69,8 @@ namespace MathNet.Spatial.Units
         /// </summary>
         /// <param name="value"></param>
         /// <param name="unit"></param>
-        public static Angle From<T>(double value, T unit) where T : IAngleUnit
+        public static Angle From<T>(double value, T unit)
+            where T : IAngleUnit
         {
             return new Angle(UnitConverter.ConvertFrom(value, unit));
         }
@@ -295,7 +296,8 @@ namespace MathNet.Spatial.Units
         /// <param name="format">A string indicating the desired format</param>
         /// <param name="formatProvider">A formatprovider</param>
         /// <param name="unit">Degrees or Radians</param>
-        public string ToString<T>(string format, IFormatProvider formatProvider, T unit) where T : IAngleUnit
+        public string ToString<T>(string format, IFormatProvider formatProvider, T unit)
+            where T : IAngleUnit
         {
             var value = UnitConverter.ConvertTo(this.Radians, unit);
             return string.Format("{0}{1}", value.ToString(format, formatProvider), unit.ShortName);
@@ -422,7 +424,7 @@ namespace MathNet.Spatial.Units
         /// <returns>An instance of  <see cref="T:MathNet.Spatial.Units.Angle"/></returns>
         public static Angle ReadFrom(XmlReader reader)
         {
-            var v = new Angle();
+            var v = default(Angle);
             v.ReadXml(reader);
             return v;
         }

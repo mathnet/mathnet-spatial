@@ -28,6 +28,5 @@
             Assert.True(c == c2);
             Assert.True(c.Equals(c2));
         }
-
     }
 }

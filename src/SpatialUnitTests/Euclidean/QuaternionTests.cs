@@ -15,7 +15,6 @@
     [TestFixture]
     public class Quaternions32Tests
     {
-
         [Test]
         public void CanConstructQuaternion()
         {
@@ -41,12 +40,12 @@
             Assert.AreEqual(2, q.ImagX);
             Assert.AreEqual(3, q.ImagY);
             Assert.AreEqual(4, q.ImagZ);
-            var norm = Math.Sqrt(1 + 2 * 2 + 3 * 3 + 4 * 4);
+            var norm = Math.Sqrt(1 + (2 * 2) + (3 * 3) + (4 * 4));
             Assert.AreEqual(norm, q.Norm);
             Assert.AreEqual(norm * norm, q.NormSquared);
             Assert.AreEqual(new Quaternion(0, 2, 3, 4), q.Vector);
             Assert.AreEqual(new Quaternion(1, 0, 0, 0), q.Scalar);
-            var norm2 = Math.Sqrt(2 * 2 + 3 * 3 + 4 * 4);
+            var norm2 = Math.Sqrt((2 * 2) + (3 * 3) + (4 * 4));
             Assert.AreEqual(new Quaternion(1 / norm, 2 / norm, 3 / norm, 4 / norm), q.Normalized);
             Assert.AreEqual(new Quaternion(0, 2 / norm2, 3 / norm2, 4 / norm2), q.NormalizedVector);
             var arg = Math.Acos(q.Real / q.Norm);
@@ -116,6 +115,7 @@
         [Test]
         public void CanEqalAndNotEqualQuaternionsAndFloatsUsingOperator()
         {
+#pragma warning disable SA1131 // Use readable conditions
             Assert.IsTrue(new Quaternion(1, 0, 0, 0) == 1);
             Assert.IsTrue(new Quaternion(2, 0, 0, 0) == 2);
             Assert.IsTrue(1 == new Quaternion(1, 0, 0, 0));
@@ -129,7 +129,7 @@
             Assert.IsTrue(new Quaternion(1, 0, 0, 1) == new Quaternion(1, 0, 0, 1));
             Assert.IsTrue(new Quaternion(1, 1, 1, 1) == new Quaternion(2, 2, 2, 2) / 2);
             Assert.IsTrue(new Quaternion(1, 1, 1, 1) != new Quaternion(0, 2, 2, 2) / 2);
-
+#pragma warning restore SA1131 // Use readable conditions
         }
 
         [TestCase(1.0, 1.0, 1.0, 1.0, new[] { MathNet.Numerics.Constants.PiOver2, 0.0, MathNet.Numerics.Constants.PiOver2 })]
@@ -168,7 +168,6 @@
 
             public static IEnumerable DivisionTests
             {
-
                 get
                 {
                     for (int i = 0; i < 10; ++i)
@@ -223,8 +222,8 @@
                     yield return new TestCaseData(q2, q1).Returns(2);
                     yield return new TestCaseData(q3, q1).Returns(q1.Norm);
                     yield return new TestCaseData(q3, q2).Returns(q2.Norm);
-                    yield return new TestCaseData(q4, q2).Returns(Math.Sqrt(8 * 8 + 8 * 8 + 8 * 8 + 1));
-                    yield return new TestCaseData(q5, q2).Returns(Math.Sqrt(1 + 2 * 2 + 3 * 3 + 5 * 5));
+                    yield return new TestCaseData(q4, q2).Returns(Math.Sqrt((8 * 8) + (8 * 8) + (8 * 8) + 1));
+                    yield return new TestCaseData(q5, q2).Returns(Math.Sqrt(1 + (2 * 2) + (3 * 3) + (5 * 5)));
                 }
             }
 
@@ -243,7 +242,6 @@
                     yield return new TestCaseData(q2, 9.0).Returns(q2 * q2 * q2 * q2 * q2 * q2 * q2 * q2 * q2);
                     yield return new TestCaseData(q2, 3.0).Returns(q2 * q2 * q2);
                    // yield return new TestCaseData(q3, 9.0).Returns(q3 * q3 * q3 * q3 * q3 * q3 * q3 * q3 * q3); //identical to q2
-
                 }
             }
 
@@ -266,7 +264,6 @@
                     yield return new TestCaseData(q3, 9).Returns(q3 * q3 * q3 * q3 * q3 * q3 * q3 * q3 * q3);
                     yield return new TestCaseData(q4, 9).Returns(q4 * q4 * q4 * q4 * q4 * q4 * q4 * q4 * q4);
                     yield return new TestCaseData(q5, 9).Returns(q5 * q5 * q5 * q5 * q5 * q5 * q5 * q5 * q5);
-
                 }
             }
 
@@ -279,8 +276,12 @@
                     var q2 = new Quaternion(1, 1, 1, 1);
                     yield return new TestCaseData(q0).Returns(new Quaternion(1, 0, 0, 0));
                     yield return new TestCaseData(q1).Returns(new Quaternion(0, 0, 0, Math.PI / 2));
-                    yield return new TestCaseData(q2).Returns(new Quaternion(Math.Log(2), 1 / Math.Sqrt(3) * Math.PI / 3,
-                        1 / Math.Sqrt(3) * Math.PI / 3, 1 / Math.Sqrt(3) * Math.PI / 3));
+                    yield return new TestCaseData(q2).Returns(
+                        new Quaternion(
+                            Math.Log(2),
+                            1 / Math.Sqrt(3) * Math.PI / 3,
+                            1 / Math.Sqrt(3) * Math.PI / 3,
+                            1 / Math.Sqrt(3) * Math.PI / 3));
                 }
             }
         }
@@ -303,37 +304,43 @@
             return new Quaternion(a, b, c, d) / new Quaternion(w, x, y, z);
         }
 
-        [Test, TestCaseSource(typeof(QuaternionCalculationTestClass), "CanNormalizeTests")]
+        [Test]
+        [TestCaseSource(typeof(QuaternionCalculationTestClass), "CanNormalizeTests")]
         public Quaternion CanNormalize(double a, double b, double c, double d)
         {
             return new Quaternion(a, b, c, d).Normalized;
         }
 
-        [Test, TestCaseSource(typeof(QuaternionCalculationTestClass), "CanInverseTests")]
+        [Test]
+        [TestCaseSource(typeof(QuaternionCalculationTestClass), "CanInverseTests")]
         public Quaternion CanInverse(double a, double b, double c, double d)
         {
             return new Quaternion(a, b, c, d).Inversed;
         }
 
-        [Test, TestCaseSource(typeof(QuaternionCalculationTestClass), "CanCalculateDistance")]
+        [Test]
+        [TestCaseSource(typeof(QuaternionCalculationTestClass), "CanCalculateDistance")]
         public double CaculateDistance(Quaternion q1, Quaternion q2)
         {
             return Quaternion.Distance(q1, q2);
         }
 
-        [Test, TestCaseSource(typeof(QuaternionCalculationTestClass), "CanCalculatePower")]
+        [Test]
+        [TestCaseSource(typeof(QuaternionCalculationTestClass), "CanCalculatePower")]
         public Quaternion CanCalculatePower(Quaternion q1, double k)
         {
             return q1.Pow(k);
         }
 
-        [Test, TestCaseSource(typeof(QuaternionCalculationTestClass), "CanCalculatePowerInt")]
+        [Test]
+        [TestCaseSource(typeof(QuaternionCalculationTestClass), "CanCalculatePowerInt")]
         public Quaternion CanCalculatePowerInt(Quaternion q1, int k)
         {
             return q1.Pow(k);
         }
 
-        [Test, TestCaseSource(typeof(QuaternionCalculationTestClass), "CanCalculatePower")]
+        [Test]
+        [TestCaseSource(typeof(QuaternionCalculationTestClass), "CanCalculatePower")]
         public Quaternion CanCalculatePowerUsingOperator(Quaternion q1, double k)
         {
             return q1 ^ k;
@@ -391,7 +398,6 @@
                 Assert.Throws<InvalidOperationException>(delegate { quat.RotateUnitQuaternion(quat180); });
                 Assert.Throws<InvalidOperationException>(delegate { quat.RotateUnitQuaternion(oneRotation); });
                 Assert.Throws<InvalidOperationException>(delegate { quat.RotateUnitQuaternion(nonRotation); });
-
             }
         }
     }

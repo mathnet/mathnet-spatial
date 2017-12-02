@@ -182,7 +182,7 @@ namespace MathNet.Spatial.Euclidean
 
         public static Point3D ReadFrom(XmlReader reader)
         {
-            var p = new Point3D();
+            var p = default(Point3D);
             p.ReadXml(reader);
             return p;
         }

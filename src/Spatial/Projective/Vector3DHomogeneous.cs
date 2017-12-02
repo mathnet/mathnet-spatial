@@ -106,7 +106,7 @@
                 return false;
             }
 
-            return (obj is Vector3DHomogeneous && this.Equals((Vector3DHomogeneous)obj));
+            return obj is Vector3DHomogeneous && this.Equals((Vector3DHomogeneous)obj);
         }
 
         public override int GetHashCode()

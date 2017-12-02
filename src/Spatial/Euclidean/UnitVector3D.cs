@@ -250,7 +250,7 @@ namespace MathNet.Spatial.Euclidean
 
         public static UnitVector3D ReadFrom(XmlReader reader)
         {
-            var v = new UnitVector3D();
+            var v = default(UnitVector3D);
             v.ReadXml(reader);
             return v;
         }
@@ -570,7 +570,8 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="about"></param>
         /// <param name="angle"></param>
         /// <returns></returns>
-        public UnitVector3D Rotate<T>(UnitVector3D about, double angle, T angleUnit) where T : IAngleUnit
+        public UnitVector3D Rotate<T>(UnitVector3D about, double angle, T angleUnit)
+            where T : IAngleUnit
         {
             return this.Rotate(about, Angle.From(angle, angleUnit));
         }

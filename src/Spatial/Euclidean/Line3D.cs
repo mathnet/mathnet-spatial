@@ -41,7 +41,7 @@
             }
 
             this.length = -1.0;
-            this.direction = new UnitVector3D();
+            this.direction = default(UnitVector3D);
         }
 
         /// <summary>
@@ -121,7 +121,7 @@
         /// <returns></returns>
         public Point3D ClosestPointTo(Point3D p, bool mustBeOnSegment)
         {
-            Vector3D v = (p - this.StartPoint);
+            Vector3D v = p - this.StartPoint;
             double dotProduct = v.DotProduct(this.Direction);
             if (mustBeOnSegment)
             {
@@ -210,10 +210,10 @@
             var d = u.DotProduct(w0);
             var e = v.DotProduct(w0);
 
-            double sc = (b * e - c * d) / (a * c - b * b);
-            double tc = (a * e - b * d) / (a * c - b * b);
+            double sc = ((b * e) - (c * d)) / ((a * c) - (b * b));
+            double tc = ((a * e) - (b * d)) / ((a * c) - (b * b));
 
-            return Tuple.Create(P0 + sc * u, Q0 + tc * v);
+            return Tuple.Create(P0 + (sc * u), Q0 + (tc * v));
         }
 
         /// <summary>

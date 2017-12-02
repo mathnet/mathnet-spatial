@@ -250,15 +250,15 @@
             double sinGamma = Math.Sin(gamma.Radians);
             double cosGamma = Math.Cos(gamma.Radians);
 
-            result.Matrix[0, 0] = cosAlpha * cosGamma - sinAlpha * sinBeta * sinGamma;
+            result.Matrix[0, 0] = (cosAlpha * cosGamma) - (sinAlpha * sinBeta * sinGamma);
             result.Matrix[0, 1] = -sinBeta * sinGamma;
-            result.Matrix[0, 2] = sinAlpha * cosGamma - cosAlpha * cosBeta * sinGamma;
+            result.Matrix[0, 2] = (sinAlpha * cosGamma) - (cosAlpha * cosBeta * sinGamma);
             result.Matrix[1, 0] = -sinAlpha * sinBeta;
             result.Matrix[1, 1] = cosBeta;
             result.Matrix[1, 2] = cosAlpha * sinBeta;
-            result.Matrix[2, 0] = -cosAlpha * sinGamma - sinAlpha * cosBeta * cosGamma;
+            result.Matrix[2, 0] = (-cosAlpha * sinGamma) - (sinAlpha * cosBeta * cosGamma);
             result.Matrix[2, 1] = -sinBeta * cosGamma;
-            result.Matrix[2, 2] = cosAlpha * cosBeta * cosGamma - sinAlpha * sinBeta;
+            result.Matrix[2, 2] = (cosAlpha * cosBeta * cosGamma) - (sinAlpha * sinBeta);
             return result;
         }
 
@@ -314,6 +314,5 @@
 
             return result;
         }
-
     }
 }

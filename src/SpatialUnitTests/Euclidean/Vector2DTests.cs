@@ -350,7 +350,7 @@
         [Test]
         public void PolarConstructorThrowsArgumentException()
         {
-            Assert.Throws<ArgumentException>(() => { new Vector2D(-1.0, new Angle(0, new Radians())); });
+            Assert.Throws<ArgumentException>(() => { new Vector2D(-1.0, new Angle(0, default(Radians))); });
         }
 
         [Test]
@@ -376,7 +376,7 @@
         [Test]
         public void EqualityComparerReturnsFalseOnNullReference()
         {
-            Assert.IsFalse((new Vector2D()).Equals(null));
+            Assert.IsFalse(default(Vector2D).Equals(null));
         }
 
         [TestCase("1,0", "0,1", "90°")]
@@ -430,6 +430,5 @@
 
             AssertGeometry.AreEqual(ex, v1.ProjectOn(v2), 1e-3);
         }
-
     }
 }

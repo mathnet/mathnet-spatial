@@ -79,7 +79,7 @@
 
         public static Vector2D ReadFrom(XmlReader reader)
         {
-            var v = new Vector2D();
+            var v = default(Vector2D);
             v.ReadXml(reader);
             return v;
         }
@@ -307,7 +307,8 @@
             return new Angle(Math.Acos(@this.DotProduct(other)), AngleUnit.Radians);
         }
 
-        public Vector2D Rotate<T>(double angle, T angleUnit) where T : IAngleUnit
+        public Vector2D Rotate<T>(double angle, T angleUnit)
+            where T : IAngleUnit
         {
             return this.Rotate(Angle.From(angle, angleUnit));
         }
@@ -341,7 +342,7 @@
         {
             // Though the cross product is undefined in 2D space, this is a useful mathematical operation to
             // determine angular direction and to compute the area of 2D shapes
-            return this.X * other.Y - this.Y * other.X;
+            return (this.X * other.Y) - (this.Y * other.X);
         }
 
         /// <summary>
@@ -351,7 +352,7 @@
         /// <returns></returns>
         public Vector2D ProjectOn(Vector2D other)
         {
-            return other * (this.DotProduct(other) / (other.DotProduct(other)));
+            return other * (this.DotProduct(other) / other.DotProduct(other));
         }
 
         public Vector2D Normalize()

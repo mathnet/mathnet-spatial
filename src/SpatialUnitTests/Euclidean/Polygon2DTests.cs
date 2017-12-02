@@ -8,7 +8,6 @@
     [TestFixture]
     public class Polygon2DTests
     {
-
         private Polygon2D TestPolygon1()
         {
             var points = from x in new string[] { "0,0", "0.25,0.5", "1,1", "-1,1", "0.5,-0.5" } select Point2D.Parse(x);
@@ -123,8 +122,6 @@
             var thinned = poly.ReduceComplexity(0.00001);
 
             CollectionAssert.AreEqual(expected, thinned);
-
         }
-
     }
 }

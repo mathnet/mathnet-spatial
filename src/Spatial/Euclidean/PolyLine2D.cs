@@ -200,7 +200,7 @@
         public Point2D ClosestPointTo(Point2D p)
         {
             double minError = double.MaxValue;
-            Point2D closest = new Point2D();
+            Point2D closest = default(Point2D);
 
             for (int i = 0; i < this.Count - 1; i++)
             {

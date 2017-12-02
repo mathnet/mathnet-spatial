@@ -17,7 +17,6 @@ namespace MathNet.Spatial.Euclidean
     [Serializable]
     public struct Point2D : IXmlSerializable, IEquatable<Point2D>, IFormattable
     {
-
         /// <summary>
         /// The x coordinate
         /// </summary>
@@ -99,7 +98,7 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>A point</returns>
         public static Point2D ReadFrom(XmlReader reader)
         {
-            var v = new Point2D();
+            var v = default(Point2D);
             v.ReadXml(reader);
             return v;
         }

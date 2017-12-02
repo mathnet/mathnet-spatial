@@ -243,7 +243,7 @@ namespace MathNet.Spatial.Euclidean
 
         public static Vector3D ReadFrom(XmlReader reader)
         {
-            var v = new Vector3D();
+            var v = default(Vector3D);
             v.ReadXml(reader);
             return v;
         }

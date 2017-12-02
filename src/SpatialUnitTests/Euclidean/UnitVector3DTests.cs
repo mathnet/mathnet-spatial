@@ -13,7 +13,7 @@
         [Test]
         public void Ctor()
         {
-            var l = Math.Sqrt(1 * 1 + 2 * 2 + 3 * 3);
+            var l = Math.Sqrt((1 * 1) + (2 * 2) + (3 * 3));
             var actuals = new[]
             {
                 new UnitVector3D(1 / l, 2 / l, 3 / l),
@@ -34,7 +34,7 @@
         [Test]
         public void ToDenseVector()
         {
-            var l = Math.Sqrt(1 * 1 + 2 * 2 + 3 * 3);
+            var l = Math.Sqrt((1 * 1) + (2 * 2) + (3 * 3));
 
             var uv = new UnitVector3D(1 / l, 2 / l, 3 / l);
             var denseVector = uv.ToVector();

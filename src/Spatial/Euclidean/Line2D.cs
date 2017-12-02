@@ -73,7 +73,7 @@
 
             // Initialize the length and direction for lazy loading
             this.length = -1.0;
-            this.direction = new Vector2D();
+            this.direction = default(Vector2D);
         }
 
         /// <summary>
@@ -144,9 +144,9 @@
             Vector2D r = this.StartPoint.VectorTo(this.EndPoint);
             Vector2D s = other.StartPoint.VectorTo(other.EndPoint);
 
-            double t = (q - p).CrossProduct(s) / (r.CrossProduct(s));
+            double t = (q - p).CrossProduct(s) / r.CrossProduct(s);
 
-            return p + t * r;
+            return p + (t * r);
         }
 
         /// <summary>
@@ -168,9 +168,9 @@
             Vector2D r = this.StartPoint.VectorTo(this.EndPoint);
             Vector2D s = other.StartPoint.VectorTo(other.EndPoint);
 
-            double t = (q - p).CrossProduct(s) / (r.CrossProduct(s));
+            double t = (q - p).CrossProduct(s) / r.CrossProduct(s);
 
-            return p + t * r;
+            return p + (t * r);
         }
 
         /// <summary>

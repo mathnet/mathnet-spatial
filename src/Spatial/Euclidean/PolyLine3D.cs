@@ -116,7 +116,7 @@
         public Point3D ClosestPointTo(Point3D p)
         {
             var minError = double.MaxValue;
-            var closest = new Point3D();
+            var closest = default(Point3D);
 
             for (int i = 0; i < this.Count - 1; i++)
             {
