@@ -1,21 +1,21 @@
-using System;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Xml;
-using System.Xml.Linq;
-using System.Xml.Schema;
-using System.Xml.Serialization;
-using MathNet.Numerics.LinearAlgebra;
-using MathNet.Spatial.Units;
-
 namespace MathNet.Spatial.Euclidean
 {
+    using System;
+    using System.Linq;
+    using System.Text.RegularExpressions;
+    using System.Xml;
+    using System.Xml.Linq;
+    using System.Xml.Schema;
+    using System.Xml.Serialization;
+    using MathNet.Numerics.LinearAlgebra;
+    using MathNet.Spatial.Units;
+
     [Serializable]
     public class CoordinateSystem : Numerics.LinearAlgebra.Double.DenseMatrix, IEquatable<CoordinateSystem>, IXmlSerializable
     {
-        static string _item3DPattern = Parser.Vector3DPattern.Trim('^', '$');
+        private static readonly string Item3DPattern = Parser.Vector3DPattern.Trim('^', '$');
 
-        public static readonly string CsPattern = string.Format(@"^ *o: *{{(?<op>{0})}} *x: *{{(?<xv>{0})}} *y: *{{(?<yv>{0})}} *z: *{{(?<zv>{0})}} *$", _item3DPattern);
+        private static readonly string CsPattern = string.Format(@"^ *o: *{{(?<op>{0})}} *x: *{{(?<xv>{0})}} *y: *{{(?<yv>{0})}} *z: *{{(?<zv>{0})}} *$", Item3DPattern);
 
         public CoordinateSystem()
             : this(new Point3D(0, 0, 0), UnitVector3D.XAxis.ToVector3D(), UnitVector3D.YAxis.ToVector3D(), UnitVector3D.ZAxis.ToVector3D())
@@ -91,7 +91,7 @@ namespace MathNet.Spatial.Euclidean
         {
             get
             {
-                var matrix = Build.DenseOfColumnVectors(XAxis.ToVector(), YAxis.ToVector(), ZAxis.ToVector());
+                var matrix = Build.DenseOfColumnVectors(this.XAxis.ToVector(), this.YAxis.ToVector(), this.ZAxis.ToVector());
                 var cs = new CoordinateSystem(this);
                 cs.SetRotationSubMatrix(matrix.Transpose());
                 return cs;
@@ -124,31 +124,33 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Creates a coordinate system that rotates 
+        /// Creates a coordinate system that rotates
         /// </summary>
         /// <param name="a">Angle to rotate</param>
         /// <param name="unit">The unit of the angle</param>
         /// <param name="v">Vector to rotate about</param>
         /// <returns></returns>
-        public static CoordinateSystem Rotation<T>(double a, T unit, UnitVector3D v) where T : IAngleUnit
+        public static CoordinateSystem Rotation<T>(double a, T unit, UnitVector3D v)
+            where T : IAngleUnit
         {
             return Rotation(Angle.From(a, unit), v);
         }
 
         /// <summary>
-        /// Creates a coordinate system that rotates 
+        /// Creates a coordinate system that rotates
         /// </summary>
         /// <param name="a">Angle to rotate</param>
         /// <param name="unit">The unit of the angle</param>
         /// <param name="v">Vector to rotate about</param>
         /// <returns></returns>
-        public static CoordinateSystem Rotation<T>(double a, T unit, Vector3D v) where T : IAngleUnit
+        public static CoordinateSystem Rotation<T>(double a, T unit, Vector3D v)
+            where T : IAngleUnit
         {
             return Rotation(Angle.From(a, unit), v.Normalize());
         }
 
         /// <summary>
-        /// Creates a coordinate system that rotates 
+        /// Creates a coordinate system that rotates
         /// </summary>
         /// <param name="angle">Angle to rotate</param>
         /// <param name="v">Vector to rotate about</param>
@@ -180,7 +182,8 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="pitch">Rotates around Y</param>
         /// <param name="roll">Rotates around X</param>
         /// <param name="unit"></param>
-        public static CoordinateSystem Rotation<T>(double yaw, double pitch, double roll, T unit) where T : IAngleUnit
+        public static CoordinateSystem Rotation<T>(double yaw, double pitch, double roll, T unit)
+            where T : IAngleUnit
         {
             var ya = Angle.From(yaw, unit);
             var ra = Angle.From(roll, unit);
@@ -209,7 +212,8 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         /// <param name="a"></param>
         /// <param name="unit"></param>
-        public static CoordinateSystem Yaw<T>(double a, T unit) where T : IAngleUnit
+        public static CoordinateSystem Yaw<T>(double a, T unit)
+            where T : IAngleUnit
         {
             return Yaw(Angle.From(a, unit));
         }
@@ -228,7 +232,8 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         /// <param name="a"></param>
         /// <param name="unit"></param>
-        public static CoordinateSystem Pitch<T>(double a, T unit) where T : IAngleUnit
+        public static CoordinateSystem Pitch<T>(double a, T unit)
+            where T : IAngleUnit
         {
             return Pitch(Angle.From(a, unit));
         }
@@ -247,7 +252,8 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         /// <param name="a"></param>
         /// <param name="unit"></param>
-        public static CoordinateSystem Roll<T>(double a, T unit) where T : IAngleUnit
+        public static CoordinateSystem Roll<T>(double a, T unit)
+            where T : IAngleUnit
         {
             return Roll(Angle.From(a, unit));
         }
@@ -357,7 +363,8 @@ namespace MathNet.Spatial.Euclidean
             return rcs.Transform(this);
         }
 
-        public CoordinateSystem RotateNoReset<T>(double yaw, double pitch, double roll, T angleUnit) where T : IAngleUnit
+        public CoordinateSystem RotateNoReset<T>(double yaw, double pitch, double roll, T angleUnit)
+            where T : IAngleUnit
         {
             var rcs = Rotation(yaw, pitch, roll, angleUnit);
             return rcs.Transform(this);
@@ -456,7 +463,7 @@ namespace MathNet.Spatial.Euclidean
         public Point3D Transform(Point3D p)
         {
             var v4 = Vector<double>.Build.Dense(new[] { p.X, p.Y, p.Z, 1 });
-            Multiply(v4, v4);
+            this.Multiply(v4, v4);
             return new Point3D(v4[0], v4[1], v4[2]);
         }
 

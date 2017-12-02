@@ -1,14 +1,14 @@
-﻿using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-using MathNet.Spatial.Euclidean;
-using NUnit.Framework;
-
-namespace MathNet.Spatial.UnitTests.Euclidean
+﻿namespace MathNet.Spatial.UnitTests.Euclidean
 {
+    using System.IO;
+    using System.Runtime.Serialization.Formatters.Binary;
+    using MathNet.Spatial.Euclidean;
+    using NUnit.Framework;
+
     [TestFixture]
     public class Ray3DTests
     {
-        [TestCase("p:{1, 2, 3} v:{0, 0, 1}","1, 2, 3", "0, 0, 1")]
+        [TestCase("p:{1, 2, 3} v:{0, 0, 1}", "1, 2, 3", "0, 0, 1")]
         public void Parse(string rs, string eps, string evs)
         {
             var ray = Ray3D.Parse(rs);

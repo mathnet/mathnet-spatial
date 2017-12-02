@@ -1,13 +1,13 @@
-﻿using System;
-using System.Xml;
-using System.Xml.Linq;
-using System.Xml.Schema;
-using System.Xml.Serialization;
-using MathNet.Numerics;
-using MathNet.Spatial.Units;
-
-namespace MathNet.Spatial.Euclidean
+﻿namespace MathNet.Spatial.Euclidean
 {
+    using System;
+    using System.Xml;
+    using System.Xml.Linq;
+    using System.Xml.Schema;
+    using System.Xml.Serialization;
+    using MathNet.Numerics;
+    using MathNet.Spatial.Units;
+
     /// <summary>
     /// A line between two points
     /// </summary>
@@ -23,8 +23,8 @@ namespace MathNet.Spatial.Euclidean
         /// The endpoint of the line
         /// </summary>
         public readonly Point3D EndPoint;
-        private double _length;
-        private UnitVector3D _direction;
+        private double length;
+        private UnitVector3D direction;
 
         /// <summary>
         /// Throws if StartPoint == EndPoint
@@ -40,8 +40,8 @@ namespace MathNet.Spatial.Euclidean
                 throw new ArgumentException("StartPoint == EndPoint");
             }
 
-            this._length = -1.0;
-            this._direction = new UnitVector3D();
+            this.length = -1.0;
+            this.direction = default(UnitVector3D);
         }
 
         /// <summary>
@@ -51,17 +51,17 @@ namespace MathNet.Spatial.Euclidean
         {
             get
             {
-                if (this._length < 0)
+                if (this.length < 0)
                 {
                     var vectorTo = this.StartPoint.VectorTo(this.EndPoint);
-                    this._length = vectorTo.Length;
-                    if (this._length > 0)
+                    this.length = vectorTo.Length;
+                    if (this.length > 0)
                     {
-                        this._direction = vectorTo.Normalize();
+                        this.direction = vectorTo.Normalize();
                     }
                 }
 
-                return this._length;
+                return this.length;
             }
         }
 
@@ -72,12 +72,12 @@ namespace MathNet.Spatial.Euclidean
         {
             get
             {
-                if (this._length < 0)
+                if (this.length < 0)
                 {
-                    this._length = this.Length; // Side effect hack
+                    this.length = this.Length; // Side effect hack
                 }
 
-                return this._direction;
+                return this.direction;
             }
         }
 
@@ -121,21 +121,24 @@ namespace MathNet.Spatial.Euclidean
         /// <returns></returns>
         public Point3D ClosestPointTo(Point3D p, bool mustBeOnSegment)
         {
-            Vector3D v = (p - this.StartPoint);
+            Vector3D v = p - this.StartPoint;
             double dotProduct = v.DotProduct(this.Direction);
             if (mustBeOnSegment)
             {
                 if (dotProduct < 0)
+                {
                     dotProduct = 0;
+                }
 
                 if (dotProduct > this.Length)
+                {
                     dotProduct = this.Length;
+                }
             }
 
-            Vector3D alongVector = dotProduct*this.Direction;
+            Vector3D alongVector = dotProduct * this.Direction;
             return this.StartPoint + alongVector;
         }
-        
 
         /// <summary>
         /// The line projected on a plane
@@ -159,7 +162,7 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Checks to determine whether or not two lines are parallel to each other, using the dot product within 
+        /// Checks to determine whether or not two lines are parallel to each other, using the dot product within
         /// the double precision specified in the MathNet.Numerics package.
         /// </summary>
         /// <param name="other">The other line to check this one against</param>
@@ -207,10 +210,10 @@ namespace MathNet.Spatial.Euclidean
             var d = u.DotProduct(w0);
             var e = v.DotProduct(w0);
 
-            double sc = (b*e - c*d)/(a*c - b*b);
-            double tc = (a*e - b*d)/(a*c - b*b);
+            double sc = ((b * e) - (c * d)) / ((a * c) - (b * b));
+            double tc = ((a * e) - (b * d)) / ((a * c) - (b * b));
 
-            return Tuple.Create(P0 + sc*u, Q0 + tc*v);
+            return Tuple.Create(P0 + (sc * u), Q0 + (tc * v));
         }
 
         /// <summary>
@@ -223,18 +226,21 @@ namespace MathNet.Spatial.Euclidean
         public Tuple<Point3D, Point3D> ClosestPointsBetween(Line3D other, bool mustBeOnSegments)
         {
             // If the segments are parallel and the answer must be on the segments, we can skip directly to the ending
-            // algorithm where the endpoints are projected onto the opposite segment and the smallest distance is 
+            // algorithm where the endpoints are projected onto the opposite segment and the smallest distance is
             // taken.  Otherwise we must first check if the infinite length line solution is valid.
-            if (!this.IsParallelTo(other) || !mustBeOnSegments)  // If the lines aren't parallel OR it doesn't have to be constrained to the segments
+            // If the lines aren't parallel OR it doesn't have to be constrained to the segments
+            if (!this.IsParallelTo(other) || !mustBeOnSegments)
             {
                 // Compute the unbounded result, and if mustBeOnSegments is false we can directly return the results
                 // since this is the same as calling the other method.
                 var result = this.ClosestPointsBetween(other);
                 if (!mustBeOnSegments)
+                {
                     return result;
+                }
 
                 // A point that is known to be colinear with the line start and end points is on the segment if
-                // its distance to both endpoints is less than the segment length.  If both projected points lie 
+                // its distance to both endpoints is less than the segment length.  If both projected points lie
                 // within their segment, we can directly return the result.
                 if (result.Item1.DistanceTo(this.StartPoint) <= this.Length &&
                     result.Item1.DistanceTo(this.EndPoint) <= this.Length &&
@@ -245,9 +251,9 @@ namespace MathNet.Spatial.Euclidean
                 }
             }
 
-            // If we got here, we know that either we're doing a bounded distance on two parallel segments or one 
+            // If we got here, we know that either we're doing a bounded distance on two parallel segments or one
             // of the two closest span points is outside of the segment of the line it was projected on.  In either
-            // case we project each of the four endpoints onto the opposite segments and select the one with the 
+            // case we project each of the four endpoints onto the opposite segments and select the one with the
             // smallest projected distance.
             Point3D checkPoint;
             Tuple<Point3D, Point3D> closestPair;
@@ -257,7 +263,6 @@ namespace MathNet.Spatial.Euclidean
             distance = checkPoint.DistanceTo(this.StartPoint);
             closestPair = Tuple.Create(this.StartPoint, checkPoint);
             double minDistance = distance;
-            
 
             checkPoint = other.ClosestPointTo(this.EndPoint, true);
             distance = checkPoint.DistanceTo(this.EndPoint);
@@ -315,7 +320,7 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Serves as a hash function for a particular type. 
+        /// Serves as a hash function for a particular type.
         /// </summary>
         /// <returns>
         /// A hash code for the current <see cref="T:System.Object"/>.
@@ -340,7 +345,7 @@ namespace MathNet.Spatial.Euclidean
         {
             return null;
         }
-        
+
         public void ReadXml(XmlReader reader)
         {
             reader.MoveToContent();
@@ -350,7 +355,7 @@ namespace MathNet.Spatial.Euclidean
             var endPoint = Point3D.ReadFrom(e.SingleElement("EndPoint").CreateReader());
             XmlExt.SetReadonlyField(ref this, l => l.EndPoint, endPoint);
         }
-        
+
         public void WriteXml(XmlWriter writer)
         {
             writer.WriteElement("StartPoint", this.StartPoint);

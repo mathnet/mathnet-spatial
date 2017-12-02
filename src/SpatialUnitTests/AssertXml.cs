@@ -1,14 +1,14 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Xml;
-using System.Xml.Linq;
-using System.Xml.Serialization;
-using NUnit.Framework;
-
-namespace MathNet.Spatial.UnitTests
+﻿namespace MathNet.Spatial.UnitTests
 {
+    using System;
+    using System.IO;
+    using System.Linq;
+    using System.Runtime.Serialization;
+    using System.Xml;
+    using System.Xml.Linq;
+    using System.Xml.Serialization;
+    using NUnit.Framework;
+
     public static class AssertXml
     {
         public static void AreEqual(string first, string other)
@@ -55,11 +55,13 @@ namespace MathNet.Spatial.UnitTests
                 Console.WriteLine();
                 AreEqual(expected, xml);
             }
+
             using (var reader = new StringReader(xml))
             {
                 return (T)serializer.Deserialize(reader);
             }
         }
+
         public static T DataContractRoundTrip<T>(T item, string expected)
         {
             var serializer = new DataContractSerializer(item.GetType());
@@ -75,12 +77,14 @@ namespace MathNet.Spatial.UnitTests
                 Console.WriteLine();
                 AreEqual(expected, xml);
             }
+
             using (var stringReader = new StringReader(xml))
             using (var reader = XmlReader.Create(stringReader))
             {
                 return (T)serializer.ReadObject(reader);
             }
         }
+
         private static XmlWriterSettings Settings
         {
             get
@@ -95,11 +99,13 @@ namespace MathNet.Spatial.UnitTests
                 return settings;
             }
         }
+
         private static string Normalize(string xml)
         {
             var e = XElement.Parse(xml);
             return Normalize(e);
         }
+
         private static string Normalize(XElement e)
         {
             using (var sw = new StringWriter())
@@ -110,6 +116,7 @@ namespace MathNet.Spatial.UnitTests
                 return sw.ToString();
             }
         }
+
         private static string CleanupXml(string xml)
         {
             var e = XElement.Parse(xml);

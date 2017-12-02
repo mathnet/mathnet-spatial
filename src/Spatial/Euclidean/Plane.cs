@@ -1,14 +1,14 @@
-﻿using System;
-using System.Xml;
-using System.Xml.Linq;
-using System.Xml.Schema;
-using System.Xml.Serialization;
-using MathNet.Numerics.LinearAlgebra;
-using MathNet.Numerics.LinearAlgebra.Double;
-using MathNet.Spatial.Units;
-
-namespace MathNet.Spatial.Euclidean
+﻿namespace MathNet.Spatial.Euclidean
 {
+    using System;
+    using System.Xml;
+    using System.Xml.Linq;
+    using System.Xml.Schema;
+    using System.Xml.Serialization;
+    using MathNet.Numerics.LinearAlgebra;
+    using MathNet.Numerics.LinearAlgebra.Double;
+    using MathNet.Spatial.Units;
+
     [Serializable]
     public struct Plane : IEquatable<Plane>, IXmlSerializable
     {
@@ -17,15 +17,15 @@ namespace MathNet.Spatial.Euclidean
         public readonly double D;
 
         public Plane(double a, double b, double c, double d)
-            : this(new UnitVector3D(a, b, c), -1*d)
+            : this(new UnitVector3D(a, b, c), -1 * d)
         {
         }
 
         public Plane(UnitVector3D normal, double offset = 0)
         {
             this.Normal = normal;
-            this.RootPoint = (offset*normal).ToPoint3D();
-            this.D = -1*offset;
+            this.RootPoint = (offset * normal).ToPoint3D();
+            this.D = -1 * offset;
         }
 
         public Plane(UnitVector3D normal, Point3D rootPoint)
@@ -52,6 +52,7 @@ namespace MathNet.Spatial.Euclidean
             {
                 throw new ArgumentException("Must use three different points");
             }
+
             Vector3D v1 = new Vector3D(p2.X - p1.X, p2.Y - p1.Y, p2.Z - p1.Z);
             Vector3D v2 = new Vector3D(p3.X - p1.X, p3.Y - p1.Y, p3.Z - p1.Z);
             Vector3D cross = v1.CrossProduct(v2);
@@ -60,6 +61,7 @@ namespace MathNet.Spatial.Euclidean
             {
                 throw new ArgumentException("The 3 points should not be on the same line");
             }
+
             this.RootPoint = p1;
             this.Normal = cross.Normalize();
             this.D = -this.RootPoint.ToVector3D().DotProduct(this.Normal);
@@ -102,7 +104,7 @@ namespace MathNet.Spatial.Euclidean
 
         public double SignedDistanceTo(Point3D point)
         {
-            var point3D = Project(point);
+            var point3D = this.Project(point);
             var vectorTo = point3D.VectorTo(point);
             return vectorTo.DotProduct(this.Normal);
         }
@@ -114,14 +116,14 @@ namespace MathNet.Spatial.Euclidean
                 throw new ArgumentException("Planes are not parallel");
             }
 
-            return SignedDistanceTo(otherPlane.RootPoint);
+            return this.SignedDistanceTo(otherPlane.RootPoint);
         }
 
         public double SignedDistanceTo(Ray3D ray)
         {
             if (Math.Abs(ray.Direction.DotProduct(this.Normal) - 0) < 1E-15)
             {
-                return SignedDistanceTo(ray.ThroughPoint);
+                return this.SignedDistanceTo(ray.ThroughPoint);
             }
 
             return 0;
@@ -129,28 +131,28 @@ namespace MathNet.Spatial.Euclidean
 
         public double AbsoluteDistanceTo(Point3D point)
         {
-            return Math.Abs(SignedDistanceTo(point));
+            return Math.Abs(this.SignedDistanceTo(point));
         }
 
         public Point3D Project(Point3D p, UnitVector3D? projectionDirection = null)
         {
             double dotProduct = this.Normal.DotProduct(p.ToVector3D());
             var projectiononNormal = projectionDirection == null ? this.Normal : projectionDirection.Value;
-            var projectionVector = (dotProduct + this.D)*projectiononNormal;
+            var projectionVector = (dotProduct + this.D) * projectiononNormal;
             return p - projectionVector;
         }
 
         public Line3D Project(Line3D line3DToProject)
         {
-            var projectedStartPoint = Project(line3DToProject.StartPoint);
-            var projectedEndPoint = Project(line3DToProject.EndPoint);
+            var projectedStartPoint = this.Project(line3DToProject.StartPoint);
+            var projectedEndPoint = this.Project(line3DToProject.EndPoint);
             return new Line3D(projectedStartPoint, projectedEndPoint);
         }
 
         public Ray3D Project(Ray3D rayToProject)
         {
-            var projectedThroughPoint = Project(rayToProject.ThroughPoint);
-            var projectedDirection = Project(rayToProject.Direction.ToVector3D());
+            var projectedThroughPoint = this.Project(rayToProject.ThroughPoint);
+            var projectedDirection = this.Project(rayToProject.Direction.ToVector3D());
             return new Ray3D(projectedThroughPoint, projectedDirection.Direction);
         }
 
@@ -161,7 +163,7 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>The projected Vector3D</returns>
         public Ray3D Project(Vector3D vector3DToProject)
         {
-            var projectedEndPoint = Project(vector3DToProject.ToPoint3D());
+            var projectedEndPoint = this.Project(vector3DToProject.ToPoint3D());
             var projectedZero = this.Project(new Point3D(0, 0, 0));
             return new Ray3D(projectedZero, projectedZero.VectorTo(projectedEndPoint).Normalize());
         }
@@ -173,7 +175,7 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>The projected Vector3D</returns>
         public Ray3D Project(UnitVector3D vector3DToProject)
         {
-            return Project(vector3DToProject.ToVector3D());
+            return this.Project(vector3DToProject.ToVector3D());
         }
 
         /// <summary>
@@ -195,8 +197,8 @@ namespace MathNet.Spatial.Euclidean
             }
 
             var y = new DenseMatrix(2, 1);
-            y[0, 0] = -1*this.D;
-            y[1, 0] = -1*intersectingPlane.D;
+            y[0, 0] = -1 * this.D;
+            y[1, 0] = -1 * intersectingPlane.D;
 
             Matrix<double> pointOnIntersectionLine = svd.Solve(y);
             var throughPoint = new Point3D(pointOnIntersectionLine.Column(0));
@@ -215,25 +217,29 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>Intersection Point or null</returns>
         public Point3D? IntersectionWith(Line3D line, double tolerance = float.Epsilon)
         {
-            if (line.Direction.IsPerpendicularTo(this.Normal)) //either parallel or lies in the plane
+            if (line.Direction.IsPerpendicularTo(this.Normal)) // either parallel or lies in the plane
             {
                 Point3D projectedPoint = this.Project(line.StartPoint, line.Direction);
-                if (projectedPoint == line.StartPoint) //Line lies in the plane
+                if (projectedPoint == line.StartPoint) // Line lies in the plane
                 {
-                    throw new InvalidOperationException("Line lies in the plane"); //Not sure what should be done here
+                    throw new InvalidOperationException("Line lies in the plane"); // Not sure what should be done here
                 }
-                else // Line and plane are parallel
+                else
                 {
+                    // Line and plane are parallel
                     return null;
                 }
             }
-            var d = SignedDistanceTo(line.StartPoint);
+
+            var d = this.SignedDistanceTo(line.StartPoint);
             var u = line.StartPoint.VectorTo(line.EndPoint);
             var t = -1 * d / u.DotProduct(this.Normal);
-            if (t > 1 || t < 0) // They are not intersected
+            if (t > 1 || t < 0)
             {
+                // They are not intersected
                 return null;
             }
+
             return line.StartPoint + (t * u);
         }
 
@@ -245,16 +251,16 @@ namespace MathNet.Spatial.Euclidean
         /// <returns></returns>
         public Point3D IntersectionWith(Ray3D ray, double tolerance = float.Epsilon)
         {
-            var d = SignedDistanceTo(ray.ThroughPoint);
-            var t = -1*d/ray.Direction.DotProduct(this.Normal);
-            return ray.ThroughPoint + (t*ray.Direction);
+            var d = this.SignedDistanceTo(ray.ThroughPoint);
+            var t = -1 * d / ray.Direction.DotProduct(this.Normal);
+            return ray.ThroughPoint + (t * ray.Direction);
         }
 
         public Point3D MirrorAbout(Point3D p)
         {
-            Point3D p2 = Project(p);
-            double d = SignedDistanceTo(p);
-            return p2 - (1*d*this.Normal);
+            Point3D p2 = this.Project(p);
+            double d = this.SignedDistanceTo(p);
+            return p2 - (1 * d * this.Normal);
         }
 
         public Plane Rotate(UnitVector3D aboutVector, Angle angle)
@@ -306,9 +312,9 @@ namespace MathNet.Spatial.Euclidean
             unchecked
             {
                 int result = this.A.GetHashCode();
-                result = (result*397) ^ this.C.GetHashCode();
-                result = (result*397) ^ this.B.GetHashCode();
-                result = (result*397) ^ this.D.GetHashCode();
+                result = (result * 397) ^ this.C.GetHashCode();
+                result = (result * 397) ^ this.B.GetHashCode();
+                result = (result * 397) ^ this.D.GetHashCode();
                 return result;
             }
         }

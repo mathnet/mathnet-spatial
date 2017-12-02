@@ -1,14 +1,14 @@
-﻿using System;
-using System.IO;
-using System.Xml;
-using System.Xml.Serialization;
-using MathNet.Numerics.LinearAlgebra.Double;
-using MathNet.Spatial.Euclidean;
-using MathNet.Spatial.Units;
-using NUnit.Framework;
-
-namespace MathNet.Spatial.UnitTests.Euclidean
+﻿namespace MathNet.Spatial.UnitTests.Euclidean
 {
+    using System;
+    using System.IO;
+    using System.Xml;
+    using System.Xml.Serialization;
+    using MathNet.Numerics.LinearAlgebra.Double;
+    using MathNet.Spatial.Euclidean;
+    using MathNet.Spatial.Units;
+    using NUnit.Framework;
+
     public class Point2DTests
     {
         [TestCase(5, "90 °", "0, 5")]
@@ -39,6 +39,7 @@ namespace MathNet.Spatial.UnitTests.Euclidean
                 Assert.AreEqual(1, p.X);
                 Assert.AreEqual(2, p.Y);
             }
+
             Assert.Throws<ArgumentException>(() => new Point2D(new[] { 1, 2, 3.0 }));
             Assert.Throws<ArgumentException>(() => new Point2D(DenseVector.OfArray(new[] { 1, 2, 3.0 })));
         }

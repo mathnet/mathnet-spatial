@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MathNet.Spatial.UnitTests
+﻿namespace MathNet.Spatial.UnitTests
 {
     using System.Globalization;
     using System.Text.RegularExpressions;

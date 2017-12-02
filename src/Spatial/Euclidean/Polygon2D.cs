@@ -1,30 +1,31 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using MathNet.Spatial.Units;
-
-namespace MathNet.Spatial.Euclidean
+﻿namespace MathNet.Spatial.Euclidean
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using MathNet.Spatial.Units;
+
     /// <summary>
-    /// Class to represent a closed polygon. If the 
+    /// Class to represent a closed polygon. If the
     /// </summary>
     public class Polygon2D : IEnumerable<Point2D>
     {
-        private List<Point2D> _points;
+        private readonly List<Point2D> points;
 
-        public int Count => this._points.Count;
+        public int Count => this.points.Count;
 
         public Polygon2D(IEnumerable<Point2D> points)
         {
-            this._points = new List<Point2D>(points);
-            if (this._points.First().Equals(this._points.Last()))
-                this._points.RemoveAt(0);
+            this.points = new List<Point2D>(points);
+            if (this.points.First().Equals(this.points.Last()))
+            {
+                this.points.RemoveAt(0);
+            }
         }
 
         // Methods
-        public Point2D this[int key] => this._points[key];
+        public Point2D this[int key] => this.points[key];
 
         /// <summary>
         /// Test whether a point is enclosed within a polygon. Points on the polygon edges are not
@@ -52,7 +53,7 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Determine whether or not a point is inside a polygon using the intersection counting 
+        /// Determine whether or not a point is inside a polygon using the intersection counting
         /// method.  Return true if the point is contained, false if it is not. Points which lie
         /// on the edge are not counted as inside the polygon.
         /// </summary>
@@ -67,9 +68,12 @@ namespace MathNet.Spatial.Euclidean
             for (int i = 0, j = poly.Count - 1; i < poly.Count; j = i++)
             {
                 if (((poly[i].Y > p.Y) != (poly[j].Y > p.Y)) &&
-                    (p.X < (poly[j].X - poly[i].X) * (p.Y - poly[i].Y) / (poly[j].Y - poly[i].Y) + poly[i].X))
+                    (p.X < ((poly[j].X - poly[i].X) * (p.Y - poly[i].Y) / (poly[j].Y - poly[i].Y)) + poly[i].X))
+                {
                     c = !c;
+                }
             }
+
             return c;
         }
 
@@ -79,8 +83,8 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Using the recursive QuickHull algorithm, take an IEnumerable of Point2Ds and compute the 
-        /// two dimensional convex hull, returning it as a Polygon2D object.  
+        /// Using the recursive QuickHull algorithm, take an IEnumerable of Point2Ds and compute the
+        /// two dimensional convex hull, returning it as a Polygon2D object.
         /// </summary>
         /// <param name="pointList"></param>
         /// <param name="clockWise">
@@ -90,16 +94,21 @@ namespace MathNet.Spatial.Euclidean
         /// <returns></returns>
         public static Polygon2D GetConvexHullFromPoints(IEnumerable<Point2D> pointList, bool clockWise = true)
         {
-            // Use the Quickhull algorithm to compute the convex hull of the given points, 
+            // Use the Quickhull algorithm to compute the convex hull of the given points,
             // making the assumption that the points were delivered in no particular order.
             var points = new List<Point2D>(pointList);
 
             // Perform basic validation of the input point cloud for cases of less than
             // four points being given
             if (points.Count <= 2)
+            {
                 throw new ArgumentException("Must have at least 3 points in the polygon to compute the convex hull");
+            }
+
             if (points.Count <= 3)
+            {
                 return new Polygon2D(points);
+            }
 
             // Find the leftmost and rightmost points
             Point2D leftMost = points.First();
@@ -107,9 +116,14 @@ namespace MathNet.Spatial.Euclidean
             foreach (var point in points)
             {
                 if (point.X < leftMost.X)
+                {
                     leftMost = point;
+                }
+
                 if (point.X > rightMost.X)
+                {
                     rightMost = point;
+                }
             }
 
             // Remove the left and right points
@@ -124,9 +138,13 @@ namespace MathNet.Spatial.Euclidean
             {
                 Vector2D testVector = leftMost.VectorTo(point2D);
                 if (chord.CrossProduct(testVector) > 0)
+                {
                     upperPoints.Add(point2D);
+                }
                 else
+                {
                     lowerPoints.Add(point2D);
+                }
             }
 
             var hullPoints = new List<Point2D> { leftMost, rightMost };
@@ -153,7 +171,10 @@ namespace MathNet.Spatial.Euclidean
         private static void RecursiveHullComputation(Point2D a, Point2D b, List<Point2D> workingList, List<Point2D> hullList)
         {
             if (!workingList.Any())
+            {
                 return;
+            }
+
             if (workingList.Count == 1)
             {
                 hullList.Add(workingList.First());
@@ -163,7 +184,7 @@ namespace MathNet.Spatial.Euclidean
 
             // Find the furthest point from the line
             var chord = a.VectorTo(b);
-            Point2D maxPoint = new Point2D();
+            Point2D maxPoint = default(Point2D);
             double maxDistance = double.MinValue;
 
             foreach (var point2D in workingList)
@@ -222,7 +243,7 @@ namespace MathNet.Spatial.Euclidean
 
         public PolyLine2D ToPolyLine2D()
         {
-            var points = this._points.ToList();
+            var points = this.points.ToList();
             points.Add(points.First());
             return new PolyLine2D(points);
         }
@@ -241,12 +262,12 @@ namespace MathNet.Spatial.Euclidean
 
         public IEnumerator<Point2D> GetEnumerator()
         {
-            return this._points.GetEnumerator();
+            return this.points.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return GetEnumerator();
+            return this.GetEnumerator();
         }
     }
 }

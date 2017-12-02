@@ -1,9 +1,9 @@
-using MathNet.Numerics.LinearAlgebra;
-using MathNet.Spatial.Euclidean;
-using NUnit.Framework;
-
 namespace MathNet.Spatial.UnitTests
 {
+    using MathNet.Numerics.LinearAlgebra;
+    using MathNet.Spatial.Euclidean;
+    using NUnit.Framework;
+
     public static class AssertGeometry
     {
         public static void AreEqual(CoordinateSystem coordinateSystem, Point3D origin, Vector3D xAxis, Vector3D yAxis, Vector3D zAxis, double tolerance = 1e-6)
@@ -22,7 +22,10 @@ namespace MathNet.Spatial.UnitTests
         public static void AreEqual(UnitVector3D expected, UnitVector3D actual, double tolerance = 1e-6, string message = "")
         {
             if (string.IsNullOrEmpty(message))
+            {
                 message = string.Format("Expected {0} but was {1}", expected, actual);
+            }
+
             Assert.AreEqual(expected.X, actual.X, tolerance, message);
             Assert.AreEqual(expected.Y, actual.Y, tolerance, message);
             Assert.AreEqual(expected.Z, actual.Z, tolerance, message);
@@ -31,7 +34,10 @@ namespace MathNet.Spatial.UnitTests
         public static void AreEqual(Vector3D expected, Vector3D actual, double tolerance = 1e-6, string message = "")
         {
             if (string.IsNullOrEmpty(message))
+            {
                 message = string.Format("Expected {0} but was {1}", expected, actual);
+            }
+
             Assert.AreEqual(expected.X, actual.X, tolerance, message);
             Assert.AreEqual(expected.Y, actual.Y, tolerance, message);
             Assert.AreEqual(expected.Z, actual.Z, tolerance, message);
@@ -50,7 +56,10 @@ namespace MathNet.Spatial.UnitTests
         public static void AreEqual(Vector2D expected, Vector2D actual, double tolerance = 1e-6, string message = "")
         {
             if (string.IsNullOrEmpty(message))
+            {
                 message = string.Format("Expected {0} but was {1}", expected, actual);
+            }
+
             Assert.AreEqual(expected.X, actual.X, tolerance, message);
             Assert.AreEqual(expected.Y, actual.Y, tolerance, message);
         }
@@ -58,7 +67,10 @@ namespace MathNet.Spatial.UnitTests
         public static void AreEqual(Point3D expected, Point3D actual, double tolerance = 1e-6, string message = "")
         {
             if (string.IsNullOrEmpty(message))
+            {
                 message = string.Format("Expected {0} but was {1}", expected, actual);
+            }
+
             Assert.AreEqual(expected.X, actual.X, tolerance, message);
             Assert.AreEqual(expected.Y, actual.Y, tolerance, message);
             Assert.AreEqual(expected.Z, actual.Z, tolerance, message);
@@ -67,9 +79,15 @@ namespace MathNet.Spatial.UnitTests
         public static void AreEqual(CoordinateSystem expected, CoordinateSystem actual, double tolerance = 1e-6, string message = "")
         {
             if (string.IsNullOrEmpty(message))
+            {
                 message = string.Format("Expected {0} but was {1}", expected, actual);
+            }
+
             if (expected.Values.Length != actual.Values.Length)
+            {
                 Assert.Fail();
+            }
+
             for (int i = 0; i < expected.Values.Length; i++)
             {
                 Assert.AreEqual(expected.Values[i], actual.Values[i], tolerance);
@@ -79,9 +97,15 @@ namespace MathNet.Spatial.UnitTests
         public static void AreEqual(double[] expected, double[] actual, double tolerance = 1e-6, string message = "")
         {
             if (string.IsNullOrEmpty(message))
+            {
                 message = string.Format("Expected {0} but was {1}", "{" + string.Join(",", expected) + "}", "{" + string.Join(",", actual) + "}");
+            }
+
             if (expected.Length != actual.Length)
+            {
                 Assert.Fail();
+            }
+
             for (int i = 0; i < expected.Length; i++)
             {
                 Assert.AreEqual(expected[i], actual[i], tolerance);
@@ -122,7 +146,10 @@ namespace MathNet.Spatial.UnitTests
         public static void AreEqual(Point2D expected, Point2D actual, double tolerance = 1e-6, string message = "")
         {
             if (string.IsNullOrEmpty(message))
+            {
                 message = string.Format("Expected {0} but was {1}", expected, actual);
+            }
+
             Assert.AreEqual(expected.X, actual.X, tolerance, message);
             Assert.AreEqual(expected.Y, actual.Y, tolerance, message);
         }

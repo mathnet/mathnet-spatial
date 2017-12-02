@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using MathNet.Numerics.LinearAlgebra;
-using MathNet.Spatial.Euclidean;
-
-namespace MathNet.Spatial.Projective
+﻿namespace MathNet.Spatial.Projective
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Linq;
+    using MathNet.Numerics.LinearAlgebra;
+    using MathNet.Spatial.Euclidean;
+
     class Vector3DHomogeneous
     {
         /// <summary>
@@ -106,7 +106,7 @@ namespace MathNet.Spatial.Projective
                 return false;
             }
 
-            return (obj is Vector3DHomogeneous && this.Equals((Vector3DHomogeneous)obj));
+            return obj is Vector3DHomogeneous && this.Equals((Vector3DHomogeneous)obj);
         }
 
         public override int GetHashCode()
@@ -153,7 +153,7 @@ namespace MathNet.Spatial.Projective
         /// </summary>
         public Vector<double> ToVector()
         {
-            return Vector<double>.Build.Dense(new[] { X, Y, Z, W });
+            return Vector<double>.Build.Dense(new[] { this.X, this.Y, this.Z, this.W });
         }
 
         public Vector3D ToVector3D()
@@ -162,6 +162,7 @@ namespace MathNet.Spatial.Projective
             {
                 return new Vector3D(this.X / this.W, this.X / this.W, this.X / this.W);
             }
+
             return Vector3D.NaN;
         }
     }

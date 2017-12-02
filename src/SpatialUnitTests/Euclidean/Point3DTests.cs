@@ -1,13 +1,13 @@
-﻿using System;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Xml;
-using System.Xml.Serialization;
-using MathNet.Spatial.Euclidean;
-using NUnit.Framework;
-
-namespace MathNet.Spatial.UnitTests.Euclidean
+﻿namespace MathNet.Spatial.UnitTests.Euclidean
 {
+    using System;
+    using System.IO;
+    using System.Runtime.Serialization.Formatters.Binary;
+    using System.Xml;
+    using System.Xml.Serialization;
+    using MathNet.Spatial.Euclidean;
+    using NUnit.Framework;
+
     [TestFixture]
     public class Point3DTests
     {
@@ -17,7 +17,7 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             var actuals = new[]
             {
                 new Point3D(1, 2, 3),
-                new Point3D(new[] {1, 2, 3.0}),
+                new Point3D(new[] { 1, 2, 3.0 }),
             };
             foreach (var actual in actuals)
             {
@@ -25,6 +25,7 @@ namespace MathNet.Spatial.UnitTests.Euclidean
                 Assert.AreEqual(2, actual.Y, 1e-6);
                 Assert.AreEqual(3, actual.Z, 1e-6);
             }
+
             Assert.Throws<ArgumentException>(() => new Point3D(new[] { 1.0, 2, 3, 4 }));
         }
 
@@ -205,7 +206,7 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             const string Xml = @"<Point3D X=""1"" Y=""-2"" Z=""3"" />";
             const string ElementXml = @"<Point3D><X>1</X><Y>-2</Y><Z>3</Z></Point3D>";
             AssertXml.XmlRoundTrips(p, Xml, (expected, actual) => AssertGeometry.AreEqual(expected, actual));
-            var serializer = new XmlSerializer(typeof (Point3D));
+            var serializer = new XmlSerializer(typeof(Point3D));
 
             var actuals = new[]
                           {

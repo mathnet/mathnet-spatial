@@ -1,45 +1,45 @@
-﻿using System;
-using MathNet.Numerics.LinearAlgebra.Double;
-using MathNet.Spatial.Units;
-
-namespace MathNet.Spatial.Projective
+﻿namespace MathNet.Spatial.Projective
 {
+    using System;
+    using MathNet.Numerics.LinearAlgebra.Double;
+    using MathNet.Spatial.Units;
+
     class Matrix3DHomogeneous
     {
         public DenseMatrix Matrix;
 
         public Matrix3DHomogeneous()
         {
-            Matrix = DenseMatrix.CreateIdentity(4);
+            this.Matrix = DenseMatrix.CreateIdentity(4);
         }
 
         public Matrix3DHomogeneous(double m00, double m01, double m02, double m03,
-                        double m10, double m11, double m12, double m13,
-                        double m20, double m21, double m22, double m23,
-                        double m30, double m31, double m32, double m33)
+                                   double m10, double m11, double m12, double m13,
+                                   double m20, double m21, double m22, double m23,
+                                   double m30, double m31, double m32, double m33)
         {
-            Matrix[0, 0] = m00;
-            Matrix[0, 1] = m01;
-            Matrix[0, 2] = m02;
-            Matrix[0, 3] = m03;
-            Matrix[1, 0] = m10;
-            Matrix[1, 1] = m11;
-            Matrix[1, 2] = m12;
-            Matrix[1, 3] = m13;
-            Matrix[2, 0] = m20;
-            Matrix[2, 1] = m21;
-            Matrix[2, 2] = m22;
-            Matrix[2, 3] = m23;
-            Matrix[3, 0] = m30;
-            Matrix[3, 1] = m31;
-            Matrix[3, 2] = m32;
-            Matrix[3, 3] = m33;
+            this.Matrix[0, 0] = m00;
+            this.Matrix[0, 1] = m01;
+            this.Matrix[0, 2] = m02;
+            this.Matrix[0, 3] = m03;
+            this.Matrix[1, 0] = m10;
+            this.Matrix[1, 1] = m11;
+            this.Matrix[1, 2] = m12;
+            this.Matrix[1, 3] = m13;
+            this.Matrix[2, 0] = m20;
+            this.Matrix[2, 1] = m21;
+            this.Matrix[2, 2] = m22;
+            this.Matrix[2, 3] = m23;
+            this.Matrix[3, 0] = m30;
+            this.Matrix[3, 1] = m31;
+            this.Matrix[3, 2] = m32;
+            this.Matrix[3, 3] = m33;
         }
 
         // Define a Identity matrix
         public void Identity3DHomegeneous()
         {
-            Matrix = DenseMatrix.CreateIdentity(4);
+            this.Matrix = DenseMatrix.CreateIdentity(4);
         }
 
         // Multiply two matrices together
@@ -55,9 +55,11 @@ namespace MathNet.Spatial.Projective
                     {
                         element += m1.Matrix[i, k] * m2.Matrix[k, j];
                     }
+
                     result.Matrix[i, j] = element;
                 }
             }
+
             return result;
         }
 
@@ -98,7 +100,6 @@ namespace MathNet.Spatial.Projective
         //    return VectorMultiply(_point);
         //}
 
-
         //Create a translation matrix
         public static Matrix3DHomogeneous CreateTraslation(double dx, double dy, double dz)
         {
@@ -108,7 +109,6 @@ namespace MathNet.Spatial.Projective
             result.Matrix[2, 3] = dz;
             return result;
         }
-
 
         // Create a scaling matrix
         public static Matrix3DHomogeneous CreateScale(double sx, double sy, double sz)
@@ -125,7 +125,7 @@ namespace MathNet.Spatial.Projective
         {
             Matrix3DHomogeneous result = new Matrix3DHomogeneous();
             double sinAngle = Math.Sin(angle.Radians);
-            double cosAngle = Math.Cos(angle.Radians);           
+            double cosAngle = Math.Cos(angle.Radians);
             result.Matrix[1, 1] = cosAngle;
             result.Matrix[1, 2] = -sinAngle;
             result.Matrix[2, 1] = sinAngle;
@@ -179,7 +179,6 @@ namespace MathNet.Spatial.Projective
             Matrix3DHomogeneous result = CreateScale(-1, 1, 1);
             return result;
         }
-
 
         // Front view projection matrix
         public static Matrix3DHomogeneous FrontView()
@@ -243,7 +242,7 @@ namespace MathNet.Spatial.Projective
         public static Matrix3DHomogeneous Euler(Angle alpha, Angle beta, Angle gamma)
         {
             Matrix3DHomogeneous result = new Matrix3DHomogeneous();
-            
+
             double sinAlpha = Math.Sin(alpha.Radians);
             double cosAlpha = Math.Cos(alpha.Radians);
             double sinBeta = Math.Sin(beta.Radians);
@@ -251,15 +250,15 @@ namespace MathNet.Spatial.Projective
             double sinGamma = Math.Sin(gamma.Radians);
             double cosGamma = Math.Cos(gamma.Radians);
 
-            result.Matrix[0, 0] = cosAlpha * cosGamma - sinAlpha * sinBeta * sinGamma;
+            result.Matrix[0, 0] = (cosAlpha * cosGamma) - (sinAlpha * sinBeta * sinGamma);
             result.Matrix[0, 1] = -sinBeta * sinGamma;
-            result.Matrix[0, 2] = sinAlpha * cosGamma - cosAlpha * cosBeta * sinGamma;
+            result.Matrix[0, 2] = (sinAlpha * cosGamma) - (cosAlpha * cosBeta * sinGamma);
             result.Matrix[1, 0] = -sinAlpha * sinBeta;
             result.Matrix[1, 1] = cosBeta;
             result.Matrix[1, 2] = cosAlpha * sinBeta;
-            result.Matrix[2, 0] = -cosAlpha * sinGamma - sinAlpha * cosBeta * cosGamma;
+            result.Matrix[2, 0] = (-cosAlpha * sinGamma) - (sinAlpha * cosBeta * cosGamma);
             result.Matrix[2, 1] = -sinBeta * cosGamma;
-            result.Matrix[2, 2] = cosAlpha * cosBeta * cosGamma - sinAlpha * sinBeta;
+            result.Matrix[2, 2] = (cosAlpha * cosBeta * cosGamma) - (sinAlpha * sinBeta);
             return result;
         }
 
@@ -270,14 +269,24 @@ namespace MathNet.Spatial.Projective
             Matrix3DHomogeneous rotate = new Matrix3DHomogeneous();
             // make sure elevation in the range of [-90, 90]:
             if (elevation > 90)
+            {
                 elevation = 90;
+            }
             else if (elevation < -90)
+            {
                 elevation = -90;
+            }
+
             // Make sure azimuth in the range of [-180, 180]:
             if (azimuth > 180)
+            {
                 azimuth = 180;
+            }
             else if (azimuth < -180)
+            {
                 azimuth = -180;
+            }
+
             elevation = elevation * Math.PI / 180.0f;
             double sne = Math.Sin(elevation);
             double cne = Math.Cos(elevation);
@@ -294,15 +303,16 @@ namespace MathNet.Spatial.Projective
             rotate.Matrix[2, 1] = -cne * cna;
             rotate.Matrix[2, 2] = sne;
             if (oneOverd <= 0)
+            {
                 result = rotate;
+            }
             else if (oneOverd > 0)
             {
                 //Point3DHomogeneous perspective = Point3DHomogeneous.Perspective(1 / oneOverd);
                 //result = perspective * rotate;
             }
+
             return result;
         }
-
-
     }
 }

@@ -1,13 +1,12 @@
-﻿using System;
-using System.Globalization;
-using System.Reflection;
-using MathNet.Spatial.Units;
-using NUnit.Framework;
-
-namespace MathNet.Spatial.UnitTests.Units
+﻿namespace MathNet.Spatial.UnitTests.Units
 {
+    using System;
+    using System.Globalization;
     using System.IO;
+    using System.Reflection;
     using System.Xml.Serialization;
+    using MathNet.Spatial.Units;
+    using NUnit.Framework;
 
     public class AngleTests
     {
@@ -86,7 +85,7 @@ namespace MathNet.Spatial.UnitTests.Units
         }
 
         [TestCase("1.5707 rad", "1.5707 rad", 1.5707 + 1.5707)]
-        [TestCase("1.5707 rad", "2 °", 1.5707 + 2 * DegToRad)]
+        [TestCase("1.5707 rad", "2 °", 1.5707 + (2 * DegToRad))]
         public void Addition(string lvs, string rvs, double ev)
         {
             var lv = Angle.Parse(lvs);
@@ -97,7 +96,7 @@ namespace MathNet.Spatial.UnitTests.Units
         }
 
         [TestCase("1.5707 rad", "1.5706 rad", 1.5707 - 1.5706)]
-        [TestCase("1.5707 rad", "2 °", 1.5707 - 2 * DegToRad)]
+        [TestCase("1.5707 rad", "2 °", 1.5707 - (2 * DegToRad))]
         public void Subtraction(string lvs, string rvs, double ev)
         {
             var lv = Angle.Parse(lvs);

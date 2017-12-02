@@ -1,18 +1,16 @@
-﻿using System.Collections.Generic;
-using System;
-using System.Linq;
-using MathNet.Spatial.Euclidean;
-using NUnit.Framework;
-
-namespace MathNet.Spatial.UnitTests.Euclidean
+﻿namespace MathNet.Spatial.UnitTests.Euclidean
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using MathNet.Spatial.Euclidean;
+    using NUnit.Framework;
+
     [TestFixture]
     public class Polygon2DTests
     {
-        
         private Polygon2D TestPolygon1()
         {
-            var points = from x in new string[] {"0,0", "0.25,0.5", "1,1", "-1,1", "0.5,-0.5"} select Point2D.Parse(x);
+            var points = from x in new string[] { "0,0", "0.25,0.5", "1,1", "-1,1", "0.5,-0.5" } select Point2D.Parse(x);
             return new Polygon2D(points);
         }
 
@@ -66,7 +64,7 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         {
             var testPoint = new Point2D(x, y);
             var testPoly = this.TestPolygon3();
-            
+
             Assert.AreEqual(outcome, Polygon2D.IsPointInPolygon(testPoint, testPoly));
         }
 
@@ -100,10 +98,10 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             var expectedPoints = (from x in expected.Split(';') select Point2D.Parse(x)).ToList();
 
             Polygon2D hullClockwise = Polygon2D.GetConvexHullFromPoints(testPoints, true);
-            
-            for(var i=0;i<hullClockwise.Count;i++)
+
+            for (var i = 0; i < hullClockwise.Count; i++)
             {
-                Assert.That(hullClockwise[i],Is.EqualTo(expectedPoints[i]));
+                Assert.That(hullClockwise[i], Is.EqualTo(expectedPoints[i]));
             }
 
             Polygon2D hullCounterClockwise = Polygon2D.GetConvexHullFromPoints(testPoints, false);
@@ -124,8 +122,6 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             var thinned = poly.ReduceComplexity(0.00001);
 
             CollectionAssert.AreEqual(expected, thinned);
-
         }
-
     }
 }

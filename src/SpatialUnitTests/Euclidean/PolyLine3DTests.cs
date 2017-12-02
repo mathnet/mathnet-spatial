@@ -1,13 +1,10 @@
-﻿using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MathNet.Spatial.Euclidean;
-
-namespace MathNet.Spatial.UnitTests.Euclidean
+﻿namespace MathNet.Spatial.UnitTests.Euclidean
 {
+    using System;
+    using System.Linq;
+    using MathNet.Spatial.Euclidean;
+    using NUnit.Framework;
+
     [TestFixture]
     public class PolyLine3DTests
     {
@@ -54,9 +51,8 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             var testElement = new PolyLine3D(from x in points.Split(';') select Point3D.Parse(x));
             var checkElement = Point3D.Parse(expected);
 
-            Assert.Throws<ArgumentException>(()=> { testElement.GetPointAtFractionAlongCurve(fraction); });
+            Assert.Throws<ArgumentException>(() => { testElement.GetPointAtFractionAlongCurve(fraction); });
         }
-
 
         [TestCase("0,0,0 ; 0,1,1 ; 1,1,2", "0,-1,0", "0,0,0")] // Off Endpoint
         [TestCase("0,0,0 ; 0,1,1 ; 1,1,2", "2,1,2", "1,1,2")] // Off Endpoint

@@ -1,11 +1,11 @@
-﻿using System;
-using MathNet.Numerics;
-using MathNet.Spatial.Units;
-
-namespace MathNet.Spatial.Euclidean
+﻿namespace MathNet.Spatial.Euclidean
 {
+    using System;
+    using MathNet.Numerics;
+    using MathNet.Spatial.Units;
+
     /// <summary>
-    /// A means of representing spatial orientation of any reference frame. 
+    /// A means of representing spatial orientation of any reference frame.
     /// More information can be found https://en.wikipedia.org/wiki/Euler_angles
     /// </summary>
     public struct EulerAngles : IEquatable<EulerAngles>
@@ -19,7 +19,7 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         public readonly Angle Beta; // theta
         /// <summary>
-        /// Gamma (or psi) is the rotation around the Z axis 
+        /// Gamma (or psi) is the rotation around the Z axis
         /// </summary>
         public readonly Angle Gamma; // psi
 
@@ -31,9 +31,9 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="gamma">an angle</param>
         public EulerAngles(Angle alpha, Angle beta, Angle gamma)
         {
-            Alpha = alpha;
-            Beta = beta;
-            Gamma = gamma;
+            this.Alpha = alpha;
+            this.Beta = beta;
+            this.Gamma = gamma;
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>true if the angles have not been set</returns>
         public bool IsEmpty()
         {
-            return double.IsNaN(Alpha.Radians) && double.IsNaN(Beta.Radians) && double.IsNaN(Gamma.Radians);
+            return double.IsNaN(this.Alpha.Radians) && double.IsNaN(this.Beta.Radians) && double.IsNaN(this.Gamma.Radians);
         }
 
         /// <summary>
@@ -53,9 +53,9 @@ namespace MathNet.Spatial.Euclidean
         public bool Equals(EulerAngles other)
         {
             const double defaultAbsoluteError = 0.000001;
-            return Alpha.Radians.AlmostEqual(other.Alpha.Radians, defaultAbsoluteError) &&
-                   Beta.Radians.AlmostEqual(other.Beta.Radians, defaultAbsoluteError) &&
-                   Gamma.Radians.AlmostEqual(other.Gamma.Radians, defaultAbsoluteError);
+            return this.Alpha.Radians.AlmostEqual(other.Alpha.Radians, defaultAbsoluteError) &&
+                   this.Beta.Radians.AlmostEqual(other.Beta.Radians, defaultAbsoluteError) &&
+                   this.Gamma.Radians.AlmostEqual(other.Gamma.Radians, defaultAbsoluteError);
         }
     }
 }

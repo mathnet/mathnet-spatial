@@ -1,15 +1,15 @@
-﻿using System;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Xml;
-using System.Xml.Serialization;
-using MathNet.Numerics.LinearAlgebra.Double;
-using MathNet.Spatial.Euclidean;
-using MathNet.Spatial.Units;
-using NUnit.Framework;
-
-namespace MathNet.Spatial.UnitTests.Euclidean
+﻿namespace MathNet.Spatial.UnitTests.Euclidean
 {
+    using System;
+    using System.IO;
+    using System.Runtime.Serialization.Formatters.Binary;
+    using System.Xml;
+    using System.Xml.Serialization;
+    using MathNet.Numerics.LinearAlgebra.Double;
+    using MathNet.Spatial.Euclidean;
+    using MathNet.Spatial.Units;
+    using NUnit.Framework;
+
     public class Vector2DTests
     {
         [TestCase(5, "90 °", "0, 5")]
@@ -40,6 +40,7 @@ namespace MathNet.Spatial.UnitTests.Euclidean
                 Assert.AreEqual(1, p.X);
                 Assert.AreEqual(2, p.Y);
             }
+
             Assert.Throws<ArgumentException>(() => new Vector2D(new[] { 1, 2, 3.0 }));
             Assert.Throws<ArgumentException>(() => new Vector2D(DenseVector.OfArray(new[] { 1, 2, 3.0 })));
         }
@@ -312,12 +313,11 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         {
             const string Xml = @"<Vector2D X=""1"" Y=""2"" />";
             const string ElementXml = @"<Vector2D><X>1</X><Y>2</Y></Vector2D>";
-            var v = new Vector2D(1,2);
+            var v = new Vector2D(1, 2);
 
             AssertXml.XmlRoundTrips(v, Xml, (e, a) => AssertGeometry.AreEqual(e, a));
 
             var serializer = new XmlSerializer(typeof(Vector2D));
-
 
             var actuals = new[]
                           {
@@ -350,7 +350,7 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         [Test]
         public void PolarConstructorThrowsArgumentException()
         {
-            Assert.Throws<ArgumentException>(() => { new Vector2D(-1.0, new Angle(0, new Radians())); });
+            Assert.Throws<ArgumentException>(() => { new Vector2D(-1.0, new Angle(0, default(Radians))); });
         }
 
         [Test]
@@ -376,15 +376,14 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         [Test]
         public void EqualityComparerReturnsFalseOnNullReference()
         {
-            Assert.IsFalse((new Vector2D()).Equals(null));
+            Assert.IsFalse(default(Vector2D).Equals(null));
         }
-
 
         [TestCase("1,0", "0,1", "90°")]
         [TestCase("0,1", "1,0", "90°")]
         [TestCase("-0.99985, 0.01745", "-1, 0", "1°")]
         [TestCase("-0.99985, -0.01745", "-1, 0", "1°")]
-        [TestCase("0.99985, 0.01745", "1, 0","1°")]
+        [TestCase("0.99985, 0.01745", "1, 0", "1°")]
         [TestCase("0.99985, -0.01745", "1, 0", "1°")]
         [TestCase("-0.99985, -0.01745", "1, 0", "179°")]
         [TestCase("-0.99985, 0.01745", "1, 0", "179°")]
@@ -431,7 +430,5 @@ namespace MathNet.Spatial.UnitTests.Euclidean
 
             AssertGeometry.AreEqual(ex, v1.ProjectOn(v2), 1e-3);
         }
-
-
     }
 }

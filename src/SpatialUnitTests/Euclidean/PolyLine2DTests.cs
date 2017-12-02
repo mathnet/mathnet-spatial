@@ -1,10 +1,10 @@
-﻿using System;
-using System.Linq;
-using MathNet.Spatial.Euclidean;
-using NUnit.Framework;
-
-namespace MathNet.Spatial.UnitTests.Euclidean
+﻿namespace MathNet.Spatial.UnitTests.Euclidean
 {
+    using System;
+    using System.Linq;
+    using MathNet.Spatial.Euclidean;
+    using NUnit.Framework;
+
     [TestFixture]
     public class PolyLine2DTests
     {
@@ -44,7 +44,6 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             Assert.AreEqual(checkElement, testElement.GetPointAtFractionAlongCurve(fraction));
         }
 
-
         [TestCase("0,-1.5;0,1;1,1", 2.0, "1,1")]
         [TestCase("0,-1.5;0,1;1,1", -5,  "0,-1.5")]
         public void GetPointAtFractionAlongCurveThrowsArgumentException(string points, double fraction, string expected)
@@ -73,8 +72,5 @@ namespace MathNet.Spatial.UnitTests.Euclidean
 
             Assert.AreEqual(expected, testCurve.ClosestPointTo(test));
         }
-
-
-
     }
 }

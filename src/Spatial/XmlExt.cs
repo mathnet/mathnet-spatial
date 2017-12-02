@@ -57,7 +57,7 @@
 
         /// <summary>
         /// Reads attribute if it exists
-        /// 
+        ///
         /// </summary>
         /// <param name="e"/><param name="localName"/>
         /// <returns/>
@@ -104,12 +104,14 @@
             return XmlConvert.ToDouble(e.Value);
         }
 
-        public static T AsEnum<T>(this XElement e) where T : struct, IConvertible
+        public static T AsEnum<T>(this XElement e)
+            where T : struct, IConvertible
         {
             return (T)Enum.Parse(typeof(T), e.Value);
         }
 
-        public static T AsEnum<T>(this XAttribute e) where T : struct, IConvertible
+        public static T AsEnum<T>(this XAttribute e)
+            where T : struct, IConvertible
         {
             return (T)Enum.Parse(typeof(T), e.Value);
         }
@@ -151,7 +153,8 @@
             throw new XmlException(string.Format("Attribute or element {0} not found", localName));
         }
 
-        public static T ReadAttributeOrElementEnum<T>(this XElement e, string localName) where T : struct, IConvertible
+        public static T ReadAttributeOrElementEnum<T>(this XElement e, string localName)
+            where T : struct, IConvertible
         {
             return (T)Enum.Parse(typeof(T), e.ReadAttributeOrElement(localName));
         }
@@ -186,7 +189,8 @@
         internal static void SetReadonlyField<TItem, TValue>(
             ref TItem self,
             Expression<Func<TItem, TValue>> func,
-            TValue value) where TItem : struct
+            TValue value)
+            where TItem : struct
         {
             var fieldInfo = self.GetType()
                                 .GetField(((MemberExpression)func.Body).Member.Name);
@@ -198,7 +202,8 @@
         internal static void SetReadonlyField<TItem, TValue>(
             this TItem self,
             Expression<Func<TItem, TValue>> func,
-            TValue value) where TItem : class
+            TValue value)
+            where TItem : class
         {
             var fieldInfo = self.GetType()
                                 .GetField(((MemberExpression)func.Body).Member.Name);
@@ -208,7 +213,8 @@
         internal static void SetReadonlyFields<TItem, TValue>(
             ref TItem self,
             Expression<Func<TItem, TValue>>[] funcs,
-            TValue[] values) where TItem : struct
+            TValue[] values)
+            where TItem : struct
         {
             object boxed = self;
             for (int i = 0; i < funcs.Length; i++)

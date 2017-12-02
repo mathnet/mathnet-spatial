@@ -1,23 +1,22 @@
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Xml;
-using System.Xml.Linq;
-using System.Xml.Schema;
-using System.Xml.Serialization;
-using MathNet.Numerics.LinearAlgebra;
-using MathNet.Spatial.Units;
-
 namespace MathNet.Spatial.Euclidean
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Linq;
+    using System.Xml;
+    using System.Xml.Linq;
+    using System.Xml.Schema;
+    using System.Xml.Serialization;
+    using MathNet.Numerics.LinearAlgebra;
+    using MathNet.Spatial.Units;
+
     /// <summary>
-    /// Represents a point in 2 dimensional cartesian space 
+    /// Represents a point in 2 dimensional cartesian space
     /// </summary>
     [Serializable]
     public struct Point2D : IXmlSerializable, IEquatable<Point2D>, IFormattable
     {
-
         /// <summary>
         /// The x coordinate
         /// </summary>
@@ -45,7 +44,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="r">distance from origin</param>
         /// <param name="a">the angle</param>
         public Point2D(double r, Angle a)
-            : this(r*Math.Cos(a.Radians), r*Math.Sin(a.Radians))
+            : this(r * Math.Cos(a.Radians), r * Math.Sin(a.Radians))
         {
         }
 
@@ -93,13 +92,13 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Creates a point from xml with x and y coordinates either as attributes or elements 
+        /// Creates a point from xml with x and y coordinates either as attributes or elements
         /// </summary>
         /// <param name="reader">an xml reader</param>
         /// <returns>A point</returns>
         public static Point2D ReadFrom(XmlReader reader)
         {
-            var v = new Point2D();
+            var v = default(Point2D);
             v.ReadXml(reader);
             return v;
         }
@@ -154,7 +153,7 @@ namespace MathNet.Spatial.Euclidean
 
         public static Point3D operator -(Point2D point, Vector3D vector)
         {
-            return new Point3D(point.X - vector.X, point.Y - vector.Y, -1*vector.Z);
+            return new Point3D(point.X - vector.X, point.Y - vector.Y, -1 * vector.Z);
         }
 
         public static Vector2D operator -(Point2D lhs, Point2D rhs)
@@ -230,7 +229,7 @@ namespace MathNet.Spatial.Euclidean
         {
             unchecked
             {
-                return (this.X.GetHashCode()*397) ^ this.Y.GetHashCode();
+                return (this.X.GetHashCode() * 397) ^ this.Y.GetHashCode();
             }
         }
 
@@ -327,7 +326,7 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         public Vector<double> ToVector()
         {
-            return Vector<double>.Build.Dense(new[] { X, Y });
+            return Vector<double>.Build.Dense(new[] { this.X, this.Y });
         }
     }
 }

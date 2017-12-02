@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace MathNet.Spatial.Euclidean
+﻿namespace MathNet.Spatial.Euclidean
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
 
     /// <summary>
     /// A PolyLine is an ordered series of line segments in space represented as list of connected Point3Ds.
@@ -14,7 +13,7 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// An integer representing the number of Point3D objects in the polyline
         /// </summary>
-        public int Count => this._points.Count;
+        public int Count => this.points.Count;
 
         /// <summary>
         /// The length of the polyline, computed as the sum of the lengths of every segment
@@ -27,18 +26,18 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         public bool IsPlanar
         {
-            get { throw new NotImplementedException();}
+            get { throw new NotImplementedException(); }
         }
 
-        private List<Point3D> _points;
+        private readonly List<Point3D> points;
 
         public PolyLine3D(IEnumerable<Point3D> points)
         {
-            this._points = new List<Point3D>(points);
+            this.points = new List<Point3D>(points);
         }
 
         // Operators
-        public Point3D this[int key] => this._points[key];
+        public Point3D this[int key] => this.points[key];
 
         // Methods
 
@@ -49,8 +48,11 @@ namespace MathNet.Spatial.Euclidean
         private double GetPolyLineLength()
         {
             double length = 0;
-            for (int i = 0; i < this._points.Count - 1; ++i)
+            for (int i = 0; i < this.points.Count - 1; ++i)
+            {
                 length += this[i].DistanceTo(this[i + 1]);
+            }
+
             return length;
         }
 
@@ -63,7 +65,10 @@ namespace MathNet.Spatial.Euclidean
         public Point3D GetPointAtFractionAlongCurve(double fraction)
         {
             if (fraction > 1 || fraction < 0)
+            {
                 throw new ArgumentException("fraction must be between 0 and 1");
+            }
+
             return this.GetPointAtLengthFromStart(fraction * this.Length);
         }
 
@@ -77,9 +82,14 @@ namespace MathNet.Spatial.Euclidean
         {
             double length = this.Length;
             if (lengthFromStart >= length)
+            {
                 return this.Last();
+            }
+
             if (lengthFromStart <= 0)
+            {
                 return this.First();
+            }
 
             double cumulativeLength = 0;
             int i = 0;
@@ -92,6 +102,7 @@ namespace MathNet.Spatial.Euclidean
                     var direction = this[i].VectorTo(this[i + 1]).Normalize();
                     return this[i] + (leftover * direction);
                 }
+
                 cumulativeLength = nextLength;
                 i++;
             }
@@ -105,7 +116,7 @@ namespace MathNet.Spatial.Euclidean
         public Point3D ClosestPointTo(Point3D p)
         {
             var minError = double.MaxValue;
-            var closest = new Point3D();
+            var closest = default(Point3D);
 
             for (int i = 0; i < this.Count - 1; i++)
             {
@@ -118,6 +129,7 @@ namespace MathNet.Spatial.Euclidean
                     closest = projected;
                 }
             }
+
             return closest;
         }
 
@@ -129,12 +141,12 @@ namespace MathNet.Spatial.Euclidean
         // IEnumerable<Point3D>
         public IEnumerator<Point3D> GetEnumerator()
         {
-            return this._points.GetEnumerator();
+            return this.points.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return GetEnumerator();
+            return this.GetEnumerator();
         }
     }
 }

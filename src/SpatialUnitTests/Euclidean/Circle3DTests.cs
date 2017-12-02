@@ -1,9 +1,9 @@
-﻿using System;
-using MathNet.Spatial.Euclidean;
-using NUnit.Framework;
-
-namespace MathNet.Spatial.UnitTests.Euclidean
+﻿namespace MathNet.Spatial.UnitTests.Euclidean
 {
+    using System;
+    using MathNet.Spatial.Euclidean;
+    using NUnit.Framework;
+
     [TestFixture]
     public class Circle3DTests
     {
@@ -15,7 +15,7 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             var cicle3D = new Circle3D(center, UnitVector3D.ZAxis, radius);
             Assert.AreEqual(2 * radius, cicle3D.Diameter, double.Epsilon);
             Assert.AreEqual(2 * Math.PI * radius, cicle3D.Circumference, double.Epsilon);
-            Assert.AreEqual( Math.PI * radius * radius, cicle3D.Area, double.Epsilon);
+            Assert.AreEqual(Math.PI * radius * radius, cicle3D.Area, double.Epsilon);
         }
 
         [TestCase("0,0,0", "5,0,0", "2.5,0,0", 2.5)]

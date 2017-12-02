@@ -1,12 +1,12 @@
-﻿using System;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-using MathNet.Spatial.Euclidean;
-using MathNet.Spatial.Units;
-using NUnit.Framework;
-
-namespace MathNet.Spatial.UnitTests.Euclidean
+﻿namespace MathNet.Spatial.UnitTests.Euclidean
 {
+    using System;
+    using System.IO;
+    using System.Runtime.Serialization.Formatters.Binary;
+    using MathNet.Spatial.Euclidean;
+    using MathNet.Spatial.Units;
+    using NUnit.Framework;
+
     [TestFixture]
     public class Line3DTests
     {
@@ -82,8 +82,8 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             AssertXml.XmlRoundTrips(l, xml, (e, a) => AssertGeometry.AreEqual(e, a));
         }
 
-        [TestCase("0,0,0", "0,0,1", "0,0,0", "0,0,0")]  // start point
-        [TestCase("0,0,0", "0,0,1", "0,0,1", "0,0,1")]  // end point
+        [TestCase("0,0,0", "0,0,1", "0,0,0", "0,0,0", Description = "Start point")]
+        [TestCase("0,0,0", "0,0,1", "0,0,1", "0,0,1", Description = "End point")]
         [TestCase("0,0,0", "0,0,1", "1,0,.25", "0,0,.25")]
         [TestCase("0,0,0", "0,0,1", "0,0,-1", "0,0,0")]
         [TestCase("0,0,0", "0,0,1", "0,0,3", "0,0,1")]
@@ -96,8 +96,8 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             Assert.AreEqual(e, line.ClosestPointTo(p, true));
         }
 
-        [TestCase("0,0,0", "0,0,1", "0,0,0", "0,0,0")]  // start point
-        [TestCase("0,0,0", "0,0,1", "0,0,1", "0,0,1")]  // end point
+        [TestCase("0,0,0", "0,0,1", "0,0,0", "0,0,0", Description = "Start point")]
+        [TestCase("0,0,0", "0,0,1", "0,0,1", "0,0,1", Description = "End point")]
         [TestCase("0,0,0", "0,0,1", "1,0,.25", "0,0,.25")]
         [TestCase("0,0,0", "0,0,1", "0,0,-1", "0,0,-1")]
         [TestCase("0,0,0", "0,0,1", "0,0,3", "0,0,3")]

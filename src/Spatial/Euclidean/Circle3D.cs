@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace MathNet.Spatial.Euclidean
+﻿namespace MathNet.Spatial.Euclidean
 {
+    using System;
+
     [Serializable]
     public struct Circle3D
     {
@@ -41,7 +41,7 @@ namespace MathNet.Spatial.Euclidean
         {
             this.CenterPoint = Point3D.MidPoint(p1, p2);
             this.Axis = axis;
-            this.Radius = p1.DistanceTo(CenterPoint);
+            this.Radius = p1.DistanceTo(this.CenterPoint);
         }
 
         /// <summary>
@@ -57,8 +57,8 @@ namespace MathNet.Spatial.Euclidean
             Vector3D p2p3 = p3 - p2;
             this.Axis = p1p2.CrossProduct(p2p3).Normalize();
 
-            Point3D midPointA = p1 + 0.5*p1p2;
-            Point3D midPointB = p2 + 0.5*p2p3;
+            Point3D midPointA = p1 + (0.5 * p1p2);
+            Point3D midPointB = p2 + (0.5 * p2p3);
 
             Vector3D directionA = p1p2.CrossProduct(this.Axis);
             Vector3D directionB = p2p3.CrossProduct(this.Axis);
@@ -68,24 +68,25 @@ namespace MathNet.Spatial.Euclidean
 
             var center = bisectorA.IntersectionWith(bisectorB);
             if (center == null)
+            {
                 throw new ArgumentException("A circle cannot be created from these points, are they colinear?");
+            }
 
             this.CenterPoint = (Point3D)center;
             this.Radius = this.CenterPoint.DistanceTo(p1);
-
         }
 
         /// <summary>
         /// Returns the diameter of the circle
         /// </summary>
-        public double Diameter => 2 * Radius;
+        public double Diameter => 2 * this.Radius;
         /// <summary>
         /// Returns the circumference of the circle
         /// </summary>
-        public double Circumference => 2 * Math.PI * Radius;
+        public double Circumference => 2 * Math.PI * this.Radius;
         /// <summary>
         /// returns the area of the circle
         /// </summary>
-        public double Area => Math.PI * Math.Pow(Radius, 2);
+        public double Area => Math.PI * Math.Pow(this.Radius, 2);
     }
 }

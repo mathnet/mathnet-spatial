@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-
-namespace MathNet.Spatial.Euclidean
+﻿namespace MathNet.Spatial.Euclidean
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+
     /// <summary>
-    /// The PolyLine2D class represents a 2D curve in space made up of line segments joined end-to-end, and is 
+    /// The PolyLine2D class represents a 2D curve in space made up of line segments joined end-to-end, and is
     /// stored as a sequential list of 2D points.
     /// </summary>
     public class PolyLine2D : IEnumerable<Point2D>
@@ -15,7 +14,7 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// Returns the number of points in the polyline
         /// </summary>
-        public int Count => this._points.Count;
+        public int Count => this.points.Count;
 
         /// <summary>
         /// Returns the length of the polyline as the sum of the length of the individual segments
@@ -27,10 +26,10 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public Point2D this[int key] => this._points[key];
+        public Point2D this[int key] => this.points[key];
 
         // Internal storage for the points
-        private List<Point2D> _points;
+        private readonly List<Point2D> points;
 
         /// <summary>
         /// Constructor which creates a PolyLine2D off of a pre-existing IEnumerable of Point2Ds
@@ -38,7 +37,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="points"></param>
         public PolyLine2D(IEnumerable<Point2D> points)
         {
-            this._points = new List<Point2D>(points);
+            this.points = new List<Point2D>(points);
         }
 
         /// <summary>
@@ -48,8 +47,11 @@ namespace MathNet.Spatial.Euclidean
         private double GetPolyLineLength()
         {
             double length = 0;
-            for (int i = 0; i < this._points.Count - 1; ++i)
+            for (int i = 0; i < this.points.Count - 1; ++i)
+            {
                 length += this[i].DistanceTo(this[i + 1]);
+            }
+
             return length;
         }
 
@@ -62,7 +64,10 @@ namespace MathNet.Spatial.Euclidean
         public Point2D GetPointAtFractionAlongCurve(double fraction)
         {
             if (fraction > 1 || fraction < 0)
+            {
                 throw new ArgumentException("fraction must be between 0 and 1");
+            }
+
             return this.GetPointAtLengthFromStart(fraction * this.Length);
         }
 
@@ -76,9 +81,14 @@ namespace MathNet.Spatial.Euclidean
         {
             double length = this.Length;
             if (lengthFromStart >= length)
+            {
                 return this.Last();
+            }
+
             if (lengthFromStart <= 0)
+            {
                 return this.First();
+            }
 
             double cumulativeLength = 0;
             int i = 0;
@@ -102,7 +112,7 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// Reduce the complexity of a manifold of points represented as an IEnumerable of Point2D objects.
         /// This algorithm goes through each point in the manifold and computes the error that would be introduced
-        /// from the original if that point were removed.  Then it removes nonadjacent points to produce a 
+        /// from the original if that point were removed.  Then it removes nonadjacent points to produce a
         /// reduced size manifold.
         /// </summary>
         /// <param name="points"></param>
@@ -113,7 +123,7 @@ namespace MathNet.Spatial.Euclidean
             var manifold = points.ToList();
             var errorByIndex = new double[manifold.Count];
 
-            // At this point we will loop through the list of points (excluding the first and the last) and 
+            // At this point we will loop through the list of points (excluding the first and the last) and
             // examine every adjacent triplet.  The middle point is tested against the segment created by
             // the two end points, and the error that would result in its deletion is computed as the length
             // of the point's projection onto the segment.
@@ -141,11 +151,16 @@ namespace MathNet.Spatial.Euclidean
                 else
                 {
                     if (errorByIndex[i] < tolerance)
+                    {
                         preserveMe = i + 1;
+                    }
                     else
+                    {
                         thinnedPoints.Add(manifold[i]);
+                    }
                 }
             }
+
             thinnedPoints.Add(manifold.Last());
 
             return thinnedPoints;
@@ -185,7 +200,7 @@ namespace MathNet.Spatial.Euclidean
         public Point2D ClosestPointTo(Point2D p)
         {
             double minError = double.MaxValue;
-            Point2D closest = new Point2D();
+            Point2D closest = default(Point2D);
 
             for (int i = 0; i < this.Count - 1; i++)
             {
@@ -198,18 +213,19 @@ namespace MathNet.Spatial.Euclidean
                     closest = projected;
                 }
             }
+
             return closest;
         }
 
         // IEnumerable<Point2D>
         public IEnumerator<Point2D> GetEnumerator()
         {
-            return this._points.GetEnumerator();
+            return this.points.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return GetEnumerator();
+            return this.GetEnumerator();
         }
     }
 }

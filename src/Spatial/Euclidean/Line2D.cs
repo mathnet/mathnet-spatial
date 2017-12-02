@@ -1,17 +1,17 @@
-﻿using System;
-using MathNet.Numerics;
-using MathNet.Spatial.Units;
-
-namespace MathNet.Spatial.Euclidean
+﻿namespace MathNet.Spatial.Euclidean
 {
+    using System;
+    using MathNet.Numerics;
+    using MathNet.Spatial.Units;
+
     /// <summary>
-    /// This structure represents a line between two points in 2-space.  It allows for operations such as 
-    /// computing the length, direction, projections to, compairisons, and shifting by a vector.  
+    /// This structure represents a line between two points in 2-space.  It allows for operations such as
+    /// computing the length, direction, projections to, compairisons, and shifting by a vector.
     /// </summary>
     public struct Line2D : IEquatable<Line2D>
     {
-        private Vector2D _direction;
-        private double _length;
+        private Vector2D direction;
+        private double length;
 
         /// <summary>
         /// The starting point of the line
@@ -30,9 +30,12 @@ namespace MathNet.Spatial.Euclidean
         {
             get
             {
-                if (this._length < 0)
-                    ComputeLengthAndDirection();
-                return this._length;
+                if (this.length < 0)
+                {
+                    this.ComputeLengthAndDirection();
+                }
+
+                return this.length;
             }
         }
 
@@ -43,14 +46,17 @@ namespace MathNet.Spatial.Euclidean
         {
             get
             {
-                if (this._length < 0)
-                    ComputeLengthAndDirection();
-                return this._direction;
+                if (this.length < 0)
+                {
+                    this.ComputeLengthAndDirection();
+                }
+
+                return this.direction;
             }
         }
 
         /// <summary>
-        /// Constructor for the Line2D, throws an error if the startpoint is equal to the 
+        /// Constructor for the Line2D, throws an error if the startpoint is equal to the
         /// endpoint.
         /// </summary>
         /// <param name="startPoint">the starting point of the line</param>
@@ -66,19 +72,18 @@ namespace MathNet.Spatial.Euclidean
             }
 
             // Initialize the length and direction for lazy loading
-            this._length = -1.0;
-            this._direction = new Vector2D();
+            this.length = -1.0;
+            this.direction = default(Vector2D);
         }
 
         /// <summary>
         /// Compute and store the length and direction of the Line2D, used for lazy loading
         /// </summary>
-        /// <returns></returns>
         private void ComputeLengthAndDirection()
         {
             var vectorBetween = this.StartPoint.VectorTo(this.EndPoint);
-            this._length = vectorBetween.Length;
-            this._direction = vectorBetween.Normalize();
+            this.length = vectorBetween.Length;
+            this.direction = vectorBetween.Normalize();
         }
 
         /// <summary>
@@ -105,11 +110,15 @@ namespace MathNet.Spatial.Euclidean
             if (mustBeOnSegment)
             {
                 if (dotProduct < 0)
+                {
                     dotProduct = 0;
+                }
 
                 double l = this.Length;
                 if (dotProduct > l)
+                {
                     dotProduct = l;
+                }
             }
 
             Vector2D alongVector = dotProduct * this.Direction;
@@ -118,14 +127,16 @@ namespace MathNet.Spatial.Euclidean
 
         /// <summary>
         /// Compute the intersection between two lines with parallelism considered by the double floating point precision
-        /// on the cross product of the two directions. 
+        /// on the cross product of the two directions.
         /// </summary>
         /// <param name="other">The other line to compute the intersection with</param>
         /// <returns>The point at the intersection of two lines, or null if the lines are parallel.</returns>
         public Point2D? IntersectWith(Line2D other)
         {
             if (this.IsParallelTo(other))
+            {
                 return null;
+            }
 
             // http://stackoverflow.com/questions/563198/how-do-you-detect-where-two-line-segments-intersect
             Point2D p = this.StartPoint;
@@ -133,13 +144,13 @@ namespace MathNet.Spatial.Euclidean
             Vector2D r = this.StartPoint.VectorTo(this.EndPoint);
             Vector2D s = other.StartPoint.VectorTo(other.EndPoint);
 
-            double t = (q - p).CrossProduct(s) / (r.CrossProduct(s));
+            double t = (q - p).CrossProduct(s) / r.CrossProduct(s);
 
-            return p + t * r;
+            return p + (t * r);
         }
 
         /// <summary>
-        /// Compute the intersection between two lines if the angle between them is greater than a specified 
+        /// Compute the intersection between two lines if the angle between them is greater than a specified
         /// angle tolerance.
         /// </summary>
         /// <param name="other">The other line to compute the intersection with</param>
@@ -147,7 +158,9 @@ namespace MathNet.Spatial.Euclidean
         public Point2D? IntersectWith(Line2D other, Angle parallelTolerance)
         {
             if (this.IsParallelTo(other, parallelTolerance))
+            {
                 return null;
+            }
 
             // http://stackoverflow.com/questions/563198/how-do-you-detect-where-two-line-segments-intersect
             Point2D p = this.StartPoint;
@@ -155,13 +168,13 @@ namespace MathNet.Spatial.Euclidean
             Vector2D r = this.StartPoint.VectorTo(this.EndPoint);
             Vector2D s = other.StartPoint.VectorTo(other.EndPoint);
 
-            double t = (q - p).CrossProduct(s) / (r.CrossProduct(s));
+            double t = (q - p).CrossProduct(s) / r.CrossProduct(s);
 
-            return p + t * r;
+            return p + (t * r);
         }
 
         /// <summary>
-        /// Checks to determine whether or not two lines are parallel to each other, using the dot product within 
+        /// Checks to determine whether or not two lines are parallel to each other, using the dot product within
         /// the double precision specified in the MathNet.Numerics package.
         /// </summary>
         /// <param name="other">The other line to check this one against</param>
@@ -181,8 +194,6 @@ namespace MathNet.Spatial.Euclidean
         {
             return this.Direction.IsParallelTo(other.Direction, angleTolerance);
         }
-
-        # region Operators 
 
         public static bool operator ==(Line2D left, Line2D right)
         {
@@ -208,11 +219,7 @@ namespace MathNet.Spatial.Euclidean
         {
             return line + (-offset);
         }
-        
-        # endregion
 
-        # region Serialization and Deserialization
-        
         public override string ToString()
         {
             return string.Format("StartPoint: {0}, EndPoint: {1}", this.StartPoint, this.EndPoint);
@@ -222,34 +229,32 @@ namespace MathNet.Spatial.Euclidean
         {
             return new Line2D(Point2D.Parse(startPointString), Point2D.Parse(endPointString));
         }
-        
-        # endregion
-
-
-        # region Equality and Hash Code
 
         public bool Equals(Line2D other)
         {
-            return StartPoint.Equals(other.StartPoint) && EndPoint.Equals(other.EndPoint);
+            return this.StartPoint.Equals(other.StartPoint) && this.EndPoint.Equals(other.EndPoint);
         }
 
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj)) return false;
-            return obj is Line2D && Equals((Line2D)obj);
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+
+            return obj is Line2D && this.Equals((Line2D)obj);
         }
 
         /// <summary>
-        /// Serves as a hash function for a particular type. 
+        /// Serves as a hash function for a particular type.
         /// </summary>
         /// <returns>A hash code for the current <see cref="T:System.Object"/></returns>
         public override int GetHashCode()
         {
             unchecked
             {
-                return (StartPoint.GetHashCode() * 397) ^ EndPoint.GetHashCode();
+                return (this.StartPoint.GetHashCode() * 397) ^ this.EndPoint.GetHashCode();
             }
         }
-        # endregion
     }
 }

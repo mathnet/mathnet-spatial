@@ -20,7 +20,7 @@ namespace MathNet.Spatial.Units
 
         private Angle(double radians)
         {
-            Radians = radians;
+            this.Radians = radians;
         }
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace MathNet.Spatial.Units
         /// <param name="unit"></param>
         public Angle(double radians, Radians unit)
         {
-            Radians = radians;
+            this.Radians = radians;
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace MathNet.Spatial.Units
         /// <param name="unit"></param>
         public Angle(double value, Degrees unit)
         {
-            Radians = UnitConverter.ConvertFrom(value, unit);
+            this.Radians = UnitConverter.ConvertFrom(value, unit);
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace MathNet.Spatial.Units
         {
             get
             {
-               return UnitConverter.ConvertTo(Radians, AngleUnit.Degrees);
+               return UnitConverter.ConvertTo(this.Radians, AngleUnit.Degrees);
             }
         }
 
@@ -69,7 +69,8 @@ namespace MathNet.Spatial.Units
         /// </summary>
         /// <param name="value"></param>
         /// <param name="unit"></param>
-        public static Angle From<T>(double value, T unit) where T : IAngleUnit
+        public static Angle From<T>(double value, T unit)
+            where T : IAngleUnit
         {
             return new Angle(UnitConverter.ConvertFrom(value, unit));
         }
@@ -122,7 +123,7 @@ namespace MathNet.Spatial.Units
         /// Indicates whether a specified <see cref="T:MathNet.Spatial.Units.Angle"/> is less than another specified <see cref="T:MathNet.Spatial.Units.Angle"/>.
         /// </summary>
         /// <returns>
-        /// true if the value of <paramref name="left"/> is less than the value of <paramref name="right"/>; otherwise, false. 
+        /// true if the value of <paramref name="left"/> is less than the value of <paramref name="right"/>; otherwise, false.
         /// </returns>
         /// <param name="left">An <see cref="T:MathNet.Spatial.Units.Angle"/>.</param>
         /// <param name="right">An <see cref="T:MathNet.Spatial.Units.Angle"/>.</param>
@@ -135,7 +136,7 @@ namespace MathNet.Spatial.Units
         /// Indicates whether a specified <see cref="T:MathNet.Spatial.Units.Angle"/> is greater than another specified <see cref="T:MathNet.Spatial.Units.Angle"/>.
         /// </summary>
         /// <returns>
-        /// true if the value of <paramref name="left"/> is greater than the value of <paramref name="right"/>; otherwise, false. 
+        /// true if the value of <paramref name="left"/> is greater than the value of <paramref name="right"/>; otherwise, false.
         /// </returns>
         /// <param name="left">An <see cref="T:MathNet.Spatial.Units.Angle"/>.</param>
         /// <param name="right">An <see cref="T:MathNet.Spatial.Units.Angle"/>.</param>
@@ -238,7 +239,7 @@ namespace MathNet.Spatial.Units
         /// <param name="angle">A <see cref="T:MathNet.Spatial.Units.Angle"/></param>
         public static Angle operator -(Angle angle)
         {
-            return new Angle(-1*angle.Radians);
+            return new Angle(-1 * angle.Radians);
         }
 
         /// <summary>
@@ -295,7 +296,8 @@ namespace MathNet.Spatial.Units
         /// <param name="format">A string indicating the desired format</param>
         /// <param name="formatProvider">A formatprovider</param>
         /// <param name="unit">Degrees or Radians</param>
-        public string ToString<T>(string format, IFormatProvider formatProvider, T unit) where T : IAngleUnit
+        public string ToString<T>(string format, IFormatProvider formatProvider, T unit)
+            where T : IAngleUnit
         {
             var value = UnitConverter.ConvertTo(this.Radians, unit);
             return string.Format("{0}{1}", value.ToString(format, formatProvider), unit.ShortName);
@@ -306,23 +308,23 @@ namespace MathNet.Spatial.Units
         /// </summary>
         /// <returns>
         /// A signed number indicating the relative values of this instance and <paramref name="value"/>.
-        /// 
+        ///
         ///                     Value
-        /// 
+        ///
         ///                     Description
-        /// 
+        ///
         ///                     A negative integer
-        /// 
+        ///
         ///                     This instance is smaller than <paramref name="value"/>.
-        /// 
+        ///
         ///                     Zero
-        /// 
+        ///
         ///                     This instance is equal to <paramref name="value"/>.
-        /// 
+        ///
         ///                     A positive integer
-        /// 
+        ///
         ///                     This instance is larger than <paramref name="value"/>.
-        /// 
+        ///
         /// </returns>
         /// <param name="value">A <see cref="T:MathNet.Spatial.Units.Angle"/> object to compare to this instance.</param>
         public int CompareTo(Angle value)
@@ -379,13 +381,13 @@ namespace MathNet.Spatial.Units
         }
 
         /// <summary>
-        /// This method is reserved and should not be used. When implementing the IXmlSerializable interface, 
-        /// you should return null (Nothing in Visual Basic) from this method, and instead, 
+        /// This method is reserved and should not be used. When implementing the IXmlSerializable interface,
+        /// you should return null (Nothing in Visual Basic) from this method, and instead,
         /// if specifying a custom schema is required, apply the <see cref="T:System.Xml.Serialization.XmlSchemaProviderAttribute"/> to the class.
         /// </summary>
         /// <returns>
         /// An <see cref="T:System.Xml.Schema.XmlSchema"/> that describes the XML representation of the object that is produced by the
-        ///  <see cref="M:System.Xml.Serialization.IXmlSerializable.WriteXml(System.Xml.XmlWriter)"/> 
+        ///  <see cref="M:System.Xml.Serialization.IXmlSerializable.WriteXml(System.Xml.XmlWriter)"/>
         /// method and consumed by the <see cref="M:System.Xml.Serialization.IXmlSerializable.ReadXml(System.Xml.XmlReader)"/> method.
         /// </returns>
         public XmlSchema GetSchema()
@@ -422,7 +424,7 @@ namespace MathNet.Spatial.Units
         /// <returns>An instance of  <see cref="T:MathNet.Spatial.Units.Angle"/></returns>
         public static Angle ReadFrom(XmlReader reader)
         {
-            var v = new Angle();
+            var v = default(Angle);
             v.ReadXml(reader);
             return v;
         }

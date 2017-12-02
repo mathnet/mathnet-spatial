@@ -1,17 +1,17 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using System.Globalization;
-using System.Linq;
-using System.Xml;
-using System.Xml.Linq;
-using System.Xml.Schema;
-using System.Xml.Serialization;
-using MathNet.Numerics.LinearAlgebra;
-using MathNet.Spatial.Units;
-
 namespace MathNet.Spatial.Euclidean
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.Contracts;
+    using System.Globalization;
+    using System.Linq;
+    using System.Xml;
+    using System.Xml.Linq;
+    using System.Xml.Schema;
+    using System.Xml.Serialization;
+    using MathNet.Numerics.LinearAlgebra;
+    using MathNet.Spatial.Units;
+
     [Serializable]
     public struct Point3D : IXmlSerializable, IEquatable<Point3D>, IFormattable
     {
@@ -75,13 +75,13 @@ namespace MathNet.Spatial.Euclidean
         [Obsolete("Not sure this is nice")]
         public static Vector<double> operator *(Matrix<double> left, Point3D right)
         {
-            return left*right.ToVector();
+            return left * right.ToVector();
         }
 
         [Obsolete("Not sure this is nice")]
         public static Vector<double> operator *(Point3D left, Matrix<double> right)
         {
-            return left.ToVector()*right;
+            return left.ToVector() * right;
         }
 
         public override string ToString()
@@ -135,8 +135,8 @@ namespace MathNet.Spatial.Euclidean
             unchecked
             {
                 var hashCode = this.X.GetHashCode();
-                hashCode = (hashCode*397) ^ this.Y.GetHashCode();
-                hashCode = (hashCode*397) ^ this.Z.GetHashCode();
+                hashCode = (hashCode * 397) ^ this.Y.GetHashCode();
+                hashCode = (hashCode * 397) ^ this.Z.GetHashCode();
                 return hashCode;
             }
         }
@@ -182,7 +182,7 @@ namespace MathNet.Spatial.Euclidean
 
         public static Point3D ReadFrom(XmlReader reader)
         {
-            var p = new Point3D();
+            var p = default(Point3D);
             p.ReadXml(reader);
             return p;
         }
@@ -274,7 +274,7 @@ namespace MathNet.Spatial.Euclidean
 
         public Point3D Rotate(Vector3D aboutVector, Angle angle)
         {
-            return Rotate(aboutVector.Normalize(), angle);
+            return this.Rotate(aboutVector.Normalize(), angle);
         }
 
         public Point3D Rotate(UnitVector3D aboutVector, Angle angle)
@@ -328,7 +328,7 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         public Vector<double> ToVector()
         {
-            return Vector<double>.Build.Dense(new[] { X, Y, Z });
+            return Vector<double>.Build.Dense(new[] { this.X, this.Y, this.Z });
         }
     }
 }
