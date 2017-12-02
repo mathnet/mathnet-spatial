@@ -51,12 +51,14 @@
   <ItemGroup>
     <Compile Include="Euclidean\Circle2D.cs" />
     <Compile Include="Euclidean\EulerAngles.cs" />
+    <Compile Include="Euclidean\ILine.cs" />
     <Compile Include="Euclidean\Line2D.cs" />
     <Compile Include="Euclidean\Matrix2D.cs" />
     <Compile Include="Euclidean\Point2D.cs" />
     <Compile Include="Euclidean\Polygon2D.cs" />
     <Compile Include="Euclidean\PolyLine2D.cs" />
     <Compile Include="Euclidean\PolyLine3D.cs" />
+    <Compile Include="Euclidean\StraightLine2D.cs" />
     <Compile Include="Euclidean\Vector2D.cs" />
     <Compile Include="Projective\Matrix3DHomogeneous.cs" />
     <Compile Include="Projective\Point3DHomogeneous.cs" />
