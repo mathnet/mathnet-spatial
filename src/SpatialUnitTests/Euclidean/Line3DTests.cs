@@ -82,8 +82,8 @@
             AssertXml.XmlRoundTrips(l, xml, (e, a) => AssertGeometry.AreEqual(e, a));
         }
 
-        [TestCase("0,0,0", "0,0,1", "0,0,0", "0,0,0")]  // start point
-        [TestCase("0,0,0", "0,0,1", "0,0,1", "0,0,1")]  // end point
+        [TestCase("0,0,0", "0,0,1", "0,0,0", "0,0,0", Description = "Start point")]
+        [TestCase("0,0,0", "0,0,1", "0,0,1", "0,0,1", Description = "End point")]
         [TestCase("0,0,0", "0,0,1", "1,0,.25", "0,0,.25")]
         [TestCase("0,0,0", "0,0,1", "0,0,-1", "0,0,0")]
         [TestCase("0,0,0", "0,0,1", "0,0,3", "0,0,1")]
@@ -96,8 +96,8 @@
             Assert.AreEqual(e, line.ClosestPointTo(p, true));
         }
 
-        [TestCase("0,0,0", "0,0,1", "0,0,0", "0,0,0")]  // start point
-        [TestCase("0,0,0", "0,0,1", "0,0,1", "0,0,1")]  // end point
+        [TestCase("0,0,0", "0,0,1", "0,0,0", "0,0,0", Description = "Start point")]
+        [TestCase("0,0,0", "0,0,1", "0,0,1", "0,0,1", Description = "End point")]
         [TestCase("0,0,0", "0,0,1", "1,0,.25", "0,0,.25")]
         [TestCase("0,0,0", "0,0,1", "0,0,-1", "0,0,-1")]
         [TestCase("0,0,0", "0,0,1", "0,0,3", "0,0,3")]

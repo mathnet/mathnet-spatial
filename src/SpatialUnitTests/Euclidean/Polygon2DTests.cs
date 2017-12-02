@@ -100,7 +100,7 @@
 
             Polygon2D hullClockwise = Polygon2D.GetConvexHullFromPoints(testPoints, true);
 
-            for(var i = 0;i < hullClockwise.Count;i++)
+            for (var i = 0; i < hullClockwise.Count; i++)
             {
                 Assert.That(hullClockwise[i], Is.EqualTo(expectedPoints[i]));
             }

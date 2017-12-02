@@ -105,7 +105,11 @@
         /// </summary>
         public double Norm
         {
-            get { return Math.Sqrt(this.NormSquared); } //TODO : robust Norm calculation
+            get
+            {
+                //TODO : robust Norm calculation
+                return Math.Sqrt(this.NormSquared);
+            }
         }
 
         /// <summary>
@@ -190,7 +194,11 @@
         /// <returns></returns>
         public Quaternion RotateRotationQuaternion(Quaternion rotation)
         {
-            if (!rotation.IsUnitQuaternion) throw new ArgumentException("The quaternion provided is not a rotation", "rotation");
+            if (!rotation.IsUnitQuaternion)
+            {
+                throw new ArgumentException("The quaternion provided is not a rotation", "rotation");
+            }
+
             return rotation * this;
         }
 
@@ -201,8 +209,15 @@
         /// <returns></returns>
         public Quaternion RotateUnitQuaternion(Quaternion unitQuaternion)
         {
-            if (!this.IsUnitQuaternion) throw new InvalidOperationException("You cannot rotate with this quaternion as it is not a Unit Quaternion");
-            if (!unitQuaternion.IsUnitQuaternion) throw new ArgumentException("The quaternion provided is not a Unit Quaternion");
+            if (!this.IsUnitQuaternion)
+            {
+                throw new InvalidOperationException("You cannot rotate with this quaternion as it is not a Unit Quaternion");
+            }
+
+            if (!unitQuaternion.IsUnitQuaternion)
+            {
+                throw new ArgumentException("The quaternion provided is not a Unit Quaternion");
+            }
 
             return (this * unitQuaternion) * this.Conjugate();
         }
@@ -328,7 +343,10 @@
             if (r == Zero)
             {
                 if (q == Zero)
+                {
                     return new Quaternion(double.NaN, double.NaN, double.NaN, double.NaN);
+                }
+
                 return new Quaternion(double.PositiveInfinity, double.PositiveInfinity, double.PositiveInfinity, double.PositiveInfinity);
             }
 
@@ -442,7 +460,10 @@
             get
             {
                 if (this == Zero)
+                {
                     return this;
+                }
+
                 var normSquared = this.NormSquared;
                 return new Quaternion(this.w / normSquared, -this.x / normSquared, -this.y / normSquared, -this.z / normSquared);
             }
@@ -478,7 +499,10 @@
         public Quaternion Log()
         {
             if (this == One)
+            {
                 return One;
+            }
+
             var quat = this.NormalizedVector * this.Arg;
             return new Quaternion(Math.Log(this.Norm), quat.ImagX, quat.ImagY, quat.ImagZ);
         }
@@ -515,9 +539,15 @@
         public Quaternion Pow(double power)
         {
             if (this == Zero)
+            {
                 return Zero;
+            }
+
             if (this == One)
+            {
                 return One;
+            }
+
             return (power * this.Log()).Exp();
         }
 
@@ -525,11 +555,20 @@
         {
             Quaternion quat = new Quaternion(this.Real, this.ImagX, this.ImagY, this.ImagZ);
             if (power == 0)
+            {
                 return One;
+            }
+
             if (power == 1)
+            {
                 return this;
+            }
+
             if (this == Zero || this == One)
+            {
                 return this;
+            }
+
             return quat * quat.Pow(power - 1);
         }
 
@@ -539,9 +578,15 @@
         public static double ChybyshevCosPoli(int n, double x)
         {
             if (n == 0)
+            {
                 return 1.0;
+            }
+
             if (n == 1)
+            {
                 return x;
+            }
+
             return 2 * ChybyshevCosPoli(n - 1, x) * x - ChybyshevCosPoli(n - 2, x);
         }
 
@@ -551,9 +596,15 @@
         public static double ChybyshevSinPoli(int n, double x)
         {
             if (n == 0)
+            {
                 return 1;
+            }
+
             if (n == 1)
+            {
                 return 2 * x;
+            }
+
             return 2 * x * ChybyshevSinPoli(n - 1, x) - ChybyshevSinPoli(n - 2, x);
         }
 
@@ -563,9 +614,15 @@
         public Quaternion Pow(Quaternion power)
         {
             if (this == Zero)
+            {
                 return Zero;
+            }
+
             if (this == One)
+            {
                 return One;
+            }
+
             return (power * this.Log()).Exp();
         }
 
@@ -610,11 +667,11 @@
         {
             return string.Format(formatProvider, "{0}{1}{2}i{3}{4}j{5}{6}k",
                 this.Real.ToString(format, formatProvider),
-                (this.ImagX < 0) ? "" : "+",
+                (this.ImagX < 0) ? string.Empty : "+",
                 this.ImagX.ToString(format, formatProvider),
-                (this.ImagY < 0) ? "" : "+",
+                (this.ImagY < 0) ? string.Empty : "+",
                 this.ImagY.ToString(format, formatProvider),
-                (this.ImagZ < 0) ? "" : "+",
+                (this.ImagZ < 0) ? string.Empty : "+",
                 this.ImagZ.ToString(format, formatProvider));
         }
 
@@ -624,13 +681,14 @@
         /// <returns></returns>
         public override string ToString()
         {
-            return string.Format("{0}{1}{2}i{3}{4}j{5}{6}k",
+            return string.Format(
+                "{0}{1}{2}i{3}{4}j{5}{6}k",
                 this.Real,
-                (this.ImagX < 0) ? "" : "+",
+                (this.ImagX < 0) ? string.Empty : "+",
                 this.ImagX,
-                (this.ImagY < 0) ? "" : "+",
+                (this.ImagY < 0) ? string.Empty : "+",
                 this.ImagY,
-                (this.ImagZ < 0) ? "" : "+",
+                (this.ImagZ < 0) ? string.Empty : "+",
                 this.ImagZ);
         }
 
@@ -640,7 +698,10 @@
         public bool Equals(Quaternion other)
         {
             if (other.IsNan && this.IsNan || other.IsInfinity && this.IsInfinity)
+            {
                 return true;
+            }
+
             return this.Real.AlmostEqual(other.Real)
                 && this.ImagX.AlmostEqual(other.ImagX)
                 && this.ImagY.AlmostEqual(other.ImagY)
@@ -652,7 +713,11 @@
         /// </summary>
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+
             return obj is Quaternion && this.Equals((Quaternion)obj);
         }
 

@@ -31,7 +31,10 @@
             get
             {
                 if (this.length < 0)
+                {
                     this.ComputeLengthAndDirection();
+                }
+
                 return this.length;
             }
         }
@@ -44,7 +47,10 @@
             get
             {
                 if (this.length < 0)
+                {
                     this.ComputeLengthAndDirection();
+                }
+
                 return this.direction;
             }
         }
@@ -73,7 +79,6 @@
         /// <summary>
         /// Compute and store the length and direction of the Line2D, used for lazy loading
         /// </summary>
-        /// <returns></returns>
         private void ComputeLengthAndDirection()
         {
             var vectorBetween = this.StartPoint.VectorTo(this.EndPoint);
@@ -105,11 +110,15 @@
             if (mustBeOnSegment)
             {
                 if (dotProduct < 0)
+                {
                     dotProduct = 0;
+                }
 
                 double l = this.Length;
                 if (dotProduct > l)
+                {
                     dotProduct = l;
+                }
             }
 
             Vector2D alongVector = dotProduct * this.Direction;
@@ -125,7 +134,9 @@
         public Point2D? IntersectWith(Line2D other)
         {
             if (this.IsParallelTo(other))
+            {
                 return null;
+            }
 
             // http://stackoverflow.com/questions/563198/how-do-you-detect-where-two-line-segments-intersect
             Point2D p = this.StartPoint;
@@ -147,7 +158,9 @@
         public Point2D? IntersectWith(Line2D other, Angle parallelTolerance)
         {
             if (this.IsParallelTo(other, parallelTolerance))
+            {
                 return null;
+            }
 
             // http://stackoverflow.com/questions/563198/how-do-you-detect-where-two-line-segments-intersect
             Point2D p = this.StartPoint;
@@ -182,8 +195,6 @@
             return this.Direction.IsParallelTo(other.Direction, angleTolerance);
         }
 
-        # region Operators
-
         public static bool operator ==(Line2D left, Line2D right)
         {
             return left.Equals(right);
@@ -209,10 +220,6 @@
             return line + (-offset);
         }
 
-        # endregion
-
-        # region Serialization and Deserialization
-
         public override string ToString()
         {
             return string.Format("StartPoint: {0}, EndPoint: {1}", this.StartPoint, this.EndPoint);
@@ -223,10 +230,6 @@
             return new Line2D(Point2D.Parse(startPointString), Point2D.Parse(endPointString));
         }
 
-        # endregion
-
-        # region Equality and Hash Code
-
         public bool Equals(Line2D other)
         {
             return this.StartPoint.Equals(other.StartPoint) && this.EndPoint.Equals(other.EndPoint);
@@ -234,7 +237,11 @@
 
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+
             return obj is Line2D && this.Equals((Line2D)obj);
         }
 
@@ -249,6 +256,5 @@
                 return (this.StartPoint.GetHashCode() * 397) ^ this.EndPoint.GetHashCode();
             }
         }
-        # endregion
     }
 }

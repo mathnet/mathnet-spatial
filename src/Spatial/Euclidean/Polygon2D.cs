@@ -19,7 +19,9 @@
         {
             this.points = new List<Point2D>(points);
             if (this.points.First().Equals(this.points.Last()))
+            {
                 this.points.RemoveAt(0);
+            }
         }
 
         // Methods
@@ -67,7 +69,9 @@
             {
                 if (((poly[i].Y > p.Y) != (poly[j].Y > p.Y)) &&
                     (p.X < (poly[j].X - poly[i].X) * (p.Y - poly[i].Y) / (poly[j].Y - poly[i].Y) + poly[i].X))
+                {
                     c = !c;
+                }
             }
 
             return c;
@@ -97,9 +101,14 @@
             // Perform basic validation of the input point cloud for cases of less than
             // four points being given
             if (points.Count <= 2)
+            {
                 throw new ArgumentException("Must have at least 3 points in the polygon to compute the convex hull");
+            }
+
             if (points.Count <= 3)
+            {
                 return new Polygon2D(points);
+            }
 
             // Find the leftmost and rightmost points
             Point2D leftMost = points.First();
@@ -107,9 +116,14 @@
             foreach (var point in points)
             {
                 if (point.X < leftMost.X)
+                {
                     leftMost = point;
+                }
+
                 if (point.X > rightMost.X)
+                {
                     rightMost = point;
+                }
             }
 
             // Remove the left and right points
@@ -124,9 +138,13 @@
             {
                 Vector2D testVector = leftMost.VectorTo(point2D);
                 if (chord.CrossProduct(testVector) > 0)
+                {
                     upperPoints.Add(point2D);
+                }
                 else
+                {
                     lowerPoints.Add(point2D);
+                }
             }
 
             var hullPoints = new List<Point2D> { leftMost, rightMost };
@@ -153,7 +171,10 @@
         private static void RecursiveHullComputation(Point2D a, Point2D b, List<Point2D> workingList, List<Point2D> hullList)
         {
             if (!workingList.Any())
+            {
                 return;
+            }
+
             if (workingList.Count == 1)
             {
                 hullList.Add(workingList.First());

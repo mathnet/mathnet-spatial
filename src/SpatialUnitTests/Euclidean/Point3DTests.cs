@@ -206,7 +206,7 @@
             const string Xml = @"<Point3D X=""1"" Y=""-2"" Z=""3"" />";
             const string ElementXml = @"<Point3D><X>1</X><Y>-2</Y><Z>3</Z></Point3D>";
             AssertXml.XmlRoundTrips(p, Xml, (expected, actual) => AssertGeometry.AreEqual(expected, actual));
-            var serializer = new XmlSerializer(typeof (Point3D));
+            var serializer = new XmlSerializer(typeof(Point3D));
 
             var actuals = new[]
                           {

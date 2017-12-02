@@ -224,8 +224,9 @@
                 {
                     throw new InvalidOperationException("Line lies in the plane"); // Not sure what should be done here
                 }
-                else // Line and plane are parallel
+                else
                 {
+                    // Line and plane are parallel
                     return null;
                 }
             }
@@ -233,8 +234,9 @@
             var d = this.SignedDistanceTo(line.StartPoint);
             var u = line.StartPoint.VectorTo(line.EndPoint);
             var t = -1 * d / u.DotProduct(this.Normal);
-            if (t > 1 || t < 0) // They are not intersected
+            if (t > 1 || t < 0)
             {
+                // They are not intersected
                 return null;
             }
 

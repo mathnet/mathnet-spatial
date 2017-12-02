@@ -126,10 +126,14 @@
             if (mustBeOnSegment)
             {
                 if (dotProduct < 0)
+                {
                     dotProduct = 0;
+                }
 
                 if (dotProduct > this.Length)
+                {
                     dotProduct = this.Length;
+                }
             }
 
             Vector3D alongVector = dotProduct * this.Direction;
@@ -224,13 +228,16 @@
             // If the segments are parallel and the answer must be on the segments, we can skip directly to the ending
             // algorithm where the endpoints are projected onto the opposite segment and the smallest distance is
             // taken.  Otherwise we must first check if the infinite length line solution is valid.
-            if (!this.IsParallelTo(other) || !mustBeOnSegments) // If the lines aren't parallel OR it doesn't have to be constrained to the segments
+            // If the lines aren't parallel OR it doesn't have to be constrained to the segments
+            if (!this.IsParallelTo(other) || !mustBeOnSegments)
             {
                 // Compute the unbounded result, and if mustBeOnSegments is false we can directly return the results
                 // since this is the same as calling the other method.
                 var result = this.ClosestPointsBetween(other);
                 if (!mustBeOnSegments)
+                {
                     return result;
+                }
 
                 // A point that is known to be colinear with the line start and end points is on the segment if
                 // its distance to both endpoints is less than the segment length.  If both projected points lie

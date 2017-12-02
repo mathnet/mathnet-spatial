@@ -48,7 +48,10 @@
         {
             double length = 0;
             for (int i = 0; i < this.points.Count - 1; ++i)
+            {
                 length += this[i].DistanceTo(this[i + 1]);
+            }
+
             return length;
         }
 
@@ -61,7 +64,10 @@
         public Point2D GetPointAtFractionAlongCurve(double fraction)
         {
             if (fraction > 1 || fraction < 0)
+            {
                 throw new ArgumentException("fraction must be between 0 and 1");
+            }
+
             return this.GetPointAtLengthFromStart(fraction * this.Length);
         }
 
@@ -75,9 +81,14 @@
         {
             double length = this.Length;
             if (lengthFromStart >= length)
+            {
                 return this.Last();
+            }
+
             if (lengthFromStart <= 0)
+            {
                 return this.First();
+            }
 
             double cumulativeLength = 0;
             int i = 0;
@@ -140,9 +151,13 @@
                 else
                 {
                     if (errorByIndex[i] < tolerance)
+                    {
                         preserveMe = i + 1;
+                    }
                     else
+                    {
                         thinnedPoints.Add(manifold[i]);
+                    }
                 }
             }
 

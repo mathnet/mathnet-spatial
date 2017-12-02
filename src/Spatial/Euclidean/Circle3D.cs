@@ -68,7 +68,9 @@
 
             var center = bisectorA.IntersectionWith(bisectorB);
             if (center == null)
+            {
                 throw new ArgumentException("A circle cannot be created from these points, are they colinear?");
+            }
 
             this.CenterPoint = (Point3D)center;
             this.Radius = this.CenterPoint.DistanceTo(p1);

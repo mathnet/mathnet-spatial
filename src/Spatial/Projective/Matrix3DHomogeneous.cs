@@ -269,14 +269,24 @@
             Matrix3DHomogeneous rotate = new Matrix3DHomogeneous();
             // make sure elevation in the range of [-90, 90]:
             if (elevation > 90)
+            {
                 elevation = 90;
+            }
             else if (elevation < -90)
+            {
                 elevation = -90;
+            }
+
             // Make sure azimuth in the range of [-180, 180]:
             if (azimuth > 180)
+            {
                 azimuth = 180;
+            }
             else if (azimuth < -180)
+            {
                 azimuth = -180;
+            }
+
             elevation = elevation * Math.PI / 180.0f;
             double sne = Math.Sin(elevation);
             double cne = Math.Cos(elevation);
@@ -293,7 +303,9 @@
             rotate.Matrix[2, 1] = -cne * cna;
             rotate.Matrix[2, 2] = sne;
             if (oneOverd <= 0)
+            {
                 result = rotate;
+            }
             else if (oneOverd > 0)
             {
                 //Point3DHomogeneous perspective = Point3DHomogeneous.Perspective(1 / oneOverd);
