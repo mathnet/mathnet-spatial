@@ -51,7 +51,7 @@
   <ItemGroup>
     <Compile Include="Euclidean\Circle2D.cs" />
     <Compile Include="Euclidean\EulerAngles.cs" />
-    <Compile Include="Euclidean\ILine.cs" />
+    <Compile Include="Euclidean\ILine2D.cs" />
     <Compile Include="Euclidean\Line2D.cs" />
     <Compile Include="Euclidean\Matrix2D.cs" />
     <Compile Include="Euclidean\Point2D.cs" />

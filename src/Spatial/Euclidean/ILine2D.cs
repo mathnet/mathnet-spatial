@@ -8,21 +8,21 @@ namespace MathNet.Spatial.Euclidean
     /// <summary>
     /// This interface represents a line in cartesian space
     /// </summary>
-    public interface ILine : IEquatable<ILine>
+    public interface ILine2D : IEquatable<ILine2D>
     {
         /// <summary>
         /// Returns the points at which the line crosses on the x axis
         /// </summary>
         /// <param name="x">An optional x coordinate</param>
         /// <returns>A list of crossing points</returns>
-        IEnumerable<Point2D> XIntercept(double x = 0);
+        Point2D[] XIntercept(double x = 0);
 
         /// <summary>
         /// Returns the points at which the line crosses on the y axis.
         /// </summary>
         /// <param name="y">An optional y coordinate</param>
         /// <returns>A list of crossing points</returns>
-        IEnumerable<Point2D> YIntercept(double y = 0);
+        Point2D[] YIntercept(double y = 0);
 
         /// <summary>
         /// Determines if a given point is on the line
@@ -44,6 +44,6 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         /// <param name="line">the line to be compared against</param>
         /// <returns>True if the lines are parallel</returns>
-        bool IsParallel(ILine line);
+        bool IsParallel<T>(T line) where T : ILine2D;
     }
 }

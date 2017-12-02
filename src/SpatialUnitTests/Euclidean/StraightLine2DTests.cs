@@ -13,13 +13,13 @@
         {
             var p1 = new Point2D(1, -1);
             var p2 = new Point2D(1, -1);
-            Assert.Throws<ArgumentException>(() => new StraightLine2D(p1, p2));
+            Assert.Throws<ArgumentException>(() => StraightLine2D.Create(p1, p2));
         }
 
         [Test]
         public void EqualityComparisonFalseAgainstNull()
         {
-            var line = new StraightLine2D(new Point2D(), new Point2D(1, 1));
+            var line = StraightLine2D.Create(new Point2D(), new Point2D(1, 1));
             Assert.IsFalse(line.Equals(null));
         }
 
@@ -31,7 +31,7 @@
         {
             var first = Point2D.Parse(p1);
             var second = Point2D.Parse(p2);
-            StraightLine2D l = new StraightLine2D(first, second);
+            StraightLine2D l = StraightLine2D.Create(first, second);
             Assert.AreEqual(gradient, l.Gradient);
             Assert.AreEqual(yintercept, l.XIntercept().First().Y);    
         }
@@ -42,7 +42,7 @@
         public void CreateFromPointGradient(string point, double gradient, double yintercept)
         {
             var p1 = Point2D.Parse(point);
-            StraightLine2D l = new StraightLine2D(p1, gradient);
+            StraightLine2D l = StraightLine2D.Create(p1, gradient);
             Assert.AreEqual(gradient, l.Gradient);
             Assert.AreEqual(yintercept, l.XIntercept().First().Y);
         }
@@ -52,8 +52,8 @@
         {
             var pointpair1 = line1.Split(';').Select(t => Point2D.Parse(t));
             var pointpair2 = line2.Split(';').Select(t => Point2D.Parse(t));
-            StraightLine2D l1 = new StraightLine2D(pointpair1);
-            StraightLine2D l2 = new StraightLine2D(pointpair2);
+            StraightLine2D l1 = StraightLine2D.CreateFromCollinear(pointpair1);
+            StraightLine2D l2 = StraightLine2D.CreateFromCollinear(pointpair2);
             Assert.AreEqual(expected, l1.IsParallel(l2));
         }
        
@@ -64,7 +64,7 @@
         [TestCase("0,0", "1,0", "3,0", "3,0")]
         public void ClosestPointTo(string start, string end, string point, string expected)
         {
-            var line = new StraightLine2D(Point2D.Parse(start), Point2D.Parse(end));
+            var line = StraightLine2D.Create(Point2D.Parse(start), Point2D.Parse(end));
             var p = Point2D.Parse(point);
             var e = Point2D.Parse(expected);
 
@@ -77,8 +77,8 @@
         [TestCase("0,0", "2,2", "0,1", "1,2", null)]
         public void IntersectWithTest(string s1, string e1, string s2, string e2, string expected)
         {
-            var line1 = new StraightLine2D(Point2D.Parse(s1), Point2D.Parse(e1));
-            var line2 = new StraightLine2D(Point2D.Parse(s2), Point2D.Parse(e2));
+            var line1 = StraightLine2D.Create(Point2D.Parse(s1), Point2D.Parse(e1));
+            var line2 = StraightLine2D.Create(Point2D.Parse(s2), Point2D.Parse(e2));
             Point2D? e = string.IsNullOrEmpty(expected) ? (Point2D?)null : Point2D.Parse(expected);
             Point2D? intersection = line1.Intersection(line2);
 
