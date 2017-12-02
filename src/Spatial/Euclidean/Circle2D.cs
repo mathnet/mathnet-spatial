@@ -1,10 +1,6 @@
 ﻿namespace MathNet.Spatial.Euclidean
 {
     using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
 
     /// <summary>
     /// Describes a standard 2 dimentional circle

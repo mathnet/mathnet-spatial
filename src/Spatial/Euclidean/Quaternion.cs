@@ -425,6 +425,7 @@
         //{
         //    return new Quaternion(d, 0, 0, 0);
         //}
+
         /// <summary>
         /// Negate this quaternion.
         /// </summary>

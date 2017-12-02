@@ -224,7 +224,7 @@
             // If the segments are parallel and the answer must be on the segments, we can skip directly to the ending
             // algorithm where the endpoints are projected onto the opposite segment and the smallest distance is
             // taken.  Otherwise we must first check if the infinite length line solution is valid.
-            if (!this.IsParallelTo(other) || !mustBeOnSegments)  // If the lines aren't parallel OR it doesn't have to be constrained to the segments
+            if (!this.IsParallelTo(other) || !mustBeOnSegments) // If the lines aren't parallel OR it doesn't have to be constrained to the segments
             {
                 // Compute the unbounded result, and if mustBeOnSegments is false we can directly return the results
                 // since this is the same as calling the other method.

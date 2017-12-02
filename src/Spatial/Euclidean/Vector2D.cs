@@ -8,7 +8,6 @@
     using System.Xml.Linq;
     using System.Xml.Schema;
     using System.Xml.Serialization;
-    using MathNet.Numerics.Financial;
     using MathNet.Numerics.LinearAlgebra;
     using MathNet.Spatial.Units;
 
