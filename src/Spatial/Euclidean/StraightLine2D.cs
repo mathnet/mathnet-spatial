@@ -141,7 +141,12 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>A point midway between the two provided points</returns>
         public Point2D MidPoint(Point2D pointA, Point2D pointB)
         {
-            return new Point2D((pointA.X + pointB.X) / 2, (pointA.Y + pointB.Y) / 2);
+            if (IsThrough(pointA) && IsThrough(pointB))
+            {
+                return new Point2D((pointA.X + pointB.X) / 2, (pointA.Y + pointB.Y) / 2);
+            }
+
+            throw new ArgumentException("Provided points are not along the line");
         }
 
         /// <summary>
@@ -212,7 +217,14 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>True if the point is on the line</returns>
         public bool IsThrough(double x, double y)
         {
-            return y == (Gradient * x) + yoffset;
+            if (double.IsInfinity(Gradient))
+            {
+                return x == xoffset;
+            }
+            else
+            {
+                return y == (Gradient * x) + yoffset;
+            }
         }
 
         /// <summary>

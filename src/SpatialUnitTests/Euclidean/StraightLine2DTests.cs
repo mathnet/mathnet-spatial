@@ -56,7 +56,20 @@
             StraightLine2D l2 = StraightLine2D.CreateFromCollinear(pointpair2);
             Assert.AreEqual(expected, l1.IsParallel(l2));
         }
-       
+
+        [TestCase("0,0;2,2", "1,1")]
+        [TestCase("-1,-1;1,1", "0,0")]
+        [TestCase("-1,-1;-1,1", "-1,0")]
+        [TestCase("-1,-1;1,-1", "0,-1")]
+        public void MidPoints(string line1, string midpoint)
+        {
+            var pointpair1 = line1.Split(';').Select(t => Point2D.Parse(t)).ToArray();
+            var mid = Point2D.Parse(midpoint);
+            StraightLine2D l1 = StraightLine2D.CreateFromCollinear(pointpair1);
+
+            Assert.AreEqual(mid, l1.MidPoint(pointpair1[0], pointpair1[1]));
+        }
+
         [TestCase("0,0", "1,0", "0,0", "0,0")]
         [TestCase("0,0", "1,0", "1,0", "1,0")]
         [TestCase("0,0", "1,0", ".25,1", ".25,0")]
