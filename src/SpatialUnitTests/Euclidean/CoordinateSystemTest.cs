@@ -223,7 +223,6 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         [TestCase(X, Y, null)]
         [TestCase(X, Y, "0,0,1")]
         [TestCase("1,-1, 1", "0, 1, 1", null)]
-        [TestCase(X, Y, Z)]
         [TestCase(X, Z, Y)]
         public void SetToRotateToTest(string vs, string vts, string axisString)
         {

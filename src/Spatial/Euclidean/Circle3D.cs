@@ -5,10 +5,25 @@ namespace MathNet.Spatial.Euclidean
     [Serializable]
     public struct Circle3D
     {
+        /// <summary>
+        /// The center of the circle
+        /// </summary>
         public readonly Point3D CenterPoint;
+        /// <summary>
+        /// the axis of the circle
+        /// </summary>
         public readonly UnitVector3D Axis;
+        /// <summary>
+        /// the radius of the circle
+        /// </summary>
         public readonly double Radius;
 
+        /// <summary>
+        /// Constructs a Circle3D with a given <paramref name="radius"/> at a <paramref name="centerPoint"/> orientated to the <paramref name="axis"/>
+        /// </summary>
+        /// <param name="centerPoint">The center of the circle</param>
+        /// <param name="axis">the axis of the circle</param>
+        /// <param name="radius">the radius of the circle</param>
         public Circle3D(Point3D centerPoint, UnitVector3D axis, double radius)
         {
             this.CenterPoint = centerPoint;
@@ -32,12 +47,12 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// Create a circle from three points which lie along its circumference.
         /// </summary>
-        /// <param name="p1"></param>
-        /// <param name="p2"></param>
-        /// <param name="p3"></param>
+        /// <param name="p1">a point on the circle</param>
+        /// <param name="p2">a point on the circle</param>
+        /// <param name="p3">a point on the circle</param>
         public Circle3D(Point3D p1, Point3D p2, Point3D p3)
         {
-            https://www.physicsforums.com/threads/equation-of-a-circle-through-3-points-in-3d-space.173847/
+            // https://www.physicsforums.com/threads/equation-of-a-circle-through-3-points-in-3d-space.173847/
             Vector3D p1p2 = p2 - p1;
             Vector3D p2p3 = p3 - p2;
             this.Axis = p1p2.CrossProduct(p2p3).Normalize();
@@ -60,8 +75,17 @@ namespace MathNet.Spatial.Euclidean
 
         }
 
+        /// <summary>
+        /// Returns the diameter of the circle
+        /// </summary>
         public double Diameter => 2 * Radius;
+        /// <summary>
+        /// Returns the circumference of the circle
+        /// </summary>
         public double Circumference => 2 * Math.PI * Radius;
+        /// <summary>
+        /// returns the area of the circle
+        /// </summary>
         public double Area => Math.PI * Math.Pow(Radius, 2);
     }
 }

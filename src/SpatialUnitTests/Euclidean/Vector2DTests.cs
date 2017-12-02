@@ -253,7 +253,6 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         [TestCase("1, 0", "-90°", "0, -1")]
         [TestCase("1, 0", "270°", "0, -1")]
         [TestCase("1, 0", "180°", "-1, 0")]
-        [TestCase("1, 0", "180°", "-1, 0")]
         [TestCase("1, 0", "0°", "1, 0")]
         [TestCase("0, 1", "-90°", "1, 0")]
         public void Rotate(string vs, string @as, string evs)
