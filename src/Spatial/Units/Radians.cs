@@ -7,24 +7,11 @@ namespace MathNet.Spatial.Units
     [EditorBrowsable(EditorBrowsableState.Never)]
     public struct Radians : IAngleUnit
     {
-        private const double Conv = 1.0;
         internal const string Name = "rad";
 
-        public double Conversionfactor
-        {
-            get
-            {
-                return Conv;
-            }
-        }
+        public double Conversionfactor => 1.0;
 
-        public string ShortName
-        {
-            get
-            {
-                return Name;
-            }
-        }
+        public string ShortName => Name;
 
         public static Angle operator *(double left, Radians right)
         {

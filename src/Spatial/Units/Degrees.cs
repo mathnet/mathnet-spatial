@@ -10,24 +10,12 @@ namespace MathNet.Spatial.Units
     [EditorBrowsable(EditorBrowsableState.Never)]
     public struct Degrees : IAngleUnit
     {
-        private const double Conv = Math.PI / 180.0;
         internal const string Name = "\u00B0";
+        private const double RadToDeg = Math.PI / 180.0;
 
-        public double Conversionfactor
-        {
-            get
-            {
-                return Conv;
-            }
-        }
+        public double Conversionfactor => RadToDeg;
 
-        public string ShortName
-        {
-            get
-            {
-                return Name;
-            }
-        }
+        public string ShortName => Name;
 
         public static Angle operator *(double left, Degrees right)
         {
