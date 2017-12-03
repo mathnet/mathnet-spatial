@@ -129,9 +129,21 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>True if <paramref name="text"/> could be parsed.</returns>
         public static bool TryParse(string text, out Point2D result)
         {
+            return TryParse(text, null, out result);
+        }
+
+        /// <summary>
+        /// Attempts to convert a string of the form x,y into a point
+        /// </summary>
+        /// <param name="text">The string to be converted</param>
+        /// <param name="formatProvider">The <see cref="IFormatProvider"/></param>
+        /// <param name="result">A point at the coordinates specified</param>
+        /// <returns>True if <paramref name="text"/> could be parsed.</returns>
+        public static bool TryParse(string text, IFormatProvider formatProvider, out Point2D result)
+        {
             double x;
             double y;
-            if (Text.TryParse2D(text, out x, out y))
+            if (Text.TryParse2D(text, formatProvider, out x, out y))
             {
                 result = new Point2D(x, y);
                 return true;
@@ -145,11 +157,12 @@ namespace MathNet.Spatial.Euclidean
         /// Attempts to convert a string of the form x,y into a point
         /// </summary>
         /// <param name="value">The string to be converted</param>
+        /// <param name="formatProvider">The <see cref="IFormatProvider"/></param>
         /// <returns>A point at the coordinates specified</returns>
-        public static Point2D Parse(string value)
+        public static Point2D Parse(string value, IFormatProvider formatProvider = null)
         {
             Point2D p;
-            if (TryParse(value, out p))
+            if (TryParse(value, formatProvider, out p))
             {
                 return p;
             }
