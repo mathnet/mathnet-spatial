@@ -25,9 +25,6 @@
         /// </summary>
         public readonly double Y;
 
-        static readonly Vector2D CachedXAxis = new Vector2D(1, 0);
-        static readonly Vector2D CachedYAxis = new Vector2D(0, 1);
-
         public Vector2D(double x, double y)
         {
             this.X = x;
@@ -62,9 +59,11 @@
             }
         }
 
-        public static Vector2D XAxis => CachedXAxis;
+        public static Vector2D XAxis { get; } = new Vector2D(1, 0);
 
-        public static Vector2D YAxis => CachedYAxis;
+        public static Vector2D YAxis { get; } = new Vector2D(0, 1);
+
+        public double Length => Math.Sqrt((this.X * this.X) + (this.Y * this.Y));
 
         public static bool operator ==(Vector2D left, Vector2D right)
         {
@@ -168,6 +167,7 @@
             return new Vector2D(transformed);
         }
 
+        /// <inheritdoc />
         public override string ToString()
         {
             return this.ToString(null, CultureInfo.InvariantCulture);
@@ -178,18 +178,20 @@
             return this.ToString(null, provider);
         }
 
+        /// <inheritdoc />
         public string ToString(string format, IFormatProvider provider = null)
         {
             var numberFormatInfo = provider != null ? NumberFormatInfo.GetInstance(provider) : CultureInfo.InvariantCulture.NumberFormat;
-            string separator = numberFormatInfo.NumberDecimalSeparator == "," ? ";" : ",";
-            return string.Format("({0}{1} {2})", this.X.ToString(format, numberFormatInfo), separator, this.Y.ToString(format, numberFormatInfo));
+            var separator = numberFormatInfo.NumberDecimalSeparator == "," ? ";" : ",";
+            return $"({this.X.ToString(format, numberFormatInfo)}{separator} {this.Y.ToString(format, numberFormatInfo)})";
         }
 
+        /// <inheritdoc />
         public bool Equals(Vector2D other)
         {
-            // ReSharper disable CompareOfFloatsByEqualityOperator
+            //// ReSharper disable CompareOfFloatsByEqualityOperator
             return this.X == other.X && this.Y == other.Y;
-            // ReSharper restore CompareOfFloatsByEqualityOperator
+            //// ReSharper restore CompareOfFloatsByEqualityOperator
         }
 
         public bool Equals(Vector2D other, double tolerance)
@@ -203,6 +205,7 @@
                    Math.Abs(other.Y - this.Y) < tolerance;
         }
 
+        /// <inheritdoc />
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj))
@@ -213,6 +216,7 @@
             return obj is Vector2D && this.Equals((Vector2D)obj);
         }
 
+        /// <inheritdoc />
         public override int GetHashCode()
         {
             unchecked
@@ -221,36 +225,23 @@
             }
         }
 
-        /// <summary>
-        /// This method is reserved and should not be used. When implementing the IXmlSerializable interface, you should return null (Nothing in Visual Basic) from this method, and instead, if specifying a custom schema is required, apply the <see cref="T:System.Xml.Serialization.XmlSchemaProviderAttribute"/> to the class.
-        /// </summary>
-        /// <returns>
-        /// An <see cref="T:System.Xml.Schema.XmlSchema"/> that describes the XML representation of the object that is produced by the <see cref="M:System.Xml.Serialization.IXmlSerializable.WriteXml(System.Xml.XmlWriter)"/> method and consumed by the <see cref="M:System.Xml.Serialization.IXmlSerializable.ReadXml(System.Xml.XmlReader)"/> method.
-        /// </returns>
+        /// <inheritdoc />
         public XmlSchema GetSchema()
         {
             return null;
         }
 
-        /// <summary>
-        /// Generates an object from its XML representation.
-        /// Handles both attribute and element style
-        /// </summary>
-        /// <param name="reader">The <see cref="T:System.Xml.XmlReader"/> stream from which the object is deserialized. </param>
+        /// <inheritdoc />
         public void ReadXml(XmlReader reader)
         {
             reader.MoveToContent();
             var e = (XElement)XNode.ReadFrom(reader);
-
-            // Hacking set readonly fields here, can't think of a cleaner workaround
-            XmlExt.SetReadonlyField(ref this, x => x.X, XmlConvert.ToDouble(e.ReadAttributeOrElementOrDefault("X")));
-            XmlExt.SetReadonlyField(ref this, x => x.Y, XmlConvert.ToDouble(e.ReadAttributeOrElementOrDefault("Y")));
+            this = new Vector2D(
+                XmlConvert.ToDouble(e.ReadAttributeOrElementOrDefault("X")),
+                XmlConvert.ToDouble(e.ReadAttributeOrElementOrDefault("Y")));
         }
 
-        /// <summary>
-        /// Converts an object into its XML representation.
-        /// </summary>
-        /// <param name="writer">The <see cref="T:System.Xml.XmlWriter"/> stream to which the object is serialized. </param>
+        /// <inheritdoc />
         public void WriteXml(XmlWriter writer)
         {
             writer.WriteAttribute("X", this.X);
@@ -306,20 +297,20 @@
         /// <returns></returns>
         public Angle SignedAngleTo(Vector2D v2, bool clockWise, bool returnNegative = false)
         {
-            int sign = clockWise ? -1 : 1;
-            double a1 = Math.Atan2(this.Y, this.X);
+            var sign = clockWise ? -1 : 1;
+            var a1 = Math.Atan2(this.Y, this.X);
             if (a1 < 0)
             {
                 a1 += 2 * Math.PI;
             }
 
-            double a2 = Math.Atan2(v2.Y, v2.X);
+            var a2 = Math.Atan2(v2.Y, v2.X);
             if (a2 < 0)
             {
                 a2 += 2 * Math.PI;
             }
 
-            double a = sign * (a2 - a1);
+            var a = sign * (a2 - a1);
             if (a < 0 && !returnNegative)
             {
                 a += 2 * Math.PI;
@@ -359,8 +350,6 @@
             var y = (this.X * sn) + (this.Y * cs);
             return new Vector2D(x, y);
         }
-
-        public double Length => Math.Sqrt((this.X * this.X) + (this.Y * this.Y));
 
         public double DotProduct(Vector2D other)
         {
