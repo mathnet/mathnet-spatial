@@ -148,7 +148,8 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>A point at the coordinates specified</returns>
         public static Point2D Parse(string value)
         {
-            if (TryParse(value, out var p))
+            Point2D p;
+            if (TryParse(value, out p))
             {
                 return p;
             }
@@ -243,9 +244,9 @@ namespace MathNet.Spatial.Euclidean
         /// <inheritdoc />
         public bool Equals(Point2D other)
         {
-            // ReSharper disable CompareOfFloatsByEqualityOperator
+            //// ReSharper disable CompareOfFloatsByEqualityOperator
             return this.X == other.X && this.Y == other.Y;
-            // ReSharper restore CompareOfFloatsByEqualityOperator
+            //// ReSharper restore CompareOfFloatsByEqualityOperator
         }
 
         public bool Equals(Point2D other, double tolerance)
