@@ -6,6 +6,7 @@ namespace MathNet.Spatial.Euclidean
     using System.Xml.Linq;
     using System.Xml.Schema;
     using System.Xml.Serialization;
+    using MathNet.Spatial.Internals;
 
     [Serializable]
     public struct Ray3D : IEquatable<Ray3D>, IXmlSerializable, IFormattable

@@ -8,6 +8,7 @@ namespace MathNet.Spatial.Euclidean
     using System.Xml.Schema;
     using System.Xml.Serialization;
     using MathNet.Numerics.LinearAlgebra;
+    using MathNet.Spatial.Internals;
     using MathNet.Spatial.Units;
 
     [Serializable]

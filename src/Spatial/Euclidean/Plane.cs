@@ -7,6 +7,7 @@
     using System.Xml.Serialization;
     using MathNet.Numerics.LinearAlgebra;
     using MathNet.Numerics.LinearAlgebra.Double;
+    using MathNet.Spatial.Internals;
     using MathNet.Spatial.Units;
 
     [Serializable]

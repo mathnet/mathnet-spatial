@@ -58,6 +58,7 @@
     <Compile Include="Euclidean\PolyLine2D.cs" />
     <Compile Include="Euclidean\PolyLine3D.cs" />
     <Compile Include="Euclidean\Vector2D.cs" />
+    <Compile Include="Internals\XmlWriterExt.cs" />
     <Compile Include="Projective\Matrix3DHomogeneous.cs" />
     <Compile Include="Projective\Point3DHomogeneous.cs" />
     <Compile Include="Projective\Vector3DHomogeneous.cs" />
@@ -81,7 +82,7 @@
     <Compile Include="Units\Radians.cs" />
     <Compile Include="Units\UnitConverter.cs" />
     <Compile Include="Units\UnitParser.cs" />
-    <Compile Include="XmlExt.cs" />
+    <Compile Include="Obsolete\XmlExt.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Spatial.csproj.paket.references" />

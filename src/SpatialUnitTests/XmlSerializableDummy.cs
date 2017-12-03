@@ -30,6 +30,7 @@ namespace MathNet.Spatial.UnitTests
         public int Age { get; set; }
 
         public XmlSchema GetSchema() { return null; }
+
         public void ReadXml(XmlReader reader)
         {
             var e = (XElement)XNode.ReadFrom(reader);

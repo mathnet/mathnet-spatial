@@ -6,6 +6,7 @@
     using System.Xml.Schema;
     using System.Xml.Serialization;
     using MathNet.Numerics;
+    using MathNet.Spatial.Internals;
     using MathNet.Spatial.Units;
 
     /// <summary>

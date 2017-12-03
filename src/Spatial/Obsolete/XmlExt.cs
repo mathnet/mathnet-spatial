@@ -2,14 +2,13 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
     using System.Linq;
     using System.Linq.Expressions;
     using System.Reflection;
     using System.Xml;
     using System.Xml.Linq;
-    using System.Xml.Serialization;
 
+    [Obsolete("This class should not have been public, will be removed in future versions. Made obsolete 2017-12-03")]
     public static class XmlExt
     {
         public static void WriteValueToReadonlyField<TClass, TProperty>(
@@ -36,28 +35,8 @@
                     .Concat(GetAllFields(t.BaseType));
         }
 
-        internal static void WriteElement(this XmlWriter writer, string name, IXmlSerializable value)
-        {
-            writer.WriteStartElement(name);
-            value.WriteXml(writer);
-            writer.WriteEndElement();
-        }
-
-        internal static void WriteElement(this XmlWriter writer, string name, double value)
-        {
-            writer.WriteStartElement(name);
-            writer.WriteValue(value);
-            writer.WriteEndElement();
-        }
-
-        internal static void WriteElement(this XmlWriter writer, string name, double value, string format)
-        {
-            writer.WriteElementString(name, value.ToString(format, CultureInfo.InvariantCulture));
-        }
-
         /// <summary>
         /// Reads attribute if it exists
-        ///
         /// </summary>
         /// <param name="e"/><param name="localName"/>
         /// <returns/>
@@ -186,47 +165,6 @@
             return writer;
         }
 
-        internal static void SetReadonlyField<TItem, TValue>(
-            ref TItem self,
-            Expression<Func<TItem, TValue>> func,
-            TValue value)
-            where TItem : struct
-        {
-            var fieldInfo = self.GetType()
-                                .GetField(((MemberExpression)func.Body).Member.Name);
-            object boxed = self;
-            fieldInfo.SetValue(boxed, value);
-            self = (TItem)boxed;
-        }
-
-        internal static void SetReadonlyField<TItem, TValue>(
-            this TItem self,
-            Expression<Func<TItem, TValue>> func,
-            TValue value)
-            where TItem : class
-        {
-            var fieldInfo = self.GetType()
-                                .GetField(((MemberExpression)func.Body).Member.Name);
-            fieldInfo.SetValue(self, value);
-        }
-
-        internal static void SetReadonlyFields<TItem, TValue>(
-            ref TItem self,
-            Expression<Func<TItem, TValue>>[] funcs,
-            TValue[] values)
-            where TItem : struct
-        {
-            object boxed = self;
-            for (int i = 0; i < funcs.Length; i++)
-            {
-                var func = funcs[i];
-                var fieldInfo = self.GetType().GetField(((MemberExpression)func.Body).Member.Name);
-                fieldInfo.SetValue(boxed, values[i]);
-            }
-
-            self = (TItem)boxed;
-        }
-
         public static void SetReadonlyFields<TItem>(ref TItem self, string[] fields, double[] values)
             where TItem : struct
         {
@@ -237,6 +175,19 @@
                 fieldInfo.SetValue(boxed, values[i]);
             }
 
+            self = (TItem)boxed;
+        }
+
+        internal static void SetReadonlyField<TItem, TValue>(
+            ref TItem self,
+            Expression<Func<TItem, TValue>> func,
+            TValue value)
+            where TItem : struct
+        {
+            var fieldInfo = self.GetType()
+                                .GetField(((MemberExpression)func.Body).Member.Name);
+            object boxed = self;
+            fieldInfo.SetValue(boxed, value);
             self = (TItem)boxed;
         }
     }
