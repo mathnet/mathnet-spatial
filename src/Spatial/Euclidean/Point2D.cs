@@ -20,14 +20,15 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// The x coordinate
         /// </summary>
-        public readonly double X; // Using public fields cos: http://blogs.msdn.com/b/ricom/archive/2006/08/31/performance-quiz-11-ten-questions-on-value-based-programming.aspx
+        public readonly double X;
 
         /// <summary>
         /// The y coordinate
         /// </summary>
-        public readonly double Y; // Using public fields cos: http://blogs.msdn.com/b/ricom/archive/2006/08/31/performance-quiz-11-ten-questions-on-value-based-programming.aspx
+        public readonly double Y;
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="Point2D"/> struct.
         /// Creates a point for given coordinates (x, y)
         /// </summary>
         /// <param name="x">The x coordinate</param>
@@ -39,6 +40,7 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="Point2D"/> struct.
         /// Creates a point r from origin rotated a counterclockwise from X-Axis
         /// </summary>
         /// <param name="r">distance from origin</param>
@@ -49,20 +51,24 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="Point2D"/> struct.
         /// Creates a point from a list of coordinates (x, y)
         /// </summary>
         /// <param name="data">a pair of coordinates in the order x, y</param>
         /// <exception cref="ArgumentException">Exception thrown if more than 2 coordinates are passed</exception>
+        [Obsolete("This constructor will be removed. Made obsolete 2017-12-03.")]
         public Point2D(IEnumerable<double> data)
             : this(data.ToArray())
         {
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="Point2D"/> struct.
         /// Creates a point from a list of coordinates (x, y)
         /// </summary>
         /// <param name="data">a pair of coordinates in the order x, y</param>
         /// <exception cref="ArgumentException">Exception thrown if more than 2 coordinates are passed</exception>
+        [Obsolete("This constructor will be removed. Made obsolete 2017-12-03.")]
         public Point2D(double[] data)
             : this(data[0], data[1])
         {
@@ -73,11 +79,43 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Returns a point at the origin (0,0)
+        /// Gets a point at the origin (0,0)
         /// </summary>
-        public static Point2D Origin
+        public static Point2D Origin => new Point2D(0, 0);
+
+        public static Point2D operator +(Point2D point, Vector2D vector)
         {
-            get { return new Point2D(0, 0); }
+            return new Point2D(point.X + vector.X, point.Y + vector.Y);
+        }
+
+        public static Point3D operator +(Point2D point, Vector3D vector)
+        {
+            return new Point3D(point.X + vector.X, point.Y + vector.Y, vector.Z);
+        }
+
+        public static Point2D operator -(Point2D point, Vector2D vector)
+        {
+            return new Point2D(point.X - vector.X, point.Y - vector.Y);
+        }
+
+        public static Point3D operator -(Point2D point, Vector3D vector)
+        {
+            return new Point3D(point.X - vector.X, point.Y - vector.Y, -1 * vector.Z);
+        }
+
+        public static Vector2D operator -(Point2D lhs, Point2D rhs)
+        {
+            return new Vector2D(lhs.X - rhs.X, lhs.Y - rhs.Y);
+        }
+
+        public static bool operator ==(Point2D left, Point2D right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(Point2D left, Point2D right)
+        {
+            return !left.Equals(right);
         }
 
         /// <summary>
@@ -136,47 +174,27 @@ namespace MathNet.Spatial.Euclidean
             return Centroid(point1, point2);
         }
 
-        public static Point2D operator +(Point2D point, Vector2D vector)
+        /// <summary>
+        /// Create a new Point2D from a Math.NET Numerics vector of length 2.
+        /// </summary>
+        /// <param name="vector"> A vector with length 2 to populate the created instance with.</param>
+        /// <returns> A <see cref="Point2D"/></returns>
+        public static Point2D OfVector(Vector<double> vector)
         {
-            return new Point2D(point.X + vector.X, point.Y + vector.Y);
-        }
+            if (vector.Count != 2)
+            {
+                throw new ArgumentException("The vector length must be 2 in order to convert it to a Point2D");
+            }
 
-        public static Point3D operator +(Point2D point, Vector3D vector)
-        {
-            return new Point3D(point.X + vector.X, point.Y + vector.Y, vector.Z);
-        }
-
-        public static Point2D operator -(Point2D point, Vector2D vector)
-        {
-            return new Point2D(point.X - vector.X, point.Y - vector.Y);
-        }
-
-        public static Point3D operator -(Point2D point, Vector3D vector)
-        {
-            return new Point3D(point.X - vector.X, point.Y - vector.Y, -1 * vector.Z);
-        }
-
-        public static Vector2D operator -(Point2D lhs, Point2D rhs)
-        {
-            return new Vector2D(lhs.X - rhs.X, lhs.Y - rhs.Y);
-        }
-
-        public static bool operator ==(Point2D left, Point2D right)
-        {
-            return left.Equals(right);
-        }
-
-        public static bool operator !=(Point2D left, Point2D right)
-        {
-            return !left.Equals(right);
+            return new Point2D(vector.At(0), vector.At(1));
         }
 
         public Point2D TransformBy(Matrix<double> m)
         {
-            var transformed = m.Multiply(this.ToVector());
-            return new Point2D(transformed);
+            return OfVector(m.Multiply(this.ToVector()));
         }
 
+        /// <inheritdoc />
         public override string ToString()
         {
             return this.ToString(null, CultureInfo.InvariantCulture);
@@ -187,6 +205,7 @@ namespace MathNet.Spatial.Euclidean
             return this.ToString(null, provider);
         }
 
+        /// <inheritdoc />
         public string ToString(string format, IFormatProvider provider = null)
         {
             var numberFormatInfo = provider != null ? NumberFormatInfo.GetInstance(provider) : CultureInfo.InvariantCulture.NumberFormat;
@@ -194,6 +213,7 @@ namespace MathNet.Spatial.Euclidean
             return string.Format("({0}{1} {2})", this.X.ToString(format, numberFormatInfo), separator, this.Y.ToString(format, numberFormatInfo));
         }
 
+        /// <inheritdoc />
         public bool Equals(Point2D other)
         {
             // ReSharper disable CompareOfFloatsByEqualityOperator
@@ -212,6 +232,7 @@ namespace MathNet.Spatial.Euclidean
                    Math.Abs(other.Y - this.Y) < tolerance;
         }
 
+        /// <inheritdoc />
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj))
@@ -222,9 +243,7 @@ namespace MathNet.Spatial.Euclidean
             return obj is Point2D && this.Equals((Point2D)obj);
         }
 
-        /// <summary>
-        /// Returns a hashcode for the point
-        /// </summary>
+        /// <inheritdoc />
         public override int GetHashCode()
         {
             unchecked
@@ -233,22 +252,13 @@ namespace MathNet.Spatial.Euclidean
             }
         }
 
-        /// <summary>
-        /// This method is reserved and should not be used. When implementing the IXmlSerializable interface, you should return null (Nothing in Visual Basic) from this method, and instead, if specifying a custom schema is required, apply the <see cref="T:System.Xml.Serialization.XmlSchemaProviderAttribute"/> to the class.
-        /// </summary>
-        /// <returns>
-        /// An <see cref="T:System.Xml.Schema.XmlSchema"/> that describes the XML representation of the object that is produced by the <see cref="M:System.Xml.Serialization.IXmlSerializable.WriteXml(System.Xml.XmlWriter)"/> method and consumed by the <see cref="M:System.Xml.Serialization.IXmlSerializable.ReadXml(System.Xml.XmlReader)"/> method.
-        /// </returns>
+        /// <inheritdoc />
         public XmlSchema GetSchema()
         {
             return null;
         }
 
-        /// <summary>
-        /// Generates an object from its XML representation.
-        /// Handles both attribute and element style
-        /// </summary>
-        /// <param name="reader">The <see cref="T:System.Xml.XmlReader"/> stream from which the object is deserialized. </param>
+        /// <inheritdoc />
         public void ReadXml(XmlReader reader)
         {
             reader.MoveToContent();
@@ -259,10 +269,7 @@ namespace MathNet.Spatial.Euclidean
             XmlExt.SetReadonlyField(ref this, x => x.Y, XmlConvert.ToDouble(e.ReadAttributeOrElementOrDefault("Y")));
         }
 
-        /// <summary>
-        /// Converts an object into its XML representation.
-        /// </summary>
-        /// <param name="writer">The <see cref="T:System.Xml.XmlWriter"/> stream to which the object is serialized. </param>
+        /// <inheritdoc />
         public void WriteXml(XmlWriter writer)
         {
             writer.WriteAttribute("X", this.X);
@@ -275,7 +282,7 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Finds the straightline distance to another point
+        /// Finds the straight line distance to another point
         /// </summary>
         /// <param name="otherPoint">The other point</param>
         /// <returns>a distance measure</returns>
@@ -288,7 +295,7 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// Converts this point into a vector from the origin
         /// </summary>
-        /// <returns>A vector equivalent to thsi point</returns>
+        /// <returns>A vector equivalent to this point</returns>
         public Vector2D ToVector2D()
         {
             return new Vector2D(this.X, this.Y);
@@ -309,21 +316,9 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Create a new Point2D from a Math.NET Numerics vector of length 2.
-        /// </summary>
-        public static Point2D OfVector(Vector<double> vector)
-        {
-            if (vector.Count != 2)
-            {
-                throw new ArgumentException("The vector length must be 2 in order to convert it to a Point2D");
-            }
-
-            return new Point2D(vector.At(0), vector.At(1));
-        }
-
-        /// <summary>
         /// Convert to a Math.NET Numerics dense vector of length 2.
         /// </summary>
+        /// <returns> A <see cref="Vector{Double}"/> with the x and y values from this instance.</returns>
         public Vector<double> ToVector()
         {
             return Vector<double>.Build.Dense(new[] { this.X, this.Y });
