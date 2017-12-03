@@ -4,269 +4,297 @@
     using MathNet.Numerics.LinearAlgebra.Double;
     using MathNet.Spatial.Units;
 
-    class Matrix3DHomogeneous
+    internal class Matrix3DHomogeneous
     {
-        public DenseMatrix Matrix;
+        private readonly DenseMatrix matrix;
 
         public Matrix3DHomogeneous()
         {
-            this.Matrix = DenseMatrix.CreateIdentity(4);
+            this.matrix = DenseMatrix.CreateIdentity(4);
         }
 
-        public Matrix3DHomogeneous(double m00, double m01, double m02, double m03,
-                                   double m10, double m11, double m12, double m13,
-                                   double m20, double m21, double m22, double m23,
-                                   double m30, double m31, double m32, double m33)
+        public Matrix3DHomogeneous(DenseMatrix matrix)
         {
-            this.Matrix[0, 0] = m00;
-            this.Matrix[0, 1] = m01;
-            this.Matrix[0, 2] = m02;
-            this.Matrix[0, 3] = m03;
-            this.Matrix[1, 0] = m10;
-            this.Matrix[1, 1] = m11;
-            this.Matrix[1, 2] = m12;
-            this.Matrix[1, 3] = m13;
-            this.Matrix[2, 0] = m20;
-            this.Matrix[2, 1] = m21;
-            this.Matrix[2, 2] = m22;
-            this.Matrix[2, 3] = m23;
-            this.Matrix[3, 0] = m30;
-            this.Matrix[3, 1] = m31;
-            this.Matrix[3, 2] = m32;
-            this.Matrix[3, 3] = m33;
+            this.matrix = matrix;
         }
 
-        // Define a Identity matrix
-        public void Identity3DHomegeneous()
+#pragma warning disable SA1117 // Parameters must be on same line or separate lines
+        public Matrix3DHomogeneous(
+            double m00, double m01, double m02, double m03,
+            double m10, double m11, double m12, double m13,
+            double m20, double m21, double m22, double m23,
+            double m30, double m31, double m32, double m33)
+#pragma warning restore SA1117 // Parameters must be on same line or separate lines
         {
-            this.Matrix = DenseMatrix.CreateIdentity(4);
+            this.matrix = DenseMatrix.CreateIdentity(4);
+            this.matrix[0, 0] = m00;
+            this.matrix[0, 1] = m01;
+            this.matrix[0, 2] = m02;
+            this.matrix[0, 3] = m03;
+            this.matrix[1, 0] = m10;
+            this.matrix[1, 1] = m11;
+            this.matrix[1, 2] = m12;
+            this.matrix[1, 3] = m13;
+            this.matrix[2, 0] = m20;
+            this.matrix[2, 1] = m21;
+            this.matrix[2, 2] = m22;
+            this.matrix[2, 3] = m23;
+            this.matrix[3, 0] = m30;
+            this.matrix[3, 1] = m31;
+            this.matrix[3, 2] = m32;
+            this.matrix[3, 3] = m33;
         }
 
         // Multiply two matrices together
         public static Matrix3DHomogeneous operator *(Matrix3DHomogeneous m1, Matrix3DHomogeneous m2)
         {
-            Matrix3DHomogeneous result = new Matrix3DHomogeneous();
-            for (int i = 0; i < 4; i++)
+            var result = new Matrix3DHomogeneous();
+            for (var i = 0; i < 4; i++)
             {
-                for (int j = 0; j < 4; j++)
+                for (var j = 0; j < 4; j++)
                 {
                     double element = 0;
-                    for (int k = 0; k < 4; k++)
+                    for (var k = 0; k < 4; k++)
                     {
-                        element += m1.Matrix[i, k] * m2.Matrix[k, j];
+                        element += m1.matrix[i, k] * m2.matrix[k, j];
                     }
 
-                    result.Matrix[i, j] = element;
+                    result.matrix[i, j] = element;
                 }
             }
 
             return result;
         }
 
-        ////Multiply a matrix with a vector
-        //public double[] VectorMultiply(double[] vector)
-        //{
-        //    double[] result = new double[4];
-        //    for (int i = 0; i < 4; i++)
-        //    {
-        //        for (int j = 0; j < 4; j++)
-        //        {
-        //             result[i] += Matrix[i, j] * vector[j];
-        //        }
-        //    }
-        //    return result;
-        //}
-
-        //public double[] VectorMultiply(Vector3DHomogeneous vector)
-        //{
-        //    double[] _vector= new double[4];
-        //    _vector[0] = vector.X;
-        //    _vector[1] = vector.Y;
-        //    _vector[2] = vector.Z;
-        //    _vector[3] = vector.W;
-
-        //    return VectorMultiply(_vector);
-        //}
-
-        ////Multiply a matrix with a point
-        //public double[] VectorMultiply(Point3DHomogeneous point)
-        //{
-        //    double[] _point = new double[4];
-        //    _point[0] = point.X;
-        //    _point[1] = point.Y;
-        //    _point[2] = point.Z;
-        //    _point[3] = point.W;
-
-        //    return VectorMultiply(_point);
-        //}
-
-        //Create a translation matrix
-        public static Matrix3DHomogeneous CreateTraslation(double dx, double dy, double dz)
+        /// <summary>
+        /// Creates an identity matrix.
+        /// </summary>
+        /// <returns>A <see cref="Matrix3DHomogeneous"/> identity matrix.</returns>
+        public static Matrix3DHomogeneous Identity()
         {
-            Matrix3DHomogeneous result = new Matrix3DHomogeneous();
-            result.Matrix[0, 3] = dx;
-            result.Matrix[1, 3] = dy;
-            result.Matrix[2, 3] = dz;
+            return new Matrix3DHomogeneous(DenseMatrix.CreateIdentity(4));
+        }
+
+        /// <summary>
+        /// Create a translation matrix
+        /// </summary>
+        /// <param name="dx">The x component.</param>
+        /// <param name="dy">The y component.</param>
+        /// <param name="dz">The z component.</param>
+        /// <returns>A <see cref="Matrix3DHomogeneous"/> describing the translation.</returns>
+        public static Matrix3DHomogeneous CreateTranslation(double dx, double dy, double dz)
+        {
+            var result = new Matrix3DHomogeneous
+                                         {
+                                             matrix =
+                                             {
+                                                 [0, 3] = dx,
+                                                 [1, 3] = dy,
+                                                 [2, 3] = dz
+                                             }
+                                         };
             return result;
         }
 
-        // Create a scaling matrix
+        /// <summary>
+        /// Create a translation matrix
+        /// </summary>
+        /// <param name="sx">The x component.</param>
+        /// <param name="sy">The y component.</param>
+        /// <param name="sz">The z component.</param>
+        /// <returns>A <see cref="Matrix3DHomogeneous"/> describing the scale operation.</returns>
         public static Matrix3DHomogeneous CreateScale(double sx, double sy, double sz)
         {
-            Matrix3DHomogeneous result = new Matrix3DHomogeneous();
-            result.Matrix[0, 0] = sx;
-            result.Matrix[1, 1] = sy;
-            result.Matrix[2, 2] = sz;
+            var result = new Matrix3DHomogeneous
+                         {
+                             matrix =
+                             {
+                                 [0, 0] = sx,
+                                 [1, 1] = sy,
+                                 [2, 2] = sz
+                             }
+                         };
             return result;
         }
 
-        // Create a rotation matrix around the x axis:
+        /// <summary>
+        /// Create a matrix for rotation around the x-axis.
+        /// </summary>
+        /// <param name="angle">The angle to rotate.</param>
+        /// <returns>A <see cref="Matrix3DHomogeneous"/> describing the rotation.</returns>
         public static Matrix3DHomogeneous RotationAroundXAxis(Angle angle)
         {
-            Matrix3DHomogeneous result = new Matrix3DHomogeneous();
-            double sinAngle = Math.Sin(angle.Radians);
-            double cosAngle = Math.Cos(angle.Radians);
-            result.Matrix[1, 1] = cosAngle;
-            result.Matrix[1, 2] = -sinAngle;
-            result.Matrix[2, 1] = sinAngle;
-            result.Matrix[2, 2] = cosAngle;
+            var result = new Matrix3DHomogeneous();
+            var sinAngle = Math.Sin(angle.Radians);
+            var cosAngle = Math.Cos(angle.Radians);
+            result.matrix[1, 1] = cosAngle;
+            result.matrix[1, 2] = -sinAngle;
+            result.matrix[2, 1] = sinAngle;
+            result.matrix[2, 2] = cosAngle;
             return result;
         }
 
-        // Create a rotation matrix around the y axis:
+        /// <summary>
+        /// Create a matrix for rotation around the y-axis.
+        /// </summary>
+        /// <param name="angle">The angle to rotate.</param>
+        /// <returns>A <see cref="Matrix3DHomogeneous"/> describing the rotation.</returns>
         public static Matrix3DHomogeneous RotationAroundYAxis(Angle angle)
         {
-            Matrix3DHomogeneous result = new Matrix3DHomogeneous();
-            double sinAngle = Math.Sin(angle.Radians);
-            double cosAngle = Math.Cos(angle.Radians);
-            result.Matrix[0, 0] = cosAngle;
-            result.Matrix[0, 2] = sinAngle;
-            result.Matrix[2, 0] = -sinAngle;
-            result.Matrix[2, 2] = cosAngle;
+            var result = new Matrix3DHomogeneous();
+            var sinAngle = Math.Sin(angle.Radians);
+            var cosAngle = Math.Cos(angle.Radians);
+            result.matrix[0, 0] = cosAngle;
+            result.matrix[0, 2] = sinAngle;
+            result.matrix[2, 0] = -sinAngle;
+            result.matrix[2, 2] = cosAngle;
             return result;
         }
 
-        // Create a rotation matrix around the z axis:
+        /// <summary>
+        /// Create a matrix for rotation around the z-axis.
+        /// </summary>
+        /// <param name="angle">The angle to rotate.</param>
+        /// <returns>A <see cref="Matrix3DHomogeneous"/> describing the rotation.</returns>
         public static Matrix3DHomogeneous RotationAroundZAxis(Angle angle)
         {
-            Matrix3DHomogeneous result = new Matrix3DHomogeneous();
-            double sinAngle = Math.Sin(angle.Radians);
-            double cosAngle = Math.Cos(angle.Radians);
-            result.Matrix[0, 0] = cosAngle;
-            result.Matrix[0, 1] = -sinAngle;
-            result.Matrix[1, 0] = sinAngle;
-            result.Matrix[1, 1] = cosAngle;
+            var result = new Matrix3DHomogeneous();
+            var sinAngle = Math.Sin(angle.Radians);
+            var cosAngle = Math.Cos(angle.Radians);
+            result.matrix[0, 0] = cosAngle;
+            result.matrix[0, 1] = -sinAngle;
+            result.matrix[1, 0] = sinAngle;
+            result.matrix[1, 1] = cosAngle;
             return result;
         }
 
-        // Create a reflection matrix across the X-Y plane
+        /// <summary>
+        /// Create a matrix for reflecting about the xy-plane.
+        /// </summary>
+        /// <returns>A <see cref="Matrix3DHomogeneous"/> describing the reflection.</returns>
         public static Matrix3DHomogeneous ReflectionXY()
         {
-            Matrix3DHomogeneous result = CreateScale(1, 1, -1);
+            var result = CreateScale(1, 1, -1);
             return result;
         }
 
-        // Create a reflection matrix across the X-Z plane
+        /// <summary>
+        /// Create a matrix for reflecting about the xz-plane.
+        /// </summary>
+        /// <returns>A <see cref="Matrix3DHomogeneous"/> describing the reflection.</returns>
         public static Matrix3DHomogeneous ReflectionXZ()
         {
-            Matrix3DHomogeneous result = CreateScale(1, -1, 1);
+            var result = CreateScale(1, -1, 1);
             return result;
         }
 
-        // Create a reflection matrix across the Y-Z plane
+        /// <summary>
+        /// Create a matrix for reflecting about the yz-plane.
+        /// </summary>
+        /// <returns>A <see cref="Matrix3DHomogeneous"/> describing the reflection.</returns>
         public static Matrix3DHomogeneous ReflectionYZ()
         {
-            Matrix3DHomogeneous result = CreateScale(-1, 1, 1);
+            var result = CreateScale(-1, 1, 1);
             return result;
         }
 
-        // Front view projection matrix
+        /// <summary>
+        /// Create a front view projection matrix
+        /// </summary>
+        /// <returns>A <see cref="Matrix3DHomogeneous"/> describing the projection.</returns>
         public static Matrix3DHomogeneous FrontView()
         {
-            Matrix3DHomogeneous result = new Matrix3DHomogeneous();
-            result.Matrix[2, 2] = 0;
+            var result = new Matrix3DHomogeneous();
+            result.matrix[2, 2] = 0;
             return result;
         }
 
-        // Side view projection matrix
+        /// <summary>
+        /// Create a side view projection matrix
+        /// </summary>
+        /// <returns>A <see cref="Matrix3DHomogeneous"/> describing the projection.</returns>
         public static Matrix3DHomogeneous SideView()
         {
-            Matrix3DHomogeneous result = new Matrix3DHomogeneous();
-            result.Matrix[0, 0] = 0;
-            result.Matrix[2, 2] = 0;
-            result.Matrix[0, 2] = -1;
+            var result = new Matrix3DHomogeneous();
+            result.matrix[0, 0] = 0;
+            result.matrix[2, 2] = 0;
+            result.matrix[0, 2] = -1;
             return result;
         }
 
-        // Top view projection matrix
+        /// <summary>
+        /// Create a top view projection matrix
+        /// </summary>
+        /// <returns>A <see cref="Matrix3DHomogeneous"/> describing the projection.</returns>
         public static Matrix3DHomogeneous TopView()
         {
-            Matrix3DHomogeneous result = new Matrix3DHomogeneous();
-            result.Matrix[1, 1] = 0;
-            result.Matrix[2, 2] = 0;
-            result.Matrix[1, 2] = -1;
+            var result = new Matrix3DHomogeneous();
+            result.matrix[1, 1] = 0;
+            result.matrix[2, 2] = 0;
+            result.matrix[1, 2] = -1;
             return result;
         }
 
-        // Axonometric projection matrix
+        // Create an axonometric projection matrix
         public static Matrix3DHomogeneous Axonometric(Angle alpha, Angle beta)
         {
-            Matrix3DHomogeneous result = new Matrix3DHomogeneous();
-            double sna = Math.Sin(alpha.Radians);
-            double cosAlpha = Math.Cos(alpha.Radians);
-            double sinBeta = Math.Sin(beta.Radians);
-            double cosBeta = Math.Cos(beta.Radians);
-            result.Matrix[0, 0] = cosBeta;
-            result.Matrix[0, 2] = sinBeta;
-            result.Matrix[1, 0] = sna * sinBeta;
-            result.Matrix[1, 1] = cosAlpha;
-            result.Matrix[1, 2] = -sna * cosBeta;
-            result.Matrix[2, 2] = 0;
+            var result = new Matrix3DHomogeneous();
+            var sna = Math.Sin(alpha.Radians);
+            var cosAlpha = Math.Cos(alpha.Radians);
+            var sinBeta = Math.Sin(beta.Radians);
+            var cosBeta = Math.Cos(beta.Radians);
+            result.matrix[0, 0] = cosBeta;
+            result.matrix[0, 2] = sinBeta;
+            result.matrix[1, 0] = sna * sinBeta;
+            result.matrix[1, 1] = cosAlpha;
+            result.matrix[1, 2] = -sna * cosBeta;
+            result.matrix[2, 2] = 0;
             return result;
         }
 
         // Oblique projection matrix
         public static Matrix3DHomogeneous Oblique(Angle alpha, Angle theta)
         {
-            Matrix3DHomogeneous result = new Matrix3DHomogeneous();
-            double tanAlpha = Math.Tan(alpha.Radians);
-            double sinTheta = Math.Sin(theta.Radians);
-            double cosTheta = Math.Cos(theta.Radians);
-            result.Matrix[0, 2] = -cosTheta / tanAlpha;
-            result.Matrix[1, 2] = -sinTheta / tanAlpha;
-            result.Matrix[2, 2] = 0;
+            var result = new Matrix3DHomogeneous();
+            var tanAlpha = Math.Tan(alpha.Radians);
+            var sinTheta = Math.Sin(theta.Radians);
+            var cosTheta = Math.Cos(theta.Radians);
+            result.matrix[0, 2] = -cosTheta / tanAlpha;
+            result.matrix[1, 2] = -sinTheta / tanAlpha;
+            result.matrix[2, 2] = 0;
             return result;
         }
 
         // Create matrix from Euler Angles
         public static Matrix3DHomogeneous Euler(Angle alpha, Angle beta, Angle gamma)
         {
-            Matrix3DHomogeneous result = new Matrix3DHomogeneous();
+            var result = new Matrix3DHomogeneous();
 
-            double sinAlpha = Math.Sin(alpha.Radians);
-            double cosAlpha = Math.Cos(alpha.Radians);
-            double sinBeta = Math.Sin(beta.Radians);
-            double cosBeta = Math.Cos(beta.Radians);
-            double sinGamma = Math.Sin(gamma.Radians);
-            double cosGamma = Math.Cos(gamma.Radians);
+            var sinAlpha = Math.Sin(alpha.Radians);
+            var cosAlpha = Math.Cos(alpha.Radians);
+            var sinBeta = Math.Sin(beta.Radians);
+            var cosBeta = Math.Cos(beta.Radians);
+            var sinGamma = Math.Sin(gamma.Radians);
+            var cosGamma = Math.Cos(gamma.Radians);
 
-            result.Matrix[0, 0] = (cosAlpha * cosGamma) - (sinAlpha * sinBeta * sinGamma);
-            result.Matrix[0, 1] = -sinBeta * sinGamma;
-            result.Matrix[0, 2] = (sinAlpha * cosGamma) - (cosAlpha * cosBeta * sinGamma);
-            result.Matrix[1, 0] = -sinAlpha * sinBeta;
-            result.Matrix[1, 1] = cosBeta;
-            result.Matrix[1, 2] = cosAlpha * sinBeta;
-            result.Matrix[2, 0] = (-cosAlpha * sinGamma) - (sinAlpha * cosBeta * cosGamma);
-            result.Matrix[2, 1] = -sinBeta * cosGamma;
-            result.Matrix[2, 2] = (cosAlpha * cosBeta * cosGamma) - (sinAlpha * sinBeta);
+            result.matrix[0, 0] = (cosAlpha * cosGamma) - (sinAlpha * sinBeta * sinGamma);
+            result.matrix[0, 1] = -sinBeta * sinGamma;
+            result.matrix[0, 2] = (sinAlpha * cosGamma) - (cosAlpha * cosBeta * sinGamma);
+            result.matrix[1, 0] = -sinAlpha * sinBeta;
+            result.matrix[1, 1] = cosBeta;
+            result.matrix[1, 2] = cosAlpha * sinBeta;
+            result.matrix[2, 0] = (-cosAlpha * sinGamma) - (sinAlpha * cosBeta * cosGamma);
+            result.matrix[2, 1] = -sinBeta * cosGamma;
+            result.matrix[2, 2] = (cosAlpha * cosBeta * cosGamma) - (sinAlpha * sinBeta);
             return result;
         }
 
         // Create matrix from azimuth and elevation
         public static Matrix3DHomogeneous AzimuthElevation(double elevation, double azimuth, double oneOverd)
         {
-            Matrix3DHomogeneous result = new Matrix3DHomogeneous();
-            Matrix3DHomogeneous rotate = new Matrix3DHomogeneous();
+            var result = new Matrix3DHomogeneous();
+            var rotate = new Matrix3DHomogeneous();
+
             // make sure elevation in the range of [-90, 90]:
             if (elevation > 90)
             {
@@ -288,20 +316,20 @@
             }
 
             elevation = elevation * Math.PI / 180.0f;
-            double sne = Math.Sin(elevation);
-            double cne = Math.Cos(elevation);
+            var sne = Math.Sin(elevation);
+            var cne = Math.Cos(elevation);
             azimuth = azimuth * Math.PI / 180.0f;
-            double sna = Math.Sin(azimuth);
-            double cna = Math.Cos(azimuth);
-            rotate.Matrix[0, 0] = cna;
-            rotate.Matrix[0, 1] = sna;
-            rotate.Matrix[0, 2] = 0;
-            rotate.Matrix[1, 0] = -sne * sna;
-            rotate.Matrix[1, 1] = sne * cna;
-            rotate.Matrix[1, 2] = cne;
-            rotate.Matrix[2, 0] = cne * sna;
-            rotate.Matrix[2, 1] = -cne * cna;
-            rotate.Matrix[2, 2] = sne;
+            var sna = Math.Sin(azimuth);
+            var cna = Math.Cos(azimuth);
+            rotate.matrix[0, 0] = cna;
+            rotate.matrix[0, 1] = sna;
+            rotate.matrix[0, 2] = 0;
+            rotate.matrix[1, 0] = -sne * sna;
+            rotate.matrix[1, 1] = sne * cna;
+            rotate.matrix[1, 2] = cne;
+            rotate.matrix[2, 0] = cne * sna;
+            rotate.matrix[2, 1] = -cne * cna;
+            rotate.matrix[2, 2] = sne;
             if (oneOverd <= 0)
             {
                 result = rotate;
