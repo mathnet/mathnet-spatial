@@ -18,28 +18,18 @@
                 return false;
             }
 
-            var match = Regex.Match(text, Vector2DPattern);
+            var match = Regex.Match(text, Vector2DPattern, RegexOptions.ExplicitCapture);
             if (!match.Success ||
-                match.Groups.Count != 2 ||
+                match.Groups.Count != 3 ||
                 match.Groups[0].Captures.Count != 1 ||
-                match.Groups[1].Captures.Count != 1)
+                match.Groups[1].Captures.Count != 1 ||
+                match.Groups[2].Captures.Count != 1)
             {
                 return false;
             }
 
-            return TryParseDouble(match.Groups["x"], out x) &&
-                   TryParseDouble(match.Groups["y"], out y);
-        }
-
-        private static bool TryParseDouble(Group @group, out double result)
-        {
-            if (@group.Captures.Count != 1)
-            {
-                result = 0;
-                return false;
-            }
-
-            return TryParseDouble(@group.Value, out result);
+            return TryParseDouble(match.Groups["x"].Value, out x) &&
+                   TryParseDouble(match.Groups["y"].Value, out y);
         }
 
         private static bool TryParseDouble(string s, out double result)

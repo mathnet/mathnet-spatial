@@ -9,6 +9,7 @@ namespace MathNet.Spatial.Euclidean
     using System.Xml.Schema;
     using System.Xml.Serialization;
     using MathNet.Numerics.LinearAlgebra;
+    using MathNet.Spatial.Internals;
     using MathNet.Spatial.Units;
 
     /// <summary>
@@ -123,12 +124,34 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// Attempts to convert a string of the form x,y into a point
         /// </summary>
+        /// <param name="text">The string to be converted</param>
+        /// <param name="result">A point at the coordinates specified</param>
+        /// <returns>True if <paramref name="text"/> could be parsed.</returns>
+        public static bool TryParse(string text, out Point2D result)
+        {
+            if (Text.TryParse2D(text, out var x, out var y))
+            {
+                result = new Point2D(x, y);
+                return true;
+            }
+
+            result = default(Point2D);
+            return false;
+        }
+
+        /// <summary>
+        /// Attempts to convert a string of the form x,y into a point
+        /// </summary>
         /// <param name="value">The string to be converted</param>
         /// <returns>A point at the coordinates specified</returns>
         public static Point2D Parse(string value)
         {
-            var doubles = Parser.ParseItem2D(value);
-            return new Point2D(doubles[0], doubles[1]);
+            if (TryParse(value, out var p))
+            {
+                return p;
+            }
+
+            throw new FormatException($"Could not parse a Point2D from the string {value}");
         }
 
         /// <summary>
