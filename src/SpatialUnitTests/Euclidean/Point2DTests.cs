@@ -79,6 +79,7 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         [TestCase("1.2, 3.4", 1.2, 3.4)]
         [TestCase("1.2 3.4", 1.2, 3.4)]
         [TestCase("(1.2, 3.4)", 1.2, 3.4)]
+        [TestCase("(.1, 2.3e-4)", 0.1, 2.3E4)]
         public void Parse(string text, double expectedX, double expectedY)
         {
             var p = Point2D.Parse(text);
