@@ -58,6 +58,7 @@
     <Compile Include="Euclidean\PolyLine2D.cs" />
     <Compile Include="Euclidean\PolyLine3D.cs" />
     <Compile Include="Euclidean\Vector2D.cs" />
+    <Compile Include="Internals\Text.cs" />
     <Compile Include="Internals\XmlWriterExt.cs" />
     <Compile Include="Projective\Matrix3DHomogeneous.cs" />
     <Compile Include="Projective\Point3DHomogeneous.cs" />
