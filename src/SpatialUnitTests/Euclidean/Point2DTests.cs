@@ -1,4 +1,5 @@
-﻿namespace MathNet.Spatial.UnitTests.Euclidean
+﻿// ReSharper disable InconsistentNaming
+namespace MathNet.Spatial.UnitTests.Euclidean
 {
     using System;
     using System.IO;
@@ -28,20 +29,19 @@
         [Test]
         public void Ctor()
         {
-            var points = new[]
-                           {
-                               new Point2D(1, 2),
-                               new Point2D(new[] { 1, 2.0 }),
-                               new Point2D(DenseVector.OfArray(new[] { 1, 2.0 })),
-                           };
-            foreach (var p in points)
-            {
-                Assert.AreEqual(1, p.X);
-                Assert.AreEqual(2, p.Y);
-            }
+            var p = new Point2D(1, 2);
+            Assert.AreEqual(1, p.X);
+            Assert.AreEqual(2, p.Y);
+        }
 
-            Assert.Throws<ArgumentException>(() => new Point2D(new[] { 1, 2, 3.0 }));
-            Assert.Throws<ArgumentException>(() => new Point2D(DenseVector.OfArray(new[] { 1, 2, 3.0 })));
+        [Test]
+        public void OfVector()
+        {
+            var p = Point2D.OfVector(DenseVector.OfArray(new[] { 1, 2.0 }));
+            Assert.AreEqual(1, p.X);
+            Assert.AreEqual(2, p.Y);
+
+            Assert.Throws<ArgumentException>(() => Point2D.OfVector(DenseVector.OfArray(new[] { 1, 2, 3.0 })));
         }
 
         [TestCase("1, 2", "1, 2", 1e-4, true)]
@@ -185,7 +185,7 @@
         }
 
         [Test]
-        public void XmlRountrip()
+        public void XmlRoundtrip()
         {
             var p = new Point2D(1, 2);
             const string Xml = @"<Point2D X=""1"" Y=""2"" />";
