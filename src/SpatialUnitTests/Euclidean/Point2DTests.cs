@@ -34,6 +34,36 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             Assert.AreEqual(2, p.Y);
         }
 
+        [TestCase("-1, -2", "1, 2", "0, 0")]
+        public void OperatorAddVector2D(string ps, string vs, string eps)
+        {
+            var p = Point2D.Parse(ps);
+            var v = Vector2D.Parse(vs);
+            var actual = p + v;
+            var expected = Point2D.Parse(eps);
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestCase("-1, -2", "1, 2", "-2, -4")]
+        public void OperatorSubtractVector2D(string ps, string vs, string eps)
+        {
+            var p = Point2D.Parse(ps);
+            var v = Vector2D.Parse(vs);
+            var actual = p - v;
+            var expected = Point2D.Parse(eps);
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestCase("-1, -2", "1, 2", "-2, -4")]
+        public void OperatorSubtractPoint2D(string p1s, string p2s, string eps)
+        {
+            var p1 = Point2D.Parse(p1s);
+            var p2 = Point2D.Parse(p2s);
+            var actual = p1 - p2;
+            var expected = Vector2D.Parse(eps);
+            Assert.AreEqual(expected, actual);
+        }
+
         [Test]
         public void OfVector()
         {
@@ -52,6 +82,10 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             var p1 = Point2D.Parse(p1s);
             var p2 = Point2D.Parse(p2s);
             Assert.AreEqual(expected, p1 == p2);
+            Assert.AreEqual(expected, p2 == p1);
+            Assert.AreEqual(!expected, p1 != p2);
+            Assert.AreEqual(!expected, p2 != p1);
+
             Assert.AreEqual(expected, p1.Equals(p2));
             Assert.AreEqual(expected, p1.Equals((object)p2));
             Assert.AreEqual(expected, Equals(p1, p2));
@@ -113,56 +147,6 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             var rm = Matrix2D.Rotation(av);
             var actual = p.TransformBy(rm);
             AssertGeometry.AreEqual(expected, actual, 1e-2);
-        }
-
-        [TestCase("-1, -2", "1, 2", "0, 0")]
-        public void Add2D(string ps, string vs, string eps)
-        {
-            var p = Point2D.Parse(ps);
-            var v = Vector2D.Parse(vs);
-            var actual = p + v;
-            var expected = Point2D.Parse(eps);
-            Assert.AreEqual(expected, actual);
-        }
-
-        [TestCase("-1, -2", "1, 2", "-2, -4")]
-        public void Subtract2D(string ps, string vs, string eps)
-        {
-            var p = Point2D.Parse(ps);
-            var v = Vector2D.Parse(vs);
-            var actual = p - v;
-            var expected = Point2D.Parse(eps);
-            Assert.AreEqual(expected, actual);
-        }
-
-        [TestCase("-1, -2", "1, 2", "-2, -4")]
-        public void SubtractPoints2D(string p1s, string p2s, string eps)
-        {
-            var p1 = Point2D.Parse(p1s);
-            var p2 = Point2D.Parse(p2s);
-            var actual = p1 - p2;
-            var expected = Vector2D.Parse(eps);
-            Assert.AreEqual(expected, actual);
-        }
-
-        [TestCase("-1, -2", "1, 2, 3", "0, 0, 3")]
-        public void Add3D(string ps, string vs, string eps)
-        {
-            var p = Point2D.Parse(ps);
-            var v = Vector3D.Parse(vs);
-            var actual = p + v;
-            var expected = Point3D.Parse(eps);
-            Assert.AreEqual(expected, actual);
-        }
-
-        [TestCase("-1, -2", "1, 2, 3", "-2, -4, -3")]
-        public void Subtract3D(string ps, string vs, string eps)
-        {
-            var p = Point2D.Parse(ps);
-            var v = Vector3D.Parse(vs);
-            var actual = p - v;
-            var expected = Point3D.Parse(eps);
-            Assert.AreEqual(expected, actual);
         }
 
         [TestCase("0, 0", "1, 2", "1, 2")]

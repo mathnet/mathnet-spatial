@@ -88,24 +88,26 @@ namespace MathNet.Spatial.Euclidean
             return new Point2D(point.X + vector.X, point.Y + vector.Y);
         }
 
+        [Obsolete("This weird operator will be removed in a future version. Made obsolete 2017-12-03.")]
         public static Point3D operator +(Point2D point, Vector3D vector)
         {
             return new Point3D(point.X + vector.X, point.Y + vector.Y, vector.Z);
         }
 
-        public static Point2D operator -(Point2D point, Vector2D vector)
+        public static Point2D operator -(Point2D left, Vector2D right)
         {
-            return new Point2D(point.X - vector.X, point.Y - vector.Y);
+            return new Point2D(left.X - right.X, left.Y - right.Y);
         }
 
-        public static Point3D operator -(Point2D point, Vector3D vector)
+        [Obsolete("This weird operator will be removed in a future version. Made obsolete 2017-12-03.")]
+        public static Point3D operator -(Point2D left, Vector3D right)
         {
-            return new Point3D(point.X - vector.X, point.Y - vector.Y, -1 * vector.Z);
+            return new Point3D(left.X - right.X, left.Y - right.Y, -1 * right.Z);
         }
 
-        public static Vector2D operator -(Point2D lhs, Point2D rhs)
+        public static Vector2D operator -(Point2D left, Point2D right)
         {
-            return new Vector2D(lhs.X - rhs.X, lhs.Y - rhs.Y);
+            return new Vector2D(left.X - right.X, left.Y - right.Y);
         }
 
         public static bool operator ==(Point2D left, Point2D right)
