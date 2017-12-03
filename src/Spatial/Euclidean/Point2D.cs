@@ -126,7 +126,7 @@ namespace MathNet.Spatial.Euclidean
         public static Point2D Parse(string value)
         {
             var doubles = Parser.ParseItem2D(value);
-            return new Point2D(doubles);
+            return new Point2D(doubles[0], doubles[1]);
         }
 
         /// <summary>
@@ -263,10 +263,9 @@ namespace MathNet.Spatial.Euclidean
         {
             reader.MoveToContent();
             var e = (XElement)XNode.ReadFrom(reader);
-
-            // Hacking set readonly fields here, can't think of a cleaner workaround
-            XmlExt.SetReadonlyField(ref this, x => x.X, XmlConvert.ToDouble(e.ReadAttributeOrElementOrDefault("X")));
-            XmlExt.SetReadonlyField(ref this, x => x.Y, XmlConvert.ToDouble(e.ReadAttributeOrElementOrDefault("Y")));
+            this = new Point2D(
+                XmlConvert.ToDouble(e.ReadAttributeOrElementOrDefault("X")),
+                XmlConvert.ToDouble(e.ReadAttributeOrElementOrDefault("Y")));
         }
 
         /// <inheritdoc />
