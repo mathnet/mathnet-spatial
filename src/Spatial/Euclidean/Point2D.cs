@@ -129,7 +129,9 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>True if <paramref name="text"/> could be parsed.</returns>
         public static bool TryParse(string text, out Point2D result)
         {
-            if (Text.TryParse2D(text, out var x, out var y))
+            double x;
+            double y;
+            if (Text.TryParse2D(text, out x, out y))
             {
                 result = new Point2D(x, y);
                 return true;

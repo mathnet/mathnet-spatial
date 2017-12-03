@@ -75,6 +75,7 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         }
 
         [TestCase("1.2; 3.4", 1.2, 3.4)]
+        [TestCase("1.2;3.4", 1.2, 3.4)]
         [TestCase("1,2; 3,4", 1.2, 3.4)]
         [TestCase("1.2, 3.4", 1.2, 3.4)]
         [TestCase("1.2 3.4", 1.2, 3.4)]
