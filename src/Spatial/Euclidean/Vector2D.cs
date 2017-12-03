@@ -45,11 +45,13 @@
             }
         }
 
+        [Obsolete("This constructor will be removed. Made obsolete 2017-12-03.")]
         public Vector2D(IEnumerable<double> data)
             : this(data.ToArray())
         {
         }
 
+        [Obsolete("This constructor will be removed. Made obsolete 2017-12-03.")]
         public Vector2D(double[] data)
             : this(data[0], data[1])
         {
@@ -161,10 +163,17 @@
             return v;
         }
 
-        public Vector2D TransformBy(Matrix<double> m)
+        /// <summary>
+        /// Create a new Vector2D from a Math.NET Numerics vector of length 2.
+        /// </summary>
+        public static Vector2D OfVector(Vector<double> vector)
         {
-            var transformed = m.Multiply(this.ToVector());
-            return new Vector2D(transformed);
+            if (vector.Count != 2)
+            {
+                throw new ArgumentException("The vector length must be 2 in order to convert it to a Vector2D");
+            }
+
+            return new Vector2D(vector.At(0), vector.At(1));
         }
 
         /// <inheritdoc />
@@ -405,17 +414,10 @@
             return new Vector2D(this.X + v.X, this.Y + v.Y);
         }
 
-        /// <summary>
-        /// Create a new Vector2D from a Math.NET Numerics vector of length 2.
-        /// </summary>
-        public static Vector2D OfVector(Vector<double> vector)
+        public Vector2D TransformBy(Matrix<double> m)
         {
-            if (vector.Count != 2)
-            {
-                throw new ArgumentException("The vector length must be 2 in order to convert it to a Vector2D");
-            }
-
-            return new Vector2D(vector.At(0), vector.At(1));
+            var transformed = m.Multiply(this.ToVector());
+            return new Vector2D(transformed);
         }
 
         /// <summary>
