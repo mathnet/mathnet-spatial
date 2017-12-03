@@ -177,17 +177,22 @@
             var exception = Assert.Throws<ArgumentException>(() => add.Invoke(angle, new object[] { angle, d }));
         }
 
-        [TestCase("15 °", @"<Angle Value=""0.26179938779914941"" />")]
-        public void XmlTest(string vs, string xml)
+        [TestCase("15°", @"<Angle Value=""0.26179938779914941"" />")]
+        public void XmlRoundTrips(string vs, string xml)
         {
             var angle = Angle.Parse(vs);
             AssertXml.XmlRoundTrips(angle, xml, (e, a) =>
             {
                 Assert.AreEqual(e.Radians, a.Radians, Tolerance);
-                Assert.IsInstanceOf<Angle>(a);
             });
+        }
+
+        [TestCase("15°", @"<Angle><Value>0.261799387799149</Value></Angle>")]
+        public void XmlElement(string vs, string xml)
+        {
+            var angle = Angle.Parse(vs);
             var serializer = new XmlSerializer(typeof(Angle));
-            using (var reader = new StringReader(@"<Angle><Value>0.261799387799149</Value></Angle>"))
+            using (var reader = new StringReader(xml))
             {
                 var fromElements = (Angle)serializer.Deserialize(reader);
                 Assert.AreEqual(angle.Radians, fromElements.Radians, 1e-6);

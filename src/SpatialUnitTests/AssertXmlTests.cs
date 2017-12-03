@@ -22,7 +22,7 @@ namespace MathNet.Spatial.UnitTests
         public void DataContractRoundTripTest()
         {
             var dummy = new XmlSerializableDummy("Meh", 14);
-            var roundTrip = AssertXml.DataContractRoundTrip(dummy, @"<XmlSerializableDummy Age=""14""><Name>Meh</Name></XmlSerializableDummy>");
+            var roundTrip = AssertXml.DataContractRoundTrip(dummy, @"<AssertXmlTests.XmlSerializableDummy Age=""14""><Name>Meh</Name></AssertXmlTests.XmlSerializableDummy>");
             Assert.AreEqual(dummy.Name, roundTrip.Name);
             Assert.AreEqual(dummy.Age, roundTrip.Age);
         }
