@@ -74,6 +74,24 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             Assert.Throws<ArgumentException>(() => Point2D.OfVector(DenseVector.OfArray(new[] { 1, 2, 3.0 })));
         }
 
+        [TestCase("1.2; 3.4", 1.2, 3.4)]
+        [TestCase("1,2; 3,4", 1.2, 3.4)]
+        [TestCase("1.2, 3.4", 1.2, 3.4)]
+        [TestCase("1.2 3.4", 1.2, 3.4)]
+        [TestCase("(1.2, 3.4)", 1.2, 3.4)]
+        public void Parse(string text, double expectedX, double expectedY)
+        {
+            var p = Point2D.Parse(text);
+            Assert.AreEqual(expectedX, p.X);
+            Assert.AreEqual(expectedY, p.Y);
+        }
+
+        [TestCase("1.2")]
+        public void ParseThrows(string text)
+        {
+            Assert.Throws<FormatException>(() => Point2D.Parse(text));
+        }
+
         [TestCase("1, 2", "1, 2", 1e-4, true)]
         [TestCase("-1, 2", "-1, 2", 1e-4, true)]
         [TestCase("1, 2", "3, 4", 1e-4, false)]

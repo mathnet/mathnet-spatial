@@ -10,7 +10,7 @@
     public static class Parser
     {
         public static readonly string DoublePattern = @"[+-]?\d*(?:[.,]\d+)?(?:[eE][+-]?\d+)?";
-        public const string SeparatorPattern = @" *[,;] *";
+        public const string SeparatorPattern = @" *[,; ] *";
         public static readonly string Vector3DPattern = string.Format(@"^ *\(?(?<x>{0}){1}(?<y>{0}){1}(?<z>{0})\)? *$", DoublePattern, SeparatorPattern);
         public static readonly string Vector2DPattern = string.Format(@"^ *\(?(?<x>{0}){1}(?<y>{0})?\)? *$", DoublePattern, SeparatorPattern);
         private static readonly string Item3DPattern = Vector3DPattern.Trim('^', '$');
