@@ -13,13 +13,13 @@ namespace MathNet.Spatial.Units
     [Serializable]
     public struct Angle : IComparable<Angle>, IEquatable<Angle>, IFormattable, IXmlSerializable
     {
-        private const double RadToDeg = 180.0 / Math.PI;
-        private const double DegToRad = Math.PI / 180.0;
-
         /// <summary>
         /// The value in radians
         /// </summary>
         public readonly double Radians;
+
+        private const double RadToDeg = 180.0 / Math.PI;
+        private const double DegToRad = Math.PI / 180.0;
 
         private Angle(double radians)
         {
@@ -255,8 +255,18 @@ namespace MathNet.Spatial.Units
         }
 
         /// <summary>
-        /// Returns a string representation of the Angle using the default format
+        /// Reads an instance of <see cref="T:MathNet.Spatial.Units.Angle"/> from the <paramref name="reader"/>
         /// </summary>
+        /// <param name="reader">The <see cref="XmlReader"/></param>
+        /// <returns>An instance of  <see cref="T:MathNet.Spatial.Units.Angle"/></returns>
+        public static Angle ReadFrom(XmlReader reader)
+        {
+            var v = default(Angle);
+            v.ReadXml(reader);
+            return v;
+        }
+
+        /// <inheritdoc />
         public override string ToString()
         {
             return this.ToString((string)null, (IFormatProvider)NumberFormatInfo.CurrentInfo);
@@ -280,11 +290,7 @@ namespace MathNet.Spatial.Units
             return this.ToString((string)null, (IFormatProvider)NumberFormatInfo.GetInstance(provider));
         }
 
-        /// <summary>
-        /// Returns a string representation of the Angle using the provided formatprovider using the specified format
-        /// </summary>
-        /// <param name="format">A string indicating the desired format</param>
-        /// <param name="formatProvider">A formatprovider</param>
+        /// <inheritdoc />
         public string ToString(string format, IFormatProvider formatProvider)
         {
             return this.ToString(format, formatProvider, AngleUnit.Radians);
@@ -303,42 +309,13 @@ namespace MathNet.Spatial.Units
             return string.Format("{0}{1}", value.ToString(format, formatProvider), unit.ShortName);
         }
 
-        /// <summary>
-        /// Compares this instance to a specified <see cref="T:MathNet.Spatial.Units.Angle"/> object and returns an integer that indicates whether this is shorter than, equal to, or longer than the <see cref="T:MathNet.Spatial.Units.Angle"/> object.
-        /// </summary>
-        /// <returns>
-        /// A signed number indicating the relative values of this instance and <paramref name="value"/>.
-        ///
-        ///                     Value
-        ///
-        ///                     Description
-        ///
-        ///                     A negative integer
-        ///
-        ///                     This instance is smaller than <paramref name="value"/>.
-        ///
-        ///                     Zero
-        ///
-        ///                     This instance is equal to <paramref name="value"/>.
-        ///
-        ///                     A positive integer
-        ///
-        ///                     This instance is larger than <paramref name="value"/>.
-        ///
-        /// </returns>
-        /// <param name="value">A <see cref="T:MathNet.Spatial.Units.Angle"/> object to compare to this instance.</param>
+        /// <inheritdoc />
         public int CompareTo(Angle value)
         {
             return this.Radians.CompareTo(value.Radians);
         }
 
-        /// <summary>
-        /// Returns a value indicating whether this instance is equal to a specified <see cref="T:MathNet.Spatial.Units.Angle"/> object.
-        /// </summary>
-        /// <returns>
-        /// true if <paramref name="other"/> represents the same angle as this instance; otherwise, false.
-        /// </returns>
-        /// <param name="other">An <see cref="T:MathNet.Spatial.Units.Angle"/> object to compare with this instance.</param>
+        /// <inheritdoc />
         public bool Equals(Angle other)
         {
             return this.Radians.Equals(other.Radians);
@@ -357,11 +334,7 @@ namespace MathNet.Spatial.Units
             return Math.Abs(this.Radians - other.Radians) < tolerance;
         }
 
-        /// <summary>
-        /// Returns a value indicating if this instance is equal to another object
-        /// </summary>
-        /// <param name="obj">an object to compare</param>
-        /// <returns>True if the object is an Angle and is equal to this one</returns>
+        /// <inheritdoc />
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj))
@@ -372,61 +345,30 @@ namespace MathNet.Spatial.Units
             return obj is Angle && this.Equals((Angle)obj);
         }
 
-        /// <summary>
-        /// Returns a hashcode for an Angle
-        /// </summary>
+        /// <inheritdoc />
         public override int GetHashCode()
         {
             return this.Radians.GetHashCode();
         }
 
-        /// <summary>
-        /// This method is reserved and should not be used. When implementing the IXmlSerializable interface,
-        /// you should return null (Nothing in Visual Basic) from this method, and instead,
-        /// if specifying a custom schema is required, apply the <see cref="T:System.Xml.Serialization.XmlSchemaProviderAttribute"/> to the class.
-        /// </summary>
-        /// <returns>
-        /// An <see cref="T:System.Xml.Schema.XmlSchema"/> that describes the XML representation of the object that is produced by the
-        ///  <see cref="M:System.Xml.Serialization.IXmlSerializable.WriteXml(System.Xml.XmlWriter)"/>
-        /// method and consumed by the <see cref="M:System.Xml.Serialization.IXmlSerializable.ReadXml(System.Xml.XmlReader)"/> method.
-        /// </returns>
+        /// <inheritdoc />
         public XmlSchema GetSchema()
         {
             return null;
         }
 
-        /// <summary>
-        /// Generates an object from its XML representation.
-        /// </summary>
-        /// <param name="reader">The <see cref="T:System.Xml.XmlReader"/> stream from which the object is deserialized. </param>
+        /// <inheritdoc />
         public void ReadXml(XmlReader reader)
         {
             reader.MoveToContent();
             var e = (XElement)XNode.ReadFrom(reader);
-
-            // Hacking set readonly fields here, can't think of a cleaner workaround
-            XmlExt.SetReadonlyField(ref this, x => x.Radians, XmlConvert.ToDouble(e.ReadAttributeOrElementOrDefault("Value")));
+            this = Angle.FromRadians(XmlConvert.ToDouble(e.ReadAttributeOrElementOrDefault("Value")));
         }
 
-        /// <summary>
-        /// Converts an object into its XML representation.
-        /// </summary>
-        /// <param name="writer">The <see cref="T:System.Xml.XmlWriter"/> stream to which the object is serialized. </param>
+        /// <inheritdoc />
         public void WriteXml(XmlWriter writer)
         {
             writer.WriteAttribute("Value", this.Radians);
-        }
-
-        /// <summary>
-        /// Reads an instance of <see cref="T:MathNet.Spatial.Units.Angle"/> from the <paramref name="reader"/>
-        /// </summary>
-        /// <param name="reader"></param>
-        /// <returns>An instance of  <see cref="T:MathNet.Spatial.Units.Angle"/></returns>
-        public static Angle ReadFrom(XmlReader reader)
-        {
-            var v = default(Angle);
-            v.ReadXml(reader);
-            return v;
         }
     }
 }

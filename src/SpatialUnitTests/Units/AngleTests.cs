@@ -69,13 +69,13 @@
         public void Equals(string s, double degv, double radv, bool expected)
         {
             var a = Angle.Parse(s);
-            var deg = Angle.From(degv, AngleUnit.Degrees);
+            var deg = Angle.FromDegrees(degv);
             Assert.AreEqual(expected, deg.Equals(a));
             Assert.AreEqual(expected, deg.Equals(a, Tolerance));
             Assert.AreEqual(expected, deg == a);
             Assert.AreEqual(!expected, deg != a);
 
-            var rad = Angle.From(radv, AngleUnit.Radians);
+            var rad = Angle.FromRadians(radv);
             Assert.AreEqual(expected, rad.Equals(a));
             Assert.AreEqual(expected, rad.Equals(a, Tolerance));
             Assert.AreEqual(expected, rad == a);
@@ -131,8 +131,8 @@
         [Test]
         public void Compare()
         {
-            Angle small = Angle.FromDegrees(1);
-            Angle big = Angle.FromDegrees(2);
+            var small = Angle.FromDegrees(1);
+            var big = Angle.FromDegrees(2);
             Assert.IsTrue(small < big);
             Assert.IsTrue(small <= big);
             Assert.IsFalse(small > big);
@@ -145,9 +145,9 @@
         [TestCase("15 °", "0.261799387799149rad")]
         public void ToString(string s, string expected)
         {
-            Angle angle = Angle.Parse(s);
-            string toString = angle.ToString(CultureInfo.InvariantCulture);
-            string toStringComma = angle.ToString(CultureInfo.GetCultureInfo("sv"));
+            var angle = Angle.Parse(s);
+            var toString = angle.ToString(CultureInfo.InvariantCulture);
+            var toStringComma = angle.ToString(CultureInfo.GetCultureInfo("sv"));
             Assert.AreEqual(expected, toString);
             Assert.AreEqual(expected.Replace('.', ','), toStringComma);
             Assert.IsTrue(angle.Equals(Angle.Parse(toString), Tolerance));
@@ -157,9 +157,9 @@
         [TestCase("15 °", "F2", "15.00°")]
         public void ToString(string s, string format, string expected)
         {
-            Angle angle = Angle.Parse(s);
-            string toString = angle.ToString(format, CultureInfo.InvariantCulture, AngleUnit.Degrees);
-            string toStringComma = angle.ToString(format, CultureInfo.GetCultureInfo("sv"), AngleUnit.Degrees);
+            var angle = Angle.Parse(s);
+            var toString = angle.ToString(format, CultureInfo.InvariantCulture, AngleUnit.Degrees);
+            var toStringComma = angle.ToString(format, CultureInfo.GetCultureInfo("sv"), AngleUnit.Degrees);
             Assert.AreEqual(expected, toString);
             Assert.AreEqual(expected.Replace('.', ','), toStringComma);
             Assert.IsTrue(angle.Equals(Angle.Parse(toString), Tolerance));
@@ -170,9 +170,9 @@
         [TestCase("op_Equality")]
         public void NotCompile(string @operator)
         {
-            var angle = new Angle(90, AngleUnit.Degrees);
+            var angle = Angle.FromDegrees(90);
             var d = 1.0;
-            MethodInfo add = typeof(Angle).GetMethod(@operator, BindingFlags.Static | BindingFlags.Public);
+            var add = typeof(Angle).GetMethod(@operator, BindingFlags.Static | BindingFlags.Public);
             Assert.DoesNotThrow(() => add.Invoke(angle, new object[] { angle, angle }));
             var exception = Assert.Throws<ArgumentException>(() => add.Invoke(angle, new object[] { angle, d }));
         }

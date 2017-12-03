@@ -3,6 +3,7 @@
     using System;
     using System.Text.RegularExpressions;
 
+    [Obsolete("This class will be removed, should not have been public. Made obsolete 2017-12-03.")]
     public static class UnitParser
     {
         public static readonly string UnitValuePattern = string.Format(@"^(?: *)(?<Value>{0}) *(?<Unit>.+) *$", Parser.DoublePattern);
