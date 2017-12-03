@@ -60,6 +60,7 @@
     <Compile Include="Euclidean\Vector2D.cs" />
     <Compile Include="Internals\Text.cs" />
     <Compile Include="Internals\XmlWriterExt.cs" />
+    <Compile Include="Internals\XmlReaderExt.cs" />
     <Compile Include="Projective\Matrix3DHomogeneous.cs" />
     <Compile Include="Projective\Point3DHomogeneous.cs" />
     <Compile Include="Projective\Vector3DHomogeneous.cs" />
