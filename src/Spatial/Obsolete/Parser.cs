@@ -6,6 +6,7 @@
     using System.Text.RegularExpressions;
     using MathNet.Spatial.Euclidean;
 
+    [Obsolete("This should not have been public. Made obsolete 2017-12-03")]
     public static class Parser
     {
         public static readonly string DoublePattern = @"[+-]?\d*(?:[.,]\d+)?(?:[eE][+-]?\d+)?";

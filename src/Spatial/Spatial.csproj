@@ -74,7 +74,7 @@
     <Compile Include="Euclidean\Vector3D.cs" />
     <Compile Include="Units\Angle.cs" />
     <Compile Include="Units\AngleUnit.cs" />
-    <Compile Include="Parser.cs" />
+    <Compile Include="Obsolete\Parser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Units\Degrees.cs" />
     <Compile Include="Units\IAngleUnit.cs" />
