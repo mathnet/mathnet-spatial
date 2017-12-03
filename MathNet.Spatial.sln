@@ -1,11 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spatial", "src\Spatial\Spatial.csproj", "{1F3364C6-9DA3-4006-B83F-6D1335099895}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpatialUnitTests", "src\SpatialUnitTests\SpatialUnitTests.csproj", "{79785508-B059-4DFA-B408-15588C551DC6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{5DFFCA1B-44E9-4A2F-824D-24AFC1D24465}"
 	ProjectSection(SolutionItems) = preProject
@@ -34,6 +32,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{4A482849-F
 		docs\tools\templates\template.cshtml = docs\tools\templates\template.cshtml
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpatialUnitTests", "src\SpatialUnitTests\SpatialUnitTests.csproj", "{79785508-B059-4DFA-B408-15588C551DC6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spatial.Serialization.XmlUnitTests", "src\Spatial.Serialization.XmlUnitTests\Spatial.Serialization.XmlUnitTests.csproj", "{51C31760-F5DF-4185-BE37-E44F15B43172}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spatial.Serialization.Xml", "src\Spatial.Serialization.Xml\Spatial.Serialization.Xml.csproj", "{0A6CAE06-D031-403C-992A-DDBF55C73A50}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,8 +52,19 @@ Global
 		{79785508-B059-4DFA-B408-15588C551DC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{79785508-B059-4DFA-B408-15588C551DC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{79785508-B059-4DFA-B408-15588C551DC6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51C31760-F5DF-4185-BE37-E44F15B43172}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51C31760-F5DF-4185-BE37-E44F15B43172}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51C31760-F5DF-4185-BE37-E44F15B43172}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51C31760-F5DF-4185-BE37-E44F15B43172}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A6CAE06-D031-403C-992A-DDBF55C73A50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A6CAE06-D031-403C-992A-DDBF55C73A50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A6CAE06-D031-403C-992A-DDBF55C73A50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A6CAE06-D031-403C-992A-DDBF55C73A50}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7020C701-A234-463A-86A8-88DDA2F72344}
 	EndGlobalSection
 EndGlobal

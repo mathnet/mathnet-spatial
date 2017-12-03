@@ -68,3 +68,5 @@ docs/content/Contributors.md
 docs/content/ReleaseNotes.md
 docs/content/ReleaseNotes-*.md
 
+/.paket/Paket.Restore.targets
+/paket-files/paket.restore.cached
