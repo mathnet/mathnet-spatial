@@ -9,6 +9,7 @@
     using System.Xml.Schema;
     using System.Xml.Serialization;
     using MathNet.Numerics.LinearAlgebra;
+    using MathNet.Spatial.Internals;
     using MathNet.Spatial.Units;
 
     [Serializable]
@@ -61,28 +62,9 @@
             }
         }
 
-        public static Vector2D XAxis
-        {
-            get { return CachedXAxis; }
-        }
+        public static Vector2D XAxis => CachedXAxis;
 
-        public static Vector2D YAxis
-        {
-            get { return CachedYAxis; }
-        }
-
-        public static Vector2D Parse(string value)
-        {
-            var doubles = Parser.ParseItem2D(value);
-            return new Vector2D(doubles);
-        }
-
-        public static Vector2D ReadFrom(XmlReader reader)
-        {
-            var v = default(Vector2D);
-            v.ReadXml(reader);
-            return v;
-        }
+        public static Vector2D YAxis => CachedYAxis;
 
         public static bool operator ==(Vector2D left, Vector2D right)
         {
@@ -94,14 +76,14 @@
             return !left.Equals(right);
         }
 
-        public static Vector2D operator +(Vector2D v1, Vector2D v2)
+        public static Vector2D operator +(Vector2D left, Vector2D right)
         {
-            return v1.Add(v2);
+            return left.Add(right);
         }
 
-        public static Vector2D operator -(Vector2D v1, Vector2D v2)
+        public static Vector2D operator -(Vector2D left, Vector2D right)
         {
-            return v1.Subtract(v2);
+            return left.Subtract(right);
         }
 
         public static Vector2D operator -(Vector2D v)
@@ -122,6 +104,62 @@
         public static Vector2D operator /(Vector2D v, double d)
         {
             return new Vector2D(v.X / d, v.Y / d);
+        }
+
+        /// <summary>
+        /// Attempts to convert a string of the form x,y into a point
+        /// </summary>
+        /// <param name="text">The string to be converted</param>
+        /// <param name="result">A point at the coordinates specified</param>
+        /// <returns>True if <paramref name="text"/> could be parsed.</returns>
+        public static bool TryParse(string text, out Vector2D result)
+        {
+            return TryParse(text, null, out result);
+        }
+
+        /// <summary>
+        /// Attempts to convert a string of the form x,y into a point
+        /// </summary>
+        /// <param name="text">The string to be converted</param>
+        /// <param name="formatProvider">The <see cref="IFormatProvider"/></param>
+        /// <param name="result">A point at the coordinates specified</param>
+        /// <returns>True if <paramref name="text"/> could be parsed.</returns>
+        public static bool TryParse(string text, IFormatProvider formatProvider, out Vector2D result)
+        {
+            double x;
+            double y;
+            if (Text.TryParse2D(text, formatProvider, out x, out y))
+            {
+                result = new Vector2D(x, y);
+                return true;
+            }
+
+            result = default(Vector2D);
+            return false;
+        }
+
+        /// <summary>
+        /// Attempts to convert a string of the form x,y into a point
+        /// </summary>
+        /// <param name="value">The string to be converted</param>
+        /// <param name="formatProvider">The <see cref="IFormatProvider"/></param>
+        /// <returns>A point at the coordinates specified</returns>
+        public static Vector2D Parse(string value, IFormatProvider formatProvider = null)
+        {
+            Vector2D p;
+            if (TryParse(value, formatProvider, out p))
+            {
+                return p;
+            }
+
+            throw new FormatException($"Could not parse a Vector2D from the string {value}");
+        }
+
+        public static Vector2D ReadFrom(XmlReader reader)
+        {
+            var v = default(Vector2D);
+            v.ReadXml(reader);
+            return v;
         }
 
         public Vector2D TransformBy(Matrix<double> m)
@@ -322,10 +360,7 @@
             return new Vector2D(x, y);
         }
 
-        public double Length
-        {
-            get { return Math.Sqrt((this.X * this.X) + (this.Y * this.Y)); }
-        }
+        public double Length => Math.Sqrt((this.X * this.X) + (this.Y * this.Y));
 
         public double DotProduct(Vector2D other)
         {

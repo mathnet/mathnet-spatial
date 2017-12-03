@@ -119,8 +119,10 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         }
 
         [TestCase("1.2")]
-        public void ParseThrows(string text)
+        [TestCase("1; 2; 3")]
+        public void ParseFails(string text)
         {
+            Assert.AreEqual(false, Point2D.TryParse(text, out _));
             Assert.Throws<FormatException>(() => Point2D.Parse(text));
         }
 
