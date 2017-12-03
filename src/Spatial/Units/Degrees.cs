@@ -11,9 +11,9 @@ namespace MathNet.Spatial.Units
     public struct Degrees : IAngleUnit
     {
         internal const string Name = "\u00B0";
-        private const double RadToDeg = Math.PI / 180.0;
+        private const double DegToRad = Math.PI / 180.0;
 
-        public double Conversionfactor => RadToDeg;
+        public double Conversionfactor => DegToRad;
 
         public string ShortName => Name;
 

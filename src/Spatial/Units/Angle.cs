@@ -13,6 +13,9 @@ namespace MathNet.Spatial.Units
     [Serializable]
     public struct Angle : IComparable<Angle>, IEquatable<Angle>, IFormattable, IXmlSerializable
     {
+        private const double RadToDeg = 180.0 / Math.PI;
+        private const double DegToRad = Math.PI / 180.0;
+
         /// <summary>
         /// The value in radians
         /// </summary>
@@ -28,6 +31,7 @@ namespace MathNet.Spatial.Units
         /// </summary>
         /// <param name="radians"></param>
         /// <param name="unit"></param>
+        [Obsolete("This constructor will be removed, use factory method FromRadians. Made obsolete 2017-12-03.")]
         public Angle(double radians, Radians unit)
         {
             this.Radians = radians;
@@ -38,60 +42,16 @@ namespace MathNet.Spatial.Units
         /// </summary>
         /// <param name="value"></param>
         /// <param name="unit"></param>
+        [Obsolete("This constructor will be removed, use factory method FromDegrees. Made obsolete 2017-12-03.")]
         public Angle(double value, Degrees unit)
         {
             this.Radians = UnitConverter.ConvertFrom(value, unit);
         }
 
         /// <summary>
-        /// The value in degrees
+        /// Gets the value in degrees
         /// </summary>
-        public double Degrees
-        {
-            get
-            {
-               return UnitConverter.ConvertTo(this.Radians, AngleUnit.Degrees);
-            }
-        }
-
-        /// <summary>
-        /// Creates an Angle from its string representation
-        /// </summary>
-        /// <param name="s">The string representation of the angle</param>
-        /// <returns></returns>
-        public static Angle Parse(string s)
-        {
-            return UnitParser.Parse(s, From);
-        }
-
-        /// <summary>
-        /// Creates a new instance of Angle.
-        /// </summary>
-        /// <param name="value"></param>
-        /// <param name="unit"></param>
-        public static Angle From<T>(double value, T unit)
-            where T : IAngleUnit
-        {
-            return new Angle(UnitConverter.ConvertFrom(value, unit));
-        }
-
-        /// <summary>
-        /// Creates a new instance of Angle.
-        /// </summary>
-        /// <param name="value"></param>
-        public static Angle FromDegrees(double value)
-        {
-            return new Angle(UnitConverter.ConvertFrom(value, AngleUnit.Degrees));
-        }
-
-        /// <summary>
-        /// Creates a new instance of Angle.
-        /// </summary>
-        /// <param name="value"></param>
-        public static Angle FromRadians(double value)
-        {
-            return new Angle(value);
-        }
+        public double Degrees => this.Radians * RadToDeg;
 
         /// <summary>
         /// Indicates whether two <see cref="T:MathNet.Spatial.Units.Angle"/> instances are equal.
@@ -252,6 +212,46 @@ namespace MathNet.Spatial.Units
         public static Angle operator +(Angle angle)
         {
             return angle;
+        }
+
+        /// <summary>
+        /// Creates an Angle from its string representation
+        /// </summary>
+        /// <param name="s">The string representation of the angle</param>
+        /// <returns></returns>
+        public static Angle Parse(string s)
+        {
+            return UnitParser.Parse(s, From);
+        }
+
+        /// <summary>
+        /// Creates a new instance of Angle.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="unit"></param>
+        [Obsolete("This method will be removed, use factory method FromDegrees or FromRadians. Made obsolete 2017-12-03.")]
+        public static Angle From<T>(double value, T unit)
+            where T : IAngleUnit
+        {
+            return new Angle(UnitConverter.ConvertFrom(value, unit));
+        }
+
+        /// <summary>
+        /// Creates a new instance of Angle.
+        /// </summary>
+        /// <param name="value"></param>
+        public static Angle FromDegrees(double value)
+        {
+            return new Angle(value * DegToRad);
+        }
+
+        /// <summary>
+        /// Creates a new instance of Angle.
+        /// </summary>
+        /// <param name="value"></param>
+        public static Angle FromRadians(double value)
+        {
+            return new Angle(value);
         }
 
         /// <summary>

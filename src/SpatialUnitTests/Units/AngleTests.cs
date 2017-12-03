@@ -12,25 +12,23 @@
     {
         private const double Tolerance = 1e-6;
         private const double DegToRad = Math.PI / 180;
+
         [Test]
         public void Ctor()
         {
             const double deg = 90;
             const double rad = deg * DegToRad;
-            var angles = new Angle[]
+            var angles = new[]
             {
-                new Angle(deg, AngleUnit.Degrees),
                 deg * AngleUnit.Degrees,
                 rad * AngleUnit.Radians,
                 Angle.FromDegrees(deg),
                 Angle.FromRadians(rad),
-                Angle.From(deg, AngleUnit.Degrees),
-                Angle.From(rad, AngleUnit.Radians),
-                new Angle(rad, AngleUnit.Radians),
             };
             foreach (var angle in angles)
             {
                 Assert.AreEqual(rad, angle.Radians, Tolerance);
+                Assert.AreEqual(deg, angle.Degrees, Tolerance);
             }
         }
 
@@ -51,7 +49,7 @@
         [TestCase("1.5707963267949 rad", 90, Math.PI / 2)]
         public void Convert(string vs, double degv, double radv)
         {
-            var angles = new Angle[]
+            var angles = new[]
             {
                 Angle.Parse(vs),
                 degv * AngleUnit.Degrees,
