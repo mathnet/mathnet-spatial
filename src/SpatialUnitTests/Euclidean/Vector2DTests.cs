@@ -179,7 +179,6 @@
         [TestCase("1,2; 3,4", 1.2, 3.4)]
         [TestCase("1,2;3,4", 1.2, 3.4)]
         [TestCase("1,2 3,4", 1.2, 3.4)]
-        [TestCase("(1,2, 3,4)", 1.2, 3.4)]
         [TestCase("(,1 2,3e-4)", 0.1, 0.00023000000000000001)]
         public void ParseSwedish(string text, double expectedX, double expectedY)
         {
