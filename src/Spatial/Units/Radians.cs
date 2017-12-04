@@ -9,8 +9,13 @@ namespace MathNet.Spatial.Units
     {
         internal const string Name = "rad";
 
+        /// <inheritdoc />
         public double Conversionfactor => 1.0;
 
+        /// <inheritdoc />
+        public double ConversionFactor => 1.0;
+
+        /// <inheritdoc />
         public string ShortName => Name;
 
         [Obsolete("This operator will be removed, use factory method FromDegrees or FromRadians. Made obsolete 2017-12-04.")]

@@ -7,7 +7,6 @@
     using System.Runtime.Serialization.Formatters.Binary;
     using System.Xml;
     using System.Xml.Serialization;
-    using MathNet.Spatial.Euclidean;
     using MathNet.Spatial.Units;
     using NUnit.Framework;
 
@@ -139,6 +138,34 @@
             Assert.IsInstanceOf<Angle>(actual);
         }
 
+        [TestCase(".1 rad", 0.1)]
+        [TestCase("1.2 rad", 1.2)]
+        [TestCase("1.2\u00A0rad", 1.2)]
+        [TestCase("1.2radians", 1.2)]
+        [TestCase("1.2 radians", 1.2)]
+        [TestCase("1.2\u00A0radians", 1.2)]
+        public void ParseRadians(string text, double expected)
+        {
+            Assert.AreEqual(true, Angle.TryParse(text, out var angle));
+            Assert.AreEqual(expected, angle.Radians);
+            Assert.AreEqual(expected, Angle.Parse(text).Radians);
+        }
+
+        [TestCase("1°", 1)]
+        [TestCase("1 °", 1)]
+        [TestCase("1deg", 1)]
+        [TestCase("1 deg", 1)]
+        [TestCase("1\u00A0deg", 1)]
+        [TestCase("1degrees", 1)]
+        [TestCase("1 degrees", 1)]
+        [TestCase("1\u00A0degrees", 1)]
+        public void ParseDegrees(string text, double expected)
+        {
+            Assert.AreEqual(true, Angle.TryParse(text, out var angle));
+            Assert.AreEqual(expected, angle.Degrees);
+            Assert.AreEqual(expected, Angle.Parse(text).Degrees);
+        }
+
         [Test]
         public void Compare()
         {
@@ -153,7 +180,7 @@
             Assert.AreEqual(1, big.CompareTo(small));
         }
 
-        [TestCase("15 °", "0.261799387799149rad")]
+        [TestCase("15 °", "0.261799387799149\u00A0rad")]
         public void ToString(string s, string expected)
         {
             var angle = Angle.Parse(s);
@@ -165,7 +192,7 @@
             Assert.IsTrue(angle.Equals(Angle.Parse(toStringComma), Tolerance));
         }
 
-        [TestCase("15 °", "F2", "15.00°")]
+        [TestCase("15°", "F2", "15.00°")]
         public void ToString(string s, string format, string expected)
         {
             var angle = Angle.Parse(s);

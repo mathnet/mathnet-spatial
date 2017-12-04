@@ -13,8 +13,13 @@ namespace MathNet.Spatial.Units
         internal const string Name = "\u00B0";
         private const double DegToRad = Math.PI / 180.0;
 
+        /// <inheritdoc />
         public double Conversionfactor => DegToRad;
 
+        /// <inheritdoc />
+        public double ConversionFactor => DegToRad;
+
+        /// <inheritdoc />
         public string ShortName => Name;
 
         [Obsolete("This operator will be removed, use factory method FromDegrees or FromRadians. Made obsolete 2017-12-04.")]

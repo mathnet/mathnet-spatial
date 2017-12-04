@@ -2,6 +2,7 @@ namespace MathNet.Spatial.Units
 {
     using System;
     using System.Globalization;
+    using System.Text.RegularExpressions;
     using System.Xml;
     using System.Xml.Schema;
     using System.Xml.Serialization;
@@ -40,7 +41,7 @@ namespace MathNet.Spatial.Units
         [Obsolete("This constructor will be removed, use factory method FromDegrees. Made obsolete 2017-12-03.")]
         public Angle(double value, Degrees unit)
         {
-            this.Radians = UnitConverter.ConvertFrom(value, unit);
+            this.Radians = value * DegToRad;
         }
 
         private Angle(double radians)
@@ -215,13 +216,48 @@ namespace MathNet.Spatial.Units
         }
 
         /// <summary>
-        /// Creates an Angle from its string representation
+        /// Attempts to convert a string into an <see cref="Angle"/>
         /// </summary>
-        /// <param name="s">The string representation of the angle</param>
-        /// <returns> A new instance of the <see cref="Angle"/> struct.</returns>
-        public static Angle Parse(string s)
+        /// <param name="text">The string to be converted</param>
+        /// <param name="result">Am <see cref="Angle"/></param>
+        /// <returns>True if <paramref name="text"/> could be parsed.</returns>
+        public static bool TryParse(string text, out Angle result)
         {
-            return UnitParser.Parse(s, From);
+            return TryParse(text, null, out result);
+        }
+
+        /// <summary>
+        /// Attempts to convert a string into an <see cref="Angle"/>
+        /// </summary>
+        /// <param name="text">The string to be converted</param>
+        /// <param name="formatProvider">The <see cref="IFormatProvider"/></param>
+        /// <param name="result">An <see cref="Angle"/></param>
+        /// <returns>True if <paramref name="text"/> could be parsed.</returns>
+        public static bool TryParse(string text, IFormatProvider formatProvider, out Angle result)
+        {
+            if (Text.TryParseAngle(text, formatProvider, out result))
+            {
+                return true;
+            }
+
+            result = default(Angle);
+            return false;
+        }
+
+        /// <summary>
+        /// Attempts to convert a string into an <see cref="Angle"/>
+        /// </summary>
+        /// <param name="value">The string to be converted</param>
+        /// <param name="formatProvider">The <see cref="IFormatProvider"/></param>
+        /// <returns>An <see cref="Angle"/></returns>
+        public static Angle Parse(string value, IFormatProvider formatProvider = null)
+        {
+            if (TryParse(value, formatProvider, out var p))
+            {
+                return p;
+            }
+
+            throw new FormatException($"Could not parse an Angle from the string {value}");
         }
 
         /// <summary>
@@ -349,6 +385,19 @@ namespace MathNet.Spatial.Units
         public bool Equals(Angle other, double tolerance)
         {
             return Math.Abs(this.Radians - other.Radians) < tolerance;
+        }
+
+        /// <summary>
+        /// Returns a value indicating whether this instance is equal to a specified <see cref="T:MathNet.Spatial.Units.Angle"/> object within the given tolerance.
+        /// </summary>
+        /// <returns>
+        /// true if <paramref name="other"/> represents the same angle as this instance; otherwise, false.
+        /// </returns>
+        /// <param name="other">An <see cref="T:MathNet.Spatial.Units.Angle"/> object to compare with this instance.</param>
+        /// <param name="tolerance">The maximum difference for being considered equal</param>
+        public bool Equals(Angle other, Angle tolerance)
+        {
+            return Math.Abs(this.Radians - other.Radians) < tolerance.Radians;
         }
 
         /// <inheritdoc />
