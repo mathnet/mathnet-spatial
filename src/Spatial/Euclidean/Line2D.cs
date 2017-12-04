@@ -155,9 +155,9 @@
         /// </summary>
         /// <param name="other">The other line to compute the intersection with</param>
         /// <returns>The point at the intersection of two lines, or null if the lines are parallel.</returns>
-        public Point2D? IntersectWith(Line2D other, Angle parallelTolerance)
+        public Point2D? IntersectWith(Line2D other, Angle tolerance)
         {
-            if (this.IsParallelTo(other, parallelTolerance))
+            if (this.IsParallelTo(other, tolerance))
             {
                 return null;
             }

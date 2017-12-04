@@ -126,9 +126,7 @@
         /// <returns>True if <paramref name="text"/> could be parsed.</returns>
         public static bool TryParse(string text, IFormatProvider formatProvider, out Vector2D result)
         {
-            double x;
-            double y;
-            if (Text.TryParse2D(text, formatProvider, out x, out y))
+            if (Text.TryParse2D(text, formatProvider, out var x, out var y))
             {
                 result = new Vector2D(x, y);
                 return true;
@@ -146,8 +144,7 @@
         /// <returns>A point at the coordinates specified</returns>
         public static Vector2D Parse(string value, IFormatProvider formatProvider = null)
         {
-            Vector2D p;
-            if (TryParse(value, formatProvider, out p))
+            if (TryParse(value, formatProvider, out var p))
             {
                 return p;
             }
@@ -221,7 +218,7 @@
                 return false;
             }
 
-            return obj is Vector2D && this.Equals((Vector2D)obj);
+            return obj is Vector2D v && this.Equals(v);
         }
 
         /// <inheritdoc />
