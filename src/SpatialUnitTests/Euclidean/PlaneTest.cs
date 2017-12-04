@@ -9,10 +9,10 @@
     [TestFixture]
     public class PlaneTest
     {
-        const string X = "1; 0 ; 0";
-        const string Z = "0; 0; 1";
-        const string NegativeZ = "0; 0; -1";
-        const string ZeroPoint = "0; 0; 0";
+        private const string X = "1; 0 ; 0";
+        private const string Z = "0; 0; 1";
+        private const string NegativeZ = "0; 0; -1";
+        private const string ZeroPoint = "0; 0; 0";
 
         [Test]
         public void CtorTest()
@@ -151,7 +151,7 @@
         {
             var plane = new Plane(UnitVector3D.ZAxis, new Point3D(0, 0, 0));
             var point3D = new Point3D(1, 2, 3);
-            Point3D mirrorAbout = plane.MirrorAbout(point3D);
+            var mirrorAbout = plane.MirrorAbout(point3D);
             AssertGeometry.AreEqual(new Point3D(1, 2, -3), mirrorAbout, float.Epsilon);
         }
 

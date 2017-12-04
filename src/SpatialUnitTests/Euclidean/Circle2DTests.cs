@@ -23,8 +23,8 @@
         public void CircleEquality(string center, double radius)
         {
             var cp = Point2D.Parse(center);
-            Circle2D c = new Circle2D(cp, radius);
-            Circle2D c2 = new Circle2D(cp, radius);
+            var c = new Circle2D(cp, radius);
+            var c2 = new Circle2D(cp, radius);
             Assert.True(c == c2);
             Assert.True(c.Equals(c2));
         }

@@ -37,7 +37,7 @@
             var p1 = Point2D.Parse(p1s);
             var p2 = Point2D.Parse(p2s);
             var line = new Line2D(p1, p2);
-            double len = line.Length;
+            var len = line.Length;
 
             Assert.AreEqual(expected, len, 1e-7);
         }
@@ -173,8 +173,8 @@
         {
             var line1 = Line2D.Parse(s1, e1);
             var line2 = Line2D.Parse(s2, e2);
-            Point2D? e = string.IsNullOrEmpty(expected) ? (Point2D?)null : Point2D.Parse(expected);
-            Point2D? intersection = line1.IntersectWith(line2);
+            var e = string.IsNullOrEmpty(expected) ? (Point2D?)null : Point2D.Parse(expected);
+            var intersection = line1.IntersectWith(line2);
 
             Assert.AreEqual(e, intersection);
         }
@@ -207,7 +207,7 @@
         [Test]
         public void ToStringCheck()
         {
-            string check = Line2D.Parse("0,0", "1,1").ToString();
+            var check = Line2D.Parse("0,0", "1,1").ToString();
 
             Assert.AreEqual("StartPoint: (0,\u00A00), EndPoint: (1,\u00A01)", check);
         }

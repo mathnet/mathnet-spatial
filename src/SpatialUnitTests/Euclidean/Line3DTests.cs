@@ -19,7 +19,7 @@
         [TestCase("0, 0, 0", "1, -1, 1", "1, -1, 1")]
         public void DirectionsTest(string p1s, string p2s, string evs)
         {
-            Line3D l = Line3D.Parse(p1s, p2s);
+            var l = Line3D.Parse(p1s, p2s);
             var excpected = UnitVector3D.Parse(evs);
             AssertGeometry.AreEqual(excpected, l.Direction);
         }
@@ -66,7 +66,7 @@
         {
             var p1 = Point3D.Parse(p1s);
             var p2 = Point3D.Parse(p2s);
-            Line3D l = new Line3D(p1, p2);
+            var l = new Line3D(p1, p2);
             var p = Point3D.Parse(ps);
             var actual = l.LineTo(p, mustStartFromLine);
             AssertGeometry.AreEqual(Point3D.Parse(sps), actual.StartPoint, 1e-6);
@@ -76,8 +76,8 @@
         [TestCase("1, 2, 3", "4, 5, 6", @"<Line3D><StartPoint X=""1"" Y=""2"" Z=""3"" /><EndPoint X=""4"" Y=""5"" Z=""6"" /></Line3D>")]
         public void XmlTests(string p1s, string p2s, string xml)
         {
-            Point3D p1 = Point3D.Parse(p1s);
-            Point3D p2 = Point3D.Parse(p2s);
+            var p1 = Point3D.Parse(p1s);
+            var p2 = Point3D.Parse(p2s);
             var l = new Line3D(p1, p2);
             AssertXml.XmlRoundTrips(l, xml, (e, a) => AssertGeometry.AreEqual(e, a));
         }

@@ -66,16 +66,16 @@
         [TestCase("1; -1 ; 0")]
         public void Orthogonal(string vs)
         {
-            Vector3D v = Vector3D.Parse(vs);
-            UnitVector3D orthogonal = v.Orthogonal;
+            var v = Vector3D.Parse(vs);
+            var orthogonal = v.Orthogonal;
             Assert.IsTrue(orthogonal.DotProduct(v) < 1e-6);
         }
 
         [TestCase("0; 0 ; 0")]
         public void Orthogonal_BadArgument(string vs)
         {
-            Vector3D v = Vector3D.Parse(vs);
-            Assert.Throws<ArgumentException>(() => { UnitVector3D orthogonal = v.Orthogonal; });
+            var v = Vector3D.Parse(vs);
+            Assert.Throws<ArgumentException>(() => { var orthogonal = v.Orthogonal; });
         }
 
         [TestCase("-2, 0, 1e-4", null, "(-2, 0, 0.0001)", 1e-4)]
@@ -83,7 +83,7 @@
         public void ToString(string vs, string format, string expected, double tolerance)
         {
             var v = Vector3D.Parse(vs);
-            string actual = v.ToString(format);
+            var actual = v.ToString(format);
             Assert.AreEqual(expected, actual);
             AssertGeometry.AreEqual(v, Vector3D.Parse(actual), tolerance);
         }
@@ -99,7 +99,7 @@
             var vector1 = Vector3D.Parse(v1s);
             var vector2 = Vector3D.Parse(v2s);
             var expected = Vector3D.Parse(ves);
-            Vector3D crossProduct = vector1.CrossProduct(vector2);
+            var crossProduct = vector1.CrossProduct(vector2);
             AssertGeometry.AreEqual(expected, crossProduct, 1E-6);
         }
 
@@ -143,8 +143,8 @@
         public void SignedAngleTo_RotationAroundZ(string vectorDoubles, double rotationInDegrees)
         {
             var vector = Vector3D.Parse(vectorDoubles);
-            Angle angle = Angle.FromDegrees(rotationInDegrees);
-            Vector3D rotated = new Vector3D(Matrix3D.RotationAroundZAxis(angle).Multiply(vector.ToVector()));
+            var angle = Angle.FromDegrees(rotationInDegrees);
+            var rotated = new Vector3D(Matrix3D.RotationAroundZAxis(angle).Multiply(vector.ToVector()));
             var actual = vector.SignedAngleTo(rotated, Vector3D.Parse(Z).Normalize());
             Assert.AreEqual(rotationInDegrees, actual.Degrees, 1E-6);
         }
@@ -164,8 +164,8 @@
         [TestCase("Z", Z)]
         public void SignedAngleTo_Itself(string axisDummy, string aboutDoubles)
         {
-            Vector3D vector = new Vector3D(1, 1, 1);
-            Vector3D aboutVector = Vector3D.Parse(aboutDoubles);
+            var vector = new Vector3D(1, 1, 1);
+            var aboutVector = Vector3D.Parse(aboutDoubles);
             var angle = vector.SignedAngleTo(vector, aboutVector.Normalize());
             Assert.AreEqual(0, angle.Degrees, 1E-6);
         }
@@ -241,7 +241,7 @@
         public void Scale(string vs, double s, string evs)
         {
             var v = Vector3D.Parse(vs);
-            Vector3D actual = v.ScaleBy(s);
+            var actual = v.ScaleBy(s);
             AssertGeometry.AreEqual(Vector3D.Parse(evs), actual, 1e-6);
         }
 
@@ -261,8 +261,8 @@
         [TestCase("1;2;3", new double[] { 1, 2, 3 })]
         public void ParseTest(string vs, double[] ep)
         {
-            Vector3D point3D = Vector3D.Parse(vs);
-            Vector3D expected = new Vector3D(ep);
+            var point3D = Vector3D.Parse(vs);
+            var expected = new Vector3D(ep);
             AssertGeometry.AreEqual(point3D, expected, 1e-9);
         }
 

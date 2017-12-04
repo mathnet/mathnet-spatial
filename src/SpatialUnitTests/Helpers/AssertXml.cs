@@ -12,6 +12,21 @@
 
     public static class AssertXml
     {
+        private static XmlWriterSettings Settings
+        {
+            get
+            {
+                var settings = new XmlWriterSettings
+                {
+                    Indent = true,
+                    NewLineHandling = NewLineHandling.Entitize,
+                    OmitXmlDeclaration = true,
+                    ////NamespaceHandling = NamespaceHandling.Default
+                };
+                return settings;
+            }
+        }
+
         public static void AreEqual(string first, string other)
         {
             var x1 = CleanupXml(first);
@@ -86,21 +101,6 @@
             }
         }
 
-        private static XmlWriterSettings Settings
-        {
-            get
-            {
-                var settings = new XmlWriterSettings
-                {
-                    Indent = true,
-                    NewLineHandling = NewLineHandling.Entitize,
-                    OmitXmlDeclaration = true,
-                    ////NamespaceHandling = NamespaceHandling.Default
-                };
-                return settings;
-            }
-        }
-
         private static string Normalize(string xml)
         {
             var e = XElement.Parse(xml);
@@ -121,7 +121,7 @@
         private static string CleanupXml(string xml)
         {
             var e = XElement.Parse(xml);
-            XElement clean = RemoveAllNamespaces(e);
+            var clean = RemoveAllNamespaces(e);
             return Normalize(clean);
         }
 

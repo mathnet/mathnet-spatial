@@ -8,13 +8,12 @@
     [TestFixture]
     public class CoordinateSystemTest
     {
-        const string X = "1; 0 ; 0";
-        const string Y = "0; 1; 0";
-        const string Z = "0; 0; 1";
-        const string NegativeX = "-1; 0; 0";
-        const string NegativeY = "0; -1; 0";
-        const string NegativeZ = "0; 0; -1";
-        private const string ZeroPoint = "0; 0; 0";
+        private const string X = "1; 0 ; 0";
+        private const string Y = "0; 1; 0";
+        private const string Z = "0; 0; 1";
+        private const string NegativeX = "-1; 0; 0";
+        private const string NegativeY = "0; -1; 0";
+        private const string NegativeZ = "0; 0; -1";
 
         [TestCase("1, 2, 3", "4, 5, 6", "7, 8, 9", "-1, -2, -3")]
         public void ConstructorTest(string ps, string xs, string ys, string zs)
@@ -141,10 +140,10 @@
         [TestCase("1, 2, 3", "-1, 0, -1", null)]
         public void RotateToTest(string v1s, string v2s, string @as)
         {
-            UnitVector3D? axis = string.IsNullOrEmpty(@as) ? (UnitVector3D?)null : UnitVector3D.Parse(@as);
-            UnitVector3D v1 = UnitVector3D.Parse(v1s);
-            UnitVector3D v2 = UnitVector3D.Parse(v2s);
-            CoordinateSystem actual = CoordinateSystem.RotateTo(v1, v2, axis);
+            var axis = string.IsNullOrEmpty(@as) ? (UnitVector3D?)null : UnitVector3D.Parse(@as);
+            var v1 = UnitVector3D.Parse(v1s);
+            var v2 = UnitVector3D.Parse(v2s);
+            var actual = CoordinateSystem.RotateTo(v1, v2, axis);
             Console.WriteLine(actual);
             var rv = actual.Transform(v1);
             AssertGeometry.AreEqual(v2, rv);
@@ -163,8 +162,8 @@
         public void TransformPoint(string ps, string eps, string css)
         {
             var p = Point3D.Parse(ps);
-            CoordinateSystem cs = CoordinateSystem.Parse(css);
-            Point3D actual = p.TransformBy(cs);
+            var cs = CoordinateSystem.Parse(css);
+            var actual = p.TransformBy(cs);
             var expected = Point3D.Parse(eps);
             AssertGeometry.AreEqual(expected, actual, float.Epsilon);
         }
@@ -174,8 +173,8 @@
         public void TransformVector(string vs, string evs, string css)
         {
             var v = Vector3D.Parse(vs);
-            CoordinateSystem cs = CoordinateSystem.Parse(css);
-            Vector3D actual = cs.Transform(v);
+            var cs = CoordinateSystem.Parse(css);
+            var actual = cs.Transform(v);
             var expected = Vector3D.Parse(evs);
             AssertGeometry.AreEqual(expected, actual);
         }
@@ -234,12 +233,12 @@
                 axis = UnitVector3D.Parse(axisString);
             }
 
-            CoordinateSystem cs = CoordinateSystem.RotateTo(v, vt, axis);
+            var cs = CoordinateSystem.RotateTo(v, vt, axis);
             var rv = cs.Transform(v);
             AssertGeometry.AreEqual(vt, rv);
 
-            CoordinateSystem invert = cs.Invert();
-            Vector3D rotateBack = invert.Transform(rv);
+            var invert = cs.Invert();
+            var rotateBack = invert.Transform(rv);
             AssertGeometry.AreEqual(v, rotateBack);
 
             cs = CoordinateSystem.RotateTo(vt, v, axis);

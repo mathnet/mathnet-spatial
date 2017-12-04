@@ -26,6 +26,16 @@ namespace MathNet.Spatial.Euclidean
         {
         }
 
+        public static bool operator ==(Ray3D left, Ray3D right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(Ray3D left, Ray3D right)
+        {
+            return !left.Equals(right);
+        }
+
         /// <summary>
         /// The intersection of the two planes
         /// </summary>
@@ -60,16 +70,6 @@ namespace MathNet.Spatial.Euclidean
             return Parser.ParseRay3D(s);
         }
 
-        public static bool operator ==(Ray3D left, Ray3D right)
-        {
-            return left.Equals(right);
-        }
-
-        public static bool operator !=(Ray3D left, Ray3D right)
-        {
-            return !left.Equals(right);
-        }
-
         /// <summary>
         /// Returns the shortes line from a point to the ray
         /// </summary>
@@ -77,8 +77,8 @@ namespace MathNet.Spatial.Euclidean
         /// <returns></returns>
         public Line3D LineTo(Point3D point3D)
         {
-            Vector3D v = this.ThroughPoint.VectorTo(point3D);
-            Vector3D alongVector = v.ProjectOn(this.Direction);
+            var v = this.ThroughPoint.VectorTo(point3D);
+            var alongVector = v.ProjectOn(this.Direction);
             return new Line3D(this.ThroughPoint + alongVector, point3D);
         }
 

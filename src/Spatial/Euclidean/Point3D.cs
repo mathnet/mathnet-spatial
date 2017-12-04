@@ -51,15 +51,45 @@ namespace MathNet.Spatial.Euclidean
             }
         }
 
-        /// <summary>
-        /// Creates a Point3D from its string representation
-        /// </summary>
-        /// <param name="s">The string representation of the Point3D</param>
-        /// <returns></returns>
-        public static Point3D Parse(string s)
+        public static Point3D Origin { get; } = new Point3D(0, 0, 0);
+
+        public static Point3D NaN { get; } = new Point3D(double.NaN, double.NaN, double.NaN);
+
+        [Obsolete("Not sure this is nice")]
+        public static Vector<double> operator *(Matrix<double> left, Point3D right)
         {
-            var doubles = Parser.ParseItem3D(s);
-            return new Point3D(doubles);
+            return left * right.ToVector();
+        }
+
+        [Obsolete("Not sure this is nice")]
+        public static Vector<double> operator *(Point3D left, Matrix<double> right)
+        {
+            return left.ToVector() * right;
+        }
+
+        public static Point3D operator +(Point3D p, Vector3D v)
+        {
+            return new Point3D(p.X + v.X, p.Y + v.Y, p.Z + v.Z);
+        }
+
+        public static Point3D operator +(Point3D p, UnitVector3D v)
+        {
+            return new Point3D(p.X + v.X, p.Y + v.Y, p.Z + v.Z);
+        }
+
+        public static Point3D operator -(Point3D p, Vector3D v)
+        {
+            return new Point3D(p.X - v.X, p.Y - v.Y, p.Z - v.Z);
+        }
+
+        public static Point3D operator -(Point3D p, UnitVector3D v)
+        {
+            return new Point3D(p.X - v.X, p.Y - v.Y, p.Z - v.Z);
+        }
+
+        public static Vector3D operator -(Point3D lhs, Point3D rhs)
+        {
+            return new Vector3D(lhs.X - rhs.X, lhs.Y - rhs.Y, lhs.Z - rhs.Z);
         }
 
         public static bool operator ==(Point3D left, Point3D right)
@@ -72,16 +102,15 @@ namespace MathNet.Spatial.Euclidean
             return !left.Equals(right);
         }
 
-        [Obsolete("Not sure this is nice")]
-        public static Vector<double> operator *(Matrix<double> left, Point3D right)
+        /// <summary>
+        /// Creates a Point3D from its string representation
+        /// </summary>
+        /// <param name="s">The string representation of the Point3D</param>
+        /// <returns></returns>
+        public static Point3D Parse(string s)
         {
-            return left * right.ToVector();
-        }
-
-        [Obsolete("Not sure this is nice")]
-        public static Vector<double> operator *(Point3D left, Matrix<double> right)
-        {
-            return left.ToVector() * right;
+            var doubles = Parser.ParseItem3D(s);
+            return new Point3D(doubles);
         }
 
         public override string ToString()
@@ -97,7 +126,7 @@ namespace MathNet.Spatial.Euclidean
         public string ToString(string format, IFormatProvider provider = null)
         {
             var numberFormatInfo = provider != null ? NumberFormatInfo.GetInstance(provider) : CultureInfo.InvariantCulture.NumberFormat;
-            string separator = numberFormatInfo.NumberDecimalSeparator == "," ? ";" : ",";
+            var separator = numberFormatInfo.NumberDecimalSeparator == "," ? ";" : ",";
             return string.Format("({0}{1} {2}{1} {3})", this.X.ToString(format, numberFormatInfo), separator, this.Y.ToString(format, numberFormatInfo), this.Z.ToString(format, numberFormatInfo));
         }
 
@@ -130,45 +159,6 @@ namespace MathNet.Spatial.Euclidean
             return obj is Point3D && this.Equals((Point3D)obj);
         }
 
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                var hashCode = this.X.GetHashCode();
-                hashCode = (hashCode * 397) ^ this.Y.GetHashCode();
-                hashCode = (hashCode * 397) ^ this.Z.GetHashCode();
-                return hashCode;
-            }
-        }
-
-        /// <summary>
-        /// This method is reserved and should not be used. When implementing the IXmlSerializable interface, you should return null (Nothing in Visual Basic) from this method, and instead, if specifying a custom schema is required, apply the <see cref="T:System.Xml.Serialization.XmlSchemaProviderAttribute"/> to the class.
-        /// </summary>
-        /// <returns>
-        /// An <see cref="T:System.Xml.Schema.XmlSchema"/> that describes the XML representation of the object that is produced by the <see cref="M:System.Xml.Serialization.IXmlSerializable.WriteXml(System.Xml.XmlWriter)"/> method and consumed by the <see cref="M:System.Xml.Serialization.IXmlSerializable.ReadXml(System.Xml.XmlReader)"/> method.
-        /// </returns>
-        public XmlSchema GetSchema()
-        {
-            return null;
-        }
-
-        /// <summary>
-        /// Generates an object from its XML representation.
-        /// </summary>
-        /// <param name="reader">The <see cref="T:System.Xml.XmlReader"/> stream from which the object is deserialized. </param>
-        public void ReadXml(XmlReader reader)
-        {
-            reader.MoveToContent();
-            var e = (XElement)XNode.ReadFrom(reader);
-
-            // Hacking set readonly fields here, can't think of a cleaner workaround
-            double x = XmlConvert.ToDouble(e.ReadAttributeOrElementOrDefault("X"));
-            double y = XmlConvert.ToDouble(e.ReadAttributeOrElementOrDefault("Y"));
-            double z = XmlConvert.ToDouble(e.ReadAttributeOrElementOrDefault("Z"));
-
-            XmlExt.SetReadonlyFields(ref this, new[] { "X", "Y", "Z" }, new[] { x, y, z });
-        }
-
         /// <summary>
         /// Converts an object into its XML representation.
         /// </summary>
@@ -185,16 +175,6 @@ namespace MathNet.Spatial.Euclidean
             var p = default(Point3D);
             p.ReadXml(reader);
             return p;
-        }
-
-        public static Point3D Origin
-        {
-            get { return new Point3D(0, 0, 0); }
-        }
-
-        public static Point3D NaN
-        {
-            get { return new Point3D(double.NaN, double.NaN, double.NaN); }
         }
 
         public static Point3D Centroid(IEnumerable<Point3D> points)
@@ -225,42 +205,6 @@ namespace MathNet.Spatial.Euclidean
         {
             return plane.IntersectionWith(ray);
         }
-
-        public static Point3D operator +(Point3D p, Vector3D v)
-        {
-            return new Point3D(p.X + v.X, p.Y + v.Y, p.Z + v.Z);
-        }
-
-        public static Point3D operator +(Point3D p, UnitVector3D v)
-        {
-            return new Point3D(p.X + v.X, p.Y + v.Y, p.Z + v.Z);
-        }
-
-        public static Point3D operator -(Point3D p, Vector3D v)
-        {
-            return new Point3D(p.X - v.X, p.Y - v.Y, p.Z - v.Z);
-        }
-
-        public static Point3D operator -(Point3D p, UnitVector3D v)
-        {
-            return new Point3D(p.X - v.X, p.Y - v.Y, p.Z - v.Z);
-        }
-
-        public static Vector3D operator -(Point3D lhs, Point3D rhs)
-        {
-            return new Vector3D(lhs.X - rhs.X, lhs.Y - rhs.Y, lhs.Z - rhs.Z);
-        }
-
-        // Not sure a ref to System.Windows.Media.Media3D is nice
-        ////public static explicit operator Point3D(System.Windows.Media.Media3D.Point3D p)
-        ////{
-        ////    return new Point3D(p.X, p.Y, p.Z);
-        ////}
-
-        ////public static explicit operator System.Windows.Media.Media3D.Point3D(Point3D p)
-        ////{
-        ////    return new System.Windows.Media.Media3D.Point3D(p.X, p.Y, p.Z);
-        ////}
 
         public Point3D MirrorAbout(Plane plane)
         {
@@ -329,6 +273,45 @@ namespace MathNet.Spatial.Euclidean
         public Vector<double> ToVector()
         {
             return Vector<double>.Build.Dense(new[] { this.X, this.Y, this.Z });
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var hashCode = this.X.GetHashCode();
+                hashCode = (hashCode * 397) ^ this.Y.GetHashCode();
+                hashCode = (hashCode * 397) ^ this.Z.GetHashCode();
+                return hashCode;
+            }
+        }
+
+        /// <summary>
+        /// This method is reserved and should not be used. When implementing the IXmlSerializable interface, you should return null (Nothing in Visual Basic) from this method, and instead, if specifying a custom schema is required, apply the <see cref="T:System.Xml.Serialization.XmlSchemaProviderAttribute"/> to the class.
+        /// </summary>
+        /// <returns>
+        /// An <see cref="T:System.Xml.Schema.XmlSchema"/> that describes the XML representation of the object that is produced by the <see cref="M:System.Xml.Serialization.IXmlSerializable.WriteXml(System.Xml.XmlWriter)"/> method and consumed by the <see cref="M:System.Xml.Serialization.IXmlSerializable.ReadXml(System.Xml.XmlReader)"/> method.
+        /// </returns>
+        public XmlSchema GetSchema()
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// Generates an object from its XML representation.
+        /// </summary>
+        /// <param name="reader">The <see cref="T:System.Xml.XmlReader"/> stream from which the object is deserialized. </param>
+        public void ReadXml(XmlReader reader)
+        {
+            reader.MoveToContent();
+            var e = (XElement)XNode.ReadFrom(reader);
+
+            // Hacking set readonly fields here, can't think of a cleaner workaround
+            var x = XmlConvert.ToDouble(e.ReadAttributeOrElementOrDefault("X"));
+            var y = XmlConvert.ToDouble(e.ReadAttributeOrElementOrDefault("Y"));
+            var z = XmlConvert.ToDouble(e.ReadAttributeOrElementOrDefault("Z"));
+
+            XmlExt.SetReadonlyFields(ref this, new[] { "X", "Y", "Z" }, new[] { x, y, z });
         }
     }
 }

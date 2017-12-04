@@ -24,6 +24,27 @@
         public readonly Point2D EndPoint;
 
         /// <summary>
+        /// Constructor for the Line2D, throws an error if the startpoint is equal to the
+        /// endpoint.
+        /// </summary>
+        /// <param name="startPoint">the starting point of the line</param>
+        /// <param name="endPoint">the ending point of the line</param>
+        public Line2D(Point2D startPoint, Point2D endPoint)
+        {
+            this.StartPoint = startPoint;
+            this.EndPoint = endPoint;
+
+            if (this.StartPoint == this.EndPoint)
+            {
+                throw new ArgumentException("The Line2D starting and ending points cannot be identical");
+            }
+
+            // Initialize the length and direction for lazy loading
+            this.length = -1.0;
+            this.direction = default(Vector2D);
+        }
+
+        /// <summary>
         /// A double precision number representing the distance between the startpoint and endpoint
         /// </summary>
         public double Length
@@ -55,35 +76,34 @@
             }
         }
 
-        /// <summary>
-        /// Constructor for the Line2D, throws an error if the startpoint is equal to the
-        /// endpoint.
-        /// </summary>
-        /// <param name="startPoint">the starting point of the line</param>
-        /// <param name="endPoint">the ending point of the line</param>
-        public Line2D(Point2D startPoint, Point2D endPoint)
+        public static bool operator ==(Line2D left, Line2D right)
         {
-            this.StartPoint = startPoint;
-            this.EndPoint = endPoint;
-
-            if (this.StartPoint == this.EndPoint)
-            {
-                throw new ArgumentException("The Line2D starting and ending points cannot be identical");
-            }
-
-            // Initialize the length and direction for lazy loading
-            this.length = -1.0;
-            this.direction = default(Vector2D);
+            return left.Equals(right);
         }
 
-        /// <summary>
-        /// Compute and store the length and direction of the Line2D, used for lazy loading
-        /// </summary>
-        private void ComputeLengthAndDirection()
+        public static bool operator !=(Line2D left, Line2D right)
         {
-            var vectorBetween = this.StartPoint.VectorTo(this.EndPoint);
-            this.length = vectorBetween.Length;
-            this.direction = vectorBetween.Normalize();
+            return !left.Equals(right);
+        }
+
+        public static Line2D operator +(Vector2D offset, Line2D line)
+        {
+            return new Line2D(line.StartPoint + offset, line.EndPoint + offset);
+        }
+
+        public static Line2D operator +(Line2D line, Vector2D offset)
+        {
+            return offset + line;
+        }
+
+        public static Line2D operator -(Line2D line, Vector2D offset)
+        {
+            return line + (-offset);
+        }
+
+        public static Line2D Parse(string startPointString, string endPointString)
+        {
+            return new Line2D(Point2D.Parse(startPointString), Point2D.Parse(endPointString));
         }
 
         /// <summary>
@@ -105,8 +125,8 @@
         /// <returns></returns>
         public Point2D ClosestPointTo(Point2D p, bool mustBeOnSegment)
         {
-            Vector2D v = this.StartPoint.VectorTo(p);
-            double dotProduct = v.DotProduct(this.Direction);
+            var v = this.StartPoint.VectorTo(p);
+            var dotProduct = v.DotProduct(this.Direction);
             if (mustBeOnSegment)
             {
                 if (dotProduct < 0)
@@ -114,14 +134,14 @@
                     dotProduct = 0;
                 }
 
-                double l = this.Length;
+                var l = this.Length;
                 if (dotProduct > l)
                 {
                     dotProduct = l;
                 }
             }
 
-            Vector2D alongVector = dotProduct * this.Direction;
+            var alongVector = dotProduct * this.Direction;
             return this.StartPoint + alongVector;
         }
 
@@ -139,12 +159,12 @@
             }
 
             // http://stackoverflow.com/questions/563198/how-do-you-detect-where-two-line-segments-intersect
-            Point2D p = this.StartPoint;
-            Point2D q = other.StartPoint;
-            Vector2D r = this.StartPoint.VectorTo(this.EndPoint);
-            Vector2D s = other.StartPoint.VectorTo(other.EndPoint);
+            var p = this.StartPoint;
+            var q = other.StartPoint;
+            var r = this.StartPoint.VectorTo(this.EndPoint);
+            var s = other.StartPoint.VectorTo(other.EndPoint);
 
-            double t = (q - p).CrossProduct(s) / r.CrossProduct(s);
+            var t = (q - p).CrossProduct(s) / r.CrossProduct(s);
 
             return p + (t * r);
         }
@@ -154,6 +174,7 @@
         /// angle tolerance.
         /// </summary>
         /// <param name="other">The other line to compute the intersection with</param>
+        /// <param name="tolerance">The tolerance used when checking if the lines are parallel</param>
         /// <returns>The point at the intersection of two lines, or null if the lines are parallel.</returns>
         public Point2D? IntersectWith(Line2D other, Angle tolerance)
         {
@@ -163,12 +184,12 @@
             }
 
             // http://stackoverflow.com/questions/563198/how-do-you-detect-where-two-line-segments-intersect
-            Point2D p = this.StartPoint;
-            Point2D q = other.StartPoint;
-            Vector2D r = this.StartPoint.VectorTo(this.EndPoint);
-            Vector2D s = other.StartPoint.VectorTo(other.EndPoint);
+            var p = this.StartPoint;
+            var q = other.StartPoint;
+            var r = this.StartPoint.VectorTo(this.EndPoint);
+            var s = other.StartPoint.VectorTo(other.EndPoint);
 
-            double t = (q - p).CrossProduct(s) / r.CrossProduct(s);
+            var t = (q - p).CrossProduct(s) / r.CrossProduct(s);
 
             return p + (t * r);
         }
@@ -195,39 +216,9 @@
             return this.Direction.IsParallelTo(other.Direction, angleTolerance);
         }
 
-        public static bool operator ==(Line2D left, Line2D right)
-        {
-            return left.Equals(right);
-        }
-
-        public static bool operator !=(Line2D left, Line2D right)
-        {
-            return !left.Equals(right);
-        }
-
-        public static Line2D operator +(Vector2D offset, Line2D line)
-        {
-            return new Line2D(line.StartPoint + offset, line.EndPoint + offset);
-        }
-
-        public static Line2D operator +(Line2D line, Vector2D offset)
-        {
-            return offset + line;
-        }
-
-        public static Line2D operator -(Line2D line, Vector2D offset)
-        {
-            return line + (-offset);
-        }
-
         public override string ToString()
         {
             return string.Format("StartPoint: {0}, EndPoint: {1}", this.StartPoint, this.EndPoint);
-        }
-
-        public static Line2D Parse(string startPointString, string endPointString)
-        {
-            return new Line2D(Point2D.Parse(startPointString), Point2D.Parse(endPointString));
         }
 
         public bool Equals(Line2D other)
@@ -255,6 +246,16 @@
             {
                 return (this.StartPoint.GetHashCode() * 397) ^ this.EndPoint.GetHashCode();
             }
+        }
+
+        /// <summary>
+        /// Compute and store the length and direction of the Line2D, used for lazy loading
+        /// </summary>
+        private void ComputeLengthAndDirection()
+        {
+            var vectorBetween = this.StartPoint.VectorTo(this.EndPoint);
+            this.length = vectorBetween.Length;
+            this.direction = vectorBetween.Normalize();
         }
     }
 }

@@ -84,17 +84,6 @@ namespace MathNet.Spatial.Euclidean
             get { return Matrix<double>.Build.Dense(3, 3, new[] { 0d, this.Z, -this.Y, -this.Z, 0d, this.X, this.Y, -this.X, 0d }); }
         }
 
-        /// <summary>
-        /// Creates a Vector3D from its string representation
-        /// </summary>
-        /// <param name="s">The string representation of the Vector3D</param>
-        /// <returns></returns>
-        public static Vector3D Parse(string s)
-        {
-            var doubles = Parser.ParseItem3D(s);
-            return new Vector3D(doubles);
-        }
-
         public static bool operator ==(Vector3D left, Vector3D right)
         {
             return left.Equals(right);
@@ -122,6 +111,49 @@ namespace MathNet.Spatial.Euclidean
             return left.DotProduct(right);
         }
 
+        public static Vector3D operator +(Vector3D v1, Vector3D v2)
+        {
+            return new Vector3D(v1.X + v2.X, v1.Y + v2.Y, v1.Z + v2.Z);
+        }
+
+        public static Vector3D operator -(Vector3D v1, Vector3D v2)
+        {
+            return new Vector3D(v1.X - v2.X, v1.Y - v2.Y, v1.Z - v2.Z);
+        }
+
+        public static Vector3D operator -(Vector3D v)
+        {
+            return v.Negate();
+        }
+
+        public static Vector3D operator *(double d, Vector3D v)
+        {
+            return new Vector3D(d * v.X, d * v.Y, d * v.Z);
+        }
+
+        public static Vector3D operator /(Vector3D v, double d)
+        {
+            return new Vector3D(v.X / d, v.Y / d, v.Z / d);
+        }
+
+        /// <summary>
+        /// Creates a Vector3D from its string representation
+        /// </summary>
+        /// <param name="s">The string representation of the Vector3D</param>
+        /// <returns></returns>
+        public static Vector3D Parse(string s)
+        {
+            var doubles = Parser.ParseItem3D(s);
+            return new Vector3D(doubles);
+        }
+
+        public static Vector3D ReadFrom(XmlReader reader)
+        {
+            var v = default(Vector3D);
+            v.ReadXml(reader);
+            return v;
+        }
+
         public override string ToString()
         {
             return this.ToString(null, CultureInfo.InvariantCulture);
@@ -135,7 +167,7 @@ namespace MathNet.Spatial.Euclidean
         public string ToString(string format, IFormatProvider provider = null)
         {
             var numberFormatInfo = provider != null ? NumberFormatInfo.GetInstance(provider) : CultureInfo.InvariantCulture.NumberFormat;
-            string separator = numberFormatInfo.NumberDecimalSeparator == "," ? ";" : ",";
+            var separator = numberFormatInfo.NumberDecimalSeparator == "," ? ";" : ",";
             return string.Format(
                 "({1}{0} {2}{0} {3})",
                 separator,
@@ -241,44 +273,6 @@ namespace MathNet.Spatial.Euclidean
             writer.WriteAttribute("Z", this.Z);
         }
 
-        public static Vector3D ReadFrom(XmlReader reader)
-        {
-            var v = default(Vector3D);
-            v.ReadXml(reader);
-            return v;
-        }
-
-        public static Vector3D operator +(Vector3D v1, Vector3D v2)
-        {
-            return new Vector3D(v1.X + v2.X, v1.Y + v2.Y, v1.Z + v2.Z);
-        }
-
-        public static Vector3D operator -(Vector3D v1, Vector3D v2)
-        {
-            return new Vector3D(v1.X - v2.X, v1.Y - v2.Y, v1.Z - v2.Z);
-        }
-
-        public static Vector3D operator -(Vector3D v)
-        {
-            return v.Negate();
-        }
-
-        public static Vector3D operator *(double d, Vector3D v)
-        {
-            return new Vector3D(d * v.X, d * v.Y, d * v.Z);
-        }
-
-        // Commented out because the d * v reads nicer than v *d
-        ////public static Vector3D operator *(Vector3D v,double d)
-        ////{
-        ////    return d*v;
-        ////}
-
-        public static Vector3D operator /(Vector3D v, double d)
-        {
-            return new Vector3D(v.X / d, v.Y / d, v.Z / d);
-        }
-
         ////public static explicit operator Vector3D(System.Windows.Media.Media3D.Vector3D v)
         ////{
         ////    return new Vector3D(v.X, v.Y, v.Z);
@@ -310,7 +304,7 @@ namespace MathNet.Spatial.Euclidean
 
         public Vector3D ProjectOn(UnitVector3D uv)
         {
-            double pd = this.DotProduct(uv);
+            var pd = this.DotProduct(uv);
             return pd * uv;
         }
 
@@ -443,9 +437,9 @@ namespace MathNet.Spatial.Euclidean
         public Matrix<double> GetUnitTensorProduct()
         {
             // unitTensorProduct:matrix([ux^2,ux*uy,ux*uz],[ux*uy,uy^2,uy*uz],[ux*uz,uy*uz,uz^2]),
-            double xy = this.X * this.Y;
-            double xz = this.X * this.Z;
-            double yz = this.Y * this.Z;
+            var xy = this.X * this.Y;
+            var xz = this.X * this.Z;
+            var yz = this.Y * this.Z;
             return Matrix<double>.Build.Dense(3, 3, new[] { this.X * this.X, xy, xz, xy, this.Y * this.Y, yz, xz, yz, this.Z * this.Z });
         }
 

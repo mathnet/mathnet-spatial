@@ -101,7 +101,7 @@
         public void ToString(string vs, string format, string expected, double tolerance)
         {
             var v = UnitVector3D.Parse(vs);
-            string actual = v.ToString(format);
+            var actual = v.ToString(format);
             Assert.AreEqual(expected, actual);
             AssertGeometry.AreEqual(v, UnitVector3D.Parse(actual), tolerance);
         }
@@ -144,7 +144,7 @@
         [TestCase("1,0,0", 3, "3,0,0")]
         public void MultiplyTest(string unitVectorAsString, double multiplier, string expected)
         {
-            UnitVector3D unitVector3D = UnitVector3D.Parse(unitVectorAsString);
+            var unitVector3D = UnitVector3D.Parse(unitVectorAsString);
             Assert.AreEqual(Vector3D.Parse(expected), multiplier * unitVector3D);
         }
     }

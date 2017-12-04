@@ -88,7 +88,7 @@ namespace MathNet.Spatial.UnitTests
                 Assert.Fail();
             }
 
-            for (int i = 0; i < expected.Values.Length; i++)
+            for (var i = 0; i < expected.Values.Length; i++)
             {
                 Assert.AreEqual(expected.Values[i], actual.Values[i], tolerance);
             }
@@ -106,7 +106,7 @@ namespace MathNet.Spatial.UnitTests
                 Assert.Fail();
             }
 
-            for (int i = 0; i < expected.Length; i++)
+            for (var i = 0; i < expected.Length; i++)
             {
                 Assert.AreEqual(expected[i], actual[i], tolerance);
             }
@@ -135,9 +135,9 @@ namespace MathNet.Spatial.UnitTests
         {
             Assert.AreEqual(expected.RowCount, actual.RowCount);
             Assert.AreEqual(expected.ColumnCount, actual.ColumnCount);
-            double[] expectedRowWiseArray = expected.ToRowWiseArray();
-            double[] actualRowWiseArray = actual.ToRowWiseArray();
-            for (int i = 0; i < expectedRowWiseArray.Length; i++)
+            var expectedRowWiseArray = expected.ToRowWiseArray();
+            var actualRowWiseArray = actual.ToRowWiseArray();
+            for (var i = 0; i < expectedRowWiseArray.Length; i++)
             {
                 Assert.AreEqual(expectedRowWiseArray[i], actualRowWiseArray[i], tolerance);
             }

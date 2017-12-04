@@ -82,6 +82,16 @@
             }
         }
 
+        public static bool operator ==(Line3D left, Line3D right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(Line3D left, Line3D right)
+        {
+            return !left.Equals(right);
+        }
+
         /// <summary>
         /// Creates a Line from its string representation
         /// </summary>
@@ -91,16 +101,6 @@
         public static Line3D Parse(string startPoint, string endPoint)
         {
             return new Line3D(Point3D.Parse(startPoint), Point3D.Parse(endPoint));
-        }
-
-        public static bool operator ==(Line3D left, Line3D right)
-        {
-            return left.Equals(right);
-        }
-
-        public static bool operator !=(Line3D left, Line3D right)
-        {
-            return !left.Equals(right);
         }
 
         /// <summary>
@@ -122,8 +122,8 @@
         /// <returns></returns>
         public Point3D ClosestPointTo(Point3D p, bool mustBeOnSegment)
         {
-            Vector3D v = p - this.StartPoint;
-            double dotProduct = v.DotProduct(this.Direction);
+            var v = p - this.StartPoint;
+            var dotProduct = v.DotProduct(this.Direction);
             if (mustBeOnSegment)
             {
                 if (dotProduct < 0)
@@ -137,7 +137,7 @@
                 }
             }
 
-            Vector3D alongVector = dotProduct * this.Direction;
+            var alongVector = dotProduct * this.Direction;
             return this.StartPoint + alongVector;
         }
 
@@ -211,8 +211,8 @@
             var d = u.DotProduct(w0);
             var e = v.DotProduct(w0);
 
-            double sc = ((b * e) - (c * d)) / ((a * c) - (b * b));
-            double tc = ((a * e) - (b * d)) / ((a * c) - (b * b));
+            var sc = ((b * e) - (c * d)) / ((a * c) - (b * b));
+            var tc = ((a * e) - (b * d)) / ((a * c) - (b * b));
 
             return Tuple.Create(P0 + (sc * u), Q0 + (tc * v));
         }
@@ -263,7 +263,7 @@
             checkPoint = other.ClosestPointTo(this.StartPoint, true);
             distance = checkPoint.DistanceTo(this.StartPoint);
             closestPair = Tuple.Create(this.StartPoint, checkPoint);
-            double minDistance = distance;
+            var minDistance = distance;
 
             checkPoint = other.ClosestPointTo(this.EndPoint, true);
             distance = checkPoint.DistanceTo(this.EndPoint);

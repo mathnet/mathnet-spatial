@@ -99,6 +99,16 @@ namespace MathNet.Spatial.Euclidean
             }
         }
 
+        public static bool operator ==(CoordinateSystem left, CoordinateSystem right)
+        {
+            return Equals(left, right);
+        }
+
+        public static bool operator !=(CoordinateSystem left, CoordinateSystem right)
+        {
+            return !Equals(left, right);
+        }
+
         public static CoordinateSystem Parse(string s)
         {
             var match = Regex.Match(s, CsPattern, RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Singleline);
@@ -118,9 +128,9 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="axis">Input Vector object. </param>
         public static CoordinateSystem RotateTo(UnitVector3D fromVector3D, UnitVector3D toVector3D, UnitVector3D? axis = null)
         {
-            Matrix<double> r = Matrix3D.RotationTo(fromVector3D, toVector3D, axis);
+            var r = Matrix3D.RotationTo(fromVector3D, toVector3D, axis);
             var coordinateSystem = new CoordinateSystem();
-            CoordinateSystem cs = SetRotationSubMatrix(r, coordinateSystem);
+            var cs = SetRotationSubMatrix(r, coordinateSystem);
             return cs;
         }
 
@@ -293,7 +303,7 @@ namespace MathNet.Spatial.Euclidean
         {
             var cs1 = new CoordinateSystem(fromOrigin, fromXAxis, fromYAxis, fromZAxis);
             var cs2 = new CoordinateSystem(toOrigin, toXAxis, toYAxis, toZAxis);
-            CoordinateSystem mcs = CreateMappingCoordinateSystem(cs1, cs2);
+            var mcs = CreateMappingCoordinateSystem(cs1, cs2);
             return mcs;
         }
 
@@ -327,16 +337,6 @@ namespace MathNet.Spatial.Euclidean
         public static Matrix<double> GetRotationSubMatrix(CoordinateSystem coordinateSystem)
         {
             return coordinateSystem.SubMatrix(0, 3, 0, 3);
-        }
-
-        public static bool operator ==(CoordinateSystem left, CoordinateSystem right)
-        {
-            return Equals(left, right);
-        }
-
-        public static bool operator !=(CoordinateSystem left, CoordinateSystem right)
-        {
-            return !Equals(left, right);
         }
 
         ////public CoordinateSystem SetCoordinateSystem(Matrix<double> matrix)
@@ -562,7 +562,7 @@ namespace MathNet.Spatial.Euclidean
         {
             unchecked
             {
-                int result = this.XAxis.GetHashCode();
+                var result = this.XAxis.GetHashCode();
                 result = (result * 397) ^ this.YAxis.GetHashCode();
                 result = (result * 397) ^ this.ZAxis.GetHashCode();
                 result = (result * 397) ^ this.OffsetToBase.GetHashCode();

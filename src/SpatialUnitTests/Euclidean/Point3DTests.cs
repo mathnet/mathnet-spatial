@@ -64,7 +64,7 @@
             var p1 = Point3D.Parse(p1s);
             var p2 = Point3D.Parse(p2s);
             var ep = Point3D.Parse(eps);
-            Point3D mp = Point3D.MidPoint(p1, p2);
+            var mp = Point3D.MidPoint(p1, p2);
             AssertGeometry.AreEqual(ep, mp, 1e-9);
             var centroid = Point3D.Centroid(p1, p2);
             AssertGeometry.AreEqual(ep, centroid, 1e-9);
@@ -119,7 +119,7 @@
         [TestCase("1, 2, 3", "0, 0, 1", "1, 2, 4")]
         public void AddVector(string ps, string vs, string eps)
         {
-            Point3D p = Point3D.Parse(ps);
+            var p = Point3D.Parse(ps);
             var actuals = new[]
                           {
                               p + Vector3D.Parse(vs),
@@ -137,7 +137,7 @@
         [TestCase("1, 2, 3", "0, 0, 1", "1, 2, 2")]
         public void SubtractVector(string ps, string vs, string eps)
         {
-            Point3D p = Point3D.Parse(ps);
+            var p = Point3D.Parse(ps);
             var actuals = new[]
                           {
                               p - Vector3D.Parse(vs),
@@ -153,8 +153,8 @@
         [TestCase("1, 2, 3", "4, 8, 16", "-3, -6, -13")]
         public void SubtractPoint(string p1s, string p2s, string evs)
         {
-            Point3D p1 = Point3D.Parse(p1s);
-            Point3D p2 = Point3D.Parse(p2s);
+            var p1 = Point3D.Parse(p1s);
+            var p2 = Point3D.Parse(p2s);
 
             var expected = Vector3D.Parse(evs);
             Assert.AreEqual(expected, p1 - p2);
@@ -177,15 +177,15 @@
         [TestCase("-1 ; -2;-3", new double[] { -1, -2, -3 })]
         public void ParseTest(string pointAsString, double[] expectedPoint)
         {
-            Point3D point3D = Point3D.Parse(pointAsString);
-            Point3D expected = new Point3D(expectedPoint);
+            var point3D = Point3D.Parse(pointAsString);
+            var expected = new Point3D(expectedPoint);
             AssertGeometry.AreEqual(expected, point3D, 1e-9);
         }
 
         [TestCase("-1 ; 2;-3")]
         public void ToVectorAndBack(string ps)
         {
-            Point3D p = Point3D.Parse(ps);
+            var p = Point3D.Parse(ps);
             AssertGeometry.AreEqual(p, p.ToVector3D().ToPoint3D(), 1e-9);
         }
 
@@ -194,7 +194,7 @@
         public void ToString(string vs, string format, string expected, double tolerance)
         {
             var p = Point3D.Parse(vs);
-            string actual = p.ToString(format);
+            var actual = p.ToString(format);
             Assert.AreEqual(expected, actual);
             AssertGeometry.AreEqual(p, Point3D.Parse(actual), tolerance);
         }

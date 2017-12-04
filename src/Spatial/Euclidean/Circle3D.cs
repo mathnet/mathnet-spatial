@@ -53,23 +53,23 @@
         public Circle3D(Point3D p1, Point3D p2, Point3D p3)
         {
             // https://www.physicsforums.com/threads/equation-of-a-circle-through-3-points-in-3d-space.173847/
-            Vector3D p1p2 = p2 - p1;
-            Vector3D p2p3 = p3 - p2;
+            var p1p2 = p2 - p1;
+            var p2p3 = p3 - p2;
             this.Axis = p1p2.CrossProduct(p2p3).Normalize();
 
-            Point3D midPointA = p1 + (0.5 * p1p2);
-            Point3D midPointB = p2 + (0.5 * p2p3);
+            var midPointA = p1 + (0.5 * p1p2);
+            var midPointB = p2 + (0.5 * p2p3);
 
-            Vector3D directionA = p1p2.CrossProduct(this.Axis);
-            Vector3D directionB = p2p3.CrossProduct(this.Axis);
+            var directionA = p1p2.CrossProduct(this.Axis);
+            var directionB = p2p3.CrossProduct(this.Axis);
 
-            Ray3D bisectorA = new Ray3D(midPointA, directionA);
-            Plane bisectorB = new Plane(midPointB, midPointB + directionB.Normalize(), midPointB + this.Axis);
+            var bisectorA = new Ray3D(midPointA, directionA);
+            var bisectorB = new Plane(midPointB, midPointB + directionB.Normalize(), midPointB + this.Axis);
 
             var center = bisectorA.IntersectionWith(bisectorB);
             if (center == null)
             {
-                throw new ArgumentException("A circle cannot be created from these points, are they colinear?");
+                throw new ArgumentException("A circle cannot be created from these points, are they collinear?");
             }
 
             this.CenterPoint = (Point3D)center;

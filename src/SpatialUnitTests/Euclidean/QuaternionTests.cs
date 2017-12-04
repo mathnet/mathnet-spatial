@@ -145,147 +145,6 @@
             Assert.AreEqual(expected, eulerAngles);
         }
 
-        public class QuaternionCalculationTestClass
-        {
-            private static double bigNumber = Math.Pow(10, 200);
-            private static double smallNumber = float.Epsilon;
-            private static Random random = new Random();
-            private static Quaternion posInf = new Quaternion(double.PositiveInfinity, 0, 0, 0);
-            private static Quaternion nanQuaternion = new Quaternion(double.NaN, 0, 0, 0);
-            public static IEnumerable NormTests
-            {
-                get
-                {
-                    //yield return new TestCaseData(bigNumber, bigNumber, bigNumber, bigNumber).Returns(2*bigNumber); // This test is supposted to work after making Norm more robust
-                    yield return new TestCaseData(0, 0, 0, 0).Returns(0.0);
-                    yield return new TestCaseData(1, 1, 1, 1).Returns(2.0);
-                    yield return new TestCaseData(1, 1, 1, 0).Returns(Math.Sqrt(3));
-                    yield return new TestCaseData(1, 2, 3, 4).Returns(Math.Sqrt(30));
-                    yield return new TestCaseData(5, 6, 7, 8).Returns(Math.Sqrt(174));
-                    yield return new TestCaseData(smallNumber, smallNumber, smallNumber, smallNumber).Returns(2 * smallNumber);
-                }
-            }
-
-            public static IEnumerable DivisionTests
-            {
-                get
-                {
-                    for (int i = 0; i < 10; ++i)
-                    {
-                        double[] a = new[] { random.NextDouble(), random.NextDouble(), random.NextDouble(), random.NextDouble() };
-                        yield return new TestCaseData(a[0], a[1], a[2], a[3], a[0], a[1], a[2], a[3]).Returns(new Quaternion(1, 0, 0, 0));
-                    }
-
-                    yield return new TestCaseData(0, 0, 0, 0, 1, 1, 1, 1).Returns(new Quaternion(0, 0, 0, 0));
-                    yield return new TestCaseData(4, 4, 4, 4, 2, 2, 2, 2).Returns(new Quaternion(2, 0, 0, 0));
-                    yield return new TestCaseData(9, 9, 9, 9, 3, 3, 3, 3).Returns(new Quaternion(3, 0, 0, 0));
-                    yield return new TestCaseData(1, 0, 0, 0, 1, 2, 3, 4).Returns(new Quaternion(1d / 30, -1d / 15, -1d / 10, -2d / 15));
-                    yield return new TestCaseData(4, 6, 9, 18, 2, 3, 3, 9).Returns(new Quaternion(215d / 103, 27d / 103, 6d / 103, -9d / 103));
-                    yield return new TestCaseData(1, 2, 3, 4, 5, 6, 7, 8).Returns(new Quaternion(70d / 174, 0d, 16d / 174, 8d / 174));
-                    yield return new TestCaseData(1, 1, 1, 1, 0, 0, 0, 0).Returns(posInf);
-                    yield return new TestCaseData(0, 0, 0, 0, 0, 0, 0, 0).Returns(nanQuaternion);
-                    yield return new TestCaseData(-1, -1, -1, -1, 0, 0, 0, 0).Returns(posInf);
-                }
-            }
-
-            public static IEnumerable CanNormalizeTests
-            {
-                get
-                {
-                    yield return new TestCaseData(1, 1, 1, 1).Returns(new Quaternion(1d / 2, 1d / 2, 1d / 2, 1d / 2));
-                    double norm = Math.Sqrt(30);
-                    yield return new TestCaseData(1, 2, 3, 4).Returns(new Quaternion(1d / norm, 2d / norm, 3d / norm, 4d / norm));
-                    yield return new TestCaseData(0, 0, 0, 0).Returns(Quaternion.Zero);
-                }
-            }
-
-            public static IEnumerable CanInverseTests
-            {
-                get
-                {
-                    yield return new TestCaseData(0, 0, 0, 0).Returns(Quaternion.Zero);
-                    yield return new TestCaseData(1, 2, 3, 4).Returns(new Quaternion(1d / 30, -2d / 30, -3d / 30, -4d / 30));
-                    yield return new TestCaseData(1, 1, 0, 0).Returns(new Quaternion(0.5, -0.5, 0, 0));
-                }
-            }
-
-            public static IEnumerable CanCalculateDistance
-            {
-                get
-                {
-                    var q1 = new Quaternion(0, 0, 0, 1);
-                    var q2 = new Quaternion(1, 1, 1, 0);
-                    var q3 = Quaternion.Zero;
-                    var q4 = new Quaternion(9, 9, 9, 1);
-                    var q5 = new Quaternion(2, 3, 4, 5);
-                    yield return new TestCaseData(q1, q2).Returns(2);
-                    yield return new TestCaseData(q2, q1).Returns(2);
-                    yield return new TestCaseData(q3, q1).Returns(q1.Norm);
-                    yield return new TestCaseData(q3, q2).Returns(q2.Norm);
-                    yield return new TestCaseData(q4, q2).Returns(Math.Sqrt((8 * 8) + (8 * 8) + (8 * 8) + 1));
-                    yield return new TestCaseData(q5, q2).Returns(Math.Sqrt(1 + (2 * 2) + (3 * 3) + (5 * 5)));
-                }
-            }
-
-            public static IEnumerable CanCalculatePower
-            {
-                get
-                {
-                    var q0 = new Quaternion(0, 0, 0, 0);
-                    var q1 = new Quaternion(1, 0, 0, 0);
-                    var q2 = new Quaternion(1, 1, 1, 1).Normalized;
-                    var q3 = new Quaternion(2, 2, 2, 2).Normalized;
-                    var q4 = new Quaternion(1, 2, 3, 4);
-                    yield return new TestCaseData(q0, 3.981).Returns(q0);
-                    yield return new TestCaseData(q1, 3.981).Returns(q1);
-
-                    yield return new TestCaseData(q2, 9.0).Returns(q2 * q2 * q2 * q2 * q2 * q2 * q2 * q2 * q2);
-                    yield return new TestCaseData(q2, 3.0).Returns(q2 * q2 * q2);
-                   // yield return new TestCaseData(q3, 9.0).Returns(q3 * q3 * q3 * q3 * q3 * q3 * q3 * q3 * q3); //identical to q2
-                }
-            }
-
-            public static IEnumerable CanCalculatePowerInt
-            {
-                get
-                {
-                    var q0 = new Quaternion(0, 0, 0, 0);
-                    var q1 = new Quaternion(1, 0, 0, 0);
-                    var q2 = new Quaternion(1, 1, 1, 1);
-                    var q3 = new Quaternion(2, 2, 2, 2);
-                    var q4 = new Quaternion(1, 2, 3, 4);
-                    var q5 = new Quaternion(3, 2, 1, 0);
-
-                    yield return new TestCaseData(q0, 9).Returns(q0);
-                    yield return new TestCaseData(q1, 9).Returns(q1);
-
-                    yield return new TestCaseData(q2, 9).Returns(q2 * q2 * q2 * q2 * q2 * q2 * q2 * q2 * q2);
-                    yield return new TestCaseData(q2, 3).Returns(q2 * q2 * q2);
-                    yield return new TestCaseData(q3, 9).Returns(q3 * q3 * q3 * q3 * q3 * q3 * q3 * q3 * q3);
-                    yield return new TestCaseData(q4, 9).Returns(q4 * q4 * q4 * q4 * q4 * q4 * q4 * q4 * q4);
-                    yield return new TestCaseData(q5, 9).Returns(q5 * q5 * q5 * q5 * q5 * q5 * q5 * q5 * q5);
-                }
-            }
-
-            public static IEnumerable LogTests
-            {
-                get
-                {
-                    var q0 = new Quaternion(1, 0, 0, 0);
-                    var q1 = new Quaternion(0, 0, 0, 1);
-                    var q2 = new Quaternion(1, 1, 1, 1);
-                    yield return new TestCaseData(q0).Returns(new Quaternion(1, 0, 0, 0));
-                    yield return new TestCaseData(q1).Returns(new Quaternion(0, 0, 0, Math.PI / 2));
-                    yield return new TestCaseData(q2).Returns(
-                        new Quaternion(
-                            Math.Log(2),
-                            1 / Math.Sqrt(3) * Math.PI / 3,
-                            1 / Math.Sqrt(3) * Math.PI / 3,
-                            1 / Math.Sqrt(3) * Math.PI / 3));
-                }
-            }
-        }
-
         [TestCaseSource(typeof(QuaternionCalculationTestClass), "LogTests")]
         public Quaternion CanCalculateLog(Quaternion quat)
         {
@@ -398,6 +257,148 @@
                 Assert.Throws<InvalidOperationException>(delegate { quat.RotateUnitQuaternion(quat180); });
                 Assert.Throws<InvalidOperationException>(delegate { quat.RotateUnitQuaternion(oneRotation); });
                 Assert.Throws<InvalidOperationException>(delegate { quat.RotateUnitQuaternion(nonRotation); });
+            }
+        }
+
+        public class QuaternionCalculationTestClass
+        {
+            private static double bigNumber = Math.Pow(10, 200);
+            private static double smallNumber = float.Epsilon;
+            private static Random random = new Random();
+            private static Quaternion posInf = new Quaternion(double.PositiveInfinity, 0, 0, 0);
+            private static Quaternion nanQuaternion = new Quaternion(double.NaN, 0, 0, 0);
+
+            public static IEnumerable NormTests
+            {
+                get
+                {
+                    //yield return new TestCaseData(bigNumber, bigNumber, bigNumber, bigNumber).Returns(2*bigNumber); // This test is supposted to work after making Norm more robust
+                    yield return new TestCaseData(0, 0, 0, 0).Returns(0.0);
+                    yield return new TestCaseData(1, 1, 1, 1).Returns(2.0);
+                    yield return new TestCaseData(1, 1, 1, 0).Returns(Math.Sqrt(3));
+                    yield return new TestCaseData(1, 2, 3, 4).Returns(Math.Sqrt(30));
+                    yield return new TestCaseData(5, 6, 7, 8).Returns(Math.Sqrt(174));
+                    yield return new TestCaseData(smallNumber, smallNumber, smallNumber, smallNumber).Returns(2 * smallNumber);
+                }
+            }
+
+            public static IEnumerable DivisionTests
+            {
+                get
+                {
+                    for (var i = 0; i < 10; ++i)
+                    {
+                        var a = new[] { random.NextDouble(), random.NextDouble(), random.NextDouble(), random.NextDouble() };
+                        yield return new TestCaseData(a[0], a[1], a[2], a[3], a[0], a[1], a[2], a[3]).Returns(new Quaternion(1, 0, 0, 0));
+                    }
+
+                    yield return new TestCaseData(0, 0, 0, 0, 1, 1, 1, 1).Returns(new Quaternion(0, 0, 0, 0));
+                    yield return new TestCaseData(4, 4, 4, 4, 2, 2, 2, 2).Returns(new Quaternion(2, 0, 0, 0));
+                    yield return new TestCaseData(9, 9, 9, 9, 3, 3, 3, 3).Returns(new Quaternion(3, 0, 0, 0));
+                    yield return new TestCaseData(1, 0, 0, 0, 1, 2, 3, 4).Returns(new Quaternion(1d / 30, -1d / 15, -1d / 10, -2d / 15));
+                    yield return new TestCaseData(4, 6, 9, 18, 2, 3, 3, 9).Returns(new Quaternion(215d / 103, 27d / 103, 6d / 103, -9d / 103));
+                    yield return new TestCaseData(1, 2, 3, 4, 5, 6, 7, 8).Returns(new Quaternion(70d / 174, 0d, 16d / 174, 8d / 174));
+                    yield return new TestCaseData(1, 1, 1, 1, 0, 0, 0, 0).Returns(posInf);
+                    yield return new TestCaseData(0, 0, 0, 0, 0, 0, 0, 0).Returns(nanQuaternion);
+                    yield return new TestCaseData(-1, -1, -1, -1, 0, 0, 0, 0).Returns(posInf);
+                }
+            }
+
+            public static IEnumerable CanNormalizeTests
+            {
+                get
+                {
+                    yield return new TestCaseData(1, 1, 1, 1).Returns(new Quaternion(1d / 2, 1d / 2, 1d / 2, 1d / 2));
+                    var norm = Math.Sqrt(30);
+                    yield return new TestCaseData(1, 2, 3, 4).Returns(new Quaternion(1d / norm, 2d / norm, 3d / norm, 4d / norm));
+                    yield return new TestCaseData(0, 0, 0, 0).Returns(Quaternion.Zero);
+                }
+            }
+
+            public static IEnumerable CanInverseTests
+            {
+                get
+                {
+                    yield return new TestCaseData(0, 0, 0, 0).Returns(Quaternion.Zero);
+                    yield return new TestCaseData(1, 2, 3, 4).Returns(new Quaternion(1d / 30, -2d / 30, -3d / 30, -4d / 30));
+                    yield return new TestCaseData(1, 1, 0, 0).Returns(new Quaternion(0.5, -0.5, 0, 0));
+                }
+            }
+
+            public static IEnumerable CanCalculateDistance
+            {
+                get
+                {
+                    var q1 = new Quaternion(0, 0, 0, 1);
+                    var q2 = new Quaternion(1, 1, 1, 0);
+                    var q3 = Quaternion.Zero;
+                    var q4 = new Quaternion(9, 9, 9, 1);
+                    var q5 = new Quaternion(2, 3, 4, 5);
+                    yield return new TestCaseData(q1, q2).Returns(2);
+                    yield return new TestCaseData(q2, q1).Returns(2);
+                    yield return new TestCaseData(q3, q1).Returns(q1.Norm);
+                    yield return new TestCaseData(q3, q2).Returns(q2.Norm);
+                    yield return new TestCaseData(q4, q2).Returns(Math.Sqrt((8 * 8) + (8 * 8) + (8 * 8) + 1));
+                    yield return new TestCaseData(q5, q2).Returns(Math.Sqrt(1 + (2 * 2) + (3 * 3) + (5 * 5)));
+                }
+            }
+
+            public static IEnumerable CanCalculatePower
+            {
+                get
+                {
+                    var q0 = new Quaternion(0, 0, 0, 0);
+                    var q1 = new Quaternion(1, 0, 0, 0);
+                    var q2 = new Quaternion(1, 1, 1, 1).Normalized;
+                    var q3 = new Quaternion(2, 2, 2, 2).Normalized;
+                    var q4 = new Quaternion(1, 2, 3, 4);
+                    yield return new TestCaseData(q0, 3.981).Returns(q0);
+                    yield return new TestCaseData(q1, 3.981).Returns(q1);
+
+                    yield return new TestCaseData(q2, 9.0).Returns(q2 * q2 * q2 * q2 * q2 * q2 * q2 * q2 * q2);
+                    yield return new TestCaseData(q2, 3.0).Returns(q2 * q2 * q2);
+                    // yield return new TestCaseData(q3, 9.0).Returns(q3 * q3 * q3 * q3 * q3 * q3 * q3 * q3 * q3); //identical to q2
+                }
+            }
+
+            public static IEnumerable CanCalculatePowerInt
+            {
+                get
+                {
+                    var q0 = new Quaternion(0, 0, 0, 0);
+                    var q1 = new Quaternion(1, 0, 0, 0);
+                    var q2 = new Quaternion(1, 1, 1, 1);
+                    var q3 = new Quaternion(2, 2, 2, 2);
+                    var q4 = new Quaternion(1, 2, 3, 4);
+                    var q5 = new Quaternion(3, 2, 1, 0);
+
+                    yield return new TestCaseData(q0, 9).Returns(q0);
+                    yield return new TestCaseData(q1, 9).Returns(q1);
+
+                    yield return new TestCaseData(q2, 9).Returns(q2 * q2 * q2 * q2 * q2 * q2 * q2 * q2 * q2);
+                    yield return new TestCaseData(q2, 3).Returns(q2 * q2 * q2);
+                    yield return new TestCaseData(q3, 9).Returns(q3 * q3 * q3 * q3 * q3 * q3 * q3 * q3 * q3);
+                    yield return new TestCaseData(q4, 9).Returns(q4 * q4 * q4 * q4 * q4 * q4 * q4 * q4 * q4);
+                    yield return new TestCaseData(q5, 9).Returns(q5 * q5 * q5 * q5 * q5 * q5 * q5 * q5 * q5);
+                }
+            }
+
+            public static IEnumerable LogTests
+            {
+                get
+                {
+                    var q0 = new Quaternion(1, 0, 0, 0);
+                    var q1 = new Quaternion(0, 0, 0, 1);
+                    var q2 = new Quaternion(1, 1, 1, 1);
+                    yield return new TestCaseData(q0).Returns(new Quaternion(1, 0, 0, 0));
+                    yield return new TestCaseData(q1).Returns(new Quaternion(0, 0, 0, Math.PI / 2));
+                    yield return new TestCaseData(q2).Returns(
+                        new Quaternion(
+                            Math.Log(2),
+                            1 / Math.Sqrt(3) * Math.PI / 3,
+                            1 / Math.Sqrt(3) * Math.PI / 3,
+                            1 / Math.Sqrt(3) * Math.PI / 3));
+                }
             }
         }
     }

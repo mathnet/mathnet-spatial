@@ -10,6 +10,13 @@
     /// </summary>
     public class PolyLine3D : IEnumerable<Point3D>
     {
+        private readonly List<Point3D> points;
+
+        public PolyLine3D(IEnumerable<Point3D> points)
+        {
+            this.points = new List<Point3D>(points);
+        }
+
         /// <summary>
         /// An integer representing the number of Point3D objects in the polyline
         /// </summary>
@@ -29,13 +36,6 @@
             get { throw new NotImplementedException(); }
         }
 
-        private readonly List<Point3D> points;
-
-        public PolyLine3D(IEnumerable<Point3D> points)
-        {
-            this.points = new List<Point3D>(points);
-        }
-
         // Operators
         public Point3D this[int key] => this.points[key];
 
@@ -48,7 +48,7 @@
         private double GetPolyLineLength()
         {
             double length = 0;
-            for (int i = 0; i < this.points.Count - 1; ++i)
+            for (var i = 0; i < this.points.Count - 1; ++i)
             {
                 length += this[i].DistanceTo(this[i + 1]);
             }
@@ -80,7 +80,7 @@
         /// <returns></returns>
         public Point3D GetPointAtLengthFromStart(double lengthFromStart)
         {
-            double length = this.Length;
+            var length = this.Length;
             if (lengthFromStart >= length)
             {
                 return this.Last();
@@ -92,13 +92,13 @@
             }
 
             double cumulativeLength = 0;
-            int i = 0;
+            var i = 0;
             while (true)
             {
-                double nextLength = cumulativeLength + this[i].DistanceTo(this[i + 1]);
+                var nextLength = cumulativeLength + this[i].DistanceTo(this[i + 1]);
                 if (cumulativeLength <= lengthFromStart && nextLength > lengthFromStart)
                 {
-                    double leftover = lengthFromStart - cumulativeLength;
+                    var leftover = lengthFromStart - cumulativeLength;
                     var direction = this[i].VectorTo(this[i + 1]).Normalize();
                     return this[i] + (leftover * direction);
                 }
@@ -118,11 +118,11 @@
             var minError = double.MaxValue;
             var closest = default(Point3D);
 
-            for (int i = 0; i < this.Count - 1; i++)
+            for (var i = 0; i < this.Count - 1; i++)
             {
                 var segment = new Line3D(this[i], this[i + 1]);
                 var projected = segment.ClosestPointTo(p, true);
-                double error = p.DistanceTo(projected);
+                var error = p.DistanceTo(projected);
                 if (error < minError)
                 {
                     minError = error;

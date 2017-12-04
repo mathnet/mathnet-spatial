@@ -32,7 +32,7 @@
         {
             var ray = new Ray3D(new Point3D(0, 0, 0), UnitVector3D.ZAxis);
             var point3D = new Point3D(1, 0, 0);
-            Line3D line3DTo = ray.LineTo(point3D);
+            var line3DTo = ray.LineTo(point3D);
             AssertGeometry.AreEqual(new Point3D(0, 0, 0), line3DTo.StartPoint);
             AssertGeometry.AreEqual(point3D, line3DTo.EndPoint, float.Epsilon);
         }

@@ -97,14 +97,14 @@
             var testPoints = (from x in points.Split(';') select Point2D.Parse(x)).ToList();
             var expectedPoints = (from x in expected.Split(';') select Point2D.Parse(x)).ToList();
 
-            Polygon2D hullClockwise = Polygon2D.GetConvexHullFromPoints(testPoints, true);
+            var hullClockwise = Polygon2D.GetConvexHullFromPoints(testPoints, true);
 
             for (var i = 0; i < hullClockwise.Count; i++)
             {
                 Assert.That(hullClockwise[i], Is.EqualTo(expectedPoints[i]));
             }
 
-            Polygon2D hullCounterClockwise = Polygon2D.GetConvexHullFromPoints(testPoints, false);
+            var hullCounterClockwise = Polygon2D.GetConvexHullFromPoints(testPoints, false);
 
             for (var i = 0; i < hullCounterClockwise.Count; i++)
             {

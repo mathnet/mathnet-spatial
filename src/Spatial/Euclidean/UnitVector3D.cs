@@ -76,16 +76,18 @@ namespace MathNet.Spatial.Euclidean
             }
         }
 
+        public static UnitVector3D XAxis { get; } = new UnitVector3D(1, 0, 0);
+
+        public static UnitVector3D YAxis { get; } = new UnitVector3D(0, 1, 0);
+
+        public static UnitVector3D ZAxis { get; } = new UnitVector3D(0, 0, 1);
+
         /// <summary>
-        /// Creates a UnitVector3D from its string representation
+        /// The length of the vector not the count of elements
         /// </summary>
-        /// <param name="s">The string representation of the UnitVector3D</param>
-        /// <returns></returns>
-        public static UnitVector3D Parse(string s)
-        {
-            var doubles = Parser.ParseItem3D(s);
-            return new UnitVector3D(doubles);
-        }
+        public double Length => 1;
+
+        internal Matrix<double> CrossProductMatrix => Matrix<double>.Build.Dense(3, 3, new[] { 0d, this.Z, -this.Y, -this.Z, 0d, this.X, this.Y, -this.X, 0d });
 
         public static bool operator ==(UnitVector3D left, UnitVector3D right)
         {
@@ -115,6 +117,52 @@ namespace MathNet.Spatial.Euclidean
         public static bool operator !=(UnitVector3D left, Vector3D right)
         {
             return !left.Equals(right);
+        }
+
+
+        public static Vector3D operator +(UnitVector3D v1, UnitVector3D v2)
+        {
+            return new Vector3D(v1.X + v2.X, v1.Y + v2.Y, v1.Z + v2.Z);
+        }
+
+        public static Vector3D operator +(Vector3D v1, UnitVector3D v2)
+        {
+            return new Vector3D(v1.X + v2.X, v1.Y + v2.Y, v1.Z + v2.Z);
+        }
+
+        public static Vector3D operator +(UnitVector3D v1, Vector3D v2)
+        {
+            return new Vector3D(v1.X + v2.X, v1.Y + v2.Y, v1.Z + v2.Z);
+        }
+
+        public static Vector3D operator -(UnitVector3D v1, UnitVector3D v2)
+        {
+            return new Vector3D(v1.X - v2.X, v1.Y - v2.Y, v1.Z - v2.Z);
+        }
+
+        public static Vector3D operator -(Vector3D v1, UnitVector3D v2)
+        {
+            return new Vector3D(v1.X - v2.X, v1.Y - v2.Y, v1.Z - v2.Z);
+        }
+
+        public static Vector3D operator -(UnitVector3D v1, Vector3D v2)
+        {
+            return new Vector3D(v1.X - v2.X, v1.Y - v2.Y, v1.Z - v2.Z);
+        }
+
+        public static Vector3D operator -(UnitVector3D v)
+        {
+            return new Vector3D(-1 * v.X, -1 * v.Y, -1 * v.Z);
+        }
+
+        public static Vector3D operator *(double d, UnitVector3D v)
+        {
+            return new Vector3D(d * v.X, d * v.Y, d * v.Z);
+        }
+
+        public static Vector3D operator /(UnitVector3D v, double d)
+        {
+            return new Vector3D(v.X / d, v.Y / d, v.Z / d);
         }
 
         [Obsolete("Not sure this is nice")]
@@ -147,7 +195,7 @@ namespace MathNet.Spatial.Euclidean
         public string ToString(string format, IFormatProvider provider = null)
         {
             var numberFormatInfo = provider != null ? NumberFormatInfo.GetInstance(provider) : CultureInfo.InvariantCulture.NumberFormat;
-            string separator = numberFormatInfo.NumberDecimalSeparator == "," ? ";" : ",";
+            var separator = numberFormatInfo.NumberDecimalSeparator == "," ? ";" : ",";
             return string.Format("({0}{1} {2}{1} {3})", this.X.ToString(format, numberFormatInfo), separator, this.Y.ToString(format, numberFormatInfo), this.Z.ToString(format, numberFormatInfo));
         }
 
@@ -223,6 +271,35 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
+        /// Converts an object into its XML representation.
+        /// </summary>
+        /// <param name="writer">The <see cref="T:System.Xml.XmlWriter"/> stream to which the object is serialized. </param>
+        public void WriteXml(XmlWriter writer)
+        {
+            writer.WriteAttribute("X", this.X);
+            writer.WriteAttribute("Y", this.Y);
+            writer.WriteAttribute("Z", this.Z);
+        }
+
+        /// <summary>
+        /// Creates a UnitVector3D from its string representation
+        /// </summary>
+        /// <param name="s">The string representation of the UnitVector3D</param>
+        /// <returns></returns>
+        public static UnitVector3D Parse(string s)
+        {
+            var doubles = Parser.ParseItem3D(s);
+            return new UnitVector3D(doubles);
+        }
+
+        public static UnitVector3D ReadFrom(XmlReader reader)
+        {
+            var v = default(UnitVector3D);
+            v.ReadXml(reader);
+            return v;
+        }
+
+        /// <summary>
         /// Generates an object from its XML representation.
         /// </summary>
         /// <param name="reader">The <see cref="T:System.Xml.XmlReader"/> stream from which the object is deserialized. </param>
@@ -237,112 +314,6 @@ namespace MathNet.Spatial.Euclidean
             XmlExt.SetReadonlyField(ref this, x => x.Z, XmlConvert.ToDouble(e.ReadAttributeOrElementOrDefault("Z")));
         }
 
-        /// <summary>
-        /// Converts an object into its XML representation.
-        /// </summary>
-        /// <param name="writer">The <see cref="T:System.Xml.XmlWriter"/> stream to which the object is serialized. </param>
-        public void WriteXml(XmlWriter writer)
-        {
-            writer.WriteAttribute("X", this.X);
-            writer.WriteAttribute("Y", this.Y);
-            writer.WriteAttribute("Z", this.Z);
-        }
-
-        public static UnitVector3D ReadFrom(XmlReader reader)
-        {
-            var v = default(UnitVector3D);
-            v.ReadXml(reader);
-            return v;
-        }
-
-        public static UnitVector3D XAxis
-        {
-            get { return new UnitVector3D(1, 0, 0); }
-        }
-
-        public static UnitVector3D YAxis
-        {
-            get { return new UnitVector3D(0, 1, 0); }
-        }
-
-        public static UnitVector3D ZAxis
-        {
-            get { return new UnitVector3D(0, 0, 1); }
-        }
-
-        internal Matrix<double> CrossProductMatrix
-        {
-            get { return Matrix<double>.Build.Dense(3, 3, new[] { 0d, this.Z, -this.Y, -this.Z, 0d, this.X, this.Y, -this.X, 0d }); }
-        }
-
-        /// <summary>
-        /// The length of the vector not the count of elements
-        /// </summary>
-        public double Length
-        {
-            get { return 1; }
-        }
-
-        public static Vector3D operator +(UnitVector3D v1, UnitVector3D v2)
-        {
-            return new Vector3D(v1.X + v2.X, v1.Y + v2.Y, v1.Z + v2.Z);
-        }
-
-        public static Vector3D operator +(Vector3D v1, UnitVector3D v2)
-        {
-            return new Vector3D(v1.X + v2.X, v1.Y + v2.Y, v1.Z + v2.Z);
-        }
-
-        public static Vector3D operator +(UnitVector3D v1, Vector3D v2)
-        {
-            return new Vector3D(v1.X + v2.X, v1.Y + v2.Y, v1.Z + v2.Z);
-        }
-
-        public static Vector3D operator -(UnitVector3D v1, UnitVector3D v2)
-        {
-            return new Vector3D(v1.X - v2.X, v1.Y - v2.Y, v1.Z - v2.Z);
-        }
-
-        public static Vector3D operator -(Vector3D v1, UnitVector3D v2)
-        {
-            return new Vector3D(v1.X - v2.X, v1.Y - v2.Y, v1.Z - v2.Z);
-        }
-
-        public static Vector3D operator -(UnitVector3D v1, Vector3D v2)
-        {
-            return new Vector3D(v1.X - v2.X, v1.Y - v2.Y, v1.Z - v2.Z);
-        }
-
-        public static Vector3D operator -(UnitVector3D v)
-        {
-            return new Vector3D(-1 * v.X, -1 * v.Y, -1 * v.Z);
-        }
-
-        public static Vector3D operator *(double d, UnitVector3D v)
-        {
-            return new Vector3D(d * v.X, d * v.Y, d * v.Z);
-        }
-
-        // Commented out because the d * v reads nicer than v *d
-        ////public static Vector3D operator *(Vector3D v,double d)
-        ////{
-        ////    return d*v;
-        ////}
-
-        public static Vector3D operator /(UnitVector3D v, double d)
-        {
-            return new Vector3D(v.X / d, v.Y / d, v.Z / d);
-        }
-
-        ////public static explicit operator UnitVector3D(System.Windows.Media.Media3D.Vector3D v)
-        ////{
-        ////    return new UnitVector3D(v.X, v.Y, v.Z);
-        ////}
-
-        ////public static explicit operator System.Windows.Media.Media3D.Vector3D(UnitVector3D p)
-        ////{
-        ////    return new System.Windows.Media.Media3D.Vector3D(p.X, p.Y, p.Z);
-        ////}
 
         public Vector3D ScaleBy(double scaleFactor)
         {
@@ -357,7 +328,7 @@ namespace MathNet.Spatial.Euclidean
 
         public Vector3D ProjectOn(UnitVector3D uv)
         {
-            double pd = this.DotProduct(uv);
+            var pd = this.DotProduct(uv);
             return pd * this;
         }
 
@@ -488,9 +459,9 @@ namespace MathNet.Spatial.Euclidean
         public Matrix<double> GetUnitTensorProduct()
         {
             // unitTensorProduct:matrix([ux^2,ux*uy,ux*uz],[ux*uy,uy^2,uy*uz],[ux*uz,uy*uz,uz^2]),
-            double xy = this.X * this.Y;
-            double xz = this.X * this.Z;
-            double yz = this.Y * this.Z;
+            var xy = this.X * this.Y;
+            var xz = this.X * this.Z;
+            var yz = this.Y * this.Z;
             return Matrix<double>.Build.Dense(3, 3, new[] { this.X * this.X, xy, xz, xy, this.Y * this.Y, yz, xz, yz, this.Z * this.Z });
         }
 

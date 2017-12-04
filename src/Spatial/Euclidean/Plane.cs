@@ -54,9 +54,9 @@
                 throw new ArgumentException("Must use three different points");
             }
 
-            Vector3D v1 = new Vector3D(p2.X - p1.X, p2.Y - p1.Y, p2.Z - p1.Z);
-            Vector3D v2 = new Vector3D(p3.X - p1.X, p3.Y - p1.Y, p3.Z - p1.Z);
-            Vector3D cross = v1.CrossProduct(v2);
+            var v1 = new Vector3D(p2.X - p1.X, p2.Y - p1.Y, p2.Z - p1.Z);
+            var v2 = new Vector3D(p3.X - p1.X, p3.Y - p1.Y, p3.Z - p1.Z);
+            var cross = v1.CrossProduct(v2);
 
             if (cross.Length <= float.Epsilon)
             {
@@ -68,30 +68,11 @@
             this.D = -this.RootPoint.ToVector3D().DotProduct(this.Normal);
         }
 
-        /// <summary>
-        /// Creates a Plane from its string representation
-        /// </summary>
-        /// <param name="s">The string representation of the Plane</param>
-        /// <returns></returns>
-        public static Plane Parse(string s)
-        {
-            return Parser.ParsePlane(s);
-        }
+        public double A => this.Normal.X;
 
-        public double A
-        {
-            get { return this.Normal.X; }
-        }
+        public double B => this.Normal.Y;
 
-        public double B
-        {
-            get { return this.Normal.Y; }
-        }
-
-        public double C
-        {
-            get { return this.Normal.Z; }
-        }
+        public double C => this.Normal.Z;
 
         public static bool operator ==(Plane left, Plane right)
         {
@@ -101,6 +82,16 @@
         public static bool operator !=(Plane left, Plane right)
         {
             return !left.Equals(right);
+        }
+
+        /// <summary>
+        /// Creates a Plane from its string representation
+        /// </summary>
+        /// <param name="s">The string representation of the Plane</param>
+        /// <returns></returns>
+        public static Plane Parse(string s)
+        {
+            return Parser.ParsePlane(s);
         }
 
         public double SignedDistanceTo(Point3D point)
@@ -137,7 +128,7 @@
 
         public Point3D Project(Point3D p, UnitVector3D? projectionDirection = null)
         {
-            double dotProduct = this.Normal.DotProduct(p.ToVector3D());
+            var dotProduct = this.Normal.DotProduct(p.ToVector3D());
             var projectiononNormal = projectionDirection == null ? this.Normal : projectionDirection.Value;
             var projectionVector = (dotProduct + this.D) * projectiononNormal;
             return p - projectionVector;
@@ -201,7 +192,7 @@
             y[0, 0] = -1 * this.D;
             y[1, 0] = -1 * intersectingPlane.D;
 
-            Matrix<double> pointOnIntersectionLine = svd.Solve(y);
+            var pointOnIntersectionLine = svd.Solve(y);
             var throughPoint = new Point3D(pointOnIntersectionLine.Column(0));
 
             var direction = new UnitVector3D(svd.VT.Row(2));
@@ -220,7 +211,7 @@
         {
             if (line.Direction.IsPerpendicularTo(this.Normal)) // either parallel or lies in the plane
             {
-                Point3D projectedPoint = this.Project(line.StartPoint, line.Direction);
+                var projectedPoint = this.Project(line.StartPoint, line.Direction);
                 if (projectedPoint == line.StartPoint) // Line lies in the plane
                 {
                     throw new InvalidOperationException("Line lies in the plane"); // Not sure what should be done here
@@ -259,8 +250,8 @@
 
         public Point3D MirrorAbout(Point3D p)
         {
-            Point3D p2 = this.Project(p);
-            double d = this.SignedDistanceTo(p);
+            var p2 = this.Project(p);
+            var d = this.SignedDistanceTo(p);
             return p2 - (1 * d * this.Normal);
         }
 
@@ -312,7 +303,7 @@
         {
             unchecked
             {
-                int result = this.A.GetHashCode();
+                var result = this.A.GetHashCode();
                 result = (result * 397) ^ this.C.GetHashCode();
                 result = (result * 397) ^ this.B.GetHashCode();
                 result = (result * 397) ^ this.D.GetHashCode();
