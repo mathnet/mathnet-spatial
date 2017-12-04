@@ -31,14 +31,15 @@ namespace MathNet.Spatial.UnitTests
         {
             private readonly string name;
 
-            private XmlSerializableDummy()
-            {
-            }
-
             public XmlSerializableDummy(string name, int age)
             {
                 this.Age = age;
                 this.name = name;
+            }
+
+            // ReSharper disable once UnusedMember.Local
+            private XmlSerializableDummy()
+            {
             }
 
             public string Name => this.name;

@@ -3,8 +3,8 @@
     using System;
     using System.Globalization;
     using System.IO;
-    using System.Reflection;
     using System.Runtime.Serialization.Formatters.Binary;
+    using System.Threading;
     using System.Xml;
     using System.Xml.Serialization;
     using MathNet.Spatial.Units;
@@ -16,85 +16,21 @@
         private const double DegToRad = Math.PI / 180;
 
         [Test]
-        public void Ctor()
+        public void OperatorCompare()
         {
-            const double deg = 90;
-            const double rad = deg * DegToRad;
-            var angles = new[]
-            {
-                deg * AngleUnit.Degrees,
-                rad * AngleUnit.Radians,
-                Angle.FromDegrees(deg),
-                Angle.FromRadians(rad),
-            };
-            foreach (var angle in angles)
-            {
-                Assert.AreEqual(rad, angle.Radians, Tolerance);
-                Assert.AreEqual(deg, angle.Degrees, Tolerance);
-            }
-        }
-
-        [TestCase("5 °", 5 * DegToRad)]
-        [TestCase("5°", 5 * DegToRad)]
-        [TestCase("-5.34 rad", -5.34)]
-        [TestCase("-5,34 rad", -5.34)]
-        [TestCase("1e-4 rad", 0.0001)]
-        [TestCase("1e-4 °", 0.0001 * DegToRad)]
-        public void Parse(string s, double expected)
-        {
-            var angle = Angle.Parse(s);
-            Assert.AreEqual(expected, angle.Radians, Tolerance);
-            Assert.IsInstanceOf<Angle>(angle);
-        }
-
-        [TestCase(@"<Angle Value=""1"" />")]
-        [TestCase(@"<Angle><Value>1</Value></Angle>")]
-        public void ReadFrom(string xml)
-        {
-            var v = Angle.FromRadians(1);
-            Assert.AreEqual(v, Angle.ReadFrom(XmlReader.Create(new StringReader(xml))));
-        }
-
-        [TestCase("90 °", 90, Math.PI / 2)]
-        [TestCase("1.5707963267949 rad", 90, Math.PI / 2)]
-        public void Convert(string vs, double degv, double radv)
-        {
-            var angles = new[]
-            {
-                Angle.Parse(vs),
-                degv * AngleUnit.Degrees,
-                radv * AngleUnit.Radians
-            };
-            foreach (var angle in angles)
-            {
-                Assert.AreEqual(degv, angle.Degrees, Tolerance);
-                Assert.AreEqual(radv, angle.Radians, Tolerance);
-                Assert.AreEqual(radv, angle.Radians, Tolerance);
-            }
-        }
-
-        [TestCase("90 °", 90, Math.PI / 2, true)]
-        [TestCase("1 rad", 1 * 180 / Math.PI, 1, true)]
-        [TestCase("1.1 rad", 1 * 180 / Math.PI, Math.PI / 2, false)]
-        public void Equals(string s, double degv, double radv, bool expected)
-        {
-            var a = Angle.Parse(s);
-            var deg = Angle.FromDegrees(degv);
-            Assert.AreEqual(expected, deg.Equals(a));
-            Assert.AreEqual(expected, deg.Equals(a, Tolerance));
-            Assert.AreEqual(expected, deg == a);
-            Assert.AreEqual(!expected, deg != a);
-
-            var rad = Angle.FromRadians(radv);
-            Assert.AreEqual(expected, rad.Equals(a));
-            Assert.AreEqual(expected, rad.Equals(a, Tolerance));
-            Assert.AreEqual(expected, rad == a);
-            Assert.AreEqual(!expected, rad != a);
+            var one = Angle.FromRadians(1);
+            var two = Angle.FromRadians(2);
+            Assert.AreEqual(true, one < two);
+            Assert.AreEqual(true, one <= two);
+            Assert.AreEqual(true, one <= Angle.FromRadians(1));
+            Assert.AreEqual(false, one < Angle.FromRadians(1));
+            Assert.AreEqual(false, one > Angle.FromRadians(1));
+            Assert.AreEqual(true, one >= Angle.FromRadians(1));
         }
 
         [TestCase("1.5707 rad", "1.5707 rad", 1.5707 + 1.5707)]
         [TestCase("1.5707 rad", "2 °", 1.5707 + (2 * DegToRad))]
-        public void Addition(string lvs, string rvs, double ev)
+        public void OperatorAdd(string lvs, string rvs, double ev)
         {
             var lv = Angle.Parse(lvs);
             var rv = Angle.Parse(rvs);
@@ -105,7 +41,7 @@
 
         [TestCase("1.5707 rad", "1.5706 rad", 1.5707 - 1.5706)]
         [TestCase("1.5707 rad", "2 °", 1.5707 - (2 * DegToRad))]
-        public void Subtraction(string lvs, string rvs, double ev)
+        public void OperatorSubtract(string lvs, string rvs, double ev)
         {
             var lv = Angle.Parse(lvs);
             var rv = Angle.Parse(rvs);
@@ -118,7 +54,7 @@
         [TestCase("-10 °", 0, 0)]
         [TestCase("-10 °", 2, -10 * 2 * DegToRad)]
         [TestCase("1 rad", 2, 2)]
-        public void Multiplication(string lvs, double rv, double ev)
+        public void OperatorMultiply(string lvs, double rv, double ev)
         {
             var lv = Angle.Parse(lvs);
             var prods = new[] { lv * rv, rv * lv };
@@ -127,6 +63,12 @@
                 Assert.AreEqual(ev, prod.Radians, 1e-3);
                 Assert.IsInstanceOf<Angle>(prod);
             }
+        }
+
+        [Test]
+        public void OperatorNegate()
+        {
+            Assert.AreEqual(-1, (-Angle.FromRadians(1)).Radians);
         }
 
         [TestCase("3.141596 rad", 2, 1.570797999)]
@@ -138,12 +80,97 @@
             Assert.IsInstanceOf<Angle>(actual);
         }
 
+        [TestCase("90 °", 90, Math.PI / 2, true)]
+        [TestCase("1 rad", 1 * 180 / Math.PI, 1, true)]
+        [TestCase("1.1 rad", 1 * 180 / Math.PI, Math.PI / 2, false)]
+        public void Equals(string s, double degrees, double radians, bool expected)
+        {
+            var a = Angle.Parse(s);
+            var deg = Angle.FromDegrees(degrees);
+            Assert.AreEqual(expected, deg.Equals(a));
+            Assert.AreEqual(expected, deg.Equals(a, Tolerance));
+            Assert.AreEqual(expected, deg == a);
+            Assert.AreEqual(!expected, deg != a);
+
+            var rad = Angle.FromRadians(radians);
+            Assert.AreEqual(expected, rad.Equals(a));
+            Assert.AreEqual(expected, rad.Equals(a, Tolerance));
+            Assert.AreEqual(expected, rad == a);
+            Assert.AreEqual(!expected, rad != a);
+        }
+
+        [Test]
+        public void EqualsWithTolerance()
+        {
+            var one = Angle.FromRadians(1);
+            var two = Angle.FromRadians(2);
+            Assert.AreEqual(true, one.Equals(two, 2));
+            Assert.AreEqual(false, one.Equals(two, 0.1));
+            Assert.AreEqual(true, one.Equals(two, Angle.FromRadians(2)));
+            Assert.AreEqual(false, one.Equals(two, Angle.FromRadians(0.1)));
+        }
+
+        [TestCase(90, 1.5707963267948966)]
+        public void FromDegrees(double degrees, double expected)
+        {
+            Assert.AreEqual(expected, Angle.FromDegrees(degrees).Radians);
+            Assert.AreEqual(degrees, Angle.FromDegrees(degrees).Degrees, 1E-6);
+        }
+
+        [TestCase(1, 1)]
+        public void FromRadians(double radians, double expected)
+        {
+            Assert.AreEqual(expected, Angle.FromRadians(radians).Radians);
+        }
+
+        [TestCase("5 °", 5 * DegToRad)]
+        [TestCase("5°", 5 * DegToRad)]
+        [TestCase("-5.34 rad", -5.34)]
+        [TestCase("-5,34 rad", -5.34)]
+        [TestCase("1e-4 rad", 0.0001)]
+        [TestCase("1e-4 °", 0.0001 * DegToRad)]
+        public void Parse(string s, double expected)
+        {
+            Assert.AreEqual(true, Angle.TryParse(s, out var angle));
+            Assert.AreEqual(expected, angle.Radians, Tolerance);
+            angle = Angle.Parse(s);
+            Assert.AreEqual(expected, angle.Radians, Tolerance);
+            Assert.IsInstanceOf<Angle>(angle);
+
+            // ReSharper disable once RedundantToStringCall
+            angle = Angle.Parse(s.ToString());
+            Assert.AreEqual(expected, angle.Radians, Tolerance);
+            Assert.IsInstanceOf<Angle>(angle);
+        }
+
+        [TestCase("5 °", 5 * DegToRad)]
+        [TestCase("5°", 5 * DegToRad)]
+        [TestCase("-5,34 rad", -5.34)]
+        [TestCase("-5,34 rad", -5.34)]
+        [TestCase("1e-4 rad", 0.0001)]
+        [TestCase("1e-4 °", 0.0001 * DegToRad)]
+        public void ParseSwedish(string s, double expected)
+        {
+            var culture = CultureInfo.GetCultureInfo("sv");
+            Assert.AreEqual(true, Angle.TryParse(s, culture, out var angle));
+            Assert.AreEqual(expected, angle.Radians, Tolerance);
+
+            angle = Angle.Parse(s, culture);
+            Assert.AreEqual(expected, angle.Radians, Tolerance);
+            Assert.IsInstanceOf<Angle>(angle);
+
+            angle = Angle.Parse(s.ToString(culture), culture);
+            Assert.AreEqual(expected, angle.Radians, Tolerance);
+            Assert.IsInstanceOf<Angle>(angle);
+        }
+
         [TestCase(".1 rad", 0.1)]
         [TestCase("1.2 rad", 1.2)]
         [TestCase("1.2\u00A0rad", 1.2)]
         [TestCase("1.2radians", 1.2)]
         [TestCase("1.2 radians", 1.2)]
         [TestCase("1.2\u00A0radians", 1.2)]
+        [TestCase("1.2\u00A0Radians", 1.2)]
         public void ParseRadians(string text, double expected)
         {
             Assert.AreEqual(true, Angle.TryParse(text, out var angle));
@@ -156,14 +183,24 @@
         [TestCase("1deg", 1)]
         [TestCase("1 deg", 1)]
         [TestCase("1\u00A0deg", 1)]
+        [TestCase("1\u00A0DEG", 1)]
         [TestCase("1degrees", 1)]
         [TestCase("1 degrees", 1)]
         [TestCase("1\u00A0degrees", 1)]
+        [TestCase("1\u00A0Degrees", 1)]
         public void ParseDegrees(string text, double expected)
         {
             Assert.AreEqual(true, Angle.TryParse(text, out var angle));
             Assert.AreEqual(expected, angle.Degrees);
             Assert.AreEqual(expected, Angle.Parse(text).Degrees);
+        }
+
+        [TestCase(@"<Angle Value=""1"" />")]
+        [TestCase(@"<Angle><Value>1</Value></Angle>")]
+        public void ReadFrom(string xml)
+        {
+            var v = Angle.FromRadians(1);
+            Assert.AreEqual(v, Angle.ReadFrom(XmlReader.Create(new StringReader(xml))));
         }
 
         [Test]
@@ -189,6 +226,7 @@
             Assert.AreEqual(expected, toString);
             Assert.AreEqual(expected.Replace('.', ','), toStringComma);
             Assert.IsTrue(angle.Equals(Angle.Parse(toString), Tolerance));
+            Assert.IsTrue(angle.Equals(Angle.Parse(toString), Angle.FromRadians(Tolerance)));
             Assert.IsTrue(angle.Equals(Angle.Parse(toStringComma), Tolerance));
         }
 
@@ -199,20 +237,11 @@
             var toString = angle.ToString(format, CultureInfo.InvariantCulture, AngleUnit.Degrees);
             var toStringComma = angle.ToString(format, CultureInfo.GetCultureInfo("sv"), AngleUnit.Degrees);
             Assert.AreEqual(expected, toString);
+            Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+            Assert.AreEqual(angle.Radians, Angle.Parse(angle.ToString(format)).Radians, 1E-2);
             Assert.AreEqual(expected.Replace('.', ','), toStringComma);
             Assert.IsTrue(angle.Equals(Angle.Parse(toString), Tolerance));
             Assert.IsTrue(angle.Equals(Angle.Parse(toStringComma), Tolerance));
-        }
-
-        [TestCase("op_Addition")]
-        [TestCase("op_Equality")]
-        public void NotCompile(string @operator)
-        {
-            var angle = Angle.FromDegrees(90);
-            var d = 1.0;
-            var add = typeof(Angle).GetMethod(@operator, BindingFlags.Static | BindingFlags.Public);
-            Assert.DoesNotThrow(() => add.Invoke(angle, new object[] { angle, angle }));
-            var exception = Assert.Throws<ArgumentException>(() => add.Invoke(angle, new object[] { angle, d }));
         }
 
         [TestCase("15°", @"<Angle Value=""0.26179938779914941"" />")]
@@ -229,10 +258,10 @@
         public void XmlContainerRoundtrip()
         {
             var container = new AssertXml.Container<Angle>
-                            {
-                                Value1 = Angle.FromRadians(1),
-                                Value2 = Angle.FromRadians(2),
-                            };
+            {
+                Value1 = Angle.FromRadians(1),
+                Value2 = Angle.FromRadians(2),
+            };
             var expected = "<ContainerOfAngle>\r\n" +
                            "  <Value1 Value=\"1\"></Value1>\r\n" +
                            "  <Value2 Value=\"2\"></Value2>\r\n" +
@@ -246,10 +275,10 @@
         public void ReadXmlContainerElementValues()
         {
             var container = new AssertXml.Container<Angle>
-                            {
-                                Value1 = Angle.FromRadians(1),
-                                Value2 = Angle.FromRadians(2),
-                            };
+            {
+                Value1 = Angle.FromRadians(1),
+                Value2 = Angle.FromRadians(2),
+            };
             var xml = "<ContainerOfAngle>\r\n" +
                            "  <Value1>1</Value1>\r\n" +
                            "  <Value2>2</Value2>\r\n" +

@@ -2,7 +2,6 @@ namespace MathNet.Spatial.Units
 {
     using System;
     using System.Globalization;
-    using System.Text.RegularExpressions;
     using System.Xml;
     using System.Xml.Schema;
     using System.Xml.Serialization;
@@ -28,6 +27,8 @@ namespace MathNet.Spatial.Units
         /// <param name="radians">The value in radians.</param>
         /// <param name="unit">The radians unit.</param>
         [Obsolete("This constructor will be removed, use factory method FromRadians. Made obsolete 2017-12-03.")]
+        //// ReSharper disable once UnusedMember.Global
+        //// ReSharper disable once UnusedParameter.Local
         public Angle(double radians, Radians unit)
         {
             this.Radians = radians;
@@ -39,6 +40,8 @@ namespace MathNet.Spatial.Units
         /// <param name="value">The value in degrees.</param>
         /// <param name="unit">The radians unit.</param>
         [Obsolete("This constructor will be removed, use factory method FromDegrees. Made obsolete 2017-12-03.")]
+        //// ReSharper disable once UnusedMember.Global
+        //// ReSharper disable once UnusedParameter.Local
         public Angle(double value, Degrees unit)
         {
             this.Radians = value * DegToRad;
@@ -54,162 +57,66 @@ namespace MathNet.Spatial.Units
         /// </summary>
         public double Degrees => this.Radians * RadToDeg;
 
-        /// <summary>
-        /// Indicates whether two <see cref="T:MathNet.Spatial.Units.Angle"/> instances are equal.
-        /// </summary>
-        /// <returns>
-        /// true if the values of <paramref name="left"/> and <paramref name="right"/> are equal; otherwise, false.
-        /// </returns>
-        /// <param name="left">A <see cref="T:MathNet.Spatial.Units.Angle"/>.</param>
-        /// <param name="right">A <see cref="T:MathNet.Spatial.Units.Angle"/>.</param>
         public static bool operator ==(Angle left, Angle right)
         {
             return left.Equals(right);
         }
 
-        /// <summary>
-        /// Indicates whether two <see cref="T:MathNet.Spatial.Units.Angle"/> instances are not equal.
-        /// </summary>
-        /// <returns>
-        /// true if the values of <paramref name="left"/> and <paramref name="right"/> are not equal; otherwise, false.
-        /// </returns>
-        /// <param name="left">A <see cref="T:MathNet.Spatial.Units.Angle"/>.</param>
-        /// <param name="right">A <see cref="T:MathNet.Spatial.Units.Angle"/>.</param>
         public static bool operator !=(Angle left, Angle right)
         {
             return !left.Equals(right);
         }
 
-        /// <summary>
-        /// Indicates whether a specified <see cref="T:MathNet.Spatial.Units.Angle"/> is less than another specified <see cref="T:MathNet.Spatial.Units.Angle"/>.
-        /// </summary>
-        /// <returns>
-        /// true if the value of <paramref name="left"/> is less than the value of <paramref name="right"/>; otherwise, false.
-        /// </returns>
-        /// <param name="left">An <see cref="T:MathNet.Spatial.Units.Angle"/>.</param>
-        /// <param name="right">An <see cref="T:MathNet.Spatial.Units.Angle"/>.</param>
         public static bool operator <(Angle left, Angle right)
         {
             return left.Radians < right.Radians;
         }
 
-        /// <summary>
-        /// Indicates whether a specified <see cref="T:MathNet.Spatial.Units.Angle"/> is greater than another specified <see cref="T:MathNet.Spatial.Units.Angle"/>.
-        /// </summary>
-        /// <returns>
-        /// true if the value of <paramref name="left"/> is greater than the value of <paramref name="right"/>; otherwise, false.
-        /// </returns>
-        /// <param name="left">An <see cref="T:MathNet.Spatial.Units.Angle"/>.</param>
-        /// <param name="right">An <see cref="T:MathNet.Spatial.Units.Angle"/>.</param>
         public static bool operator >(Angle left, Angle right)
         {
             return left.Radians > right.Radians;
         }
 
-        /// <summary>
-        /// Indicates whether a specified <see cref="T:MathNet.Spatial.Units.Angle"/> is less than or equal to another specified <see cref="T:MathNet.Spatial.Units.Angle"/>.
-        /// </summary>
-        /// <returns>
-        /// true if the value of <paramref name="left"/> is less than or equal to the value of <paramref name="right"/>; otherwise, false.
-        /// </returns>
-        /// <param name="left">An <see cref="T:MathNet.Spatial.Units.Angle"/>.</param>
-        /// <param name="right">An <see cref="T:MathNet.Spatial.Units.Angle"/>.</param>
         public static bool operator <=(Angle left, Angle right)
         {
             return left.Radians <= right.Radians;
         }
 
-        /// <summary>
-        /// Indicates whether a specified <see cref="T:MathNet.Spatial.Units.Angle"/> is greater than or equal to another specified <see cref="T:MathNet.Spatial.Units.Angle"/>.
-        /// </summary>
-        /// <returns>
-        /// true if the value of <paramref name="left"/> is greater than or equal to the value of <paramref name="right"/>; otherwise, false.
-        /// </returns>
-        /// <param name="left">An <see cref="T:MathNet.Spatial.Units.Angle"/>.</param>
-        /// <param name="right">An <see cref="T:MathNet.Spatial.Units.Angle"/>.</param>
         public static bool operator >=(Angle left, Angle right)
         {
             return left.Radians >= right.Radians;
         }
 
-        /// <summary>
-        /// Multiplies an instance of <see cref="T:MathNet.Spatial.Units.Angle"/> with <paramref name="left"/> and returns the result.
-        /// </summary>
-        /// <param name="right">An instance of <see cref="T:MathNet.Spatial.Units.Angle"/></param>
-        /// <param name="left">An instance of <seealso cref="T:System.Double"/></param>
-        /// <returns>Multiplies an instance of <see cref="T:MathNet.Spatial.Units.Angle"/> with <paramref name="left"/> and returns the result.</returns>
         public static Angle operator *(double left, Angle right)
         {
             return new Angle(left * right.Radians);
         }
 
-        /// <summary>
-        /// Multiplies an instance of <see cref="T:MathNet.Spatial.Units.Angle"/> with <paramref name="right"/> and returns the result.
-        /// </summary>
-        /// <param name="left">An instance of <see cref="T:MathNet.Spatial.Units.Angle"/></param>
-        /// <param name="right">An instance of <seealso cref="T:System.Double"/></param>
-        /// <returns>Multiplies an instance of <see cref="T:MathNet.Spatial.Units.Angle"/> with <paramref name="right"/> and returns the result.</returns>
         public static Angle operator *(Angle left, double right)
         {
             return new Angle(left.Radians * right);
         }
 
-        /// <summary>
-        /// Divides an instance of <see cref="T:MathNet.Spatial.Units.Angle"/> with <paramref name="right"/> and returns the result.
-        /// </summary>
-        /// <param name="left">An instance of <see cref="T:MathNet.Spatial.Units.Angle"/></param>
-        /// <param name="right">An instance of <seealso cref="T:System.Double"/></param>
-        /// <returns>Divides an instance of <see cref="T:MathNet.Spatial.Units.Angle"/> with <paramref name="right"/> and returns the result.</returns>
         public static Angle operator /(Angle left, double right)
         {
             return new Angle(left.Radians / right);
         }
 
-        /// <summary>
-        /// Adds two specified <see cref="T:MathNet.Spatial.Units.Angle"/> instances.
-        /// </summary>
-        /// <returns>
-        /// An <see cref="T:MathNet.Spatial.Units.Angle"/> whose value is the sum of the values of <paramref name="left"/> and <paramref name="right"/>.
-        /// </returns>
-        /// <param name="left">A <see cref="T:MathNet.Spatial.Units.Angle"/>.</param>
-        /// <param name="right">A TimeSpan.</param>
         public static Angle operator +(Angle left, Angle right)
         {
             return new Angle(left.Radians + right.Radians);
         }
 
-        /// <summary>
-        /// Subtracts an angle from another angle and returns the difference.
-        /// </summary>
-        /// <returns>
-        /// An <see cref="T:MathNet.Spatial.Units.Angle"/> that is the difference
-        /// </returns>
-        /// <param name="left">A <see cref="T:MathNet.Spatial.Units.Angle"/> (the minuend).</param>
-        /// <param name="right">A <see cref="T:MathNet.Spatial.Units.Angle"/> (the subtrahend).</param>
         public static Angle operator -(Angle left, Angle right)
         {
             return new Angle(left.Radians - right.Radians);
         }
 
-        /// <summary>
-        /// Returns an <see cref="T:MathNet.Spatial.Units.Angle"/> whose value is the negated value of the specified instance.
-        /// </summary>
-        /// <returns>
-        /// An <see cref="T:MathNet.Spatial.Units.Angle"/> with the same numeric value as this instance, but the opposite sign.
-        /// </returns>
-        /// <param name="angle">A <see cref="T:MathNet.Spatial.Units.Angle"/></param>
         public static Angle operator -(Angle angle)
         {
             return new Angle(-1 * angle.Radians);
         }
 
-        /// <summary>
-        /// Returns the specified instance of <see cref="T:MathNet.Spatial.Units.Angle"/>.
-        /// </summary>
-        /// <returns>
-        /// Returns <paramref name="angle"/>.
-        /// </returns>
-        /// <param name="angle">A <see cref="T:MathNet.Spatial.Units.Angle"/></param>
         public static Angle operator +(Angle angle)
         {
             return angle;
@@ -271,7 +178,7 @@ namespace MathNet.Spatial.Units
         public static Angle From<T>(double value, T unit)
             where T : IAngleUnit
         {
-            return new Angle(UnitConverter.ConvertFrom(value, unit));
+            return new Angle(value * unit.ConversionFactor);
         }
 
         /// <summary>
