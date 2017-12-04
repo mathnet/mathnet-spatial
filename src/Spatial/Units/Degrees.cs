@@ -17,9 +17,10 @@ namespace MathNet.Spatial.Units
 
         public string ShortName => Name;
 
+        [Obsolete("This operator will be removed, use factory method FromDegrees or FromRadians. Made obsolete 2017-12-04.")]
         public static Angle operator *(double left, Degrees right)
         {
-            return new Angle(left, right);
+            return Angle.FromDegrees(left);
         }
     }
 }
