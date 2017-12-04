@@ -154,9 +154,7 @@
 
         public static Vector2D ReadFrom(XmlReader reader)
         {
-            var v = default(Vector2D);
-            v.ReadXml(reader);
-            return v;
+            return reader.ReadFrom<Vector2D>();
         }
 
         /// <summary>
@@ -228,40 +226,6 @@
             {
                 return (this.X.GetHashCode() * 397) ^ this.Y.GetHashCode();
             }
-        }
-
-        /// <inheritdoc />
-        public XmlSchema GetSchema()
-        {
-            return null;
-        }
-
-        /// <inheritdoc />
-        public void ReadXml(XmlReader reader)
-        {
-            if (reader.TryReadAttributeAsDouble("X", out var x) &&
-                reader.TryReadAttributeAsDouble("Y", out var y))
-            {
-                reader.Skip();
-                this = new Vector2D(x, y);
-                return;
-            }
-
-            if (reader.TryReadElementsAsDoubles("X", "Y", out x, out y))
-            {
-                reader.Skip();
-                this = new Vector2D(x, y);
-                return;
-            }
-
-            throw new XmlException("Could not read a Vector2D");
-        }
-
-        /// <inheritdoc />
-        public void WriteXml(XmlWriter writer)
-        {
-            writer.WriteAttribute("X", this.X);
-            writer.WriteAttribute("Y", this.Y);
         }
 
         /// <summary>
@@ -433,6 +397,40 @@
         public Vector<double> ToVector()
         {
             return Vector<double>.Build.Dense(new[] { this.X, this.Y });
+        }
+
+        /// <inheritdoc />
+        XmlSchema IXmlSerializable.GetSchema()
+        {
+            return null;
+        }
+
+        /// <inheritdoc />
+        void IXmlSerializable.ReadXml(XmlReader reader)
+        {
+            if (reader.TryReadAttributeAsDouble("X", out var x) &&
+                reader.TryReadAttributeAsDouble("Y", out var y))
+            {
+                reader.Skip();
+                this = new Vector2D(x, y);
+                return;
+            }
+
+            if (reader.TryReadElementsAsDoubles("X", "Y", out x, out y))
+            {
+                reader.Skip();
+                this = new Vector2D(x, y);
+                return;
+            }
+
+            throw new XmlException("Could not read a Vector2D");
+        }
+
+        /// <inheritdoc />
+        void IXmlSerializable.WriteXml(XmlWriter writer)
+        {
+            writer.WriteAttribute("X", this.X);
+            writer.WriteAttribute("Y", this.Y);
         }
     }
 }

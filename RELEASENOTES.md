@@ -1,5 +1,6 @@
 ### 0.5.0
 * Breaking: Parse methods throws FormatException, was ArgumentException
+* Breaking: Make implementation of IXmlSerializable explicit, adds noise to the API.
 
 ### 0.4.0 - 2017-05-01
 * Build: extra *.Signed packages with strong named assemblies for legacy use cases

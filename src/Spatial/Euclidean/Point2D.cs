@@ -174,9 +174,7 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>A point</returns>
         public static Point2D ReadFrom(XmlReader reader)
         {
-            var v = default(Point2D);
-            v.ReadXml(reader);
-            return v;
+            return reader.ReadFrom<Point2D>();
         }
 
         /// <summary>
@@ -247,8 +245,8 @@ namespace MathNet.Spatial.Euclidean
         public string ToString(string format, IFormatProvider provider = null)
         {
             var numberFormatInfo = provider != null ? NumberFormatInfo.GetInstance(provider) : CultureInfo.InvariantCulture.NumberFormat;
-            string separator = numberFormatInfo.NumberDecimalSeparator == "," ? ";" : ",";
-            return string.Format("({0}{1} {2})", this.X.ToString(format, numberFormatInfo), separator, this.Y.ToString(format, numberFormatInfo));
+            var separator = numberFormatInfo.NumberDecimalSeparator == "," ? ";" : ",";
+            return $"({this.X.ToString(format, numberFormatInfo)}{separator} {this.Y.ToString(format, numberFormatInfo)})";
         }
 
         /// <inheritdoc />
@@ -278,7 +276,7 @@ namespace MathNet.Spatial.Euclidean
                 return false;
             }
 
-            return obj is Point2D && this.Equals((Point2D)obj);
+            return obj is Point2D p && this.Equals(p);
         }
 
         /// <inheritdoc />
@@ -288,29 +286,6 @@ namespace MathNet.Spatial.Euclidean
             {
                 return (this.X.GetHashCode() * 397) ^ this.Y.GetHashCode();
             }
-        }
-
-        /// <inheritdoc />
-        public XmlSchema GetSchema()
-        {
-            return null;
-        }
-
-        /// <inheritdoc />
-        public void ReadXml(XmlReader reader)
-        {
-            reader.MoveToContent();
-            var e = (XElement)XNode.ReadFrom(reader);
-            this = new Point2D(
-                XmlConvert.ToDouble(e.ReadAttributeOrElementOrDefault("X")),
-                XmlConvert.ToDouble(e.ReadAttributeOrElementOrDefault("Y")));
-        }
-
-        /// <inheritdoc />
-        public void WriteXml(XmlWriter writer)
-        {
-            writer.WriteAttribute("X", this.X);
-            writer.WriteAttribute("Y", this.Y);
         }
 
         public Vector2D VectorTo(Point2D otherPoint)
@@ -359,6 +334,37 @@ namespace MathNet.Spatial.Euclidean
         public Vector<double> ToVector()
         {
             return Vector<double>.Build.Dense(new[] { this.X, this.Y });
+        }
+
+        /// <inheritdoc />
+        XmlSchema IXmlSerializable.GetSchema() => null;
+
+        /// <inheritdoc />
+        void IXmlSerializable.ReadXml(XmlReader reader)
+        {
+            if (reader.TryReadAttributeAsDouble("X", out var x) &&
+                reader.TryReadAttributeAsDouble("Y", out var y))
+            {
+                reader.Skip();
+                this = new Point2D(x, y);
+                return;
+            }
+
+            if (reader.TryReadElementsAsDoubles("X", "Y", out x, out y))
+            {
+                reader.Skip();
+                this = new Point2D(x, y);
+                return;
+            }
+
+            throw new XmlException("Could not read a Point2D");
+        }
+
+        /// <inheritdoc />
+        void IXmlSerializable.WriteXml(XmlWriter writer)
+        {
+            writer.WriteAttribute("X", this.X);
+            writer.WriteAttribute("Y", this.Y);
         }
     }
 }

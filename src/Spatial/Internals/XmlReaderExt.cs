@@ -1,9 +1,18 @@
 ﻿namespace MathNet.Spatial.Internals
 {
     using System.Xml;
+    using System.Xml.Serialization;
 
     internal static class XmlReaderExt
     {
+        internal static T ReadFrom<T>(this XmlReader reader)
+            where T : struct, IXmlSerializable
+        {
+            var instance = default(T);
+            instance.ReadXml(reader);
+            return instance;
+        }
+
         internal static bool TryReadAttributeAsDouble(this XmlReader reader, string localName, out double value)
         {
             if (reader.MoveToContent() == XmlNodeType.Element &&
