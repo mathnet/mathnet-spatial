@@ -1,4 +1,5 @@
-﻿namespace MathNet.Spatial.UnitTests.Euclidean
+﻿// ReSharper disable InconsistentNaming
+namespace MathNet.Spatial.UnitTests.Euclidean
 {
     using System;
     using System.Globalization;
@@ -6,7 +7,7 @@
     using System.Runtime.Serialization.Formatters.Binary;
     using System.Xml;
     using System.Xml.Serialization;
-    using MathNet.Numerics.LinearAlgebra.Double;
+    using MathNet.Numerics.LinearAlgebra;
     using MathNet.Spatial.Euclidean;
     using MathNet.Spatial.Units;
     using NUnit.Framework;
@@ -16,20 +17,9 @@
         [Test]
         public void Ctor()
         {
-            var points = new[]
-                           {
-                               new Vector2D(1, 2),
-                               new Vector2D(new[] { 1, 2.0 }),
-                               new Vector2D(DenseVector.OfArray(new[] { 1, 2.0 })),
-                           };
-            foreach (var p in points)
-            {
-                Assert.AreEqual(1, p.X);
-                Assert.AreEqual(2, p.Y);
-            }
-
-            Assert.Throws<ArgumentException>(() => new Vector2D(new[] { 1, 2, 3.0 }));
-            Assert.Throws<ArgumentException>(() => new Vector2D(DenseVector.OfArray(new[] { 1, 2, 3.0 })));
+            var v = new Vector2D(1, 2);
+            Assert.AreEqual(1, v.X);
+            Assert.AreEqual(2, v.Y);
         }
 
         [TestCase(5, "90 °", "0, 5")]
@@ -52,6 +42,62 @@
             Assert.Throws<ArgumentOutOfRangeException>(() => Vector2D.FromPolar(-1.0, Angle.FromRadians(0)));
         }
 
+        [Test]
+        public void OfVector()
+        {
+            var v = Vector2D.OfVector(Vector<double>.Build.Dense(new[] { 1.0, 2 }));
+            Assert.AreEqual(1, v.X);
+            Assert.AreEqual(2, v.Y);
+
+            Assert.Throws<ArgumentException>(() => Vector2D.OfVector(Vector<double>.Build.Dense(new[] { 1.0 })));
+            Assert.Throws<ArgumentException>(() => Vector2D.OfVector(Vector<double>.Build.Dense(new[] { 1.0, 2, 3 })));
+        }
+
+        [TestCase("-1, -2", "1, 2", "0, 0")]
+        public void OperatorAdd(string v1s, string v2s, string evs)
+        {
+            var v1 = Vector2D.Parse(v1s);
+            var v2 = Vector2D.Parse(v2s);
+            var expected = Vector2D.Parse(evs);
+            Assert.AreEqual(expected, v1 + v2);
+            Assert.AreEqual(expected, v2 + v1);
+        }
+
+        [TestCase("-1, -2", "1, 2", "-2, -4")]
+        public void OperatorSubtract(string v1s, string v2s, string evs)
+        {
+            var v1 = Vector2D.Parse(v1s);
+            var v2 = Vector2D.Parse(v2s);
+            var expected = Vector2D.Parse(evs);
+            Assert.AreEqual(expected, v1 - v2);
+        }
+
+        [TestCase("-1, -2", "1, 2")]
+        public void OperatorNegate(string vs, string evs)
+        {
+            var v = Vector2D.Parse(vs);
+            var expected = Vector2D.Parse(evs);
+            Assert.AreEqual(expected, -v);
+        }
+
+        [TestCase("-1, -2", 2, "-2, -4")]
+        public void OperatorMultiply(string vs, double d, string evs)
+        {
+            var v = Vector2D.Parse(vs);
+            var expected = Vector2D.Parse(evs);
+            Assert.AreEqual(expected, v * d);
+            Assert.AreEqual(expected, d * v);
+        }
+
+        [TestCase("-1, -2", 2, "-0.5, -1")]
+        public void OperatorDivide(string vs, double d, string evs)
+        {
+            var v = Vector2D.Parse(vs);
+            var actual = v / d;
+            var expected = Vector2D.Parse(evs);
+            Assert.AreEqual(expected, actual);
+        }
+
         [TestCase("1, 0", "1, 0", 1e-4, true)]
         [TestCase("-1, 1", "-1, 1", 1e-4, true)]
         [TestCase("1, 0", "1, 1", 1e-4, false)]
@@ -60,11 +106,13 @@
             var v1 = Vector2D.Parse(v1s);
             var v2 = Vector2D.Parse(v2s);
             Assert.AreEqual(expected, v1 == v2);
+            Assert.AreEqual(expected, v2 == v1);
+            Assert.AreNotEqual(expected, v1 != v2);
+            Assert.AreNotEqual(expected, v2 != v1);
             Assert.AreEqual(expected, v1.Equals(v2));
             Assert.AreEqual(expected, v1.Equals((object)v2));
             Assert.AreEqual(expected, Equals(v1, v2));
             Assert.AreEqual(expected, v1.Equals(v2, tol));
-            Assert.AreNotEqual(expected, v1 != v2);
         }
 
         [TestCase("-1, -2", "1, 2", "0, 0")]
@@ -72,18 +120,9 @@
         {
             var v1 = Vector2D.Parse(v1s);
             var v2 = Vector2D.Parse(v2s);
-            var actuals = new[]
-                            {
-                                v1 + v2,
-                                v2 + v1,
-                                v1.Add(v2),
-                                v2.Add(v1)
-                            };
             var expected = Vector2D.Parse(evs);
-            foreach (var actual in actuals)
-            {
-                Assert.AreEqual(expected, actual);
-            }
+            Assert.AreEqual(expected, v1.Add(v2));
+            Assert.AreEqual(expected, v2.Add(v1));
         }
 
         [TestCase("-1, -2", "1, 2", "-2, -4")]
@@ -91,73 +130,23 @@
         {
             var v1 = Vector2D.Parse(v1s);
             var v2 = Vector2D.Parse(v2s);
-            var actuals = new[]
-                          {
-                              v1 - v2,
-                              v1.Subtract(v2)
-                          };
             var expected = Vector2D.Parse(evs);
-            foreach (var actual in actuals)
-            {
-                Assert.AreEqual(expected, actual);
-            }
+            Assert.AreEqual(expected, v1.Subtract(v2));
         }
 
         [TestCase("-1, -2", "1, 2")]
         public void Negate(string vs, string evs)
         {
             var v = Vector2D.Parse(vs);
-            var actuals = new[]
-                            {
-                                -v,
-                                v.Negate()
-                            };
             var expected = Vector2D.Parse(evs);
-            foreach (var actual in actuals)
-            {
-                Assert.AreEqual(expected, actual);
-            }
+            Assert.AreEqual(expected, v.Negate());
         }
 
         [TestCase("-1, -2", 2, "-2, -4")]
-        public void MultiplyAndScaleBy(string vs, double d, string evs)
+        public void ScaleBy(string vs, double d, string evs)
         {
             var v = Vector2D.Parse(vs);
-            var actuals = new[]
-                          {
-                              d * v,
-                              v.ScaleBy(d)
-                          };
-            var expected = Vector2D.Parse(evs);
-            foreach (var actual in actuals)
-            {
-                Assert.AreEqual(expected, actual);
-            }
-        }
-
-        [TestCase("-1, -2", 2, "-2, -4")]
-        public void FlippedMultiplyAndScaleBy(string vs, double d, string evs)
-        {
-            var v = Vector2D.Parse(vs);
-            var actuals = new[]
-                          {
-                              v * d,
-                              v.ScaleBy(d)
-                          };
-            var expected = Vector2D.Parse(evs);
-            foreach (var actual in actuals)
-            {
-                Assert.AreEqual(expected, actual);
-            }
-        }
-
-        [TestCase("-1, -2", 2, "-0.5, -1")]
-        public void Divide(string vs, double d, string evs)
-        {
-            var v = Vector2D.Parse(vs);
-            var actual = v / d;
-            var expected = Vector2D.Parse(evs);
-            Assert.AreEqual(expected, actual);
+            Assert.AreEqual(Vector2D.Parse(evs), v.ScaleBy(d));
         }
 
         [TestCase("1.2; 3.4", 1.2, 3.4)]
@@ -306,16 +295,8 @@
         {
             var v = Vector2D.Parse(vs);
             var angle = Angle.Parse(@as);
-            var actuals = new[]
-                          {
-                              v.Rotate(angle),
-                              v.Rotate(angle.Degrees, AngleUnit.Degrees)
-                          };
             var expected = Vector2D.Parse(evs);
-            foreach (var actual in actuals)
-            {
-                AssertGeometry.AreEqual(expected, actual, 0.01);
-            }
+            AssertGeometry.AreEqual(expected, v.Rotate(angle), 0.01);
         }
 
         [TestCase("1, 2", "3, 4", 11)]

@@ -42,6 +42,7 @@
         /// <param name="r">The radius</param>
         /// <param name="a">The angle</param>
         [Obsolete("This constructor will be removed, use FromPolar. Made obsolete 2017-12-03.")]
+        //// ReSharper disable once UnusedMember.Global
         public Vector2D(double r, Angle a)
             : this(r * Math.Cos(a.Radians), r * Math.Sin(a.Radians))
         {
@@ -52,6 +53,7 @@
         }
 
         [Obsolete("This constructor will be removed. Made obsolete 2017-12-03.")]
+        //// ReSharper disable once UnusedMember.Global
         public Vector2D(IEnumerable<double> data)
             : this(data.ToArray())
         {
@@ -303,6 +305,7 @@
         }
 
         [Obsolete("This method will be removed, use the overload that takes an Angle. Made obsolete 2017-12-03.")]
+        //// ReSharper disable once UnusedMember.Global
         public Vector2D Rotate<T>(double angle, T angleUnit)
             where T : IAngleUnit
         {
