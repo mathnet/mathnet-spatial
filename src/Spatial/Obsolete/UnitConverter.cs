@@ -1,5 +1,9 @@
-﻿namespace MathNet.Spatial.Units
+﻿// ReSharper disable once CheckNamespace
+namespace MathNet.Spatial.Units
 {
+    using System;
+
+    [Obsolete("This should not have been public, will be removed in a future version. Made obsolete 2017-12-03")]
     public static class UnitConverter
     {
         public static double ConvertTo<TUnit>(double value, TUnit toUnit)

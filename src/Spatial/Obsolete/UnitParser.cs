@@ -1,4 +1,5 @@
-﻿namespace MathNet.Spatial.Units
+﻿// ReSharper disable once CheckNamespace
+namespace MathNet.Spatial.Units
 {
     using System;
     using System.Text.RegularExpressions;
