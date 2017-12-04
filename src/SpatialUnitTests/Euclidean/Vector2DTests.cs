@@ -360,28 +360,62 @@
             Assert.AreEqual(360 - expected.Degrees, ccw.Degrees, 1e-3);
         }
 
+        [TestCase(@"<Vector2D X=""1"" Y=""2"" />")]
+        [TestCase(@"<Vector2D><X>1</X><Y>2</Y></Vector2D>")]
+        public void ReadFrom(string xml)
+        {
+            var v = new Vector2D(1, 2);
+            AssertGeometry.AreEqual(v, Vector2D.ReadFrom(XmlReader.Create(new StringReader(xml))));
+        }
+
         [Test]
         public void XmlRoundtrip()
         {
-            const string Xml = @"<Vector2D X=""1"" Y=""2"" />";
-            const string ElementXml = @"<Vector2D><X>1</X><Y>2</Y></Vector2D>";
             var v = new Vector2D(1, 2);
+            AssertXml.XmlRoundTrips(v, @"<Vector2D X=""1"" Y=""2"" />", (e, a) => AssertGeometry.AreEqual(e, a));
+        }
 
-            AssertXml.XmlRoundTrips(v, Xml, (e, a) => AssertGeometry.AreEqual(e, a));
-
-            var serializer = new XmlSerializer(typeof(Vector2D));
-
-            var actuals = new[]
-                          {
-                              Vector2D.ReadFrom(XmlReader.Create(new StringReader(Xml))),
-                              Vector2D.ReadFrom(XmlReader.Create(new StringReader(ElementXml))),
-                              (Vector2D)serializer.Deserialize(new StringReader(Xml)),
-                              (Vector2D)serializer.Deserialize(new StringReader(ElementXml))
-                          };
-            foreach (var actual in actuals)
+        [Test]
+        public void XmlContainerRoundtrip()
+        {
+            var container = new AssertXml.Container<Vector2D>
             {
-                AssertGeometry.AreEqual(v, actual);
-            }
+                Value1 = new Vector2D(1, 2),
+                Value2 = new Vector2D(3, 4)
+            };
+            var expected = "<ContainerOfVector2D>\r\n" +
+                           "  <Value1 X=\"1\" Y=\"2\"></Value1>\r\n" +
+                           "  <Value2 X=\"3\" Y=\"4\"></Value2>\r\n" +
+                           "</ContainerOfVector2D>";
+            var roundTrip = AssertXml.XmlSerializerRoundTrip(container, expected);
+            AssertGeometry.AreEqual(container.Value1, roundTrip.Value1);
+            AssertGeometry.AreEqual(container.Value2, roundTrip.Value2);
+        }
+
+        [Test]
+        public void XmlElements()
+        {
+            var container = new AssertXml.Container<Vector2D>
+            {
+                Value1 = new Vector2D(1, 2),
+                Value2 = new Vector2D(3, 4)
+            };
+            var xml = "<ContainerOfVector2D>\r\n" +
+                           "  <Value1><X>1</X><Y>2</Y></Value1>\r\n" +
+                           "  <Value2><X>3</X><Y>4</Y></Value2>\r\n" +
+                           "</ContainerOfVector2D>";
+            var serializer = new XmlSerializer(typeof(AssertXml.Container<Vector2D>));
+            var deserialized = (AssertXml.Container<Vector2D>)serializer.Deserialize(new StringReader(xml));
+            AssertGeometry.AreEqual(container.Value1, deserialized.Value1);
+            AssertGeometry.AreEqual(container.Value2, deserialized.Value2);
+        }
+
+        [Test]
+        public void XmlContainerElements()
+        {
+            var v = new Vector2D(1, 2);
+            var serializer = new XmlSerializer(typeof(Vector2D));
+            AssertGeometry.AreEqual(v, (Vector2D)serializer.Deserialize(new StringReader(@"<Vector2D><X>1</X><Y>2</Y></Vector2D>")));
         }
 
         [Test]

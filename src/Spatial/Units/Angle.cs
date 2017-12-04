@@ -6,6 +6,7 @@ namespace MathNet.Spatial.Units
     using System.Xml.Linq;
     using System.Xml.Schema;
     using System.Xml.Serialization;
+    using MathNet.Spatial.Internals;
 
     /// <summary>
     /// An angle
@@ -360,6 +361,14 @@ namespace MathNet.Spatial.Units
         /// <inheritdoc />
         public void ReadXml(XmlReader reader)
         {
+            if (reader.TryReadAttributeAsDouble("Value", out var value) ||
+                reader.TryReadAttributeAsDouble("Radians", out value))
+            {
+                reader.Skip();
+                this = FromRadians(value);
+                return;
+            }
+
             reader.MoveToContent();
             var e = (XElement)XNode.ReadFrom(reader);
             this = Angle.FromRadians(XmlConvert.ToDouble(e.ReadAttributeOrElementOrDefault("Value")));

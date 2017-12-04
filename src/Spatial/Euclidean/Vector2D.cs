@@ -5,7 +5,6 @@
     using System.Globalization;
     using System.Linq;
     using System.Xml;
-    using System.Xml.Linq;
     using System.Xml.Schema;
     using System.Xml.Serialization;
     using MathNet.Numerics.LinearAlgebra;
@@ -243,11 +242,22 @@
         /// <inheritdoc />
         public void ReadXml(XmlReader reader)
         {
-            reader.MoveToContent();
-            var e = (XElement)XNode.ReadFrom(reader);
-            this = new Vector2D(
-                XmlConvert.ToDouble(e.ReadAttributeOrElementOrDefault("X")),
-                XmlConvert.ToDouble(e.ReadAttributeOrElementOrDefault("Y")));
+            if (reader.TryReadAttributeAsDouble("X", out var x) &&
+                reader.TryReadAttributeAsDouble("Y", out var y))
+            {
+                reader.Skip();
+                this = new Vector2D(x, y);
+                return;
+            }
+
+            if (reader.TryReadElementsAsDoubles("X", "Y", out x, out y))
+            {
+                reader.Skip();
+                this = new Vector2D(x, y);
+                return;
+            }
+
+            throw new XmlException("Could not read a Vector2D");
         }
 
         /// <inheritdoc />

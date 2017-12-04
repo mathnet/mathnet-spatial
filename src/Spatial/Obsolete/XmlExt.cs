@@ -129,7 +129,7 @@
                 return xelement.Value;
             }
 
-            throw new XmlException(string.Format("Attribute or element {0} not found", localName));
+            throw new XmlException($"Attribute or element {localName} not found");
         }
 
         public static T ReadAttributeOrElementEnum<T>(this XElement e, string localName)

@@ -1,6 +1,7 @@
 ﻿namespace MathNet.Spatial.UnitTests
 {
     using System;
+    using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Runtime.Serialization;
@@ -50,9 +51,9 @@
             {
                 serializer.Serialize(writer, item);
                 xml = sw.ToString();
-                Console.WriteLine("XmlSerializer");
-                Console.Write(xml);
-                Console.WriteLine();
+                Debug.WriteLine("XmlSerializer");
+                Debug.Write(xml);
+                Debug.WriteLine(string.Empty);
                 AreEqual(expected, xml);
             }
 
@@ -72,9 +73,9 @@
                 serializer.WriteObject(writer, item);
                 writer.Flush();
                 xml = sw.ToString();
-                Console.WriteLine("DataContractSerializer");
-                Console.Write(xml);
-                Console.WriteLine();
+                Debug.WriteLine("DataContractSerializer");
+                Debug.Write(xml);
+                Debug.WriteLine(string.Empty);
                 AreEqual(expected, xml);
             }
 
@@ -135,6 +136,13 @@
             ne.Add(e.Attributes().Where(a => !a.IsNamespaceDeclaration));
             ne.Add(e.Elements().Select(RemoveAllNamespaces));
             return ne;
+        }
+
+        public class Container<T>
+        {
+            public T Value1 { get; set; }
+
+            public T Value2 { get; set; }
         }
     }
 }

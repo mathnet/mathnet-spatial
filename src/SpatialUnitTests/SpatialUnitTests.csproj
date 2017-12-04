@@ -65,9 +65,9 @@
     <Compile Include="Euclidean\Ray3DTests.cs" />
     <Compile Include="Euclidean\UnitVector3DTests.cs" />
     <Compile Include="Euclidean\Vector3DTests.cs" />
-    <Compile Include="AssertXml.cs" />
-    <Compile Include="AssertXmlTests.cs" />
-    <Compile Include="AssertGeometry.cs" />
+    <Compile Include="Helpers\AssertXml.cs" />
+    <Compile Include="Helpers\AssertXmlTests.cs" />
+    <Compile Include="Helpers\AssertGeometry.cs" />
     <Compile Include="ParserTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Units\AngleTests.cs" />
