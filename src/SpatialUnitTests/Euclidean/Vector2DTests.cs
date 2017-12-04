@@ -295,22 +295,6 @@
             Assert.AreEqual(expected, v2.IsParallelTo(v1, Angle.FromDegrees(degreesTolerance)));
         }
 
-        [TestCase("1, 0", "0, 1", false, 90)]
-        [TestCase("1, 0", "0, 1", true, 270)]
-        [TestCase("1, 0", "0, -1", true, 90)]
-        [TestCase("1, 0", "0, -1", false, 270)]
-        [TestCase("1, 0", "-1, 0", true, 180)]
-        [TestCase("1, 0", "-1, 0", false, 180)]
-        [TestCase("1, 0", "1, 0", false, 0)]
-        [TestCase("0, 1", "1, 0", true, 90)]
-        public void SignedAngleToTest(string v1s, string v2s, bool clockWise, float expected)
-        {
-            var v1 = Vector2D.Parse(v1s);
-            var v2 = Vector2D.Parse(v2s);
-            var av = v1.SignedAngleTo(v2, clockWise);
-            Assert.AreEqual(expected, av.Degrees, 0.1);
-        }
-
         [TestCase("1, 0", "90°", "0, 1")]
         [TestCase("1, 0", "-270°", "0, 1")]
         [TestCase("1, 0", "-90°", "0, -1")]
@@ -370,6 +354,22 @@
             Assert.AreEqual(360 - expected.Degrees, ccw.Degrees, 1e-3);
         }
 
+        [TestCase("1, 0", "0, 1", false, 90)]
+        [TestCase("1, 0", "0, 1", true, 270)]
+        [TestCase("1, 0", "0, -1", true, 90)]
+        [TestCase("1, 0", "0, -1", false, 270)]
+        [TestCase("1, 0", "-1, 0", true, 180)]
+        [TestCase("1, 0", "-1, 0", false, 180)]
+        [TestCase("1, 0", "1, 0", false, 0)]
+        [TestCase("0, 1", "1, 0", true, 90)]
+        public void SignedAngleTo(string v1s, string v2s, bool clockWise, float expected)
+        {
+            var v1 = Vector2D.Parse(v1s);
+            var v2 = Vector2D.Parse(v2s);
+            var av = v1.SignedAngleTo(v2, clockWise);
+            Assert.AreEqual(expected, av.Degrees, 0.1);
+        }
+
         [TestCase(@"<Vector2D X=""1"" Y=""2"" />")]
         [TestCase(@"<Vector2D Y=""2"" X=""1""/>")]
         [TestCase(@"<Vector2D><X>1</X><Y>2</Y></Vector2D>")]
@@ -407,6 +407,7 @@
         }
 
         [TestCase("1,0", "0,1", "90°")]
+        [TestCase("2,0", "0,3", "90°")]
         [TestCase("1,0", "0,-1", "90°")]
         [TestCase("0,1", "1,0", "90°")]
         [TestCase("-0.99985, 0.01745", "-1, 0", "1°")]
