@@ -15,15 +15,20 @@
     public struct Vector2D : IXmlSerializable, IEquatable<Vector2D>, IFormattable
     {
         /// <summary>
-        /// Using public fields cos: http://blogs.msdn.com/b/ricom/archive/2006/08/31/performance-quiz-11-ten-questions-on-value-based-programming.aspx
+        /// The x component.
         /// </summary>
         public readonly double X;
 
         /// <summary>
-        /// Using public fields cos: http://blogs.msdn.com/b/ricom/archive/2006/08/31/performance-quiz-11-ten-questions-on-value-based-programming.aspx
+        /// The y component.
         /// </summary>
         public readonly double Y;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Vector2D"/> struct.
+        /// </summary>
+        /// <param name="x">The x component.</param>
+        /// <param name="y">The y component.</param>
         public Vector2D(double x, double y)
         {
             this.X = x;
@@ -31,16 +36,18 @@
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="Vector2D"/> struct.
         /// Creates a vector with length r rotated a counterclockwise from X-Axis
         /// </summary>
         /// <param name="r">The radius</param>
         /// <param name="a">The angle</param>
+        [Obsolete("This constructor will be removed, use FromPolar. Made obsolete 2017-12-03.")]
         public Vector2D(double r, Angle a)
             : this(r * Math.Cos(a.Radians), r * Math.Sin(a.Radians))
         {
             if (r < 0)
             {
-                throw new ArgumentException("r < 0", "r");
+                throw new ArgumentOutOfRangeException(nameof(r), r, "Expected a radius greater than or equal to zero.");
             }
         }
 
@@ -104,6 +111,18 @@
         public static Vector2D operator /(Vector2D v, double d)
         {
             return new Vector2D(v.X / d, v.Y / d);
+        }
+
+        public static Vector2D FromPolar(double radius, Angle angle)
+        {
+            if (radius < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(radius), radius, "Expected a radius greater than or equal to zero.");
+            }
+
+            return new Vector2D(
+                radius * Math.Cos(angle.Radians),
+                radius * Math.Sin(angle.Radians));
         }
 
         /// <summary>
@@ -171,61 +190,11 @@
         }
 
         /// <inheritdoc />
-        public override string ToString()
-        {
-            return this.ToString(null, CultureInfo.InvariantCulture);
-        }
-
-        public string ToString(IFormatProvider provider)
-        {
-            return this.ToString(null, provider);
-        }
-
-        /// <inheritdoc />
         public string ToString(string format, IFormatProvider provider = null)
         {
             var numberFormatInfo = provider != null ? NumberFormatInfo.GetInstance(provider) : CultureInfo.InvariantCulture.NumberFormat;
             var separator = numberFormatInfo.NumberDecimalSeparator == "," ? ";" : ",";
             return $"({this.X.ToString(format, numberFormatInfo)}{separator}\u00A0{this.Y.ToString(format, numberFormatInfo)})";
-        }
-
-        /// <inheritdoc />
-        public bool Equals(Vector2D other)
-        {
-            //// ReSharper disable CompareOfFloatsByEqualityOperator
-            return this.X == other.X && this.Y == other.Y;
-            //// ReSharper restore CompareOfFloatsByEqualityOperator
-        }
-
-        public bool Equals(Vector2D other, double tolerance)
-        {
-            if (tolerance < 0)
-            {
-                throw new ArgumentException("epsilon < 0");
-            }
-
-            return Math.Abs(other.X - this.X) < tolerance &&
-                   Math.Abs(other.Y - this.Y) < tolerance;
-        }
-
-        /// <inheritdoc />
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj))
-            {
-                return false;
-            }
-
-            return obj is Vector2D v && this.Equals(v);
-        }
-
-        /// <inheritdoc />
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                return (this.X.GetHashCode() * 397) ^ this.Y.GetHashCode();
-            }
         }
 
         /// <summary>
@@ -397,6 +366,56 @@
         public Vector<double> ToVector()
         {
             return Vector<double>.Build.Dense(new[] { this.X, this.Y });
+        }
+
+        /// <inheritdoc />
+        public bool Equals(Vector2D other)
+        {
+            //// ReSharper disable CompareOfFloatsByEqualityOperator
+            return this.X == other.X && this.Y == other.Y;
+            //// ReSharper restore CompareOfFloatsByEqualityOperator
+        }
+
+        public bool Equals(Vector2D other, double tolerance)
+        {
+            if (tolerance < 0)
+            {
+                throw new ArgumentException("epsilon < 0");
+            }
+
+            return Math.Abs(other.X - this.X) < tolerance &&
+                   Math.Abs(other.Y - this.Y) < tolerance;
+        }
+
+        /// <inheritdoc />
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+
+            return obj is Vector2D v && this.Equals(v);
+        }
+
+        /// <inheritdoc />
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return (this.X.GetHashCode() * 397) ^ this.Y.GetHashCode();
+            }
+        }
+
+        /// <inheritdoc />
+        public override string ToString()
+        {
+            return this.ToString(null, CultureInfo.InvariantCulture);
+        }
+
+        public string ToString(IFormatProvider provider)
+        {
+            return this.ToString(null, provider);
         }
 
         /// <inheritdoc />

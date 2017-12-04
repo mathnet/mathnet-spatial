@@ -45,9 +45,14 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         /// <param name="r">distance from origin</param>
         /// <param name="a">the angle</param>
+        [Obsolete("This constructor will be removed, use FromPolar. Made obsolete 2017-12-03.")]
         public Point2D(double r, Angle a)
             : this(r * Math.Cos(a.Radians), r * Math.Sin(a.Radians))
         {
+            if (r < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(r), r, "Expected a radius greater than or equal to zero.");
+            }
         }
 
         /// <summary>
@@ -118,6 +123,18 @@ namespace MathNet.Spatial.Euclidean
         public static bool operator !=(Point2D left, Point2D right)
         {
             return !left.Equals(right);
+        }
+
+        public static Point2D FromPolar(double radius, Angle angle)
+        {
+            if (radius < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(radius), radius, "Expected a radius greater than or equal to zero.");
+            }
+
+            return new Point2D(
+                radius * Math.Cos(angle.Radians),
+                radius * Math.Sin(angle.Radians));
         }
 
         /// <summary>

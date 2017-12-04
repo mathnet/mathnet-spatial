@@ -27,12 +27,18 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         [TestCase(1, "-45 °", "0.71, -0.71")]
         [TestCase(1, "0 °", "1, 0")]
         [TestCase(1, "180 °", "-1, 0")]
-        public void PolarCtorTest(int r, string avs, string eps)
+        public void FromPolar(int radius, string avs, string eps)
         {
-            var av = Angle.Parse(avs);
-            var p = new Point2D(r, av);
+            var angle = Angle.Parse(avs);
+            var p = Point2D.FromPolar(radius, angle);
             var ep = Point2D.Parse(eps);
             AssertGeometry.AreEqual(ep, p, 1e-2);
+        }
+
+        [Test]
+        public void FromPolarFailsWhenNegativeRadius()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => Point2D.FromPolar(-1.0, Angle.FromRadians(0)));
         }
 
         [TestCase("-1, -2", "1, 2", "0, 0")]

@@ -13,20 +13,6 @@
 
     public class Vector2DTests
     {
-        [TestCase(5, "90 °", "0, 5")]
-        [TestCase(3, "-90 °", "0, -3")]
-        [TestCase(1, "45 °", "0.71, 0.71")]
-        [TestCase(1, "-45 °", "0.71, -0.71")]
-        [TestCase(1, "0 °", "1, 0")]
-        [TestCase(1, "180 °", "-1, 0")]
-        public void PolarCtorTest(int r, string avs, string eps)
-        {
-            var av = Angle.Parse(avs);
-            var p = new Vector2D(r, av);
-            var ep = Vector2D.Parse(eps);
-            AssertGeometry.AreEqual(ep, p, 1e-2);
-        }
-
         [Test]
         public void Ctor()
         {
@@ -44,6 +30,26 @@
 
             Assert.Throws<ArgumentException>(() => new Vector2D(new[] { 1, 2, 3.0 }));
             Assert.Throws<ArgumentException>(() => new Vector2D(DenseVector.OfArray(new[] { 1, 2, 3.0 })));
+        }
+
+        [TestCase(5, "90 °", "0, 5")]
+        [TestCase(3, "-90 °", "0, -3")]
+        [TestCase(1, "45 °", "0.71, 0.71")]
+        [TestCase(1, "-45 °", "0.71, -0.71")]
+        [TestCase(1, "0 °", "1, 0")]
+        [TestCase(1, "180 °", "-1, 0")]
+        public void FromPolar(int radius, string avs, string eps)
+        {
+            var angle = Angle.Parse(avs);
+            var v = Vector2D.FromPolar(radius, angle);
+            var ep = Vector2D.Parse(eps);
+            AssertGeometry.AreEqual(ep, v, 1e-2);
+        }
+
+        [Test]
+        public void FromPolarFailsWhenNegativeRadius()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => Vector2D.FromPolar(-1.0, Angle.FromRadians(0)));
         }
 
         [TestCase("1, 0", "1, 0", 1e-4, true)]
@@ -370,12 +376,6 @@
         {
             var v = new Vector2D(1, 2);
             AssertGeometry.AreEqual(v, Vector2D.ReadFrom(XmlReader.Create(new StringReader(xml))));
-        }
-
-        [Test]
-        public void PolarConstructorThrowsArgumentExceptionWhenNegativeRadius()
-        {
-            Assert.Throws<ArgumentException>(() => { new Vector2D(-1.0, Angle.FromRadians(0)); });
         }
 
         [Test]
