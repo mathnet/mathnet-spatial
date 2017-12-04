@@ -301,7 +301,7 @@
                 a -= 2 * Math.PI;
             }
 
-            return new Angle(a, AngleUnit.Radians);
+            return Angle.FromRadians(a);
         }
 
         /// <summary>
@@ -313,7 +313,7 @@
         {
             var @this = this.Normalize();
             var other = toVector2D.Normalize();
-            return new Angle(Math.Acos(@this.DotProduct(other)), AngleUnit.Radians);
+            return Angle.FromRadians(Math.Acos(@this.DotProduct(other)));
         }
 
         public Vector2D Rotate<T>(double angle, T angleUnit)

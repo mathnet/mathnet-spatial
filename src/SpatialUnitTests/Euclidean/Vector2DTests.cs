@@ -371,9 +371,9 @@
         }
 
         [Test]
-        public void PolarConstructorThrowsArgumentException()
+        public void PolarConstructorThrowsArgumentExceptionWhenNegativeRadius()
         {
-            Assert.Throws<ArgumentException>(() => { new Vector2D(-1.0, new Angle(0, default(Radians))); });
+            Assert.Throws<ArgumentException>(() => { new Vector2D(-1.0, Angle.FromRadians(0)); });
         }
 
         [Test]
@@ -490,10 +490,10 @@
         public void XmlContainerElements()
         {
             var container = new AssertXml.Container<Vector2D>
-                            {
-                                Value1 = new Vector2D(1, 2),
-                                Value2 = new Vector2D(3, 4)
-                            };
+            {
+                Value1 = new Vector2D(1, 2),
+                Value2 = new Vector2D(3, 4)
+            };
             var xml = "<ContainerOfVector2D>\r\n" +
                       "  <Value1><X>1</X><Y>2</Y></Value1>\r\n" +
                       "  <Value2><X>3</X><Y>4</Y></Value2>\r\n" +

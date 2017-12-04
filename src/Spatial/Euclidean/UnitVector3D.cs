@@ -513,12 +513,12 @@ namespace MathNet.Spatial.Euclidean
         {
             if (this.IsParallelTo(about))
             {
-                throw new ArgumentException("FromVector paralell to aboutVector");
+                throw new ArgumentException("FromVector parallel to aboutVector");
             }
 
             if (v.IsParallelTo(about))
             {
-                throw new ArgumentException("FromVector paralell to aboutVector");
+                throw new ArgumentException("FromVector parallel to aboutVector");
             }
 
             var rp = new Plane(new Point3D(0, 0, 0), about);
@@ -527,19 +527,19 @@ namespace MathNet.Spatial.Euclidean
             var dp = pfv.DotProduct(ptv);
             if (Math.Abs(dp - 1) < 1E-15)
             {
-                return new Angle(0, AngleUnit.Radians);
+                return Angle.FromRadians(0);
             }
 
             if (Math.Abs(dp + 1) < 1E-15)
             {
-                return new Angle(Math.PI, AngleUnit.Radians);
+                return Angle.FromRadians(Math.PI);
             }
 
             var angle = Math.Acos(dp);
             var cpv = pfv.CrossProduct(ptv);
             var sign = cpv.DotProduct(rp.Normal);
             var signedAngle = sign * angle;
-            return new Angle(signedAngle, AngleUnit.Radians);
+            return Angle.FromRadians(signedAngle);
         }
 
         /// <summary>
@@ -561,7 +561,7 @@ namespace MathNet.Spatial.Euclidean
         {
             var dp = this.DotProduct(v);
             var angle = Math.Acos(dp);
-            return new Angle(angle, AngleUnit.Radians);
+            return Angle.FromRadians(angle);
         }
 
         /// <summary>
