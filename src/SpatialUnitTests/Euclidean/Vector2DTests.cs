@@ -22,37 +22,6 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             Assert.AreEqual(2, v.Y);
         }
 
-        [TestCase(5, "90 °", "0, 5")]
-        [TestCase(3, "-90 °", "0, -3")]
-        [TestCase(1, "45 °", "0.71, 0.71")]
-        [TestCase(1, "-45 °", "0.71, -0.71")]
-        [TestCase(1, "0 °", "1, 0")]
-        [TestCase(1, "180 °", "-1, 0")]
-        public void FromPolar(int radius, string avs, string eps)
-        {
-            var angle = Angle.Parse(avs);
-            var v = Vector2D.FromPolar(radius, angle);
-            var ep = Vector2D.Parse(eps);
-            AssertGeometry.AreEqual(ep, v, 1e-2);
-        }
-
-        [Test]
-        public void FromPolarFailsWhenNegativeRadius()
-        {
-            Assert.Throws<ArgumentOutOfRangeException>(() => Vector2D.FromPolar(-1.0, Angle.FromRadians(0)));
-        }
-
-        [Test]
-        public void OfVector()
-        {
-            var v = Vector2D.OfVector(Vector<double>.Build.Dense(new[] { 1.0, 2 }));
-            Assert.AreEqual(1, v.X);
-            Assert.AreEqual(2, v.Y);
-
-            Assert.Throws<ArgumentException>(() => Vector2D.OfVector(Vector<double>.Build.Dense(new[] { 1.0 })));
-            Assert.Throws<ArgumentException>(() => Vector2D.OfVector(Vector<double>.Build.Dense(new[] { 1.0, 2, 3 })));
-        }
-
         [TestCase("-1, -2", "1, 2", "0, 0")]
         public void OperatorAdd(string v1s, string v2s, string evs)
         {
@@ -98,55 +67,36 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             Assert.AreEqual(expected, actual);
         }
 
-        [TestCase("1, 0", "1, 0", 1e-4, true)]
-        [TestCase("-1, 1", "-1, 1", 1e-4, true)]
-        [TestCase("1, 0", "1, 1", 1e-4, false)]
-        public void Equals(string v1s, string v2s, double tol, bool expected)
+
+        [TestCase(5, "90 °", "0, 5")]
+        [TestCase(3, "-90 °", "0, -3")]
+        [TestCase(1, "45 °", "0.71, 0.71")]
+        [TestCase(1, "-45 °", "0.71, -0.71")]
+        [TestCase(1, "0 °", "1, 0")]
+        [TestCase(1, "180 °", "-1, 0")]
+        public void FromPolar(int radius, string avs, string eps)
         {
-            var v1 = Vector2D.Parse(v1s);
-            var v2 = Vector2D.Parse(v2s);
-            Assert.AreEqual(expected, v1 == v2);
-            Assert.AreEqual(expected, v2 == v1);
-            Assert.AreNotEqual(expected, v1 != v2);
-            Assert.AreNotEqual(expected, v2 != v1);
-            Assert.AreEqual(expected, v1.Equals(v2));
-            Assert.AreEqual(expected, v1.Equals((object)v2));
-            Assert.AreEqual(expected, Equals(v1, v2));
-            Assert.AreEqual(expected, v1.Equals(v2, tol));
+            var angle = Angle.Parse(avs);
+            var v = Vector2D.FromPolar(radius, angle);
+            var ep = Vector2D.Parse(eps);
+            AssertGeometry.AreEqual(ep, v, 1e-2);
         }
 
-        [TestCase("-1, -2", "1, 2", "0, 0")]
-        public void Add(string v1s, string v2s, string evs)
+        [Test]
+        public void FromPolarFailsWhenNegativeRadius()
         {
-            var v1 = Vector2D.Parse(v1s);
-            var v2 = Vector2D.Parse(v2s);
-            var expected = Vector2D.Parse(evs);
-            Assert.AreEqual(expected, v1.Add(v2));
-            Assert.AreEqual(expected, v2.Add(v1));
+            Assert.Throws<ArgumentOutOfRangeException>(() => Vector2D.FromPolar(-1.0, Angle.FromRadians(0)));
         }
 
-        [TestCase("-1, -2", "1, 2", "-2, -4")]
-        public void Subtract(string v1s, string v2s, string evs)
+        [Test]
+        public void OfVector()
         {
-            var v1 = Vector2D.Parse(v1s);
-            var v2 = Vector2D.Parse(v2s);
-            var expected = Vector2D.Parse(evs);
-            Assert.AreEqual(expected, v1.Subtract(v2));
-        }
+            var v = Vector2D.OfVector(Vector<double>.Build.Dense(new[] { 1.0, 2 }));
+            Assert.AreEqual(1, v.X);
+            Assert.AreEqual(2, v.Y);
 
-        [TestCase("-1, -2", "1, 2")]
-        public void Negate(string vs, string evs)
-        {
-            var v = Vector2D.Parse(vs);
-            var expected = Vector2D.Parse(evs);
-            Assert.AreEqual(expected, v.Negate());
-        }
-
-        [TestCase("-1, -2", 2, "-2, -4")]
-        public void ScaleBy(string vs, double d, string evs)
-        {
-            var v = Vector2D.Parse(vs);
-            Assert.AreEqual(Vector2D.Parse(evs), v.ScaleBy(d));
+            Assert.Throws<ArgumentException>(() => Vector2D.OfVector(Vector<double>.Build.Dense(new[] { 1.0 })));
+            Assert.Throws<ArgumentException>(() => Vector2D.OfVector(Vector<double>.Build.Dense(new[] { 1.0, 2, 3 })));
         }
 
         [TestCase("1.2; 3.4", 1.2, 3.4)]
@@ -200,6 +150,57 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         {
             Assert.AreEqual(false, Vector2D.TryParse(text, out _));
             Assert.Throws<FormatException>(() => Vector2D.Parse(text));
+        }
+
+        [TestCase("1, 0", "1, 0", 1e-4, true)]
+        [TestCase("-1, 1", "-1, 1", 1e-4, true)]
+        [TestCase("1, 0", "1, 1", 1e-4, false)]
+        public void Equals(string v1s, string v2s, double tol, bool expected)
+        {
+            var v1 = Vector2D.Parse(v1s);
+            var v2 = Vector2D.Parse(v2s);
+            Assert.AreEqual(expected, v1 == v2);
+            Assert.AreEqual(expected, v2 == v1);
+            Assert.AreNotEqual(expected, v1 != v2);
+            Assert.AreNotEqual(expected, v2 != v1);
+            Assert.AreEqual(expected, v1.Equals(v2));
+            Assert.AreEqual(expected, v1.Equals((object)v2));
+            Assert.AreEqual(expected, Equals(v1, v2));
+            Assert.AreEqual(expected, v1.Equals(v2, tol));
+        }
+
+        [TestCase("-1, -2", "1, 2", "0, 0")]
+        public void Add(string v1s, string v2s, string evs)
+        {
+            var v1 = Vector2D.Parse(v1s);
+            var v2 = Vector2D.Parse(v2s);
+            var expected = Vector2D.Parse(evs);
+            Assert.AreEqual(expected, v1.Add(v2));
+            Assert.AreEqual(expected, v2.Add(v1));
+        }
+
+        [TestCase("-1, -2", "1, 2", "-2, -4")]
+        public void Subtract(string v1s, string v2s, string evs)
+        {
+            var v1 = Vector2D.Parse(v1s);
+            var v2 = Vector2D.Parse(v2s);
+            var expected = Vector2D.Parse(evs);
+            Assert.AreEqual(expected, v1.Subtract(v2));
+        }
+
+        [TestCase("-1, -2", "1, 2")]
+        public void Negate(string vs, string evs)
+        {
+            var v = Vector2D.Parse(vs);
+            var expected = Vector2D.Parse(evs);
+            Assert.AreEqual(expected, v.Negate());
+        }
+
+        [TestCase("-1, -2", 2, "-2, -4")]
+        public void ScaleBy(string vs, double d, string evs)
+        {
+            var v = Vector2D.Parse(vs);
+            Assert.AreEqual(Vector2D.Parse(evs), v.ScaleBy(d));
         }
 
         [TestCase("2, 0", 2)]
