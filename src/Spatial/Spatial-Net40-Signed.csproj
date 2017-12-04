@@ -14,6 +14,7 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\MathNet.snk</AssemblyOriginatorKeyFile>
     <TargetFrameworkProfile />
+	<CodeAnalysisRuleSet>Spatial.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>..\..\out\lib-signed\Net40\</OutputPath>
