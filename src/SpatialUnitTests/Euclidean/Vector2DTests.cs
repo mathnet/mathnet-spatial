@@ -253,6 +253,8 @@
             var v2 = Vector2D.Parse(v2s);
             Assert.AreEqual(expected, v1.IsPerpendicularTo(v2, tol));
             Assert.AreEqual(expected, v2.IsPerpendicularTo(v1, tol));
+            Assert.AreEqual(expected, v1.IsPerpendicularTo(v2, Angle.FromRadians(tol)));
+            Assert.AreEqual(expected, v2.IsPerpendicularTo(v1, Angle.FromRadians(tol)));
         }
 
         [TestCase("1, 0", "1, 0", 1e-10, true)]
@@ -405,6 +407,7 @@
         }
 
         [TestCase("1,0", "0,1", "90°")]
+        [TestCase("1,0", "0,-1", "90°")]
         [TestCase("0,1", "1,0", "90°")]
         [TestCase("-0.99985, 0.01745", "-1, 0", "1°")]
         [TestCase("-0.99985, -0.01745", "-1, 0", "1°")]
@@ -412,14 +415,16 @@
         [TestCase("0.99985, -0.01745", "1, 0", "1°")]
         [TestCase("-0.99985, -0.01745", "1, 0", "179°")]
         [TestCase("-0.99985, 0.01745", "1, 0", "179°")]
-        public void UnSignedAngleTo(string v1s, string v2s, string expectedAngle)
+        public void AngleTo(string v1s, string v2s, string expectedAngle)
         {
             var v1 = Vector2D.Parse(v1s);
             var v2 = Vector2D.Parse(v2s);
-            var expected = Angle.Parse(expectedAngle);
 
             var angle = v1.AngleTo(v2);
+            var expected = Angle.Parse(expectedAngle);
+            Assert.AreEqual(expected.Degrees, angle.Degrees, 1e-3);
 
+            angle = v2.AngleTo(v1);
             Assert.AreEqual(expected.Degrees, angle.Degrees, 1e-3);
         }
 

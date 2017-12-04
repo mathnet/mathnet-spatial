@@ -177,8 +177,10 @@
         }
 
         /// <summary>
-        /// Create a new Vector2D from a Math.NET Numerics vector of length 2.
+        /// Create a new <see cref="Vector2D"/> from a Math.NET Numerics vector of length 2.
         /// </summary>
+        /// <param name="vector"> A vector with length 2 to populate the created instance with.</param>
+        /// <returns> A <see cref="Vector2D"/></returns>
         public static Vector2D OfVector(Vector<double> vector)
         {
             if (vector.Count != 2)
@@ -189,62 +191,75 @@
             return new Vector2D(vector.At(0), vector.At(1));
         }
 
-        /// <inheritdoc />
-        public string ToString(string format, IFormatProvider provider = null)
-        {
-            var numberFormatInfo = provider != null ? NumberFormatInfo.GetInstance(provider) : CultureInfo.InvariantCulture.NumberFormat;
-            var separator = numberFormatInfo.NumberDecimalSeparator == "," ? ";" : ",";
-            return $"({this.X.ToString(format, numberFormatInfo)}{separator}\u00A0{this.Y.ToString(format, numberFormatInfo)})";
-        }
-
         /// <summary>
-        /// Computes whether or not this vector is parallel to another vector using the dot product method
-        /// and comparing to within a specified tolerance
+        /// Computes whether or not this vector is perpendicular to <paramref name="other"/> vector by:
+        /// 1. Normalizing both
+        /// 2. Computing the dot product.
+        /// 3. Comparing 1- Math.Abs(dot product) to <paramref name="tolerance"/>
         /// </summary>
-        /// <param name="othervector"></param>
-        /// <param name="tolerance"></param>
+        /// <param name="other">The other <see cref="Vector2D"/></param>
+        /// <param name="tolerance">The tolerance for when vectors are said to be parallel</param>
         /// <returns>True if the vector dot product is within the given double tolerance of unity, false if not</returns>
-        public bool IsParallelTo(Vector2D othervector, double tolerance = 1e-10)
+        public bool IsParallelTo(Vector2D other, double tolerance = 1e-10)
         {
-            var @this = this.Normalize();
-            var other = othervector.Normalize();
-            var dp = Math.Abs(@this.DotProduct(other));
+            var dp = Math.Abs(this.Normalize().DotProduct(other.Normalize()));
             return Math.Abs(1 - dp) <= tolerance;
         }
 
         /// <summary>
         /// Computes whether or not this vector is parallel to another vector within a given angle tolerance.
         /// </summary>
-        /// <param name="othervector"></param>
-        /// <param name="angleTolerance"></param>
+        /// <param name="other">The other <see cref="Vector2D"/></param>
+        /// <param name="tolerance">The tolerance for when vectors are said to be parallel</param>
         /// <returns>True if the vectors are parallel within the angle tolerance, false if they are not</returns>
-        public bool IsParallelTo(Vector2D othervector, Angle angleTolerance)
+        public bool IsParallelTo(Vector2D other, Angle tolerance)
         {
             // Compute the angle between these vectors
-            var angle = this.AngleTo(othervector);
+            var angle = this.AngleTo(other);
+            if (angle < tolerance)
+            {
+                return true;
+            }
 
             // Compute the 180° opposite of the angle
-            var opposite = Angle.FromDegrees(180) - angle;
-
-            // Check against the smaller of the two
-            return ((angle < opposite) ? angle : opposite) < angleTolerance;
-        }
-
-        public bool IsPerpendicularTo(Vector2D othervector, double tolerance = 1e-10)
-        {
-            var @this = this.Normalize();
-            var other = othervector.Normalize();
-            return Math.Abs(@this.DotProduct(other)) < tolerance;
+            return Angle.FromRadians(Math.PI) - angle < tolerance;
         }
 
         /// <summary>
-        ///
+        /// Computes whether or not this vector is perpendicular to <paramref name="other"/> vector by:
+        /// 1. Normalizing both
+        /// 2. Computing the dot product.
+        /// 3. Comparing Math.Abs(dot product) to <paramref name="tolerance"/>
         /// </summary>
-        /// <param name="v2"></param>
-        /// <param name="clockWise">Positive in clockwisedirection</param>
-        /// <param name="returnNegative">If angle is > 180° a negative value is returned</param>
+        /// <param name="other">The other <see cref="Vector2D"/></param>
+        /// <param name="tolerance">The tolerance for when vectors are said to be parallel</param>
+        /// <returns>True if the vector dot product is within the given double tolerance of unity, false if not</returns>
+        public bool IsPerpendicularTo(Vector2D other, double tolerance = 1e-10)
+        {
+            return Math.Abs(this.Normalize().DotProduct(other.Normalize())) < tolerance;
+        }
+
+        /// <summary>
+        /// Computes whether or not this vector is parallel to another vector within a given angle tolerance.
+        /// </summary>
+        /// <param name="other">The other <see cref="Vector2D"/></param>
+        /// <param name="tolerance">The tolerance for when vectors are said to be parallel</param>
+        /// <returns>True if the vectors are parallel within the angle tolerance, false if they are not</returns>
+        public bool IsPerpendicularTo(Vector2D other, Angle tolerance)
+        {
+            var angle = this.AngleTo(other);
+            const double perpendicular = Math.PI / 2;
+            return Math.Abs(angle.Radians - perpendicular) < tolerance.Radians;
+        }
+
+        /// <summary>
+        /// Compute the signed angle to another vector.
+        /// </summary>
+        /// <param name="other">The other <see cref="Vector2D"/></param>
+        /// <param name="clockWise">Positive in clockwise direction</param>
+        /// <param name="returnNegative">When true and the result is > 180° a negative value is returned</param>
         /// <returns></returns>
-        public Angle SignedAngleTo(Vector2D v2, bool clockWise, bool returnNegative = false)
+        public Angle SignedAngleTo(Vector2D other, bool clockWise = false, bool returnNegative = false)
         {
             var sign = clockWise ? -1 : 1;
             var a1 = Math.Atan2(this.Y, this.X);
@@ -253,7 +268,7 @@
                 a1 += 2 * Math.PI;
             }
 
-            var a2 = Math.Atan2(v2.Y, v2.X);
+            var a2 = Math.Atan2(other.Y, other.X);
             if (a2 < 0)
             {
                 a2 += 2 * Math.PI;
@@ -276,15 +291,18 @@
         /// <summary>
         /// Compute the angle between this vector and another using the arccosine of the dot product.
         /// </summary>
-        /// <param name="toVector2D"></param>
+        /// <param name="other"></param>
         /// <returns>The angle between vectors, with a range between 0° and 180°</returns>
-        public Angle AngleTo(Vector2D toVector2D)
+        public Angle AngleTo(Vector2D other)
         {
-            var @this = this.Normalize();
-            var other = toVector2D.Normalize();
-            return Angle.FromRadians(Math.Acos(@this.DotProduct(other)));
+            return Angle.FromRadians(
+                Math.Abs(
+                    Math.Atan2(
+                        (this.X * other.Y) - (other.X * this.Y),
+                        (this.X * other.X) + (this.Y * other.Y))));
         }
 
+        [Obsolete("This method will be removed, use the overload that takes an Angle. Made obsolete 2017-12-03.")]
         public Vector2D Rotate<T>(double angle, T angleUnit)
             where T : IAngleUnit
         {
@@ -357,7 +375,7 @@
         public Vector2D TransformBy(Matrix<double> m)
         {
             var transformed = m.Multiply(this.ToVector());
-            return new Vector2D(transformed);
+            return new Vector2D(transformed.At(0), transformed.At(1));
         }
 
         /// <summary>
@@ -376,6 +394,12 @@
             //// ReSharper restore CompareOfFloatsByEqualityOperator
         }
 
+        /// <summary>
+        /// Compare this instance with <paramref name="other"/>
+        /// </summary>
+        /// <param name="other">The other <see cref="Vector2D"/></param>
+        /// <param name="tolerance">The tolerance when comparing the x and y components</param>
+        /// <returns>True if found to be equal.</returns>
         public bool Equals(Vector2D other, double tolerance)
         {
             if (tolerance < 0)
@@ -416,6 +440,14 @@
         public string ToString(IFormatProvider provider)
         {
             return this.ToString(null, provider);
+        }
+
+        /// <inheritdoc />
+        public string ToString(string format, IFormatProvider provider = null)
+        {
+            var numberFormatInfo = provider != null ? NumberFormatInfo.GetInstance(provider) : CultureInfo.InvariantCulture.NumberFormat;
+            var separator = numberFormatInfo.NumberDecimalSeparator == "," ? ";" : ",";
+            return $"({this.X.ToString(format, numberFormatInfo)}{separator}\u00A0{this.Y.ToString(format, numberFormatInfo)})";
         }
 
         /// <inheritdoc />
