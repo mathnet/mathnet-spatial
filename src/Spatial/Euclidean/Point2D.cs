@@ -5,7 +5,6 @@ namespace MathNet.Spatial.Euclidean
     using System.Globalization;
     using System.Linq;
     using System.Xml;
-    using System.Xml.Linq;
     using System.Xml.Schema;
     using System.Xml.Serialization;
     using MathNet.Numerics.LinearAlgebra;
@@ -168,9 +167,9 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Creates a point from xml with x and y coordinates either as attributes or elements
+        /// Reads a Point2D the current position of <paramref name="reader"/>
         /// </summary>
-        /// <param name="reader">an xml reader</param>
+        /// <param name="reader">The <see cref="XmlReader"/></param>
         /// <returns>A point</returns>
         public static Point2D ReadFrom(XmlReader reader)
         {
