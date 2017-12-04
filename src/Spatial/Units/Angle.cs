@@ -21,7 +21,6 @@ namespace MathNet.Spatial.Units
         private const double RadToDeg = 180.0 / Math.PI;
         private const double DegToRad = Math.PI / 180.0;
 
-
         /// <summary>
         /// Initializes a new instance of the <see cref="Angle"/> struct.
         /// </summary>
@@ -219,7 +218,7 @@ namespace MathNet.Spatial.Units
         /// Creates an Angle from its string representation
         /// </summary>
         /// <param name="s">The string representation of the angle</param>
-        /// <returns></returns>
+        /// <returns> A new instance of the <see cref="Angle"/> struct.</returns>
         public static Angle Parse(string s)
         {
             return UnitParser.Parse(s, From);
@@ -228,8 +227,10 @@ namespace MathNet.Spatial.Units
         /// <summary>
         /// Creates a new instance of Angle.
         /// </summary>
-        /// <param name="value"></param>
-        /// <param name="unit"></param>
+        /// <typeparam name="T">The type of the unit</typeparam>
+        /// <param name="value">The value</param>
+        /// <param name="unit">the unit</param>
+        /// <returns> A new instance of the <see cref="Angle"/> struct.</returns>
         [Obsolete("This method will be removed, use factory method FromDegrees or FromRadians. Made obsolete 2017-12-03.")]
         public static Angle From<T>(double value, T unit)
             where T : IAngleUnit
@@ -240,7 +241,8 @@ namespace MathNet.Spatial.Units
         /// <summary>
         /// Creates a new instance of Angle.
         /// </summary>
-        /// <param name="value"></param>
+        /// <param name="value">The value in degrees.</param>
+        /// <returns> A new instance of the <see cref="Angle"/> struct.</returns>
         public static Angle FromDegrees(double value)
         {
             return new Angle(value * DegToRad);
@@ -249,7 +251,8 @@ namespace MathNet.Spatial.Units
         /// <summary>
         /// Creates a new instance of Angle.
         /// </summary>
-        /// <param name="value"></param>
+        /// <param name="value">The value in radians.</param>
+        /// <returns> A new instance of the <see cref="Angle"/> struct.</returns>
         public static Angle FromRadians(double value)
         {
             return new Angle(value);
@@ -268,44 +271,58 @@ namespace MathNet.Spatial.Units
         /// <inheritdoc />
         public override string ToString()
         {
-            return this.ToString((string)null, (IFormatProvider)NumberFormatInfo.CurrentInfo);
+            return this.ToString(null, NumberFormatInfo.CurrentInfo);
         }
 
         /// <summary>
         /// Returns a string representation of the Angle using the provided format
         /// </summary>
         /// <param name="format">a string indicating the desired format of the double.</param>
+        /// <returns>The string representation of this instance.</returns>
         public string ToString(string format)
         {
-            return this.ToString(format, (IFormatProvider)NumberFormatInfo.CurrentInfo);
+            return this.ToString(format, NumberFormatInfo.CurrentInfo);
         }
 
         /// <summary>
         /// Returns a string representation of the Angle using the provided <see cref="IFormatProvider"/>
         /// </summary>
-        /// <param name="provider">a format provider</param>
+        /// <param name="provider">A <see cref="IFormatProvider"/></param>
+        /// <returns>The string representation of this instance.</returns>
         public string ToString(IFormatProvider provider)
         {
-            return this.ToString((string)null, (IFormatProvider)NumberFormatInfo.GetInstance(provider));
+            return this.ToString(null, NumberFormatInfo.GetInstance(provider));
         }
 
         /// <inheritdoc />
-        public string ToString(string format, IFormatProvider formatProvider)
+        public string ToString(string format, IFormatProvider provider)
         {
-            return this.ToString(format, formatProvider, AngleUnit.Radians);
+            return this.ToString(format, provider, AngleUnit.Radians);
         }
 
         /// <summary>
-        /// Returns a string representation of the Angle using the provided formatprovider using the specified format for a given unit
+        /// Returns a string representation of the Angle using the provided <see cref="IFormatProvider"/> using the specified format for a given unit
         /// </summary>
-        /// <param name="format">A string indicating the desired format</param>
-        /// <param name="formatProvider">A formatprovider</param>
+        /// <typeparam name="T">The unit type, generic to avoid boxing.</typeparam>
+        /// <param name="format">a string indicating the desired format of the double.</param>
+        /// <param name="provider">A <see cref="IFormatProvider"/></param>
         /// <param name="unit">Degrees or Radians</param>
-        public string ToString<T>(string format, IFormatProvider formatProvider, T unit)
+        /// <returns>The string representation of this instance.</returns>
+        public string ToString<T>(string format, IFormatProvider provider, T unit)
             where T : IAngleUnit
         {
-            var value = UnitConverter.ConvertTo(this.Radians, unit);
-            return $"{value.ToString(format, formatProvider)}{unit.ShortName}";
+            if (unit == null ||
+                unit is Radians)
+            {
+                return $"{this.Radians.ToString(format, provider)}\u00A0{unit?.ShortName ?? AngleUnit.Radians.ShortName}";
+            }
+
+            if (unit is Degrees)
+            {
+                return $"{this.Degrees.ToString(format, provider)}{unit.ShortName}";
+            }
+
+            throw new ArgumentOutOfRangeException(nameof(unit), unit, "Unknown unit");
         }
 
         /// <inheritdoc />
