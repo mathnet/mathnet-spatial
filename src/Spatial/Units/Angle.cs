@@ -3,7 +3,6 @@ namespace MathNet.Spatial.Units
     using System;
     using System.Globalization;
     using System.Xml;
-    using System.Xml.Linq;
     using System.Xml.Schema;
     using System.Xml.Serialization;
     using MathNet.Spatial.Internals;
@@ -22,16 +21,12 @@ namespace MathNet.Spatial.Units
         private const double RadToDeg = 180.0 / Math.PI;
         private const double DegToRad = Math.PI / 180.0;
 
-        private Angle(double radians)
-        {
-            this.Radians = radians;
-        }
 
         /// <summary>
-        /// Initializes a new instance of the Angle.
+        /// Initializes a new instance of the <see cref="Angle"/> struct.
         /// </summary>
-        /// <param name="radians"></param>
-        /// <param name="unit"></param>
+        /// <param name="radians">The value in radians.</param>
+        /// <param name="unit">The radians unit.</param>
         [Obsolete("This constructor will be removed, use factory method FromRadians. Made obsolete 2017-12-03.")]
         public Angle(double radians, Radians unit)
         {
@@ -39,14 +34,19 @@ namespace MathNet.Spatial.Units
         }
 
         /// <summary>
-        /// Initializes a new instance of the Angle.
+        /// Initializes a new instance of the <see cref="Angle"/> struct.
         /// </summary>
-        /// <param name="value"></param>
-        /// <param name="unit"></param>
+        /// <param name="value">The value in degrees.</param>
+        /// <param name="unit">The radians unit.</param>
         [Obsolete("This constructor will be removed, use factory method FromDegrees. Made obsolete 2017-12-03.")]
         public Angle(double value, Degrees unit)
         {
             this.Radians = UnitConverter.ConvertFrom(value, unit);
+        }
+
+        private Angle(double radians)
+        {
+            this.Radians = radians;
         }
 
         /// <summary>
@@ -262,9 +262,7 @@ namespace MathNet.Spatial.Units
         /// <returns>An instance of  <see cref="T:MathNet.Spatial.Units.Angle"/></returns>
         public static Angle ReadFrom(XmlReader reader)
         {
-            var v = default(Angle);
-            v.ReadXml(reader);
-            return v;
+            return reader.ReadFrom<Angle>();
         }
 
         /// <inheritdoc />
@@ -276,14 +274,14 @@ namespace MathNet.Spatial.Units
         /// <summary>
         /// Returns a string representation of the Angle using the provided format
         /// </summary>
-        /// <param name="format">a string indicating the desired format</param>
+        /// <param name="format">a string indicating the desired format of the double.</param>
         public string ToString(string format)
         {
             return this.ToString(format, (IFormatProvider)NumberFormatInfo.CurrentInfo);
         }
 
         /// <summary>
-        /// Returns a string representation of the Angle using the provided formatprovider
+        /// Returns a string representation of the Angle using the provided <see cref="IFormatProvider"/>
         /// </summary>
         /// <param name="provider">a format provider</param>
         public string ToString(IFormatProvider provider)
@@ -307,7 +305,7 @@ namespace MathNet.Spatial.Units
             where T : IAngleUnit
         {
             var value = UnitConverter.ConvertTo(this.Radians, unit);
-            return string.Format("{0}{1}", value.ToString(format, formatProvider), unit.ShortName);
+            return $"{value.ToString(format, formatProvider)}{unit.ShortName}";
         }
 
         /// <inheritdoc />
@@ -319,7 +317,8 @@ namespace MathNet.Spatial.Units
         /// <inheritdoc />
         public bool Equals(Angle other)
         {
-            return this.Radians.Equals(other.Radians);
+            // ReSharper disable once CompareOfFloatsByEqualityOperator
+            return this.Radians == other.Radians;
         }
 
         /// <summary>
@@ -343,7 +342,7 @@ namespace MathNet.Spatial.Units
                 return false;
             }
 
-            return obj is Angle && this.Equals((Angle)obj);
+            return obj is Angle angle && this.Equals(angle);
         }
 
         /// <inheritdoc />
@@ -353,13 +352,13 @@ namespace MathNet.Spatial.Units
         }
 
         /// <inheritdoc />
-        public XmlSchema GetSchema()
+        XmlSchema IXmlSerializable.GetSchema()
         {
             return null;
         }
 
         /// <inheritdoc />
-        public void ReadXml(XmlReader reader)
+        void IXmlSerializable.ReadXml(XmlReader reader)
         {
             if (reader.TryReadAttributeAsDouble("Value", out var value) ||
                 reader.TryReadAttributeAsDouble("Radians", out value))
@@ -369,13 +368,46 @@ namespace MathNet.Spatial.Units
                 return;
             }
 
-            reader.MoveToContent();
-            var e = (XElement)XNode.ReadFrom(reader);
-            this = Angle.FromRadians(XmlConvert.ToDouble(e.ReadAttributeOrElementOrDefault("Value")));
+            if (reader.TryReadAttributeAsDouble("Degrees", out value))
+            {
+                reader.Skip();
+                this = FromDegrees(value);
+                return;
+            }
+
+            if (reader.Read())
+            {
+                if (reader.HasValue)
+                {
+                    this = FromRadians(reader.ReadContentAsDouble());
+                    reader.Skip();
+                    return;
+                }
+
+                if (reader.MoveToContent() == XmlNodeType.Element)
+                {
+                    if (reader.TryReadElementContentAsDouble("Value", out value) ||
+                        reader.TryReadElementContentAsDouble("Radians", out value))
+                    {
+                        reader.Skip();
+                        this = FromRadians(value);
+                        return;
+                    }
+
+                    if (reader.TryReadElementContentAsDouble("Degrees", out value))
+                    {
+                        reader.Skip();
+                        this = FromDegrees(value);
+                        return;
+                    }
+                }
+            }
+
+            throw new XmlException("Could not read an Angle");
         }
 
         /// <inheritdoc />
-        public void WriteXml(XmlWriter writer)
+        void IXmlSerializable.WriteXml(XmlWriter writer)
         {
             writer.WriteAttribute("Value", this.Radians);
         }

@@ -53,6 +53,36 @@
         }
 
         /// <summary>
+        /// Reads the values oif the elements named <paramref name="localName"/> and <paramref name="localName"/> if they exist on the current element.
+        /// This is not a proper try method as it checks if <paramref name="reader"/> is null and throws.
+        /// </summary>
+        /// <remarks>
+        /// Calling this method has side effects as it changes the position of the reader.
+        /// </remarks>
+        /// <param name="reader">A <see cref="XmlReader"/></param>
+        /// <param name="localName">The local name of the element to read value from.</param>
+        /// <param name="value">The value read from from <paramref name="reader"/></param>
+        /// <returns>True if both elements were found.</returns>
+        internal static bool TryReadElementContentAsDouble(this XmlReader reader, string localName, out double value)
+        {
+            if (reader == null)
+            {
+                throw new ArgumentNullException(nameof(reader));
+            }
+
+            if (reader.MoveToContent() == XmlNodeType.Element &&
+                !reader.IsEmptyElement &&
+                reader.LocalName == localName)
+            {
+                value = reader.ReadElementContentAsDouble();
+                return true;
+            }
+
+            value = 0;
+            return false;
+        }
+
+        /// <summary>
         /// Reads the values oif the elements named <paramref name="xName"/> and <paramref name="xName"/> if they exist on the current element.
         /// This is not a proper try method as it checks if <paramref name="reader"/> is null and throws.
         /// </summary>
@@ -74,32 +104,48 @@
 
             x = 0;
             y = 0;
-            var foundX = false;
-            var foundY = false;
             if (reader.MoveToContent() == XmlNodeType.Element &&
                 !reader.IsEmptyElement &&
                 !reader.HasValue)
             {
                 var subtree = reader.ReadSubtree();
-                while (subtree.Read())
+                if (subtree.ReadToFirstDescendant())
                 {
-                    if (subtree.LocalName == xName)
+                    if (subtree.TryReadElementContentAsDouble(xName, out x) &&
+                        subtree.TryReadElementContentAsDouble(yName, out y))
                     {
-                        foundX = true;
-                        x = subtree.ReadElementContentAsDouble();
+                        subtree.Skip();
+                        return true;
                     }
 
-                    if (subtree.LocalName == yName)
+                    if (subtree.TryReadElementContentAsDouble(yName, out y) &&
+                        subtree.TryReadElementContentAsDouble(xName, out x))
                     {
-                        foundY = true;
-                        y = subtree.ReadElementContentAsDouble();
+                        subtree.Skip();
+                        return true;
                     }
                 }
-
-                return foundX && foundY;
             }
 
             return false;
+        }
+
+        internal static bool ReadToFirstDescendant(this XmlReader reader)
+        {
+            var depth = reader.Depth;
+            if (reader.MoveToContent() != XmlNodeType.Element)
+            {
+                return reader.Depth > depth &&
+                       reader.NodeType == XmlNodeType.Element;
+            }
+
+            while (reader.Read() &&
+                   reader.Depth <= depth)
+            {
+            }
+
+            return reader.Depth > depth &&
+                   reader.NodeType == XmlNodeType.Element;
         }
     }
 }

@@ -361,7 +361,9 @@
         }
 
         [TestCase(@"<Vector2D X=""1"" Y=""2"" />")]
+        [TestCase(@"<Vector2D Y=""2"" X=""1""/>")]
         [TestCase(@"<Vector2D><X>1</X><Y>2</Y></Vector2D>")]
+        [TestCase(@"<Vector2D><Y>2</Y><X>1</X></Vector2D>")]
         public void ReadFrom(string xml)
         {
             var v = new Vector2D(1, 2);
@@ -452,7 +454,6 @@
             AssertGeometry.AreEqual(ex, v1.ProjectOn(v2), 1e-3);
         }
 
-
         [Test]
         public void XmlRoundtrip()
         {
@@ -504,7 +505,7 @@
         }
 
         [Test]
-        public void BinaryRountrip()
+        public void BinaryRoundtrip()
         {
             var v = new Vector2D(1, 2);
             using (var ms = new MemoryStream())
