@@ -159,7 +159,10 @@
         [TestCase("1,2; 3,4", 1.2, 3.4)]
         [TestCase("1.2, 3.4", 1.2, 3.4)]
         [TestCase("1.2 3.4", 1.2, 3.4)]
+        [TestCase("1.2,\u00A03.4", 1.2, 3.4)]
+        [TestCase("1.2\u00A03.4", 1.2, 3.4)]
         [TestCase("(1.2, 3.4)", 1.2, 3.4)]
+        [TestCase("1,2\u00A03,4", 1.2, 3.4)]
         [TestCase("(.1, 2.3e-4)", 0.1, 0.00023000000000000001)]
         public void Parse(string text, double expectedX, double expectedY)
         {
@@ -213,12 +216,12 @@
             Assert.AreEqual(expected, v.Length, 1e-6);
         }
 
-        [TestCase("-2, 0", null, "(-2, 0)")]
-        [TestCase("-2, 0", "N2", "(-2.00, 0.00)")]
+        [TestCase("-2, 0", null, "(-2,\u00A00)")]
+        [TestCase("-2, 0", "N2", "(-2.00,\u00A00.00)")]
         public void ToString(string vs, string format, string expected)
         {
             var v = Vector2D.Parse(vs);
-            string actual = v.ToString(format);
+            var actual = v.ToString(format);
             Assert.AreEqual(expected, actual);
             Assert.AreEqual(v, Vector2D.Parse(actual));
         }
@@ -296,7 +299,7 @@
         {
             var v1 = Vector2D.Parse(v1s);
             var v2 = Vector2D.Parse(v2s);
-            Angle av = v1.SignedAngleTo(v2, clockWise);
+            var av = v1.SignedAngleTo(v2, clockWise);
             Assert.AreEqual(expected, av.Degrees, 0.1);
         }
 
@@ -432,7 +435,7 @@
             var v1 = Vector2D.Parse(v1s);
             var v2 = Vector2D.Parse(v2s);
 
-            double cross = v1.CrossProduct(v2);
+            var cross = v1.CrossProduct(v2);
 
             Assert.AreEqual(expected, cross, 1e-3);
         }

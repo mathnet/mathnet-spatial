@@ -245,7 +245,7 @@ namespace MathNet.Spatial.Euclidean
         {
             var numberFormatInfo = provider != null ? NumberFormatInfo.GetInstance(provider) : CultureInfo.InvariantCulture.NumberFormat;
             var separator = numberFormatInfo.NumberDecimalSeparator == "," ? ";" : ",";
-            return $"({this.X.ToString(format, numberFormatInfo)}{separator} {this.Y.ToString(format, numberFormatInfo)})";
+            return $"({this.X.ToString(format, numberFormatInfo)}{separator}\u00A0{this.Y.ToString(format, numberFormatInfo)})";
         }
 
         /// <inheritdoc />

@@ -70,6 +70,8 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         [TestCase("1,2; 3,4", 1.2, 3.4)]
         [TestCase("1.2, 3.4", 1.2, 3.4)]
         [TestCase("1.2 3.4", 1.2, 3.4)]
+        [TestCase("1.2,\u00A03.4", 1.2, 3.4)]
+        [TestCase("1.2\u00A03.4", 1.2, 3.4)]
         [TestCase("(1.2, 3.4)", 1.2, 3.4)]
         [TestCase("(.1, 2.3e-4)", 0.1, 0.00023000000000000001)]
         public void Parse(string text, double expectedX, double expectedY)
@@ -90,6 +92,7 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         [TestCase("1,2; 3,4", 1.2, 3.4)]
         [TestCase("1,2;3,4", 1.2, 3.4)]
         [TestCase("1,2 3,4", 1.2, 3.4)]
+        [TestCase("1,2\u00A03,4", 1.2, 3.4)]
         [TestCase("(,1 2,3e-4)", 0.1, 0.00023000000000000001)]
         public void ParseSwedish(string text, double expectedX, double expectedY)
         {
@@ -131,25 +134,6 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             Assert.AreEqual(2, p.Y);
 
             Assert.Throws<ArgumentException>(() => Point2D.OfVector(DenseVector.OfArray(new[] { 1, 2, 3.0 })));
-        }
-
-        [TestCase("1, 2", "1, 2", 1e-4, true)]
-        [TestCase("-1, 2", "-1, 2", 1e-4, true)]
-        [TestCase("1, 2", "3, 4", 1e-4, false)]
-        public void Equals(string p1s, string p2s, double tol, bool expected)
-        {
-            var p1 = Point2D.Parse(p1s);
-            var p2 = Point2D.Parse(p2s);
-            Assert.AreEqual(expected, p1 == p2);
-            Assert.AreEqual(expected, p2 == p1);
-            Assert.AreEqual(!expected, p1 != p2);
-            Assert.AreEqual(!expected, p2 != p1);
-
-            Assert.AreEqual(expected, p1.Equals(p2));
-            Assert.AreEqual(expected, p1.Equals((object)p2));
-            Assert.AreEqual(expected, Equals(p1, p2));
-            Assert.AreEqual(expected, p1.Equals(p2, tol));
-            Assert.AreNotEqual(expected, p1 != p2);
         }
 
         [Test]
@@ -225,6 +209,35 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             var actual = p1.ToVector2D();
             var expected = Vector2D.Parse(evs);
             Assert.AreEqual(expected, actual);
+        }
+
+        [TestCase("1, 2", "1, 2", 1e-4, true)]
+        [TestCase("-1, 2", "-1, 2", 1e-4, true)]
+        [TestCase("1, 2", "3, 4", 1e-4, false)]
+        public void Equals(string p1s, string p2s, double tol, bool expected)
+        {
+            var p1 = Point2D.Parse(p1s);
+            var p2 = Point2D.Parse(p2s);
+            Assert.AreEqual(expected, p1 == p2);
+            Assert.AreEqual(expected, p2 == p1);
+            Assert.AreEqual(!expected, p1 != p2);
+            Assert.AreEqual(!expected, p2 != p1);
+
+            Assert.AreEqual(expected, p1.Equals(p2));
+            Assert.AreEqual(expected, p1.Equals((object)p2));
+            Assert.AreEqual(expected, Equals(p1, p2));
+            Assert.AreEqual(expected, p1.Equals(p2, tol));
+            Assert.AreNotEqual(expected, p1 != p2);
+        }
+
+        [TestCase("-2, 0", null, "(-2,\u00A00)")]
+        [TestCase("-2, 0", "N2", "(-2.00,\u00A00.00)")]
+        public void ToString(string vs, string format, string expected)
+        {
+            var v = Point2D.Parse(vs);
+            var actual = v.ToString(format);
+            Assert.AreEqual(expected, actual);
+            Assert.AreEqual(v, Point2D.Parse(actual));
         }
 
         [Test]

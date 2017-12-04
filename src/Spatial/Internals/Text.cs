@@ -7,12 +7,12 @@
 
     internal static class Text
     {
-        internal const string DoublePatternNullProvider = @"[+-]?\d*(?:[.,]\d+)?(?:[eE][+-]?\d+)?";
-        internal const string DoublePatternPointProvider = @"[+-]?\d*(?:[.]\d+)?(?:[eE][+-]?\d+)?";
-        internal const string DoublePatternCommaProvider = @"[+-]?\d*(?:[,]\d+)?(?:[eE][+-]?\d+)?";
+        private const string DoublePatternNullProvider = "[+-]?\\d*(?:[.,]\\d+)?(?:[eE][+-]?\\d+)?";
+        private const string DoublePatternPointProvider = "[+-]?\\d*(?:[.]\\d+)?(?:[eE][+-]?\\d+)?";
+        private const string DoublePatternCommaProvider = "[+-]?\\d*(?:[,]\\d+)?(?:[eE][+-]?\\d+)?";
 
-        private const string SeparatorPatternNullProvider = @"[,; ] *";
-        private const string SeparatorPatternCommaProvider = @"[; ] *";
+        private const string SeparatorPatternNullProvider = "[,; \u00A0]( |\u00A0)*";
+        private const string SeparatorPatternCommaProvider = "[; \u00A0]( |\u00A0)*";
 
         internal static bool TryParse2D(string text, IFormatProvider provider, out double x, out double y)
         {
@@ -114,8 +114,8 @@
 
         private static class RegexAngle
         {
-            private const string RadiansPattern = @"^(?<value>{0})( |\u00A0)?(°|rad|radians) *$";
-            private const string DegreesPattern = @"^(?<value>{0})( |\u00A0)?(°|deg|degrees) *$";
+            private const string RadiansPattern = "^(?<value>{0})( |\u00A0)?(°|rad|radians) *$";
+            private const string DegreesPattern = "^(?<value>{0})( |\u00A0)?(°|deg|degrees) *$";
             private const RegexOptions RegexOptions = System.Text.RegularExpressions.RegexOptions.ExplicitCapture | System.Text.RegularExpressions.RegexOptions.Compiled | System.Text.RegularExpressions.RegexOptions.Singleline | System.Text.RegularExpressions.RegexOptions.IgnoreCase;
 
             // This is for legacy reasons, we allow any culture, not nice.

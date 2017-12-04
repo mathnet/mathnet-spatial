@@ -209,7 +209,7 @@
         {
             string check = Line2D.Parse("0,0", "1,1").ToString();
 
-            Assert.AreEqual("StartPoint: (0, 0), EndPoint: (1, 1)", check);
+            Assert.AreEqual("StartPoint: (0,\u00A00), EndPoint: (1,\u00A01)", check);
         }
     }
 }
