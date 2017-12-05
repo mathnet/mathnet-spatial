@@ -268,7 +268,7 @@
             using (var reader = new StringReader(xml))
             {
                 var actual = Point3D.ReadFrom(XmlReader.Create(reader));
-                AssertGeometry.AreEqual(new Point3D(1, -2, 3), actual);
+                Assert.AreEqual(new Point3D(1, -2, 3), actual);
             }
         }
 
@@ -276,26 +276,55 @@
         public void XmlRoundtrip()
         {
             var p = new Point3D(1, -2, 3);
-            const string Xml = @"<Point3D X=""1"" Y=""-2"" Z=""3"" />";
-            const string ElementXml = @"<Point3D><X>1</X><Y>-2</Y><Z>3</Z></Point3D>";
-            AssertXml.XmlRoundTrips(p, Xml, (expected, actual) => AssertGeometry.AreEqual(expected, actual));
-            var serializer = new XmlSerializer(typeof(Point3D));
-
-            var actuals = new[]
-                          {
-                              Point3D.ReadFrom(XmlReader.Create(new StringReader(Xml))),
-                              Point3D.ReadFrom(XmlReader.Create(new StringReader(ElementXml))),
-                              (Point3D)serializer.Deserialize(new StringReader(Xml)),
-                              (Point3D)serializer.Deserialize(new StringReader(ElementXml))
-                          };
-            foreach (var actual in actuals)
-            {
-                AssertGeometry.AreEqual(p, actual);
-            }
+            var xml = @"<Point3D X=""1"" Y=""-2"" Z=""3"" />";
+            AssertXml.XmlRoundTrips(p, xml, (expected, actual) => AssertGeometry.AreEqual(expected, actual));
         }
 
         [Test]
-        public void BinaryRountrip()
+        public void XmlContainerRoundtrip()
+        {
+            var container = new AssertXml.Container<Point3D>
+            {
+                Value1 = new Point3D(1, 2, 3),
+                Value2 = new Point3D(4, 5, 6)
+            };
+            var expected = "<ContainerOfPoint3D>\r\n" +
+                           "  <Value1 X=\"1\" Y=\"2\" Z=\"3\"></Value1>\r\n" +
+                           "  <Value2 X=\"4\" Y=\"5\" Z=\"6\"></Value2>\r\n" +
+                           "</ContainerOfPoint3D>";
+            var roundTrip = AssertXml.XmlSerializerRoundTrip(container, expected);
+            AssertGeometry.AreEqual(container.Value1, roundTrip.Value1);
+            AssertGeometry.AreEqual(container.Value2, roundTrip.Value2);
+        }
+
+        [Test]
+        public void XmlElements()
+        {
+            var v = new Point3D(1, 2, 3);
+            var serializer = new XmlSerializer(typeof(Point3D));
+            AssertGeometry.AreEqual(v, (Point3D)serializer.Deserialize(new StringReader(@"<Point3D><X>1</X><Y>2</Y><Z>3</Z></Point3D>")));
+        }
+
+        [Test]
+        public void XmlContainerElements()
+        {
+            var container = new AssertXml.Container<Point3D>
+            {
+                Value1 = new Point3D(1, 2, 3),
+                Value2 = new Point3D(4, 5, 6)
+            };
+            var xml = "<ContainerOfPoint3D>\r\n" +
+                      "  <Value1><X>1</X><Y>2</Y><Z>3</Z></Value1>\r\n" +
+                      "  <Value2><X>4</X><Y>5</Y><Z>6</Z></Value2>\r\n" +
+                      "</ContainerOfPoint3D>";
+            var serializer = new XmlSerializer(typeof(AssertXml.Container<Point3D>));
+            var deserialized = (AssertXml.Container<Point3D>)serializer.Deserialize(new StringReader(xml));
+            AssertGeometry.AreEqual(container.Value1, deserialized.Value1);
+            AssertGeometry.AreEqual(container.Value2, deserialized.Value2);
+        }
+
+        [Test]
+        public void BinaryRoundtrip()
         {
             var v = new Point3D(1, 2, 3);
             using (var ms = new MemoryStream())
