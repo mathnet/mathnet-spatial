@@ -472,7 +472,7 @@
                 return;
             }
 
-            if (reader.TryReadElementsAsDoubles("X", "Y", out x, out y))
+            if (reader.TryReadChildElementsAsDoubles("X", "Y", out x, out y))
             {
                 reader.Skip();
                 this = new Vector2D(x, y);

@@ -95,7 +95,7 @@
         /// <param name="x">The x value read from from <paramref name="reader"/></param>
         /// <param name="y">The y value read from from <paramref name="reader"/></param>
         /// <returns>True if both elements were found.</returns>
-        internal static bool TryReadElementsAsDoubles(this XmlReader reader, string xName, string yName, out double x, out double y)
+        internal static bool TryReadChildElementsAsDoubles(this XmlReader reader, string xName, string yName, out double x, out double y)
         {
             if (reader == null)
             {
@@ -111,18 +111,80 @@
                 var subtree = reader.ReadSubtree();
                 if (subtree.ReadToFirstDescendant())
                 {
-                    if (subtree.TryReadElementContentAsDouble(xName, out x) &&
-                        subtree.TryReadElementContentAsDouble(yName, out y))
+                    if (subtree.TryReadSiblingElementsAsDoubles(xName, yName, out x, out y))
                     {
                         subtree.Skip();
                         return true;
                     }
+                }
+            }
 
-                    if (subtree.TryReadElementContentAsDouble(yName, out y) &&
-                        subtree.TryReadElementContentAsDouble(xName, out x))
+            return false;
+        }
+
+        /// <summary>
+        /// Reads the values oif the elements named <paramref name="xName"/> and <paramref name="xName"/> if they exist on the current element.
+        /// This is not a proper try method as it checks if <paramref name="reader"/> is null and throws.
+        /// </summary>
+        /// <remarks>
+        /// Calling this method has side effects as it changes the position of the reader.
+        /// </remarks>
+        /// <param name="reader">A <see cref="XmlReader"/></param>
+        /// <param name="xName">The local name of the x element.</param>
+        /// <param name="yName">The local name of the y element.</param>
+        /// <param name="zName">The local name of the z element.</param>
+        /// <param name="x">The x value read from from <paramref name="reader"/></param>
+        /// <param name="y">The y value read from from <paramref name="reader"/></param>
+        /// <param name="z">The z value read from from <paramref name="reader"/></param>
+        /// <returns>True if both elements were found.</returns>
+        internal static bool TryReadChildElementsAsDoubles(this XmlReader reader, string xName, string yName, string zName, out double x, out double y, out double z)
+        {
+            if (reader == null)
+            {
+                throw new ArgumentNullException(nameof(reader));
+            }
+
+            x = 0;
+            y = 0;
+            z = 0;
+            if (reader.MoveToContent() == XmlNodeType.Element &&
+                !reader.IsEmptyElement &&
+                !reader.HasValue)
+            {
+                var subtree = reader.ReadSubtree();
+                if (subtree.ReadToFirstDescendant())
+                {
+                    if (subtree.TryReadElementContentAsDouble(xName, out x))
                     {
-                        subtree.Skip();
-                        return true;
+                        if (subtree.TryReadSiblingElementsAsDoubles(yName, zName, out y, out z))
+                        {
+                            subtree.Skip();
+                            return true;
+                        }
+
+                        return false;
+                    }
+
+                    if (subtree.TryReadElementContentAsDouble(yName, out y))
+                    {
+                        if (subtree.TryReadSiblingElementsAsDoubles(xName, zName, out x, out z))
+                        {
+                            subtree.Skip();
+                            return true;
+                        }
+
+                        return false;
+                    }
+
+                    if (subtree.TryReadElementContentAsDouble(zName, out z))
+                    {
+                        if (subtree.TryReadSiblingElementsAsDoubles(xName, yName, out x, out y))
+                        {
+                            subtree.Skip();
+                            return true;
+                        }
+
+                        return false;
                     }
                 }
             }
@@ -146,6 +208,23 @@
 
             return reader.Depth > depth &&
                    reader.NodeType == XmlNodeType.Element;
+        }
+
+        private static bool TryReadSiblingElementsAsDoubles(this XmlReader subtree, string xName, string yName, out double x, out double y)
+        {
+            if (subtree.TryReadElementContentAsDouble(xName, out x) &&
+                subtree.TryReadElementContentAsDouble(yName, out y))
+            {
+                return true;
+            }
+
+            if (subtree.TryReadElementContentAsDouble(yName, out y) &&
+                subtree.TryReadElementContentAsDouble(xName, out x))
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

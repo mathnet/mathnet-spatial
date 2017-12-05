@@ -321,15 +321,23 @@ namespace MathNet.Spatial.Euclidean
 
         void IXmlSerializable.ReadXml(XmlReader reader)
         {
-            reader.MoveToContent();
-            var e = (XElement)XNode.ReadFrom(reader);
+            if (reader.TryReadAttributeAsDouble("X", out var x) &&
+                reader.TryReadAttributeAsDouble("Y", out var y) &&
+                reader.TryReadAttributeAsDouble("Z", out var z))
+            {
+                reader.Skip();
+                this = new Point3D(x, y, z);
+                return;
+            }
 
-            // Hacking set readonly fields here, can't think of a cleaner workaround
-            var x = XmlConvert.ToDouble(e.ReadAttributeOrElementOrDefault("X"));
-            var y = XmlConvert.ToDouble(e.ReadAttributeOrElementOrDefault("Y"));
-            var z = XmlConvert.ToDouble(e.ReadAttributeOrElementOrDefault("Z"));
+            if (reader.TryReadChildElementsAsDoubles("X", "Y", "Z", out x, out y, out z))
+            {
+                reader.Skip();
+                this = new Point3D(x, y, z);
+                return;
+            }
 
-            XmlExt.SetReadonlyFields(ref this, new[] { "X", "Y", "Z" }, new[] { x, y, z });
+            throw new XmlException($"Could not read a {this.GetType()}");
         }
 
         void IXmlSerializable.WriteXml(XmlWriter writer)
