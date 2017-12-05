@@ -23,13 +23,38 @@
             }
 
             if (Regex2D.TryMatch(text, provider, out var match) &&
-                match.Groups.Count == 3 ||
-                match.Groups[0].Captures.Count == 1 ||
-                match.Groups[1].Captures.Count == 1 ||
+                match.Groups.Count == 3 &&
+                match.Groups[0].Captures.Count == 1 &&
+                match.Groups[1].Captures.Count == 1 &&
                 match.Groups[2].Captures.Count == 1)
             {
                 return TryParseDouble(match.Groups["x"].Value, provider, out x) &&
                        TryParseDouble(match.Groups["y"].Value, provider, out y);
+            }
+
+            return false;
+        }
+
+        internal static bool TryParse3D(string text, IFormatProvider provider, out double x, out double y, out double z)
+        {
+            x = 0;
+            y = 0;
+            z = 0;
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                return false;
+            }
+
+            if (Regex3D.TryMatch(text, provider, out var match) &&
+                match.Groups.Count == 4 &&
+                match.Groups[0].Captures.Count == 1 &&
+                match.Groups[1].Captures.Count == 1 &&
+                match.Groups[2].Captures.Count == 1 &&
+                match.Groups[3].Captures.Count == 1)
+            {
+                return TryParseDouble(match.Groups["x"].Value, provider, out x) &&
+                       TryParseDouble(match.Groups["y"].Value, provider, out y) &&
+                       TryParseDouble(match.Groups["z"].Value, provider, out z);
             }
 
             return false;
@@ -81,6 +106,48 @@
 
             private static readonly Regex Comma = new Regex(
                 string.Format(Pattern2D, DoublePatternCommaProvider, SeparatorPatternCommaProvider),
+                RegexOptions);
+
+            internal static bool TryMatch(string text, IFormatProvider formatProvider, out Match match)
+            {
+                if (formatProvider != null &&
+                    NumberFormatInfo.GetInstance(formatProvider) is NumberFormatInfo formatInfo)
+                {
+                    if (formatInfo.NumberDecimalSeparator == ".")
+                    {
+                        match = Point.Match(text);
+                        return match.Success;
+                    }
+
+                    if (formatInfo.NumberDecimalSeparator == ",")
+                    {
+                        match = Comma.Match(text);
+                        return match.Success;
+                    }
+                }
+
+                match = Point.Match(text);
+                if (match.Success)
+                {
+                    return true;
+                }
+
+                match = Comma.Match(text);
+                return match.Success;
+            }
+        }
+
+        private static class Regex3D
+        {
+            private const string Pattern3D = "^ *\\(?(?<x>{0}){1}(?<y>{0}){1}(?<z>{0})\\)? *$";
+            private const RegexOptions RegexOptions = System.Text.RegularExpressions.RegexOptions.ExplicitCapture | System.Text.RegularExpressions.RegexOptions.Compiled | System.Text.RegularExpressions.RegexOptions.Singleline;
+
+            private static readonly Regex Point = new Regex(
+                string.Format(Pattern3D, DoublePatternPointProvider, SeparatorPatternPointProvider),
+                RegexOptions);
+
+            private static readonly Regex Comma = new Regex(
+                string.Format(Pattern3D, DoublePatternCommaProvider, SeparatorPatternCommaProvider),
                 RegexOptions);
 
             internal static bool TryMatch(string text, IFormatProvider formatProvider, out Match match)

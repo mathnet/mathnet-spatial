@@ -9,6 +9,7 @@ namespace MathNet.Spatial.Euclidean
     using System.Xml.Schema;
     using System.Xml.Serialization;
     using MathNet.Numerics.LinearAlgebra;
+    using MathNet.Spatial.Internals;
     using MathNet.Spatial.Units;
 
     [Serializable]
@@ -137,14 +138,49 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Creates a Vector3D from its string representation
+        /// Attempts to convert a string of the form x,y into a point
         /// </summary>
-        /// <param name="s">The string representation of the Vector3D</param>
-        /// <returns></returns>
-        public static Vector3D Parse(string s)
+        /// <param name="text">The string to be converted</param>
+        /// <param name="result">A point at the coordinates specified</param>
+        /// <returns>True if <paramref name="text"/> could be parsed.</returns>
+        public static bool TryParse(string text, out Vector3D result)
         {
-            var doubles = Parser.ParseItem3D(s);
-            return new Vector3D(doubles);
+            return TryParse(text, null, out result);
+        }
+
+        /// <summary>
+        /// Attempts to convert a string of the form x,y into a point
+        /// </summary>
+        /// <param name="text">The string to be converted</param>
+        /// <param name="formatProvider">The <see cref="IFormatProvider"/></param>
+        /// <param name="result">A point at the coordinates specified</param>
+        /// <returns>True if <paramref name="text"/> could be parsed.</returns>
+        public static bool TryParse(string text, IFormatProvider formatProvider, out Vector3D result)
+        {
+            if (Text.TryParse3D(text, formatProvider, out var x, out var y, out var z))
+            {
+                result = new Vector3D(x, y, z);
+                return true;
+            }
+
+            result = default(Vector3D);
+            return false;
+        }
+
+        /// <summary>
+        /// Attempts to convert a string of the form x,y into a point
+        /// </summary>
+        /// <param name="value">The string to be converted</param>
+        /// <param name="formatProvider">The <see cref="IFormatProvider"/></param>
+        /// <returns>A point at the coordinates specified</returns>
+        public static Vector3D Parse(string value, IFormatProvider formatProvider = null)
+        {
+            if (TryParse(value, formatProvider, out var p))
+            {
+                return p;
+            }
+
+            throw new FormatException($"Could not parse a Vector3D from the string {value}");
         }
 
         public static Vector3D ReadFrom(XmlReader reader)
