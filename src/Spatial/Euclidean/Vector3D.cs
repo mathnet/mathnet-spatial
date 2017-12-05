@@ -2,6 +2,7 @@ namespace MathNet.Spatial.Euclidean
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.Contracts;
     using System.Globalization;
     using System.Linq;
     using System.Xml;
@@ -215,6 +216,7 @@ namespace MathNet.Spatial.Euclidean
         /// Compute and return a unit vector from this vector
         /// </summary>
         /// <returns></returns>
+        [Pure]
         public UnitVector3D Normalize()
         {
             return UnitVector3D.Create(this.X, this.Y, this.Z);
@@ -322,11 +324,13 @@ namespace MathNet.Spatial.Euclidean
             return new Vector3D(-1 * this.X, -1 * this.Y, -1 * this.Z);
         }
 
+        [Pure]
         public double DotProduct(Vector3D v)
         {
             return (this.X * v.X) + (this.Y * v.Y) + (this.Z * v.Z);
         }
 
+        [Pure]
         public double DotProduct(UnitVector3D v)
         {
             return (this.X * v.X) + (this.Y * v.Y) + (this.Z * v.Z);

@@ -16,3 +16,9 @@ group Analyzers
 group Test
     source https://www.nuget.org/api/v2
     nuget NUnit ~> 3.0
+
+group Benchmarks
+    source https://www.nuget.org/api/v2
+    nuget MathNet.Numerics
+    nuget BenchmarkDotNet.Diagnostics.Windows
+

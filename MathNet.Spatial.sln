@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spatial", "src\Spatial\Spatial.csproj", "{1F3364C6-9DA3-4006-B83F-6D1335099895}"
 EndProject
@@ -34,6 +34,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{4A482849-F
 		docs\tools\templates\template.cshtml = docs\tools\templates\template.cshtml
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spatial.Benchmarks", "src\Spatial.Benchmarks\Spatial.Benchmarks.csproj", "{3D8A4A0D-0282-4C17-8673-9FCFB52728F6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,8 +50,15 @@ Global
 		{79785508-B059-4DFA-B408-15588C551DC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{79785508-B059-4DFA-B408-15588C551DC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{79785508-B059-4DFA-B408-15588C551DC6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D8A4A0D-0282-4C17-8673-9FCFB52728F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D8A4A0D-0282-4C17-8673-9FCFB52728F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D8A4A0D-0282-4C17-8673-9FCFB52728F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D8A4A0D-0282-4C17-8673-9FCFB52728F6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FD9E5078-AB4D-4C51-8855-21FA9508073D}
 	EndGlobalSection
 EndGlobal
