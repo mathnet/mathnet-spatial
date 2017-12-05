@@ -1,4 +1,5 @@
-﻿namespace MathNet.Spatial
+﻿#pragma warning disable SA1600 // Elements must be documented
+namespace MathNet.Spatial
 {
     using System;
     using System.Collections.Generic;
@@ -35,20 +36,9 @@
                     .Concat(GetAllFields(t.BaseType));
         }
 
-        /// <summary>
-        /// Reads attribute if it exists
-        /// </summary>
-        /// <param name="e"/><param name="localName"/>
-        /// <returns/>
         public static string ReadAttributeOrDefault(this XElement e, string localName)
         {
-            XAttribute xattribute = e.Attribute(localName);
-            if (xattribute != null)
-            {
-                return xattribute.Value;
-            }
-
-            return null;
+            return e.Attribute(localName)?.Value;
         }
 
         public static XElement SingleElement(this XElement e, string localName)

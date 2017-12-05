@@ -1,4 +1,5 @@
-﻿namespace MathNet.Spatial
+﻿#pragma warning disable SA1600 // Elements must be documented
+namespace MathNet.Spatial
 {
     using System;
     using System.Globalization;

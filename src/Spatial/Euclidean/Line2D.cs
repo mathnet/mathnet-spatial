@@ -10,9 +10,6 @@
     /// </summary>
     public struct Line2D : IEquatable<Line2D>
     {
-        private Vector2D direction;
-        private double length;
-
         /// <summary>
         /// The starting point of the line
         /// </summary>
@@ -24,57 +21,31 @@
         public readonly Point2D EndPoint;
 
         /// <summary>
-        /// Constructor for the Line2D, throws an error if the startpoint is equal to the
-        /// endpoint.
+        /// Initializes a new instance of the <see cref="Line2D"/> struct.
+        /// Throws an ArgumentException if the <paramref name="startPoint"/> is equal to the <paramref name="endPoint"/>.
         /// </summary>
         /// <param name="startPoint">the starting point of the line</param>
         /// <param name="endPoint">the ending point of the line</param>
         public Line2D(Point2D startPoint, Point2D endPoint)
         {
-            this.StartPoint = startPoint;
-            this.EndPoint = endPoint;
-
-            if (this.StartPoint == this.EndPoint)
+            if (startPoint == endPoint)
             {
                 throw new ArgumentException("The Line2D starting and ending points cannot be identical");
             }
 
-            // Initialize the length and direction for lazy loading
-            this.length = -1.0;
-            this.direction = default(Vector2D);
+            this.StartPoint = startPoint;
+            this.EndPoint = endPoint;
         }
 
         /// <summary>
-        /// A double precision number representing the distance between the startpoint and endpoint
+        /// Gets the distance from <see cref="StartPoint"/> to <see cref="EndPoint"/>
         /// </summary>
-        public double Length
-        {
-            get
-            {
-                if (this.length < 0)
-                {
-                    this.ComputeLengthAndDirection();
-                }
-
-                return this.length;
-            }
-        }
+        public double Length => this.StartPoint.DistanceTo(this.EndPoint);
 
         /// <summary>
-        /// A normalized Vector2D representing the direction from the startpoint to the endpoint
+        /// Gets a normalized vector in the direction from <see cref="StartPoint"/> to <see cref="EndPoint"/>
         /// </summary>
-        public Vector2D Direction
-        {
-            get
-            {
-                if (this.length < 0)
-                {
-                    this.ComputeLengthAndDirection();
-                }
-
-                return this.direction;
-            }
-        }
+        public Vector2D Direction => this.StartPoint.VectorTo(this.EndPoint).Normalize();
 
         public static bool operator ==(Line2D left, Line2D right)
         {
@@ -209,23 +180,26 @@
         /// Checks to determine whether or not two lines are parallel to each other within a specified angle tolerance
         /// </summary>
         /// <param name="other">The other line to check this one against</param>
-        /// <param name="angleTolerance">If the angle between line directions is less than this value, the method returns true</param>
+        /// <param name="tolerance">If the angle between line directions is less than this value, the method returns true</param>
         /// <returns>True if the lines are parallel within the angle tolerance, false if they are not</returns>
-        public bool IsParallelTo(Line2D other, Angle angleTolerance)
+        public bool IsParallelTo(Line2D other, Angle tolerance)
         {
-            return this.Direction.IsParallelTo(other.Direction, angleTolerance);
+            return this.Direction.IsParallelTo(other.Direction, tolerance);
         }
 
+        /// <inheritdoc/>
         public override string ToString()
         {
             return string.Format("StartPoint: {0}, EndPoint: {1}", this.StartPoint, this.EndPoint);
         }
 
+        /// <inheritdoc/>
         public bool Equals(Line2D other)
         {
             return this.StartPoint.Equals(other.StartPoint) && this.EndPoint.Equals(other.EndPoint);
         }
 
+        /// <inheritdoc />
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj))
@@ -233,29 +207,16 @@
                 return false;
             }
 
-            return obj is Line2D && this.Equals((Line2D)obj);
+            return obj is Line2D d && this.Equals(d);
         }
 
-        /// <summary>
-        /// Serves as a hash function for a particular type.
-        /// </summary>
-        /// <returns>A hash code for the current <see cref="T:System.Object"/></returns>
+        /// <inheritdoc />
         public override int GetHashCode()
         {
             unchecked
             {
                 return (this.StartPoint.GetHashCode() * 397) ^ this.EndPoint.GetHashCode();
             }
-        }
-
-        /// <summary>
-        /// Compute and store the length and direction of the Line2D, used for lazy loading
-        /// </summary>
-        private void ComputeLengthAndDirection()
-        {
-            var vectorBetween = this.StartPoint.VectorTo(this.EndPoint);
-            this.length = vectorBetween.Length;
-            this.direction = vectorBetween.Normalize();
         }
     }
 }

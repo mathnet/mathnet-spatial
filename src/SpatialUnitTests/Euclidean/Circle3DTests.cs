@@ -24,7 +24,7 @@
         {
             var p1 = Point3D.Parse(p1s);
             var p2 = Point3D.Parse(p2s);
-            var circle3D = new Circle3D(p1, p2, UnitVector3D.ZAxis);
+            var circle3D = Circle3D.FromPointsAndAxis(p1, p2, UnitVector3D.ZAxis);
             AssertGeometry.AreEqual(circle3D.CenterPoint, Point3D.Parse(centers));
             Assert.AreEqual(circle3D.Radius, radius, 1e-6);
         }

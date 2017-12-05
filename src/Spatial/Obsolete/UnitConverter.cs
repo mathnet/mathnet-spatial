@@ -1,4 +1,5 @@
-﻿// ReSharper disable once CheckNamespace
+﻿#pragma warning disable SA1600 // Elements must be documented
+// ReSharper disable once CheckNamespace
 namespace MathNet.Spatial.Units
 {
     using System;

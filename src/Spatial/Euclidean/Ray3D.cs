@@ -153,8 +153,9 @@ namespace MathNet.Spatial.Euclidean
         {
             reader.MoveToContent();
             var e = (XElement)XNode.ReadFrom(reader);
-            XmlExt.SetReadonlyField(ref this, l => l.ThroughPoint, Point3D.ReadFrom(e.SingleElement("ThroughPoint").CreateReader()));
-            XmlExt.SetReadonlyField(ref this, l => l.Direction, UnitVector3D.ReadFrom(e.SingleElement("Direction").CreateReader()));
+            this = new Ray3D(
+                Point3D.ReadFrom(e.SingleElement("ThroughPoint").CreateReader()),
+                UnitVector3D.ReadFrom(e.SingleElement("Direction").CreateReader()));
         }
 
         public void WriteXml(XmlWriter writer)

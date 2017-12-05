@@ -1,4 +1,5 @@
-﻿// ReSharper disable once CheckNamespace
+﻿#pragma warning disable SA1600 // Elements must be documented
+// ReSharper disable once CheckNamespace
 namespace MathNet.Spatial.Units
 {
     using System;
@@ -7,7 +8,7 @@ namespace MathNet.Spatial.Units
     [Obsolete("This class will be removed, should not have been public. Made obsolete 2017-12-03.")]
     public static class UnitParser
     {
-        public static readonly string UnitValuePattern = string.Format(@"^(?: *)(?<Value>{0}) *(?<Unit>.+) *$", Parser.DoublePattern);
+        public static readonly string UnitValuePattern = $@"^(?: *)(?<Value>{Parser.DoublePattern}) *(?<Unit>.+) *$";
 
         public static T Parse<T>(string s, Func<double, IAngleUnit, T> creator)
         {

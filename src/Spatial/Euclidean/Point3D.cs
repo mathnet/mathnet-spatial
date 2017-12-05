@@ -233,17 +233,20 @@ namespace MathNet.Spatial.Euclidean
             return p - this;
         }
 
+        [Pure]
         public double DistanceTo(Point3D p)
         {
             var vector = this.VectorTo(p);
             return vector.Length;
         }
 
+        [Pure]
         public Vector3D ToVector3D()
         {
             return new Vector3D(this.X, this.Y, this.Z);
         }
 
+        [Pure]
         public Point3D TransformBy(CoordinateSystem cs)
         {
             return cs.Transform(this);

@@ -47,9 +47,7 @@
         [Obsolete("This constructor will be removed, use factory method FromPointsAndAxis. Made obsolete 2017-12-05.")]
         public Circle3D(Point3D p1, Point3D p2, UnitVector3D axis)
         {
-            this.CenterPoint = Point3D.MidPoint(p1, p2);
-            this.Axis = axis;
-            this.Radius = p1.DistanceTo(this.CenterPoint);
+            this = FromPointsAndAxis(p1, p2, axis);
         }
 
         /// <summary>
@@ -62,28 +60,7 @@
         [Obsolete("This constructor will be removed, use factory method FromPoints. Made obsolete 2017-12-05.")]
         public Circle3D(Point3D p1, Point3D p2, Point3D p3)
         {
-            // https://www.physicsforums.com/threads/equation-of-a-circle-through-3-points-in-3d-space.173847/
-            var p1p2 = p2 - p1;
-            var p2p3 = p3 - p2;
-            this.Axis = p1p2.CrossProduct(p2p3).Normalize();
-
-            var midPointA = p1 + (0.5 * p1p2);
-            var midPointB = p2 + (0.5 * p2p3);
-
-            var directionA = p1p2.CrossProduct(this.Axis);
-            var directionB = p2p3.CrossProduct(this.Axis);
-
-            var bisectorA = new Ray3D(midPointA, directionA);
-            var bisectorB = Plane.FromPoints(midPointB, midPointB + directionB.Normalize(), midPointB + this.Axis);
-
-            var center = bisectorA.IntersectionWith(bisectorB);
-            if (center == null)
-            {
-                throw new ArgumentException("A circle cannot be created from these points, are they collinear?");
-            }
-
-            this.CenterPoint = (Point3D)center;
-            this.Radius = this.CenterPoint.DistanceTo(p1);
+            this = FromPoints(p1, p2, p3);
         }
 
         /// <summary>
@@ -112,10 +89,12 @@
         public static Circle3D FromPoints(Point3D p1, Point3D p2, Point3D p3)
         {
             // https://www.physicsforums.com/threads/equation-of-a-circle-through-3-points-in-3d-space.173847/
+            //// ReSharper disable InconsistentNaming
             var p1p2 = p2 - p1;
             var p2p3 = p3 - p2;
-            var axis = p1p2.CrossProduct(p2p3).Normalize();
+            //// ReSharper restore InconsistentNaming
 
+            var axis = p1p2.CrossProduct(p2p3).Normalize();
             var midPointA = p1 + (0.5 * p1p2);
             var midPointB = p2 + (0.5 * p2p3);
 
