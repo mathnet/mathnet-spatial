@@ -116,15 +116,15 @@
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Plane"/> struct.
-        /// Creates a Plane that contains the three given points.
-        /// http://www.had2know.com/academics/equation-plane-through-3-points.html
+        /// Creates a plane that contains the three given points.
         /// </summary>
-        /// <param name="p1">The first point on the Plane.</param>
-        /// <param name="p2">The second point on the Plane.</param>
-        /// <param name="p3">The third point on the Plane.</param>
-        /// <returns>The Plane containing the three points.</returns>
+        /// <param name="p1">The first point on the plane.</param>
+        /// <param name="p2">The second point on the plane.</param>
+        /// <param name="p3">The third point on the plane.</param>
+        /// <returns>The plane containing the three points.</returns>
         public static Plane FromPoints(Point3D p1, Point3D p2, Point3D p3)
         {
+            // http://www.had2know.com/academics/equation-plane-through-3-points.html
             if (p1 == p2 || p1 == p3 || p2 == p3)
             {
                 throw new ArgumentException("Must use three different points");
@@ -142,6 +142,11 @@
             return new Plane(cross.Normalize(), p1);
         }
 
+        public static Point3D PointFromPlanes(Plane plane1, Plane plane2, Plane plane3)
+        {
+            return Point3D.IntersectionOf(plane1, plane2, plane3);
+        }
+
         /// <summary>
         /// Creates a Plane from its string representation
         /// </summary>
@@ -152,23 +157,40 @@
             return Parser.ParsePlane(s);
         }
 
+        /// <summary>
+        /// Get the distance to the point along the <see cref="Normal"/>
+        /// </summary>
+        /// <param name="point">The <see cref="Point3D"/></param>
+        /// <returns>The distance.</returns>
         public double SignedDistanceTo(Point3D point)
         {
-            var point3D = this.Project(point);
-            var vectorTo = point3D.VectorTo(point);
-            return vectorTo.DotProduct(this.Normal);
+            var p = this.Project(point);
+            var v = p.VectorTo(point);
+            return v.DotProduct(this.Normal);
         }
 
-        public double SignedDistanceTo(Plane otherPlane)
+        /// <summary>
+        /// Get the distance to the plane along the <see cref="Normal"/>
+        /// This assumes the planes are parallel
+        /// </summary>
+        /// <param name="other">The <see cref="Point3D"/></param>
+        /// <returns>The distance.</returns>
+        public double SignedDistanceTo(Plane other)
         {
-            if (!this.Normal.IsParallelTo(otherPlane.Normal, tolerance: 1E-15))
+            if (!this.Normal.IsParallelTo(other.Normal, tolerance: 1E-15))
             {
                 throw new ArgumentException("Planes are not parallel");
             }
 
-            return this.SignedDistanceTo(otherPlane.RootPoint);
+            return this.SignedDistanceTo(other.RootPoint);
         }
 
+        /// <summary>
+        /// Get the distance to the ThroughPoint of <paramref name="ray"/>  along the <see cref="Normal"/>
+        /// This assumes the ray is parallel to the plane.
+        /// </summary>
+        /// <param name="ray">The <see cref="Point3D"/></param>
+        /// <returns>The distance.</returns>
         public double SignedDistanceTo(Ray3D ray)
         {
             if (Math.Abs(ray.Direction.DotProduct(this.Normal) - 0) < 1E-15)
@@ -179,6 +201,11 @@
             return 0;
         }
 
+        /// <summary>
+        /// Get the distance to the point.
+        /// </summary>
+        /// <param name="point">The <see cref="Point3D"/></param>
+        /// <returns>The distance.</returns>
         public double AbsoluteDistanceTo(Point3D point)
         {
             return Math.Abs(this.SignedDistanceTo(point));
@@ -306,6 +333,11 @@
             return ray.ThroughPoint + (t * ray.Direction);
         }
 
+        /// <summary>
+        /// Returns <paramref name="p"/> mirrored about the plane.
+        /// </summary>
+        /// <param name="p">The <see cref="Point3D"/></param>
+        /// <returns>The mirrored point.</returns>
         public Point3D MirrorAbout(Point3D p)
         {
             var p2 = this.Project(p);
@@ -321,25 +353,13 @@
             return new Plane(rotatedPlaneVector, rotatedPoint);
         }
 
-        /// <summary>
-        /// Indicates whether the current object is equal to another object of the same type.
-        /// </summary>
-        /// <returns>
-        /// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
-        /// </returns>
-        /// <param name="other">An object to compare with this object.</param>
+        /// <inheritdoc />
         public bool Equals(Plane other)
         {
             return this.RootPoint == other.RootPoint && this.Normal == other.Normal;
         }
 
-        /// <summary>
-        /// Determines whether the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>.
-        /// </summary>
-        /// <returns>
-        /// true if the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>; otherwise, false.
-        /// </returns>
-        /// <param name="obj">The <see cref="T:System.Object"/> to compare with the current <see cref="T:System.Object"/>. </param><filterpriority>2</filterpriority>
+        /// <inheritdoc />
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj))
@@ -350,13 +370,7 @@
             return obj is Plane && this.Equals((Plane)obj);
         }
 
-        /// <summary>
-        /// Serves as a hash function for a particular type.
-        /// </summary>
-        /// <returns>
-        /// A hash code for the current <see cref="T:System.Object"/>.
-        /// </returns>
-        /// <filterpriority>2</filterpriority>
+        /// <inheritdoc />
         public override int GetHashCode()
         {
             unchecked
@@ -369,22 +383,20 @@
             }
         }
 
-        public static Point3D PointFromPlanes(Plane plane1, Plane plane2, Plane plane3)
-        {
-            return Point3D.IntersectionOf(plane1, plane2, plane3);
-        }
-
+        /// <inheritdoc />
         public override string ToString()
         {
             return string.Format("A:{0} B:{1} C:{2} D:{3}", Math.Round(this.A, 4), Math.Round(this.B, 4), Math.Round(this.C, 4), Math.Round(this.D, 4));
         }
 
-        public XmlSchema GetSchema()
+        /// <inheritdoc />
+        XmlSchema IXmlSerializable.GetSchema()
         {
             return null;
         }
 
-        public void ReadXml(XmlReader reader)
+        /// <inheritdoc />
+        void IXmlSerializable.ReadXml(XmlReader reader)
         {
             reader.MoveToContent();
             var e = (XElement)XNode.ReadFrom(reader);
@@ -393,7 +405,8 @@
                 Point3D.ReadFrom(e.SingleElement("RootPoint").CreateReader()));
         }
 
-        public void WriteXml(XmlWriter writer)
+        /// <inheritdoc/>
+        void IXmlSerializable.WriteXml(XmlWriter writer)
         {
             writer.WriteElement("RootPoint", this.RootPoint);
             writer.WriteElement("Normal", this.Normal);

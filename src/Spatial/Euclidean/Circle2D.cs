@@ -3,11 +3,12 @@
     using System;
 
     /// <summary>
-    /// Describes a standard 2 dimentional circle
+    /// Describes a standard 2 dimensional circle
     /// </summary>
     public struct Circle2D : IEquatable<Circle2D>
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="Circle2D"/> struct.
         /// Creates a Circle of a given radius from a center point
         /// </summary>
         /// <param name="center">The location of the center</param>
@@ -19,27 +20,27 @@
         }
 
         /// <summary>
-        /// The center point of the circle
+        /// Gets the center point of the circle
         /// </summary>
         public Point2D Center { get; }
 
         /// <summary>
-        /// The radius of the circle
+        /// Gets the radius of the circle
         /// </summary>
         public double Radius { get; }
 
         /// <summary>
-        /// Returns the circumference of the circle
+        /// Gets the circumference of the circle
         /// </summary>
         public double Circumference => 2 * this.Radius * Math.PI;
 
         /// <summary>
-        /// Returns the diameter of the circle
+        /// Gets the diameter of the circle
         /// </summary>
         public double Diameter => 2 * this.Radius;
 
         /// <summary>
-        /// Returns the area of the circle
+        /// Gets the area of the circle
         /// </summary>
         public double Area => this.Radius * this.Radius * Math.PI;
 
@@ -53,21 +54,14 @@
             return !left.Equals(right);
         }
 
-        /// <summary>
-        /// Determines if two circle are equal to each other
-        /// </summary>
-        /// <param name="other">The other circle</param>
-        /// <returns>true if the circles have the same radius and center</returns>
+        /// <inheritdoc />
         public bool Equals(Circle2D other)
         {
+            // ReSharper disable once CompareOfFloatsByEqualityOperator
             return this.Radius == other.Radius && this.Center == other.Center;
         }
 
-        /// <summary>
-        /// Determines if two objects are equal to each other
-        /// </summary>
-        /// <param name="obj">An object</param>
-        /// <returns>True if the objects are the same</returns>
+        /// <inheritdoc />
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj))
@@ -75,13 +69,10 @@
                 return false;
             }
 
-            return obj is Circle2D && this.Equals((Circle2D)obj);
+            return obj is Circle2D d && this.Equals(d);
         }
 
-        /// <summary>
-        /// Returns the hashocde for a Circle
-        /// </summary>
-        /// <returns>A hashcode</returns>
+        /// <inheritdoc />
         public override int GetHashCode()
         {
             unchecked
