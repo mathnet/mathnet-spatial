@@ -67,7 +67,6 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             Assert.AreEqual(expected, actual);
         }
 
-
         [TestCase(5, "90 °", "0, 5")]
         [TestCase(3, "-90 °", "0, -3")]
         [TestCase(1, "45 °", "0.71, 0.71")]
@@ -99,8 +98,11 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             Assert.Throws<ArgumentException>(() => Vector2D.OfVector(Vector<double>.Build.Dense(new[] { 1.0, 2, 3 })));
         }
 
+        [TestCase("-1,1", -1, 1)]
+        [TestCase("1, 2", 1, 2)]
         [TestCase("1.2; 3.4", 1.2, 3.4)]
         [TestCase("1.2;3.4", 1.2, 3.4)]
+        [TestCase("1.2 ; 3.4", 1.2, 3.4)]
         [TestCase("1,2; 3,4", 1.2, 3.4)]
         [TestCase("1.2, 3.4", 1.2, 3.4)]
         [TestCase("1.2 3.4", 1.2, 3.4)]
@@ -152,21 +154,14 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             Assert.Throws<FormatException>(() => Vector2D.Parse(text));
         }
 
-        [TestCase("1, 0", "1, 0", 1e-4, true)]
-        [TestCase("-1, 1", "-1, 1", 1e-4, true)]
-        [TestCase("1, 0", "1, 1", 1e-4, false)]
-        public void Equals(string v1s, string v2s, double tol, bool expected)
+        [TestCase(@"<Vector2D X=""1"" Y=""2"" />")]
+        [TestCase(@"<Vector2D Y=""2"" X=""1""/>")]
+        [TestCase(@"<Vector2D><X>1</X><Y>2</Y></Vector2D>")]
+        [TestCase(@"<Vector2D><Y>2</Y><X>1</X></Vector2D>")]
+        public void ReadFrom(string xml)
         {
-            var v1 = Vector2D.Parse(v1s);
-            var v2 = Vector2D.Parse(v2s);
-            Assert.AreEqual(expected, v1 == v2);
-            Assert.AreEqual(expected, v2 == v1);
-            Assert.AreNotEqual(expected, v1 != v2);
-            Assert.AreNotEqual(expected, v2 != v1);
-            Assert.AreEqual(expected, v1.Equals(v2));
-            Assert.AreEqual(expected, v1.Equals((object)v2));
-            Assert.AreEqual(expected, Equals(v1, v2));
-            Assert.AreEqual(expected, v1.Equals(v2, tol));
+            var v = new Vector2D(1, 2);
+            AssertGeometry.AreEqual(v, Vector2D.ReadFrom(XmlReader.Create(new StringReader(xml))));
         }
 
         [TestCase("-1, -2", "1, 2", "0, 0")]
@@ -210,16 +205,6 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         {
             var v = Vector2D.Parse(vs);
             Assert.AreEqual(expected, v.Length, 1e-6);
-        }
-
-        [TestCase("-2, 0", null, "(-2,\u00A00)")]
-        [TestCase("-2, 0", "N2", "(-2.00,\u00A00.00)")]
-        public void ToString(string vs, string format, string expected)
-        {
-            var v = Vector2D.Parse(vs);
-            var actual = v.ToString(format);
-            Assert.AreEqual(expected, actual);
-            Assert.AreEqual(v, Vector2D.Parse(actual));
         }
 
         [Test]
@@ -352,16 +337,6 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             Assert.AreEqual(expected, av.Degrees, 0.1);
         }
 
-        [TestCase(@"<Vector2D X=""1"" Y=""2"" />")]
-        [TestCase(@"<Vector2D Y=""2"" X=""1""/>")]
-        [TestCase(@"<Vector2D><X>1</X><Y>2</Y></Vector2D>")]
-        [TestCase(@"<Vector2D><Y>2</Y><X>1</X></Vector2D>")]
-        public void ReadFrom(string xml)
-        {
-            var v = new Vector2D(1, 2);
-            AssertGeometry.AreEqual(v, Vector2D.ReadFrom(XmlReader.Create(new StringReader(xml))));
-        }
-
         [Test]
         public void CheckCachedXAxis()
         {
@@ -372,20 +347,6 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         public void CheckCachedYAxis()
         {
             AssertGeometry.AreEqual(new Vector2D(0, 1), Vector2D.YAxis);
-        }
-
-        [Test]
-        public void EqualityComparerThrowsExceptionOnNegativeTolerance()
-        {
-            var v1 = new Vector2D(0, 0);
-            var v2 = new Vector2D(1, 1);
-            Assert.Throws<ArgumentException>(() => v1.Equals(v2, -0.01));
-        }
-
-        [Test]
-        public void EqualityComparerReturnsFalseOnNullReference()
-        {
-            Assert.IsFalse(default(Vector2D).Equals(null));
         }
 
         [TestCase("1,0", "0,1", "90°")]
@@ -442,6 +403,42 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             var ex = Vector2D.Parse(exs);
 
             AssertGeometry.AreEqual(ex, v1.ProjectOn(v2), 1e-3);
+        }
+
+        [TestCase("1, 0", "1, 0", 1e-4, true)]
+        [TestCase("-1, 1", "-1, 1", 1e-4, true)]
+        [TestCase("1, 0", "1, 1", 1e-4, false)]
+        public void Equals(string v1s, string v2s, double tol, bool expected)
+        {
+            var v1 = Vector2D.Parse(v1s);
+            var v2 = Vector2D.Parse(v2s);
+            Assert.AreEqual(expected, v1 == v2);
+            Assert.AreEqual(expected, v2 == v1);
+            Assert.AreNotEqual(expected, v1 != v2);
+            Assert.AreNotEqual(expected, v2 != v1);
+            Assert.AreEqual(expected, v1.Equals(v2));
+            Assert.AreEqual(expected, v1.Equals((object)v2));
+            Assert.AreEqual(expected, Equals(v1, v2));
+            Assert.AreEqual(expected, v1.Equals(v2, tol));
+            Assert.IsFalse(default(Vector2D).Equals(null));
+        }
+
+        [Test]
+        public void EqualsFailsWhenNegativeTolerance()
+        {
+            var v1 = new Vector2D(0, 0);
+            var v2 = new Vector2D(1, 1);
+            Assert.Throws<ArgumentException>(() => v1.Equals(v2, -0.01));
+        }
+
+        [TestCase("-2, 0", null, "(-2,\u00A00)")]
+        [TestCase("-2, 0", "N2", "(-2.00,\u00A00.00)")]
+        public void ToString(string vs, string format, string expected)
+        {
+            var v = Vector2D.Parse(vs);
+            var actual = v.ToString(format);
+            Assert.AreEqual(expected, actual);
+            Assert.AreEqual(v, Vector2D.Parse(actual));
         }
 
         [Test]

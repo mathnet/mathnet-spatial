@@ -7,12 +7,11 @@
 
     internal static class Text
     {
-        private const string DoublePatternNullProvider = "[+-]?\\d*(?:[.,]\\d+)?(?:[eE][+-]?\\d+)?";
         private const string DoublePatternPointProvider = "[+-]?\\d*(?:[.]\\d+)?(?:[eE][+-]?\\d+)?";
         private const string DoublePatternCommaProvider = "[+-]?\\d*(?:[,]\\d+)?(?:[eE][+-]?\\d+)?";
 
-        private const string SeparatorPatternNullProvider = "[,; \u00A0]( |\u00A0)*";
-        private const string SeparatorPatternCommaProvider = "[; \u00A0]( |\u00A0)*";
+        private const string SeparatorPatternPointProvider = " ?[,;]?( |\u00A0)?";
+        private const string SeparatorPatternCommaProvider = " ?[;]?( |\u00A0)?";
 
         internal static bool TryParse2D(string text, IFormatProvider provider, out double x, out double y)
         {
@@ -23,18 +22,17 @@
                 return false;
             }
 
-            var match = Regex2D.Get(provider).Match(text);
-            if (!match.Success ||
-                match.Groups.Count != 3 ||
-                match.Groups[0].Captures.Count != 1 ||
-                match.Groups[1].Captures.Count != 1 ||
-                match.Groups[2].Captures.Count != 1)
+            if (Regex2D.TryMatch(text, provider, out var match) &&
+                match.Groups.Count == 3 ||
+                match.Groups[0].Captures.Count == 1 ||
+                match.Groups[1].Captures.Count == 1 ||
+                match.Groups[2].Captures.Count == 1)
             {
-                return false;
+                return TryParseDouble(match.Groups["x"].Value, provider, out x) &&
+                       TryParseDouble(match.Groups["y"].Value, provider, out y);
             }
 
-            return TryParseDouble(match.Groups["x"].Value, provider, out x) &&
-                   TryParseDouble(match.Groups["y"].Value, provider, out y);
+            return false;
         }
 
         internal static bool TryParseAngle(string text, IFormatProvider provider, out Angle a)
@@ -74,41 +72,43 @@
 
         private static class Regex2D
         {
-            private const string Pattern2D = @"^ *\(?(?<x>{0}){1}(?<y>{0})?\)? *$";
+            private const string Pattern2D = "^ *\\(?(?<x>{0}){1}(?<y>{0})\\)? *$";
             private const RegexOptions RegexOptions = System.Text.RegularExpressions.RegexOptions.ExplicitCapture | System.Text.RegularExpressions.RegexOptions.Compiled | System.Text.RegularExpressions.RegexOptions.Singleline;
 
-            // This is for legacy reasons, we allow any culture, not nice.
-            private static readonly Regex NullProvider = new Regex(
-                string.Format(Pattern2D, DoublePatternNullProvider, SeparatorPatternNullProvider),
+            private static readonly Regex Point = new Regex(
+                string.Format(Pattern2D, DoublePatternPointProvider, SeparatorPatternPointProvider),
                 RegexOptions);
 
-            private static readonly Regex PointProvider = new Regex(
-                string.Format(Pattern2D, DoublePatternPointProvider, SeparatorPatternNullProvider),
-                RegexOptions);
-
-            private static readonly Regex CommaProvider = new Regex(
+            private static readonly Regex Comma = new Regex(
                 string.Format(Pattern2D, DoublePatternCommaProvider, SeparatorPatternCommaProvider),
                 RegexOptions);
 
-            internal static Regex Get(IFormatProvider formatProvider)
+            internal static bool TryMatch(string text, IFormatProvider formatProvider, out Match match)
             {
-                if (formatProvider == null)
+                if (formatProvider != null &&
+                    NumberFormatInfo.GetInstance(formatProvider) is NumberFormatInfo formatInfo)
                 {
-                    return NullProvider;
+                    if (formatInfo.NumberDecimalSeparator == ".")
+                    {
+                        match = Point.Match(text);
+                        return match.Success;
+                    }
+
+                    if (formatInfo.NumberDecimalSeparator == ",")
+                    {
+                        match = Comma.Match(text);
+                        return match.Success;
+                    }
                 }
 
-                var formatInfo = NumberFormatInfo.GetInstance(formatProvider);
-                if (formatInfo.NumberDecimalSeparator == ".")
+                match = Point.Match(text);
+                if (match.Success)
                 {
-                    return PointProvider;
+                    return true;
                 }
 
-                if (formatInfo.NumberDecimalSeparator == ",")
-                {
-                    return CommaProvider;
-                }
-
-                return NullProvider;
+                match = Comma.Match(text);
+                return match.Success;
             }
         }
 
@@ -118,29 +118,19 @@
             private const string DegreesPattern = "^(?<value>{0})( |\u00A0)?(°|deg|degrees) *$";
             private const RegexOptions RegexOptions = System.Text.RegularExpressions.RegexOptions.ExplicitCapture | System.Text.RegularExpressions.RegexOptions.Compiled | System.Text.RegularExpressions.RegexOptions.Singleline | System.Text.RegularExpressions.RegexOptions.IgnoreCase;
 
-            // This is for legacy reasons, we allow any culture, not nice.
-            private static readonly Regex RadiansNullProvider = new Regex(
-                string.Format(RadiansPattern, DoublePatternNullProvider),
-                RegexOptions);
-
-            private static readonly Regex RadiansPointProvider = new Regex(
+            private static readonly Regex RadiansPoint = new Regex(
                 string.Format(RadiansPattern, DoublePatternPointProvider),
                 RegexOptions);
 
-            private static readonly Regex RadiansCommaProvider = new Regex(
+            private static readonly Regex RadiansComma = new Regex(
                 string.Format(RadiansPattern, DoublePatternCommaProvider),
                 RegexOptions);
 
-            // This is for legacy reasons, we allow any culture, not nice.
-            private static readonly Regex DegreesNullProvider = new Regex(
-                string.Format(DegreesPattern, DoublePatternNullProvider),
-                RegexOptions);
-
-            private static readonly Regex DegreesPointProvider = new Regex(
+            private static readonly Regex DegreesPoint = new Regex(
                 string.Format(DegreesPattern, DoublePatternPointProvider),
                 RegexOptions);
 
-            private static readonly Regex DegreesCommaProvider = new Regex(
+            private static readonly Regex DegreesComma = new Regex(
                 string.Format(DegreesPattern, DoublePatternCommaProvider),
                 RegexOptions);
 
@@ -168,52 +158,56 @@
 
             private static bool TryMatchRadians(string text, IFormatProvider formatProvider, out Match match)
             {
-                if (formatProvider == null)
+                if (formatProvider != null &&
+                    NumberFormatInfo.GetInstance(formatProvider) is NumberFormatInfo formatInfo)
                 {
-                    match = RadiansNullProvider.Match(text);
-                    return match.Success;
+                    if (formatInfo.NumberDecimalSeparator == ".")
+                    {
+                        match = RadiansPoint.Match(text);
+                        return match.Success;
+                    }
+
+                    if (formatInfo.NumberDecimalSeparator == ",")
+                    {
+                        match = RadiansComma.Match(text);
+                        return match.Success;
+                    }
                 }
 
-                var formatInfo = NumberFormatInfo.GetInstance(formatProvider);
-                if (formatInfo.NumberDecimalSeparator == ".")
+                match = RadiansPoint.Match(text);
+                if (match.Success)
                 {
-                    match = RadiansPointProvider.Match(text);
-                    return match.Success;
+                    return true;
                 }
 
-                if (formatInfo.NumberDecimalSeparator == ",")
-                {
-                    match = RadiansCommaProvider.Match(text);
-                    return match.Success;
-                }
-
-                match = RadiansNullProvider.Match(text);
+                match = RadiansComma.Match(text);
                 return match.Success;
             }
 
-
             private static bool TryMatchDegrees(string text, IFormatProvider provider, out Match match)
             {
-                if (provider == null)
+                if (provider != null && NumberFormatInfo.GetInstance(provider) is NumberFormatInfo formatInfo)
                 {
-                    match = DegreesNullProvider.Match(text);
-                    return match.Success;
+                    if (formatInfo.NumberDecimalSeparator == ".")
+                    {
+                        match = DegreesPoint.Match(text);
+                        return match.Success;
+                    }
+
+                    if (formatInfo.NumberDecimalSeparator == ",")
+                    {
+                        match = DegreesComma.Match(text);
+                        return match.Success;
+                    }
                 }
 
-                var formatInfo = NumberFormatInfo.GetInstance(provider);
-                if (formatInfo.NumberDecimalSeparator == ".")
+                match = DegreesPoint.Match(text);
+                if (match.Success)
                 {
-                    match = DegreesPointProvider.Match(text);
-                    return match.Success;
+                    return true;
                 }
 
-                if (formatInfo.NumberDecimalSeparator == ",")
-                {
-                    match = DegreesCommaProvider.Match(text);
-                    return match.Success;
-                }
-
-                match = DegreesNullProvider.Match(text);
+                match = DegreesComma.Match(text);
                 return match.Success;
             }
         }

@@ -71,6 +71,9 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             Assert.AreEqual(expected, actual);
         }
 
+        [TestCase("-1,1", -1, 1)]
+        [TestCase("-1,-1", -1, -1)]
+        [TestCase("1, 2", 1, 2)]
         [TestCase("1.2; 3.4", 1.2, 3.4)]
         [TestCase("1.2;3.4", 1.2, 3.4)]
         [TestCase("1,2; 3,4", 1.2, 3.4)]
@@ -186,7 +189,7 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         [TestCase("1, 0", "-90 °", "0, -1")]
         [TestCase("1, 0", "45 °", "0.71, 0.71")]
         [TestCase("1, 0", "-45 °", "0.71, -0.71")]
-        [TestCase("1, 0", "30 °", "0,87, 0.5")]
+        [TestCase("1, 0", "30 °", "0.87, 0.5")]
         [TestCase("-5, 0", "30 °", "-4.33, -2.5")]
         public void RotateTest(string ps, string avs, string eps)
         {
@@ -234,6 +237,7 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             Assert.AreEqual(expected, Equals(p1, p2));
             Assert.AreEqual(expected, p1.Equals(p2, tol));
             Assert.AreNotEqual(expected, p1 != p2);
+            Assert.AreEqual(false, p1.Equals(null));
         }
 
         [TestCase("-2, 0", null, "(-2,\u00A00)")]
