@@ -702,5 +702,11 @@ namespace MathNet.Spatial.Euclidean
             writer.WriteAttribute("Y", this.Y);
             writer.WriteAttribute("Z", this.Z);
         }
+
+        [Pure]
+        internal double DotProduct(Point3D v)
+        {
+            return (this.X * v.X) + (this.Y * v.Y) + (this.Z * v.Z);
+        }
     }
 }

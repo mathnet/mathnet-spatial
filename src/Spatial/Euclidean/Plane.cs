@@ -12,37 +12,118 @@
     [Serializable]
     public struct Plane : IEquatable<Plane>, IXmlSerializable
     {
+        /// <summary>
+        /// The normal vector of the Plane.
+        /// </summary>
         public readonly UnitVector3D Normal;
-        public readonly Point3D RootPoint;
 
-        public Plane(double a, double b, double c, double d)
-            : this(new UnitVector3D(a, b, c), -1 * d)
-        {
-        }
+        /// <summary>
+        /// The distance to the Plane along its normal from the origin.
+        /// </summary>
+        public readonly double D;
 
-        public Plane(UnitVector3D normal, double offset = 0)
-            : this(normal, (offset * normal).ToPoint3D())
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Plane"/> struct.
+        /// Constructs a Plane from the X, Y, and Z components of its normal, and its distance from the origin on that normal.
+        /// </summary>
+        /// <param name="x">The X-component of the normal.</param>
+        /// <param name="y">The Y-component of the normal.</param>
+        /// <param name="z">The Z-component of the normal.</param>
+        /// <param name="d">The distance of the Plane along its normal from the origin.</param>
+        public Plane(double x, double y, double z, double d)
+            : this(UnitVector3D.Create(x, y, z), -d)
         {
-        }
-
-        public Plane(UnitVector3D normal, Point3D rootPoint)
-            : this(rootPoint, normal)
-        {
-        }
-
-        public Plane(Point3D rootPoint, UnitVector3D normal)
-        {
-            this.RootPoint = rootPoint;
-            this.Normal = normal;
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="Plane"/> struct.
+        /// Constructs a Plane from the given normal and distance along the normal from the origin.
+        /// </summary>
+        /// <param name="normal">The Plane's normal vector.</param>
+        /// <param name="offset">The Plane's distance from the origin along its normal vector.</param>
+        public Plane(UnitVector3D normal, double offset = 0)
+        {
+            this.Normal = normal;
+            this.D = -offset;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Plane"/> struct.
+        /// Constructs a Plane from the given normal and distance along the normal from the origin.
+        /// </summary>
+        /// <param name="normal">The Plane's normal vector.</param>
+        /// <param name="rootPoint">A point in the plane.</param>
+        public Plane(UnitVector3D normal, Point3D rootPoint)
+            : this(normal, normal.DotProduct(rootPoint))
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Plane"/> struct.
+        /// Constructs a Plane from the given normal and distance along the normal from the origin.
+        /// </summary>
+        /// <param name="normal">The Plane's normal vector.</param>
+        /// <param name="rootPoint">A point in the plane.</param>
+        public Plane(Point3D rootPoint, UnitVector3D normal)
+            : this(normal, normal.DotProduct(rootPoint))
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Plane"/> struct.
+        /// Creates a Plane that contains the three given points.
         /// http://www.had2know.com/academics/equation-plane-through-3-points.html
         /// </summary>
-        /// <param name="p1"></param>
-        /// <param name="p2"></param>
-        /// <param name="p3"></param>
+        /// <param name="p1">The first point on the Plane.</param>
+        /// <param name="p2">The second point on the Plane.</param>
+        /// <param name="p3">The third point on the Plane.</param>
+        /// <returns>The Plane containing the three points.</returns>
+        [Obsolete("This constructor will be removed, use factory method Plane.FromPoints. Made obsolete 2017-12-05.")]
         public Plane(Point3D p1, Point3D p2, Point3D p3)
+        {
+            this = FromPoints(p1, p2, p3);
+        }
+
+        /// <summary>
+        /// Gets the <see cref="Normal"/> x component.
+        /// </summary>
+        public double A => this.Normal.X;
+
+        /// <summary>
+        /// Gets the <see cref="Normal"/> y component.
+        /// </summary>
+        public double B => this.Normal.Y;
+
+        /// <summary>
+        /// Gets the <see cref="Normal"/> y component.
+        /// </summary>
+        public double C => this.Normal.Z;
+
+        /// <summary>
+        /// Gets the point on the plane closest to origin.
+        /// </summary>
+        public Point3D RootPoint => (-this.D * this.Normal).ToPoint3D();
+
+        public static bool operator ==(Plane left, Plane right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(Plane left, Plane right)
+        {
+            return !left.Equals(right);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Plane"/> struct.
+        /// Creates a Plane that contains the three given points.
+        /// http://www.had2know.com/academics/equation-plane-through-3-points.html
+        /// </summary>
+        /// <param name="p1">The first point on the Plane.</param>
+        /// <param name="p2">The second point on the Plane.</param>
+        /// <param name="p3">The third point on the Plane.</param>
+        /// <returns>The Plane containing the three points.</returns>
+        public static Plane FromPoints(Point3D p1, Point3D p2, Point3D p3)
         {
             if (p1 == p2 || p1 == p3 || p2 == p3)
             {
@@ -58,26 +139,7 @@
                 throw new ArgumentException("The 3 points should not be on the same line");
             }
 
-            this.RootPoint = p1;
-            this.Normal = cross.Normalize();
-        }
-
-        public double A => this.Normal.X;
-
-        public double B => this.Normal.Y;
-
-        public double C => this.Normal.Z;
-
-        public double D => -this.RootPoint.ToVector3D().DotProduct(this.Normal);
-
-        public static bool operator ==(Plane left, Plane right)
-        {
-            return left.Equals(right);
-        }
-
-        public static bool operator !=(Plane left, Plane right)
-        {
-            return !left.Equals(right);
+            return new Plane(cross.Normalize(), p1);
         }
 
         /// <summary>
@@ -326,8 +388,9 @@
         {
             reader.MoveToContent();
             var e = (XElement)XNode.ReadFrom(reader);
-            XmlExt.SetReadonlyField(ref this, l => l.RootPoint, Point3D.ReadFrom(e.SingleElement("RootPoint").CreateReader()));
-            XmlExt.SetReadonlyField(ref this, l => l.Normal, UnitVector3D.ReadFrom(e.SingleElement("Normal").CreateReader()));
+            this = new Plane(
+                UnitVector3D.ReadFrom(e.SingleElement("Normal").CreateReader()),
+                Point3D.ReadFrom(e.SingleElement("RootPoint").CreateReader()));
         }
 
         public void WriteXml(XmlWriter writer)
