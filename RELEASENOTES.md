@@ -2,6 +2,7 @@
 * Breaking: Parse methods throws FormatException, was ArgumentException
 * Breaking: Make implementation of IXmlSerializable explicit, adds noise to the API.
 * Breaking: use nobreaking space, \u00A0, in Angle.ToString().
+* Breaking: require length to be 1 ± 0.1 when parsing UnitVector3D
 
 ### 0.4.0 - 2017-05-01
 * Build: extra *.Signed packages with strong named assemblies for legacy use cases

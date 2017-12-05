@@ -10,6 +10,7 @@ namespace MathNet.Spatial.Euclidean
     using System.Xml.Schema;
     using System.Xml.Serialization;
     using MathNet.Numerics.LinearAlgebra;
+    using MathNet.Spatial.Internals;
     using MathNet.Spatial.Units;
 
     /// <summary>
@@ -119,7 +120,6 @@ namespace MathNet.Spatial.Euclidean
             return !left.Equals(right);
         }
 
-
         public static Vector3D operator +(UnitVector3D v1, UnitVector3D v2)
         {
             return new Vector3D(v1.X + v2.X, v1.Y + v2.Y, v1.Z + v2.Z);
@@ -180,6 +180,56 @@ namespace MathNet.Spatial.Euclidean
         public static double operator *(UnitVector3D left, UnitVector3D right)
         {
             return left.DotProduct(right);
+        }
+
+        /// <summary>
+        /// Attempts to convert a string of the form x,y,z into a vector
+        /// </summary>
+        /// <param name="text">The string to be converted</param>
+        /// <param name="result">A vector with the coordinates specified</param>
+        /// <returns>True if <paramref name="text"/> could be parsed.</returns>
+        public static bool TryParse(string text, out UnitVector3D result)
+        {
+            return TryParse(text, null, out result);
+        }
+
+        /// <summary>
+        /// Attempts to convert a string of the form x,y,z into a vector
+        /// </summary>
+        /// <param name="text">The string to be converted</param>
+        /// <param name="formatProvider">The <see cref="IFormatProvider"/></param>
+        /// <param name="result">A point at the coordinates specified</param>
+        /// <returns>True if <paramref name="text"/> could be parsed.</returns>
+        public static bool TryParse(string text, IFormatProvider formatProvider, out UnitVector3D result)
+        {
+            if (Text.TryParse3D(text, formatProvider, out var x, out var y, out var z))
+            {
+                var temp = new Vector3D(x, y, z);
+                if (Math.Abs(temp.Length - 1) < 0.1)
+                {
+                    result = temp.Normalize();
+                    return true;
+                }
+            }
+
+            result = default(UnitVector3D);
+            return false;
+        }
+
+        /// <summary>
+        /// Attempts to convert a string of the form x,y,z into a vector
+        /// </summary>
+        /// <param name="value">The string to be converted</param>
+        /// <param name="formatProvider">The <see cref="IFormatProvider"/></param>
+        /// <returns>A point at the coordinates specified</returns>
+        public static UnitVector3D Parse(string value, IFormatProvider formatProvider = null)
+        {
+            if (TryParse(value, formatProvider, out var p))
+            {
+                return p;
+            }
+
+            throw new FormatException($"Could not parse a UnitVector3D from the string {value}");
         }
 
         public override string ToString()
@@ -279,17 +329,6 @@ namespace MathNet.Spatial.Euclidean
             writer.WriteAttribute("X", this.X);
             writer.WriteAttribute("Y", this.Y);
             writer.WriteAttribute("Z", this.Z);
-        }
-
-        /// <summary>
-        /// Creates a UnitVector3D from its string representation
-        /// </summary>
-        /// <param name="s">The string representation of the UnitVector3D</param>
-        /// <returns></returns>
-        public static UnitVector3D Parse(string s)
-        {
-            var doubles = Parser.ParseItem3D(s);
-            return new UnitVector3D(doubles);
         }
 
         public static UnitVector3D ReadFrom(XmlReader reader)
