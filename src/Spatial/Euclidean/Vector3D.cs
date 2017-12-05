@@ -138,10 +138,10 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Attempts to convert a string of the form x,y into a point
+        /// Attempts to convert a string of the form x,y,z into a vector
         /// </summary>
         /// <param name="text">The string to be converted</param>
-        /// <param name="result">A point at the coordinates specified</param>
+        /// <param name="result">A vector with the coordinates specified</param>
         /// <returns>True if <paramref name="text"/> could be parsed.</returns>
         public static bool TryParse(string text, out Vector3D result)
         {
@@ -149,7 +149,7 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Attempts to convert a string of the form x,y into a point
+        /// Attempts to convert a string of the form x,y,z into a vector
         /// </summary>
         /// <param name="text">The string to be converted</param>
         /// <param name="formatProvider">The <see cref="IFormatProvider"/></param>
@@ -168,7 +168,7 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Attempts to convert a string of the form x,y into a point
+        /// Attempts to convert a string of the form x,y,z into a vector
         /// </summary>
         /// <param name="value">The string to be converted</param>
         /// <param name="formatProvider">The <see cref="IFormatProvider"/></param>

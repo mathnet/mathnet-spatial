@@ -1,6 +1,7 @@
 ﻿namespace MathNet.Spatial.UnitTests.Euclidean
 {
     using System;
+    using System.Globalization;
     using System.IO;
     using System.Runtime.Serialization.Formatters.Binary;
     using System.Xml;
@@ -27,6 +28,74 @@
             }
 
             Assert.Throws<ArgumentException>(() => new Point3D(new[] { 1.0, 2, 3, 4 }));
+        }
+
+        [TestCase("-1,1,-1", -1, 1, -1)]
+        [TestCase("1, 2, 3", 1, 2, 3)]
+        [TestCase("1.2; 3.4; 5.6", 1.2, 3.4, 5.6)]
+        [TestCase("1.2;3.4;5.6", 1.2, 3.4, 5.6)]
+        [TestCase("1.2 ; 3.4 ; 5.6", 1.2, 3.4, 5.6)]
+        [TestCase("1,2; 3,4; 5,6", 1.2, 3.4, 5.6)]
+        [TestCase("1.2, 3.4, 5.6", 1.2, 3.4, 5.6)]
+        [TestCase("1.2 3.4 5.6", 1.2, 3.4, 5.6)]
+        [TestCase("1.2,\u00A03.4\u00A05.6", 1.2, 3.4, 5.6)]
+        [TestCase("1.2\u00A03.4\u00A05.6", 1.2, 3.4, 5.6)]
+        [TestCase("(1.2, 3.4 5.6)", 1.2, 3.4, 5.6)]
+        [TestCase("1,2\u00A03,4\u00A05,6", 1.2, 3.4, 5.6)]
+        [TestCase("(.1, 2.3e-4,1)", 0.1, 0.00023000000000000001, 1)]
+        [TestCase("1.0 , 2.5,3.3", 1, 2.5, 3.3)]
+        [TestCase("1,0 ; 2,5;3,3", 1, 2.5, 3.3)]
+        [TestCase("1.0 ; 2.5;3.3", 1, 2.5, 3.3)]
+        [TestCase("1.0,2.5,-3.3", 1, 2.5, -3.3)]
+        [TestCase("1;2;3", 1, 2, 3)]
+        public void Parse(string text, double expectedX, double expectedY, double expectedZ)
+        {
+            Assert.AreEqual(true, Point3D.TryParse(text, out var p));
+            Assert.AreEqual(expectedX, p.X);
+            Assert.AreEqual(expectedY, p.Y);
+            Assert.AreEqual(expectedZ, p.Z);
+
+            p = Point3D.Parse(text);
+            Assert.AreEqual(expectedX, p.X);
+            Assert.AreEqual(expectedY, p.Y);
+            Assert.AreEqual(expectedZ, p.Z);
+
+            p = Point3D.Parse(p.ToString());
+            Assert.AreEqual(expectedX, p.X);
+            Assert.AreEqual(expectedY, p.Y);
+            Assert.AreEqual(expectedZ, p.Z);
+        }
+
+        [TestCase("1,2; 3,4; 5,6", 1.2, 3.4, 5.6)]
+        [TestCase("1,2;3,4;5,6", 1.2, 3.4, 5.6)]
+        [TestCase("1,2 3,4 5,6", 1.2, 3.4, 5.6)]
+        [TestCase("(,1 2,3e-4 1)", 0.1, 0.00023000000000000001, 1)]
+        public void ParseSwedish(string text, double expectedX, double expectedY, double expectedZ)
+        {
+            var culture = CultureInfo.GetCultureInfo("sv");
+            Assert.AreEqual(true, Point3D.TryParse(text, culture, out var p));
+            Assert.AreEqual(expectedX, p.X);
+            Assert.AreEqual(expectedY, p.Y);
+            Assert.AreEqual(expectedZ, p.Z);
+
+            p = Point3D.Parse(text, culture);
+            Assert.AreEqual(expectedX, p.X);
+            Assert.AreEqual(expectedY, p.Y);
+            Assert.AreEqual(expectedZ, p.Z);
+
+            p = Point3D.Parse(p.ToString(culture));
+            Assert.AreEqual(expectedX, p.X);
+            Assert.AreEqual(expectedY, p.Y);
+            Assert.AreEqual(expectedZ, p.Z);
+        }
+
+        [TestCase("1.2")]
+        [TestCase("1,2; 2.3; 3")]
+        [TestCase("1; 2; 3; 4")]
+        public void ParseFails(string text)
+        {
+            Assert.AreEqual(false, Point3D.TryParse(text, out _));
+            Assert.Throws<FormatException>(() => Point3D.Parse(text));
         }
 
         [Test]
@@ -169,17 +238,6 @@
 
             Assert.AreEqual(d, p1.DistanceTo(p2), 1e-6);
             Assert.AreEqual(d, p2.DistanceTo(p1), 1e-6);
-        }
-
-        [TestCase("1.0 , 2.5,3.3", new double[] { 1, 2.5, 3.3 })]
-        [TestCase("1,0 ; 2,5;3,3", new double[] { 1, 2.5, 3.3 })]
-        [TestCase("-1.0 ; 2.5;3.3", new double[] { -1, 2.5, 3.3 })]
-        [TestCase("-1 ; -2;-3", new double[] { -1, -2, -3 })]
-        public void ParseTest(string pointAsString, double[] expectedPoint)
-        {
-            var point3D = Point3D.Parse(pointAsString);
-            var expected = new Point3D(expectedPoint);
-            AssertGeometry.AreEqual(expected, point3D, 1e-9);
         }
 
         [TestCase("-1 ; 2;-3")]
