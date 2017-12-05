@@ -571,13 +571,23 @@ namespace MathNet.Spatial.Euclidean
         /// <inheritdoc />
         void IXmlSerializable.ReadXml(XmlReader reader)
         {
-            reader.MoveToContent();
-            var e = (XElement)XNode.ReadFrom(reader);
+            if (reader.TryReadAttributeAsDouble("X", out var x) &&
+                reader.TryReadAttributeAsDouble("Y", out var y) &&
+                reader.TryReadAttributeAsDouble("Z", out var z))
+            {
+                reader.Skip();
+                this = new Vector3D(x, y, z);
+                return;
+            }
 
-            // Hacking set readonly fields here, can't think of a cleaner workaround
-            XmlExt.SetReadonlyField(ref this, x => x.X, XmlConvert.ToDouble(e.ReadAttributeOrElementOrDefault("X")));
-            XmlExt.SetReadonlyField(ref this, x => x.Y, XmlConvert.ToDouble(e.ReadAttributeOrElementOrDefault("Y")));
-            XmlExt.SetReadonlyField(ref this, x => x.Z, XmlConvert.ToDouble(e.ReadAttributeOrElementOrDefault("Z")));
+            if (reader.TryReadChildElementsAsDoubles("X", "Y", "Z", out x, out y, out z))
+            {
+                reader.Skip();
+                this = new Vector3D(x, y, z);
+                return;
+            }
+
+            throw new XmlException($"Could not read a {this.GetType()}");
         }
 
         /// <inheritdoc />

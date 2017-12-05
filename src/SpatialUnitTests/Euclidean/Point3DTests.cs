@@ -98,6 +98,21 @@
             Assert.Throws<FormatException>(() => Point3D.Parse(text));
         }
 
+        [TestCase("<Point3D X=\"1\" Y=\"-2\" Z=\"3\" />")]
+        [TestCase("<Point3D Y=\"-2\" Z=\"3\"  X=\"1\"/>")]
+        [TestCase("<Point3D Z=\"3\" X=\"1\" Y=\"-2\" />")]
+        [TestCase("<Point3D><X>1</X><Y>-2</Y><Z>3</Z></Point3D>")]
+        [TestCase("<Point3D><Y>-2</Y><Z>3</Z><X>1</X></Point3D>")]
+        [TestCase("<Point3D><Z>3</Z><X>1</X><Y>-2</Y></Point3D>")]
+        public void ReadFrom(string xml)
+        {
+            using (var reader = new StringReader(xml))
+            {
+                var actual = Point3D.ReadFrom(XmlReader.Create(reader));
+                Assert.AreEqual(new Point3D(1, -2, 3), actual);
+            }
+        }
+
         [Test]
         public void ToDenseVector()
         {
@@ -255,21 +270,6 @@
             var actual = p.ToString(format);
             Assert.AreEqual(expected, actual);
             AssertGeometry.AreEqual(p, Point3D.Parse(actual), tolerance);
-        }
-
-        [TestCase("<Point3D X=\"1\" Y=\"-2\" Z=\"3\" />")]
-        [TestCase("<Point3D Y=\"-2\" Z=\"3\"  X=\"1\"/>")]
-        [TestCase("<Point3D Z=\"3\" X=\"1\" Y=\"-2\" />")]
-        [TestCase("<Point3D><X>1</X><Y>-2</Y><Z>3</Z></Point3D>")]
-        [TestCase("<Point3D><Y>-2</Y><Z>3</Z><X>1</X></Point3D>")]
-        [TestCase("<Point3D><Z>3</Z><X>1</X><Y>-2</Y></Point3D>")]
-        public void ReadFrom(string xml)
-        {
-            using (var reader = new StringReader(xml))
-            {
-                var actual = Point3D.ReadFrom(XmlReader.Create(reader));
-                Assert.AreEqual(new Point3D(1, -2, 3), actual);
-            }
         }
 
         [Test]

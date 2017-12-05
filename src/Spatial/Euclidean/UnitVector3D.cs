@@ -514,7 +514,6 @@ namespace MathNet.Spatial.Euclidean
             return Vector<double>.Build.Dense(new[] { this.X, this.Y, this.Z });
         }
 
-
         public override string ToString()
         {
             return this.ToString(null, CultureInfo.InvariantCulture);
@@ -597,22 +596,47 @@ namespace MathNet.Spatial.Euclidean
             return null;
         }
 
+        void IXmlSerializable.ReadXml(XmlReader reader)
+        {
+            bool TryGetUnitVector(double xv, double yv, double zv, out UnitVector3D result)
+            {
+                var temp = new Vector3D(xv, yv, zv);
+                if (Math.Abs(temp.Length - 1) < 1E-3)
+                {
+                    result = temp.Normalize();
+                    return true;
+                }
+
+                result = default(UnitVector3D);
+                return false;
+            }
+
+            if (reader.TryReadAttributeAsDouble("X", out var x) &&
+                reader.TryReadAttributeAsDouble("Y", out var y) &&
+                reader.TryReadAttributeAsDouble("Z", out var z) &&
+                TryGetUnitVector(x, y, z, out var uv))
+            {
+                reader.Skip();
+                this = uv;
+                return;
+            }
+
+            if (reader.TryReadChildElementsAsDoubles("X", "Y", "Z", out x, out y, out z) &&
+                TryGetUnitVector(x, y, z, out uv))
+            {
+                reader.Skip();
+                this = uv;
+                return;
+            }
+
+            throw new XmlException($"Could not read a {this.GetType()}");
+        }
+
         void IXmlSerializable.WriteXml(XmlWriter writer)
         {
             writer.WriteAttribute("X", this.X);
             writer.WriteAttribute("Y", this.Y);
             writer.WriteAttribute("Z", this.Z);
-        }
-
-        void IXmlSerializable.ReadXml(XmlReader reader)
-        {
-            reader.MoveToContent();
-            var e = (XElement)XNode.ReadFrom(reader);
-
-            // Hacking set readonly fields here, can't think of a cleaner workaround
-            XmlExt.SetReadonlyField(ref this, x => x.X, XmlConvert.ToDouble(e.ReadAttributeOrElementOrDefault("X")));
-            XmlExt.SetReadonlyField(ref this, x => x.Y, XmlConvert.ToDouble(e.ReadAttributeOrElementOrDefault("Y")));
-            XmlExt.SetReadonlyField(ref this, x => x.Z, XmlConvert.ToDouble(e.ReadAttributeOrElementOrDefault("Z")));
         }
     }
 }

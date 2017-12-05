@@ -3,6 +3,7 @@
     using System;
     using System.Globalization;
     using System.IO;
+    using System.Runtime.Serialization.Formatters.Binary;
     using System.Xml;
     using System.Xml.Serialization;
     using MathNet.Spatial.Euclidean;
@@ -112,6 +113,21 @@
             Assert.Throws<FormatException>(() => Vector3D.Parse(text));
         }
 
+        [TestCase("<Vector3D X=\"1\" Y=\"-2\" Z=\"3\" />")]
+        [TestCase("<Vector3D Y=\"-2\" Z=\"3\"  X=\"1\"/>")]
+        [TestCase("<Vector3D Z=\"3\" X=\"1\" Y=\"-2\" />")]
+        [TestCase("<Vector3D><X>1</X><Y>-2</Y><Z>3</Z></Vector3D>")]
+        [TestCase("<Vector3D><Y>-2</Y><Z>3</Z><X>1</X></Vector3D>")]
+        [TestCase("<Vector3D><Z>3</Z><X>1</X><Y>-2</Y></Vector3D>")]
+        public void ReadFrom(string xml)
+        {
+            using (var reader = new StringReader(xml))
+            {
+                var actual = Vector3D.ReadFrom(XmlReader.Create(reader));
+                Assert.AreEqual(new Vector3D(1, -2, 3), actual);
+            }
+        }
+
         [Test]
         public void ToDenseVector()
         {
@@ -121,20 +137,6 @@
             Assert.AreEqual(1, denseVector[0], 1e-6);
             Assert.AreEqual(2, denseVector[1], 1e-6);
             Assert.AreEqual(3, denseVector[2], 1e-6);
-        }
-
-        [TestCase("1, 2, 3", "1, 2, 3", 1e-4, true)]
-        [TestCase("1, 2, 3", "4, 5, 6", 1e-4, false)]
-        public void Equals(string p1s, string p2s, double tol, bool expected)
-        {
-            var v1 = Vector3D.Parse(p1s);
-            var v2 = Vector3D.Parse(p2s);
-            Assert.AreEqual(expected, v1 == v2);
-            Assert.AreEqual(expected, v1.Equals(v2));
-            Assert.AreEqual(expected, v1.Equals((object)v2));
-            Assert.AreEqual(expected, Equals(v1, v2));
-            Assert.AreEqual(expected, v1.Equals(v2, tol));
-            Assert.AreNotEqual(expected, v1 != v2);
         }
 
         [TestCase("1; 0 ; 0")]
@@ -152,16 +154,6 @@
         {
             var v = Vector3D.Parse(vs);
             Assert.Throws<ArgumentException>(() => { var _ = v.Orthogonal; });
-        }
-
-        [TestCase("-2, 0, 1e-4", null, "(-2, 0, 0.0001)", 1e-4)]
-        [TestCase("-2, 0, 1e-4", "F2", "(-2.00, 0.00, 0.00)", 1e-4)]
-        public void ToString(string vs, string format, string expected, double tolerance)
-        {
-            var v = Vector3D.Parse(vs);
-            var actual = v.ToString(format);
-            Assert.AreEqual(expected, actual);
-            AssertGeometry.AreEqual(v, Vector3D.Parse(actual), tolerance);
         }
 
         [TestCase(X, Y, Z)]
@@ -451,27 +443,93 @@
             Assert.AreEqual(expected, v1.IsPerpendicularTo(v2));
         }
 
-        [Test]
-        public void SerializeDeserialize()
+        [TestCase("1, 2, 3", "1, 2, 3", 1e-4, true)]
+        [TestCase("1, 2, 3", "4, 5, 6", 1e-4, false)]
+        public void Equals(string p1s, string p2s, double tol, bool expected)
         {
-            var v = new Vector3D(1, -2, 3);
-            const string Xml = @"<Vector3D X=""1"" Y=""-2"" Z=""3"" />";
-            const string ElementXml = @"<Vector3D><X>1</X><Y>-2</Y><Z>3</Z></Vector3D>";
-            var roundTrip = AssertXml.XmlSerializerRoundTrip(v, Xml);
-            AssertGeometry.AreEqual(v, roundTrip);
+            var v1 = Vector3D.Parse(p1s);
+            var v2 = Vector3D.Parse(p2s);
+            Assert.AreEqual(expected, v1 == v2);
+            Assert.AreEqual(expected, v1.Equals(v2));
+            Assert.AreEqual(expected, v1.Equals((object)v2));
+            Assert.AreEqual(expected, Equals(v1, v2));
+            Assert.AreEqual(expected, v1.Equals(v2, tol));
+            Assert.AreNotEqual(expected, v1 != v2);
+        }
 
-            var serializer = new XmlSerializer(typeof(Vector3D));
+        [TestCase("-2, 0, 1e-4", null, "(-2, 0, 0.0001)", 1e-4)]
+        [TestCase("-2, 0, 1e-4", "F2", "(-2.00, 0.00, 0.00)", 1e-4)]
+        public void ToString(string vs, string format, string expected, double tolerance)
+        {
+            var v = Vector3D.Parse(vs);
+            var actual = v.ToString(format);
+            Assert.AreEqual(expected, actual);
+            AssertGeometry.AreEqual(v, Vector3D.Parse(actual), tolerance);
+        }
 
-            var actuals = new[]
-                          {
-                              Vector3D.ReadFrom(XmlReader.Create(new StringReader(Xml))),
-                              Vector3D.ReadFrom(XmlReader.Create(new StringReader(ElementXml))),
-                              (Vector3D)serializer.Deserialize(new StringReader(Xml)),
-                              (Vector3D)serializer.Deserialize(new StringReader(ElementXml))
-                          };
-            foreach (var actual in actuals)
+        [Test]
+        public void XmlRoundtrip()
+        {
+            var p = new Vector3D(1, -2, 3);
+            var xml = @"<Vector3D X=""1"" Y=""-2"" Z=""3"" />";
+            AssertXml.XmlRoundTrips(p, xml, (expected, actual) => AssertGeometry.AreEqual(expected, actual));
+        }
+
+        [Test]
+        public void XmlContainerRoundtrip()
+        {
+            var container = new AssertXml.Container<Vector3D>
             {
-                AssertGeometry.AreEqual(v, actual);
+                Value1 = new Vector3D(1, 2, 3),
+                Value2 = new Vector3D(4, 5, 6)
+            };
+            var expected = "<ContainerOfVector3D>\r\n" +
+                           "  <Value1 X=\"1\" Y=\"2\" Z=\"3\"></Value1>\r\n" +
+                           "  <Value2 X=\"4\" Y=\"5\" Z=\"6\"></Value2>\r\n" +
+                           "</ContainerOfVector3D>";
+            var roundTrip = AssertXml.XmlSerializerRoundTrip(container, expected);
+            AssertGeometry.AreEqual(container.Value1, roundTrip.Value1);
+            AssertGeometry.AreEqual(container.Value2, roundTrip.Value2);
+        }
+
+        [Test]
+        public void XmlElements()
+        {
+            var v = new Vector3D(1, 2, 3);
+            var serializer = new XmlSerializer(typeof(Vector3D));
+            AssertGeometry.AreEqual(v, (Vector3D)serializer.Deserialize(new StringReader(@"<Vector3D><X>1</X><Y>2</Y><Z>3</Z></Vector3D>")));
+        }
+
+        [Test]
+        public void XmlContainerElements()
+        {
+            var container = new AssertXml.Container<Vector3D>
+            {
+                Value1 = new Vector3D(1, 2, 3),
+                Value2 = new Vector3D(4, 5, 6)
+            };
+            var xml = "<ContainerOfVector3D>\r\n" +
+                      "  <Value1><X>1</X><Y>2</Y><Z>3</Z></Value1>\r\n" +
+                      "  <Value2><X>4</X><Y>5</Y><Z>6</Z></Value2>\r\n" +
+                      "</ContainerOfVector3D>";
+            var serializer = new XmlSerializer(typeof(AssertXml.Container<Vector3D>));
+            var deserialized = (AssertXml.Container<Vector3D>)serializer.Deserialize(new StringReader(xml));
+            AssertGeometry.AreEqual(container.Value1, deserialized.Value1);
+            AssertGeometry.AreEqual(container.Value2, deserialized.Value2);
+        }
+
+        [Test]
+        public void BinaryRoundtrip()
+        {
+            var v = new Vector3D(1, 2, 3);
+            using (var ms = new MemoryStream())
+            {
+                var formatter = new BinaryFormatter();
+                formatter.Serialize(ms, v);
+                ms.Flush();
+                ms.Position = 0;
+                var roundTrip = (Vector3D)formatter.Deserialize(ms);
+                AssertGeometry.AreEqual(v, roundTrip);
             }
         }
     }

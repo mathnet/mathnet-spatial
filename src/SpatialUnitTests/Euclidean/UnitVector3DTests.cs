@@ -3,6 +3,7 @@
     using System;
     using System.Globalization;
     using System.IO;
+    using System.Runtime.Serialization.Formatters.Binary;
     using System.Xml;
     using System.Xml.Serialization;
     using MathNet.Spatial.Euclidean;
@@ -168,27 +169,6 @@
         }
 
         [Test]
-        public void XmlRoundTrips()
-        {
-            var uv = new UnitVector3D(0.2672612419124244, -0.53452248382484879, 0.80178372573727319);
-            var xml = @"<UnitVector3D X=""0.2672612419124244"" Y=""-0.53452248382484879"" Z=""0.80178372573727319"" />";
-            var elementXml = @"<UnitVector3D><X>0.2672612419124244</X><Y>-0.53452248382484879</Y><Z>0.80178372573727319</Z></UnitVector3D>";
-
-            AssertXml.XmlRoundTrips(uv, xml, (e, a) => AssertGeometry.AreEqual(e, a));
-            var serializer = new XmlSerializer(typeof(UnitVector3D));
-            var actuals = new[]
-                                {
-                                    UnitVector3D.ReadFrom(XmlReader.Create(new StringReader(xml))),
-                                    (UnitVector3D)serializer.Deserialize(new StringReader(xml)),
-                                    (UnitVector3D)serializer.Deserialize(new StringReader(elementXml))
-                                };
-            foreach (var actual in actuals)
-            {
-                AssertGeometry.AreEqual(uv, actual);
-            }
-        }
-
-        [Test]
         public void CastTest()
         {
             Assert.Inconclusive("Is it possible to implement this in a good way?");
@@ -207,6 +187,90 @@
         {
             var unitVector3D = UnitVector3D.Parse(unitVectorAsString);
             Assert.AreEqual(Vector3D.Parse(expected), multiplier * unitVector3D);
+        }
+
+        [TestCase("<UnitVector3D X=\"0.2672612419124244\" Y=\"-0.53452248382484879\" Z=\"0.80178372573727319\" />")]
+        [TestCase("<UnitVector3D Y=\"-0.53452248382484879\" Z=\"0.80178372573727319\"  X=\"0.2672612419124244\"/>")]
+        [TestCase("<UnitVector3D Z=\"0.80178372573727319\" X=\"0.2672612419124244\" Y=\"-0.53452248382484879\" />")]
+        [TestCase("<UnitVector3D><X>0.2672612419124244</X><Y>-0.53452248382484879</Y><Z>0.80178372573727319</Z></UnitVector3D>")]
+        [TestCase("<UnitVector3D><Y>-0.53452248382484879</Y><Z>0.80178372573727319</Z><X>0.2672612419124244</X></UnitVector3D>")]
+        [TestCase("<UnitVector3D><Z>0.80178372573727319</Z><X>0.2672612419124244</X><Y>-0.53452248382484879</Y></UnitVector3D>")]
+        public void ReadFrom(string xml)
+        {
+            using (var reader = new StringReader(xml))
+            {
+                var actual = UnitVector3D.ReadFrom(XmlReader.Create(reader));
+                Assert.AreEqual(new UnitVector3D(0.2672612419124244, -0.53452248382484879, 0.80178372573727319), actual);
+            }
+        }
+
+        [Test]
+        public void XmlRoundtrip()
+        {
+            var p = new UnitVector3D(0.2672612419124244, -0.53452248382484879, 0.80178372573727319);
+            var xml = "<UnitVector3D X=\"0.2672612419124244\" Y=\"-0.53452248382484879\" Z=\"0.80178372573727319\" />";
+            AssertXml.XmlRoundTrips(p, xml, (expected, actual) => AssertGeometry.AreEqual(expected, actual));
+        }
+
+        [Test]
+        public void XmlContainerRoundtrip()
+        {
+            var container = new AssertXml.Container<UnitVector3D>
+            {
+                Value1 = new UnitVector3D(0.2672612419124244, -0.53452248382484879, 0.80178372573727319),
+                Value2 = new UnitVector3D(1, 0, 0)
+            };
+            var expected = "<ContainerOfUnitVector3D>\r\n" +
+                           "  <Value1 X=\"0.2672612419124244\" Y=\"-0.53452248382484879\" Z=\"0.80178372573727319\"></Value1>\r\n" +
+                           "  <Value2 X=\"1\" Y=\"0\" Z=\"0\"></Value2>\r\n" +
+                           "</ContainerOfUnitVector3D>";
+            var roundTrip = AssertXml.XmlSerializerRoundTrip(container, expected);
+            AssertGeometry.AreEqual(container.Value1, roundTrip.Value1);
+            AssertGeometry.AreEqual(container.Value2, roundTrip.Value2);
+        }
+
+        [Test]
+        public void XmlElements()
+        {
+            var v = new UnitVector3D(0.2672612419124244, -0.53452248382484879, 0.80178372573727319);
+            var serializer = new XmlSerializer(typeof(UnitVector3D));
+            using (var reader = new StringReader("<UnitVector3D><X>0.2672612419124244</X><Y>-0.53452248382484879</Y><Z>0.80178372573727319</Z></UnitVector3D>"))
+            {
+                AssertGeometry.AreEqual(v, (UnitVector3D)serializer.Deserialize(reader));
+            }
+        }
+
+        [Test]
+        public void XmlContainerElements()
+        {
+            var container = new AssertXml.Container<UnitVector3D>
+            {
+                Value1 = new UnitVector3D(0.2672612419124244, -0.53452248382484879, 0.80178372573727319),
+                Value2 = new UnitVector3D(1, 0, 0)
+            };
+            var xml = "<ContainerOfUnitVector3D>\r\n" +
+                      "  <Value1><X>0.2672612419124244</X><Y>-0.53452248382484879</Y><Z>0.80178372573727319</Z></Value1>\r\n" +
+                      "  <Value2><X>1</X><Y>0</Y><Z>0</Z></Value2>\r\n" +
+                      "</ContainerOfUnitVector3D>";
+            var serializer = new XmlSerializer(typeof(AssertXml.Container<UnitVector3D>));
+            var deserialized = (AssertXml.Container<UnitVector3D>)serializer.Deserialize(new StringReader(xml));
+            AssertGeometry.AreEqual(container.Value1, deserialized.Value1);
+            AssertGeometry.AreEqual(container.Value2, deserialized.Value2);
+        }
+
+        [Test]
+        public void BinaryRoundtrip()
+        {
+            var v = new UnitVector3D(0.2672612419124244, 2, 3);
+            using (var ms = new MemoryStream())
+            {
+                var formatter = new BinaryFormatter();
+                formatter.Serialize(ms, v);
+                ms.Flush();
+                ms.Position = 0;
+                var roundTrip = (UnitVector3D)formatter.Deserialize(ms);
+                AssertGeometry.AreEqual(v, roundTrip);
+            }
         }
     }
 }
