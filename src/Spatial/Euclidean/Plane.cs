@@ -5,7 +5,6 @@
     using System.Xml.Linq;
     using System.Xml.Schema;
     using System.Xml.Serialization;
-    using MathNet.Numerics.LinearAlgebra;
     using MathNet.Numerics.LinearAlgebra.Double;
     using MathNet.Spatial.Internals;
     using MathNet.Spatial.Units;

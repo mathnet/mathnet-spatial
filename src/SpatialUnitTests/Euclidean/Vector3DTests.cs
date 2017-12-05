@@ -37,6 +37,13 @@
             Assert.Throws<ArgumentException>(() => new Vector3D(new[] { 1.0, 2, 3, 4 }));
         }
 
+        [TestCase("1,2,-3", 3, "3,6,-9")]
+        public void OperatorMultiply(string vectorAsString, double multiplier, string expected)
+        {
+            var vector = Vector3D.Parse(vectorAsString);
+            AssertGeometry.AreEqual(Vector3D.Parse(expected), multiplier * vector, 1e-6);
+        }
+
         [TestCase("-1,1,-1", -1, 1, -1)]
         [TestCase("1, 2, 3", 1, 2, 3)]
         [TestCase("1.2; 3.4; 5.6", 1.2, 3.4, 5.6)]
@@ -144,7 +151,7 @@
         public void Orthogonal_BadArgument(string vs)
         {
             var v = Vector3D.Parse(vs);
-            Assert.Throws<ArgumentException>(() => { var orthogonal = v.Orthogonal; });
+            Assert.Throws<ArgumentException>(() => { var _ = v.Orthogonal; });
         }
 
         [TestCase("-2, 0, 1e-4", null, "(-2, 0, 0.0001)", 1e-4)]
@@ -163,7 +170,7 @@
         [TestCase(Y, Z, X)]
         [TestCase(Y, "0.1, 0.1, 1", "1, 0, -0.1", Description = "Nästan Z")]
         [TestCase(Y, "-0.1, -0.1, 1", "1, 0, 0.1", Description = "Nästan Z men minus")]
-        public void CrossProductTest(string v1s, string v2s, string ves)
+        public void CrossProduct(string v1s, string v2s, string ves)
         {
             var vector1 = Vector3D.Parse(v1s);
             var vector2 = Vector3D.Parse(v2s);
@@ -176,7 +183,7 @@
         [TestCase(X, X, Z, 0)]
         [TestCase(X, NegativeY, Z, -90)]
         [TestCase(X, NegativeX, Z, 180)]
-        public void SignedAngleToTest(string fromString, string toString, string axisString, double degreeAngle)
+        public void SignedAngleTo(string fromString, string toString, string axisString, double degreeAngle)
         {
             var fromVector = Vector3D.Parse(fromString);
             var toVector = Vector3D.Parse(toString);
@@ -219,7 +226,7 @@
         }
 
         [TestCase(X, Z, 90, Y)]
-        public void RotateTest(string vs, string avs, double deg, string evs)
+        public void Rotate(string vs, string avs, double deg, string evs)
         {
             var v = Vector3D.Parse(vs);
             var aboutvector = Vector3D.Parse(avs);
@@ -267,7 +274,7 @@
         [TestCase("1; 0; 0", "1; 0; 0", "0°")]
         [TestCase("-1; -1; 1", "-1; -1; 1", "0°")]
         [TestCase("1; 1; 1", "-1; -1; -1", "180°")]
-        public void AngleToTest(string v1s, string v2s, string ea)
+        public void AngleTo(string v1s, string v2s, string ea)
         {
             var v1 = Vector3D.Parse(v1s);
             var v2 = Vector3D.Parse(v2s);
@@ -332,7 +339,7 @@
         [TestCase("1;-8;7", "1;-8;7", true)]
         [TestCase(X, "1;-8;7", false)]
         [TestCase("1;-1.2;0", Z, false)]
-        public void IsParallelToTest(string vector1, string vector2, bool isParalell)
+        public void IsParallelTo(string vector1, string vector2, bool isParalell)
         {
             var firstVector = Vector3D.Parse(vector1);
             var secondVector = Vector3D.Parse(vector2);
@@ -437,19 +444,11 @@
         [TestCase(Y, Z, true)]
         [TestCase(Z, Y, true)]
         [TestCase(Z, X, true)]
-        public void IsPerpendicularToTest(string v1s, string v2s, bool expected)
+        public void IsPerpendicularTo(string v1s, string v2s, bool expected)
         {
             var v1 = Vector3D.Parse(v1s);
             var v2 = Vector3D.Parse(v2s);
             Assert.AreEqual(expected, v1.IsPerpendicularTo(v2));
-        }
-
-        [TestCase("1,2,-3", 3, "3,6,-9")]
-        public void Multiply(string vectorAsString, double mulitplier, string expected)
-        {
-            var vector = Vector3D.Parse(vectorAsString);
-            AssertGeometry.AreEqual(Vector3D.Parse(expected), mulitplier * vector, 1e-6);
-            AssertGeometry.AreEqual(Vector3D.Parse(expected), mulitplier * vector, 1e-6);
         }
 
         [Test]

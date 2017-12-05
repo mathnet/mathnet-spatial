@@ -57,7 +57,7 @@
         }
 
         [Test]
-        public void BinaryRountrip()
+        public void BinaryRoundtrip()
         {
             var v = new Ray3D(new Point3D(1, 2, -3), new UnitVector3D(1, 2, 3));
             using (var ms = new MemoryStream())

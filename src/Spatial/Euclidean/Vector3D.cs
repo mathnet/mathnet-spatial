@@ -51,18 +51,12 @@ namespace MathNet.Spatial.Euclidean
             }
         }
 
-        public static Vector3D NaN
-        {
-            get { return new Vector3D(double.NaN, double.NaN, double.NaN); }
-        }
+        public static Vector3D NaN { get; } = new Vector3D(double.NaN, double.NaN, double.NaN);
 
         /// <summary>
         /// The length of the vector not the count of elements
         /// </summary>
-        public double Length
-        {
-            get { return Math.Sqrt((this.X * this.X) + (this.Y * this.Y) + (this.Z * this.Z)); }
-        }
+        public double Length => Math.Sqrt((this.X * this.X) + (this.Y * this.Y) + (this.Z * this.Z));
 
         /// <summary>
         /// A vector orthogonbal to this
@@ -80,10 +74,7 @@ namespace MathNet.Spatial.Euclidean
             }
         }
 
-        internal Matrix<double> CrossProductMatrix
-        {
-            get { return Matrix<double>.Build.Dense(3, 3, new[] { 0d, this.Z, -this.Y, -this.Z, 0d, this.X, this.Y, -this.X, 0d }); }
-        }
+        internal Matrix<double> CrossProductMatrix => Matrix<double>.Build.Dense(3, 3, new[] { 0d, this.Z, -this.Y, -this.Z, 0d, this.X, this.Y, -this.X, 0d });
 
         public static bool operator ==(Vector3D left, Vector3D right)
         {
