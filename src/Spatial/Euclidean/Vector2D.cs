@@ -175,7 +175,7 @@
 
         public static Vector2D ReadFrom(XmlReader reader)
         {
-            return reader.ReadFrom<Vector2D>();
+            return reader.ReadElementAs<Vector2D>();
         }
 
         /// <summary>
@@ -260,7 +260,7 @@
         /// <param name="other">The other <see cref="Vector2D"/></param>
         /// <param name="clockWise">Positive in clockwise direction</param>
         /// <param name="returnNegative">When true and the result is > 180° a negative value is returned</param>
-        /// <returns></returns>
+        /// <returns>The angle between the vectors.</returns>
         public Angle SignedAngleTo(Vector2D other, bool clockWise = false, bool returnNegative = false)
         {
             var sign = clockWise ? -1 : 1;
@@ -293,7 +293,7 @@
         /// <summary>
         /// Compute the angle between this vector and another using the arccosine of the dot product.
         /// </summary>
-        /// <param name="other"></param>
+        /// <param name="other">The other <see cref="Vector2D"/></param>
         /// <returns>The angle between vectors, with a range between 0° and 180°</returns>
         public Angle AngleTo(Vector2D other)
         {
@@ -329,9 +329,10 @@
         /// <summary>
         /// Performs the 2D 'cross product' as if the 2D vectors were really 3D vectors in the z=0 plane, returning
         /// the scalar magnitude and direction of the resulting z value.
+        /// Formula: (this.X * other.Y) - (this.Y * other.X)
         /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
+        /// <param name="other">The other <see cref="Vector2D"/></param>
+        /// <returns>(this.X * other.Y) - (this.Y * other.X)</returns>
         public double CrossProduct(Vector2D other)
         {
             // Though the cross product is undefined in 2D space, this is a useful mathematical operation to
@@ -342,8 +343,8 @@
         /// <summary>
         /// Projects this vector onto another vector
         /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
+        /// <param name="other">The other <see cref="Vector2D"/></param>
+        /// <returns>A <see cref="Vector2D"/> representing this vector projected on <paramref name="other"/></returns>
         public Vector2D ProjectOn(Vector2D other)
         {
             return other * (this.DotProduct(other) / other.DotProduct(other));
@@ -384,6 +385,7 @@
         /// <summary>
         /// Convert to a Math.NET Numerics dense vector of length 2.
         /// </summary>
+        /// <returns> A <see cref="Vector{Double}"/> with the x and y values from this instance.</returns>
         public Vector<double> ToVector()
         {
             return Vector<double>.Build.Dense(new[] { this.X, this.Y });

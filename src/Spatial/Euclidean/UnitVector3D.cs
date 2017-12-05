@@ -236,127 +236,10 @@ namespace MathNet.Spatial.Euclidean
             throw new FormatException($"Could not parse a UnitVector3D from the string {value}");
         }
 
-        public override string ToString()
-        {
-            return this.ToString(null, CultureInfo.InvariantCulture);
-        }
-
-        public string ToString(IFormatProvider provider)
-        {
-            return this.ToString(null, provider);
-        }
-
-        public string ToString(string format, IFormatProvider provider = null)
-        {
-            var numberFormatInfo = provider != null ? NumberFormatInfo.GetInstance(provider) : CultureInfo.InvariantCulture.NumberFormat;
-            var separator = numberFormatInfo.NumberDecimalSeparator == "," ? ";" : ",";
-            return string.Format("({0}{1} {2}{1} {3})", this.X.ToString(format, numberFormatInfo), separator, this.Y.ToString(format, numberFormatInfo), this.Z.ToString(format, numberFormatInfo));
-        }
-
-        public bool Equals(Vector3D other)
-        {
-            // ReSharper disable CompareOfFloatsByEqualityOperator
-            return this.X == other.X && this.Y == other.Y && this.Z == other.Z;
-            // ReSharper restore CompareOfFloatsByEqualityOperator
-        }
-
-        public bool Equals(UnitVector3D other)
-        {
-            // ReSharper disable CompareOfFloatsByEqualityOperator
-            return this.X == other.X && this.Y == other.Y && this.Z == other.Z;
-            // ReSharper restore CompareOfFloatsByEqualityOperator
-        }
-
-        public bool Equals(UnitVector3D other, double tolerance)
-        {
-            if (tolerance < 0)
-            {
-                throw new ArgumentException("epsilon < 0");
-            }
-
-            return Math.Abs(other.X - this.X) < tolerance &&
-                   Math.Abs(other.Y - this.Y) < tolerance &&
-                   Math.Abs(other.Z - this.Z) < tolerance;
-        }
-
-        public bool Equals(Vector3D other, double tolerance)
-        {
-            if (tolerance < 0)
-            {
-                throw new ArgumentException("epsilon < 0");
-            }
-
-            return Math.Abs(other.X - this.X) < tolerance &&
-                   Math.Abs(other.Y - this.Y) < tolerance &&
-                   Math.Abs(other.Z - this.Z) < tolerance;
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj))
-            {
-                return false;
-            }
-
-            return (obj is UnitVector3D && this.Equals((UnitVector3D)obj)) ||
-                   (obj is Vector3D && this.Equals((Vector3D)obj));
-        }
-
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                var hashCode = this.X.GetHashCode();
-                hashCode = (hashCode * 397) ^ this.Y.GetHashCode();
-                hashCode = (hashCode * 397) ^ this.Z.GetHashCode();
-                return hashCode;
-            }
-        }
-
-        /// <summary>
-        /// This method is reserved and should not be used. When implementing the IXmlSerializable interface, you should return null (Nothing in Visual Basic) from this method, and instead, if specifying a custom schema is required, apply the <see cref="T:System.Xml.Serialization.XmlSchemaProviderAttribute"/> to the class.
-        /// </summary>
-        /// <returns>
-        /// An <see cref="T:System.Xml.Schema.XmlSchema"/> that describes the XML representation of the object that is produced by the <see cref="M:System.Xml.Serialization.IXmlSerializable.WriteXml(System.Xml.XmlWriter)"/> method and consumed by the <see cref="M:System.Xml.Serialization.IXmlSerializable.ReadXml(System.Xml.XmlReader)"/> method.
-        /// </returns>
-        public XmlSchema GetSchema()
-        {
-            return null;
-        }
-
-        /// <summary>
-        /// Converts an object into its XML representation.
-        /// </summary>
-        /// <param name="writer">The <see cref="T:System.Xml.XmlWriter"/> stream to which the object is serialized. </param>
-        public void WriteXml(XmlWriter writer)
-        {
-            writer.WriteAttribute("X", this.X);
-            writer.WriteAttribute("Y", this.Y);
-            writer.WriteAttribute("Z", this.Z);
-        }
-
         public static UnitVector3D ReadFrom(XmlReader reader)
         {
-            var v = default(UnitVector3D);
-            v.ReadXml(reader);
-            return v;
+            return reader.ReadElementAs<UnitVector3D>();
         }
-
-        /// <summary>
-        /// Generates an object from its XML representation.
-        /// </summary>
-        /// <param name="reader">The <see cref="T:System.Xml.XmlReader"/> stream from which the object is deserialized. </param>
-        public void ReadXml(XmlReader reader)
-        {
-            reader.MoveToContent();
-            var e = (XElement)XNode.ReadFrom(reader);
-
-            // Hacking set readonly fields here, can't think of a cleaner workaround
-            XmlExt.SetReadonlyField(ref this, x => x.X, XmlConvert.ToDouble(e.ReadAttributeOrElementOrDefault("X")));
-            XmlExt.SetReadonlyField(ref this, x => x.Y, XmlConvert.ToDouble(e.ReadAttributeOrElementOrDefault("Y")));
-            XmlExt.SetReadonlyField(ref this, x => x.Z, XmlConvert.ToDouble(e.ReadAttributeOrElementOrDefault("Z")));
-        }
-
 
         public Vector3D ScaleBy(double scaleFactor)
         {
@@ -629,6 +512,107 @@ namespace MathNet.Spatial.Euclidean
         public Vector<double> ToVector()
         {
             return Vector<double>.Build.Dense(new[] { this.X, this.Y, this.Z });
+        }
+
+
+        public override string ToString()
+        {
+            return this.ToString(null, CultureInfo.InvariantCulture);
+        }
+
+        public string ToString(IFormatProvider provider)
+        {
+            return this.ToString(null, provider);
+        }
+
+        public string ToString(string format, IFormatProvider provider = null)
+        {
+            var numberFormatInfo = provider != null ? NumberFormatInfo.GetInstance(provider) : CultureInfo.InvariantCulture.NumberFormat;
+            var separator = numberFormatInfo.NumberDecimalSeparator == "," ? ";" : ",";
+            return string.Format("({0}{1} {2}{1} {3})", this.X.ToString(format, numberFormatInfo), separator, this.Y.ToString(format, numberFormatInfo), this.Z.ToString(format, numberFormatInfo));
+        }
+
+        public bool Equals(Vector3D other)
+        {
+            // ReSharper disable CompareOfFloatsByEqualityOperator
+            return this.X == other.X && this.Y == other.Y && this.Z == other.Z;
+            // ReSharper restore CompareOfFloatsByEqualityOperator
+        }
+
+        public bool Equals(UnitVector3D other)
+        {
+            // ReSharper disable CompareOfFloatsByEqualityOperator
+            return this.X == other.X && this.Y == other.Y && this.Z == other.Z;
+            // ReSharper restore CompareOfFloatsByEqualityOperator
+        }
+
+        public bool Equals(UnitVector3D other, double tolerance)
+        {
+            if (tolerance < 0)
+            {
+                throw new ArgumentException("epsilon < 0");
+            }
+
+            return Math.Abs(other.X - this.X) < tolerance &&
+                   Math.Abs(other.Y - this.Y) < tolerance &&
+                   Math.Abs(other.Z - this.Z) < tolerance;
+        }
+
+        public bool Equals(Vector3D other, double tolerance)
+        {
+            if (tolerance < 0)
+            {
+                throw new ArgumentException("epsilon < 0");
+            }
+
+            return Math.Abs(other.X - this.X) < tolerance &&
+                   Math.Abs(other.Y - this.Y) < tolerance &&
+                   Math.Abs(other.Z - this.Z) < tolerance;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+
+            return (obj is UnitVector3D && this.Equals((UnitVector3D)obj)) ||
+                   (obj is Vector3D && this.Equals((Vector3D)obj));
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var hashCode = this.X.GetHashCode();
+                hashCode = (hashCode * 397) ^ this.Y.GetHashCode();
+                hashCode = (hashCode * 397) ^ this.Z.GetHashCode();
+                return hashCode;
+            }
+        }
+
+        XmlSchema IXmlSerializable.GetSchema()
+        {
+            return null;
+        }
+
+        void IXmlSerializable.WriteXml(XmlWriter writer)
+        {
+            writer.WriteAttribute("X", this.X);
+            writer.WriteAttribute("Y", this.Y);
+            writer.WriteAttribute("Z", this.Z);
+        }
+
+        void IXmlSerializable.ReadXml(XmlReader reader)
+        {
+            reader.MoveToContent();
+            var e = (XElement)XNode.ReadFrom(reader);
+
+            // Hacking set readonly fields here, can't think of a cleaner workaround
+            XmlExt.SetReadonlyField(ref this, x => x.X, XmlConvert.ToDouble(e.ReadAttributeOrElementOrDefault("X")));
+            XmlExt.SetReadonlyField(ref this, x => x.Y, XmlConvert.ToDouble(e.ReadAttributeOrElementOrDefault("Y")));
+            XmlExt.SetReadonlyField(ref this, x => x.Z, XmlConvert.ToDouble(e.ReadAttributeOrElementOrDefault("Z")));
         }
     }
 }

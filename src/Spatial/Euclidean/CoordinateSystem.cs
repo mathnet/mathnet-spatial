@@ -584,20 +584,16 @@ namespace MathNet.Spatial.Euclidean
         {
             var e = (XElement)XNode.ReadFrom(reader);
 
-            var xAxis = new Vector3D(double.NaN, double.NaN, double.NaN);
-            xAxis.ReadXml(e.SingleElementReader("XAxis"));
+            var xAxis = Vector3D.ReadFrom(e.SingleElementReader("XAxis"));
             this.SetColumn(0, new[] { xAxis.X, xAxis.Y, xAxis.Z, 0 });
 
-            var yAxis = new Vector3D(double.NaN, double.NaN, double.NaN);
-            yAxis.ReadXml(e.SingleElementReader("YAxis"));
+            var yAxis = Vector3D.ReadFrom(e.SingleElementReader("YAxis"));
             this.SetColumn(1, new[] { yAxis.X, yAxis.Y, yAxis.Z, 0 });
 
-            var zAxis = new Vector3D(double.NaN, double.NaN, double.NaN);
-            zAxis.ReadXml(e.SingleElementReader("ZAxis"));
+            var zAxis = Vector3D.ReadFrom(e.SingleElementReader("ZAxis"));
             this.SetColumn(2, new[] { zAxis.X, zAxis.Y, zAxis.Z, 0 });
 
-            var origin = new Point3D(double.NaN, double.NaN, double.NaN);
-            origin.ReadXml(e.SingleElementReader("Origin"));
+            var origin = Point3D.ReadFrom(e.SingleElementReader("Origin"));
             this.SetColumn(3, new[] { origin.X, origin.Y, origin.Z, 1 });
         }
 

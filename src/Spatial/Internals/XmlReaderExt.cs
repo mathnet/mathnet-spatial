@@ -12,7 +12,7 @@
         /// <typeparam name="T">The type of the instance to read from the current position of the reader.</typeparam>
         /// <param name="reader">A <see cref="XmlReader"/></param>
         /// <returns> A new instance of {T} with values from <paramref name="reader"/></returns>
-        internal static T ReadFrom<T>(this XmlReader reader)
+        internal static T ReadElementAs<T>(this XmlReader reader)
             where T : struct, IXmlSerializable
         {
             if (reader == null)

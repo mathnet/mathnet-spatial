@@ -208,7 +208,7 @@ namespace MathNet.Spatial.Units
         /// <returns>An instance of  <see cref="T:MathNet.Spatial.Units.Angle"/></returns>
         public static Angle ReadFrom(XmlReader reader)
         {
-            return reader.ReadFrom<Angle>();
+            return reader.ReadElementAs<Angle>();
         }
 
         /// <inheritdoc />

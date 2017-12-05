@@ -190,7 +190,7 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>A point</returns>
         public static Point2D ReadFrom(XmlReader reader)
         {
-            return reader.ReadFrom<Point2D>();
+            return reader.ReadElementAs<Point2D>();
         }
 
         /// <summary>
@@ -332,7 +332,7 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// return new Point3D(X, Y, 0);
         /// </summary>
-        /// <returns>return new Point3D(X, Y, 0);</returns>
+        /// <returns>A <see cref="Point3D"/> with x & y from this instance and z = 0</returns>
         public Point3D ToPoint3D()
         {
             return new Point3D(this.X, this.Y, 0);
