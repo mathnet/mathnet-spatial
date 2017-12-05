@@ -42,14 +42,14 @@
         [TestCase("0, 0, 0", "1, -1, 1", "0, 0, 0", "2, -1, 1", false)]
         public void Equals(string p1s, string v1s, string p2s, string v2s, bool expected)
         {
-            var ray1 = Ray3D.Parse(p1s, v1s);
-            var ray2 = Ray3D.Parse(p2s, v2s);
+            var ray1 = new Ray3D(Point3D.Parse(p1s), UnitVector3D.Parse(v1s, tolerance: 2));
+            var ray2 = new Ray3D(Point3D.Parse(p2s), UnitVector3D.Parse(v2s, tolerance: 2));
             Assert.AreEqual(expected, ray1.Equals(ray2));
             Assert.AreEqual(expected, ray1 == ray2);
             Assert.AreEqual(!expected, ray1 != ray2);
         }
 
-        [TestCase("1, 2, 3", "-1, 2, 3", false, @"<Ray3D><ThroughPoint X=""1"" Y=""2"" Z=""3"" /><Direction X=""-0.2672612419124244"" Y=""0.53452248382484879"" Z=""0.80178372573727319"" /></Ray3D>")]
+        [TestCase("1, 2, 3", "-0.2672612419124244, 0.53452248382484879, 0.80178372573727319", false, @"<Ray3D><ThroughPoint X=""1"" Y=""2"" Z=""3"" /><Direction X=""-0.2672612419124244"" Y=""0.53452248382484879"" Z=""0.80178372573727319"" /></Ray3D>")]
         public void XmlTests(string ps, string vs, bool asElements, string xml)
         {
             var ray = new Ray3D(Point3D.Parse(ps), UnitVector3D.Parse(vs));

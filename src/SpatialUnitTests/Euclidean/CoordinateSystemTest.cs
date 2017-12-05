@@ -140,9 +140,9 @@
         [TestCase("1, 2, 3", "-1, 0, -1", null)]
         public void RotateToTest(string v1s, string v2s, string @as)
         {
-            var axis = string.IsNullOrEmpty(@as) ? (UnitVector3D?)null : UnitVector3D.Parse(@as);
-            var v1 = UnitVector3D.Parse(v1s);
-            var v2 = UnitVector3D.Parse(v2s);
+            var axis = string.IsNullOrEmpty(@as) ? (UnitVector3D?)null : Vector3D.Parse(@as).Normalize();
+            var v1 = Vector3D.Parse(v1s).Normalize();
+            var v2 = Vector3D.Parse(v2s).Normalize();
             var actual = CoordinateSystem.RotateTo(v1, v2, axis);
             Console.WriteLine(actual);
             var rv = actual.Transform(v1);
@@ -225,8 +225,8 @@
         [TestCase(X, Z, Y)]
         public void SetToRotateToTest(string vs, string vts, string axisString)
         {
-            var v = UnitVector3D.Parse(vs);
-            var vt = UnitVector3D.Parse(vts);
+            var v = UnitVector3D.Parse(vs, tolerance: 1);
+            var vt = UnitVector3D.Parse(vts, tolerance: 1);
             UnitVector3D? axis = null;
             if (axisString != null)
             {

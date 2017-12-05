@@ -20,7 +20,7 @@
         public void DirectionsTest(string p1s, string p2s, string evs)
         {
             var l = Line3D.Parse(p1s, p2s);
-            var excpected = UnitVector3D.Parse(evs);
+            var excpected = UnitVector3D.Parse(evs, tolerance: 1);
             AssertGeometry.AreEqual(excpected, l.Direction);
         }
 

@@ -187,25 +187,28 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         /// <param name="text">The string to be converted</param>
         /// <param name="result">A vector with the coordinates specified</param>
+        /// <param name="tolerance">The tolerance for how big deviation from Length = 1 is accepted</param>
         /// <returns>True if <paramref name="text"/> could be parsed.</returns>
-        public static bool TryParse(string text, out UnitVector3D result)
+        public static bool TryParse(string text, out UnitVector3D result, double tolerance = 0.1)
         {
-            return TryParse(text, null, out result);
+            return TryParse(text, null, out result, tolerance);
         }
 
         /// <summary>
-        /// Attempts to convert a string of the form x,y,z into a vector
+        /// Attempts to convert a string of the form x,y,z into a unit vector
+        /// First it is parsed to a vector then the length of the vector is compared to the tolerance and normalized if within.
         /// </summary>
         /// <param name="text">The string to be converted</param>
         /// <param name="formatProvider">The <see cref="IFormatProvider"/></param>
         /// <param name="result">A point at the coordinates specified</param>
+        /// <param name="tolerance">The tolerance for how big deviation from Length = 1 is accepted</param>
         /// <returns>True if <paramref name="text"/> could be parsed.</returns>
-        public static bool TryParse(string text, IFormatProvider formatProvider, out UnitVector3D result)
+        public static bool TryParse(string text, IFormatProvider formatProvider, out UnitVector3D result, double tolerance = 0.1)
         {
             if (Text.TryParse3D(text, formatProvider, out var x, out var y, out var z))
             {
                 var temp = new Vector3D(x, y, z);
-                if (Math.Abs(temp.Length - 1) < 0.1)
+                if (Math.Abs(temp.Length - 1) < tolerance)
                 {
                     result = temp.Normalize();
                     return true;
@@ -221,10 +224,11 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         /// <param name="value">The string to be converted</param>
         /// <param name="formatProvider">The <see cref="IFormatProvider"/></param>
+        /// <param name="tolerance">The tolerance for how big deviation from Length = 1 is accepted</param>
         /// <returns>A point at the coordinates specified</returns>
-        public static UnitVector3D Parse(string value, IFormatProvider formatProvider = null)
+        public static UnitVector3D Parse(string value, IFormatProvider formatProvider = null, double tolerance = 0.1)
         {
-            if (TryParse(value, formatProvider, out var p))
+            if (TryParse(value, formatProvider, out var p, tolerance))
             {
                 return p;
             }
