@@ -17,20 +17,26 @@ namespace MathNet.Spatial.Euclidean
     public struct Point3D : IXmlSerializable, IEquatable<Point3D>, IFormattable
     {
         /// <summary>
-        /// Using public fields cos: http://blogs.msdn.com/b/ricom/archive/2006/08/31/performance-quiz-11-ten-questions-on-value-based-programming.aspx
+        /// The x component.
         /// </summary>
         public readonly double X;
 
         /// <summary>
-        /// Using public fields cos: http://blogs.msdn.com/b/ricom/archive/2006/08/31/performance-quiz-11-ten-questions-on-value-based-programming.aspx
+        /// The y component.
         /// </summary>
         public readonly double Y;
 
         /// <summary>
-        /// Using public fields cos: http://blogs.msdn.com/b/ricom/archive/2006/08/31/performance-quiz-11-ten-questions-on-value-based-programming.aspx
+        /// The z component.
         /// </summary>
         public readonly double Z;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Point3D"/> struct.
+        /// </summary>
+        /// <param name="x">The x component.</param>
+        /// <param name="y">The y component.</param>
+        /// <param name="z">The z component.</param>
         public Point3D(double x, double y, double z)
         {
             this.X = x;
@@ -38,11 +44,13 @@ namespace MathNet.Spatial.Euclidean
             this.Z = z;
         }
 
+        [Obsolete("This constructor will be removed. Made obsolete 2017-12-05.")]
         public Point3D(IEnumerable<double> data)
             : this(data.ToArray())
         {
         }
 
+        [Obsolete("This constructor will be removed. Made obsolete 2017-12-05.")]
         public Point3D(double[] data)
             : this(data[0], data[1], data[2])
         {
@@ -149,6 +157,21 @@ namespace MathNet.Spatial.Euclidean
             throw new FormatException($"Could not parse a Point3D from the string {value}");
         }
 
+        /// <summary>
+        /// Create a new <see cref="Point3D"/> from a Math.NET Numerics vector of length 3.
+        /// </summary>
+        /// <param name="vector"> A vector with length 2 to populate the created instance with.</param>
+        /// <returns> A <see cref="Point3D"/></returns>
+        public static Point3D OfVector(Vector<double> vector)
+        {
+            if (vector.Count != 3)
+            {
+                throw new ArgumentException("The vector length must be 3 in order to convert it to a Point3D");
+            }
+
+            return new Point3D(vector.At(0), vector.At(1), vector.At(2));
+        }
+
         public static Point3D ReadFrom(XmlReader reader)
         {
             return reader.ReadElementAs<Point3D>();
@@ -228,20 +251,7 @@ namespace MathNet.Spatial.Euclidean
 
         public Point3D TransformBy(Matrix<double> m)
         {
-            return new Point3D(m.Multiply(this.ToVector()));
-        }
-
-        /// <summary>
-        /// Create a new Point3D from a Math.NET Numerics vector of length 3.
-        /// </summary>
-        public static Point3D OfVector(Vector<double> vector)
-        {
-            if (vector.Count != 3)
-            {
-                throw new ArgumentException("The vector length must be 3 in order to convert it to a Point3D");
-            }
-
-            return new Point3D(vector.At(0), vector.At(1), vector.At(2));
+            return OfVector(m.Multiply(this.ToVector()));
         }
 
         /// <summary>

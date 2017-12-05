@@ -302,7 +302,7 @@
         public void Normalize_BadArgument(string vs, string evs)
         {
             var vector = Vector3D.Parse(vs);
-            Assert.Throws<ArgumentException>(() => vector.Normalize());
+            Assert.Throws<InvalidOperationException>(() => vector.Normalize());
         }
 
         [TestCase("1, -1, 10", 5, "5, -5, 50")]

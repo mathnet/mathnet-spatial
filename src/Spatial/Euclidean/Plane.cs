@@ -184,15 +184,15 @@
                 throw new ArgumentException("Planes are parallel");
             }
 
-            var y = new DenseMatrix(2, 1);
-            y[0, 0] = -1 * this.D;
-            y[1, 0] = -1 * intersectingPlane.D;
+            var y = new DenseMatrix(2, 1)
+            {
+                [0, 0] = -1 * this.D,
+                [1, 0] = -1 * intersectingPlane.D
+            };
 
             var pointOnIntersectionLine = svd.Solve(y);
-            var throughPoint = new Point3D(pointOnIntersectionLine.Column(0));
-
-            var direction = new UnitVector3D(svd.VT.Row(2));
-
+            var throughPoint = Point3D.OfVector(pointOnIntersectionLine.Column(0));
+            var direction = UnitVector3D.OfVector(svd.VT.Row(2));
             return new Ray3D(throughPoint, direction);
         }
 

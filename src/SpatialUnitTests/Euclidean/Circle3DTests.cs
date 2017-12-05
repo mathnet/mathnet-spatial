@@ -61,7 +61,7 @@
             var p2 = new Point3D(-1, 0, 0);
             var p3 = new Point3D(1, 0, 0);
 
-            Assert.Throws<ArgumentException>(() => { new Circle3D(p1, p2, p3); });
+            Assert.Throws<InvalidOperationException>(() => { new Circle3D(p1, p2, p3); });
         }
     }
 }

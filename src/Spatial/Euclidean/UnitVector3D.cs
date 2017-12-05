@@ -6,7 +6,6 @@ namespace MathNet.Spatial.Euclidean
     using System.Globalization;
     using System.Linq;
     using System.Xml;
-    using System.Xml.Linq;
     using System.Xml.Schema;
     using System.Xml.Serialization;
     using MathNet.Numerics.LinearAlgebra;
@@ -20,38 +19,63 @@ namespace MathNet.Spatial.Euclidean
     public struct UnitVector3D : IXmlSerializable, IEquatable<UnitVector3D>, IEquatable<Vector3D>, IFormattable
     {
         /// <summary>
-        /// Using public fields cos: http://blogs.msdn.com/b/ricom/archive/2006/08/31/performance-quiz-11-ten-questions-on-value-based-programming.aspx
+        /// The x component.
         /// </summary>
         public readonly double X;
 
         /// <summary>
-        /// Using public fields cos: http://blogs.msdn.com/b/ricom/archive/2006/08/31/performance-quiz-11-ten-questions-on-value-based-programming.aspx
+        /// The y component.
         /// </summary>
         public readonly double Y;
 
         /// <summary>
-        /// Using public fields cos: http://blogs.msdn.com/b/ricom/archive/2006/08/31/performance-quiz-11-ten-questions-on-value-based-programming.aspx
+        /// The z component.
         /// </summary>
         public readonly double Z;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UnitVector3D"/> struct.
+        /// The provided values are scaled to L2 norm == 1
+        /// </summary>
+        /// <param name="x">The x component.</param>
+        /// <param name="y">The y component.</param>
+        /// <param name="z">The z component.</param>
+        [Obsolete("This constructor will be made private, prefer the factory method Create. Made obsolete 2017-12-05.")]
         public UnitVector3D(double x, double y, double z)
         {
-            var l = Math.Sqrt((x * x) + (y * y) + (z * z));
-            if (l < float.Epsilon)
+            if (double.IsNaN(x) || double.IsInfinity(x))
+            {
+                throw new ArgumentOutOfRangeException(nameof(x), x, "Invalid value.");
+            }
+
+            if (double.IsNaN(y) || double.IsInfinity(y))
+            {
+                throw new ArgumentOutOfRangeException(nameof(y), y, "Invalid value.");
+            }
+
+            if (double.IsNaN(z) || double.IsInfinity(z))
+            {
+                throw new ArgumentOutOfRangeException(nameof(z), z, "Invalid value.");
+            }
+
+            var norm = Math.Sqrt((x * x) + (y * y) + (z * z));
+            if (norm < float.Epsilon)
             {
                 throw new ArgumentException("l < float.Epsilon");
             }
 
-            this.X = x / l;
-            this.Y = y / l;
-            this.Z = z / l;
+            this.X = x / norm;
+            this.Y = y / norm;
+            this.Z = z / norm;
         }
 
+        [Obsolete("This constructor will be removed. Made obsolete 2017-12-05.")]
         public UnitVector3D(IEnumerable<double> data)
             : this(data.ToArray())
         {
         }
 
+        [Obsolete("This constructor will be removed. Made obsolete 2017-12-05.")]
         public UnitVector3D(double[] data)
             : this(data[0], data[1], data[2])
         {
@@ -60,6 +84,12 @@ namespace MathNet.Spatial.Euclidean
                 throw new ArgumentException("Size must be 3");
             }
         }
+
+        public static UnitVector3D XAxis { get; } = Create(1, 0, 0);
+
+        public static UnitVector3D YAxis { get; } = Create(0, 1, 0);
+
+        public static UnitVector3D ZAxis { get; } = Create(0, 0, 1);
 
         /// <summary>
         /// A vector orthogonbal to this
@@ -76,12 +106,6 @@ namespace MathNet.Spatial.Euclidean
                 return new UnitVector3D(-this.Y - this.Z, this.X, this.X);
             }
         }
-
-        public static UnitVector3D XAxis { get; } = new UnitVector3D(1, 0, 0);
-
-        public static UnitVector3D YAxis { get; } = new UnitVector3D(0, 1, 0);
-
-        public static UnitVector3D ZAxis { get; } = new UnitVector3D(0, 0, 1);
 
         /// <summary>
         /// The length of the vector not the count of elements
@@ -180,6 +204,46 @@ namespace MathNet.Spatial.Euclidean
         public static double operator *(UnitVector3D left, UnitVector3D right)
         {
             return left.DotProduct(right);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UnitVector3D"/> struct.
+        /// The provided values are scaled to L2 norm == 1
+        /// </summary>
+        /// <param name="x">The x component.</param>
+        /// <param name="y">The y component.</param>
+        /// <param name="z">The z component.</param>
+        /// <param name="tolerance">The allowed deviation from 1 for the L2-norm of x,y,z</param>
+        /// <returns>The <see cref="UnitVector3D"/></returns>
+        public static UnitVector3D Create(double x, double y, double z, double tolerance = double.PositiveInfinity)
+        {
+            var norm = Math.Sqrt((x * x) + (y * y) + (z * z));
+            if (norm < float.Epsilon)
+            {
+                throw new InvalidOperationException("The Euclidean norm of x, y, z is less than float.Epsilon");
+            }
+
+            if (Math.Abs(norm - 1) > tolerance)
+            {
+                throw new InvalidOperationException("The Euclidean norm of x, y, z differs more than tolerance from 1");
+            }
+
+            return new UnitVector3D(x / norm, y / norm, z / norm);
+        }
+
+        /// <summary>
+        /// Create a new <see cref="UnitVector3D"/> from a Math.NET Numerics vector of length 3.
+        /// </summary>
+        /// <param name="vector"> A vector with length 2 to populate the created instance with.</param>
+        /// <returns> A <see cref="UnitVector3D"/></returns>
+        public static UnitVector3D OfVector(Vector<double> vector)
+        {
+            if (vector.Count != 3)
+            {
+                throw new ArgumentException("The vector length must be 3 in order to convert it to a Vector3D");
+            }
+
+            return UnitVector3D.Create(vector.At(0), vector.At(1), vector.At(2));
         }
 
         /// <summary>
