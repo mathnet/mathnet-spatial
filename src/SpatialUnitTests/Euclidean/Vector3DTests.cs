@@ -153,7 +153,7 @@
         public void Orthogonal_BadArgument(string vs)
         {
             var v = Vector3D.Parse(vs);
-            Assert.Throws<ArgumentException>(() => { var _ = v.Orthogonal; });
+            Assert.Throws<InvalidOperationException>(() => { var _ = v.Orthogonal; });
         }
 
         [TestCase(X, Y, Z)]
@@ -236,12 +236,6 @@
             var aboutVector = Vector3D.Parse(aboutDoubles);
             var angle = vector.SignedAngleTo(vector, aboutVector.Normalize());
             Assert.AreEqual(0, angle.Degrees, 1E-6);
-        }
-
-        [Test]
-        public void SignedAngleToBug()
-        {
-            var ninetyDegAngle = new Vector3D(0, 1, 0);
         }
 
         [TestCase(X, Y, "90°")]

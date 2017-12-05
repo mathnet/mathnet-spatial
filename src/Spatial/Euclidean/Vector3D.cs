@@ -5,7 +5,6 @@ namespace MathNet.Spatial.Euclidean
     using System.Globalization;
     using System.Linq;
     using System.Xml;
-    using System.Xml.Linq;
     using System.Xml.Schema;
     using System.Xml.Serialization;
     using MathNet.Numerics.LinearAlgebra;
@@ -75,10 +74,10 @@ namespace MathNet.Spatial.Euclidean
             {
                 if (-this.X - this.Y > 0.1)
                 {
-                    return new UnitVector3D(this.Z, this.Z, -this.X - this.Y);
+                    return UnitVector3D.Create(this.Z, this.Z, -this.X - this.Y);
                 }
 
-                return new UnitVector3D(-this.Y - this.Z, this.X, this.X);
+                return UnitVector3D.Create(-this.Y - this.Z, this.X, this.X);
             }
         }
 

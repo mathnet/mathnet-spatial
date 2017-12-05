@@ -24,8 +24,6 @@
         /// The endpoint of the line
         /// </summary>
         public readonly Point3D EndPoint;
-        private double length;
-        private UnitVector3D direction;
 
         /// <summary>
         /// Throws if StartPoint == EndPoint
@@ -34,53 +32,24 @@
         /// <param name="endPoint"></param>
         public Line3D(Point3D startPoint, Point3D endPoint)
         {
-            this.StartPoint = startPoint;
-            this.EndPoint = endPoint;
-            if (this.StartPoint == this.EndPoint)
+            if (startPoint == endPoint)
             {
                 throw new ArgumentException("StartPoint == EndPoint");
             }
 
-            this.length = -1.0;
-            this.direction = default(UnitVector3D);
+            this.StartPoint = startPoint;
+            this.EndPoint = endPoint;
         }
 
         /// <summary>
-        /// Distance from startpoint to endpoint, the length of the line
+        /// Gets distance from <see cref="StartPoint"/> to <see cref="EndPoint"/>, the length of the line
         /// </summary>
-        public double Length
-        {
-            get
-            {
-                if (this.length < 0)
-                {
-                    var vectorTo = this.StartPoint.VectorTo(this.EndPoint);
-                    this.length = vectorTo.Length;
-                    if (this.length > 0)
-                    {
-                        this.direction = vectorTo.Normalize();
-                    }
-                }
-
-                return this.length;
-            }
-        }
+        public double Length => this.StartPoint.DistanceTo(this.EndPoint);
 
         /// <summary>
-        /// The direction from the startpoint to the endpoint
+        /// Gets the direction from the <see cref="StartPoint"/> to <see cref="EndPoint"/>
         /// </summary>
-        public UnitVector3D Direction
-        {
-            get
-            {
-                if (this.length < 0)
-                {
-                    this.length = this.Length; // Side effect hack
-                }
-
-                return this.direction;
-            }
-        }
+        public UnitVector3D Direction => this.StartPoint.VectorTo(this.EndPoint).Normalize();
 
         public static bool operator ==(Line3D left, Line3D right)
         {
@@ -291,25 +260,13 @@
             return closestPair;
         }
 
-        /// <summary>
-        /// Indicates whether the current object is equal to another object of the same type.
-        /// </summary>
-        /// <returns>
-        /// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
-        /// </returns>
-        /// <param name="other">An object to compare with this object.</param>
+        /// <inheritdoc />
         public bool Equals(Line3D other)
         {
             return this.StartPoint.Equals(other.StartPoint) && this.EndPoint.Equals(other.EndPoint);
         }
 
-        /// <summary>
-        /// Determines whether the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>.
-        /// </summary>
-        /// <returns>
-        /// true if the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>; otherwise, false.
-        /// </returns>
-        /// <param name="obj">The <see cref="T:System.Object"/> to compare with the current <see cref="T:System.Object"/>. </param><filterpriority>2</filterpriority>
+        /// <inheritdoc />
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj))
@@ -320,13 +277,7 @@
             return obj is Line3D && this.Equals((Line3D)obj);
         }
 
-        /// <summary>
-        /// Serves as a hash function for a particular type.
-        /// </summary>
-        /// <returns>
-        /// A hash code for the current <see cref="T:System.Object"/>.
-        /// </returns>
-        /// <filterpriority>2</filterpriority>
+        /// <inheritdoc />
         public override int GetHashCode()
         {
             unchecked
@@ -337,27 +288,30 @@
             }
         }
 
+        /// <inheritdoc />
         public override string ToString()
         {
             return string.Format("StartPoint: {0}, EndPoint: {1}", this.StartPoint, this.EndPoint);
         }
 
-        public XmlSchema GetSchema()
+        /// <inheritdoc />
+        XmlSchema IXmlSerializable.GetSchema()
         {
             return null;
         }
 
-        public void ReadXml(XmlReader reader)
+        /// <inheritdoc/>
+        void IXmlSerializable.ReadXml(XmlReader reader)
         {
             reader.MoveToContent();
             var e = (XElement)XNode.ReadFrom(reader);
-            var startPoint = Point3D.ReadFrom(e.SingleElement("StartPoint").CreateReader());
-            XmlExt.SetReadonlyField(ref this, l => l.StartPoint, startPoint);
-            var endPoint = Point3D.ReadFrom(e.SingleElement("EndPoint").CreateReader());
-            XmlExt.SetReadonlyField(ref this, l => l.EndPoint, endPoint);
+            this = new Line3D(
+                Point3D.ReadFrom(e.SingleElement("StartPoint").CreateReader()),
+                Point3D.ReadFrom(e.SingleElement("EndPoint").CreateReader()));
         }
 
-        public void WriteXml(XmlWriter writer)
+        /// <inheritdoc />
+        void IXmlSerializable.WriteXml(XmlWriter writer)
         {
             writer.WriteElement("StartPoint", this.StartPoint);
             writer.WriteElement("EndPoint", this.EndPoint);
