@@ -15,7 +15,6 @@
     {
         public readonly UnitVector3D Normal;
         public readonly Point3D RootPoint;
-        public readonly double D;
 
         public Plane(double a, double b, double c, double d)
             : this(new UnitVector3D(a, b, c), -1 * d)
@@ -23,10 +22,8 @@
         }
 
         public Plane(UnitVector3D normal, double offset = 0)
+            : this(normal, (offset * normal).ToPoint3D())
         {
-            this.Normal = normal;
-            this.RootPoint = (offset * normal).ToPoint3D();
-            this.D = -1 * offset;
         }
 
         public Plane(UnitVector3D normal, Point3D rootPoint)
@@ -38,7 +35,6 @@
         {
             this.RootPoint = rootPoint;
             this.Normal = normal;
-            this.D = -this.RootPoint.ToVector3D().DotProduct(this.Normal);
         }
 
         /// <summary>
@@ -65,7 +61,6 @@
 
             this.RootPoint = p1;
             this.Normal = cross.Normalize();
-            this.D = -this.RootPoint.ToVector3D().DotProduct(this.Normal);
         }
 
         public double A => this.Normal.X;
@@ -73,6 +68,8 @@
         public double B => this.Normal.Y;
 
         public double C => this.Normal.Z;
+
+        public double D => -this.RootPoint.ToVector3D().DotProduct(this.Normal);
 
         public static bool operator ==(Plane left, Plane right)
         {
@@ -332,7 +329,6 @@
             var e = (XElement)XNode.ReadFrom(reader);
             XmlExt.SetReadonlyField(ref this, l => l.RootPoint, Point3D.ReadFrom(e.SingleElement("RootPoint").CreateReader()));
             XmlExt.SetReadonlyField(ref this, l => l.Normal, UnitVector3D.ReadFrom(e.SingleElement("Normal").CreateReader()));
-            XmlExt.SetReadonlyField(ref this, l => l.D, -this.RootPoint.ToVector3D().DotProduct(this.Normal));
         }
 
         public void WriteXml(XmlWriter writer)
