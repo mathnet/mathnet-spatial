@@ -1,6 +1,7 @@
 namespace MathNet.Spatial.Euclidean
 {
     using System;
+    using System.Diagnostics.Contracts;
     using System.Globalization;
     using System.Xml;
     using System.Xml.Linq;
@@ -97,7 +98,6 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         /// <param name="s">a string representing the ray</param>
         /// <returns>a ray</returns>
-        [Obsolete("Should not have been made public, will be removed in a future version. Made obsolete 2017-12-06")]
         public static Ray3D Parse(string s)
         {
             return Parser.ParseRay3D(s);
@@ -108,6 +108,7 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         /// <param name="point3D">A point.</param>
         /// <returns>A line segment from the point to the closest point on the ray</returns>
+        [Pure]
         public Line3D LineTo(Point3D point3D)
         {
             var v = this.ThroughPoint.VectorTo(point3D);
@@ -116,10 +117,11 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Returns the point at which a ray intersets with a plane
+        /// Returns the point at which this ray intersects with the plane
         /// </summary>
         /// <param name="plane">A geometric plane.</param>
         /// <returns>A point of intersection if such an intersection exists; otherwise null.</returns>
+        [Pure]
         public Point3D? IntersectionWith(Plane plane)
         {
             return plane.IntersectionWith(this);
@@ -131,12 +133,14 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="otherRay">The ray to compare against.</param>
         /// <param name="tolerance">A tolerance (epsilon) to adjust for floating point error</param>
         /// <returns>True if the rays are collinear; otherwise false.</returns>
+        [Pure]
         public bool IsCollinear(Ray3D otherRay, double tolerance = float.Epsilon)
         {
             return this.Direction.IsParallelTo(otherRay.Direction, tolerance);
         }
 
         /// <inheritdoc/>
+        [Pure]
         public bool Equals(Ray3D other)
         {
             return this.Direction.Equals(other.Direction) &&
@@ -149,6 +153,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="other">The ray to compare against.</param>
         /// <param name="tolerance">A tolerance (epsilon) to adjust for floating point error</param>
         /// <returns>true if the ways are equal; otherwise false</returns>
+        [Pure]
         public bool Equals(Ray3D other, double tolerance)
         {
             return this.Direction.Equals(other.Direction, tolerance) &&
@@ -156,6 +161,7 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <inheritdoc/>
+        [Pure]
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj))
@@ -163,10 +169,11 @@ namespace MathNet.Spatial.Euclidean
                 return false;
             }
 
-            return obj is Ray3D && this.Equals((Ray3D)obj);
+            return obj is Ray3D d && this.Equals(d);
         }
 
         /// <inheritdoc/>
+        [Pure]
         public override int GetHashCode()
         {
             unchecked
@@ -178,12 +185,14 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <inheritdoc/>
+        [Pure]
         public override string ToString()
         {
             return this.ToString(null, CultureInfo.InvariantCulture);
         }
 
         /// <inheritdoc/>
+        [Pure]
         public string ToString(string format, IFormatProvider formatProvider)
         {
             return string.Format(
@@ -193,13 +202,13 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <inheritdoc/>
-        public XmlSchema GetSchema()
+        XmlSchema IXmlSerializable.GetSchema()
         {
             return null;
         }
 
         /// <inheritdoc/>
-        public void ReadXml(XmlReader reader)
+        void IXmlSerializable.ReadXml(XmlReader reader)
         {
             reader.MoveToContent();
             var e = (XElement)XNode.ReadFrom(reader);
@@ -209,7 +218,7 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <inheritdoc/>
-        public void WriteXml(XmlWriter writer)
+        void IXmlSerializable.WriteXml(XmlWriter writer)
         {
             writer.WriteElement("ThroughPoint", this.ThroughPoint);
             writer.WriteElement("Direction", this.Direction);

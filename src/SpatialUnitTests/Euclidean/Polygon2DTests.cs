@@ -10,25 +10,25 @@
     {
         private Polygon2D TestPolygon1()
         {
-            var points = from x in new string[] { "0,0", "0.25,0.5", "1,1", "-1,1", "0.5,-0.5" } select Point2D.Parse(x);
+            var points = from x in new[] { "0,0", "0.25,0.5", "1,1", "-1,1", "0.5,-0.5" } select Point2D.Parse(x);
             return new Polygon2D(points);
         }
 
         private Polygon2D TestPolygon2()
         {
-            var points = from x in new string[] { "0,0", "0.25,0.5", "1,1", "-1,1", "0.5,-0.5", "0,0" } select Point2D.Parse(x);
+            var points = from x in new[] { "0,0", "0.25,0.5", "1,1", "-1,1", "0.5,-0.5", "0,0" } select Point2D.Parse(x);
             return new Polygon2D(points);
         }
 
         private Polygon2D TestPolygon3()
         {
-            var points = from x in new string[] { "0.25,0", "0.5,1", "1,-1" } select Point2D.Parse(x);
+            var points = from x in new[] { "0.25,0", "0.5,1", "1,-1" } select Point2D.Parse(x);
             return new Polygon2D(points);
         }
 
         private Polygon2D TestPolygon4()
         {
-            var points = from x in new string[] { "0.5,1", "1,-1", "0.25,0" } select Point2D.Parse(x);
+            var points = from x in new[] { "0.5,1", "1,-1", "0.25,0" } select Point2D.Parse(x);
             return new Polygon2D(points);
         }
 

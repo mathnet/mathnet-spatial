@@ -1,6 +1,7 @@
 ﻿namespace MathNet.Spatial.Euclidean
 {
     using System;
+    using System.Diagnostics.Contracts;
     using System.Xml;
     using System.Xml.Linq;
     using System.Xml.Schema;
@@ -16,12 +17,12 @@
     public struct Line3D : IEquatable<Line3D>, IXmlSerializable
     {
         /// <summary>
-        /// The startpoint of the line
+        /// The start point of the line
         /// </summary>
         public readonly Point3D StartPoint;
 
         /// <summary>
-        /// The endpoint of the line
+        /// The end point of the line
         /// </summary>
         public readonly Point3D EndPoint;
 
@@ -45,11 +46,13 @@
         /// <summary>
         /// Gets distance from <see cref="StartPoint"/> to <see cref="EndPoint"/>, the length of the line
         /// </summary>
+        [Pure]
         public double Length => this.StartPoint.DistanceTo(this.EndPoint);
 
         /// <summary>
         /// Gets the direction from the <see cref="StartPoint"/> to <see cref="EndPoint"/>
         /// </summary>
+        [Pure]
         public UnitVector3D Direction => this.StartPoint.VectorTo(this.EndPoint).Normalize();
 
         /// <summary>
@@ -90,8 +93,9 @@
         /// Returns the shortest line between this line and a point.
         /// </summary>
         /// <param name="p">the point to create a line to</param>
-        /// <param name="mustStartBetweenStartAndEnd">If false the startpoint can extend beyond the start and endpoint of the line</param>
+        /// <param name="mustStartBetweenStartAndEnd">If false the start point can extend beyond the start and endpoint of the line</param>
         /// <returns>The shortest line between the line and the point</returns>
+        [Pure]
         public Line3D LineTo(Point3D p, bool mustStartBetweenStartAndEnd)
         {
             return new Line3D(this.ClosestPointTo(p, mustStartBetweenStartAndEnd), p);
@@ -103,6 +107,7 @@
         /// <param name="p">The point that the returned point is the closest point on the line to</param>
         /// <param name="mustBeOnSegment">If true the returned point is contained by the segment ends, otherwise it can be anywhere on the projected line</param>
         /// <returns>The closest point on the line to the provided point</returns>
+        [Pure]
         public Point3D ClosestPointTo(Point3D p, bool mustBeOnSegment)
         {
             var v = p - this.StartPoint;
@@ -129,6 +134,7 @@
         /// </summary>
         /// <param name="plane">The plane.</param>
         /// <returns>A projected line.</returns>
+        [Pure]
         public Line3D ProjectOn(Plane plane)
         {
             return plane.Project(this);
@@ -139,7 +145,8 @@
         /// </summary>
         /// <param name="plane">The plane.</param>
         /// <param name="tolerance">A tolerance (epsilon) to compensate for floating point error</param>
-        /// <returns>A point where the line and plane interset; null if no such point exists</returns>
+        /// <returns>A point where the line and plane intersect; null if no such point exists</returns>
+        [Pure]
         public Point3D? IntersectionWith(Plane plane, double tolerance = double.Epsilon)
         {
             return plane.IntersectionWith(this, tolerance);
@@ -151,6 +158,7 @@
         /// </summary>
         /// <param name="other">The other line to check this one against</param>
         /// <returns>True if the lines are parallel, false if they are not</returns>
+        [Pure]
         public bool IsParallelTo(Line3D other)
         {
             return this.Direction.IsParallelTo(other.Direction, Precision.DoublePrecision * 2);
@@ -162,6 +170,7 @@
         /// <param name="other">The other line to check this one against</param>
         /// <param name="angleTolerance">If the angle between line directions is less than this value, the method returns true</param>
         /// <returns>True if the lines are parallel within the angle tolerance, false if they are not</returns>
+        [Pure]
         public bool IsParallelTo(Line3D other, Angle angleTolerance)
         {
             return this.Direction.IsParallelTo(other.Direction, angleTolerance);
@@ -174,6 +183,7 @@
         /// </summary>
         /// <param name="other">line to compute the closest points with</param>
         /// <returns>A tuple of two points representing the endpoints of the shortest distance between the two lines</returns>
+        [Pure]
         public Tuple<Point3D, Point3D> ClosestPointsBetween(Line3D other)
         {
             if (this.IsParallelTo(other))
@@ -207,6 +217,7 @@
         /// <param name="other">line to compute the closest points with</param>
         /// <param name="mustBeOnSegments">if true, the lines are treated as segments bounded by the start and end point</param>
         /// <returns>A tuple of two points representing the endpoints of the shortest distance between the two lines or segments</returns>
+        [Pure]
         public Tuple<Point3D, Point3D> ClosestPointsBetween(Line3D other, bool mustBeOnSegments)
         {
             // If the segments are parallel and the answer must be on the segments, we can skip directly to the ending
@@ -223,7 +234,7 @@
                     return result;
                 }
 
-                // A point that is known to be colinear with the line start and end points is on the segment if
+                // A point that is known to be collinear with the line start and end points is on the segment if
                 // its distance to both endpoints is less than the segment length.  If both projected points lie
                 // within their segment, we can directly return the result.
                 if (result.Item1.DistanceTo(this.StartPoint) <= this.Length &&
@@ -239,13 +250,10 @@
             // of the two closest span points is outside of the segment of the line it was projected on.  In either
             // case we project each of the four endpoints onto the opposite segments and select the one with the
             // smallest projected distance.
-            Point3D checkPoint;
-            Tuple<Point3D, Point3D> closestPair;
-            double distance;
 
-            checkPoint = other.ClosestPointTo(this.StartPoint, true);
-            distance = checkPoint.DistanceTo(this.StartPoint);
-            closestPair = Tuple.Create(this.StartPoint, checkPoint);
+            var checkPoint = other.ClosestPointTo(this.StartPoint, true);
+            var distance = checkPoint.DistanceTo(this.StartPoint);
+            var closestPair = Tuple.Create(this.StartPoint, checkPoint);
             var minDistance = distance;
 
             checkPoint = other.ClosestPointTo(this.EndPoint, true);
@@ -275,12 +283,14 @@
         }
 
         /// <inheritdoc />
+        [Pure]
         public bool Equals(Line3D other)
         {
             return this.StartPoint.Equals(other.StartPoint) && this.EndPoint.Equals(other.EndPoint);
         }
 
         /// <inheritdoc />
+        [Pure]
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj))
@@ -288,10 +298,11 @@
                 return false;
             }
 
-            return obj is Line3D && this.Equals((Line3D)obj);
+            return obj is Line3D d && this.Equals(d);
         }
 
         /// <inheritdoc />
+        [Pure]
         public override int GetHashCode()
         {
             unchecked
@@ -303,9 +314,10 @@
         }
 
         /// <inheritdoc />
+        [Pure]
         public override string ToString()
         {
-            return string.Format("StartPoint: {0}, EndPoint: {1}", this.StartPoint, this.EndPoint);
+            return $"StartPoint: {this.StartPoint}, EndPoint: {this.EndPoint}";
         }
 
         /// <inheritdoc />

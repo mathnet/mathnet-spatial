@@ -1,4 +1,5 @@
-﻿namespace MathNet.Spatial.UnitTests.Euclidean
+﻿// ReSharper disable InconsistentNaming
+namespace MathNet.Spatial.UnitTests.Euclidean
 {
     using System;
     using MathNet.Spatial.Euclidean;
@@ -36,14 +37,14 @@
             }
         }
 
-        [TestCase("o:{1, 2e-6, -3} x:{1, 2, 3} y:{3, 3, 3} z:{4, 4, 4}", new double[] { 1, 2e-6, -3 }, new double[] { 1, 2, 3 }, new double[] { 3, 3, 3 }, new double[] { 4, 4, 4 })]
-        public void ParseTests(string s, double[] ops, double[] xs, double[] ys, double[] zs)
+        [TestCase("o:{1, 2e-6, -3} x:{1, 2, 3} y:{3, 3, 3} z:{4, 4, 4}", "1, 2e-6, -3", "1, 2, 3", "3, 3, 3", "4, 4, 4")]
+        public void ParseTests(string s, string ops, string xs, string ys, string zs)
         {
             var cs = CoordinateSystem.Parse(s);
-            AssertGeometry.AreEqual(new Point3D(ops), cs.Origin);
-            AssertGeometry.AreEqual(new Vector3D(xs), cs.XAxis);
-            AssertGeometry.AreEqual(new Vector3D(ys), cs.YAxis);
-            AssertGeometry.AreEqual(new Vector3D(zs), cs.ZAxis);
+            AssertGeometry.AreEqual(Point3D.Parse(ops), cs.Origin);
+            AssertGeometry.AreEqual(Vector3D.Parse(xs), cs.XAxis);
+            AssertGeometry.AreEqual(Vector3D.Parse(ys), cs.YAxis);
+            AssertGeometry.AreEqual(Vector3D.Parse(zs), cs.ZAxis);
         }
 
         [TestCase("1, 2, 3", "90°", "0, 0, 1", "-2, 1, 3")]
@@ -64,14 +65,11 @@
                 {
                     CoordinateSystem.Rotation(angle, UnitVector3D.Parse(vs)),
                     CoordinateSystem.Rotation(angle, Vector3D.Parse(vs)),
-                    CoordinateSystem.Rotation(angle.Degrees, AngleUnit.Degrees, Vector3D.Parse(vs)),
-                    CoordinateSystem.Rotation(angle.Radians, AngleUnit.Radians, Vector3D.Parse(vs)),
                 };
             var expected = Point3D.Parse(eps);
             foreach (var coordinateSystem in coordinateSystems)
             {
                 var rotatedPoint = coordinateSystem.Transform(p);
-                //Console.WriteLine(coordinateSystem.ToString());
                 AssertGeometry.AreEqual(expected, rotatedPoint);
             }
         }
@@ -92,14 +90,11 @@
             var coordinateSystems = new[]
                 {
                     CoordinateSystem.Rotation(yaw, pitch, roll),
-                    CoordinateSystem.Rotation(yaw.Degrees, pitch.Degrees, roll.Degrees, AngleUnit.Degrees),
-                    CoordinateSystem.Rotation(yaw.Radians, pitch.Radians, roll.Radians, AngleUnit.Radians),
                 };
             var expected = Point3D.Parse(eps);
             foreach (var coordinateSystem in coordinateSystems)
             {
                 var rotatedPoint = coordinateSystem.Transform(p);
-                //Console.WriteLine(coordinateSystem.ToString());
                 AssertGeometry.AreEqual(expected, rotatedPoint);
             }
         }
@@ -182,7 +177,7 @@
         [Test]
         public void TransformUnitVector()
         {
-            var cs = CoordinateSystem.Rotation(90, AngleUnit.Degrees, UnitVector3D.ZAxis);
+            var cs = CoordinateSystem.Rotation(Angle.FromDegrees(90), UnitVector3D.ZAxis);
             var uv = UnitVector3D.XAxis;
             var actual = cs.Transform(uv);
             AssertGeometry.AreEqual(UnitVector3D.YAxis, actual);

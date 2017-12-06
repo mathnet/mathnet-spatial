@@ -64,11 +64,13 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// Gets the Euclidean Norm.
         /// </summary>
+        [Pure]
         public double Length => Math.Sqrt((this.X * this.X) + (this.Y * this.Y) + (this.Z * this.Z));
 
         /// <summary>
         /// A vector orthogonal to this
         /// </summary>
+        [Pure]
         public UnitVector3D Orthogonal
         {
             get
@@ -82,6 +84,7 @@ namespace MathNet.Spatial.Euclidean
             }
         }
 
+        [Pure]
         internal Matrix<double> CrossProductMatrix => Matrix<double>.Build.Dense(3, 3, new[] { 0d, this.Z, -this.Y, -this.Z, 0d, this.X, this.Y, -this.X, 0d });
 
         public static bool operator ==(Vector3D left, Vector3D right)

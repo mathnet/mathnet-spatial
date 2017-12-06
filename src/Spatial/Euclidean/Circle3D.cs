@@ -1,12 +1,13 @@
 ﻿namespace MathNet.Spatial.Euclidean
 {
     using System;
+    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// Describes a 3 dimensional circle
     /// </summary>
     [Serializable]
-    public struct Circle3D
+    public struct Circle3D : IEquatable<Circle3D>
     {
         /// <summary>
         /// The center of the circle
@@ -66,17 +67,30 @@
         /// <summary>
         /// Gets the diameter of the circle
         /// </summary>
+        [Pure]
         public double Diameter => 2 * this.Radius;
 
         /// <summary>
         /// Gets the circumference of the circle
         /// </summary>
+        [Pure]
         public double Circumference => 2 * Math.PI * this.Radius;
 
         /// <summary>
         /// Gets the area of the circle
         /// </summary>
+        [Pure]
         public double Area => this.Radius * this.Radius * Math.PI;
+
+        public static bool operator ==(Circle3D left, Circle3D right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(Circle3D left, Circle3D right)
+        {
+            return !left.Equals(right);
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Circle3D"/> struct.
@@ -125,6 +139,40 @@
         {
             var cp = Point3D.MidPoint(p1, p2);
             return new Circle3D(cp, axis, cp.DistanceTo(p1));
+        }
+
+        /// <inheritdoc />
+        [Pure]
+        public bool Equals(Circle3D other)
+        {
+            return this.CenterPoint.Equals(other.CenterPoint)
+                   && this.Axis.Equals(other.Axis)
+                   && this.Radius.Equals(other.Radius);
+        }
+
+        /// <inheritdoc />
+        [Pure]
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+
+            return obj is Circle3D d && this.Equals(d);
+        }
+
+        /// <inheritdoc />
+        [Pure]
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var hashCode = this.CenterPoint.GetHashCode();
+                hashCode = (hashCode * 397) ^ this.Axis.GetHashCode();
+                hashCode = (hashCode * 397) ^ this.Radius.GetHashCode();
+                return hashCode;
+            }
         }
     }
 }

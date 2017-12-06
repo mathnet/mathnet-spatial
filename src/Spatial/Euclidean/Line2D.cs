@@ -1,12 +1,13 @@
 ﻿namespace MathNet.Spatial.Euclidean
 {
     using System;
+    using System.Diagnostics.Contracts;
     using MathNet.Numerics;
     using MathNet.Spatial.Units;
 
     /// <summary>
     /// This structure represents a line between two points in 2-space.  It allows for operations such as
-    /// computing the length, direction, projections to, compairisons, and shifting by a vector.
+    /// computing the length, direction, projections to, comparisons, and shifting by a vector.
     /// </summary>
     public struct Line2D : IEquatable<Line2D>
     {
@@ -40,11 +41,13 @@
         /// <summary>
         /// Gets the distance from <see cref="StartPoint"/> to <see cref="EndPoint"/>
         /// </summary>
+        [Pure]
         public double Length => this.StartPoint.DistanceTo(this.EndPoint);
 
         /// <summary>
         /// Gets a normalized vector in the direction from <see cref="StartPoint"/> to <see cref="EndPoint"/>
         /// </summary>
+        [Pure]
         public Vector2D Direction => this.StartPoint.VectorTo(this.EndPoint).Normalize();
 
         /// <summary>
@@ -118,8 +121,9 @@
         /// Returns the shortest line between this line and a point.
         /// </summary>
         /// <param name="p">the point to create a line to</param>
-        /// <param name="mustStartBetweenAndEnd">If false the startpoint can extend beyond the start and endpoint of the line</param>
+        /// <param name="mustStartBetweenAndEnd">If false the start point can extend beyond the start and endpoint of the line</param>
         /// <returns>The shortest line between the line and the point</returns>
+        [Pure]
         public Line2D LineTo(Point2D p, bool mustStartBetweenAndEnd)
         {
             return new Line2D(this.ClosestPointTo(p, mustStartBetweenAndEnd), p);
@@ -131,6 +135,7 @@
         /// <param name="p">The point that the returned point is the closest point on the line to</param>
         /// <param name="mustBeOnSegment">If true the returned point is contained by the segment ends, otherwise it can be anywhere on the projected line</param>
         /// <returns>The closest point on the line to the provided point</returns>
+        [Pure]
         public Point2D ClosestPointTo(Point2D p, bool mustBeOnSegment)
         {
             var v = this.StartPoint.VectorTo(p);
@@ -159,6 +164,7 @@
         /// </summary>
         /// <param name="other">The other line to compute the intersection with</param>
         /// <returns>The point at the intersection of two lines, or null if the lines are parallel.</returns>
+        [Pure]
         public Point2D? IntersectWith(Line2D other)
         {
             if (this.IsParallelTo(other))
@@ -184,6 +190,7 @@
         /// <param name="other">The other line to compute the intersection with</param>
         /// <param name="tolerance">The tolerance used when checking if the lines are parallel</param>
         /// <returns>The point at the intersection of two lines, or null if the lines are parallel.</returns>
+        [Pure]
         public Point2D? IntersectWith(Line2D other, Angle tolerance)
         {
             if (this.IsParallelTo(other, tolerance))
@@ -208,6 +215,7 @@
         /// </summary>
         /// <param name="other">The other line to check this one against</param>
         /// <returns>True if the lines are parallel, false if they are not</returns>
+        [Pure]
         public bool IsParallelTo(Line2D other)
         {
             return this.Direction.IsParallelTo(other.Direction, Precision.DoublePrecision * 2);
@@ -219,24 +227,28 @@
         /// <param name="other">The other line to check this one against</param>
         /// <param name="tolerance">If the angle between line directions is less than this value, the method returns true</param>
         /// <returns>True if the lines are parallel within the angle tolerance, false if they are not</returns>
+        [Pure]
         public bool IsParallelTo(Line2D other, Angle tolerance)
         {
             return this.Direction.IsParallelTo(other.Direction, tolerance);
         }
 
         /// <inheritdoc/>
+        [Pure]
         public override string ToString()
         {
-            return string.Format("StartPoint: {0}, EndPoint: {1}", this.StartPoint, this.EndPoint);
+            return $"StartPoint: {this.StartPoint}, EndPoint: {this.EndPoint}";
         }
 
         /// <inheritdoc/>
+        [Pure]
         public bool Equals(Line2D other)
         {
             return this.StartPoint.Equals(other.StartPoint) && this.EndPoint.Equals(other.EndPoint);
         }
 
         /// <inheritdoc />
+        [Pure]
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj))
@@ -248,6 +260,7 @@
         }
 
         /// <inheritdoc />
+        [Pure]
         public override int GetHashCode()
         {
             unchecked

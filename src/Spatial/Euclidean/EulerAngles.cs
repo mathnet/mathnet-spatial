@@ -1,6 +1,7 @@
 ﻿namespace MathNet.Spatial.Euclidean
 {
     using System;
+    using System.Diagnostics.Contracts;
     using MathNet.Numerics;
     using MathNet.Spatial.Units;
 
@@ -53,6 +54,7 @@
         /// Checks if the EulerAngles are empty
         /// </summary>
         /// <returns>true if the angles have not been set</returns>
+        [Pure]
         public bool IsEmpty()
         {
             return double.IsNaN(this.Alpha.Radians) && double.IsNaN(this.Beta.Radians) && double.IsNaN(this.Gamma.Radians);
@@ -63,6 +65,7 @@
         /// </summary>
         /// <param name="other">the other <see cref="EulerAngles"/> to compare</param>
         /// <returns>true if the angles are equal to within a fixed error of 0.000001</returns>
+        [Pure]
         public bool Equals(EulerAngles other)
         {
             const double defaultAbsoluteError = 0.000001;
@@ -72,6 +75,7 @@
         }
 
         /// <inheritdoc/>
+        [Pure]
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj))
@@ -83,6 +87,7 @@
         }
 
         /// <inheritdoc/>
+        [Pure]
         public override int GetHashCode()
         {
             unchecked

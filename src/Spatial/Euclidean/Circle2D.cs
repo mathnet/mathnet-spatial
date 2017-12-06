@@ -1,6 +1,7 @@
 ﻿namespace MathNet.Spatial.Euclidean
 {
     using System;
+    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// Describes a standard 2 dimensional circle
@@ -32,16 +33,19 @@
         /// <summary>
         /// Gets the circumference of the circle
         /// </summary>
+        [Pure]
         public double Circumference => 2 * this.Radius * Math.PI;
 
         /// <summary>
         /// Gets the diameter of the circle
         /// </summary>
+        [Pure]
         public double Diameter => 2 * this.Radius;
 
         /// <summary>
         /// Gets the area of the circle
         /// </summary>
+        [Pure]
         public double Area => this.Radius * this.Radius * Math.PI;
 
         /// <summary>
@@ -79,15 +83,15 @@
         {
             var midpointAB = Point2D.MidPoint(pointA, pointB);
             var midpointBC = Point2D.MidPoint(pointB, pointC);
-            double gradientAB = (pointB.Y - pointA.Y) / (pointB.X - pointA.X);
-            double gradientBC = (pointC.Y - pointB.Y) / (pointC.X - pointB.X);
-            double gradientl1 = -1 / gradientAB;
-            double gradientl2 = -1 / gradientBC;
-            double denominator = gradientl2 - gradientl1;
-            double nominator = midpointAB.Y - (gradientl1 * midpointAB.X) + (gradientl2 * midpointBC.X) - midpointBC.Y;
-            double centerX = nominator / denominator;
-            double centerY = (gradientl1 * (centerX - midpointAB.X)) + midpointAB.Y;
-            Point2D center = new Point2D(centerX, centerY);
+            var gradientAB = (pointB.Y - pointA.Y) / (pointB.X - pointA.X);
+            var gradientBC = (pointC.Y - pointB.Y) / (pointC.X - pointB.X);
+            var gradientl1 = -1 / gradientAB;
+            var gradientl2 = -1 / gradientBC;
+            var denominator = gradientl2 - gradientl1;
+            var nominator = midpointAB.Y - (gradientl1 * midpointAB.X) + (gradientl2 * midpointBC.X) - midpointBC.Y;
+            var centerX = nominator / denominator;
+            var centerY = (gradientl1 * (centerX - midpointAB.X)) + midpointAB.Y;
+            var center = new Point2D(centerX, centerY);
 
             if (double.IsNaN(center.X) || double.IsNaN(center.Y) || double.IsInfinity(center.X) || double.IsInfinity(center.Y))
             {
@@ -98,6 +102,7 @@
         }
 
         /// <inheritdoc />
+        [Pure]
         public bool Equals(Circle2D other)
         {
             // ReSharper disable once CompareOfFloatsByEqualityOperator
@@ -105,6 +110,7 @@
         }
 
         /// <inheritdoc />
+        [Pure]
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj))
@@ -116,6 +122,7 @@
         }
 
         /// <inheritdoc />
+        [Pure]
         public override int GetHashCode()
         {
             unchecked

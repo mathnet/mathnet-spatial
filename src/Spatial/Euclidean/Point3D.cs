@@ -205,21 +205,25 @@ namespace MathNet.Spatial.Euclidean
             return plane.IntersectionWith(ray);
         }
 
+        [Pure]
         public Point3D MirrorAbout(Plane plane)
         {
             return plane.MirrorAbout(this);
         }
 
+        [Pure]
         public Point3D ProjectOn(Plane plane)
         {
             return plane.Project(this);
         }
 
+        [Pure]
         public Point3D Rotate(Vector3D aboutVector, Angle angle)
         {
             return this.Rotate(aboutVector.Normalize(), angle);
         }
 
+        [Pure]
         public Point3D Rotate(UnitVector3D aboutVector, Angle angle)
         {
             var cs = CoordinateSystem.Rotation(angle, aboutVector);
@@ -251,6 +255,7 @@ namespace MathNet.Spatial.Euclidean
             return cs.Transform(this);
         }
 
+        [Pure]
         public Point3D TransformBy(Matrix<double> m)
         {
             return OfVector(m.Multiply(this.ToVector()));
@@ -259,23 +264,27 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// Convert to a Math.NET Numerics dense vector of length 3.
         /// </summary>
+        [Pure]
         public Vector<double> ToVector()
         {
             return Vector<double>.Build.Dense(new[] { this.X, this.Y, this.Z });
         }
 
         /// <inheritdoc />
+        [Pure]
         public override string ToString()
         {
             return this.ToString(null, CultureInfo.InvariantCulture);
         }
 
+        [Pure]
         public string ToString(IFormatProvider provider)
         {
             return this.ToString(null, provider);
         }
 
         /// <inheritdoc />
+        [Pure]
         public string ToString(string format, IFormatProvider provider = null)
         {
             var numberFormatInfo = provider != null ? NumberFormatInfo.GetInstance(provider) : CultureInfo.InvariantCulture.NumberFormat;
@@ -284,6 +293,7 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <inheritdoc />
+        [Pure]
         public bool Equals(Point3D other)
         {
             // ReSharper disable CompareOfFloatsByEqualityOperator
@@ -291,6 +301,7 @@ namespace MathNet.Spatial.Euclidean
             // ReSharper restore CompareOfFloatsByEqualityOperator
         }
 
+        [Pure]
         public bool Equals(Point3D other, double tolerance)
         {
             if (tolerance < 0)
@@ -304,6 +315,7 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <inheritdoc />
+        [Pure]
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj))
@@ -315,6 +327,7 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <inheritdoc />
+        [Pure]
         public override int GetHashCode()
         {
             unchecked

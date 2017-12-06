@@ -37,7 +37,6 @@
         public void GetPointAtFractionAlongCurve(string points, double fraction, string expected)
         {
             // Note that this method also tests GetPointAtLengthFromStart(...)
-
             var testElement = new PolyLine2D(from x in points.Split(';') select Point2D.Parse(x));
             var checkElement = Point2D.Parse(expected);
 
@@ -49,8 +48,6 @@
         public void GetPointAtFractionAlongCurveThrowsArgumentException(string points, double fraction, string expected)
         {
             var testElement = new PolyLine2D(from x in points.Split(';') select Point2D.Parse(x));
-            var checkElement = Point2D.Parse(expected);
-
             Assert.Throws<ArgumentException>(() => { testElement.GetPointAtFractionAlongCurve(fraction); });
         }
 

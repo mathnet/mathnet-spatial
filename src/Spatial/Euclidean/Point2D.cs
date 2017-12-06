@@ -2,6 +2,7 @@ namespace MathNet.Spatial.Euclidean
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.Contracts;
     using System.Globalization;
     using System.Linq;
     using System.Xml;
@@ -125,6 +126,13 @@ namespace MathNet.Spatial.Euclidean
             return !left.Equals(right);
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Point2D"/> struct.
+        /// Creates a point r from origin rotated a counterclockwise from X-Axis
+        /// </summary>
+        /// <param name="radius">distance from origin</param>
+        /// <param name="angle">the angle</param>
+        /// <returns>The <see cref="Point2D"/></returns>
         public static Point2D FromPolar(double radius, Angle angle)
         {
             if (radius < 0)
@@ -246,18 +254,75 @@ namespace MathNet.Spatial.Euclidean
             return OfVector(m.Multiply(this.ToVector()));
         }
 
+        [Pure]
+        public Vector2D VectorTo(Point2D otherPoint)
+        {
+            return otherPoint - this;
+        }
+
+        /// <summary>
+        /// Finds the straight line distance to another point
+        /// </summary>
+        /// <param name="otherPoint">The other point</param>
+        /// <returns>a distance measure</returns>
+        [Pure]
+        public double DistanceTo(Point2D otherPoint)
+        {
+            var vector = this.VectorTo(otherPoint);
+            return vector.Length;
+        }
+
+        /// <summary>
+        /// Converts this point into a vector from the origin
+        /// </summary>
+        /// <returns>A vector equivalent to this point</returns>
+        [Pure]
+        public Vector2D ToVector2D()
+        {
+            return new Vector2D(this.X, this.Y);
+        }
+
+        /// <summary>
+        /// return new Point3D(X, Y, 0);
+        /// </summary>
+        /// <returns>A <see cref="Point3D"/> with x & y from this instance and z = 0</returns>
+        [Pure]
+        public Point3D ToPoint3D()
+        {
+            return new Point3D(this.X, this.Y, 0);
+        }
+
+        [Pure]
+        public Point3D TransformBy(CoordinateSystem cs)
+        {
+            return cs.Transform(this.ToPoint3D());
+        }
+
+        /// <summary>
+        /// Convert to a Math.NET Numerics dense vector of length 2.
+        /// </summary>
+        /// <returns> A <see cref="Vector{Double}"/> with the x and y values from this instance.</returns>
+        [Pure]
+        public Vector<double> ToVector()
+        {
+            return Vector<double>.Build.Dense(new[] { this.X, this.Y });
+        }
+
         /// <inheritdoc />
+        [Pure]
         public override string ToString()
         {
             return this.ToString(null, CultureInfo.InvariantCulture);
         }
 
+        [Pure]
         public string ToString(IFormatProvider provider)
         {
             return this.ToString(null, provider);
         }
 
         /// <inheritdoc />
+        [Pure]
         public string ToString(string format, IFormatProvider provider = null)
         {
             var numberFormatInfo = provider != null ? NumberFormatInfo.GetInstance(provider) : CultureInfo.InvariantCulture.NumberFormat;
@@ -266,6 +331,7 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <inheritdoc />
+        [Pure]
         public bool Equals(Point2D other)
         {
             //// ReSharper disable CompareOfFloatsByEqualityOperator
@@ -273,6 +339,7 @@ namespace MathNet.Spatial.Euclidean
             //// ReSharper restore CompareOfFloatsByEqualityOperator
         }
 
+        [Pure]
         public bool Equals(Point2D other, double tolerance)
         {
             if (tolerance < 0)
@@ -285,6 +352,7 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <inheritdoc />
+        [Pure]
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj))
@@ -296,60 +364,13 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <inheritdoc />
+        [Pure]
         public override int GetHashCode()
         {
             unchecked
             {
                 return (this.X.GetHashCode() * 397) ^ this.Y.GetHashCode();
             }
-        }
-
-        public Vector2D VectorTo(Point2D otherPoint)
-        {
-            return otherPoint - this;
-        }
-
-        /// <summary>
-        /// Finds the straight line distance to another point
-        /// </summary>
-        /// <param name="otherPoint">The other point</param>
-        /// <returns>a distance measure</returns>
-        public double DistanceTo(Point2D otherPoint)
-        {
-            var vector = this.VectorTo(otherPoint);
-            return vector.Length;
-        }
-
-        /// <summary>
-        /// Converts this point into a vector from the origin
-        /// </summary>
-        /// <returns>A vector equivalent to this point</returns>
-        public Vector2D ToVector2D()
-        {
-            return new Vector2D(this.X, this.Y);
-        }
-
-        /// <summary>
-        /// return new Point3D(X, Y, 0);
-        /// </summary>
-        /// <returns>A <see cref="Point3D"/> with x & y from this instance and z = 0</returns>
-        public Point3D ToPoint3D()
-        {
-            return new Point3D(this.X, this.Y, 0);
-        }
-
-        public Point3D TransformBy(CoordinateSystem cs)
-        {
-            return cs.Transform(this.ToPoint3D());
-        }
-
-        /// <summary>
-        /// Convert to a Math.NET Numerics dense vector of length 2.
-        /// </summary>
-        /// <returns> A <see cref="Vector{Double}"/> with the x and y values from this instance.</returns>
-        public Vector<double> ToVector()
-        {
-            return Vector<double>.Build.Dense(new[] { this.X, this.Y });
         }
 
         /// <inheritdoc />
