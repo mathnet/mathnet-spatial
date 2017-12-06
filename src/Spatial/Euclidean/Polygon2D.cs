@@ -7,12 +7,19 @@
     using MathNet.Spatial.Units;
 
     /// <summary>
-    /// Class to represent a closed polygon. If the
+    /// Class to represent a closed polygon.
     /// </summary>
     public class Polygon2D : IEnumerable<Point2D>
     {
+        /// <summary>
+        /// A list of vertices.
+        /// </summary>
         private readonly List<Point2D> points;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Polygon2D"/> class.
+        /// </summary>
+        /// <param name="points">A list of vertices.</param>
         public Polygon2D(IEnumerable<Point2D> points)
         {
             this.points = new List<Point2D>(points);
@@ -22,32 +29,39 @@
             }
         }
 
+        /// <summary>
+        /// Gets the number of vertices in the polygon.
+        /// </summary>
         public int Count => this.points.Count;
 
-        // Methods
+        /// <summary>
+        /// A index into the list of vertices
+        /// </summary>
+        /// <param name="key">An index for the vertex number</param>
+        /// <returns>A Vertex</returns>
         public Point2D this[int key] => this.points[key];
 
-        // Operators
+        /// <summary>
+        /// Adds a vector to the each point on the polygon
+        /// </summary>
+        /// <param name="shift">The vector to add</param>
+        /// <param name="poly">The polygon</param>
+        /// <returns>A new <see cref="Polygon2D"/> at the adjusted points</returns>
         public static Polygon2D operator +(Vector2D shift, Polygon2D poly)
         {
             var newPoints = from p in poly select p + shift;
             return new Polygon2D(newPoints);
         }
 
+        /// <summary>
+        /// Adds a vector to the each point on the polygon
+        /// </summary>
+        /// <param name="poly">The polygon</param>
+        /// <param name="shift">The vector to add</param>
+        /// <returns>A new <see cref="Polygon2D"/> at the adjusted points</returns>
         public static Polygon2D operator +(Polygon2D poly, Vector2D shift)
         {
             return shift + poly;
-        }
-
-        /// <summary>
-        /// Test whether a point is enclosed within a polygon. Points on the polygon edges are not
-        /// counted as contained within the polygon.
-        /// </summary>
-        /// <param name="p"></param>
-        /// <returns></returns>
-        public bool EnclosesPoint(Point2D p)
-        {
-            return Polygon2D.IsPointInPolygon(p, this);
         }
 
         /// <summary>
@@ -56,9 +70,9 @@
         /// that can fail if the two polygons are heavily overlapped in such a way that one protrudes through
         /// the other and out its opposing side without any vertices being enclosed.
         /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <returns></returns>
+        /// <param name="a">The first polygon.</param>
+        /// <param name="b">The second polygon</param>
+        /// <returns>True if the vertices collide; otherwise false.</returns>
         public static bool ArePolygonVerticesColliding(Polygon2D a, Polygon2D b)
         {
             return a.Any(b.EnclosesPoint) || b.Any(a.EnclosesPoint);
@@ -69,9 +83,9 @@
         /// method.  Return true if the point is contained, false if it is not. Points which lie
         /// on the edge are not counted as inside the polygon.
         /// </summary>
-        /// <param name="p"></param>
-        /// <param name="poly"></param>
-        /// <returns></returns>
+        /// <param name="p">A point</param>
+        /// <param name="poly">A polygon</param>
+        /// <returns>True if the point is inside the polygon; otherwise false.</returns>
         public static bool IsPointInPolygon(Point2D p, Polygon2D poly)
         {
             // Algorithm from http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
@@ -89,21 +103,16 @@
             return c;
         }
 
-        public Polygon2D ReduceComplexity(double singleStepTolerance)
-        {
-            return new Polygon2D(PolyLine2D.ReduceComplexity(this.ToPolyLine2D(), singleStepTolerance));
-        }
-
         /// <summary>
         /// Using the recursive QuickHull algorithm, take an IEnumerable of Point2Ds and compute the
         /// two dimensional convex hull, returning it as a Polygon2D object.
         /// </summary>
-        /// <param name="pointList"></param>
+        /// <param name="pointList">A list of points</param>
         /// <param name="clockWise">
         /// In which direction to return the points on the convex hull.
         /// If true, clockwise. Otherwise counter clockwise
         /// </param>
-        /// <returns></returns>
+        /// <returns>A polygon.</returns>
         public static Polygon2D GetConvexHullFromPoints(IEnumerable<Point2D> pointList, bool clockWise = true)
         {
             // Use the Quickhull algorithm to compute the convex hull of the given points,
@@ -173,6 +182,32 @@
             return new Polygon2D(from x in results select x.Item2);
         }
 
+        /// <summary>
+        /// Test whether a point is enclosed within a polygon. Points on the polygon edges are not
+        /// counted as contained within the polygon.
+        /// </summary>
+        /// <param name="p">A point.</param>
+        /// <returns>True if the point is inside the polygon; otherwise false.</returns>
+        public bool EnclosesPoint(Point2D p)
+        {
+            return Polygon2D.IsPointInPolygon(p, this);
+        }
+
+        /// <summary>
+        /// Creates a new polygon from the existing polygon by removing any edges whose adjacent segments are considered colinear within the provided tolerance
+        /// </summary>
+        /// <param name="singleStepTolerance">The tolerance by which adjactent edges should be considered collinear.</param>
+        /// <returns>A polygon</returns>
+        public Polygon2D ReduceComplexity(double singleStepTolerance)
+        {
+            return new Polygon2D(PolyLine2D.ReduceComplexity(this.ToPolyLine2D(), singleStepTolerance));
+        }
+
+        /// <summary>
+        /// Returns a rotated polygon
+        /// </summary>
+        /// <param name="angle">The angle by which to rotate.</param>
+        /// <returns>A new polygon that has been rotated.</returns>
         public Polygon2D Rotate(Angle angle)
         {
             var newPoints = from p in this select new Point2D(0, 0) + p.ToVector2D().Rotate(angle);
@@ -182,9 +217,9 @@
         /// <summary>
         /// Rotate the polygon around the specified point
         /// </summary>
-        /// <param name="angle"></param>
-        /// <param name="center"></param>
-        /// <returns></returns>
+        /// <param name="angle">The angle by which to rotate</param>
+        /// <param name="center">A point at which to rotate around</param>
+        /// <returns>A new polygon that has been rotated.</returns>
         public Polygon2D RotateAround(Angle angle, Point2D center)
         {
             // Shift to the origin
@@ -198,6 +233,10 @@
             return -shiftVector + rotatedPoly;
         }
 
+        /// <summary>
+        /// Converts the polygon into a PolyLine2D
+        /// </summary>
+        /// <returns>A polyline</returns>
         public PolyLine2D ToPolyLine2D()
         {
             var points = this.points.ToList();
@@ -205,11 +244,19 @@
             return new PolyLine2D(points);
         }
 
+        /// <summary>
+        /// Returns an enumerator for the vertices
+        /// </summary>
+        /// <returns>An enumerator for the vertices</returns>
         public IEnumerator<Point2D> GetEnumerator()
         {
             return this.points.GetEnumerator();
         }
 
+        /// <summary>
+        /// Returns an enumerator for the vertices
+        /// </summary>
+        /// <returns>An enumerator for the vertices</returns>
         IEnumerator IEnumerable.GetEnumerator()
         {
             return this.GetEnumerator();
@@ -218,10 +265,10 @@
         /// <summary>
         /// Recursive method to isolate the points from the working list which lie on the convex hull
         /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <param name="workingList"></param>
-        /// <param name="hullList"></param>
+        /// <param name="a">The first point</param>
+        /// <param name="b">The second point</param>
+        /// <param name="workingList">A list of points to be evaluated</param>
+        /// <param name="hullList">A list of points on the convexhull</param>
         private static void RecursiveHullComputation(Point2D a, Point2D b, List<Point2D> workingList, List<Point2D> hullList)
         {
             if (!workingList.Any())
