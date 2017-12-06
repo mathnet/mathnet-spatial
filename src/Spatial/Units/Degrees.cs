@@ -14,7 +14,7 @@ namespace MathNet.Spatial.Units
         private const double DegToRad = Math.PI / 180.0;
 
         /// <inheritdoc />
-        public double Conversionfactor => DegToRad;
+        double IUnit.Conversionfactor => this.ConversionFactor;
 
         /// <inheritdoc />
         public double ConversionFactor => DegToRad;

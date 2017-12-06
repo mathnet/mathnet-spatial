@@ -408,14 +408,6 @@
             return (this * unitQuaternion) * this.Conjugate();
         }
 
-        ///// <summary>
-        ///// Convert a floating point number to a quaternion.
-        ///// </summary>
-        //public static implicit operator Quaternion(double d)
-        //{
-        //    return new Quaternion(d, 0, 0, 0);
-        //}
-
         /// <summary>
         /// Negate this quaternion.
         /// </summary>

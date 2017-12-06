@@ -294,18 +294,17 @@
         /// <returns>Intersection Point or null</returns>
         public Point3D? IntersectionWith(Line3D line, double tolerance = float.Epsilon)
         {
-            if (line.Direction.IsPerpendicularTo(this.Normal)) // either parallel or lies in the plane
+            if (line.Direction.IsPerpendicularTo(this.Normal, tolerance))
             {
+                // either parallel or lies in the plane
                 var projectedPoint = this.Project(line.StartPoint, line.Direction);
-                if (projectedPoint == line.StartPoint) // Line lies in the plane
+                if (projectedPoint == line.StartPoint)
                 {
-                    throw new InvalidOperationException("Line lies in the plane"); // Not sure what should be done here
+                    throw new InvalidOperationException("Line lies in the plane");
                 }
-                else
-                {
-                    // Line and plane are parallel
-                    return null;
-                }
+
+                // Line and plane are parallel
+                return null;
             }
 
             var d = this.SignedDistanceTo(line.StartPoint);
