@@ -47,6 +47,7 @@
         /// <param name="shift">The vector to add</param>
         /// <param name="poly">The polygon</param>
         /// <returns>A new <see cref="Polygon2D"/> at the adjusted points</returns>
+        [Obsolete("Use Translate instance method instead, obsolete since 6/12/2017")]
         public static Polygon2D operator +(Vector2D shift, Polygon2D poly)
         {
             var newPoints = from p in poly select p + shift;
@@ -59,6 +60,7 @@
         /// <param name="poly">The polygon</param>
         /// <param name="shift">The vector to add</param>
         /// <returns>A new <see cref="Polygon2D"/> at the adjusted points</returns>
+        [Obsolete("Use Translate instance method instead, obsolete since 6/12/2017")]
         public static Polygon2D operator +(Polygon2D poly, Vector2D shift)
         {
             return shift + poly;
@@ -215,6 +217,17 @@
         }
 
         /// <summary>
+        /// Returns a new polygon which is translated (moved) by a vector
+        /// </summary>
+        /// <param name="vector">A vector.</param>
+        /// <returns>A new polygon that has been translated.</returns>
+        public Polygon2D Translate(Vector2D vector)
+        {
+            var newPoints = from p in this.points select p + vector;
+            return new Polygon2D(newPoints);
+        }
+
+        /// <summary>
         /// Rotate the polygon around the specified point
         /// </summary>
         /// <param name="angle">The angle by which to rotate</param>
@@ -224,13 +237,13 @@
         {
             // Shift to the origin
             var shiftVector = center.VectorTo(Point2D.Origin);
-            var tempPoly = shiftVector + this;
+            var tempPoly = this.Translate(shiftVector);
 
             // Rotate
             var rotatedPoly = tempPoly.Rotate(angle);
 
             // Shift back
-            return -shiftVector + rotatedPoly;
+            return rotatedPoly.Translate(- shiftVector);
         }
 
         /// <summary>
