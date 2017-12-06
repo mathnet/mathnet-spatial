@@ -1,4 +1,5 @@
-﻿namespace MathNet.Spatial.UnitTests.Euclidean
+﻿// ReSharper disable InconsistentNaming
+namespace MathNet.Spatial.UnitTests.Euclidean
 {
     using System;
     using System.Globalization;
@@ -23,19 +24,10 @@
         [Test]
         public void Ctor()
         {
-            var actuals = new[]
-            {
-                new Vector3D(1, 2, 3),
-                new Vector3D(new[] { 1, 2, 3.0 }),
-            };
-            foreach (var actual in actuals)
-            {
-                Assert.AreEqual(1, actual.X, 1e-6);
-                Assert.AreEqual(2, actual.Y, 1e-6);
-                Assert.AreEqual(3, actual.Z, 1e-6);
-            }
-
-            Assert.Throws<ArgumentException>(() => new Vector3D(new[] { 1.0, 2, 3, 4 }));
+            var v = new Vector3D(1, 2, 3);
+            Assert.AreEqual(1, v.X);
+            Assert.AreEqual(2, v.Y);
+            Assert.AreEqual(3, v.Z);
         }
 
         [TestCase("1,2,-3", 3, "3,6,-9")]
@@ -132,11 +124,16 @@
         public void ToDenseVector()
         {
             var v = new Vector3D(1, 2, 3);
-            var denseVector = v.ToVector();
-            Assert.AreEqual(3, denseVector.Count);
-            Assert.AreEqual(1, denseVector[0], 1e-6);
-            Assert.AreEqual(2, denseVector[1], 1e-6);
-            Assert.AreEqual(3, denseVector[2], 1e-6);
+            var vector = v.ToVector();
+            Assert.AreEqual(3, vector.Count);
+            Assert.AreEqual(1, vector[0]);
+            Assert.AreEqual(2, vector[1]);
+            Assert.AreEqual(3, vector[2]);
+
+            var roundtripped = Vector3D.OfVector(vector);
+            Assert.AreEqual(1, roundtripped.X);
+            Assert.AreEqual(2, roundtripped.Y);
+            Assert.AreEqual(3, roundtripped.Z);
         }
 
         [TestCase("1; 0 ; 0")]
@@ -153,15 +150,17 @@
         public void Orthogonal_BadArgument(string vs)
         {
             var v = Vector3D.Parse(vs);
+#pragma warning disable SA1312 // Variable names must begin with lower-case letter
             Assert.Throws<InvalidOperationException>(() => { var _ = v.Orthogonal; });
+#pragma warning restore SA1312 // Variable names must begin with lower-case letter
         }
 
         [TestCase(X, Y, Z)]
         [TestCase(X, "1, 1, 0", Z)]
         [TestCase(X, NegativeY, NegativeZ)]
         [TestCase(Y, Z, X)]
-        [TestCase(Y, "0.1, 0.1, 1", "1, 0, -0.1", Description = "Nästan Z")]
-        [TestCase(Y, "-0.1, -0.1, 1", "1, 0, 0.1", Description = "Nästan Z men minus")]
+        [TestCase(Y, "0.1, 0.1, 1", "1, 0, -0.1", Description = "Almost Z")]
+        [TestCase(Y, "-0.1, -0.1, 1", "1, 0, 0.1", Description = "Almost Z men minus")]
         public void CrossProduct(string v1s, string v2s, string ves)
         {
             var vector1 = Vector3D.Parse(v1s);
@@ -212,7 +211,7 @@
         {
             var vector = Vector3D.Parse(vectorDoubles);
             var angle = Angle.FromDegrees(rotationInDegrees);
-            var rotated = new Vector3D(Matrix3D.RotationAroundZAxis(angle).Multiply(vector.ToVector()));
+            var rotated = Vector3D.OfVector(Matrix3D.RotationAroundZAxis(angle).Multiply(vector.ToVector()));
             var actual = vector.SignedAngleTo(rotated, Vector3D.Parse(Z).Normalize());
             Assert.AreEqual(rotationInDegrees, actual.Degrees, 1E-6);
         }
@@ -221,9 +220,12 @@
         public void Rotate(string vs, string avs, double deg, string evs)
         {
             var v = Vector3D.Parse(vs);
-            var aboutvector = Vector3D.Parse(avs);
-            var rotated = v.Rotate(aboutvector, Angle.FromDegrees(deg));
+            var about = Vector3D.Parse(avs);
             var expected = Vector3D.Parse(evs);
+            var rotated = v.Rotate(about, Angle.FromDegrees(deg));
+            AssertGeometry.AreEqual(expected, rotated, 1E-6);
+
+            rotated = v.Rotate(about.Normalize(), Angle.FromDegrees(deg));
             AssertGeometry.AreEqual(expected, rotated, 1E-6);
         }
 
@@ -296,6 +298,7 @@
         public void Normalize_BadArgument(string vs, string evs)
         {
             var vector = Vector3D.Parse(vs);
+            //// ReSharper disable once ReturnValueOfPureMethodIsNotUsed
             Assert.Throws<InvalidOperationException>(() => vector.Normalize());
         }
 
@@ -325,11 +328,14 @@
         [TestCase("1;-8;7", "1;-8;7", true)]
         [TestCase(X, "1;-8;7", false)]
         [TestCase("1;-1.2;0", Z, false)]
-        public void IsParallelTo(string vector1, string vector2, bool isParalell)
+        public void IsParallelTo(string vector1, string vector2, bool expected)
         {
-            var firstVector = Vector3D.Parse(vector1);
-            var secondVector = Vector3D.Parse(vector2);
-            Assert.AreEqual(isParalell, firstVector.IsParallelTo(secondVector, 1E-6));
+            var v1 = Vector3D.Parse(vector1);
+            var v2 = Vector3D.Parse(vector2);
+            Assert.AreEqual(true, v1.IsParallelTo(v1, 1E-6));
+            Assert.AreEqual(true, v2.IsParallelTo(v2, 1E-6));
+            Assert.AreEqual(expected, v1.IsParallelTo(v2, 1E-6));
+            Assert.AreEqual(expected, v2.IsParallelTo(v1, 1E-6));
         }
 
         [TestCase("0,1,0", "0,1, 0", 1e-10, true)]

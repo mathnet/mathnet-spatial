@@ -233,7 +233,9 @@ namespace MathNet.Spatial.Euclidean
                 throw new InvalidOperationException("The Euclidean norm of x, y, z differs more than tolerance from 1");
             }
 
+#pragma warning disable CS0618 // Type or member is obsolete needed until the ctor is made private
             return new UnitVector3D(x / norm, y / norm, z / norm);
+#pragma warning restore CS0618 // Type or member is obsolete
         }
 
         /// <summary>
@@ -407,7 +409,9 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public UnitVector3D Negate()
         {
+#pragma warning disable CS0618 // Type or member is obsolete
             return new UnitVector3D(-1 * this.X, -1 * this.Y, -1 * this.Z);
+#pragma warning restore CS0618 // Type or member is obsolete
         }
 
         [Pure]
@@ -436,12 +440,12 @@ namespace MathNet.Spatial.Euclidean
         }
 
         [Pure]
-        public UnitVector3D CrossProduct(UnitVector3D inVector3D)
+        public UnitVector3D CrossProduct(UnitVector3D other)
         {
-            var x = (this.Y * inVector3D.Z) - (this.Z * inVector3D.Y);
-            var y = (this.Z * inVector3D.X) - (this.X * inVector3D.Z);
-            var z = (this.X * inVector3D.Y) - (this.Y * inVector3D.X);
-            var v = new UnitVector3D(x, y, z);
+            var x = (this.Y * other.Z) - (this.Z * other.Y);
+            var y = (this.Z * other.X) - (this.X * other.Z);
+            var z = (this.X * other.Y) - (this.Y * other.X);
+            var v = Create(x, y, z);
             return v;
         }
 
@@ -542,10 +546,12 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// Returns a vector that is this vector rotated the signed angle around the about vector
         /// </summary>
-        /// <param name="about"></param>
-        /// <param name="angle"></param>
-        /// <returns></returns>
+        /// <param name="about">The vector to rotate around.</param>
+        /// <param name="angle">The angle positive according to right hand rule.</param>
+        /// <param name="unit">The <see cref="IAngleUnit"/></param>
+        /// <returns>A rotated vector.</returns>
         [Pure]
+        [Obsolete("This method will be removed, prefer the overload taking an Angle. Made obsolete 2017-12-05.")]
         public UnitVector3D Rotate<T>(UnitVector3D about, double angle, T unit)
             where T : IAngleUnit
         {
@@ -555,9 +561,9 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// Returns a vector that is this vector rotated the signed angle around the about vector
         /// </summary>
-        /// <param name="about"></param>
-        /// <param name="angle"></param>
-        /// <returns></returns>
+        /// <param name="about">The vector to rotate around.</param>
+        /// <param name="angle">The angle positive according to right hand rule.</param>
+        /// <returns>A rotated vector.</returns>
         [Pure]
         public UnitVector3D Rotate(UnitVector3D about, Angle angle)
         {
@@ -586,7 +592,7 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public Vector3D TransformBy(Matrix<double> m)
         {
-            return new Vector3D(m.Multiply(this.ToVector()));
+            return Vector3D.OfVector(m.Multiply(this.ToVector()));
         }
 
         /// <summary>
