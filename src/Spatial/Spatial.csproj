@@ -58,6 +58,7 @@
     <Compile Include="Euclidean\PolyLine2D.cs" />
     <Compile Include="Euclidean\PolyLine3D.cs" />
     <Compile Include="Euclidean\Vector2D.cs" />
+    <Compile Include="Internals\ImmutableList.cs" />
     <Compile Include="Internals\Text.cs" />
     <Compile Include="Internals\XmlWriterExt.cs" />
     <Compile Include="Internals\XmlReaderExt.cs" />
