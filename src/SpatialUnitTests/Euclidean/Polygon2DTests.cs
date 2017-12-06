@@ -40,6 +40,17 @@
             CollectionAssert.AreEqual(checkList, polygon);
         }
 
+        [TestCase("0,0;2,2;3,1;2,0", "1,1", "1,1;3,3;4,2;3,1")]
+        [TestCase("0,0;2,2;3,1;2,0", "-1,-1", "-1,-1;1,1;2,0;1,-1")]
+        public void TranslatePolygon(string points, string vectorString, string expectedPolygon)
+        {
+            var testElement = new Polygon2D(from x in points.Split(';') select Point2D.Parse(x));
+            var expected = new Polygon2D(from x in expectedPolygon.Split(';') select Point2D.Parse(x));
+            Vector2D vector = Vector2D.Parse(vectorString);
+            var result = testElement.Translate(vector);
+            Assert.AreEqual(expected, result);
+        }
+
         [Test]
         public void ConstructorTest_ClipsStartOnDuplicate()
         {
