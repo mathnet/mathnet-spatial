@@ -11,12 +11,12 @@
     public struct Line2D : IEquatable<Line2D>
     {
         /// <summary>
-        /// The starting point of the line
+        /// The starting point of the line segment
         /// </summary>
         public readonly Point2D StartPoint;
 
         /// <summary>
-        /// The end point of the line
+        /// The end point of the line segment
         /// </summary>
         public readonly Point2D EndPoint;
 
@@ -24,8 +24,8 @@
         /// Initializes a new instance of the <see cref="Line2D"/> struct.
         /// Throws an ArgumentException if the <paramref name="startPoint"/> is equal to the <paramref name="endPoint"/>.
         /// </summary>
-        /// <param name="startPoint">the starting point of the line</param>
-        /// <param name="endPoint">the ending point of the line</param>
+        /// <param name="startPoint">the starting point of the line segment.</param>
+        /// <param name="endPoint">the ending point of the line segment</param>
         public Line2D(Point2D startPoint, Point2D endPoint)
         {
             if (startPoint == endPoint)
@@ -47,31 +47,68 @@
         /// </summary>
         public Vector2D Direction => this.StartPoint.VectorTo(this.EndPoint).Normalize();
 
+        /// <summary>
+        /// Returns a value that indicates whether each pair of elements in two specified lines is equal.
+        /// </summary>
+        /// <param name="left">The first line to compare</param>
+        /// <param name="right">The second line to compare</param>
+        /// <returns>True if the lines are the same; otherwise false.</returns>
         public static bool operator ==(Line2D left, Line2D right)
         {
             return left.Equals(right);
         }
 
+        /// <summary>
+        /// Returns a value that indicates whether any pair of elements in two specified lines is not equal.
+        /// </summary>
+        /// <param name="left">The first line to compare</param>
+        /// <param name="right">The second line to compare</param>
+        /// <returns>True if the lines are different; otherwise false.</returns>
         public static bool operator !=(Line2D left, Line2D right)
         {
             return !left.Equals(right);
         }
 
+        /// <summary>
+        /// Adds a vector to the start point and end point of the line
+        /// </summary>
+        /// <param name="offset">The vector to add</param>
+        /// <param name="line">The line</param>
+        /// <returns>A new <see cref="Line2D"/> at the adjusted points</returns>
         public static Line2D operator +(Vector2D offset, Line2D line)
         {
             return new Line2D(line.StartPoint + offset, line.EndPoint + offset);
         }
 
+        /// <summary>
+        /// Adds a vector to the start point and end point of the line
+        /// </summary>
+        /// <param name="line">The line</param>
+        /// <param name="offset">The vector to add</param>
+        /// <returns>A new line at the adjusted points</returns>
         public static Line2D operator +(Line2D line, Vector2D offset)
         {
             return offset + line;
         }
 
+        /// <summary>
+        /// Subtracts a vector from the start point and end point of the line
+        /// </summary>
+        /// <param name="line">The line</param>
+        /// <param name="offset">The vector to subtract</param>
+        /// <returns>A new line at the adjusted points</returns>
         public static Line2D operator -(Line2D line, Vector2D offset)
         {
             return line + (-offset);
         }
 
+        /// <summary>
+        /// Returns a new <see cref="Line2D"/> from a pair of strings which represent points.
+        /// See <see cref="Point2D.Parse(string, IFormatProvider)" /> for details on acceptable formats.
+        /// </summary>
+        /// <param name="startPointString">The string representation of the first point.</param>
+        /// <param name="endPointString">The string representation of the second point.</param>
+        /// <returns>A line segment from the first point to the second point.</returns>
         public static Line2D Parse(string startPointString, string endPointString)
         {
             return new Line2D(Point2D.Parse(startPointString), Point2D.Parse(endPointString));
@@ -82,7 +119,7 @@
         /// </summary>
         /// <param name="p">the point to create a line to</param>
         /// <param name="mustStartBetweenAndEnd">If false the startpoint can extend beyond the start and endpoint of the line</param>
-        /// <returns></returns>
+        /// <returns>The shortest line between the line and the point</returns>
         public Line2D LineTo(Point2D p, bool mustStartBetweenAndEnd)
         {
             return new Line2D(this.ClosestPointTo(p, mustStartBetweenAndEnd), p);
@@ -93,7 +130,7 @@
         /// </summary>
         /// <param name="p">The point that the returned point is the closest point on the line to</param>
         /// <param name="mustBeOnSegment">If true the returned point is contained by the segment ends, otherwise it can be anywhere on the projected line</param>
-        /// <returns></returns>
+        /// <returns>The closest point on the line to the provided point</returns>
         public Point2D ClosestPointTo(Point2D p, bool mustBeOnSegment)
         {
             var v = this.StartPoint.VectorTo(p);

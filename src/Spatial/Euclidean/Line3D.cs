@@ -26,10 +26,11 @@
         public readonly Point3D EndPoint;
 
         /// <summary>
-        /// Throws if StartPoint == EndPoint
+        /// Initializes a new instance of the <see cref="Line3D"/> struct.
+        /// Throws an ArgumentException if the <paramref name="startPoint"/> is equal to the <paramref name="endPoint"/>.
         /// </summary>
-        /// <param name="startPoint"></param>
-        /// <param name="endPoint"></param>
+        /// <param name="startPoint">The starting point of the line segment.</param>
+        /// <param name="endPoint">The ending point of the line segment.</param>
         public Line3D(Point3D startPoint, Point3D endPoint)
         {
             if (startPoint == endPoint)
@@ -51,33 +52,46 @@
         /// </summary>
         public UnitVector3D Direction => this.StartPoint.VectorTo(this.EndPoint).Normalize();
 
+        /// <summary>
+        /// Returns a value that indicates whether each pair of elements in two specified lines is equal.
+        /// </summary>
+        /// <param name="left">The first line to compare</param>
+        /// <param name="right">The second line to compare</param>
+        /// <returns>True if the lines are the same; otherwise false.</returns>
         public static bool operator ==(Line3D left, Line3D right)
         {
             return left.Equals(right);
         }
 
+        /// <summary>
+        /// Returns a value that indicates whether any pair of elements in two specified lines is not equal.
+        /// </summary>
+        /// <param name="left">The first line to compare</param>
+        /// <param name="right">The second line to compare</param>
+        /// <returns>True if the lines are different; otherwise false.</returns>
         public static bool operator !=(Line3D left, Line3D right)
         {
             return !left.Equals(right);
         }
 
         /// <summary>
-        /// Creates a Line from its string representation
+        /// Returns a new <see cref="Line2D"/> from a pair of strings which represent points.
+        /// See <see cref="Point3D.Parse(string, IFormatProvider)" /> for details on acceptable formats.
         /// </summary>
-        /// <param name="startPoint">The string representation of the startpoint</param>
-        /// <param name="endPoint">The string representation of the endpoint</param>
-        /// <returns></returns>
+        /// <param name="startPoint">The string representation of the first point.</param>
+        /// <param name="endPoint">The string representation of the second point.</param>
+        /// <returns>A line segment from the first point to the second point.</returns>
         public static Line3D Parse(string startPoint, string endPoint)
         {
             return new Line3D(Point3D.Parse(startPoint), Point3D.Parse(endPoint));
         }
 
         /// <summary>
-        /// Returns the shortest line to a point
+        /// Returns the shortest line between this line and a point.
         /// </summary>
-        /// <param name="p"></param>
-        /// <param name="mustStartBetweenStartAndEnd">If false the startpoint can be on the line extending beyond the start and endpoint of the line</param>
-        /// <returns></returns>
+        /// <param name="p">the point to create a line to</param>
+        /// <param name="mustStartBetweenStartAndEnd">If false the startpoint can extend beyond the start and endpoint of the line</param>
+        /// <returns>The shortest line between the line and the point</returns>
         public Line3D LineTo(Point3D p, bool mustStartBetweenStartAndEnd)
         {
             return new Line3D(this.ClosestPointTo(p, mustStartBetweenStartAndEnd), p);
@@ -86,9 +100,9 @@
         /// <summary>
         /// Returns the closest point on the line to the given point.
         /// </summary>
-        /// <param name="p">The point which the returned point is the closest point on the line to</param>
-        /// <param name="mustBeOnSegment">If true the returned point is contained by the segment ends, otherwise it can be anywhere on the projected line.</param>
-        /// <returns></returns>
+        /// <param name="p">The point that the returned point is the closest point on the line to</param>
+        /// <param name="mustBeOnSegment">If true the returned point is contained by the segment ends, otherwise it can be anywhere on the projected line</param>
+        /// <returns>The closest point on the line to the provided point</returns>
         public Point3D ClosestPointTo(Point3D p, bool mustBeOnSegment)
         {
             var v = p - this.StartPoint;
@@ -113,8 +127,8 @@
         /// <summary>
         /// The line projected on a plane
         /// </summary>
-        /// <param name="plane"></param>
-        /// <returns></returns>
+        /// <param name="plane">The plane.</param>
+        /// <returns>A projected line.</returns>
         public Line3D ProjectOn(Plane plane)
         {
             return plane.Project(this);
@@ -123,9 +137,9 @@
         /// <summary>
         /// Find the intersection between the line and a plane
         /// </summary>
-        /// <param name="plane"></param>
-        /// <param name="tolerance"></param>
-        /// <returns></returns>
+        /// <param name="plane">The plane.</param>
+        /// <param name="tolerance">A tolerance (epsilon) to compensate for floating point error</param>
+        /// <returns>A point where the line and plane interset; null if no such point exists</returns>
         public Point3D? IntersectionWith(Plane plane, double tolerance = double.Epsilon)
         {
             return plane.IntersectionWith(this, tolerance);
@@ -168,12 +182,12 @@
             }
 
             // http://geomalgorithms.com/a07-_distance.html
-            var P0 = this.StartPoint;
+            var point0 = this.StartPoint;
             var u = this.Direction;
-            var Q0 = other.StartPoint;
+            var point1 = other.StartPoint;
             var v = other.Direction;
 
-            var w0 = P0 - Q0;
+            var w0 = point0 - point1;
             var a = u.DotProduct(u);
             var b = u.DotProduct(v);
             var c = v.DotProduct(v);
@@ -183,7 +197,7 @@
             var sc = ((b * e) - (c * d)) / ((a * c) - (b * b));
             var tc = ((a * e) - (b * d)) / ((a * c) - (b * b));
 
-            return Tuple.Create(P0 + (sc * u), Q0 + (tc * v));
+            return Tuple.Create(point0 + (sc * u), point1 + (tc * v));
         }
 
         /// <summary>
