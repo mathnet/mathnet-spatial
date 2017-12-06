@@ -307,6 +307,11 @@ namespace MathNet.Spatial.Euclidean
             throw new FormatException($"Could not parse a UnitVector3D from the string {value}");
         }
 
+        /// <summary>
+        /// Creates an <see cref="UnitVector3D"/> from an <see cref="XmlReader"/>.
+        /// </summary>
+        /// <param name="reader">An <see cref="XmlReader"/> positioned at the node to read into this <see cref="UnitVector3D"/>.</param>
+        /// <returns>An <see cref="UnitVector3D"/> that contains the data read from the reader.</returns>
         public static UnitVector3D ReadFrom(XmlReader reader)
         {
             return reader.ReadElementAs<UnitVector3D>();
@@ -611,6 +616,11 @@ namespace MathNet.Spatial.Euclidean
             return this.ToString(null, CultureInfo.InvariantCulture);
         }
 
+        /// <summary>
+        /// Returns a string representation of this instance using the provided <see cref="IFormatProvider"/>
+        /// </summary>
+        /// <param name="provider">A <see cref="IFormatProvider"/></param>
+        /// <returns>The string representation of this instance.</returns>
         [Pure]
         public string ToString(IFormatProvider provider)
         {

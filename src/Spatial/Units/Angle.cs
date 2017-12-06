@@ -202,10 +202,10 @@ namespace MathNet.Spatial.Units
         }
 
         /// <summary>
-        /// Reads an instance of <see cref="T:MathNet.Spatial.Units.Angle"/> from the <paramref name="reader"/>
+        /// Creates an <see cref="Angle"/> from an <see cref="XmlReader"/>.
         /// </summary>
-        /// <param name="reader">The <see cref="XmlReader"/></param>
-        /// <returns>An instance of  <see cref="T:MathNet.Spatial.Units.Angle"/></returns>
+        /// <param name="reader">An <see cref="XmlReader"/> positioned at the node to read into this <see cref="Angle"/>.</param>
+        /// <returns>An <see cref="Angle"/> that contains the data read from the reader.</returns>
         public static Angle ReadFrom(XmlReader reader)
         {
             return reader.ReadElementAs<Angle>();
@@ -228,7 +228,7 @@ namespace MathNet.Spatial.Units
         }
 
         /// <summary>
-        /// Returns a string representation of the Angle using the provided <see cref="IFormatProvider"/>
+        /// Returns a string representation of this instance using the provided <see cref="IFormatProvider"/>
         /// </summary>
         /// <param name="provider">A <see cref="IFormatProvider"/></param>
         /// <returns>The string representation of this instance.</returns>

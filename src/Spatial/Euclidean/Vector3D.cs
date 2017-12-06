@@ -200,6 +200,11 @@ namespace MathNet.Spatial.Euclidean
             return new Vector3D(vector.At(0), vector.At(1), vector.At(2));
         }
 
+        /// <summary>
+        /// Creates an <see cref="Vector3D"/> from an <see cref="XmlReader"/>.
+        /// </summary>
+        /// <param name="reader">An <see cref="XmlReader"/> positioned at the node to read into this <see cref="Vector3D"/>.</param>
+        /// <returns>An <see cref="Vector3D"/> that contains the data read from the reader.</returns>
         public static Vector3D ReadFrom(XmlReader reader)
         {
             return reader.ReadElementAs<Vector3D>();
@@ -518,6 +523,11 @@ namespace MathNet.Spatial.Euclidean
             return this.ToString(null, CultureInfo.InvariantCulture);
         }
 
+        /// <summary>
+        /// Returns a string representation of this instance using the provided <see cref="IFormatProvider"/>
+        /// </summary>
+        /// <param name="provider">A <see cref="IFormatProvider"/></param>
+        /// <returns>The string representation of this instance.</returns>
         [Pure]
         public string ToString(IFormatProvider provider)
         {

@@ -175,6 +175,11 @@
             throw new FormatException($"Could not parse a Vector2D from the string {value}");
         }
 
+        /// <summary>
+        /// Creates an <see cref="Vector2D"/> from an <see cref="XmlReader"/>.
+        /// </summary>
+        /// <param name="reader">An <see cref="XmlReader"/> positioned at the node to read into this <see cref="Vector2D"/>.</param>
+        /// <returns>An <see cref="Vector2D"/> that contains the data read from the reader.</returns>
         public static Vector2D ReadFrom(XmlReader reader)
         {
             return reader.ReadElementAs<Vector2D>();
@@ -467,6 +472,11 @@
             return this.ToString(null, CultureInfo.InvariantCulture);
         }
 
+        /// <summary>
+        /// Returns a string representation of this instance using the provided <see cref="IFormatProvider"/>
+        /// </summary>
+        /// <param name="provider">A <see cref="IFormatProvider"/></param>
+        /// <returns>The string representation of this instance.</returns>
         [Pure]
         public string ToString(IFormatProvider provider)
         {

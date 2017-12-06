@@ -56,11 +56,17 @@
             return new Point3DHomogeneous(vector);
         }
 
+        /// <inheritdoc />
         public override string ToString()
         {
             return this.ToString(null, CultureInfo.InvariantCulture);
         }
 
+        /// <summary>
+        /// Returns a string representation of this instance using the provided <see cref="IFormatProvider"/>
+        /// </summary>
+        /// <param name="provider">A <see cref="IFormatProvider"/></param>
+        /// <returns>The string representation of this instance.</returns>
         public string ToString(IFormatProvider provider)
         {
             return this.ToString(null, provider);
@@ -93,6 +99,7 @@
                    Math.Abs(other.W - this.W) < tolerance;
         }
 
+        /// <inheritdoc/>
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj))
@@ -100,9 +107,10 @@
                 return false;
             }
 
-            return obj is Point3DHomogeneous && this.Equals((Point3DHomogeneous)obj);
+            return obj is Point3DHomogeneous homogeneous && this.Equals(homogeneous);
         }
 
+        /// <inheritdoc/>
         public override int GetHashCode()
         {
             unchecked
