@@ -174,9 +174,8 @@
             var line1 = Line2D.Parse(s1, e1);
             var line2 = Line2D.Parse(s2, e2);
             var e = string.IsNullOrEmpty(expected) ? (Point2D?)null : Point2D.Parse(expected);
-            var intersection = line1.IntersectWith(line2);
-
-            Assert.AreEqual(e, intersection);
+            Assert.AreEqual(e, line1.IntersectWith(line2));
+            Assert.AreEqual(e, line1.IntersectWith(line2, Angle.FromRadians(0.001)));
         }
 
         [TestCase("0,0", "0,1", "1,1", "1,2", true)]

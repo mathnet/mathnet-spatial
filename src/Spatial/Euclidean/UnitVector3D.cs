@@ -250,7 +250,7 @@ namespace MathNet.Spatial.Euclidean
                 throw new ArgumentException("The vector length must be 3 in order to convert it to a Vector3D");
             }
 
-            return UnitVector3D.Create(vector.At(0), vector.At(1), vector.At(2));
+            return Create(vector.At(0), vector.At(1), vector.At(2));
         }
 
         /// <summary>
@@ -317,16 +317,26 @@ namespace MathNet.Spatial.Euclidean
             return reader.ReadElementAs<UnitVector3D>();
         }
 
+        /// <summary>
+        /// Scale this instance by <paramref name="factor"/>
+        /// </summary>
+        /// <param name="factor">The plane to project on.</param>
+        /// <returns>The projected <see cref="Ray3D"/></returns>
         [Pure]
-        public Vector3D ScaleBy(double scaleFactor)
+        public Vector3D ScaleBy(double factor)
         {
-            return scaleFactor * this;
+            return factor * this;
         }
 
+        /// <summary>
+        /// Project this instance onto the plane
+        /// </summary>
+        /// <param name="plane">The plane to project on.</param>
+        /// <returns>The projected <see cref="Ray3D"/></returns>
         [Pure]
-        public Ray3D ProjectOn(Plane planeToProjectOn)
+        public Ray3D ProjectOn(Plane plane)
         {
-            return planeToProjectOn.Project(this.ToVector3D());
+            return plane.Project(this.ToVector3D());
         }
 
         [Pure]

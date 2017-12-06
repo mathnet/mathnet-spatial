@@ -63,7 +63,7 @@
         /// Returns a value that indicates whether any pair of elements in two specified circles is not equal.
         /// </summary>
         /// <param name="left">The first circle to compare.</param>
-        /// <param name="right">The second circle to compar.e</param>
+        /// <param name="right">The second circle to compare</param>
         /// <returns>True if the circles are different; otherwise false.</returns>
         public static bool operator !=(Circle2D left, Circle2D right)
         {
@@ -81,12 +81,14 @@
         /// <exception cref="ArgumentException">An exception is thrown if no possible circle can be formed from the points</exception>
         public static Circle2D FromPoints(Point2D pointA, Point2D pointB, Point2D pointC)
         {
+            // ReSharper disable InconsistentNaming
             var midpointAB = Point2D.MidPoint(pointA, pointB);
             var midpointBC = Point2D.MidPoint(pointB, pointC);
             var gradientAB = (pointB.Y - pointA.Y) / (pointB.X - pointA.X);
             var gradientBC = (pointC.Y - pointB.Y) / (pointC.X - pointB.X);
             var gradientl1 = -1 / gradientAB;
             var gradientl2 = -1 / gradientBC;
+            // ReSharper restore InconsistentNaming
             var denominator = gradientl2 - gradientl1;
             var nominator = midpointAB.Y - (gradientl1 * midpointAB.X) + (gradientl2 * midpointBC.X) - midpointBC.Y;
             var centerX = nominator / denominator;
@@ -95,7 +97,7 @@
 
             if (double.IsNaN(center.X) || double.IsNaN(center.Y) || double.IsInfinity(center.X) || double.IsInfinity(center.Y))
             {
-                throw new ArgumentException("Points cannot form a circle, are they colinnear?");
+                throw new ArgumentException("Points cannot form a circle, are they collinear?");
             }
 
             return new Circle2D(center, center.DistanceTo(pointA));

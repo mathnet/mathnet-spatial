@@ -327,6 +327,11 @@
         /// <returns></returns>
         public Point3D IntersectionWith(Ray3D ray, double tolerance = float.Epsilon)
         {
+            if(this.Normal.IsPerpendicularTo(ray.Direction, tolerance))
+            {
+                throw new InvalidOperationException("Ray is parallel to the plane.");
+            }
+
             var d = this.SignedDistanceTo(ray.ThroughPoint);
             var t = -1 * d / ray.Direction.DotProduct(this.Normal);
             return ray.ThroughPoint + (t * ray.Direction);
