@@ -277,7 +277,7 @@
         /// <returns>A new polygon that has been rotated.</returns>
         public Polygon2D Rotate(Angle angle)
         {
-            var rotated = points.Select(t => Point2D.Origin + t.ToVector2D().Rotate(angle)).ToArray();
+            var rotated = this.points.Select(t => Point2D.Origin + t.ToVector2D().Rotate(angle)).ToArray();
             return new Polygon2D(rotated);
         }
 
@@ -286,7 +286,7 @@
         /// </summary>
         /// <param name="vector">A vector.</param>
         /// <returns>A new polygon that has been translated.</returns>
-        public Polygon2D Translate(Vector2D vector)
+        public Polygon2D TranslateBy(Vector2D vector)
         {
             var newPoints = from p in this.points select p + vector;
             return new Polygon2D(newPoints);
@@ -302,13 +302,13 @@
         {
             // Shift to the origin
             var shiftVector = center.VectorTo(Point2D.Origin);
-            var tempPoly = this.Translate(shiftVector);
+            var tempPoly = this.TranslateBy(shiftVector);
 
             // Rotate
             var rotatedPoly = tempPoly.Rotate(angle);
 
             // Shift back
-            return rotatedPoly.Translate(-shiftVector);
+            return rotatedPoly.TranslateBy(-shiftVector);
         }
 
         /// <summary>
@@ -340,6 +340,60 @@
         IEnumerator IEnumerable.GetEnumerator()
         {
             return this.GetEnumerator();
+        }
+
+        /// <inheritdoc />
+        [Pure]
+        public bool Equals(Polygon2D other)
+        {
+            for (int i = 0; i < this.points.Count; i++)
+            {
+                if (this.points[i] != other.points[i])
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Returns a value to indicate if a pair of polygons are equal
+        /// </summary>
+        /// <param name="other">The polygon to compare against.</param>
+        /// <param name="tolerance">A tolerance (epsilon) to adjust for floating point error</param>
+        /// <returns>true if the polygons are equal; otherwise false</returns>
+        [Pure]
+        public bool Equals(Polygon2D other, double tolerance)
+        {
+            for (int i = 0; i < this.points.Count; i++)
+            {
+                if (!this.points[i].Equals(other.points[i], tolerance))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        /// <inheritdoc />
+        [Pure]
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+
+            return obj is Polygon2D d && this.Equals(d);
+        }
+
+        /// <inheritdoc />
+        [Pure]
+        public override int GetHashCode()
+        {
+            return this.Vertices.GetHashCode();
         }
 
         /// <summary>
@@ -413,47 +467,6 @@
             }
 
             this.edges = new ImmutableList<Line2D>(localedges.ToArray());
-        }
-
-        [Pure]
-        public bool Equals(Polygon2D other)
-        {
-            for (int i = 0; i < points.Count; i++)
-            {
-                if (points[i] != other.points[i])
-                    return false;
-            }
-            return true;
-        }
-
-        [Pure]
-        public bool Equals(Polygon2D other, double tolerance)
-        {
-            for (int i = 0; i < points.Count; i++)
-            {
-                if (!points[i].Equals(other.points[i], tolerance))
-                    return false;
-            }
-            return true;
-        }
-
-        /// <inheritdoc />
-        [Pure]
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj))
-            {
-                return false;
-            }
-
-            return obj is Polygon2D d && this.Equals(d);
-        }
-
-        /// <inheritdoc />
-        [Pure]
-        public override int GetHashCode()
-        {
-            return this.Vertices.GetHashCode();
         }
     }
 }

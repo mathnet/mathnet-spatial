@@ -48,7 +48,7 @@
             var testElement = new Polygon2D(from x in points.Split(';') select Point2D.Parse(x));
             var expected = new Polygon2D(from x in expectedPolygon.Split(';') select Point2D.Parse(x));
             Vector2D vector = Vector2D.Parse(vectorString);
-            var result = testElement.Translate(vector);
+            var result = testElement.TranslateBy(vector);
             Assert.AreEqual(expected, result);
         }
 
