@@ -34,6 +34,8 @@
     <CodeAnalysisRuleSet>Spatial.Benchmarks.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Point2DBenchmarks.cs" />
+    <Compile Include="Point3DBenchmarks.cs" />
     <Compile Include="Properties\MemoryDiagnoserConfig.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
