@@ -476,19 +476,14 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         [Test]
         public void XmlContainerElements()
         {
-            var container = new AssertXml.Container<Vector2D>
-            {
-                Value1 = new Vector2D(1, 2),
-                Value2 = new Vector2D(3, 4)
-            };
             var xml = "<ContainerOfVector2D>\r\n" +
                       "  <Value1><X>1</X><Y>2</Y></Value1>\r\n" +
                       "  <Value2><X>3</X><Y>4</Y></Value2>\r\n" +
                       "</ContainerOfVector2D>";
             var serializer = new XmlSerializer(typeof(AssertXml.Container<Vector2D>));
             var deserialized = (AssertXml.Container<Vector2D>)serializer.Deserialize(new StringReader(xml));
-            AssertGeometry.AreEqual(container.Value1, deserialized.Value1);
-            AssertGeometry.AreEqual(container.Value2, deserialized.Value2);
+            AssertGeometry.AreEqual(new Vector2D(1, 2), deserialized.Value1);
+            AssertGeometry.AreEqual(new Vector2D(3, 4), deserialized.Value2);
         }
 
         [Test]

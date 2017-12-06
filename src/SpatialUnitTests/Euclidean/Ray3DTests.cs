@@ -1,4 +1,5 @@
-﻿namespace MathNet.Spatial.UnitTests.Euclidean
+﻿// ReSharper disable InconsistentNaming
+namespace MathNet.Spatial.UnitTests.Euclidean
 {
     using System.IO;
     using System.Runtime.Serialization.Formatters.Binary;
@@ -59,7 +60,7 @@
         [Test]
         public void BinaryRoundtrip()
         {
-            var v = new Ray3D(new Point3D(1, 2, -3), new UnitVector3D(1, 2, 3));
+            var v = new Ray3D(new Point3D(1, 2, -3), UnitVector3D.Create(1, 2, 3));
             using (var ms = new MemoryStream())
             {
                 var formatter = new BinaryFormatter();

@@ -497,19 +497,14 @@
         [Test]
         public void XmlContainerElements()
         {
-            var container = new AssertXml.Container<Vector3D>
-            {
-                Value1 = new Vector3D(1, 2, 3),
-                Value2 = new Vector3D(4, 5, 6)
-            };
             var xml = "<ContainerOfVector3D>\r\n" +
                       "  <Value1><X>1</X><Y>2</Y><Z>3</Z></Value1>\r\n" +
                       "  <Value2><X>4</X><Y>5</Y><Z>6</Z></Value2>\r\n" +
                       "</ContainerOfVector3D>";
             var serializer = new XmlSerializer(typeof(AssertXml.Container<Vector3D>));
             var deserialized = (AssertXml.Container<Vector3D>)serializer.Deserialize(new StringReader(xml));
-            AssertGeometry.AreEqual(container.Value1, deserialized.Value1);
-            AssertGeometry.AreEqual(container.Value2, deserialized.Value2);
+            AssertGeometry.AreEqual(new Vector3D(1, 2, 3), deserialized.Value1);
+            AssertGeometry.AreEqual(new Vector3D(4, 5, 6), deserialized.Value2);
         }
 
         [Test]

@@ -1,4 +1,5 @@
-﻿namespace MathNet.Spatial.UnitTests.Euclidean
+﻿// ReSharper disable InconsistentNaming
+namespace MathNet.Spatial.UnitTests.Euclidean
 {
     using System;
     using System.Globalization;
@@ -13,24 +14,21 @@
     public class UnitVector3DTests
     {
         [Test]
-        public void Ctor()
+        public void Create()
         {
-            var l = Math.Sqrt((1 * 1) + (2 * 2) + (3 * 3));
-            var actuals = new[]
-            {
-                new UnitVector3D(1 / l, 2 / l, 3 / l),
-                new UnitVector3D(1, 2, 3), // Ctor normalizes
-                new UnitVector3D(new[] { 1, 2, 3.0 }),
-                new UnitVector3D(new[] { 1 / l, 2 / l, 3.0 / l }),
-            };
-            foreach (var actual in actuals)
-            {
-                Assert.AreEqual(1 / l, actual.X, 1e-6);
-                Assert.AreEqual(2 / l, actual.Y, 1e-6);
-                Assert.AreEqual(3 / l, actual.Z, 1e-6);
-            }
+            var actual = UnitVector3D.Create(1, -2, 3);
+            Assert.AreEqual(0.2672612419124244, actual.X);
+            Assert.AreEqual(-0.53452248382484879, actual.Y);
+            Assert.AreEqual(0.80178372573727319, actual.Z);
 
-            Assert.Throws<ArgumentException>(() => new UnitVector3D(new[] { 1.0, 2, 3, 4 }));
+            actual = UnitVector3D.Create(0.2672612419124244, -0.53452248382484879, 0.80178372573727319);
+            Assert.AreEqual(0.2672612419124244, actual.X);
+            Assert.AreEqual(-0.53452248382484879, actual.Y);
+            Assert.AreEqual(0.80178372573727319, actual.Z);
+
+            Assert.Throws<ArgumentOutOfRangeException>(() => UnitVector3D.Create(double.NaN, 2, 3));
+            Assert.Throws<ArgumentOutOfRangeException>(() => UnitVector3D.Create(double.PositiveInfinity, 2, 3));
+            Assert.Throws<ArgumentOutOfRangeException>(() => UnitVector3D.Create(double.NegativeInfinity, 2, 3));
         }
 
         [TestCase("1,0; 0; 0,0", 1, 0, 0)]
@@ -200,16 +198,16 @@
             using (var reader = new StringReader(xml))
             {
                 var actual = UnitVector3D.ReadFrom(XmlReader.Create(reader));
-                Assert.AreEqual(new UnitVector3D(0.2672612419124244, -0.53452248382484879, 0.80178372573727319), actual);
+                Assert.AreEqual(UnitVector3D.Create(0.2672612419124244, -0.53452248382484879, 0.80178372573727319), actual);
             }
         }
 
         [Test]
         public void XmlRoundtrip()
         {
-            var p = new UnitVector3D(0.2672612419124244, -0.53452248382484879, 0.80178372573727319);
+            var uv = UnitVector3D.Create(0.2672612419124244, -0.53452248382484879, 0.80178372573727319);
             var xml = "<UnitVector3D X=\"0.2672612419124244\" Y=\"-0.53452248382484879\" Z=\"0.80178372573727319\" />";
-            AssertXml.XmlRoundTrips(p, xml, (expected, actual) => AssertGeometry.AreEqual(expected, actual));
+            AssertXml.XmlRoundTrips(uv, xml, (expected, actual) => AssertGeometry.AreEqual(expected, actual));
         }
 
         [Test]
@@ -217,8 +215,8 @@
         {
             var container = new AssertXml.Container<UnitVector3D>
             {
-                Value1 = new UnitVector3D(0.2672612419124244, -0.53452248382484879, 0.80178372573727319),
-                Value2 = new UnitVector3D(1, 0, 0)
+                Value1 = UnitVector3D.Create(0.2672612419124244, -0.53452248382484879, 0.80178372573727319),
+                Value2 = UnitVector3D.Create(1, 0, 0)
             };
             var expected = "<ContainerOfUnitVector3D>\r\n" +
                            "  <Value1 X=\"0.2672612419124244\" Y=\"-0.53452248382484879\" Z=\"0.80178372573727319\"></Value1>\r\n" +
@@ -232,7 +230,7 @@
         [Test]
         public void XmlElements()
         {
-            var v = new UnitVector3D(0.2672612419124244, -0.53452248382484879, 0.80178372573727319);
+            var v = UnitVector3D.Create(0.2672612419124244, -0.53452248382484879, 0.80178372573727319);
             var serializer = new XmlSerializer(typeof(UnitVector3D));
             using (var reader = new StringReader("<UnitVector3D><X>0.2672612419124244</X><Y>-0.53452248382484879</Y><Z>0.80178372573727319</Z></UnitVector3D>"))
             {
@@ -243,19 +241,14 @@
         [Test]
         public void XmlContainerElements()
         {
-            var container = new AssertXml.Container<UnitVector3D>
-            {
-                Value1 = new UnitVector3D(0.2672612419124244, -0.53452248382484879, 0.80178372573727319),
-                Value2 = new UnitVector3D(1, 0, 0)
-            };
             var xml = "<ContainerOfUnitVector3D>\r\n" +
                       "  <Value1><X>0.2672612419124244</X><Y>-0.53452248382484879</Y><Z>0.80178372573727319</Z></Value1>\r\n" +
                       "  <Value2><X>1</X><Y>0</Y><Z>0</Z></Value2>\r\n" +
                       "</ContainerOfUnitVector3D>";
             var serializer = new XmlSerializer(typeof(AssertXml.Container<UnitVector3D>));
             var deserialized = (AssertXml.Container<UnitVector3D>)serializer.Deserialize(new StringReader(xml));
-            AssertGeometry.AreEqual(container.Value1, deserialized.Value1);
-            AssertGeometry.AreEqual(container.Value2, deserialized.Value2);
+            AssertGeometry.AreEqual(UnitVector3D.Create(0.2672612419124244, -0.53452248382484879, 0.80178372573727319), deserialized.Value1);
+            AssertGeometry.AreEqual(UnitVector3D.Create(1, 0, 0), deserialized.Value2);
         }
 
         [Test]
