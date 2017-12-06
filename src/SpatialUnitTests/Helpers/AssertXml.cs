@@ -101,12 +101,6 @@
             }
         }
 
-        private static string Normalize(string xml)
-        {
-            var e = XElement.Parse(xml);
-            return Normalize(e);
-        }
-
         private static string Normalize(XElement e)
         {
             using (var sw = new StringWriter())

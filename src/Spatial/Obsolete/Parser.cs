@@ -1,4 +1,5 @@
-﻿#pragma warning disable SA1600 // Elements must be documented
+﻿// ReSharper disable UnusedMember.Global
+#pragma warning disable SA1600 // Elements must be documented
 namespace MathNet.Spatial
 {
     using System;

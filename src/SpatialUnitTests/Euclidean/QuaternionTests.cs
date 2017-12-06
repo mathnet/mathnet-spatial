@@ -71,7 +71,7 @@
         /// Can substract quaternions using operator.
         /// </summary>
         [Test]
-        public void CanSubstractQuaternionsAndFloatUsingOperator()
+        public void CanSubtractQuaternionsAndFloatUsingOperator()
         {
             Assert.AreEqual(Quaternion.Zero, new Quaternion(1, 2, 3, 4) - new Quaternion(1, 2, 3, 4));
             Assert.AreEqual(new Quaternion(-1, -2, -3, -4), new Quaternion(0, 0, 0, 0) - new Quaternion(1, 2, 3, 4));
@@ -262,7 +262,6 @@
 
         public class QuaternionCalculationTestClass
         {
-            private static double bigNumber = Math.Pow(10, 200);
             private static double smallNumber = float.Epsilon;
             private static Random random = new Random();
             private static Quaternion posInf = new Quaternion(double.PositiveInfinity, 0, 0, 0);
@@ -348,16 +347,17 @@
                 get
                 {
                     var q0 = new Quaternion(0, 0, 0, 0);
-                    var q1 = new Quaternion(1, 0, 0, 0);
-                    var q2 = new Quaternion(1, 1, 1, 1).Normalized;
-                    var q3 = new Quaternion(2, 2, 2, 2).Normalized;
-                    var q4 = new Quaternion(1, 2, 3, 4);
                     yield return new TestCaseData(q0, 3.981).Returns(q0);
+
+                    var q1 = new Quaternion(1, 0, 0, 0);
                     yield return new TestCaseData(q1, 3.981).Returns(q1);
 
+                    var q2 = new Quaternion(1, 1, 1, 1).Normalized;
                     yield return new TestCaseData(q2, 9.0).Returns(q2 * q2 * q2 * q2 * q2 * q2 * q2 * q2 * q2);
                     yield return new TestCaseData(q2, 3.0).Returns(q2 * q2 * q2);
-                    // yield return new TestCaseData(q3, 9.0).Returns(q3 * q3 * q3 * q3 * q3 * q3 * q3 * q3 * q3); //identical to q2
+
+                    var q3 = new Quaternion(2, 2, 2, 2).Normalized;
+                    yield return new TestCaseData(q3, 9.0).Returns(q3 * q3 * q3 * q3 * q3 * q3 * q3 * q3 * q3);
                 }
             }
 
