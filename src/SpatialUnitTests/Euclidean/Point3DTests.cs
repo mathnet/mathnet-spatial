@@ -1,4 +1,5 @@
-﻿namespace MathNet.Spatial.UnitTests.Euclidean
+﻿// ReSharper disable InconsistentNaming
+namespace MathNet.Spatial.UnitTests.Euclidean
 {
     using System;
     using System.Globalization;
@@ -15,19 +16,10 @@
         [Test]
         public void Ctor()
         {
-            var actuals = new[]
-            {
-                new Point3D(1, 2, 3),
-                new Point3D(new[] { 1, 2, 3.0 }),
-            };
-            foreach (var actual in actuals)
-            {
-                Assert.AreEqual(1, actual.X, 1e-6);
-                Assert.AreEqual(2, actual.Y, 1e-6);
-                Assert.AreEqual(3, actual.Z, 1e-6);
-            }
-
-            Assert.Throws<ArgumentException>(() => new Point3D(new[] { 1.0, 2, 3, 4 }));
+            var actual = new Point3D(1, 2, 3);
+            Assert.AreEqual(1, actual.X, 1e-6);
+            Assert.AreEqual(2, actual.Y, 1e-6);
+            Assert.AreEqual(3, actual.Z, 1e-6);
         }
 
         [TestCase("-1,1,-1", -1, 1, -1)]
@@ -117,11 +109,16 @@
         public void ToDenseVector()
         {
             var p = new Point3D(1, 2, 3);
-            var denseVector = p.ToVector();
-            Assert.AreEqual(3, denseVector.Count);
-            Assert.AreEqual(1, denseVector[0], 1e-6);
-            Assert.AreEqual(2, denseVector[1], 1e-6);
-            Assert.AreEqual(3, denseVector[2], 1e-6);
+            var vector = p.ToVector();
+            Assert.AreEqual(3, vector.Count);
+            Assert.AreEqual(1, vector[0], 1e-6);
+            Assert.AreEqual(2, vector[1], 1e-6);
+            Assert.AreEqual(3, vector[2], 1e-6);
+
+            var roundtripped = Point3D.OfVector(vector);
+            Assert.AreEqual(1, roundtripped.X, 1e-6);
+            Assert.AreEqual(2, roundtripped.Y, 1e-6);
+            Assert.AreEqual(3, roundtripped.Z, 1e-6);
         }
 
         [TestCase("1, 2, 3", "1, 2, 3", 1e-4, true)]

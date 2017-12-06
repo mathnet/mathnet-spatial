@@ -17,6 +17,13 @@
         }
 
         [Benchmark]
+        public Vector3D Parse()
+        {
+            // Probably not going to be in any hot path but adding a benchmark any way because it is fun.
+            return Vector3D.Parse("1; 2");
+        }
+
+        [Benchmark]
         public UnitVector3D Normalize()
         {
             return V1.Normalize();

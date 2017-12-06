@@ -20,19 +20,19 @@
             var plane1 = new Plane(new Point3D(0, 0, 3), UnitVector3D.ZAxis);
             var plane2 = new Plane(0, 0, 3, -3);
             var plane3 = new Plane(UnitVector3D.ZAxis, 3);
-            var plane4 = new Plane(new Point3D(0, 0, 3), new Point3D(5, 3, 3), new Point3D(-2, 1, 3));
+            var plane4 = Plane.FromPoints(new Point3D(0, 0, 3), new Point3D(5, 3, 3), new Point3D(-2, 1, 3));
             AssertGeometry.AreEqual(plane1, plane2);
             AssertGeometry.AreEqual(plane1, plane3);
             AssertGeometry.AreEqual(plane1, plane4);
         }
 
-        [TestCase("p:{0, 0, 0} v:{1, 0, 0}", new double[] { 0, 0, 0 }, new double[] { 1, 0, 0 })]
-        [TestCase("1, 0, 0, 0", new double[] { 0, 0, 0 }, new double[] { 1, 0, 0 })]
-        public void ParseTest(string s, double[] pds, double[] vds)
+        [TestCase("p:{0, 0, 0} v:{1, 0, 0}", "0, 0, 0", "1, 0, 0")]
+        [TestCase("1, 0, 0, 0", "0, 0, 0", "1, 0, 0")]
+        public void ParseTest(string s, string pds, string vds)
         {
             var plane = Plane.Parse(s);
-            AssertGeometry.AreEqual(new Point3D(pds), plane.RootPoint);
-            AssertGeometry.AreEqual(new Vector3D(vds), plane.Normal);
+            AssertGeometry.AreEqual(Point3D.Parse(pds), plane.RootPoint);
+            AssertGeometry.AreEqual(Vector3D.Parse(vds), plane.Normal);
         }
 
         [TestCase(ZeroPoint, "p:{0, 0, 0} v:{0, 0, 1}", ZeroPoint)]
@@ -45,13 +45,6 @@
             var projectedPoint = plane.Project(Point3D.Parse(ps));
             var expected = Point3D.Parse(eps);
             AssertGeometry.AreEqual(expected, projectedPoint, float.Epsilon);
-        }
-
-        private void ProjectPoint(Point3D pointToProject, Point3D planeRootPoint, UnitVector3D planeNormal, Point3D projectedresult)
-        {
-            var plane = new Plane(planeNormal, planeRootPoint);
-            var projectOn = plane.Project(pointToProject);
-            AssertGeometry.AreEqual(projectedresult, projectOn, float.Epsilon);
         }
 
         [TestCase(ZeroPoint, Z, ZeroPoint, 0)]
@@ -165,9 +158,9 @@
         [Test]
         public void InterSectionPointDifferentOrderTest()
         {
-            var plane1 = new Plane(new UnitVector3D(0.8, 0.3, 0.01), new Point3D(20, 0, 0));
-            var plane2 = new Plane(new UnitVector3D(0.002, 1, 0.1), new Point3D(0, 0, 0));
-            var plane3 = new Plane(new UnitVector3D(0.5, 0.5, 1), new Point3D(0, 0, -30));
+            var plane1 = new Plane(UnitVector3D.Create(0.8, 0.3, 0.01), new Point3D(20, 0, 0));
+            var plane2 = new Plane(UnitVector3D.Create(0.002, 1, 0.1), new Point3D(0, 0, 0));
+            var plane3 = new Plane(UnitVector3D.Create(0.5, 0.5, 1), new Point3D(0, 0, -30));
             var pointFromPlanes1 = Plane.PointFromPlanes(plane1, plane2, plane3);
             var pointFromPlanes2 = Plane.PointFromPlanes(plane2, plane1, plane3);
             var pointFromPlanes3 = Plane.PointFromPlanes(plane3, plane1, plane2);
@@ -208,7 +201,7 @@
         }
 
         [TestCase("p:{0, 0, 0} v:{0, 0, 1}")]
-        public void BinaryRountrip(string pls)
+        public void BinaryRoundtrip(string pls)
         {
             var plane = Plane.Parse(pls);
             using (var ms = new MemoryStream())
