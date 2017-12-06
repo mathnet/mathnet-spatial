@@ -94,24 +94,29 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// A vector orthogonbal to this
         /// </summary>
+        [Pure]
         public UnitVector3D Orthogonal
         {
             get
             {
                 if (-this.X - this.Y > 0.1)
                 {
+#pragma warning disable CS0618 // Type or member is obsolete we want this when the ctor is public to avoid scaling
                     return new UnitVector3D(this.Z, this.Z, -this.X - this.Y);
                 }
 
                 return new UnitVector3D(-this.Y - this.Z, this.X, this.X);
+#pragma warning restore CS0618 // Type or member is obsolete
             }
         }
 
         /// <summary>
         /// The length of the vector not the count of elements
         /// </summary>
+        [Pure]
         public double Length => 1;
 
+        [Pure]
         internal Matrix<double> CrossProductMatrix => Matrix<double>.Build.Dense(3, 3, new[] { 0d, this.Z, -this.Y, -this.Z, 0d, this.X, this.Y, -this.X, 0d });
 
         public static bool operator ==(UnitVector3D left, UnitVector3D right)
@@ -305,6 +310,7 @@ namespace MathNet.Spatial.Euclidean
             return reader.ReadElementAs<UnitVector3D>();
         }
 
+        [Pure]
         public Vector3D ScaleBy(double scaleFactor)
         {
             return scaleFactor * this;
@@ -316,6 +322,7 @@ namespace MathNet.Spatial.Euclidean
             return planeToProjectOn.Project(this.ToVector3D());
         }
 
+        [Pure]
         public Vector3D ProjectOn(UnitVector3D uv)
         {
             var pd = this.DotProduct(uv);
@@ -428,6 +435,7 @@ namespace MathNet.Spatial.Euclidean
             return new Vector3D(this.X + v.X, this.Y + v.Y, this.Z + v.Z);
         }
 
+        [Pure]
         public UnitVector3D CrossProduct(UnitVector3D inVector3D)
         {
             var x = (this.Y * inVector3D.Z) - (this.Z * inVector3D.Y);
@@ -437,6 +445,7 @@ namespace MathNet.Spatial.Euclidean
             return v;
         }
 
+        [Pure]
         public Vector3D CrossProduct(Vector3D inVector3D)
         {
             var x = (this.Y * inVector3D.Z) - (this.Z * inVector3D.Y);
@@ -446,6 +455,7 @@ namespace MathNet.Spatial.Euclidean
             return v;
         }
 
+        [Pure]
         public Matrix<double> GetUnitTensorProduct()
         {
             // unitTensorProduct:matrix([ux^2,ux*uy,ux*uz],[ux*uy,uy^2,uy*uz],[ux*uz,uy*uz,uz^2]),
@@ -460,6 +470,7 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         /// <param name="v">The fromVector3D to calculate the signed angle to </param>
         /// <param name="about">The vector around which to rotate to get the correct sign</param>
+        [Pure]
         public Angle SignedAngleTo(Vector3D v, UnitVector3D about)
         {
             return this.SignedAngleTo(v.Normalize(), about);
@@ -470,6 +481,7 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         /// <param name="v">The fromVector3D to calculate the signed angle to </param>
         /// <param name="about">The vector around which to rotate to get the correct sign</param>
+        [Pure]
         public Angle SignedAngleTo(UnitVector3D v, UnitVector3D about)
         {
             if (this.IsParallelTo(about))
@@ -508,6 +520,7 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         /// <param name="v">The other vector</param>
         /// <returns>The angle</returns>
+        [Pure]
         public Angle AngleTo(Vector3D v)
         {
             return this.AngleTo(v.Normalize());
@@ -518,6 +531,7 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         /// <param name="v">The other vector</param>
         /// <returns>The angle between the vectors, with a range between 0° and 180°</returns>
+        [Pure]
         public Angle AngleTo(UnitVector3D v)
         {
             var dp = this.DotProduct(v);
@@ -531,10 +545,11 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="about"></param>
         /// <param name="angle"></param>
         /// <returns></returns>
-        public UnitVector3D Rotate<T>(UnitVector3D about, double angle, T angleUnit)
+        [Pure]
+        public UnitVector3D Rotate<T>(UnitVector3D about, double angle, T unit)
             where T : IAngleUnit
         {
-            return this.Rotate(about, Angle.From(angle, angleUnit));
+            return this.Rotate(about, Angle.From(angle, unit));
         }
 
         /// <summary>
@@ -543,12 +558,14 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="about"></param>
         /// <param name="angle"></param>
         /// <returns></returns>
+        [Pure]
         public UnitVector3D Rotate(UnitVector3D about, Angle angle)
         {
             var cs = CoordinateSystem.Rotation(angle, about);
             return cs.Transform(this).Normalize();
         }
 
+        [Pure]
         public Point3D ToPoint3D()
         {
             return new Point3D(this.X, this.Y, this.Z);
@@ -560,11 +577,13 @@ namespace MathNet.Spatial.Euclidean
             return new Vector3D(this.X, this.Y, this.Z);
         }
 
+        [Pure]
         public Vector3D TransformBy(CoordinateSystem coordinateSystem)
         {
             return coordinateSystem.Transform(this.ToVector3D());
         }
 
+        [Pure]
         public Vector3D TransformBy(Matrix<double> m)
         {
             return new Vector3D(m.Multiply(this.ToVector()));
@@ -573,21 +592,27 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// Convert to a Math.NET Numerics dense vector of length 3.
         /// </summary>
+        [Pure]
         public Vector<double> ToVector()
         {
             return Vector<double>.Build.Dense(new[] { this.X, this.Y, this.Z });
         }
 
+        /// <inheritdoc />
+        [Pure]
         public override string ToString()
         {
             return this.ToString(null, CultureInfo.InvariantCulture);
         }
 
+        [Pure]
         public string ToString(IFormatProvider provider)
         {
             return this.ToString(null, provider);
         }
 
+        /// <inheritdoc/>
+        [Pure]
         public string ToString(string format, IFormatProvider provider = null)
         {
             var numberFormatInfo = provider != null ? NumberFormatInfo.GetInstance(provider) : CultureInfo.InvariantCulture.NumberFormat;
@@ -595,6 +620,8 @@ namespace MathNet.Spatial.Euclidean
             return string.Format("({0}{1} {2}{1} {3})", this.X.ToString(format, numberFormatInfo), separator, this.Y.ToString(format, numberFormatInfo), this.Z.ToString(format, numberFormatInfo));
         }
 
+        /// <inheritdoc />
+        [Pure]
         public bool Equals(Vector3D other)
         {
             // ReSharper disable CompareOfFloatsByEqualityOperator
@@ -602,6 +629,8 @@ namespace MathNet.Spatial.Euclidean
             // ReSharper restore CompareOfFloatsByEqualityOperator
         }
 
+        /// <inheritdoc />
+        [Pure]
         public bool Equals(UnitVector3D other)
         {
             // ReSharper disable CompareOfFloatsByEqualityOperator
@@ -609,6 +638,7 @@ namespace MathNet.Spatial.Euclidean
             // ReSharper restore CompareOfFloatsByEqualityOperator
         }
 
+        [Pure]
         public bool Equals(UnitVector3D other, double tolerance)
         {
             if (tolerance < 0)
@@ -621,6 +651,7 @@ namespace MathNet.Spatial.Euclidean
                    Math.Abs(other.Z - this.Z) < tolerance;
         }
 
+        [Pure]
         public bool Equals(Vector3D other, double tolerance)
         {
             if (tolerance < 0)
@@ -633,6 +664,8 @@ namespace MathNet.Spatial.Euclidean
                    Math.Abs(other.Z - this.Z) < tolerance;
         }
 
+        /// <inheritdoc />
+        [Pure]
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj))
@@ -644,6 +677,8 @@ namespace MathNet.Spatial.Euclidean
                    (obj is Vector3D && this.Equals((Vector3D)obj));
         }
 
+        /// <inheritdoc/>
+        [Pure]
         public override int GetHashCode()
         {
             unchecked

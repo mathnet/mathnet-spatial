@@ -222,16 +222,19 @@ namespace MathNet.Spatial.Euclidean
             return UnitVector3D.Create(this.X, this.Y, this.Z);
         }
 
+        [Pure]
         public Vector3D ScaleBy(double scaleFactor)
         {
             return scaleFactor * this;
         }
 
+        [Pure]
         public Ray3D ProjectOn(Plane planeToProjectOn)
         {
             return planeToProjectOn.Project(this);
         }
 
+        [Pure]
         public Vector3D ProjectOn(UnitVector3D uv)
         {
             var pd = this.DotProduct(uv);
@@ -242,94 +245,106 @@ namespace MathNet.Spatial.Euclidean
         /// Computes whether or not this vector is parallel to another vector using the dot product method and comparing it
         /// to within a specified tolerance.
         /// </summary>
-        /// <param name="othervector"></param>
+        /// <param name="other">The other <see cref="Vector3D"/></param>
         /// <param name="tolerance">A tolerance value for the dot product method.  Values below 2*Precision.DoublePrecision may cause issues.</param>
         /// <returns>true if the vector dot product is within the given tolerance of unity, false if it is not</returns>
-        public bool IsParallelTo(Vector3D othervector, double tolerance = 1e-10)
+        [Pure]
+        public bool IsParallelTo(Vector3D other, double tolerance = 1e-10)
         {
             var @this = this.Normalize();
-            return @this.IsParallelTo(othervector, tolerance);
+            return @this.IsParallelTo(other, tolerance);
         }
 
         /// <summary>
         /// Computes whether or not this vector is parallel to a unit vector using the dot product method and comparing it
         /// to within a specified tolerance.
         /// </summary>
-        /// <param name="othervector"></param>
+        /// <param name="other">The other <see cref="UnitVector3D"/></param>
         /// <param name="tolerance">A tolerance value for the dot product method.  Values below 2*Precision.DoublePrecision may cause issues.</param>
         /// <returns>true if the vector dot product is within the given tolerance of unity, false if not</returns>
-        public bool IsParallelTo(UnitVector3D othervector, double tolerance = 1e-10)
+        [Pure]
+        public bool IsParallelTo(UnitVector3D other, double tolerance = 1e-10)
         {
-            var @this = this.Normalize();
-            return @this.IsParallelTo(othervector, tolerance);
+            return this.Normalize().IsParallelTo(other, tolerance);
         }
 
         /// <summary>
         /// Determine whether or not this vector is parallel to another vector within a given angle tolerance.
         /// </summary>
-        /// <param name="othervector"></param>
-        /// <param name="angleTolerance"></param>
+        /// <param name="other">The other <see cref="Vector3D"/></param>
+        /// <param name="tolerance">The tolerance for when the vectors are considered parallel.</param>
         /// <returns>true if the vectors are parallel within the angle tolerance, false if they are not</returns>
-        public bool IsParallelTo(Vector3D othervector, Angle angleTolerance)
+        [Pure]
+        public bool IsParallelTo(Vector3D other, Angle tolerance)
         {
-            var @this = this.Normalize();
-            return @this.IsParallelTo(othervector, angleTolerance);
+            return this.Normalize().IsParallelTo(other, tolerance);
         }
 
         /// <summary>
         /// Determine whether or not this vector is parallel to a unit vector within a given angle tolerance.
         /// </summary>
-        /// <param name="othervector"></param>
-        /// <param name="angleTolerance"></param>
+        /// <param name="other">The other <see cref="UnitVector3D"/></param>
+        /// <param name="tolerance">The tolerance for when the vectors are considered parallel.</param>
         /// <returns>true if the vectors are parallel within the angle tolerance, false if they are not</returns>
-        public bool IsParallelTo(UnitVector3D othervector, Angle angleTolerance)
+        [Pure]
+        public bool IsParallelTo(UnitVector3D other, Angle tolerance)
         {
             var @this = this.Normalize();
-            return @this.IsParallelTo(othervector, angleTolerance);
+            return @this.IsParallelTo(other, tolerance);
         }
 
         /// <summary>
         /// Computes whether or not this vector is perpendicular to another vector using the dot product method and
         /// comparing it to within a specified tolerance
         /// </summary>
-        /// <param name="othervector"></param>
-        /// <param name="tolerance"></param>
+        /// <param name="other">The other <see cref="Vector3D"/></param>
+        /// <param name="tolerance">A tolerance value for the dot product method.  Values below 2*Precision.DoublePrecision may cause issues.</param>
         /// <returns>true if the vector dot product is within the given tolerance of zero, false if not</returns>
-        public bool IsPerpendicularTo(Vector3D othervector, double tolerance = 1e-6)
+        [Pure]
+        public bool IsPerpendicularTo(Vector3D other, double tolerance = 1e-6)
         {
-            var @this = this.Normalize();
-            var other = othervector.Normalize();
-            return Math.Abs(@this.DotProduct(other)) < tolerance;
+            return Math.Abs(this.Normalize().DotProduct(other.Normalize())) < tolerance;
         }
 
         /// <summary>
         /// Computes whether or not this vector is perpendicular to another vector using the dot product method and
         /// comparing it to within a specified tolerance
         /// </summary>
-        /// <param name="othervector"></param>
-        /// <param name="tolerance"></param>
+        /// <param name="other">The other <see cref="UnitVector3D"/></param>
+        /// <param name="tolerance">A tolerance value for the dot product method.  Values below 2*Precision.DoublePrecision may cause issues.</param>
         /// <returns>true if the vector dot product is within the given tolerance of zero, false if not</returns>
-        public bool IsPerpendicularTo(UnitVector3D othervector, double tolerance = 1e-6)
+        [Pure]
+        public bool IsPerpendicularTo(UnitVector3D other, double tolerance = 1e-6)
         {
-            var @this = this.Normalize();
-            return Math.Abs(@this.DotProduct(othervector)) < tolerance;
+            return Math.Abs(this.Normalize().DotProduct(other)) < tolerance;
         }
 
         /// <summary>
         /// Inverses the direction of the vector, equivalent to multiplying by -1
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A <see cref="Vector3D"/> pointing in the opposite direction.</returns>
+        [Pure]
         public Vector3D Negate()
         {
             return new Vector3D(-1 * this.X, -1 * this.Y, -1 * this.Z);
         }
 
+        /// <summary>
+        /// Returns the dot product of two vectors.
+        /// </summary>
+        /// <param name="v">The second vector.</param>
+        /// <returns>The dot product.</returns>
         [Pure]
         public double DotProduct(Vector3D v)
         {
             return (this.X * v.X) + (this.Y * v.Y) + (this.Z * v.Z);
         }
 
+        /// <summary>
+        /// Returns the dot product of two vectors.
+        /// </summary>
+        /// <param name="v">The second vector.</param>
+        /// <returns>The dot product.</returns>
         [Pure]
         public double DotProduct(UnitVector3D v)
         {
@@ -343,11 +358,13 @@ namespace MathNet.Spatial.Euclidean
         }
 
         [Obsolete("Use + instead")]
+        [Pure]
         public Vector3D Add(Vector3D v)
         {
             return new Vector3D(this.X + v.X, this.Y + v.Y, this.Z + v.Z);
         }
 
+        [Pure]
         public Vector3D CrossProduct(Vector3D inVector3D)
         {
             var x = (this.Y * inVector3D.Z) - (this.Z * inVector3D.Y);
@@ -357,6 +374,7 @@ namespace MathNet.Spatial.Euclidean
             return v;
         }
 
+        [Pure]
         public Vector3D CrossProduct(UnitVector3D inVector3D)
         {
             var x = (this.Y * inVector3D.Z) - (this.Z * inVector3D.Y);
@@ -366,6 +384,7 @@ namespace MathNet.Spatial.Euclidean
             return v;
         }
 
+        [Pure]
         public Matrix<double> GetUnitTensorProduct()
         {
             // unitTensorProduct:matrix([ux^2,ux*uy,ux*uz],[ux*uy,uy^2,uy*uz],[ux*uz,uy*uz,uz^2]),
@@ -380,6 +399,7 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         /// <param name="v">The vector to calculate the signed angle to </param>
         /// <param name="about">The vector around which to rotate to get the correct sign</param>
+        [Pure]
         public Angle SignedAngleTo(Vector3D v, UnitVector3D about)
         {
             return this.Normalize().SignedAngleTo(v.Normalize(), about);
@@ -390,6 +410,7 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         /// <param name="v">The vector to calculate the signed angle to </param>
         /// <param name="about">The vector around which to rotate to get the correct sign</param>
+        [Pure]
         public Angle SignedAngleTo(UnitVector3D v, UnitVector3D about)
         {
             return this.Normalize().SignedAngleTo(v, about);
@@ -400,6 +421,7 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         /// <param name="v">The other vector</param>
         /// <returns>The angle between the vectors, with a range between 0° and 180°</returns>
+        [Pure]
         public Angle AngleTo(Vector3D v)
         {
             var uv1 = this.Normalize();
@@ -412,20 +434,14 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         /// <param name="v">The other vector</param>
         /// <returns>The angle between the vectors, with a range between 0° and 180°</returns>
+        [Pure]
         public Angle AngleTo(UnitVector3D v)
         {
             var uv = this.Normalize();
             return uv.AngleTo(v);
         }
 
-        /// <summary>
-        /// Returns a vector that is this vector rotated the signed angle around the about vector
-        /// </summary>
-        /// <typeparam name="T">Constraining it like this does not box</typeparam>
-        /// <param name="about"></param>
-        /// <param name="angle"></param>
-        /// <param name="angleUnit"></param>
-        /// <returns></returns>
+        [Obsolete("This method will be removed prefer the other overload.. Made obsolete 2017-12-05.")]
         public Vector3D Rotate<T>(UnitVector3D about, double angle, T angleUnit)
             where T : IAngleUnit
         {
@@ -438,6 +454,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="about"></param>
         /// <param name="angle"></param>
         /// <returns></returns>
+        [Pure]
         public Vector3D Rotate(Vector3D about, Angle angle)
         {
             return this.Rotate(about.Normalize(), angle);
@@ -449,6 +466,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="about"></param>
         /// <param name="angle"></param>
         /// <returns></returns>
+        [Pure]
         public Vector3D Rotate(UnitVector3D about, Angle angle)
         {
             var cs = CoordinateSystem.Rotation(angle, about);
@@ -469,11 +487,13 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         /// <param name="coordinateSystem"></param>
         /// <returns></returns>
+        [Pure]
         public Vector3D TransformBy(CoordinateSystem coordinateSystem)
         {
             return coordinateSystem.Transform(this);
         }
 
+        [Pure]
         public Vector3D TransformBy(Matrix<double> m)
         {
             return new Vector3D(m.Multiply(this.ToVector()));
@@ -482,17 +502,20 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// Convert to a Math.NET Numerics dense vector of length 3.
         /// </summary>
+        [Pure]
         public Vector<double> ToVector()
         {
             return Vector<double>.Build.Dense(new[] { this.X, this.Y, this.Z });
         }
 
         /// <inheritdoc />
+        [Pure]
         public override string ToString()
         {
             return this.ToString(null, CultureInfo.InvariantCulture);
         }
 
+        [Pure]
         public string ToString(IFormatProvider provider)
         {
             return this.ToString(null, provider);
@@ -512,6 +535,7 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <inheritdoc />
+        [Pure]
         public bool Equals(Vector3D other)
         {
             // ReSharper disable CompareOfFloatsByEqualityOperator
@@ -520,6 +544,7 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <inheritdoc />
+        [Pure]
         public bool Equals(UnitVector3D other)
         {
             // ReSharper disable CompareOfFloatsByEqualityOperator
@@ -527,6 +552,7 @@ namespace MathNet.Spatial.Euclidean
             // ReSharper restore CompareOfFloatsByEqualityOperator
         }
 
+        [Pure]
         public bool Equals(Vector3D other, double tolerance)
         {
             if (tolerance < 0)
@@ -539,6 +565,7 @@ namespace MathNet.Spatial.Euclidean
                    Math.Abs(other.Z - this.Z) < tolerance;
         }
 
+        [Pure]
         public bool Equals(UnitVector3D other, double tolerance)
         {
             if (tolerance < 0)
@@ -552,6 +579,7 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <inheritdoc />
+        [Pure]
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj))
@@ -564,6 +592,7 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <inheritdoc />
+        [Pure]
         public override int GetHashCode()
         {
             unchecked
