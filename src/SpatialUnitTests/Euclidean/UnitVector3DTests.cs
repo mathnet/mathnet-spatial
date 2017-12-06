@@ -169,20 +169,6 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             AssertGeometry.AreEqual(v, UnitVector3D.Parse(actual), tolerance);
         }
 
-        [Test]
-        public void CastTest()
-        {
-            Assert.Inconclusive("Is it possible to implement this in a good way?");
-            //Vector<double> vector = new DenseVector(new[] { 1.0, 1.0, 0.0 });
-            //UnitVector3D casted = (UnitVector3D)vector;
-            //Assert.AreEqual(1, casted.Length, 0.00001);
-            //Vector<double> castback = casted;
-
-            //Vector<double> vectorTooLong = new DenseVector(new[] { 1.0, 0.0, 0.0, 0.0 });
-            //UnitVector3D vectorFail;
-            //Assert.Throws<InvalidCastException>(() => vectorFail = (UnitVector3D)vectorTooLong);
-        }
-
         [TestCase("1,0,0", 3, "3,0,0")]
         public void MultiplyTest(string unitVectorAsString, double multiplier, string expected)
         {
@@ -257,15 +243,15 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         [Test]
         public void BinaryRoundtrip()
         {
-            var v = new UnitVector3D(0.2672612419124244, 2, 3);
+            var uv = UnitVector3D.Create(0.2672612419124244, -0.53452248382484879, 0.80178372573727319);
             using (var ms = new MemoryStream())
             {
                 var formatter = new BinaryFormatter();
-                formatter.Serialize(ms, v);
+                formatter.Serialize(ms, uv);
                 ms.Flush();
                 ms.Position = 0;
                 var roundTrip = (UnitVector3D)formatter.Deserialize(ms);
-                AssertGeometry.AreEqual(v, roundTrip);
+                AssertGeometry.AreEqual(uv, roundTrip);
             }
         }
     }
