@@ -11,48 +11,62 @@
     /// </summary>
     public class PolyLine2D : IEnumerable<Point2D>
     {
-        // Internal storage for the points
+        /// <summary>
+        /// Internal storage for the points
+        /// </summary>
         private readonly List<Point2D> points;
 
         /// <summary>
-        /// Constructor which creates a PolyLine2D off of a pre-existing IEnumerable of Point2Ds
+        /// Initializes a new instance of the <see cref="PolyLine2D"/> class.
+        /// Creates a PolyLine2D from a pre-existing IEnumerable of Point2Ds
         /// </summary>
-        /// <param name="points"></param>
+        /// <param name="points">A list of points.</param>
         public PolyLine2D(IEnumerable<Point2D> points)
         {
             this.points = new List<Point2D>(points);
         }
 
         /// <summary>
-        /// Returns the number of points in the polyline
+        /// Gets the number of points in the polyline
         /// </summary>
         public int Count => this.points.Count;
 
         /// <summary>
-        /// Returns the length of the polyline as the sum of the length of the individual segments
+        /// Gets the length of the polyline as the sum of the length of the individual segments
         /// </summary>
         public double Length => this.GetPolyLineLength();
 
         /// <summary>
-        /// Access a point in the polyline by index number
+        /// Returns a point in the polyline by index number
         /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
+        /// <param name="key">The index of a point</param>
+        /// <returns>The indexed point</returns>
         public Point2D this[int key] => this.points[key];
 
         /// <summary>
-        /// Computes the length of the polyline by summing the lengths of the individual segments
+        /// Reduce the complexity of a manifold of points represented as an IEnumerable of Point2D objects by
+        /// iteratively removing all nonadjacent points which would each result in an error of less than the
+        /// single step tolerance if removed.  Iterate until no further changes are made.
         /// </summary>
-        /// <returns></returns>
-        private double GetPolyLineLength()
+        /// <param name="points">A list of points.</param>
+        /// <param name="singleStepTolerance">The tolerance (epsilon) for comparing sameness of line segements</param>
+        /// <returns>A new PolyLine2D with same segements merged.</returns>
+        public static PolyLine2D ReduceComplexity(IEnumerable<Point2D> points, double singleStepTolerance)
         {
-            double length = 0;
-            for (var i = 0; i < this.points.Count - 1; ++i)
+            var manifold = points.ToList();
+            var n = manifold.Count;
+
+            manifold = ReduceComplexitySingleStep(manifold, singleStepTolerance).ToList();
+            var n1 = manifold.Count;
+
+            while (n1 != n)
             {
-                length += this[i].DistanceTo(this[i + 1]);
+                n = n1;
+                manifold = ReduceComplexitySingleStep(manifold, singleStepTolerance).ToList();
+                n1 = manifold.Count;
             }
 
-            return length;
+            return new PolyLine2D(manifold);
         }
 
         /// <summary>
@@ -60,7 +74,7 @@
         /// the point halfway along the length of the polyline.
         /// </summary>
         /// <param name="fraction">The fractional length at which to compute the point</param>
-        /// <returns></returns>
+        /// <returns>A point a fraction of the way along the line.</returns>
         public Point2D GetPointAtFractionAlongCurve(double fraction)
         {
             if (fraction > 1 || fraction < 0)
@@ -76,7 +90,7 @@
         /// an argument greater than the length of the curve will return the last point.
         /// </summary>
         /// <param name="lengthFromStart">The distance from the first point along the curve at which to return a point</param>
-        /// <returns></returns>
+        /// <returns>A point which is the specified distance along the line</returns>
         public Point2D GetPointAtLengthFromStart(double lengthFromStart)
         {
             var length = this.Length;
@@ -110,36 +124,10 @@
         }
 
         /// <summary>
-        /// Reduce the complexity of a manifold of points represented as an IEnumerable of Point2D objects by
-        /// iteratively removing all nonadjacent points which would each result in an error of less than the
-        /// single step tolerance if removed.  Iterate until no further changes are made.
-        /// </summary>
-        /// <param name="points"></param>
-        /// <param name="singleStepTolerance"></param>
-        /// <returns></returns>
-        public static PolyLine2D ReduceComplexity(IEnumerable<Point2D> points, double singleStepTolerance)
-        {
-            var manifold = points.ToList();
-            var n = manifold.Count;
-
-            manifold = ReduceComplexitySingleStep(manifold, singleStepTolerance).ToList();
-            var n1 = manifold.Count;
-
-            while (n1 != n)
-            {
-                n = n1;
-                manifold = ReduceComplexitySingleStep(manifold, singleStepTolerance).ToList();
-                n1 = manifold.Count;
-            }
-
-            return new PolyLine2D(manifold);
-        }
-
-        /// <summary>
         /// Returns the closest point on the polyline to the given point.
         /// </summary>
-        /// <param name="p"></param>
-        /// <returns></returns>
+        /// <param name="p">a point</param>
+        /// <returns>A point which is the closest to the given point but still on the line.</returns>
         public Point2D ClosestPointTo(Point2D p)
         {
             var minError = double.MaxValue;
@@ -178,9 +166,9 @@
         /// from the original if that point were removed.  Then it removes nonadjacent points to produce a
         /// reduced size manifold.
         /// </summary>
-        /// <param name="points"></param>
-        /// <param name="tolerance"></param>
-        /// <returns></returns>
+        /// <param name="points">A list of points</param>
+        /// <param name="tolerance">Tolerance (Epislon) to apply to determine if segments are to be merged.</param>
+        /// <returns>A new list of points minus any segment which was merged.</returns>
         private static IEnumerable<Point2D> ReduceComplexitySingleStep(IEnumerable<Point2D> points, double tolerance)
         {
             var manifold = points.ToList();
@@ -227,6 +215,21 @@
             thinnedPoints.Add(manifold.Last());
 
             return thinnedPoints;
+        }
+
+        /// <summary>
+        /// Computes the length of the polyline by summing the lengths of the individual segments
+        /// </summary>
+        /// <returns>The length of the line</returns>
+        private double GetPolyLineLength()
+        {
+            double length = 0;
+            for (var i = 0; i < this.points.Count - 1; ++i)
+            {
+                length += this[i].DistanceTo(this[i + 1]);
+            }
+
+            return length;
         }
     }
 }
