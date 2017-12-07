@@ -456,16 +456,14 @@
         /// </summary>
         private void PopulateEdgeList()
         {
-            var localedges = new List<Line2D>();
-            for (var i = 0; i < this.points.Count; i++)
+            var localedges = new List<Line2D>(this.points.Count);
+            for (var i = 0; i < this.points.Count - 1; i++)
             {
-                for (var j = i; j < this.points.Count; j++)
-                {
-                    var edge = new Line2D(this.points[i], this.points[j]);
-                    localedges.Add(edge);
-                }
+                var edge = new Line2D(this.points[i], this.points[i+1]);
+                localedges.Add(edge);
             }
 
+            localedges.Add(new Line2D(this.points[this.points.Count - 1], this.points[0])); // complete loop
             this.edges = ImmutableList.Create(localedges);
         }
     }
