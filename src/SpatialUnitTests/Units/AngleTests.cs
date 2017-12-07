@@ -126,7 +126,7 @@
         [TestCase(20, 33, 49, 0.35890271998857842)]
         public void FromSexagesimal(int degrees, int minutes, double seconds, double expected)
         {
-            Assert.AreEqual(expected, Angle.FromSexagesimal(degrees, minutes, seconds).Radians);
+            Assert.AreEqual(expected, Angle.FromSexagesimal(degrees, minutes, seconds).Radians, 1E-6);
         }
 
         [TestCase("5 °", 5 * DegToRad)]
