@@ -23,7 +23,7 @@ namespace Spatial.Benchmarks
                 throw new FileNotFoundException(file);
             }
 
-            foreach (var summary in RunSingle<Vector3DBenchmarks>())
+            foreach (var summary in RunAll())
             {
                 CopyResult(summary);
             }

@@ -8,19 +8,23 @@ Frequency=3410117 Hz, Resolution=293.2451 ns, Timer=TSC
 
 
 ```
-|                 Method |         Mean |      Error |     StdDev |        Median |  Gen 0 | Allocated |
-|----------------------- |-------------:|-----------:|-----------:|--------------:|-------:|----------:|
-|                 Length |     1.385 ns |  0.3264 ns |  0.6209 ns |     1.5461 ns |      - |       0 B |
-|              Normalize |   142.580 ns |  3.1340 ns |  6.6107 ns |   140.3477 ns |      - |       0 B |
-|             DotProduct |     1.086 ns |  0.3295 ns |  0.7636 ns |     0.9842 ns |      - |       0 B |
-| OperatorMultiplyVector |     1.011 ns |  0.1969 ns |  0.1644 ns |     1.0081 ns |      - |       0 B |
-|            OperatorAdd |     2.615 ns |  0.4627 ns |  0.4752 ns |     2.4897 ns |      - |       0 B |
-|                ScaleBy |     1.557 ns |  0.0487 ns |  0.0380 ns |     1.5513 ns |      - |       0 B |
-| OperatorMultiplyDouble |     1.420 ns |  0.0053 ns |  0.0045 ns |     1.4193 ns |      - |       0 B |
-|      IsParallelToAngle |   362.248 ns |  7.1844 ns | 16.2165 ns |   363.1630 ns |      - |       0 B |
-|     IsParallelToDouble |   321.965 ns |  6.4002 ns | 11.5408 ns |   323.9992 ns |      - |       0 B |
-|                 Rotate | 1,318.857 ns | 26.5503 ns | 61.0037 ns | 1,316.5528 ns | 0.4425 |    2320 B |
-|                AngleTo |   342.210 ns |  7.1548 ns | 10.4874 ns |   335.2963 ns |      - |       0 B |
-|          SignedAngleTo |   928.628 ns | 18.8798 ns | 47.0172 ns |   900.6708 ns |      - |       0 B |
-|         OperatorEquals |     4.704 ns |  0.1312 ns |  0.2298 ns |     4.7116 ns |      - |       0 B |
-|                 Equals |    14.277 ns |  0.3182 ns |  0.6712 ns |    14.3222 ns |      - |       0 B |
+|                 Method |          Mean |     Error |    StdDev |        Median |  Gen 0 | Allocated |
+|----------------------- |--------------:|----------:|----------:|--------------:|-------:|----------:|
+|                 Length |     1.0989 ns | 0.0050 ns | 0.0039 ns |     1.0984 ns |      - |       0 B |
+|                  Parse |            NA |        NA |        NA |            NA |    N/A |       N/A |
+|              Normalize |   136.0978 ns | 3.0187 ns | 5.0436 ns |   131.9405 ns |      - |       0 B |
+|             DotProduct |     1.4328 ns | 0.2884 ns | 0.2962 ns |     1.3258 ns |      - |       0 B |
+| OperatorMultiplyVector |     0.7207 ns | 0.0061 ns | 0.0047 ns |     0.7201 ns |      - |       0 B |
+|            OperatorAdd |     1.5960 ns | 0.0084 ns | 0.0078 ns |     1.5928 ns |      - |       0 B |
+|                ScaleBy |     1.7746 ns | 0.0046 ns | 0.0038 ns |     1.7752 ns |      - |       0 B |
+| OperatorMultiplyDouble |     1.7620 ns | 0.0058 ns | 0.0046 ns |     1.7621 ns |      - |       0 B |
+|      IsParallelToAngle |   335.4198 ns | 0.0934 ns | 0.0828 ns |   335.4110 ns |      - |       0 B |
+|     IsParallelToDouble |   299.7251 ns | 0.1483 ns | 0.1238 ns |   299.6907 ns |      - |       0 B |
+|                 Rotate | 1,201.8385 ns | 0.9987 ns | 0.7797 ns | 1,201.7425 ns | 0.4425 |    2320 B |
+|                AngleTo |   327.9350 ns | 0.0837 ns | 0.0782 ns |   327.9405 ns |      - |       0 B |
+|          SignedAngleTo |   921.8131 ns | 0.6306 ns | 0.5266 ns |   921.6602 ns |      - |       0 B |
+|         OperatorEquals |     4.6718 ns | 0.0263 ns | 0.0233 ns |     4.6670 ns |      - |       0 B |
+|                 Equals |    13.2884 ns | 0.2961 ns | 0.4340 ns |    12.9257 ns |      - |       0 B |
+
+Benchmarks with issues:
+  Vector3DBenchmarks.Parse: DefaultJob
