@@ -3,42 +3,96 @@
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Diagnostics.Contracts;
     using System.Linq;
+    using MathNet.Spatial.Internals;
     using MathNet.Spatial.Units;
 
     /// <summary>
     /// Class to represent a closed polygon.
     /// </summary>
-    public class Polygon2D : IEnumerable<Point2D>
+    public class Polygon2D : IEnumerable<Point2D>, IEquatable<Polygon2D>
     {
         /// <summary>
         /// A list of vertices.
         /// </summary>
-        private readonly List<Point2D> points;
+        private ImmutableList<Point2D> points;
+
+        /// <summary>
+        /// A list of edges.  This list is lazy loaded on demand.
+        /// </summary>
+        private ImmutableList<Line2D> edges;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Polygon2D"/> class.
+        /// At least three points are needed to construct a polygon.  If less are passed an ArgumentException is thrown.
         /// </summary>
-        /// <param name="points">A list of vertices.</param>
-        public Polygon2D(IEnumerable<Point2D> points)
+        /// <param name="vertices">A list of vertices.</param>
+        public Polygon2D(IEnumerable<Point2D> vertices)
+            : this(vertices.ToArray())
         {
-            this.points = new List<Point2D>(points);
-            if (this.points.First().Equals(this.points.Last()))
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Polygon2D"/> class.
+        /// At least three points are needed to construct a polygon.  If less are passed an ArgumentException is thrown.
+        /// </summary>
+        /// <param name="vertices">A list of vertices.</param>
+        public Polygon2D(params Point2D[] vertices)
+        {
+            if (vertices.Count() < 3)
             {
-                this.points.RemoveAt(0);
+                throw new ArgumentException("Cannot create a polygon out of less than three points");
+            }
+
+            if (vertices.First().Equals(vertices.Last()))
+            {
+                this.points = new ImmutableList<Point2D>(vertices.Skip(1).ToArray());
+            }
+            else
+            {
+                this.points = new ImmutableList<Point2D>(vertices.ToArray());
             }
         }
 
         /// <summary>
         /// Gets the number of vertices in the polygon.
         /// </summary>
+        [Obsolete("Use VertexCount instead, obsolete since 6/12/2017")]
         public int Count => this.points.Count;
+
+        /// <summary>
+        /// Gets a list of vertices
+        /// </summary>
+        public Point2D[] Vertices => this.points.ToArray();
+
+        /// <summary>
+        /// Gets a list of Edges
+        /// </summary>
+        public Line2D[] Edges
+        {
+            get
+            {
+                if (this.edges == null)
+                {
+                    this.PopulateEdgeList();
+                }
+
+                return this.edges.ToArray();
+            }
+        }
+
+        /// <summary>
+        /// Gets the number of vertices in the polygon.
+        /// </summary>
+        public int VertexCount => this.points.Count;
 
         /// <summary>
         /// A index into the list of vertices
         /// </summary>
         /// <param name="key">An index for the vertex number</param>
         /// <returns>A Vertex</returns>
+        [Obsolete("Use Vertices instead, obsolete since 6/12/2017")]
         public Point2D this[int key] => this.points[key];
 
         /// <summary>
@@ -88,6 +142,7 @@
         /// <param name="p">A point</param>
         /// <param name="poly">A polygon</param>
         /// <returns>True if the point is inside the polygon; otherwise false.</returns>
+        [Obsolete("Use instance method EnclosesPoint instead, obsolete since 6/12/2017")]
         public static bool IsPointInPolygon(Point2D p, Polygon2D poly)
         {
             // Algorithm from http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
@@ -192,7 +247,17 @@
         /// <returns>True if the point is inside the polygon; otherwise false.</returns>
         public bool EnclosesPoint(Point2D p)
         {
-            return Polygon2D.IsPointInPolygon(p, this);
+            var c = false;
+            for (int i = 0, j = this.points.Count - 1; i < this.points.Count; j = i++)
+            {
+                if (((this.points[i].Y > p.Y) != (this.points[j].Y > p.Y)) &&
+                    (p.X < ((this.points[j].X - this.points[i].X) * (p.Y - this.points[i].Y) / (this.points[j].Y - this.points[i].Y)) + this.points[i].X))
+                {
+                    c = !c;
+                }
+            }
+
+            return c;
         }
 
         /// <summary>
@@ -206,14 +271,14 @@
         }
 
         /// <summary>
-        /// Returns a rotated polygon
+        /// Returns a polygon rotated around the origin
         /// </summary>
         /// <param name="angle">The angle by which to rotate.</param>
         /// <returns>A new polygon that has been rotated.</returns>
         public Polygon2D Rotate(Angle angle)
         {
-            var newPoints = from p in this select new Point2D(0, 0) + p.ToVector2D().Rotate(angle);
-            return new Polygon2D(newPoints);
+            var rotated = this.points.Select(t => Point2D.Origin + t.ToVector2D().Rotate(angle)).ToArray();
+            return new Polygon2D(rotated);
         }
 
         /// <summary>
@@ -221,7 +286,7 @@
         /// </summary>
         /// <param name="vector">A vector.</param>
         /// <returns>A new polygon that has been translated.</returns>
-        public Polygon2D Translate(Vector2D vector)
+        public Polygon2D TranslateBy(Vector2D vector)
         {
             var newPoints = from p in this.points select p + vector;
             return new Polygon2D(newPoints);
@@ -237,13 +302,13 @@
         {
             // Shift to the origin
             var shiftVector = center.VectorTo(Point2D.Origin);
-            var tempPoly = this.Translate(shiftVector);
+            var tempPoly = this.TranslateBy(shiftVector);
 
             // Rotate
             var rotatedPoly = tempPoly.Rotate(angle);
 
             // Shift back
-            return rotatedPoly.Translate(- shiftVector);
+            return rotatedPoly.TranslateBy(-shiftVector);
         }
 
         /// <summary>
@@ -261,6 +326,7 @@
         /// Returns an enumerator for the vertices
         /// </summary>
         /// <returns>An enumerator for the vertices</returns>
+        [Obsolete("Use Verticies instead, obsolete since 6/12/2017")]
         public IEnumerator<Point2D> GetEnumerator()
         {
             return this.points.GetEnumerator();
@@ -270,9 +336,64 @@
         /// Returns an enumerator for the vertices
         /// </summary>
         /// <returns>An enumerator for the vertices</returns>
+        [Obsolete("Use Verticies instead, obsolete since 6/12/2017")]
         IEnumerator IEnumerable.GetEnumerator()
         {
             return this.GetEnumerator();
+        }
+
+        /// <inheritdoc />
+        [Pure]
+        public bool Equals(Polygon2D other)
+        {
+            for (int i = 0; i < this.points.Count; i++)
+            {
+                if (this.points[i] != other.points[i])
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Returns a value to indicate if a pair of polygons are equal
+        /// </summary>
+        /// <param name="other">The polygon to compare against.</param>
+        /// <param name="tolerance">A tolerance (epsilon) to adjust for floating point error</param>
+        /// <returns>true if the polygons are equal; otherwise false</returns>
+        [Pure]
+        public bool Equals(Polygon2D other, double tolerance)
+        {
+            for (int i = 0; i < this.points.Count; i++)
+            {
+                if (!this.points[i].Equals(other.points[i], tolerance))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        /// <inheritdoc />
+        [Pure]
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+
+            return obj is Polygon2D d && this.Equals(d);
+        }
+
+        /// <inheritdoc />
+        [Pure]
+        public override int GetHashCode()
+        {
+            return this.Vertices.GetHashCode();
         }
 
         /// <summary>
@@ -328,6 +449,24 @@
             // Recurse to the next level
             RecursiveHullComputation(a, maxPoint, workingList, hullList);
             RecursiveHullComputation(maxPoint, b, workingList, hullList);
+        }
+
+        /// <summary>
+        /// Populates the edge list
+        /// </summary>
+        private void PopulateEdgeList()
+        {
+            List<Line2D> localedges = new List<Line2D>();
+            for (int i = 0; i < this.points.Count; i++)
+            {
+                for (int j = i; j < this.points.Count; j++)
+                {
+                    Line2D edge = new Line2D(this.points[i], this.points[j]);
+                    localedges.Add(edge);
+                }
+            }
+
+            this.edges = new ImmutableList<Line2D>(localedges.ToArray());
         }
     }
 }
