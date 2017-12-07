@@ -143,6 +143,20 @@
             Assert.IsInstanceOf<Angle>(angle);
         }
 
+        [Test]
+        public void FailParse()
+        {
+            bool result = Angle.TryParse("test", out var angle);
+            Assert.AreEqual(default(Angle), angle);
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void FailParseDirect()
+        {
+            Assert.Throws<FormatException>(() => Angle.Parse("Test"), "Expected FormatException", null);
+        }
+
         [TestCase("5 °", 5 * DegToRad)]
         [TestCase("5°", 5 * DegToRad)]
         [TestCase("-5,34 rad", -5.34)]
@@ -295,6 +309,8 @@
         [TestCase("15°", @"<Angle><Value>0.261799387799149</Value></Angle>")]
         [TestCase("15°", @"<Angle><Radians>0.261799387799149</Radians></Angle>")]
         [TestCase("15°", @"<Angle><Degrees>15</Degrees></Angle>")]
+        [TestCase("15°", @"<Angle Radians=""0.26179938779914941"" />")]
+        [TestCase("180°", @"<Angle Degrees=""180"" />")]
         public void XmlElement(string vs, string xml)
         {
             var angle = Angle.Parse(vs);
@@ -319,6 +335,40 @@
                 var roundtripped = (Angle)formatter.Deserialize(ms);
                 Assert.AreEqual(angle, roundtripped);
             }
+        }
+
+        [Test]
+        public void ToStringTest()
+        {
+            int number = 1;
+            var angle = Angle.FromRadians(number);
+            string expected = number + " rad";
+            Assert.AreEqual(expected, angle.ToString());
+        }
+
+        [Test]
+        public void ObjectEqualsTest()
+        {
+            var angle = Angle.FromRadians(1);
+            Assert.IsTrue(angle.Equals((object)angle));
+        }
+
+        [Test]
+        public void ObjectNullTest()
+        {
+            var angle = Angle.FromRadians(1);
+            Assert.IsFalse(angle.Equals(null));
+        }
+
+        [Test]
+        public void HashCodeTest()
+        {
+            string test = "test";
+            var angle = Angle.FromRadians(1);
+            var lookup = new System.Collections.Generic.Dictionary<Angle, string>();
+            lookup.Add(angle, test);
+
+            Assert.AreEqual(test, lookup[angle]);
         }
     }
 }
