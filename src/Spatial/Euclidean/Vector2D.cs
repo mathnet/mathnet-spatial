@@ -12,6 +12,9 @@
     using MathNet.Spatial.Internals;
     using MathNet.Spatial.Units;
 
+    /// <summary>
+    /// A struct representing a vector in 2D space
+    /// </summary>
     [Serializable]
     public struct Vector2D : IXmlSerializable, IEquatable<Vector2D>, IFormattable
     {
@@ -53,6 +56,10 @@
             }
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Vector2D"/> struct.
+        /// </summary>
+        /// <param name="data">A list of 2 doubles</param>
         [Obsolete("This constructor will be removed. Made obsolete 2017-12-03.")]
         //// ReSharper disable once UnusedMember.Global
         public Vector2D(IEnumerable<double> data)
@@ -60,6 +67,10 @@
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Vector2D"/> struct.
+        /// </summary>
+        /// <param name="data">A list of 2 doubles</param>
         [Obsolete("This constructor will be removed. Made obsolete 2017-12-03.")]
         public Vector2D(double[] data)
             : this(data[0], data[1])
@@ -70,53 +81,115 @@
             }
         }
 
+        /// <summary>
+        /// Gets a vector representing the X Axis
+        /// </summary>
         public static Vector2D XAxis { get; } = new Vector2D(1, 0);
 
+        /// <summary>
+        /// Gets a vector representing the Y Axis
+        /// </summary>
         public static Vector2D YAxis { get; } = new Vector2D(0, 1);
 
+        /// <summary>
+        /// Gets the length of the vector
+        /// </summary>
         [Pure]
         public double Length => Math.Sqrt((this.X * this.X) + (this.Y * this.Y));
 
+        /// <summary>
+        /// Returns a value that indicates whether each pair of elements in two specified vectors is equal.
+        /// </summary>
+        /// <param name="left">The first vector to compare.</param>
+        /// <param name="right">The second vector to compare.</param>
+        /// <returns>True if the vectors are the same; otherwise false.</returns>
         public static bool operator ==(Vector2D left, Vector2D right)
         {
             return left.Equals(right);
         }
 
+        /// <summary>
+        /// Returns a value that indicates whether any pair of elements in two specified vectors is not equal.
+        /// </summary>
+        /// <param name="left">The first vector to compare.</param>
+        /// <param name="right">The second vector to compare.</param>
+        /// <returns>True if the vectors are different; otherwise false.</returns>
         public static bool operator !=(Vector2D left, Vector2D right)
         {
             return !left.Equals(right);
         }
 
+        /// <summary>
+        /// Adds two vectors
+        /// </summary>
+        /// <param name="left">The first vector</param>
+        /// <param name="right">The second vector</param>
+        /// <returns>A new summed vector</returns>
         public static Vector2D operator +(Vector2D left, Vector2D right)
         {
             return left.Add(right);
         }
 
+        /// <summary>
+        /// Subtracts two vectors
+        /// </summary>
+        /// <param name="left">The first vector</param>
+        /// <param name="right">The second vector</param>
+        /// <returns>A new difference vector</returns>
         public static Vector2D operator -(Vector2D left, Vector2D right)
         {
             return left.Subtract(right);
         }
 
+        /// <summary>
+        /// Negates the vector
+        /// </summary>
+        /// <param name="v">A vector to negate</param>
+        /// <returns>A new negated vector</returns>
         public static Vector2D operator -(Vector2D v)
         {
             return v.Negate();
         }
 
+        /// <summary>
+        /// Multiplies a vector by a scalar
+        /// </summary>
+        /// <param name="d">A scalar</param>
+        /// <param name="v">A vector</param>
+        /// <returns>A scaled vector</returns>
         public static Vector2D operator *(double d, Vector2D v)
         {
             return new Vector2D(d * v.X, d * v.Y);
         }
 
+        /// <summary>
+        /// Multiplies a vector by a scalar
+        /// </summary>
+        /// <param name="v">A vector</param>
+        /// <param name="d">A scalar</param>
+        /// <returns>A scaled vector</returns>
         public static Vector2D operator *(Vector2D v, double d)
         {
             return d * v;
         }
 
+        /// <summary>
+        /// Divides a vector by a scalar
+        /// </summary>
+        /// <param name="v">A vector</param>
+        /// <param name="d">A scalar</param>
+        /// <returns>A scaled vector</returns>
         public static Vector2D operator /(Vector2D v, double d)
         {
             return new Vector2D(v.X / d, v.Y / d);
         }
 
+        /// <summary>
+        /// Creates a Vector from Polar coordinates
+        /// </summary>
+        /// <param name="radius">The distance of the point from the origin</param>
+        /// <param name="angle">The angle of the point as measured from the X Axis</param>
+        /// <returns>A vector.</returns>
         public static Vector2D FromPolar(double radius, Angle angle)
         {
             if (radius < 0)
@@ -262,8 +335,8 @@
         public bool IsPerpendicularTo(Vector2D other, Angle tolerance)
         {
             var angle = this.AngleTo(other);
-            const double perpendicular = Math.PI / 2;
-            return Math.Abs(angle.Radians - perpendicular) < tolerance.Radians;
+            const double Perpendicular = Math.PI / 2;
+            return Math.Abs(angle.Radians - Perpendicular) < tolerance.Radians;
         }
 
         /// <summary>
@@ -318,6 +391,13 @@
                         (this.X * other.X) + (this.Y * other.Y))));
         }
 
+        /// <summary>
+        /// Rotates a Vector
+        /// </summary>
+        /// <typeparam name="T">An Angleunit</typeparam>
+        /// <param name="angle">An angle</param>
+        /// <param name="angleUnit">A type of angle</param>
+        /// <returns>A new vector</returns>
         [Obsolete("This method will be removed, use the overload that takes an Angle. Made obsolete 2017-12-03.")]
         //// ReSharper disable once UnusedMember.Global
         public Vector2D Rotate<T>(double angle, T angleUnit)
@@ -326,6 +406,11 @@
             return this.Rotate(Angle.From(angle, angleUnit));
         }
 
+        /// <summary>
+        /// Rotates a Vector by an angle
+        /// </summary>
+        /// <param name="angle">The angle.</param>
+        /// <returns>A new rotated vector.</returns>
         [Pure]
         public Vector2D Rotate(Angle angle)
         {
@@ -336,6 +421,11 @@
             return new Vector2D(x, y);
         }
 
+        /// <summary>
+        /// Perform the dot product on a pair of vectors
+        /// </summary>
+        /// <param name="other">The second vector</param>
+        /// <returns>The result of the dot product.</returns>
         [Pure]
         public double DotProduct(Vector2D other)
         {
@@ -368,6 +458,10 @@
             return other * (this.DotProduct(other) / other.DotProduct(other));
         }
 
+        /// <summary>
+        /// Creates a new unit vector from the existing vector.
+        /// </summary>
+        /// <returns>A new unit vector in the same direction as the original vector</returns>
         [Pure]
         public Vector2D Normalize()
         {
@@ -375,30 +469,54 @@
             return new Vector2D(this.X / l, this.Y / l);
         }
 
+        /// <summary>
+        /// Scales the vector by the provided value
+        /// </summary>
+        /// <param name="d">a scaling factor</param>
+        /// <returns>A new scale adjusted vector</returns>
         [Pure]
         public Vector2D ScaleBy(double d)
         {
             return new Vector2D(d * this.X, d * this.Y);
         }
 
+        /// <summary>
+        /// Returns the negative of the vector
+        /// </summary>
+        /// <returns>A new negated vector.</returns>
         [Pure]
         public Vector2D Negate()
         {
             return new Vector2D(-1 * this.X, -1 * this.Y);
         }
 
+        /// <summary>
+        /// Subtracts a vector from this vector.
+        /// </summary>
+        /// <param name="v">A vector to subtract</param>
+        /// <returns>A new vector which is the difference of the current vector and the provided vector</returns>
         [Pure]
         public Vector2D Subtract(Vector2D v)
         {
             return new Vector2D(this.X - v.X, this.Y - v.Y);
         }
 
+        /// <summary>
+        /// Adds a vector to this vector
+        /// </summary>
+        /// <param name="v">A vector to add</param>
+        /// <returns>A new vector which is the sum of the existing vector and the provided vector</returns>
         [Pure]
         public Vector2D Add(Vector2D v)
         {
             return new Vector2D(this.X + v.X, this.Y + v.Y);
         }
 
+        /// <summary>
+        /// Transforms a vector by multipying it against a provided patrix
+        /// </summary>
+        /// <param name="m">The matrix to multiply</param>
+        /// <returns>A new transformed vector</returns>
         [Pure]
         public Vector2D TransformBy(Matrix<double> m)
         {
