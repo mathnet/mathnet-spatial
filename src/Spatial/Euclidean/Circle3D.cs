@@ -82,11 +82,23 @@
         [Pure]
         public double Area => this.Radius * this.Radius * Math.PI;
 
+        /// <summary>
+        /// Returns a value that indicates whether each pair of elements in two specified circles is equal.
+        /// </summary>
+        /// <param name="left">The first circle to compare</param>
+        /// <param name="right">The second circle to compare</param>
+        /// <returns>True if the circles are the same; otherwise false.</returns>
         public static bool operator ==(Circle3D left, Circle3D right)
         {
             return left.Equals(right);
         }
 
+        /// <summary>
+        /// Returns a value that indicates whether any pair of elements in two specified circles is not equal.
+        /// </summary>
+        /// <param name="left">The first circle to compare</param>
+        /// <param name="right">The second circle to compare</param>
+        /// <returns>True if the circles are different; otherwise false.</returns>
         public static bool operator !=(Circle3D left, Circle3D right)
         {
             return !left.Equals(right);
