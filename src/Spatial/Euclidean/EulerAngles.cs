@@ -40,11 +40,23 @@
             this.Gamma = gamma;
         }
 
+        /// <summary>
+        /// Returns a value that indicates whether each pair of elements in two specified EulerAngles is equal.
+        /// </summary>
+        /// <param name="left">The first EularAngle to compare</param>
+        /// <param name="right">The second EularAngle to compare</param>
+        /// <returns>True if the EulerAngles are the same; otherwise false.</returns>
         public static bool operator ==(EulerAngles left, EulerAngles right)
         {
             return left.Equals(right);
         }
 
+        /// <summary>
+        /// Returns a value that indicates whether any pair of elements in two specified EulerAngles is not equal.
+        /// </summary>
+        /// <param name="left">The first EularAngle to compare</param>
+        /// <param name="right">The second EularAngle to compare</param>
+        /// <returns>True if the EulerAngles are different; otherwise false.</returns>
         public static bool operator !=(EulerAngles left, EulerAngles right)
         {
             return !left.Equals(right);
