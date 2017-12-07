@@ -40,18 +40,18 @@
         /// <param name="vertices">A list of vertices.</param>
         public Polygon2D(params Point2D[] vertices)
         {
-            if (vertices.Count() < 3)
+            if (vertices.Length < 3)
             {
                 throw new ArgumentException("Cannot create a polygon out of less than three points");
             }
 
-            if (vertices.First().Equals(vertices.Last()))
+            if (vertices[0].Equals(vertices[vertices.Length - 1]))
             {
-                this.points = new ImmutableList<Point2D>(vertices.Skip(1).ToArray());
+                this.points = ImmutableList.Create(vertices.Skip(1).ToArray());
             }
             else
             {
-                this.points = new ImmutableList<Point2D>(vertices.ToArray());
+                this.points = ImmutableList.Create(vertices);
             }
         }
 
@@ -346,7 +346,7 @@
         [Pure]
         public bool Equals(Polygon2D other)
         {
-            for (int i = 0; i < this.points.Count; i++)
+            for (var i = 0; i < this.points.Count; i++)
             {
                 if (this.points[i] != other.points[i])
                 {
@@ -366,7 +366,7 @@
         [Pure]
         public bool Equals(Polygon2D other, double tolerance)
         {
-            for (int i = 0; i < this.points.Count; i++)
+            for (var i = 0; i < this.points.Count; i++)
             {
                 if (!this.points[i].Equals(other.points[i], tolerance))
                 {
@@ -402,7 +402,7 @@
         /// <param name="a">The first point</param>
         /// <param name="b">The second point</param>
         /// <param name="workingList">A list of points to be evaluated</param>
-        /// <param name="hullList">A list of points on the convexhull</param>
+        /// <param name="hullList">A list of points on the convex hull</param>
         private static void RecursiveHullComputation(Point2D a, Point2D b, List<Point2D> workingList, List<Point2D> hullList)
         {
             if (!workingList.Any())
@@ -456,17 +456,17 @@
         /// </summary>
         private void PopulateEdgeList()
         {
-            List<Line2D> localedges = new List<Line2D>();
-            for (int i = 0; i < this.points.Count; i++)
+            var localedges = new List<Line2D>();
+            for (var i = 0; i < this.points.Count; i++)
             {
-                for (int j = i; j < this.points.Count; j++)
+                for (var j = i; j < this.points.Count; j++)
                 {
-                    Line2D edge = new Line2D(this.points[i], this.points[j]);
+                    var edge = new Line2D(this.points[i], this.points[j]);
                     localedges.Add(edge);
                 }
             }
 
-            this.edges = new ImmutableList<Line2D>(localedges.ToArray());
+            this.edges = ImmutableList.Create(localedges);
         }
     }
 }
