@@ -285,6 +285,18 @@ namespace MathNet.Spatial.Units
         }
 
         /// <summary>
+        /// Creates a new instance of Angle from the sexagesimal format of the angle in degrees, minutes, seconds
+        /// </summary>
+        /// <param name="degrees">The degrees of the angle</param>
+        /// <param name="minutes">The minutes of the angle</param>
+        /// <param name="seconds">The seconds of the angle</param>
+        /// <returns>A new instance of the <see cref="Angle"/> struct.</returns>
+        public static Angle FromSexagesimal(int degrees, int minutes, double seconds)
+        {
+            return Angle.FromDegrees(degrees + (minutes / 60.0F) + (seconds / 3600.0F));
+        }
+
+        /// <summary>
         /// Creates an <see cref="Angle"/> from an <see cref="XmlReader"/>.
         /// </summary>
         /// <param name="reader">An <see cref="XmlReader"/> positioned at the node to read into this <see cref="Angle"/>.</param>
