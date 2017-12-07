@@ -459,7 +459,7 @@
             var localedges = new List<Line2D>(this.points.Count);
             for (var i = 0; i < this.points.Count - 1; i++)
             {
-                var edge = new Line2D(this.points[i], this.points[i+1]);
+                var edge = new Line2D(this.points[i], this.points[i + 1]);
                 localedges.Add(edge);
             }
 

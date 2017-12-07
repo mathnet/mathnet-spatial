@@ -88,6 +88,7 @@
             var gradientBC = (pointC.Y - pointB.Y) / (pointC.X - pointB.X);
             var gradientl1 = -1 / gradientAB;
             var gradientl2 = -1 / gradientBC;
+
             // ReSharper restore InconsistentNaming
             var denominator = gradientl2 - gradientl1;
             var nominator = midpointAB.Y - (gradientl1 * midpointAB.X) + (gradientl2 * midpointBC.X) - midpointBC.Y;

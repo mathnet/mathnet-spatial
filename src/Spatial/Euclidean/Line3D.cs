@@ -246,10 +246,10 @@
                 }
             }
 
-            // If we got here, we know that either we're doing a bounded distance on two parallel segments or one
-            // of the two closest span points is outside of the segment of the line it was projected on.  In either
-            // case we project each of the four endpoints onto the opposite segments and select the one with the
-            // smallest projected distance.
+            //// If we got here, we know that either we're doing a bounded distance on two parallel segments or one
+            //// of the two closest span points is outside of the segment of the line it was projected on.  In either
+            //// case we project each of the four endpoints onto the opposite segments and select the one with the
+            //// smallest projected distance.
 
             var checkPoint = other.ClosestPointTo(this.StartPoint, true);
             var distance = checkPoint.DistanceTo(this.StartPoint);
