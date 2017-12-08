@@ -64,12 +64,22 @@
         /// <summary>
         /// Gets a list of vertices
         /// </summary>
-        public Point2D[] Vertices => this.points.ToArray();
+        public IEnumerable<Point2D> Vertices
+        {
+            get
+            {
+                var enumerator = this.points.GetEnumerator();
+                while (enumerator.MoveNext())
+                {
+                    yield return enumerator.Current;
+                }
+            }
+        }
 
         /// <summary>
         /// Gets a list of Edges
         /// </summary>
-        public Line2D[] Edges
+        public IEnumerable<Line2D> Edges
         {
             get
             {
@@ -78,7 +88,11 @@
                     this.PopulateEdgeList();
                 }
 
-                return this.edges.ToArray();
+                var enumerator = this.edges.GetEnumerator();
+                while (enumerator.MoveNext())
+                {
+                    yield return enumerator.Current;
+                }
             }
         }
 
@@ -172,63 +186,23 @@
         /// <returns>A polygon.</returns>
         public static Polygon2D GetConvexHullFromPoints(IEnumerable<Point2D> pointList, bool clockWise = true)
         {
-            // Use the Quickhull algorithm to compute the convex hull of the given points,
-            // making the assumption that the points were delivered in no particular order.
-            var points = new List<Point2D>(pointList);
+            int count = pointList.Count();
 
             // Perform basic validation of the input point cloud for cases of less than
             // four points being given
-            if (points.Count <= 2)
+            if (count <= 2)
             {
                 throw new ArgumentException("Must have at least 3 points in the polygon to compute the convex hull");
             }
 
-            if (points.Count <= 3)
+            if (count <= 3)
             {
-                return new Polygon2D(points);
+                return new Polygon2D(pointList);
             }
 
-            // Find the leftmost and rightmost points
-            var leftMost = points.First();
-            var rightMost = points.First();
-            foreach (var point in points)
-            {
-                if (point.X < leftMost.X)
-                {
-                    leftMost = point;
-                }
-
-                if (point.X > rightMost.X)
-                {
-                    rightMost = point;
-                }
-            }
-
-            // Remove the left and right points
-            points.Remove(leftMost);
-            points.Remove(rightMost);
-
-            // Break the remaining cloud into upper and lower sets
-            var upperPoints = new List<Point2D>();
-            var lowerPoints = new List<Point2D>();
-            var chord = leftMost.VectorTo(rightMost);
-            foreach (var point2D in points)
-            {
-                var testVector = leftMost.VectorTo(point2D);
-                if (chord.CrossProduct(testVector) > 0)
-                {
-                    upperPoints.Add(point2D);
-                }
-                else
-                {
-                    lowerPoints.Add(point2D);
-                }
-            }
-
-            var hullPoints = new List<Point2D> { leftMost, rightMost };
-
-            RecursiveHullComputation(leftMost, rightMost, upperPoints, hullPoints);
-            RecursiveHullComputation(leftMost, rightMost, lowerPoints, hullPoints);
+            var chull = new ConvexHull(pointList, false);
+            chull.CalcConvexHull();
+            var hullPoints = chull.GetResultsAsArrayOfPoint();
 
             // Order the hull points by angle to the centroid
             var centroid = Point2D.Centroid(hullPoints);

@@ -38,7 +38,7 @@
         {
             var polygon = this.TestPolygon1();
             var checkList = new List<Point2D> { new Point2D(0, 0), new Point2D(0.25, 0.5), new Point2D(1, 1), new Point2D(-1, 1), new Point2D(0.5, -0.5) };
-            CollectionAssert.AreEqual(checkList, polygon);
+            CollectionAssert.AreEqual(checkList, polygon.Vertices);
         }
 
         [TestCase("0,0;2,2;3,1;2,0", "1,1", "1,1;3,3;4,2;3,1")]
@@ -124,7 +124,7 @@
         [TestCase("0.87,0.39;0.83,0.42;0.75,0.62;0.91,0.49;0.18,0.63;0.17,0.95;0.22,0.5;0.93,0.41;0.66,0.79;0.32,0.42", "0.66,0.79;0.17,0.95;0.18,0.63;0.22,0.5;0.32,0.42;0.87,0.39;0.93,0.41;0.91,0.49")]
         [TestCase("0.18,0.39;0.91,0.3;0.35,0.53;0.91,0.38;0.49,0.28;0.61,0.22;0.27,0.18;0.44,0.06;0.5,0.79;0.78,0.22", "0.91,0.38;0.5,0.79;0.18,0.39;0.27,0.18;0.44,0.06;0.78,0.22;0.91,0.3")]
         [TestCase("0.89,0.55;0.98,0.24;0.03,0.2;0.51,0.99;0.72,0.32;0.56,0.87;0.1,0.75;0.64,0.16;0.82,0.73;0.17,0.46", "0.89,0.55;0.82,0.73;0.51,0.99;0.1,0.75;0.03,0.2;0.64,0.16;0.98,0.24")]
-       // [TestCase("-201.573,100.940;197.083,21.031;161.021,-29.414;114.223,-23.998;230.290,-68.246;-32.272,182.239;-173.345,72.736;-175.435,-176.273;90.810,-97.350;-196.942,216.594;67.759,-162.464;67.454,-174.844;-89.116,171.982;-18.421,11.935;73.816,-180.169;-103.560,-36.297;-233.800,194.296;-64.463,166.811;-17.182,83.403;-72.010,219.944")]
+        [TestCase("-201.573,100.940;197.083,21.031;161.021,-29.414;114.223,-23.998;230.290,-68.246;-32.272,182.239;-173.345,72.736;-175.435,-176.273;90.810,-97.350;-196.942,216.594;67.759,-162.464;67.454,-174.844;-89.116,171.982;-18.421,11.935;73.816,-180.169;-103.560,-36.297;-233.800,194.296;-64.463,166.811;-17.182,83.403;-72.010,219.944", "-72.01,219.944;-196.942,216.594;-233.8,194.296;-175.435,-176.273;73.816,-180.169;230.29,-68.246;197.083,21.031")]
         public void ConvexHullTest(string points, string expected)
         {
             var testPoints = (from x in points.Split(';') select Point2D.Parse(x)).ToList();
@@ -133,17 +133,24 @@
             var hullClockwise = Polygon2D.GetConvexHullFromPoints(testPoints, true);
 
             var ClockwiseVerticies = hullClockwise.Vertices;
+            CollectionAssert.AreEqual(expectedPoints, ClockwiseVerticies);
+            /*
             for (var i = 0; i < hullClockwise.VertexCount; i++)
             {
                 Assert.That(ClockwiseVerticies[i], Is.EqualTo(expectedPoints[i]));
             }
+            */
 
             var hullCounterClockwise = Polygon2D.GetConvexHullFromPoints(testPoints, false);
-            var CounterClockwiseVerticies = hullCounterClockwise.Vertices;
+            var counterClockwiseVerticies = hullCounterClockwise.Vertices;
+            expectedPoints.Reverse();
+            CollectionAssert.AreEqual(expectedPoints, counterClockwiseVerticies);
+            /*
             for (var i = 0; i < hullCounterClockwise.VertexCount; i++)
             {
-                Assert.That(CounterClockwiseVerticies[i], Is.EqualTo(expectedPoints[hullCounterClockwise.VertexCount - 1 - i]));
+                Assert.That(counterClockwiseVerticies[i], Is.EqualTo(expectedPoints[hullCounterClockwise.VertexCount - 1 - i]));
             }
+            */
 
             var pointsNotOnConvexHull = testPoints.Except(hullCounterClockwise);
             foreach (var pointNotOnConvexHull in pointsNotOnConvexHull)
@@ -156,7 +163,7 @@
             // then that point should be outside the new convex hull; if it's inside then our new
             // convex hull is the actual convex hull, which means the original one wasn't!
 
-            foreach (var pointToRemove in CounterClockwiseVerticies)
+            foreach (var pointToRemove in counterClockwiseVerticies)
             {
                 var convexHullWithPointRemoved = new Polygon2D(hullCounterClockwise.Except(new[] { pointToRemove }));
                 var pointIsInsideConvexHull =
