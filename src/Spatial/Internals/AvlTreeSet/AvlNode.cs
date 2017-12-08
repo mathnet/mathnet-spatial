@@ -1,6 +1,6 @@
 ﻿namespace MathNet.Spatial.Internals
 {
-    public sealed class AvlNode<T>
+    internal sealed class AvlNode<T>
     {
         public AvlNode<T> Parent;
         public AvlNode<T> Left;

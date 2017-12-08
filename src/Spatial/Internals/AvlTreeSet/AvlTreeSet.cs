@@ -1,18 +1,18 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading;
-
-namespace MathNet.Spatial.Internals
+﻿namespace MathNet.Spatial.Internals
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Runtime.CompilerServices;
+    using System.Text;
+    using System.Threading;
+
     /// <summary>
     /// 2016-12-08, Eric Ouellet
     /// The code is an adapted version of BitLush AvlTree: https://bitlush.com/blog/efficient-avl-tree-in-c-sharp
     /// </summary>
-    public class AvlTreeSet<T> : IEnumerable<T>, IEnumerable, ICollection<T>, ICollection// ISet<T>
+    internal class AvlTreeSet<T> : IEnumerable<T>, IEnumerable, ICollection<T>, ICollection// ISet<T>
     {
         private IComparer<T> comparer;
         private AvlNode<T> root;
@@ -23,7 +23,6 @@ namespace MathNet.Spatial.Internals
             this.comparer = comparer;
         }
 
-        // ******************************************************************
         public AvlTreeSet() : this(Comparer<T>.Default)
         {
         }

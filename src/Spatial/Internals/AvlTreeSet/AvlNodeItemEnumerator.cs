@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-
-namespace MathNet.Spatial.Internals
+﻿namespace MathNet.Spatial.Internals
 {
-    public class AvlNodeItemEnumerator<T> : IEnumerator<T>
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+
+    internal class AvlNodeItemEnumerator<T> : IEnumerator<T>
     {
         private AvlNode<T> current = null;
         private AvlTreeSet<T> avlTree;
