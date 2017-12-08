@@ -20,7 +20,7 @@
         public Vector3D Parse()
         {
             // Probably not going to be in any hot path but adding a benchmark any way because it is fun.
-            return Vector3D.Parse("1; 2");
+            return Vector3D.Parse("1; 2; 3");
         }
 
         [Benchmark]
