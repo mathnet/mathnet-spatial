@@ -175,7 +175,7 @@
         }
 
         /// <summary>
-        /// Using the recursive QuickHull algorithm, take an IEnumerable of Point2Ds and compute the
+        /// Using algorithm from Ouellet - https://www.codeproject.com/Articles/1210225/Fast-and-improved-D-Convex-Hull-algorithm-and-its, take an IEnumerable of Point2Ds and computes the
         /// two dimensional convex hull, returning it as a Polygon2D object.
         /// </summary>
         /// <param name="pointList">A list of points</param>
@@ -368,61 +368,6 @@
         public override int GetHashCode()
         {
             return this.Vertices.GetHashCode();
-        }
-
-        /// <summary>
-        /// Recursive method to isolate the points from the working list which lie on the convex hull
-        /// </summary>
-        /// <param name="a">The first point</param>
-        /// <param name="b">The second point</param>
-        /// <param name="workingList">A list of points to be evaluated</param>
-        /// <param name="hullList">A list of points on the convex hull</param>
-        private static void RecursiveHullComputation(Point2D a, Point2D b, List<Point2D> workingList, List<Point2D> hullList)
-        {
-            if (!workingList.Any())
-            {
-                return;
-            }
-
-            if (workingList.Count == 1)
-            {
-                hullList.Add(workingList.First());
-                workingList.Remove(workingList.First());
-                return;
-            }
-
-            // Find the furthest point from the line
-            var chord = a.VectorTo(b);
-            var maxPoint = default(Point2D);
-            var maxDistance = double.MinValue;
-
-            foreach (var point2D in workingList)
-            {
-                var testVector = a.VectorTo(point2D);
-                var projection = testVector.ProjectOn(chord);
-                var rejection = testVector - projection;
-                if (rejection.Length > maxDistance)
-                {
-                    maxDistance = rejection.Length;
-                    maxPoint = point2D;
-                }
-            }
-
-            // Add the point to the hull and remove it from the working list
-            hullList.Add(maxPoint);
-            workingList.Remove(maxPoint);
-
-            // Remove all points from the workinglist inside the new triangle
-            var exclusionTriangle = new Polygon2D(new Point2D[] { a, b, maxPoint });
-            var removeList = workingList.Where(x => exclusionTriangle.EnclosesPoint(x)).ToList();
-            foreach (var point2D in removeList)
-            {
-                workingList.Remove(point2D);
-            }
-
-            // Recurse to the next level
-            RecursiveHullComputation(a, maxPoint, workingList, hullList);
-            RecursiveHullComputation(maxPoint, b, workingList, hullList);
         }
 
         /// <summary>
