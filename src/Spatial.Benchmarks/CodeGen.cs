@@ -1,7 +1,6 @@
 ﻿namespace Spatial.Benchmarks
 {
     using System;
-    using System.IO;
     using System.Linq;
     using System.Reflection;
     using System.Text;
@@ -18,6 +17,8 @@
         [TestCase(typeof(Point3D))]
         [TestCase(typeof(Vector3D))]
         [TestCase(typeof(UnitVector3D))]
+        [TestCase(typeof(Ray3D))]
+        [TestCase(typeof(Plane))]
         public void DumpBenchmark(Type type)
         {
             var builder = new StringBuilder();
@@ -90,7 +91,7 @@
                 builder.AppendLine("        [Benchmark]")
                        .AppendLine($"        public {method.ReturnType.Name} {method.Name}()")
                        .AppendLine("        {")
-                       .AppendLine($"             return P1.{method.Name}({parameters});")
+                       .AppendLine($"             return {type.Name}1.{method.Name}({parameters});")
                        .AppendLine("        }")
                        .AppendLine();
             }

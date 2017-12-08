@@ -40,6 +40,7 @@
     <Compile Include="Properties\MemoryDiagnoserConfig.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Ray3DBenchmarks.cs" />
     <Compile Include="UnitVector3DBenchmarks.cs" />
     <Compile Include="Vector2DBenchmarks.cs" />
     <Compile Include="Vector3DBenchmarks.cs" />
