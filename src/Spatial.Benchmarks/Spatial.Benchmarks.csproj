@@ -35,6 +35,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="CodeGen.cs" />
+    <Compile Include="PlaneBenchmarks.cs" />
     <Compile Include="Point2DBenchmarks.cs" />
     <Compile Include="Point3DBenchmarks.cs" />
     <Compile Include="Properties\MemoryDiagnoserConfig.cs" />
