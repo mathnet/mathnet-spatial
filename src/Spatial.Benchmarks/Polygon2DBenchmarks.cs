@@ -9,9 +9,9 @@
     public class Polygon2DBenchmarks
     {
         private static readonly Random Random = new Random();
-        private static readonly IReadOnlyList<Point2D> Point2D50 = Enumerable.Repeat<int>(0, 50).Select(_ => new Point2D(Random.Next(), Random.Next())).ToList();
-        private static readonly IReadOnlyList<Point2D> Point2D500 = Enumerable.Repeat<int>(0, 50).Select(_ => new Point2D(Random.Next(), Random.Next())).ToList();
-        private static readonly IReadOnlyList<Point2D> Point2D5000 = Enumerable.Repeat<int>(0, 50).Select(_ => new Point2D(Random.Next(), Random.Next())).ToList();
+        private static readonly IReadOnlyList<Point2D> Point2D50 = Enumerable.Repeat(0, 50).Select(_ => new Point2D(Random.Next(), Random.Next())).ToList();
+        private static readonly IReadOnlyList<Point2D> Point2D500 = Enumerable.Repeat(0, 500).Select(_ => new Point2D(Random.Next(), Random.Next())).ToList();
+        private static readonly IReadOnlyList<Point2D> Point2D5000 = Enumerable.Repeat(0, 500).Select(_ => new Point2D(Random.Next(), Random.Next())).ToList();
 
         [Benchmark]
         public Polygon2D GetConvexHullFromPoints50()
