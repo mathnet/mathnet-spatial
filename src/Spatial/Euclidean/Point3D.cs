@@ -12,6 +12,9 @@ namespace MathNet.Spatial.Euclidean
     using MathNet.Spatial.Internals;
     using MathNet.Spatial.Units;
 
+    /// <summary>
+    /// Represents a point in 3 dimensional space
+    /// </summary>
     [Serializable]
     public struct Point3D : IXmlSerializable, IEquatable<Point3D>, IFormattable
     {
@@ -43,12 +46,24 @@ namespace MathNet.Spatial.Euclidean
             this.Z = z;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Point3D"/> struct.
+        /// Creates a point from a list of coordinates (x, y, z)
+        /// </summary>
+        /// <param name="data">a list of coordinates in the order x, y, z</param>
+        /// <exception cref="ArgumentException">Exception thrown if anything other than 3 coordinates are passed</exception>
         [Obsolete("This constructor will be removed. Made obsolete 2017-12-05.")]
         public Point3D(IEnumerable<double> data)
             : this(data.ToArray())
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Point3D"/> struct.
+        /// Creates a point from a list of coordinates (x, y, z)
+        /// </summary>
+        /// <param name="data">a size 3 array of coordinates in the order x, y, z</param>
+        /// <exception cref="ArgumentException">Exception thrown if anything other than 3 coordinates are passed</exception>
         [Obsolete("This constructor will be removed. Made obsolete 2017-12-05.")]
         public Point3D(double[] data)
             : this(data[0], data[1], data[2])
@@ -59,52 +74,112 @@ namespace MathNet.Spatial.Euclidean
             }
         }
 
+        /// <summary>
+        /// Gets a point at the origin
+        /// </summary>
         public static Point3D Origin { get; } = new Point3D(0, 0, 0);
 
+        /// <summary>
+        /// Gets a point where all values are NAN
+        /// </summary>
         public static Point3D NaN { get; } = new Point3D(double.NaN, double.NaN, double.NaN);
 
+        /// <summary>
+        /// Multiplies a matrix and a vector representation of the point together
+        /// </summary>
+        /// <param name="left">A matrix</param>
+        /// <param name="right">A point</param>
+        /// <returns>A Mathnet.Numerics vector</returns>
         [Obsolete("Not sure this is nice")]
         public static Vector<double> operator *(Matrix<double> left, Point3D right)
         {
             return left * right.ToVector();
         }
 
+        /// <summary>
+        /// Multiplies a matrix and a vector representation of the point together
+        /// </summary>
+        /// <param name="left">A point</param>
+        /// <param name="right">A matrix</param>
+        /// <returns>A Mathnet.Numerics vector</returns>
         [Obsolete("Not sure this is nice")]
         public static Vector<double> operator *(Point3D left, Matrix<double> right)
         {
             return left.ToVector() * right;
         }
 
-        public static Point3D operator +(Point3D p, Vector3D v)
+        /// <summary>
+        /// Adds a point and a vector together
+        /// </summary>
+        /// <param name="point">A point</param>
+        /// <param name="vector">A vector</param>
+        /// <returns>A new point at the summed location</returns>
+        public static Point3D operator +(Point3D point, Vector3D vector)
         {
-            return new Point3D(p.X + v.X, p.Y + v.Y, p.Z + v.Z);
+            return new Point3D(point.X + vector.X, point.Y + vector.Y, point.Z + vector.Z);
         }
 
-        public static Point3D operator +(Point3D p, UnitVector3D v)
+        /// <summary>
+        /// Adds a point and a vector together
+        /// </summary>
+        /// <param name="point">A point</param>
+        /// <param name="vector">A vector</param>
+        /// <returns>A new point at the summed location</returns>
+        public static Point3D operator +(Point3D point, UnitVector3D vector)
         {
-            return new Point3D(p.X + v.X, p.Y + v.Y, p.Z + v.Z);
+            return new Point3D(point.X + vector.X, point.Y + vector.Y, point.Z + vector.Z);
         }
 
-        public static Point3D operator -(Point3D p, Vector3D v)
+        /// <summary>
+        /// Subtracts a vector from a point
+        /// </summary>
+        /// <param name="point">A point</param>
+        /// <param name="vector">A vector</param>
+        /// <returns>A new point at the difference</returns>
+        public static Point3D operator -(Point3D point, Vector3D vector)
         {
-            return new Point3D(p.X - v.X, p.Y - v.Y, p.Z - v.Z);
+            return new Point3D(point.X - vector.X, point.Y - vector.Y, point.Z - vector.Z);
         }
 
-        public static Point3D operator -(Point3D p, UnitVector3D v)
+        /// <summary>
+        /// Subtracts a vector from a point
+        /// </summary>
+        /// <param name="point">A point</param>
+        /// <param name="vector">A vector</param>
+        /// <returns>A new point at the difference</returns>
+        public static Point3D operator -(Point3D point, UnitVector3D vector)
         {
-            return new Point3D(p.X - v.X, p.Y - v.Y, p.Z - v.Z);
+            return new Point3D(point.X - vector.X, point.Y - vector.Y, point.Z - vector.Z);
         }
 
-        public static Vector3D operator -(Point3D lhs, Point3D rhs)
+        /// <summary>
+        /// Subtracts the first point from the second point
+        /// </summary>
+        /// <param name="left">The first point</param>
+        /// <param name="right">The second point</param>
+        /// <returns>A vector pointing to the difference</returns>
+        public static Vector3D operator -(Point3D left, Point3D right)
         {
-            return new Vector3D(lhs.X - rhs.X, lhs.Y - rhs.Y, lhs.Z - rhs.Z);
+            return new Vector3D(left.X - right.X, left.Y - right.Y, left.Z - right.Z);
         }
 
+        /// <summary>
+        /// Returns a value that indicates whether each pair of elements in two specified points is equal.
+        /// </summary>
+        /// <param name="left">The first point to compare</param>
+        /// <param name="right">The second point to compare</param>
+        /// <returns>True if the points are the same; otherwise false.</returns>
         public static bool operator ==(Point3D left, Point3D right)
         {
             return left.Equals(right);
         }
 
+        /// <summary>
+        /// Returns a value that indicates whether any pair of elements in two specified points is not equal.
+        /// </summary>
+        /// <param name="left">The first point to compare</param>
+        /// <param name="right">The second point to compare</param>
+        /// <returns>True if the points are different; otherwise false.</returns>
         public static bool operator !=(Point3D left, Point3D right)
         {
             return !left.Equals(right);
@@ -181,11 +256,21 @@ namespace MathNet.Spatial.Euclidean
             return reader.ReadElementAs<Point3D>();
         }
 
+        /// <summary>
+        /// Returns the centroid of an arbitary collection of points
+        /// </summary>
+        /// <param name="points">a list of points</param>
+        /// <returns>The centroid of the points</returns>
         public static Point3D Centroid(IEnumerable<Point3D> points)
         {
             return Centroid(points.ToArray());
         }
 
+        /// <summary>
+        /// Returns the centroid of an arbitary collection of points
+        /// </summary>
+        /// <param name="points">a list of points</param>
+        /// <returns>The centroid of the points</returns>
         public static Point3D Centroid(params Point3D[] points)
         {
             return new Point3D(
@@ -194,40 +279,81 @@ namespace MathNet.Spatial.Euclidean
                 points.Average(point => point.Z));
         }
 
+        /// <summary>
+        /// Returns the midpoint of two points
+        /// </summary>
+        /// <param name="p1">The first point</param>
+        /// <param name="p2">The second point</param>
+        /// <returns>The midpoint of the points</returns>
         public static Point3D MidPoint(Point3D p1, Point3D p2)
         {
             return Centroid(p1, p2);
         }
 
+        /// <summary>
+        /// Returns the point at which three planes intersect
+        /// </summary>
+        /// <param name="plane1">The first plane</param>
+        /// <param name="plane2">The second plane</param>
+        /// <param name="plane3">The third plane</param>
+        /// <returns>The point of intersection</returns>
         public static Point3D IntersectionOf(Plane plane1, Plane plane2, Plane plane3)
         {
             var ray = plane1.IntersectionWith(plane2);
             return plane3.IntersectionWith(ray);
         }
 
+        /// <summary>
+        /// Returns the point of intersection between a plane and a ray
+        /// </summary>
+        /// <param name="plane">A geometric plane</param>
+        /// <param name="ray">a ray</param>
+        /// <returns>The point of intersection</returns>
         public static Point3D IntersectionOf(Plane plane, Ray3D ray)
         {
             return plane.IntersectionWith(ray);
         }
 
+        /// <summary>
+        /// Returns the mirror point of this point across a plane
+        /// </summary>
+        /// <param name="plane">A plane</param>
+        /// <returns>The mirrored point</returns>
         [Pure]
         public Point3D MirrorAbout(Plane plane)
         {
             return plane.MirrorAbout(this);
         }
 
+        /// <summary>
+        /// Projects a point onto a plane
+        /// </summary>
+        /// <param name="plane">a plane</param>
+        /// <returns>The projected point</returns>
         [Pure]
         public Point3D ProjectOn(Plane plane)
         {
             return plane.Project(this);
         }
 
+        /// <summary>
+        /// Rotates the point about a given vector
+        /// </summary>
+        /// <param name="aboutVector">A vector</param>
+        /// <param name="angle">The angle to rotate</param>
+        /// <returns>The rotated point</returns>
         [Pure]
         public Point3D Rotate(Vector3D aboutVector, Angle angle)
         {
             return this.Rotate(aboutVector.Normalize(), angle);
         }
 
+        /// <summary>
+        /// Rotates the point about a given vector
+        /// </summary>
+        /// <param name="aboutVector">A vector</param>
+        /// <param name="angle">The angle to rotate</param>
+        /// <returns>The rotated point</returns>
         [Pure]
         public Point3D Rotate(UnitVector3D aboutVector, Angle angle)
         {
@@ -235,12 +361,22 @@ namespace MathNet.Spatial.Euclidean
             return cs.Transform(this);
         }
 
+        /// <summary>
+        /// Gets a vector from this point to another point
+        /// </summary>
+        /// <param name="p">The point to which the vector should go</param>
+        /// <returns>A vector pointing to the other point.</returns>
         [Pure]
         public Vector3D VectorTo(Point3D p)
         {
             return p - this;
         }
 
+        /// <summary>
+        /// Finds the straight line distance to another point
+        /// </summary>
+        /// <param name="p">The other point</param>
+        /// <returns>a distance measure</returns>
         [Pure]
         public double DistanceTo(Point3D p)
         {
@@ -248,18 +384,32 @@ namespace MathNet.Spatial.Euclidean
             return vector.Length;
         }
 
+        /// <summary>
+        /// Converts this point into a vector from the origin
+        /// </summary>
+        /// <returns>A vector equivalent to this point</returns>
         [Pure]
         public Vector3D ToVector3D()
         {
             return new Vector3D(this.X, this.Y, this.Z);
         }
 
+        /// <summary>
+        /// Applies a transform coordinatesystem to the point
+        /// </summary>
+        /// <param name="cs">A coordinate system</param>
+        /// <returns>A new 3D point</returns>
         [Pure]
         public Point3D TransformBy(CoordinateSystem cs)
         {
             return cs.Transform(this);
         }
 
+        /// <summary>
+        /// Applies a transform matrix to the point
+        /// </summary>
+        /// <param name="m">A transform matrix</param>
+        /// <returns>A new point</returns>
         [Pure]
         public Point3D TransformBy(Matrix<double> m)
         {
@@ -269,6 +419,7 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// Convert to a Math.NET Numerics dense vector of length 3.
         /// </summary>
+        /// <returns>A Math.Net Numerics vector</returns>
         [Pure]
         public Vector<double> ToVector()
         {
@@ -308,9 +459,16 @@ namespace MathNet.Spatial.Euclidean
         {
             // ReSharper disable CompareOfFloatsByEqualityOperator
             return this.X == other.X && this.Y == other.Y && this.Z == other.Z;
+
             // ReSharper restore CompareOfFloatsByEqualityOperator
         }
 
+        /// <summary>
+        /// Returns a value to indicate if a pair of points are equal
+        /// </summary>
+        /// <param name="other">The point to compare against.</param>
+        /// <param name="tolerance">A tolerance (epsilon) to adjust for floating point error</param>
+        /// <returns>True if the points are equal; otherwise false</returns>
         [Pure]
         public bool Equals(Point3D other, double tolerance)
         {
@@ -349,11 +507,10 @@ namespace MathNet.Spatial.Euclidean
             }
         }
 
-        XmlSchema IXmlSerializable.GetSchema()
-        {
-            return null;
-        }
+        /// <inheritdoc />
+        XmlSchema IXmlSerializable.GetSchema() => null;
 
+        /// <inheritdoc />
         void IXmlSerializable.ReadXml(XmlReader reader)
         {
             if (reader.TryReadAttributeAsDouble("X", out var x) &&
@@ -375,6 +532,7 @@ namespace MathNet.Spatial.Euclidean
             throw new XmlException($"Could not read a {this.GetType()}");
         }
 
+        /// <inheritdoc />
         void IXmlSerializable.WriteXml(XmlWriter writer)
         {
             writer.WriteAttribute("X", this.X);
