@@ -14,7 +14,7 @@
 
         public int Compare(MutablePoint pt1, MutablePoint pt2)
         {
-            return this.comparer.Invoke(pt1, pt2);
+            return this.comparer(pt1, pt2);
         }
     }
 }

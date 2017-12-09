@@ -68,10 +68,9 @@
         {
             get
             {
-                var enumerator = this.points.GetEnumerator();
-                while (enumerator.MoveNext())
+                foreach(var point in this.points)
                 {
-                    yield return enumerator.Current;
+                    yield return point;
                 }
             }
         }
@@ -88,10 +87,9 @@
                     this.PopulateEdgeList();
                 }
 
-                var enumerator = this.edges.GetEnumerator();
-                while (enumerator.MoveNext())
+                foreach (var edge in this.edges)
                 {
-                    yield return enumerator.Current;
+                    yield return edge;
                 }
             }
         }
