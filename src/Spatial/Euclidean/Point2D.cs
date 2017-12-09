@@ -13,7 +13,7 @@ namespace MathNet.Spatial.Euclidean
     using MathNet.Spatial.Units;
 
     /// <summary>
-    /// Represents a point in 2 dimensional cartesian space
+    /// Represents a point in 2 dimensional space
     /// </summary>
     [Serializable]
     public struct Point2D : IXmlSerializable, IEquatable<Point2D>, IFormattable
@@ -89,38 +89,80 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         public static Point2D Origin => new Point2D(0, 0);
 
+        /// <summary>
+        /// Adds a point and a vector together
+        /// </summary>
+        /// <param name="point">A point</param>
+        /// <param name="vector">A vector</param>
+        /// <returns>A new point at the summed location</returns>
         public static Point2D operator +(Point2D point, Vector2D vector)
         {
             return new Point2D(point.X + vector.X, point.Y + vector.Y);
         }
 
+        /// <summary>
+        /// Adds a point and a 3D vector together
+        /// </summary>
+        /// <param name="point">A point</param>
+        /// <param name="vector">A 3D vector</param>
+        /// <returns>A new point at the summed location ignoring the Z dimension</returns>
         [Obsolete("This weird operator will be removed in a future version. Made obsolete 2017-12-03.")]
         public static Point3D operator +(Point2D point, Vector3D vector)
         {
             return new Point3D(point.X + vector.X, point.Y + vector.Y, vector.Z);
         }
 
+        /// <summary>
+        /// Subtracts a vector from a point
+        /// </summary>
+        /// <param name="left">A point</param>
+        /// <param name="right">A vector</param>
+        /// <returns>A new point at the difference</returns>
         public static Point2D operator -(Point2D left, Vector2D right)
         {
             return new Point2D(left.X - right.X, left.Y - right.Y);
         }
 
+        /// <summary>
+        /// Subtracts a 3D vector from a point
+        /// </summary>
+        /// <param name="left">A point</param>
+        /// <param name="right">A 3D vector</param>
+        /// <returns>A new point at the difference excluding the z dimension</returns>
         [Obsolete("This weird operator will be removed in a future version. Made obsolete 2017-12-03.")]
         public static Point3D operator -(Point2D left, Vector3D right)
         {
             return new Point3D(left.X - right.X, left.Y - right.Y, -1 * right.Z);
         }
 
+        /// <summary>
+        /// Subtracts the first point from the second point
+        /// </summary>
+        /// <param name="left">The first point</param>
+        /// <param name="right">The second point</param>
+        /// <returns>A vector pointing to the difference</returns>
         public static Vector2D operator -(Point2D left, Point2D right)
         {
             return new Vector2D(left.X - right.X, left.Y - right.Y);
         }
 
+        /// <summary>
+        /// Returns a value that indicates whether each pair of elements in two specified points is equal.
+        /// </summary>
+        /// <param name="left">The first point to compare</param>
+        /// <param name="right">The second point to compare</param>
+        /// <returns>True if the points are the same; otherwise false.</returns>
         public static bool operator ==(Point2D left, Point2D right)
         {
             return left.Equals(right);
         }
 
+        /// <summary>
+        /// Returns a value that indicates whether any pair of elements in two specified points is not equal.
+        /// </summary>
+        /// <param name="left">The first point to compare</param>
+        /// <param name="right">The second point to compare</param>
+        /// <returns>True if the points are different; otherwise false.</returns>
         public static bool operator !=(Point2D left, Point2D right)
         {
             return !left.Equals(right);
@@ -249,11 +291,21 @@ namespace MathNet.Spatial.Euclidean
             return new Point2D(vector.At(0), vector.At(1));
         }
 
+        /// <summary>
+        /// Applies a transform matrix to the point
+        /// </summary>
+        /// <param name="m">A transform matrix</param>
+        /// <returns>A new point</returns>
         public Point2D TransformBy(Matrix<double> m)
         {
             return OfVector(m.Multiply(this.ToVector()));
         }
 
+        /// <summary>
+        /// Gets a vector from this point to another point
+        /// </summary>
+        /// <param name="otherPoint">The point to which the vector should go</param>
+        /// <returns>A vector pointing to the other point.</returns>
         [Pure]
         public Vector2D VectorTo(Point2D otherPoint)
         {
@@ -285,13 +337,18 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// return new Point3D(X, Y, 0);
         /// </summary>
-        /// <returns>A <see cref="Point3D"/> with x & y from this instance and z = 0</returns>
+        /// <returns>A <see cref="Point3D"/> with x and y from this instance and z = 0</returns>
         [Pure]
         public Point3D ToPoint3D()
         {
             return new Point3D(this.X, this.Y, 0);
         }
 
+        /// <summary>
+        /// Applies a transform coordinatesystem to the point
+        /// </summary>
+        /// <param name="cs">A coordinate system</param>
+        /// <returns>A new 3D point</returns>
         [Pure]
         public Point3D TransformBy(CoordinateSystem cs)
         {
@@ -344,6 +401,12 @@ namespace MathNet.Spatial.Euclidean
             //// ReSharper restore CompareOfFloatsByEqualityOperator
         }
 
+        /// <summary>
+        /// Returns a value to indicate if a pair of points are equal
+        /// </summary>
+        /// <param name="other">The point to compare against.</param>
+        /// <param name="tolerance">A tolerance (epsilon) to adjust for floating point error</param>
+        /// <returns>true if the points are equal; otherwise false</returns>
         [Pure]
         public bool Equals(Point2D other, double tolerance)
         {
