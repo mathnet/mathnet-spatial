@@ -107,12 +107,6 @@
         }
 
         [Test]
-        public void CanUnaryPlus()
-        {
-            Assert.AreEqual(new Quaternion(1, 2, 3, 4), +new Quaternion(1, 2, 3, 4));
-        }
-
-        [Test]
         public void CanEqalAndNotEqualQuaternionsAndFloatsUsingOperator()
         {
 #pragma warning disable SA1131 // Use readable conditions
