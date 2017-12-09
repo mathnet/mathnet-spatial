@@ -80,10 +80,10 @@
         [Pure]
         public bool Equals(EulerAngles other)
         {
-            const double defaultAbsoluteError = 0.000001;
-            return this.Alpha.Radians.AlmostEqual(other.Alpha.Radians, defaultAbsoluteError) &&
-                   this.Beta.Radians.AlmostEqual(other.Beta.Radians, defaultAbsoluteError) &&
-                   this.Gamma.Radians.AlmostEqual(other.Gamma.Radians, defaultAbsoluteError);
+            const double DefaultAbsoluteError = 0.000001;
+            return this.Alpha.Radians.AlmostEqual(other.Alpha.Radians, DefaultAbsoluteError) &&
+                   this.Beta.Radians.AlmostEqual(other.Beta.Radians, DefaultAbsoluteError) &&
+                   this.Gamma.Radians.AlmostEqual(other.Gamma.Radians, DefaultAbsoluteError);
         }
 
         /// <inheritdoc/>
