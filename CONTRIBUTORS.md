@@ -18,11 +18,14 @@ Feel free to add a link to your personal site/blog and/or twitter handle.*
 - Johan Larsson
 - [Christoph Rüegg](http://christoph.ruegg.name/) (@cdrnet)
 - Matt Jarvis
+- Adam Jones
 - Mostafa Ali
 - MaLiN22223
+- Per Kuijpers
 - David Watts
 - csjune
 - Mehran Maghoumi
 - Ralle
+- Roger
 - ippei
 - luisllamasbinaburo
