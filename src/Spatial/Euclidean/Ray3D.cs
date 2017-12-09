@@ -98,6 +98,7 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         /// <param name="s">a string representing the ray</param>
         /// <returns>a ray</returns>
+        [Obsolete("Should not have been made public. Mode Obsolete 2017-12-09")]
         public static Ray3D Parse(string s)
         {
             return Parser.ParseRay3D(s);
@@ -152,7 +153,7 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         /// <param name="other">The ray to compare against.</param>
         /// <param name="tolerance">A tolerance (epsilon) to adjust for floating point error</param>
-        /// <returns>true if the ways are equal; otherwise false</returns>
+        /// <returns>True if the rays are equal; otherwise false</returns>
         [Pure]
         public bool Equals(Ray3D other, double tolerance)
         {
