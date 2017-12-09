@@ -151,7 +151,8 @@
         /// Creates a Plane from its string representation
         /// </summary>
         /// <param name="s">The string representation of the Plane</param>
-        /// <returns></returns>
+        /// <returns>a new Plane</returns>
+        [Obsolete("Should not have been made public, removed on 9/12/2017")]
         public static Plane Parse(string s)
         {
             return Parser.ParsePlane(s);
@@ -259,9 +260,9 @@
         /// Finds the intersection of the two planes, throws if they are parallel
         /// http://mathworld.wolfram.com/Plane-PlaneIntersection.html
         /// </summary>
-        /// <param name="intersectingPlane"></param>
-        /// <param name="tolerance"></param>
-        /// <returns></returns>
+        /// <param name="intersectingPlane">a plane which intersects</param>
+        /// <param name="tolerance">A tolerance (epsilon) to account for floating point error.</param>
+        /// <returns>A ray at the intersection.</returns>
         public Ray3D IntersectionWith(Plane intersectingPlane, double tolerance = float.Epsilon)
         {
             var a = new DenseMatrix(2, 3);
@@ -289,8 +290,8 @@
         /// Find intersection between Line3D and Plane
         /// http://geomalgorithms.com/a05-_intersect-1.html
         /// </summary>
-        /// <param name="line"></param>
-        /// <param name="tolerance"></param>
+        /// <param name="line">A line segment</param>
+        /// <param name="tolerance">A tolerance (epsilon) to account for floating point error.</param>
         /// <returns>Intersection Point or null</returns>
         public Point3D? IntersectionWith(Line3D line, double tolerance = float.Epsilon)
         {
@@ -322,12 +323,12 @@
         /// <summary>
         /// http://www.cs.princeton.edu/courses/archive/fall00/cs426/lectures/raycast/sld017.htm
         /// </summary>
-        /// <param name="ray"></param>
-        /// <param name="tolerance"></param>
-        /// <returns></returns>
+        /// <param name="ray">A ray</param>
+        /// <param name="tolerance">A tolerance (epsilon) to account for floating point error.</param>
+        /// <returns>The point of intersection.</returns>
         public Point3D IntersectionWith(Ray3D ray, double tolerance = float.Epsilon)
         {
-            if(this.Normal.IsPerpendicularTo(ray.Direction, tolerance))
+            if (this.Normal.IsPerpendicularTo(ray.Direction, tolerance))
             {
                 throw new InvalidOperationException("Ray is parallel to the plane.");
             }
