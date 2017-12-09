@@ -24,14 +24,33 @@
         /// </summary>
         public static readonly Quaternion Zero = new Quaternion(0, 0, 0, 0);
 
+        /// <summary>
+        /// Specifies the rotation component of the Quaternion.
+        /// </summary>
         private readonly double w; // real part
+
+        /// <summary>
+        /// Specifies the X-value of the vector component of the Quaternion
+        /// </summary>
         private readonly double x;
+
+        /// <summary>
+        /// Specifies the Y-value of the vector component of the Quaternion
+        /// </summary>
         private readonly double y;
+
+        /// <summary>
+        /// Specifies the Z-value of the vector component of the Quaternion
+        /// </summary>
         private readonly double z; // imaginary part
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Quaternion"/> struct.
         /// </summary>
+        /// <param name="real">The rotation component of the Quaternion</param>
+        /// <param name="imagX">The X-value of the vector component of the Quaternion</param>
+        /// <param name="imagY">The Y-value of the vector component of the Quaternion</param>
+        /// <param name="imagZ">The Z-value of the vector component of the Quaternion</param>
         public Quaternion(double real, double imagX, double imagY, double imagZ)
         {
             this.x = imagX;
@@ -88,7 +107,7 @@
         public double Arg => Math.Acos(this.Real / this.Norm);
 
         /// <summary>
-        /// True if the quaternion q is of length |q| = 1.
+        /// Gets a value indicating whether the quaternion q has length |q| = 1.
         /// </summary>
         /// <remarks>
         /// To normalize a quaternion to a length of 1, use the <see cref="Normalized"/> method.
@@ -97,29 +116,29 @@
         public bool IsUnitQuaternion => this.NormSquared.AlmostEqual(1);
 
         /// <summary>
-        /// Returns a new Quaternion q with the Scalar part only.
+        /// Gets a new Quaternion q with the Scalar part only.
         /// If you need a Double, use the Real-Field instead.
         /// </summary>
         public Quaternion Scalar => new Quaternion(this.w, 0, 0, 0);
 
         /// <summary>
-        /// Returns a new Quaternion q with the Vector part only.
+        /// Gets a new Quaternion q with the Vector part only.
         /// </summary>
         public Quaternion Vector => new Quaternion(0, this.x, this.y, this.z);
 
         /// <summary>
-        /// Returns a new normalized Quaternion u with the Vector part only, such that ||u|| = 1.
+        /// Gets a new normalized Quaternion u with the Vector part only, such that ||u|| = 1.
         /// Q may then be represented as q = r*(cos(phi) + u*sin(phi)) = r*exp(phi*u) where r is the absolute and phi the argument of q.
         /// </summary>
         public Quaternion NormalizedVector => ToUnitQuaternion(0, this.x, this.y, this.z);
 
         /// <summary>
-        /// Returns a new normalized Quaternion q with the direction of this quaternion.
+        /// Gets a new normalized Quaternion q with the direction of this quaternion.
         /// </summary>
         public Quaternion Normalized => this == Zero ? this : ToUnitQuaternion(this.w, this.x, this.y, this.z);
 
         /// <summary>
-        /// Inverts this quaternion. Inversing Zero returns Zero
+        /// Gets an inverted quaternion. Inversing Zero returns Zero
         /// </summary>
         public Quaternion Inversed
         {
@@ -135,11 +154,17 @@
             }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether the quaternion is not a number
+        /// </summary>
         public bool IsNan => double.IsNaN(this.Real) ||
                              double.IsNaN(this.ImagX) ||
                              double.IsNaN(this.ImagY) ||
                              double.IsNaN(this.ImagZ);
 
+        /// <summary>
+        /// Gets a value indicating whether the quaternion is not a number
+        /// </summary>
         public bool IsInfinity => double.IsInfinity(this.Real) ||
                                   double.IsInfinity(this.ImagX) ||
                                   double.IsInfinity(this.ImagY) ||
@@ -165,16 +190,10 @@
         ////}
 
         /// <summary>
-        /// (nop)
-        /// </summary>
-        public static Quaternion operator +(Quaternion q)
-        {
-            return q;
-        }
-
-        /// <summary>
         /// Negate a quaternion.
         /// </summary>
+        /// <param name="q">The quaternion to negate</param>
+        /// <returns>A negated quaternion</returns>
         public static Quaternion operator -(Quaternion q)
         {
             return q.Negate();
@@ -183,14 +202,20 @@
         /// <summary>
         /// Add a quaternion to a quaternion.
         /// </summary>
-        public static Quaternion operator +(Quaternion r, Quaternion q)
+        /// <param name="q1">The first quaternion</param>
+        /// <param name="q2">The second quaternion</param>
+        /// <returns>The sum of two quaternions</returns>
+        public static Quaternion operator +(Quaternion q1, Quaternion q2)
         {
-            return new Quaternion(r.w + q.w, r.x + q.x, r.y + q.y, r.z + q.z);
+            return new Quaternion(q1.w + q2.w, q1.x + q2.x, q1.y + q2.y, q1.z + q2.z);
         }
 
         /// <summary>
         /// Add a floating point number to a quaternion.
         /// </summary>
+        /// <param name="q1">a quaternion</param>
+        /// <param name="d">a number to add</param>
+        /// <returns>A quaternion whose real value is increased by a scalar</returns>
         public static Quaternion operator +(Quaternion q1, double d)
         {
             return new Quaternion(q1.Real + d, q1.ImagX, q1.ImagY, q1.ImagZ);
@@ -199,14 +224,20 @@
         /// <summary>
         /// Add a quaternion to a floating point number.
         /// </summary>
-        public static Quaternion operator +(double d, Quaternion q1)
+        /// <param name="d">a number to add</param>
+        /// <param name="q">a quaternion</param>
+        /// <returns>A quaternion whose real value is increased by a scalar</returns>
+        public static Quaternion operator +(double d, Quaternion q)
         {
-            return q1 + d;
+            return q + d;
         }
 
         /// <summary>
         /// Subtract a quaternion from a quaternion.
         /// </summary>
+        /// <param name="q1">The first quaternion</param>
+        /// <param name="q2">The second quaternion</param>
+        /// <returns>The quaternion difference</returns>
         public static Quaternion operator -(Quaternion q1, Quaternion q2)
         {
             return new Quaternion(q1.w - q2.w, q1.x - q2.x, q1.y - q2.y, q1.z - q2.z);
@@ -215,6 +246,9 @@
         /// <summary>
         /// Subtract a floating point number from a quaternion.
         /// </summary>
+        /// <param name="d">a number to subtract</param>
+        /// <param name="q">a quaternion</param>
+        /// <returns>A new quaternion</returns>
         public static Quaternion operator -(double d, Quaternion q)
         {
             return new Quaternion(d - q.Real, q.x, q.y, q.z);
@@ -223,6 +257,9 @@
         /// <summary>
         /// Subtract a floating point number from a quaternion.
         /// </summary>
+        /// <param name="q">a quaternion</param>
+        /// <param name="d">a number to subtract</param>
+        /// <returns>A new quaternion</returns>
         public static Quaternion operator -(Quaternion q, double d)
         {
             return new Quaternion(q.Real - d, q.x, q.y, q.z);
@@ -231,6 +268,9 @@
         /// <summary>
         /// Multiply a quaternion with a quaternion.
         /// </summary>
+        /// <param name="q1">The first quaternion</param>
+        /// <param name="q2">The second quaternion</param>
+        /// <returns>A new quaternion</returns>
         public static Quaternion operator *(Quaternion q1, Quaternion q2)
         {
             var ci = (q1.x * q2.w) + (q1.y * q2.z) - (q1.z * q2.y) + (q1.w * q2.x);
@@ -243,22 +283,31 @@
         /// <summary>
         /// Multiply a floating point number with a quaternion.
         /// </summary>
-        public static Quaternion operator *(Quaternion q1, double d)
+        /// <param name="q">a quaternion</param>
+        /// <param name="d">a scalar</param>
+        /// <returns>A new quaternion</returns>
+        public static Quaternion operator *(Quaternion q, double d)
         {
-            return new Quaternion(q1.Real * d, q1.ImagX * d, q1.ImagY * d, q1.ImagZ * d);
+            return new Quaternion(q.Real * d, q.ImagX * d, q.ImagY * d, q.ImagZ * d);
         }
 
         /// <summary>
         /// Multiply a floating point number with a quaternion.
         /// </summary>
-        public static Quaternion operator *(double d, Quaternion q1)
+        /// <param name="d">a scalar</param>
+        /// <param name="q">a quaternion</param>
+        /// <returns>A new quaternion</returns>
+        public static Quaternion operator *(double d, Quaternion q)
         {
-            return new Quaternion(q1.Real * d, q1.ImagX * d, q1.ImagY * d, q1.ImagZ * d);
+            return new Quaternion(q.Real * d, q.ImagX * d, q.ImagY * d, q.ImagZ * d);
         }
 
         /// <summary>
         /// Divide a quaternion by a quaternion.
         /// </summary>
+        /// <param name="q">The numerator quaternion</param>
+        /// <param name="r">The denominator quaternion</param>
+        /// <returns>A new divided quaternion</returns>
         public static Quaternion operator /(Quaternion q, Quaternion r)
         {
             if (r == Zero)
@@ -282,14 +331,20 @@
         /// <summary>
         /// Divide a quaternion by a floating point number.
         /// </summary>
-        public static Quaternion operator /(Quaternion q1, double d)
+        /// <param name="q">a quaternion</param>
+        /// <param name="d">a scalar</param>
+        /// <returns>A new quaternion</returns>
+        public static Quaternion operator /(Quaternion q, double d)
         {
-            return new Quaternion(q1.Real / d, q1.ImagX / d, q1.ImagY / d, q1.ImagZ / d);
+            return new Quaternion(q.Real / d, q.ImagX / d, q.ImagY / d, q.ImagZ / d);
         }
 
         /// <summary>
         /// Raise a quaternion to a quaternion.
         /// </summary>
+        /// <param name="q1">The first quaternion</param>
+        /// <param name="q2">The second quaternion</param>
+        /// <returns>A new quaternion</returns>
         public static Quaternion operator ^(Quaternion q1, Quaternion q2)
         {
             return q1.Pow(q2);
@@ -298,14 +353,20 @@
         /// <summary>
         /// Raise a quaternion to a floating point number.
         /// </summary>
-        public static Quaternion operator ^(Quaternion q1, double d)
+        /// <param name="q">a quaternion</param>
+        /// <param name="d">a scalar</param>
+        /// <returns>A new quaternion</returns>
+        public static Quaternion operator ^(Quaternion q, double d)
         {
-            return q1.Pow(d);
+            return q.Pow(d);
         }
 
         /// <summary>
         /// Equality operator for two quaternions
         /// </summary>
+        /// <param name="q1">The first quaternion</param>
+        /// <param name="q2">The second quaternion</param>
+        /// <returns>True if the quaternions are equal; otherwise false</returns>
         public static bool operator ==(Quaternion q1, Quaternion q2)
         {
             return q1.Equals(q2);
@@ -314,6 +375,9 @@
         /// <summary>
         /// Equality operator for quaternion and double
         /// </summary>
+        /// <param name="q">a quaternion</param>
+        /// <param name="d">a scalar</param>
+        /// <returns>True if the real part of the quaternion is almost equal to the double and the rest of the quaternion is almost 0; otherwise false</returns>
         public static bool operator ==(Quaternion q, double d)
         {
             return q.Real.AlmostEqual(d)
@@ -325,6 +389,9 @@
         /// <summary>
         /// Equality operator for quaternion and double
         /// </summary>
+        /// <param name="d">a scalar</param>
+        /// <param name="q">a quaternion</param>
+        /// <returns>True if the real part of the quaternion is almost equal to the double and the rest of the quaternion is almost 0; otherwise false</returns>
         public static bool operator ==(double d, Quaternion q)
         {
             return q.Real.AlmostEqual(d)
@@ -336,6 +403,9 @@
         /// <summary>
         /// Inequality operator for two quaternions
         /// </summary>
+        /// <param name="q1">The first quaternion</param>
+        /// <param name="q2">The second quaternion</param>
+        /// <returns>True if the quaternions are different; otherwise false</returns>
         public static bool operator !=(Quaternion q1, Quaternion q2)
         {
             return !(q1 == q2);
@@ -344,17 +414,76 @@
         /// <summary>
         /// Inequality operator for quaternion and double
         /// </summary>
-        public static bool operator !=(Quaternion q1, double d)
+        /// <param name="q">a quaternion</param>
+        /// <param name="d">a scalar</param>
+        /// <returns>False if the real part of the quaternion is almost equal to the double and the rest of the quaternion is almost 0; otherwise True</returns>
+        public static bool operator !=(Quaternion q, double d)
         {
-            return !(q1 == d);
+            return !(q == d);
         }
 
         /// <summary>
         /// Inequality operator for quaternion and double
         /// </summary>
-        public static bool operator !=(double d, Quaternion q1)
+        /// <param name="d">a scalar</param>
+        /// <param name="q">a quaternion</param>
+        /// <returns>False if the real part of the quaternion is almost equal to the double and the rest of the quaternion is almost 0; otherwise True</returns>
+        public static bool operator !=(double d, Quaternion q)
         {
-            return !(q1 == d);
+            return !(q == d);
+        }
+
+        /// <summary>
+        /// Returns the distance |a-b| of two quaternions, forming a metric space.
+        /// </summary>
+        /// <param name="a">The first quaternion</param>
+        /// <param name="b">The second quaternion</param>
+        /// <returns>The distance between two quaternions.</returns>
+        public static double Distance(Quaternion a, Quaternion b)
+        {
+            return (a - b).Norm;
+        }
+
+        /// <summary>
+        /// Returns cos(n*arccos(x)) = 2*Cos((n-1)arccos(x))cos(arccos(x)) - cos((n-2)*arccos(x))
+        /// </summary>
+        /// <param name="n">an integer</param>
+        /// <param name="x">a double</param>
+        /// <returns>the polynomial result</returns>
+        public static double ChybyshevCosPoli(int n, double x)
+        {
+            if (n == 0)
+            {
+                return 1.0;
+            }
+
+            if (n == 1)
+            {
+                return x;
+            }
+
+            return (2 * ChybyshevCosPoli(n - 1, x) * x) - ChybyshevCosPoli(n - 2, x);
+        }
+
+        /// <summary>
+        /// Returns sin(n*x)
+        /// </summary>
+        /// <param name="n">an integer</param>
+        /// <param name="x">a double</param>
+        /// <returns>the polynomial result</returns>
+        public static double ChybyshevSinPoli(int n, double x)
+        {
+            if (n == 0)
+            {
+                return 1;
+            }
+
+            if (n == 1)
+            {
+                return 2 * x;
+            }
+
+            return (2 * x * ChybyshevSinPoli(n - 1, x)) - ChybyshevSinPoli(n - 2, x);
         }
 
         /// <summary>
@@ -364,7 +493,7 @@
         /// 2) Rotate the resulting frame about its (new) y axis by angle beta;
         /// 3) Rotate the resulting frame about its (new) x axis by angle alpha, to arrive at frame B.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>An EulerAngle</returns>
         public EulerAngles ToEulerAngles()
         {
             return new EulerAngles(
@@ -377,7 +506,7 @@
         /// Roatates the provided rotation quaternion with this quaternion
         /// </summary>
         /// <param name="rotation">The rotation quaternion to rotate</param>
-        /// <returns></returns>
+        /// <returns>A rotated quaternion</returns>
         public Quaternion RotateRotationQuaternion(Quaternion rotation)
         {
             if (!rotation.IsUnitQuaternion)
@@ -392,7 +521,7 @@
         /// Roatates the provided unit quaternion with this quaternion
         /// </summary>
         /// <param name="unitQuaternion">The unit quaternion to rotate</param>
-        /// <returns></returns>
+        /// <returns>A rotated quaternion</returns>
         public Quaternion RotateUnitQuaternion(Quaternion unitQuaternion)
         {
             if (!this.IsUnitQuaternion)
@@ -411,22 +540,16 @@
         /// <summary>
         /// Negate this quaternion.
         /// </summary>
+        /// <returns>A new negated quaternion</returns>
         public Quaternion Negate()
         {
             return new Quaternion(-this.w, -this.x, -this.y, -this.z);
         }
 
         /// <summary>
-        /// Returns the distance |a-b| of two quaternions, forming a metric space.
-        /// </summary>
-        public static double Distance(Quaternion a, Quaternion b)
-        {
-            return (a - b).Norm;
-        }
-
-        /// <summary>
         /// Conjugate this quaternion.
         /// </summary>
+        /// <returns>a new conjugated quaternion</returns>
         public Quaternion Conjugate()
         {
             return new Quaternion(this.w, -this.x, -this.y, -this.z);
@@ -435,6 +558,8 @@
         /// <summary>
         /// Logarithm to a given base.
         /// </summary>
+        /// <param name="lbase">A base</param>
+        /// <returns>A new quaternion</returns>
         public Quaternion Log(double lbase)
         {
             return this.Log() / Math.Log(lbase);
@@ -443,6 +568,7 @@
         /// <summary>
         /// Natural Logarithm to base E.
         /// </summary>
+        /// <returns>A new quaternion</returns>
         public Quaternion Log()
         {
             if (this == One)
@@ -457,6 +583,7 @@
         /// <summary>
         /// Common Logarithm to base 10.
         /// </summary>
+        /// <returns>A new quaternion</returns>
         public Quaternion Log10()
         {
             return this.Log() / Math.Log(10);
@@ -465,7 +592,7 @@
         /// <summary>
         /// Exponential Function.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A new quaternion</returns>
         public Quaternion Exp()
         {
             var real = Math.Pow(Math.E, this.Real);
@@ -483,6 +610,8 @@
         /// <remarks>
         /// This algorithm is not very accurate and works only for normalized quaternions
         /// </remarks>
+        /// <param name="power">a number by which to raise the quaternion to</param>
+        /// <returns>A new quaternion</returns>
         public Quaternion Pow(double power)
         {
             if (this == Zero)
@@ -498,6 +627,11 @@
             return (power * this.Log()).Exp();
         }
 
+        /// <summary>
+        /// Raise the quaternion to a given power.
+        /// </summary>
+        /// <param name="power">a number by which to raise the quaternion to</param>
+        /// <returns>A new quaternion</returns>
         public Quaternion Pow(int power)
         {
             var quat = new Quaternion(this.Real, this.ImagX, this.ImagY, this.ImagZ);
@@ -520,44 +654,10 @@
         }
 
         /// <summary>
-        /// Returns cos(n*arccos(x)) = 2*Cos((n-1)arccos(x))cos(arccos(x)) - cos((n-2)*arccos(x))
-        /// </summary>
-        public static double ChybyshevCosPoli(int n, double x)
-        {
-            if (n == 0)
-            {
-                return 1.0;
-            }
-
-            if (n == 1)
-            {
-                return x;
-            }
-
-            return (2 * ChybyshevCosPoli(n - 1, x) * x) - ChybyshevCosPoli(n - 2, x);
-        }
-
-        /// <summary>
-        /// Returns sin(n*x)
-        /// </summary>
-        public static double ChybyshevSinPoli(int n, double x)
-        {
-            if (n == 0)
-            {
-                return 1;
-            }
-
-            if (n == 1)
-            {
-                return 2 * x;
-            }
-
-            return (2 * x * ChybyshevSinPoli(n - 1, x)) - ChybyshevSinPoli(n - 2, x);
-        }
-
-        /// <summary>
         /// Raise the quaternion to a given power.
         /// </summary>
+        /// <param name="power">a quaternion to use as the power</param>
+        /// <returns>The quaternion raied to a power of another quaternion</returns>
         public Quaternion Pow(Quaternion power)
         {
             if (this == Zero)
@@ -576,6 +676,7 @@
         /// <summary>
         /// Square root of the Quaternion: q^(1/2).
         /// </summary>
+        /// <returns>The square root of the quaternion</returns>
         public Quaternion Sqrt()
         {
             var arg = this.Arg * 0.5;
@@ -585,6 +686,9 @@
         /// <summary>
         /// returns quaternion as real+ImagXi+ImagYj+ImagZk based on format provided
         /// </summary>
+        /// <param name="format">A format string to pass to the format provider</param>
+        /// <param name="formatProvider">a format provider</param>
+        /// <returns>A string represention of the quaternion</returns>
         public string ToString(string format, IFormatProvider formatProvider)
         {
             return string.Format(
@@ -602,7 +706,7 @@
         /// <summary>
         /// returns quaternion as real+ImagXi+ImagYj+ImagZk
         /// </summary>
-        /// <returns></returns>
+        /// <returns>a string represention of the quaternion</returns>
         public override string ToString()
         {
             return string.Format(
@@ -616,9 +720,7 @@
                 this.ImagZ);
         }
 
-        /// <summary>
-        /// Equality for quaternions
-        /// </summary>
+        /// <inheritdoc />
         public bool Equals(Quaternion other)
         {
             if ((other.IsNan && this.IsNan) ||
@@ -633,9 +735,7 @@
                 && this.ImagZ.AlmostEqual(other.ImagZ);
         }
 
-        /// <summary>
-        /// Equality for quaternion
-        /// </summary>
+        /// <inheritdoc />
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj))
@@ -646,9 +746,7 @@
             return obj is Quaternion && this.Equals((Quaternion)obj);
         }
 
-        /// <summary>
-        /// Quaternion hashcode based on all members.
-        /// </summary>
+        /// <inheritdoc />
         public override int GetHashCode()
         {
             unchecked
@@ -664,6 +762,11 @@
         /// <summary>
         /// Calculates norm of quaternion from it's algebraical notation
         /// </summary>
+        /// <param name="real">The rotation component of the Quaternion</param>
+        /// <param name="imagX">The X-value of the vector component of the Quaternion</param>
+        /// <param name="imagY">The Y-value of the vector component of the Quaternion</param>
+        /// <param name="imagZ">The Z-value of the vector component of the Quaternion</param>
+        /// <returns>a norm squared quaternion</returns>
         private static double ToNormSquared(double real, double imagX, double imagY, double imagZ)
         {
             return (imagX * imagX) + (imagY * imagY) + (imagZ * imagZ) + (real * real);
@@ -672,6 +775,11 @@
         /// <summary>
         /// Creates unit quaternion (it's norm == 1) from it's algebraical notation
         /// </summary>
+        /// <param name="real">The rotation component of the Quaternion</param>
+        /// <param name="imagX">The X-value of the vector component of the Quaternion</param>
+        /// <param name="imagY">The Y-value of the vector component of the Quaternion</param>
+        /// <param name="imagZ">The Z-value of the vector component of the Quaternion</param>
+        /// <returns>a unit quaternion</returns>
         private static Quaternion ToUnitQuaternion(double real, double imagX, double imagY, double imagZ)
         {
             var norm = Math.Sqrt(ToNormSquared(real, imagX, imagY, imagZ));
