@@ -13,6 +13,10 @@
         private static readonly Point3D Point3D1 = new Point3D(0, 0, 0);
         private static readonly Point3D Point3D2 = new Point3D(1, 0, 0);
         private static readonly Point3D Point3D3 = new Point3D(0, 1, 0);
+        private static readonly Ray3D Ray3D = new Ray3D(Point3D.Origin, UnitVector3D.ZAxis);
+        private static readonly Vector3D Vector3D = new Vector3D(5, 6, 7);
+        private static readonly UnitVector3D UnitVector3D = UnitVector3D.Create(0.2, 0.4, 0.7, 1);
+        private static readonly Line3D Line3D = new Line3D(new Point3D(2, 3, 4), new Point3D(5, 6, 7));
 
         [Benchmark]
         public double A()
@@ -57,67 +61,67 @@
         }
 
         [Benchmark]
-        public double SignedDistanceTo()
+        public double SignedDistanceToPoint3D()
         {
             return Plane1.SignedDistanceTo(Point3D);
         }
 
         [Benchmark]
-        public double SignedDistanceTo()
+        public double SignedDistanceToPlane()
         {
             return Plane1.SignedDistanceTo(Plane2);
         }
 
         [Benchmark]
-        public double SignedDistanceTo()
+        public double SignedDistanceToRay3D()
         {
             return Plane1.SignedDistanceTo(Ray3D);
         }
 
         [Benchmark]
-        public double AbsoluteDistanceTo()
+        public double AbsoluteDistanceToPoint3D()
         {
             return Plane1.AbsoluteDistanceTo(Point3D);
         }
 
         [Benchmark]
-        public Point3D Project()
+        public Point3D ProjectPoint3D()
         {
-            return Plane1.Project(Point3D, Nullable`1);
+            return Plane1.Project(Point3D);
         }
 
         [Benchmark]
-        public Line3D Project()
+        public Line3D ProjectLine3D()
         {
             return Plane1.Project(Line3D);
         }
 
         [Benchmark]
-        public Ray3D Project()
+        public Ray3D ProjectRay3D()
         {
             return Plane1.Project(Ray3D);
         }
 
         [Benchmark]
-        public Ray3D Project()
+        public Ray3D ProjectVector3D()
         {
             return Plane1.Project(Vector3D);
         }
 
         [Benchmark]
-        public Ray3D Project()
+        public Ray3D ProjectUnitVector3D()
         {
             return Plane1.Project(UnitVector3D);
         }
 
         [Benchmark]
-        public Ray3D IntersectionWith()
+        public Ray3D IntersectionWithPlane()
         {
             return Plane1.IntersectionWith(Plane2, 2);
         }
 
         [Benchmark]
-        public Nullable`1 IntersectionWith()
+        public Nullable<Point3D> IntersectionWithLine3D()
         {
             return Plane1.IntersectionWith(Line3D, 2);
         }
