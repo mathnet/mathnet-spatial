@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="Euclidean\Circle2DTests.cs" />
     <Compile Include="Euclidean\Circle3DTests.cs" />
+    <Compile Include="Euclidean\LineSegment2DTests.cs" />
     <Compile Include="Euclidean\Line2DTests.cs" />
     <Compile Include="Euclidean\Point2DTests.cs" />
     <Compile Include="Euclidean\Polygon2DTests.cs" />
