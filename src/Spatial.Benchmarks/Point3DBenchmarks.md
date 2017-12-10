@@ -2,36 +2,36 @@
 
 BenchmarkDotNet=v0.10.11, OS=Windows 7 SP1 (6.1.7601.0)
 Processor=Intel Xeon CPU E5-2637 v4 3.50GHzIntel Xeon CPU E5-2637 v4 3.50GHz, ProcessorCount=16
-Frequency=3410097 Hz, Resolution=293.2468 ns, Timer=TSC
+Frequency=3410107 Hz, Resolution=293.2459 ns, Timer=TSC
   [Host]     : .NET Framework 4.7 (CLR 4.0.30319.42000), 32bit LegacyJIT-v4.7.2117.0
   DefaultJob : .NET Framework 4.7 (CLR 4.0.30319.42000), 32bit LegacyJIT-v4.7.2117.0
 
 
 ```
-|                          Method |         Mean |      Error |      StdDev |        Median |  Gen 0 | Allocated |
-|-------------------------------- |-------------:|-----------:|------------:|--------------:|-------:|----------:|
-|        OperatorAdditionVector3D |     2.789 ns |  0.5248 ns |   1.5308 ns |     2.2251 ns |      - |       0 B |
-|    OperatorAdditionUnitVector3D |     1.398 ns |  0.4543 ns |   1.3396 ns |     1.4076 ns |      - |       0 B |
-|     OperatorSubtractionVector3D |     1.604 ns |  0.4762 ns |   1.3966 ns |     1.4100 ns |      - |       0 B |
-| OperatorSubtractionUnitVector3D |     1.628 ns |  0.3930 ns |   1.1586 ns |     1.5104 ns |      - |       0 B |
-|      OperatorSubtractionPoint3D |     1.738 ns |  0.4038 ns |   1.1907 ns |     1.6982 ns |      - |       0 B |
-|                OperatorEquality |     2.570 ns |  0.1162 ns |   0.3426 ns |     2.5703 ns |      - |       0 B |
-|                           Parse | 1,648.356 ns | 45.2549 ns | 132.0107 ns | 1,638.4033 ns | 0.0916 |     488 B |
-|                        OfVector |     4.801 ns |  0.5013 ns |   1.4781 ns |     4.5396 ns |      - |       0 B |
-|                        Centroid |   197.059 ns |  4.5331 ns |  13.2948 ns |   196.7110 ns | 0.0224 |     120 B |
-|                        MidPoint |   205.989 ns |  6.0465 ns |  17.6378 ns |   204.3920 ns | 0.0341 |     180 B |
-|            IntersectionOfPlanes |           NA |         NA |          NA |            NA |    N/A |       N/A |
-|       IntersectionOfPlaneAndRay |    66.973 ns |  2.0545 ns |   6.0254 ns |    65.9950 ns |      - |       0 B |
-|                     MirrorAbout |    55.598 ns |  2.1763 ns |   6.3828 ns |    54.7076 ns |      - |       0 B |
-|                       ProjectOn |    22.026 ns |  0.7744 ns |   1.8702 ns |    22.2268 ns |      - |       0 B |
-|                          Rotate | 1,387.218 ns | 30.5836 ns |  89.2138 ns | 1,376.1153 ns | 0.4215 |    2216 B |
-|          RotateAroundUnitVector | 1,221.696 ns | 33.3636 ns |  98.3734 ns | 1,194.1924 ns | 0.4215 |    2216 B |
-|                        VectorTo |     2.651 ns |  0.4167 ns |   1.2156 ns |     2.4543 ns |      - |       0 B |
-|                      DistanceTo |     1.931 ns |  0.3650 ns |   1.0294 ns |     1.9995 ns |      - |       0 B |
-|                      ToVector3D |     1.075 ns |  0.3726 ns |   1.0985 ns |     0.8523 ns |      - |       0 B |
-|                        ToVector |    33.991 ns |  1.0443 ns |   3.0792 ns |    33.6502 ns | 0.0167 |      88 B |
-|                          Equals |     2.488 ns |  0.1092 ns |   0.3219 ns |     2.3960 ns |      - |       0 B |
-|             EqualsWIthTolerance |    18.831 ns |  0.4640 ns |   1.3461 ns |    18.8056 ns |      - |       0 B |
+|                          Method |         Mean |      Error |     StdDev |       Median |  Gen 0 | Allocated |
+|-------------------------------- |-------------:|-----------:|-----------:|-------------:|-------:|----------:|
+|        OperatorAdditionVector3D |     2.366 ns |  0.3587 ns |  1.0576 ns |     2.142 ns |      - |       0 B |
+|    OperatorAdditionUnitVector3D |     1.744 ns |  0.3257 ns |  0.4566 ns |     1.392 ns |      - |       0 B |
+|     OperatorSubtractionVector3D |     2.119 ns |  0.3392 ns |  0.7587 ns |     2.171 ns |      - |       0 B |
+| OperatorSubtractionUnitVector3D |     1.846 ns |  0.3359 ns |  0.7717 ns |     1.887 ns |      - |       0 B |
+|      OperatorSubtractionPoint3D |     2.156 ns |  0.3469 ns |  0.8703 ns |     2.024 ns |      - |       0 B |
+|                OperatorEquality |     2.547 ns |  0.0872 ns |  0.2154 ns |     2.543 ns |      - |       0 B |
+|                           Parse | 1,456.256 ns | 29.3019 ns | 46.4759 ns | 1,466.342 ns | 0.0916 |     488 B |
+|                        OfVector |     4.460 ns |  0.3857 ns |  0.9887 ns |     4.362 ns |      - |       0 B |
+|                        Centroid |   343.062 ns |  7.2169 ns | 16.2897 ns |   343.295 ns | 0.0226 |     120 B |
+|                        MidPoint |   184.003 ns |  4.0278 ns |  6.3884 ns |   184.629 ns | 0.0341 |     180 B |
+|            IntersectionOfPlanes |           NA |         NA |         NA |           NA |    N/A |       N/A |
+|       IntersectionOfPlaneAndRay |    62.726 ns |  1.5452 ns |  3.3262 ns |    62.512 ns |      - |       0 B |
+|                     MirrorAbout |    52.409 ns |  1.5498 ns |  2.0152 ns |    51.805 ns |      - |       0 B |
+|                       ProjectOn |    22.586 ns |  0.7342 ns |  1.2063 ns |    22.675 ns |      - |       0 B |
+|                          Rotate | 1,276.310 ns |  0.9905 ns |  0.5895 ns | 1,276.050 ns | 0.4215 |    2216 B |
+|          RotateAroundUnitVector | 1,246.201 ns | 23.5669 ns | 37.3795 ns | 1,255.381 ns | 0.4215 |    2216 B |
+|                        VectorTo |     1.543 ns |  0.3398 ns |  0.6547 ns |     1.679 ns |      - |       0 B |
+|                      DistanceTo |     1.510 ns |  0.0071 ns |  0.0063 ns |     1.508 ns |      - |       0 B |
+|                      ToVector3D |     1.352 ns |  0.3486 ns |  0.5323 ns |     1.258 ns |      - |       0 B |
+|                        ToVector |    32.906 ns |  0.7249 ns |  1.6213 ns |    33.308 ns | 0.0167 |      88 B |
+|                          Equals |     2.488 ns |  0.0865 ns |  0.1708 ns |     2.504 ns |      - |       0 B |
+|             EqualsWIthTolerance |    16.264 ns |  0.0135 ns |  0.0105 ns |    16.263 ns |      - |       0 B |
 
 Benchmarks with issues:
   Point3DBenchmarks.IntersectionOfPlanes: DefaultJob

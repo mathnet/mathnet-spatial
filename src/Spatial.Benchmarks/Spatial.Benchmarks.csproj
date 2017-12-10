@@ -49,8 +49,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="PlaneBenchmarks.md" />
     <None Include="Point2DBenchmarks.md" />
     <None Include="Point3DBenchmarks.md" />
+    <None Include="Polygon2DBenchmarks.md" />
     <None Include="Ray3DBenchmarks.md" />
     <None Include="Spatial.Benchmarks.csproj.paket.references" />
     <None Include="Spatial.Benchmarks.ruleset" />
