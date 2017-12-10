@@ -30,7 +30,7 @@
         {
             if (startPoint == endPoint)
             {
-                throw new ArgumentException("The Line2D starting and ending points cannot be identical");
+                throw new ArgumentException("The segment starting and ending points cannot be identical");
             }
 
             this.StartPoint = startPoint;
@@ -88,7 +88,7 @@
         /// </summary>
         /// <param name="vector">A vector to apply</param>
         /// <returns>A new translated linesegment</returns>
-        public LineSegment2D Translate(Vector2D vector)
+        public LineSegment2D TranslateBy(Vector2D vector)
         {
             var startVector = this.StartPoint.ToVector2D().Add(vector);
             var endVector = this.EndPoint.ToVector2D().Add(vector);

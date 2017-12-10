@@ -101,6 +101,17 @@
             Assert.AreEqual(expLine, line.LineTo(point));
         }
 
+        [TestCase("1,1", "3,1", "1,1", "2,2", "4,2")]
+        [TestCase("1,1", "3,1", "-1,-1", "0,0", "2,0")]
+        public void TranslateBy(string spoint1, string spoint2, string svector, string spoint3, string spoint4)
+        {
+            var line = LineSegment2D.Parse(spoint1, spoint2);
+            var expected = LineSegment2D.Parse(spoint3, spoint4);
+            var vector = Vector2D.Parse(svector);
+            Assert.AreEqual(expected.Length, line.Length);
+            Assert.AreEqual(expected, line.TranslateBy(vector));
+        }
+
         [TestCase("0,0", "1,0", "0,0", "0,0")]
         [TestCase("0,0", "1,0", "1,0", "1,0")]
         [TestCase("0,0", "1,0", ".25,1", ".25,0")]
