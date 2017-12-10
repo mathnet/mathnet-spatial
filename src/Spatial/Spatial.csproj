@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Euclidean\Circle2D.cs" />
+    <Compile Include="Euclidean\LIneSegment2D.cs" />
     <Compile Include="Internals\ConvexHull\QComparer.cs" />
     <Compile Include="Internals\AvlTreeSet\AvlNode.cs" />
     <Compile Include="Internals\AvlTreeSet\AvlNodeItemEnumerator.cs" />
