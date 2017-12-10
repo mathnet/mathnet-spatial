@@ -50,6 +50,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Euclidean\Circle2D.cs" />
+    <Compile Include="Internals\ConvexHull\QComparer.cs" />
+    <Compile Include="Internals\AvlTreeSet\AvlNode.cs" />
+    <Compile Include="Internals\AvlTreeSet\AvlNodeItemEnumerator.cs" />
+    <Compile Include="Internals\AvlTreeSet\AvlTreeSet.cs" />
+    <Compile Include="Internals\ConvexHull\ConvexHull.cs" />
+    <Compile Include="Internals\ConvexHull\MutablePoint.cs" />
+    <Compile Include="Internals\ConvexHull\Quadrant.cs" />
+    <Compile Include="Internals\ConvexHull\QuadrantSpecific1.cs" />
+    <Compile Include="Internals\ConvexHull\QuadrantSpecific2.cs" />
+    <Compile Include="Internals\ConvexHull\QuadrantSpecific3.cs" />
+    <Compile Include="Internals\ConvexHull\QuadrantSpecific4.cs" />
     <Compile Include="Euclidean\EulerAngles.cs" />
     <Compile Include="Euclidean\Line2D.cs" />
     <Compile Include="Euclidean\Matrix2D.cs" />

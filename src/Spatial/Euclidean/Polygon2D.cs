@@ -64,12 +64,21 @@
         /// <summary>
         /// Gets a list of vertices
         /// </summary>
-        public Point2D[] Vertices => this.points.ToArray();
+        public IEnumerable<Point2D> Vertices
+        {
+            get
+            {
+                foreach(var point in this.points)
+                {
+                    yield return point;
+                }
+            }
+        }
 
         /// <summary>
         /// Gets a list of Edges
         /// </summary>
-        public Line2D[] Edges
+        public IEnumerable<Line2D> Edges
         {
             get
             {
@@ -78,7 +87,10 @@
                     this.PopulateEdgeList();
                 }
 
-                return this.edges.ToArray();
+                foreach (var edge in this.edges)
+                {
+                    yield return edge;
+                }
             }
         }
 
@@ -161,7 +173,7 @@
         }
 
         /// <summary>
-        /// Using the recursive QuickHull algorithm, take an IEnumerable of Point2Ds and compute the
+        /// Using algorithm from Ouellet - https://www.codeproject.com/Articles/1210225/Fast-and-improved-D-Convex-Hull-algorithm-and-its, take an IEnumerable of Point2Ds and computes the
         /// two dimensional convex hull, returning it as a Polygon2D object.
         /// </summary>
         /// <param name="pointList">A list of points</param>
@@ -172,63 +184,23 @@
         /// <returns>A polygon.</returns>
         public static Polygon2D GetConvexHullFromPoints(IEnumerable<Point2D> pointList, bool clockWise = true)
         {
-            // Use the Quickhull algorithm to compute the convex hull of the given points,
-            // making the assumption that the points were delivered in no particular order.
-            var points = new List<Point2D>(pointList);
+            int count = pointList.Count();
 
             // Perform basic validation of the input point cloud for cases of less than
             // four points being given
-            if (points.Count <= 2)
+            if (count <= 2)
             {
                 throw new ArgumentException("Must have at least 3 points in the polygon to compute the convex hull");
             }
 
-            if (points.Count <= 3)
+            if (count <= 3)
             {
-                return new Polygon2D(points);
+                return new Polygon2D(pointList);
             }
 
-            // Find the leftmost and rightmost points
-            var leftMost = points.First();
-            var rightMost = points.First();
-            foreach (var point in points)
-            {
-                if (point.X < leftMost.X)
-                {
-                    leftMost = point;
-                }
-
-                if (point.X > rightMost.X)
-                {
-                    rightMost = point;
-                }
-            }
-
-            // Remove the left and right points
-            points.Remove(leftMost);
-            points.Remove(rightMost);
-
-            // Break the remaining cloud into upper and lower sets
-            var upperPoints = new List<Point2D>();
-            var lowerPoints = new List<Point2D>();
-            var chord = leftMost.VectorTo(rightMost);
-            foreach (var point2D in points)
-            {
-                var testVector = leftMost.VectorTo(point2D);
-                if (chord.CrossProduct(testVector) > 0)
-                {
-                    upperPoints.Add(point2D);
-                }
-                else
-                {
-                    lowerPoints.Add(point2D);
-                }
-            }
-
-            var hullPoints = new List<Point2D> { leftMost, rightMost };
-
-            RecursiveHullComputation(leftMost, rightMost, upperPoints, hullPoints);
-            RecursiveHullComputation(leftMost, rightMost, lowerPoints, hullPoints);
+            var chull = new ConvexHull(pointList, false);
+            chull.CalcConvexHull();
+            var hullPoints = chull.GetResultsAsArrayOfPoint();
 
             // Order the hull points by angle to the centroid
             var centroid = Point2D.Centroid(hullPoints);
@@ -394,61 +366,6 @@
         public override int GetHashCode()
         {
             return this.Vertices.GetHashCode();
-        }
-
-        /// <summary>
-        /// Recursive method to isolate the points from the working list which lie on the convex hull
-        /// </summary>
-        /// <param name="a">The first point</param>
-        /// <param name="b">The second point</param>
-        /// <param name="workingList">A list of points to be evaluated</param>
-        /// <param name="hullList">A list of points on the convex hull</param>
-        private static void RecursiveHullComputation(Point2D a, Point2D b, List<Point2D> workingList, List<Point2D> hullList)
-        {
-            if (!workingList.Any())
-            {
-                return;
-            }
-
-            if (workingList.Count == 1)
-            {
-                hullList.Add(workingList.First());
-                workingList.Remove(workingList.First());
-                return;
-            }
-
-            // Find the furthest point from the line
-            var chord = a.VectorTo(b);
-            var maxPoint = default(Point2D);
-            var maxDistance = double.MinValue;
-
-            foreach (var point2D in workingList)
-            {
-                var testVector = a.VectorTo(point2D);
-                var projection = testVector.ProjectOn(chord);
-                var rejection = testVector - projection;
-                if (rejection.Length > maxDistance)
-                {
-                    maxDistance = rejection.Length;
-                    maxPoint = point2D;
-                }
-            }
-
-            // Add the point to the hull and remove it from the working list
-            hullList.Add(maxPoint);
-            workingList.Remove(maxPoint);
-
-            // Remove all points from the workinglist inside the new triangle
-            var exclusionTriangle = new Polygon2D(new Point2D[] { a, b, maxPoint });
-            var removeList = workingList.Where(x => exclusionTriangle.EnclosesPoint(x)).ToList();
-            foreach (var point2D in removeList)
-            {
-                workingList.Remove(point2D);
-            }
-
-            // Recurse to the next level
-            RecursiveHullComputation(a, maxPoint, workingList, hullList);
-            RecursiveHullComputation(maxPoint, b, workingList, hullList);
         }
 
         /// <summary>
