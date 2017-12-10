@@ -338,6 +338,7 @@ namespace MathNet.Spatial.Euclidean
         /// return new Point3D(X, Y, 0);
         /// </summary>
         /// <returns>A <see cref="Point3D"/> with x and y from this instance and z = 0</returns>
+        [Obsolete("Use projections instead, Obsolete on 2017-12-10")]
         [Pure]
         public Point3D ToPoint3D()
         {
@@ -349,6 +350,7 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         /// <param name="cs">A coordinate system</param>
         /// <returns>A new 3D point</returns>
+        [Obsolete("Use projections instead, Obsolete on 2017-12-10")]
         [Pure]
         public Point3D TransformBy(CoordinateSystem cs)
         {
