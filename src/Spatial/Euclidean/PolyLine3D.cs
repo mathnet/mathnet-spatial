@@ -115,8 +115,8 @@
 
             for (var i = 0; i < this.Count - 1; i++)
             {
-                var segment = new Line3D(this[i], this[i + 1]);
-                var projected = segment.ClosestPointTo(p, true);
+                var segment = new LineSegment3D(this[i], this[i + 1]);
+                var projected = segment.ClosestPointTo(p);
                 var error = p.DistanceTo(projected);
                 if (error < minError)
                 {
