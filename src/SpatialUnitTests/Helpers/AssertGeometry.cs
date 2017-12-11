@@ -3,6 +3,7 @@ namespace MathNet.Spatial.UnitTests
     using MathNet.Numerics.LinearAlgebra;
     using MathNet.Spatial.Euclidean;
     using NUnit.Framework;
+    using System;
 
     public static class AssertGeometry
     {
@@ -113,6 +114,12 @@ namespace MathNet.Spatial.UnitTests
         }
 
         public static void AreEqual(Line3D expected, Line3D actual, double tolerance = 1e-6)
+        {
+            AreEqual(expected.StartPoint, actual.StartPoint, tolerance);
+            AreEqual(expected.EndPoint, actual.EndPoint, tolerance);
+        }
+
+        public static void AreEqual(LineSegment3D expected, LineSegment3D actual, double tolerance = 1e-6)
         {
             AreEqual(expected.StartPoint, actual.StartPoint, tolerance);
             AreEqual(expected.EndPoint, actual.EndPoint, tolerance);

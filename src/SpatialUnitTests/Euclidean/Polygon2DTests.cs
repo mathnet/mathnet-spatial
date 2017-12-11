@@ -66,7 +66,7 @@
         public void PolygonEdges(string stringpoints, string lines)
         {
             List<Point2D> points = (from x in stringpoints.Split(';') select Point2D.Parse(x)).ToList();
-            var lineset = lines.Split(';').Select(t => Line2D.Parse(t.Split(':').First(), t.Split(':').Last())).ToList();
+            var lineset = lines.Split(';').Select(t => LineSegment2D.Parse(t.Split(':').First(), t.Split(':').Last())).ToList();
 
             var poly = new Polygon2D(points);
             CollectionAssert.AreEquivalent(lineset, poly.Edges);

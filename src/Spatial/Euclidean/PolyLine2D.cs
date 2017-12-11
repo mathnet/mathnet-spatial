@@ -135,8 +135,8 @@
 
             for (var i = 0; i < this.Count - 1; i++)
             {
-                var segment = new Line2D(this[i], this[i + 1]);
-                var projected = segment.ClosestPointTo(p, true);
+                var segment = new LineSegment2D(this[i], this[i + 1]);
+                var projected = segment.ClosestPointTo(p);
                 var error = p.DistanceTo(projected);
                 if (error < minError)
                 {
@@ -184,7 +184,7 @@
                 var v0 = manifold[i - 1];
                 var v1 = manifold[i];
                 var v2 = manifold[i + 1];
-                var projected = new Line2D(v0, v2).ClosestPointTo(v1, true);
+                var projected = new LineSegment2D(v0, v2).ClosestPointTo(v1);
 
                 var error = v1.VectorTo(projected).Length;
                 errorByIndex[i] = error;

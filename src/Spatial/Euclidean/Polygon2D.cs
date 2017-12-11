@@ -21,7 +21,7 @@
         /// <summary>
         /// A list of edges.  This list is lazy loaded on demand.
         /// </summary>
-        private ImmutableList<Line2D> edges;
+        private ImmutableList<LineSegment2D> edges;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Polygon2D"/> class.
@@ -68,7 +68,7 @@
         {
             get
             {
-                foreach(var point in this.points)
+                foreach (var point in this.points)
                 {
                     yield return point;
                 }
@@ -78,7 +78,7 @@
         /// <summary>
         /// Gets a list of Edges
         /// </summary>
-        public IEnumerable<Line2D> Edges
+        public IEnumerable<LineSegment2D> Edges
         {
             get
             {
@@ -373,14 +373,14 @@
         /// </summary>
         private void PopulateEdgeList()
         {
-            var localedges = new List<Line2D>(this.points.Count);
+            var localedges = new List<LineSegment2D>(this.points.Count);
             for (var i = 0; i < this.points.Count - 1; i++)
             {
-                var edge = new Line2D(this.points[i], this.points[i + 1]);
+                var edge = new LineSegment2D(this.points[i], this.points[i + 1]);
                 localedges.Add(edge);
             }
 
-            localedges.Add(new Line2D(this.points[this.points.Count - 1], this.points[0])); // complete loop
+            localedges.Add(new LineSegment2D(this.points[this.points.Count - 1], this.points[0])); // complete loop
             this.edges = ImmutableList.Create(localedges);
         }
     }
