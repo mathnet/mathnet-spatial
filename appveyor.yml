@@ -4,6 +4,6 @@ build_script:
 test: 
     Assemblies:
         Only:
-            - '**\MathNet.Spatial.UnitTests.dll
+            - '**\MathNet.Spatial.UnitTests.dll'
 deploy: off
 shallow_clone: true
