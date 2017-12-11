@@ -17,6 +17,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Spatial.Analyzers\Spatial.Analyzers.csproj" />
     <ProjectReference Include="..\Spatial.CodeFixes\Spatial.CodeFixes.csproj" />
+    <ProjectReference Include="..\Spatial\Spatial.csproj" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>
