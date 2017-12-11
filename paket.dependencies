@@ -16,6 +16,8 @@ group Analyzers
 group Test
     source https://www.nuget.org/api/v2
     nuget NUnit ~> 3.0
+	nuget Newtonsoft.Json ~> 10.0.3
+	nuget Protobuf-net ~> 2.3.3	
 
 group Benchmarks
     source https://www.nuget.org/api/v2
