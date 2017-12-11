@@ -16,9 +16,9 @@
         {
             AvlNode<T> current;
 
-            if (Right != null)
+            if (this.Right != null)
             {
-                current = Right;
+                current = this.Right;
                 while (current.Left != null)
                 {
                     current = current.Left;
@@ -48,9 +48,9 @@
         {
             AvlNode<T> current;
 
-            if (Left != null)
+            if (this.Left != null)
             {
-                current = Left;
+                current = this.Left;
                 while (current.Right != null)
                 {
                     current = current.Right;
@@ -74,7 +74,7 @@
 
         public override string ToString()
         {
-            return $"AvlNode [{Item}], balance: {Balance}, Parent: {Parent?.Item.ToString()}, Left: {Left?.Item.ToString()}, Right: {Right?.Item.ToString()},";
+            return $"AvlNode [{this.Item}], balance: {this.Balance}, Parent: {this.Parent?.Item.ToString()}, Left: {this.Left?.Item.ToString()}, Right: {this.Right?.Item.ToString()},";
         }
     }
 }

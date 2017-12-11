@@ -20,7 +20,7 @@
             double topX = rightX;
             double topY = rightY;
 
-            foreach (var point in ListOfPoint)
+            foreach (var point in this.ListOfPoint)
             {
                 if (point.X >= rightX)
                 {
@@ -55,9 +55,9 @@
                 }
             }
 
-            FirstPoint = new MutablePoint(rightX, rightY);
-            LastPoint = new MutablePoint(topX, topY);
-            RootPoint = new MutablePoint(topX, rightY);
+            this.FirstPoint = new MutablePoint(rightX, rightY);
+            this.LastPoint = new MutablePoint(topX, topY);
+            this.RootPoint = new MutablePoint(topX, rightY);
         }
 
         //[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -78,11 +78,11 @@
         //[MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal override void ProcessPoint(ref MutablePoint point)
         {
-            CurrentNode = Root;
+            this.CurrentNode = this.Root;
             AvlNode<MutablePoint> currentPrevious = null;
             AvlNode<MutablePoint> currentNext = null;
 
-            while (CurrentNode != null)
+            while (this.CurrentNode != null)
             {
                 //if (CanQuickReject(point, CurrentNode.Item))
                 //{
@@ -90,52 +90,52 @@
                 //}
 
                 var insertionSide = Side.Unknown;
-                if (point.X > CurrentNode.Item.X)
+                if (point.X > this.CurrentNode.Item.X)
                 {
-                    if (CurrentNode.Left != null)
+                    if (this.CurrentNode.Left != null)
                     {
-                        CurrentNode = CurrentNode.Left;
+                        this.CurrentNode = this.CurrentNode.Left;
                         continue;
                     }
 
-                    currentPrevious = CurrentNode.GetPreviousNode();
+                    currentPrevious = this.CurrentNode.GetPreviousNode();
                     if (CanQuickReject(ref point, ref currentPrevious.Item))
                     {
                         return;
                     }
 
-                    if (!IsPointToTheRightOfOthers(currentPrevious.Item, CurrentNode.Item, point))
+                    if (!this.IsPointToTheRightOfOthers(currentPrevious.Item, this.CurrentNode.Item, point))
                     {
                         return;
                     }
 
-                    if (CurrentNode.Item == point) // Ensure to have no duplicate
+                    if (this.CurrentNode.Item == point) // Ensure to have no duplicate
                     {
                         return;
                     }
 
                     insertionSide = Side.Left;
                 }
-                else if (point.X < CurrentNode.Item.X)
+                else if (point.X < this.CurrentNode.Item.X)
                 {
-                    if (CurrentNode.Right != null)
+                    if (this.CurrentNode.Right != null)
                     {
-                        CurrentNode = CurrentNode.Right;
+                        this.CurrentNode = this.CurrentNode.Right;
                         continue;
                     }
 
-                    currentNext = CurrentNode.GetNextNode();
+                    currentNext = this.CurrentNode.GetNextNode();
                     if (CanQuickReject(ref point, ref currentNext.Item))
                     {
                         return;
                     }
 
-                    if (!IsPointToTheRightOfOthers(CurrentNode.Item, currentNext.Item, point))
+                    if (!this.IsPointToTheRightOfOthers(this.CurrentNode.Item, currentNext.Item, point))
                     {
                         return;
                     }
 
-                    if (CurrentNode.Item == point) // Ensure to have no duplicate
+                    if (this.CurrentNode.Item == point) // Ensure to have no duplicate
                     {
                         return;
                     }
@@ -144,15 +144,15 @@
                 }
                 else
                 {
-                    if (point.Y <= CurrentNode.Item.Y)
+                    if (point.Y <= this.CurrentNode.Item.Y)
                     {
                         return; // invalid point
                     }
 
                     // Replace CurrentNode point with point
-                    CurrentNode.Item = point;
+                    this.CurrentNode.Item = point;
 
-                    InvalidateNeighbors(CurrentNode.GetPreviousNode(), CurrentNode, CurrentNode.GetNextNode());
+                    this.InvalidateNeighbors(this.CurrentNode.GetPreviousNode(), this.CurrentNode, this.CurrentNode.GetNextNode());
                     return;
                 }
 
@@ -161,37 +161,37 @@
                 // Try to optimize and verify if can replace a node instead insertion to minimize tree balancing
                 if (insertionSide == Side.Right)
                 {
-                    currentPrevious = CurrentNode.GetPreviousNode();
-                    if (currentPrevious != null && !IsPointToTheRightOfOthers(currentPrevious.Item, point, CurrentNode.Item))
+                    currentPrevious = this.CurrentNode.GetPreviousNode();
+                    if (currentPrevious != null && !this.IsPointToTheRightOfOthers(currentPrevious.Item, point, this.CurrentNode.Item))
                     {
-                        CurrentNode.Item = point;
-                        InvalidateNeighbors(currentPrevious, CurrentNode, currentNext);
+                        this.CurrentNode.Item = point;
+                        this.InvalidateNeighbors(currentPrevious, this.CurrentNode, currentNext);
                         return;
                     }
 
                     var nextNext = currentNext.GetNextNode();
-                    if (nextNext != null && !IsPointToTheRightOfOthers(point, nextNext.Item, currentNext.Item))
+                    if (nextNext != null && !this.IsPointToTheRightOfOthers(point, nextNext.Item, currentNext.Item))
                     {
                         currentNext.Item = point;
-                        InvalidateNeighbors(null, currentNext, nextNext);
+                        this.InvalidateNeighbors(null, currentNext, nextNext);
                         return;
                     }
                 }
                 else // Left
                 {
-                    currentNext = CurrentNode.GetNextNode();
-                    if (currentNext != null && !IsPointToTheRightOfOthers(point, currentNext.Item, CurrentNode.Item))
+                    currentNext = this.CurrentNode.GetNextNode();
+                    if (currentNext != null && !this.IsPointToTheRightOfOthers(point, currentNext.Item, this.CurrentNode.Item))
                     {
-                        CurrentNode.Item = point;
-                        InvalidateNeighbors(currentPrevious, CurrentNode, currentNext);
+                        this.CurrentNode.Item = point;
+                        this.InvalidateNeighbors(currentPrevious, this.CurrentNode, currentNext);
                         return;
                     }
 
                     var previousPrevious = currentPrevious.GetPreviousNode();
-                    if (previousPrevious != null && !IsPointToTheRightOfOthers(previousPrevious.Item, point, currentPrevious.Item))
+                    if (previousPrevious != null && !this.IsPointToTheRightOfOthers(previousPrevious.Item, point, currentPrevious.Item))
                     {
                         currentPrevious.Item = point;
-                        InvalidateNeighbors(previousPrevious, currentPrevious, null);
+                        this.InvalidateNeighbors(previousPrevious, currentPrevious, null);
                         return;
                     }
                 }
@@ -200,16 +200,16 @@
                 AvlNode<MutablePoint> newNode = new AvlNode<MutablePoint>();
                 if (insertionSide == Side.Right)
                 {
-                    newNode.Parent = CurrentNode;
+                    newNode.Parent = this.CurrentNode;
                     newNode.Item = point;
-                    CurrentNode.Right = newNode;
+                    this.CurrentNode.Right = newNode;
                     this.AddBalance(newNode.Parent, -1);
                 }
                 else // Left
                 {
-                    newNode.Parent = CurrentNode;
+                    newNode.Parent = this.CurrentNode;
                     newNode.Item = point;
-                    CurrentNode.Left = newNode;
+                    this.CurrentNode.Left = newNode;
                     this.AddBalance(newNode.Parent, 1);
                 }
             }

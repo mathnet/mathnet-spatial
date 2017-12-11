@@ -5,7 +5,7 @@
 
     internal class QComparer : IComparer<MutablePoint>
     {
-        private Func<MutablePoint, MutablePoint, int> comparer;
+        private readonly Func<MutablePoint, MutablePoint, int> comparer;
 
         public QComparer(Func<MutablePoint, MutablePoint, int> comparer)
         {

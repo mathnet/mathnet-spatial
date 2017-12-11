@@ -3,9 +3,6 @@
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.Runtime.CompilerServices;
-    using System.Text;
     using System.Threading;
 
     /// <summary>
@@ -14,9 +11,10 @@
     /// </summary>
     internal class AvlTreeSet<T> : IEnumerable<T>, IEnumerable, ICollection<T>, ICollection// ISet<T>
     {
-        private IComparer<T> comparer;
+        private readonly IComparer<T> comparer;
         private AvlNode<T> root;
-        protected int count = 0;
+        private object syncRoot;
+        private int count = 0;
 
         public AvlTreeSet(IComparer<T> comparer)
         {
@@ -27,19 +25,20 @@
         {
         }
 
-        public AvlNode<T> Root => root;
+        public AvlNode<T> Root => this.root;
 
-        public int Count => count;
-
-        private object _syncRoot;
+        public int Count => this.count;
 
         public object SyncRoot
         {
             get
             {
-                if (this._syncRoot == null)
-                    Interlocked.CompareExchange(ref this._syncRoot, new object(), (object)null);
-                return this._syncRoot;
+                if (this.syncRoot == null)
+                {
+                    Interlocked.CompareExchange(ref this.syncRoot, new object(), (object)null);
+                }
+
+                return this.syncRoot;
             }
         }
 
@@ -54,11 +53,11 @@
 
         protected AvlNode<T> GetNode(T item)
         {
-            AvlNode<T> node = root;
+            AvlNode<T> node = this.root;
 
             while (node != null)
             {
-                int compareResult = comparer.Compare(item, node.Item);
+                int compareResult = this.comparer.Compare(item, node.Item);
                 if (compareResult < 0)
                 {
                     node = node.Left;
@@ -78,7 +77,7 @@
 
         public bool Contains(T item)
         {
-            AvlNode<T> node = root;
+            AvlNode<T> node = this.root;
 
             while (node != null)
             {
@@ -102,11 +101,11 @@
 
         public virtual bool Add(T item)
         {
-            AvlNode<T> node = root;
+            AvlNode<T> node = this.root;
 
             while (node != null)
             {
-                int compare = comparer.Compare(item, node.Item);
+                int compare = this.comparer.Compare(item, node.Item);
 
                 if (compare < 0)
                 {
@@ -115,7 +114,7 @@
                     if (left == null)
                     {
                         node.Left = new AvlNode<T> { Item = item, Parent = node };
-                        AddBalance(node, 1);
+                        this.AddBalance(node, 1);
                         return true;
                     }
                     else
@@ -130,7 +129,7 @@
                     if (right == null)
                     {
                         node.Right = new AvlNode<T> { Item = item, Parent = node };
-                        AddBalance(node, -1);
+                        this.AddBalance(node, -1);
                         return true;
                     }
                     else
@@ -158,7 +157,7 @@
         //[MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected void AddBalance(AvlNode<T> node, int balance)
         {
-            count++;
+            this.count++;
 
             while (node != null)
             {
@@ -173,11 +172,11 @@
                 {
                     if (node.Left.Balance == 1)
                     {
-                        RotateRight(node);
+                        this.RotateRight(node);
                     }
                     else
                     {
-                        RotateLeftRight(node);
+                        this.RotateLeftRight(node);
                     }
 
                     break;
@@ -187,11 +186,11 @@
                 {
                     if (node.Right.Balance == -1)
                     {
-                        RotateLeft(node);
+                        this.RotateLeft(node);
                     }
                     else
                     {
-                        RotateRightLeft(node);
+                        this.RotateRightLeft(node);
                     }
 
                     break;
@@ -224,9 +223,9 @@
                 rightLeft.Parent = node;
             }
 
-            if (node == root)
+            if (node == this.root)
             {
-                root = right;
+                this.root = right;
             }
             else if (parent.Right == node)
             {
@@ -259,9 +258,9 @@
                 leftRight.Parent = node;
             }
 
-            if (node == root)
+            if (node == this.root)
             {
-                root = left;
+                this.root = left;
             }
             else if (parent.Left == node)
             {
@@ -304,9 +303,9 @@
                 leftRightLeft.Parent = left;
             }
 
-            if (node == root)
+            if (node == this.root)
             {
-                root = leftRight;
+                this.root = leftRight;
             }
             else if (parent.Left == node)
             {
@@ -364,9 +363,9 @@
                 rightLeftRight.Parent = right;
             }
 
-            if (node == root)
+            if (node == this.root)
             {
-                root = rightLeft;
+                this.root = rightLeft;
             }
             else if (parent.Right == node)
             {
@@ -400,7 +399,7 @@
 
         public virtual bool Remove(T item)
         {
-            AvlNode<T> node = root;
+            AvlNode<T> node = this.root;
 
             while (node != null)
             {
@@ -433,9 +432,9 @@
             {
                 if (right == null)
                 {
-                    if (node == root)
+                    if (node == this.root)
                     {
-                        root = null;
+                        this.root = null;
                     }
                     else
                     {
@@ -443,13 +442,13 @@
                         {
                             node.Parent.Left = null;
 
-                            RemoveBalance(node.Parent, -1);
+                            this.RemoveBalance(node.Parent, -1);
                         }
                         else if (node.Parent.Right == node)
                         {
                             node.Parent.Right = null;
 
-                            RemoveBalance(node.Parent, 1);
+                            this.RemoveBalance(node.Parent, 1);
                         }
                     }
                 }
@@ -457,14 +456,14 @@
                 {
                     Replace(node, right);
 
-                    RemoveBalance(node, 0);
+                    this.RemoveBalance(node, 0);
                 }
             }
             else if (right == null)
             {
                 Replace(node, left);
 
-                RemoveBalance(node, 0);
+                this.RemoveBalance(node, 0);
             }
             else
             {
@@ -480,9 +479,9 @@
 
                     left.Parent = successor;
 
-                    if (node == root)
+                    if (node == this.root)
                     {
-                        root = successor;
+                        this.root = successor;
                     }
                     else
                     {
@@ -496,7 +495,7 @@
                         }
                     }
 
-                    RemoveBalance(successor, 1);
+                    this.RemoveBalance(successor, 1);
                 }
                 else
                 {
@@ -531,9 +530,9 @@
 
                     left.Parent = successor;
 
-                    if (node == root)
+                    if (node == this.root)
                     {
-                        root = successor;
+                        this.root = successor;
                     }
                     else
                     {
@@ -547,7 +546,7 @@
                         }
                     }
 
-                    RemoveBalance(successorParent, -1);
+                    this.RemoveBalance(successorParent, -1);
                 }
             }
         }
@@ -567,7 +566,7 @@
                 {
                     if (node.Left.Balance >= 0)
                     {
-                        node = RotateRight(node);
+                        node = this.RotateRight(node);
 
                         if (node.Balance == -1)
                         {
@@ -583,7 +582,7 @@
                 {
                     if (node.Right.Balance <= 0)
                     {
-                        node = RotateLeft(node);
+                        node = this.RotateLeft(node);
 
                         if (node.Balance == 1)
                         {
@@ -592,7 +591,7 @@
                     }
                     else
                     {
-                        node = RotateRightLeft(node);
+                        node = this.RotateRightLeft(node);
                     }
                 }
                 else if (balance != 0)
@@ -634,12 +633,12 @@
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return GetEnumerator();
+            return this.GetEnumerator();
         }
 
         public T GetFirstItem()
         {
-            AvlNode<T> node = GetFirstNode();
+            AvlNode<T> node = this.GetFirstNode();
             if (node != null)
             {
                 return node.Item;
@@ -650,9 +649,9 @@
 
         public AvlNode<T> GetFirstNode()
         {
-            if (Root != null)
+            if (this.Root != null)
             {
-                AvlNode<T> current = Root;
+                AvlNode<T> current = this.Root;
                 while (current.Left != null)
                 {
                     current = current.Left;
@@ -666,7 +665,7 @@
 
         public T GetLastItem()
         {
-            AvlNode<T> node = GetLastNode();
+            AvlNode<T> node = this.GetLastNode();
             if (node != null)
             {
                 return node.Item;
@@ -703,7 +702,7 @@
 
         void ICollection<T>.Add(T item)
         {
-            Add(item);
+            this.Add(item);
         }
 
         public void Clear()

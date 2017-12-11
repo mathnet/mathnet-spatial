@@ -17,28 +17,28 @@ namespace MathNet.Spatial.Internals
 
             internal Limit(MutablePoint pt)
             {
-                Q1Top = pt;
-                Q2Top = pt;
-                Q2Left = pt;
-                Q3Left = pt;
-                Q3Bottom = pt;
-                Q4Bottom = pt;
-                Q4Right = pt;
-                Q1Right = pt;
+                this.Q1Top = pt;
+                this.Q2Top = pt;
+                this.Q2Left = pt;
+                this.Q3Left = pt;
+                this.Q3Bottom = pt;
+                this.Q4Bottom = pt;
+                this.Q4Right = pt;
+                this.Q1Right = pt;
             }
 
             internal Limit Copy()
             {
                 Limit limit = new Limit
                 {
-                    Q1Top = Q1Top,
-                    Q2Top = Q2Top,
-                    Q2Left = Q2Left,
-                    Q3Left = Q3Left,
-                    Q3Bottom = Q3Bottom,
-                    Q4Bottom = Q4Bottom,
-                    Q4Right = Q4Right,
-                    Q1Right = Q1Right
+                    Q1Top = this.Q1Top,
+                    Q2Top = this.Q2Top,
+                    Q2Left = this.Q2Left,
+                    Q3Left = this.Q3Left,
+                    Q3Bottom = this.Q3Bottom,
+                    Q4Bottom = this.Q4Bottom,
+                    Q4Right = this.Q4Right,
+                    Q1Right = this.Q1Right
                 };
 
                 return limit;
@@ -68,7 +68,7 @@ namespace MathNet.Spatial.Internals
                 l.Add(p);
             }
 
-            Init(l.ToArray(), shouldCloseTheGraph);
+            this.Init(l.ToArray(), shouldCloseTheGraph);
         }
 
         //[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -79,33 +79,33 @@ namespace MathNet.Spatial.Internals
 
         private void Init(MutablePoint[] listOfPoint, bool shouldCloseTheGraph)
         {
-            _listOfPoint = listOfPoint;
-            _shouldCloseTheGraph = shouldCloseTheGraph;
+            this._listOfPoint = listOfPoint;
+            this._shouldCloseTheGraph = shouldCloseTheGraph;
 
-            _q1 = new QuadrantSpecific1(this._listOfPoint, (a, b) => (a.X > b.X) ? -1 : (a.X < b.X) ? 1 : 0);
-            _q2 = new QuadrantSpecific2(this._listOfPoint, (a, b) => (a.X > b.X) ? -1 : (a.X < b.X) ? 1 : 0);
-            _q3 = new QuadrantSpecific3(this._listOfPoint, (a, b) => (a.X < b.X) ? -1 : (a.X > b.X) ? 1 : 0);
-            _q4 = new QuadrantSpecific4(this._listOfPoint, (a, b) => (a.X < b.X) ? -1 : (a.X > b.X) ? 1 : 0);
+            this._q1 = new QuadrantSpecific1(this._listOfPoint, (a, b) => (a.X > b.X) ? -1 : (a.X < b.X) ? 1 : 0);
+            this._q2 = new QuadrantSpecific2(this._listOfPoint, (a, b) => (a.X > b.X) ? -1 : (a.X < b.X) ? 1 : 0);
+            this._q3 = new QuadrantSpecific3(this._listOfPoint, (a, b) => (a.X < b.X) ? -1 : (a.X > b.X) ? 1 : 0);
+            this._q4 = new QuadrantSpecific4(this._listOfPoint, (a, b) => (a.X < b.X) ? -1 : (a.X > b.X) ? 1 : 0);
         }
 
         private bool IsQuadrantAreDisjoint()
         {
-            if (IsPointToTheRightOfOthers(_q1.FirstPoint, _q1.LastPoint, _q3.RootPoint))
+            if (IsPointToTheRightOfOthers(this._q1.FirstPoint, this._q1.LastPoint, this._q3.RootPoint))
             {
                 return false;
             }
 
-            if (IsPointToTheRightOfOthers(_q2.FirstPoint, _q2.LastPoint, _q4.RootPoint))
+            if (IsPointToTheRightOfOthers(this._q2.FirstPoint, this._q2.LastPoint, this._q4.RootPoint))
             {
                 return false;
             }
 
-            if (IsPointToTheRightOfOthers(_q3.FirstPoint, _q3.LastPoint, _q1.RootPoint))
+            if (IsPointToTheRightOfOthers(this._q3.FirstPoint, this._q3.LastPoint, this._q1.RootPoint))
             {
                 return false;
             }
 
-            if (IsPointToTheRightOfOthers(_q4.FirstPoint, _q4.LastPoint, _q2.RootPoint))
+            if (IsPointToTheRightOfOthers(this._q4.FirstPoint, this._q4.LastPoint, this._q2.RootPoint))
             {
                 return false;
             }
@@ -124,20 +124,20 @@ namespace MathNet.Spatial.Internals
                 return;
             }
 
-            SetQuadrantLimitsOneThread();
+            this.SetQuadrantLimitsOneThread();
 
-            _q1.Prepare();
-            _q2.Prepare();
-            _q3.Prepare();
-            _q4.Prepare();
+            this._q1.Prepare();
+            this._q2.Prepare();
+            this._q3.Prepare();
+            this._q4.Prepare();
 
-            MutablePoint q1Root = _q1.RootPoint;
-            MutablePoint q2Root = _q2.RootPoint;
-            MutablePoint q3Root = _q3.RootPoint;
-            MutablePoint q4Root = _q4.RootPoint;
+            MutablePoint q1Root = this._q1.RootPoint;
+            MutablePoint q2Root = this._q2.RootPoint;
+            MutablePoint q3Root = this._q3.RootPoint;
+            MutablePoint q4Root = this._q4.RootPoint;
 
             // Main Loop to extract ConvexHullPoints
-            MutablePoint[] points = _listOfPoint;
+            MutablePoint[] points = this._listOfPoint;
             int index = 0;
             int pointCount = points.Length;
 
@@ -145,7 +145,7 @@ namespace MathNet.Spatial.Internals
             {
                 MutablePoint point;
 
-                if (IsQuadrantAreDisjoint())
+                if (this.IsQuadrantAreDisjoint())
                 {
                     Q1First:
                     if (index < pointCount)
@@ -154,25 +154,25 @@ namespace MathNet.Spatial.Internals
 
                         if (point.X > q1Root.X && point.Y > q1Root.Y)
                         {
-                            _q1.ProcessPoint(ref point);
+                            this._q1.ProcessPoint(ref point);
                             goto Q1First;
                         }
 
                         if (point.X < q2Root.X && point.Y > q2Root.Y)
                         {
-                            _q2.ProcessPoint(ref point);
+                            this._q2.ProcessPoint(ref point);
                             goto Q2First;
                         }
 
                         if (point.X < q3Root.X && point.Y < q3Root.Y)
                         {
-                            _q3.ProcessPoint(ref point);
+                            this._q3.ProcessPoint(ref point);
                             goto Q3First;
                         }
 
                         if (point.X > q4Root.X && point.Y < q4Root.Y)
                         {
-                            _q4.ProcessPoint(ref point);
+                            this._q4.ProcessPoint(ref point);
                             goto Q4First;
                         }
 
@@ -190,25 +190,25 @@ namespace MathNet.Spatial.Internals
 
                         if (point.X < q2Root.X && point.Y > q2Root.Y)
                         {
-                            _q2.ProcessPoint(ref point);
+                            this._q2.ProcessPoint(ref point);
                             goto Q2First;
                         }
 
                         if (point.X < q3Root.X && point.Y < q3Root.Y)
                         {
-                            _q3.ProcessPoint(ref point);
+                            this._q3.ProcessPoint(ref point);
                             goto Q3First;
                         }
 
                         if (point.X > q4Root.X && point.Y < q4Root.Y)
                         {
-                            _q4.ProcessPoint(ref point);
+                            this._q4.ProcessPoint(ref point);
                             goto Q4First;
                         }
 
                         if (point.X > q1Root.X && point.Y > q1Root.Y)
                         {
-                            _q1.ProcessPoint(ref point);
+                            this._q1.ProcessPoint(ref point);
                             goto Q1First;
                         }
 
@@ -226,25 +226,25 @@ namespace MathNet.Spatial.Internals
 
                         if (point.X < q3Root.X && point.Y < q3Root.Y)
                         {
-                            _q3.ProcessPoint(ref point);
+                            this._q3.ProcessPoint(ref point);
                             goto Q3First;
                         }
 
                         if (point.X > q4Root.X && point.Y < q4Root.Y)
                         {
-                            _q4.ProcessPoint(ref point);
+                            this._q4.ProcessPoint(ref point);
                             goto Q4First;
                         }
 
                         if (point.X > q1Root.X && point.Y > q1Root.Y)
                         {
-                            _q1.ProcessPoint(ref point);
+                            this._q1.ProcessPoint(ref point);
                             goto Q1First;
                         }
 
                         if (point.X < q2Root.X && point.Y > q2Root.Y)
                         {
-                            _q2.ProcessPoint(ref point);
+                            this._q2.ProcessPoint(ref point);
                             goto Q2First;
                         }
 
@@ -262,25 +262,25 @@ namespace MathNet.Spatial.Internals
 
                         if (point.X > q4Root.X && point.Y < q4Root.Y)
                         {
-                            _q4.ProcessPoint(ref point);
+                            this._q4.ProcessPoint(ref point);
                             goto Q4First;
                         }
 
                         if (point.X > q1Root.X && point.Y > q1Root.Y)
                         {
-                            _q1.ProcessPoint(ref point);
+                            this._q1.ProcessPoint(ref point);
                             goto Q1First;
                         }
 
                         if (point.X < q2Root.X && point.Y > q2Root.Y)
                         {
-                            _q2.ProcessPoint(ref point);
+                            this._q2.ProcessPoint(ref point);
                             goto Q2First;
                         }
 
                         if (point.X < q3Root.X && point.Y < q3Root.Y)
                         {
-                            _q3.ProcessPoint(ref point);
+                            this._q3.ProcessPoint(ref point);
                             goto Q3First;
                         }
 
@@ -300,17 +300,17 @@ namespace MathNet.Spatial.Internals
 
                         if (point.X > q1Root.X && point.Y > q1Root.Y)
                         {
-                            if (IsPointToTheRightOfOthers(_q1.FirstPoint, _q1.LastPoint, point))
+                            if (IsPointToTheRightOfOthers(this._q1.FirstPoint, this._q1.LastPoint, point))
                             {
-                                _q1.ProcessPoint(ref point);
+                                this._q1.ProcessPoint(ref point);
                                 goto Q1First;
                             }
 
                             if (point.X < q3Root.X && point.Y < q3Root.Y)
                             {
-                                if (IsPointToTheRightOfOthers(_q3.FirstPoint, _q3.LastPoint, point))
+                                if (IsPointToTheRightOfOthers(this._q3.FirstPoint, this._q3.LastPoint, point))
                                 {
-                                    _q3.ProcessPoint(ref point);
+                                    this._q3.ProcessPoint(ref point);
                                 }
 
                                 goto Q3First;
@@ -321,17 +321,17 @@ namespace MathNet.Spatial.Internals
 
                         if (point.X < q2Root.X && point.Y > q2Root.Y)
                         {
-                            if (IsPointToTheRightOfOthers(_q2.FirstPoint, _q2.LastPoint, point))
+                            if (IsPointToTheRightOfOthers(this._q2.FirstPoint, this._q2.LastPoint, point))
                             {
-                                _q2.ProcessPoint(ref point);
+                                this._q2.ProcessPoint(ref point);
                                 goto Q2First;
                             }
 
                             if (point.X > q4Root.X && point.Y < q4Root.Y)
                             {
-                                if (IsPointToTheRightOfOthers(_q4.FirstPoint, _q4.LastPoint, point))
+                                if (IsPointToTheRightOfOthers(this._q4.FirstPoint, this._q4.LastPoint, point))
                                 {
-                                    _q4.ProcessPoint(ref point);
+                                    this._q4.ProcessPoint(ref point);
                                 }
 
                                 goto Q4First;
@@ -342,18 +342,18 @@ namespace MathNet.Spatial.Internals
 
                         if (point.X < q3Root.X && point.Y < q3Root.Y)
                         {
-                            if (IsPointToTheRightOfOthers(_q3.FirstPoint, _q3.LastPoint, point))
+                            if (IsPointToTheRightOfOthers(this._q3.FirstPoint, this._q3.LastPoint, point))
                             {
-                                _q3.ProcessPoint(ref point);
+                                this._q3.ProcessPoint(ref point);
                             }
 
                             goto Q3First;
                         }
                         else if (point.X > q4Root.X && point.Y < q4Root.Y)
                         {
-                            if (IsPointToTheRightOfOthers(_q4.FirstPoint, _q4.LastPoint, point))
+                            if (IsPointToTheRightOfOthers(this._q4.FirstPoint, this._q4.LastPoint, point))
                             {
-                                _q4.ProcessPoint(ref point);
+                                this._q4.ProcessPoint(ref point);
                             }
 
                             goto Q4First;
@@ -373,17 +373,17 @@ namespace MathNet.Spatial.Internals
 
                         if (point.X < q2Root.X && point.Y > q2Root.Y)
                         {
-                            if (IsPointToTheRightOfOthers(_q2.FirstPoint, _q2.LastPoint, point))
+                            if (IsPointToTheRightOfOthers(this._q2.FirstPoint, this._q2.LastPoint, point))
                             {
-                                _q2.ProcessPoint(ref point);
+                                this._q2.ProcessPoint(ref point);
                                 goto Q2First;
                             }
 
                             if (point.X > q4Root.X && point.Y < q4Root.Y)
                             {
-                                if (IsPointToTheRightOfOthers(_q4.FirstPoint, _q4.LastPoint, point))
+                                if (IsPointToTheRightOfOthers(this._q4.FirstPoint, this._q4.LastPoint, point))
                                 {
-                                    _q4.ProcessPoint(ref point);
+                                    this._q4.ProcessPoint(ref point);
                                 }
 
                                 goto Q4First;
@@ -394,17 +394,17 @@ namespace MathNet.Spatial.Internals
 
                         if (point.X < q3Root.X && point.Y < q3Root.Y)
                         {
-                            if (IsPointToTheRightOfOthers(_q3.FirstPoint, _q3.LastPoint, point))
+                            if (IsPointToTheRightOfOthers(this._q3.FirstPoint, this._q3.LastPoint, point))
                             {
-                                _q3.ProcessPoint(ref point);
+                                this._q3.ProcessPoint(ref point);
                                 goto Q3First;
                             }
 
                             if (point.X > q1Root.X && point.Y > q1Root.Y)
                             {
-                                if (IsPointToTheRightOfOthers(_q1.FirstPoint, _q1.LastPoint, point))
+                                if (IsPointToTheRightOfOthers(this._q1.FirstPoint, this._q1.LastPoint, point))
                                 {
-                                    _q1.ProcessPoint(ref point);
+                                    this._q1.ProcessPoint(ref point);
                                 }
 
                                 goto Q1First;
@@ -415,18 +415,18 @@ namespace MathNet.Spatial.Internals
 
                         if (point.X > q4Root.X && point.Y < q4Root.Y)
                         {
-                            if (IsPointToTheRightOfOthers(_q4.FirstPoint, _q4.LastPoint, point))
+                            if (IsPointToTheRightOfOthers(this._q4.FirstPoint, this._q4.LastPoint, point))
                             {
-                                _q4.ProcessPoint(ref point);
+                                this._q4.ProcessPoint(ref point);
                             }
 
                             goto Q4First;
                         }
                         else if (point.X > q1Root.X && point.Y > q1Root.Y)
                         {
-                            if (IsPointToTheRightOfOthers(_q1.FirstPoint, _q1.LastPoint, point))
+                            if (IsPointToTheRightOfOthers(this._q1.FirstPoint, this._q1.LastPoint, point))
                             {
-                                _q1.ProcessPoint(ref point);
+                                this._q1.ProcessPoint(ref point);
                             }
 
                             goto Q1First;
@@ -446,17 +446,17 @@ namespace MathNet.Spatial.Internals
 
                         if (point.X < q3Root.X && point.Y < q3Root.Y)
                         {
-                            if (IsPointToTheRightOfOthers(_q3.FirstPoint, _q3.LastPoint, point))
+                            if (IsPointToTheRightOfOthers(this._q3.FirstPoint, this._q3.LastPoint, point))
                             {
-                                _q3.ProcessPoint(ref point);
+                                this._q3.ProcessPoint(ref point);
                                 goto Q3First;
                             }
 
                             if (point.X > q1Root.X && point.Y > q1Root.Y)
                             {
-                                if (IsPointToTheRightOfOthers(_q1.FirstPoint, _q1.LastPoint, point))
+                                if (IsPointToTheRightOfOthers(this._q1.FirstPoint, this._q1.LastPoint, point))
                                 {
-                                    _q1.ProcessPoint(ref point);
+                                    this._q1.ProcessPoint(ref point);
                                 }
 
                                 goto Q1First;
@@ -467,17 +467,17 @@ namespace MathNet.Spatial.Internals
 
                         if (point.X > q4Root.X && point.Y < q4Root.Y)
                         {
-                            if (IsPointToTheRightOfOthers(_q4.FirstPoint, _q4.LastPoint, point))
+                            if (IsPointToTheRightOfOthers(this._q4.FirstPoint, this._q4.LastPoint, point))
                             {
-                                _q4.ProcessPoint(ref point);
+                                this._q4.ProcessPoint(ref point);
                                 goto Q4First;
                             }
 
                             if (point.X < q2Root.X && point.Y > q2Root.Y)
                             {
-                                if (IsPointToTheRightOfOthers(_q2.FirstPoint, _q2.LastPoint, point))
+                                if (IsPointToTheRightOfOthers(this._q2.FirstPoint, this._q2.LastPoint, point))
                                 {
-                                    _q2.ProcessPoint(ref point);
+                                    this._q2.ProcessPoint(ref point);
                                 }
 
                                 goto Q2First;
@@ -488,17 +488,17 @@ namespace MathNet.Spatial.Internals
 
                         if (point.X > q1Root.X && point.Y > q1Root.Y)
                         {
-                            if (IsPointToTheRightOfOthers(_q1.FirstPoint, _q1.LastPoint, point))
+                            if (IsPointToTheRightOfOthers(this._q1.FirstPoint, this._q1.LastPoint, point))
                             {
-                                _q1.ProcessPoint(ref point);
+                                this._q1.ProcessPoint(ref point);
                                 goto Q1First;
                             }
                         }
                         else if (point.X < q2Root.X && point.Y > q2Root.Y)
                         {
-                            if (IsPointToTheRightOfOthers(_q2.FirstPoint, _q2.LastPoint, point))
+                            if (IsPointToTheRightOfOthers(this._q2.FirstPoint, this._q2.LastPoint, point))
                             {
-                                _q2.ProcessPoint(ref point);
+                                this._q2.ProcessPoint(ref point);
                                 goto Q2First;
                             }
                         }
@@ -517,17 +517,17 @@ namespace MathNet.Spatial.Internals
 
                         if (point.X > q4Root.X && point.Y < q4Root.Y)
                         {
-                            if (IsPointToTheRightOfOthers(_q4.FirstPoint, _q4.LastPoint, point))
+                            if (IsPointToTheRightOfOthers(this._q4.FirstPoint, this._q4.LastPoint, point))
                             {
-                                _q4.ProcessPoint(ref point);
+                                this._q4.ProcessPoint(ref point);
                                 goto Q4First;
                             }
 
                             if (point.X < q2Root.X && point.Y > q2Root.Y)
                             {
-                                if (IsPointToTheRightOfOthers(_q2.FirstPoint, _q2.LastPoint, point))
+                                if (IsPointToTheRightOfOthers(this._q2.FirstPoint, this._q2.LastPoint, point))
                                 {
-                                    _q2.ProcessPoint(ref point);
+                                    this._q2.ProcessPoint(ref point);
                                 }
 
                                 goto Q2First;
@@ -538,17 +538,17 @@ namespace MathNet.Spatial.Internals
 
                         if (point.X > q1Root.X && point.Y > q1Root.Y)
                         {
-                            if (IsPointToTheRightOfOthers(_q1.FirstPoint, _q1.LastPoint, point))
+                            if (IsPointToTheRightOfOthers(this._q1.FirstPoint, this._q1.LastPoint, point))
                             {
-                                _q1.ProcessPoint(ref point);
+                                this._q1.ProcessPoint(ref point);
                                 goto Q1First;
                             }
 
                             if (point.X < q3Root.X && point.Y < q3Root.Y)
                             {
-                                if (IsPointToTheRightOfOthers(_q3.FirstPoint, _q3.LastPoint, point))
+                                if (IsPointToTheRightOfOthers(this._q3.FirstPoint, this._q3.LastPoint, point))
                                 {
-                                    _q3.ProcessPoint(ref point);
+                                    this._q3.ProcessPoint(ref point);
                                 }
 
                                 goto Q3First;
@@ -559,18 +559,18 @@ namespace MathNet.Spatial.Internals
 
                         if (point.X < q3Root.X && point.Y < q3Root.Y)
                         {
-                            if (IsPointToTheRightOfOthers(_q3.FirstPoint, _q3.LastPoint, point))
+                            if (IsPointToTheRightOfOthers(this._q3.FirstPoint, this._q3.LastPoint, point))
                             {
-                                _q3.ProcessPoint(ref point);
+                                this._q3.ProcessPoint(ref point);
                                 goto Q3First;
                             }
                         }
 
                         if (point.X < q2Root.X && point.Y > q2Root.Y)
                         {
-                            if (IsPointToTheRightOfOthers(_q2.FirstPoint, _q2.LastPoint, point))
+                            if (IsPointToTheRightOfOthers(this._q2.FirstPoint, this._q2.LastPoint, point))
                             {
-                                _q2.ProcessPoint(ref point);
+                                this._q2.ProcessPoint(ref point);
                                 goto Q2First;
                             }
                         }
@@ -600,7 +600,7 @@ namespace MathNet.Spatial.Internals
             double top, rightTop, rightBottom, bottom, leftTop, leftBottom;
             top = rightTop = rightBottom = bottom = leftTop = leftBottom = ptFirst.Y;
 
-            foreach (MutablePoint pt in _listOfPoint)
+            foreach (MutablePoint pt in this._listOfPoint)
             {
                 if (pt.X >= right)
                 {
@@ -1140,125 +1140,125 @@ namespace MathNet.Spatial.Internals
 
         private void AggregateLimits(Limit limit)
         {
-            lock (_findLimitFinalLock)
+            lock (this._findLimitFinalLock)
             {
-                if (limit.Q1Right.X >= _limit.Q1Right.X)
+                if (limit.Q1Right.X >= this._limit.Q1Right.X)
                 {
-                    if (limit.Q1Right.X == _limit.Q1Right.X)
+                    if (limit.Q1Right.X == this._limit.Q1Right.X)
                     {
-                        if (limit.Q1Right.Y > _limit.Q1Right.Y)
+                        if (limit.Q1Right.Y > this._limit.Q1Right.Y)
                         {
-                            _limit.Q1Right = limit.Q1Right;
+                            this._limit.Q1Right = limit.Q1Right;
                         }
                     }
                     else
                     {
-                        _limit.Q1Right = limit.Q1Right;
+                        this._limit.Q1Right = limit.Q1Right;
                     }
                 }
 
-                if (limit.Q4Right.X > _limit.Q4Right.X)
+                if (limit.Q4Right.X > this._limit.Q4Right.X)
                 {
-                    if (limit.Q4Right.X == _limit.Q4Right.X)
+                    if (limit.Q4Right.X == this._limit.Q4Right.X)
                     {
-                        if (limit.Q4Right.Y < _limit.Q4Right.Y)
+                        if (limit.Q4Right.Y < this._limit.Q4Right.Y)
                         {
-                            _limit.Q4Right = limit.Q4Right;
+                            this._limit.Q4Right = limit.Q4Right;
                         }
                     }
                     else
                     {
-                        _limit.Q4Right = limit.Q4Right;
+                        this._limit.Q4Right = limit.Q4Right;
                     }
                 }
 
-                if (limit.Q2Left.X < _limit.Q2Left.X)
+                if (limit.Q2Left.X < this._limit.Q2Left.X)
                 {
-                    if (limit.Q2Left.X == _limit.Q2Left.X)
+                    if (limit.Q2Left.X == this._limit.Q2Left.X)
                     {
-                        if (limit.Q2Left.Y > _limit.Q2Left.Y)
+                        if (limit.Q2Left.Y > this._limit.Q2Left.Y)
                         {
-                            _limit.Q2Left = limit.Q2Left;
+                            this._limit.Q2Left = limit.Q2Left;
                         }
                     }
                     else
                     {
-                        _limit.Q2Left = limit.Q2Left;
+                        this._limit.Q2Left = limit.Q2Left;
                     }
                 }
 
-                if (limit.Q3Left.X < _limit.Q3Left.X)
+                if (limit.Q3Left.X < this._limit.Q3Left.X)
                 {
-                    if (limit.Q3Left.X == _limit.Q3Left.X)
+                    if (limit.Q3Left.X == this._limit.Q3Left.X)
                     {
-                        if (limit.Q3Left.Y > _limit.Q3Left.Y)
+                        if (limit.Q3Left.Y > this._limit.Q3Left.Y)
                         {
-                            _limit.Q3Left = limit.Q3Left;
+                            this._limit.Q3Left = limit.Q3Left;
                         }
                     }
                     else
                     {
-                        _limit.Q3Left = limit.Q3Left;
+                        this._limit.Q3Left = limit.Q3Left;
                     }
                 }
 
-                if (limit.Q1Top.Y > _limit.Q1Top.Y)
+                if (limit.Q1Top.Y > this._limit.Q1Top.Y)
                 {
-                    if (limit.Q1Top.Y == _limit.Q1Top.Y)
+                    if (limit.Q1Top.Y == this._limit.Q1Top.Y)
                     {
-                        if (limit.Q1Top.X > _limit.Q1Top.X)
+                        if (limit.Q1Top.X > this._limit.Q1Top.X)
                         {
-                            _limit.Q1Top = limit.Q1Top;
+                            this._limit.Q1Top = limit.Q1Top;
                         }
                     }
                     else
                     {
-                        _limit.Q1Top = limit.Q1Top;
+                        this._limit.Q1Top = limit.Q1Top;
                     }
                 }
 
-                if (limit.Q2Top.Y > _limit.Q2Top.Y)
+                if (limit.Q2Top.Y > this._limit.Q2Top.Y)
                 {
-                    if (limit.Q2Top.Y == _limit.Q2Top.Y)
+                    if (limit.Q2Top.Y == this._limit.Q2Top.Y)
                     {
-                        if (limit.Q2Top.X < _limit.Q2Top.X)
+                        if (limit.Q2Top.X < this._limit.Q2Top.X)
                         {
-                            _limit.Q2Top = limit.Q2Top;
+                            this._limit.Q2Top = limit.Q2Top;
                         }
                     }
                     else
                     {
-                        _limit.Q2Top = limit.Q2Top;
+                        this._limit.Q2Top = limit.Q2Top;
                     }
                 }
 
-                if (limit.Q3Bottom.Y < _limit.Q3Bottom.Y)
+                if (limit.Q3Bottom.Y < this._limit.Q3Bottom.Y)
                 {
-                    if (limit.Q3Bottom.Y == _limit.Q3Bottom.Y)
+                    if (limit.Q3Bottom.Y == this._limit.Q3Bottom.Y)
                     {
-                        if (limit.Q3Bottom.X < _limit.Q3Bottom.X)
+                        if (limit.Q3Bottom.X < this._limit.Q3Bottom.X)
                         {
-                            _limit.Q3Bottom = limit.Q3Bottom;
+                            this._limit.Q3Bottom = limit.Q3Bottom;
                         }
                     }
                     else
                     {
-                        _limit.Q3Bottom = limit.Q3Bottom;
+                        this._limit.Q3Bottom = limit.Q3Bottom;
                     }
                 }
 
-                if (limit.Q4Bottom.Y < _limit.Q4Bottom.Y)
+                if (limit.Q4Bottom.Y < this._limit.Q4Bottom.Y)
                 {
-                    if (limit.Q4Bottom.Y == _limit.Q4Bottom.Y)
+                    if (limit.Q4Bottom.Y == this._limit.Q4Bottom.Y)
                     {
-                        if (limit.Q4Bottom.X > _limit.Q4Bottom.X)
+                        if (limit.Q4Bottom.X > this._limit.Q4Bottom.X)
                         {
-                            _limit.Q4Bottom = limit.Q4Bottom;
+                            this._limit.Q4Bottom = limit.Q4Bottom;
                         }
                     }
                     else
                     {
-                        _limit.Q4Bottom = limit.Q4Bottom;
+                        this._limit.Q4Bottom = limit.Q4Bottom;
                     }
                 }
             }
@@ -1266,39 +1266,39 @@ namespace MathNet.Spatial.Internals
 
         public Point2D[] GetResultsAsArrayOfPoint()
         {
-            if (_listOfPoint == null || !_listOfPoint.Any())
+            if (this._listOfPoint == null || !this._listOfPoint.Any())
             {
                 return new Point2D[0];
             }
 
-            int countOfPoints = _q1.Count + _q2.Count + _q3.Count + _q4.Count;
+            int countOfPoints = this._q1.Count + this._q2.Count + this._q3.Count + this._q4.Count;
 
-            if (_q1.LastPoint == _q2.FirstPoint)
+            if (this._q1.LastPoint == this._q2.FirstPoint)
             {
                 countOfPoints--;
             }
 
-            if (_q2.LastPoint == _q3.FirstPoint)
+            if (this._q2.LastPoint == this._q3.FirstPoint)
             {
                 countOfPoints--;
             }
 
-            if (_q3.LastPoint == _q4.FirstPoint)
+            if (this._q3.LastPoint == this._q4.FirstPoint)
             {
                 countOfPoints--;
             }
 
-            if (_q4.LastPoint == _q1.FirstPoint)
+            if (this._q4.LastPoint == this._q1.FirstPoint)
             {
                 countOfPoints--;
             }
 
             if (countOfPoints == 0) // Case where there is only one point
             {
-                return new Point2D[] { new Point2D(_q1.FirstPoint.X, _q1.FirstPoint.Y) };
+                return new Point2D[] { new Point2D(this._q1.FirstPoint.X, this._q1.FirstPoint.Y) };
             }
 
-            if (_shouldCloseTheGraph)
+            if (this._shouldCloseTheGraph)
             {
                 countOfPoints++;
             }
@@ -1307,16 +1307,16 @@ namespace MathNet.Spatial.Internals
 
             int resultIndex = -1;
 
-            if (_q1.FirstPoint != _q4.LastPoint)
+            if (this._q1.FirstPoint != this._q4.LastPoint)
             {
-                foreach (MutablePoint pt in _q1)
+                foreach (MutablePoint pt in this._q1)
                 {
                     results[++resultIndex] = new Point2D(pt.X, pt.Y);
                 }
             }
             else
             {
-                var enumerator = _q1.GetEnumerator();
+                var enumerator = this._q1.GetEnumerator();
                 enumerator.Reset();
                 if (enumerator.MoveNext())
                 {
@@ -1329,20 +1329,20 @@ namespace MathNet.Spatial.Internals
                 }
             }
 
-            if (_q2.Count == 1)
+            if (this._q2.Count == 1)
             {
-                if (_q2.FirstPoint != _q1.LastPoint)
+                if (this._q2.FirstPoint != this._q1.LastPoint)
                 {
-                    results[++resultIndex] = new Point2D(_q2.FirstPoint.X, _q2.FirstPoint.Y);
+                    results[++resultIndex] = new Point2D(this._q2.FirstPoint.X, this._q2.FirstPoint.Y);
                 }
             }
             else
             {
-                var enumerator = _q2.GetEnumerator();
+                var enumerator = this._q2.GetEnumerator();
                 enumerator.Reset();
                 if (enumerator.MoveNext()) // Will always be true
                 {
-                    if (enumerator.Current != _q1.LastPoint)
+                    if (enumerator.Current != this._q1.LastPoint)
                     {
                         results[++resultIndex] = new Point2D(enumerator.Current.X, enumerator.Current.Y);
                     }
@@ -1354,20 +1354,20 @@ namespace MathNet.Spatial.Internals
                 }
             }
 
-            if (_q3.Count == 1)
+            if (this._q3.Count == 1)
             {
-                if (_q3.FirstPoint != _q2.LastPoint)
+                if (this._q3.FirstPoint != this._q2.LastPoint)
                 {
-                    results[++resultIndex] = new Point2D(_q3.FirstPoint.X, _q3.FirstPoint.Y);
+                    results[++resultIndex] = new Point2D(this._q3.FirstPoint.X, this._q3.FirstPoint.Y);
                 }
             }
             else
             {
-                var enumerator = _q3.GetEnumerator();
+                var enumerator = this._q3.GetEnumerator();
                 enumerator.Reset();
                 if (enumerator.MoveNext()) // Will always be true
                 {
-                    if (enumerator.Current != _q2.LastPoint)
+                    if (enumerator.Current != this._q2.LastPoint)
                     {
                         results[++resultIndex] = new Point2D(enumerator.Current.X, enumerator.Current.Y);
                     }
@@ -1379,20 +1379,20 @@ namespace MathNet.Spatial.Internals
                 }
             }
 
-            if (_q4.Count == 1)
+            if (this._q4.Count == 1)
             {
-                if (_q4.FirstPoint != _q3.LastPoint)
+                if (this._q4.FirstPoint != this._q3.LastPoint)
                 {
-                    results[++resultIndex] = new Point2D(_q4.FirstPoint.X, _q4.FirstPoint.Y);
+                    results[++resultIndex] = new Point2D(this._q4.FirstPoint.X, this._q4.FirstPoint.Y);
                 }
             }
             else
             {
-                var enumerator = _q4.GetEnumerator();
+                var enumerator = this._q4.GetEnumerator();
                 enumerator.Reset();
                 if (enumerator.MoveNext()) // Will always be true
                 {
-                    if (enumerator.Current != _q3.LastPoint)
+                    if (enumerator.Current != this._q3.LastPoint)
                     {
                         results[++resultIndex] = new Point2D(enumerator.Current.X, enumerator.Current.Y);
                     }
@@ -1404,7 +1404,7 @@ namespace MathNet.Spatial.Internals
                 }
             }
 
-            if (_shouldCloseTheGraph && results[resultIndex] != results[0])
+            if (this._shouldCloseTheGraph && results[resultIndex] != results[0])
             {
                 results[++resultIndex] = results[0];
             }
@@ -1415,7 +1415,7 @@ namespace MathNet.Spatial.Internals
 
         private bool IsZeroData()
         {
-            return _listOfPoint == null || !_listOfPoint.Any();
+            return this._listOfPoint == null || !this._listOfPoint.Any();
         }
     }
 }

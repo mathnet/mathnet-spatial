@@ -28,7 +28,7 @@
         internal Quadrant(MutablePoint[] listOfPoint, IComparer<MutablePoint> comparer)
             : base(comparer)
         {
-            ListOfPoint = listOfPoint;
+            this.ListOfPoint = listOfPoint;
         }
 
         /// <summary>
@@ -39,20 +39,20 @@
 
         public void Prepare()
         {
-            if (!ListOfPoint.Any())
+            if (!this.ListOfPoint.Any())
             {
                 // There is no points at all. Hey don't try to crash me.
                 return;
             }
 
             // Begin : General Init
-            Add(FirstPoint);
-            if (FirstPoint.Equals(LastPoint))
+            this.Add(this.FirstPoint);
+            if (this.FirstPoint.Equals(this.LastPoint))
             {
                 return; // Case where for weird distribution like triangle or diagonal. This quadrant will have no point
             }
 
-            Add(LastPoint);
+            this.Add(this.LastPoint);
         }
 
         /// <summary>
@@ -101,14 +101,14 @@
                         break;
                     }
 
-                    invalidPoint = !IsPointToTheRightOfOthers(previousPrevious.Item, pointNew.Item, pointPrevious.Item);
+                    invalidPoint = !this.IsPointToTheRightOfOthers(previousPrevious.Item, pointNew.Item, pointPrevious.Item);
                     if (!invalidPoint)
                     {
                         break;
                     }
 
                     MutablePoint ptPrevPrev = previousPrevious.Item;
-                    RemoveNode(pointPrevious);
+                    this.RemoveNode(pointPrevious);
                     pointPrevious = this.GetNode(ptPrevPrev);
                     previousPrevious = pointPrevious.GetPreviousNode();
                 }
@@ -125,15 +125,15 @@
                         break;
                     }
 
-                    invalidPoint = !IsPointToTheRightOfOthers(pointNew.Item, nextNext.Item, pointNext.Item);
+                    invalidPoint = !this.IsPointToTheRightOfOthers(pointNew.Item, nextNext.Item, pointNext.Item);
                     if (!invalidPoint)
                     {
                         break;
                     }
 
                     MutablePoint ptNextNext = nextNext.Item;
-                    RemoveNode(pointNext);
-                    pointNext = GetNode(ptNextNext);
+                    this.RemoveNode(pointNext);
+                    pointNext = this.GetNode(ptNextNext);
                     nextNext = pointNext.GetNextNode();
                 }
             }

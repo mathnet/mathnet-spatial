@@ -6,8 +6,9 @@
 
     internal class AvlNodeItemEnumerator<T> : IEnumerator<T>
     {
+        private readonly AvlTreeSet<T> avlTree;
+
         private AvlNode<T> current = null;
-        private AvlTreeSet<T> avlTree;
 
         public AvlNodeItemEnumerator(AvlTreeSet<T> avlTree)
         {
