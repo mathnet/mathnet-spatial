@@ -7,8 +7,6 @@
     using MathNet.Spatial.Units;
     using MathNet.Spatial.UnitTests;
     using NUnit.Framework;
-    using ProtoBuf;
-    using ProtoBuf.Meta;
 
     public class ProtobufNetTests
     {
