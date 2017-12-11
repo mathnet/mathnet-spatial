@@ -114,10 +114,14 @@ Target "ApplyVersion" (fun _ ->
     patchVersionInAssemblyInfo "src/Spatial" spatialRelease
     patchVersionInAssemblyInfo "src/SpatialUnitTests" spatialRelease)
 
+Target "DotnetRestore" (fun _ ->
+    DotNetCli.Restore (fun c -> { c with Project = "MathNet.Spatial.sln" }))
+
 Target "Prepare" DoNothing
 "Start"
   =?> ("Clean", not (hasBuildParam "incremental"))
   ==> "ApplyVersion"
+  ==> "DotnetRestore"
   ==> "Prepare"
 
 

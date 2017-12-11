@@ -24,3 +24,13 @@ group Benchmarks
     nuget MathNet.Numerics
     nuget BenchmarkDotNet.Diagnostics.Windows
 
+group Roslyn
+    storage: none
+    source https://www.nuget.org/api/v2
+    nuget Microsoft.CodeAnalysis.CSharp.Workspaces 1.2.1
+    nuget System.Collections.Immutable 1.1.37
+    nuget System.Reflection.Metadata 1.2.0
+    nuget Microsoft.Composition 1.0.27
+    nuget NUnit
+    nuget Gu.Roslyn.Asserts 1.2.0
+

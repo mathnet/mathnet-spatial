@@ -1,0 +1,5 @@
+group Roslyn
+  Microsoft.CodeAnalysis.CSharp
+
+group Analyzers
+  StyleCop.Analyzers
