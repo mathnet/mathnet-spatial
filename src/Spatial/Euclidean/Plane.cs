@@ -220,11 +220,19 @@
             return p - projectionVector;
         }
 
+        [Obsolete("Use LineSegment3D instead, obsolete from 2017-12-10")]
         public Line3D Project(Line3D line3DToProject)
         {
             var projectedStartPoint = this.Project(line3DToProject.StartPoint);
             var projectedEndPoint = this.Project(line3DToProject.EndPoint);
             return new Line3D(projectedStartPoint, projectedEndPoint);
+        }
+
+        public LineSegment3D Project(LineSegment3D line3DToProject)
+        {
+            var projectedStartPoint = this.Project(line3DToProject.StartPoint);
+            var projectedEndPoint = this.Project(line3DToProject.EndPoint);
+            return new LineSegment3D(projectedStartPoint, projectedEndPoint);
         }
 
         public Ray3D Project(Ray3D rayToProject)
@@ -293,7 +301,42 @@
         /// <param name="line">A line segment</param>
         /// <param name="tolerance">A tolerance (epsilon) to account for floating point error.</param>
         /// <returns>Intersection Point or null</returns>
+        [Obsolete("Use LineSegment3D instead, Obsolete from 2017-12-10")]
         public Point3D? IntersectionWith(Line3D line, double tolerance = float.Epsilon)
+        {
+            if (line.Direction.IsPerpendicularTo(this.Normal, tolerance))
+            {
+                // either parallel or lies in the plane
+                var projectedPoint = this.Project(line.StartPoint, line.Direction);
+                if (projectedPoint == line.StartPoint)
+                {
+                    throw new InvalidOperationException("Line lies in the plane");
+                }
+
+                // Line and plane are parallel
+                return null;
+            }
+
+            var d = this.SignedDistanceTo(line.StartPoint);
+            var u = line.StartPoint.VectorTo(line.EndPoint);
+            var t = -1 * d / u.DotProduct(this.Normal);
+            if (t > 1 || t < 0)
+            {
+                // They are not intersected
+                return null;
+            }
+
+            return line.StartPoint + (t * u);
+        }
+
+        /// <summary>
+        /// Find intersection between LineSegment3D and Plane
+        /// http://geomalgorithms.com/a05-_intersect-1.html
+        /// </summary>
+        /// <param name="line">A line segment</param>
+        /// <param name="tolerance">A tolerance (epsilon) to account for floating point error.</param>
+        /// <returns>Intersection Point or null</returns>
+        public Point3D? IntersectionWith(LineSegment3D line, double tolerance = float.Epsilon)
         {
             if (line.Direction.IsPerpendicularTo(this.Normal, tolerance))
             {

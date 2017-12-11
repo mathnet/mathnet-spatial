@@ -501,9 +501,20 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         /// <param name="l"></param>
         /// <returns></returns>
+        [Obsolete("Use LineSegment3D, Obsolete from 2017-12-10")]
         public Line3D Transform(Line3D l)
         {
             return new Line3D(this.Transform(l.StartPoint), this.Transform(l.EndPoint));
+        }
+
+        /// <summary>
+        /// Transforms a line segement.
+        /// </summary>
+        /// <param name="l">A line segment</param>
+        /// <returns>The transformed line sgement</returns>
+        public LineSegment3D Transform(LineSegment3D l)
+        {
+            return new LineSegment3D(this.Transform(l.StartPoint), this.Transform(l.EndPoint));
         }
 
         /// <summary>

@@ -110,11 +110,25 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="point3D">A point.</param>
         /// <returns>A line segment from the point to the closest point on the ray</returns>
         [Pure]
+        [Obsolete("Use ShortestLineTo, Obsolete from 2017-12-11")]
         public Line3D LineTo(Point3D point3D)
         {
             var v = this.ThroughPoint.VectorTo(point3D);
             var alongVector = v.ProjectOn(this.Direction);
             return new Line3D(this.ThroughPoint + alongVector, point3D);
+        }
+
+        /// <summary>
+        /// Returns the shortest line from a point to the ray
+        /// </summary>
+        /// <param name="point3D">A point.</param>
+        /// <returns>A line segment from the point to the closest point on the ray</returns>
+        [Pure]
+        public LineSegment3D ShortestLineTo(Point3D point3D)
+        {
+            var v = this.ThroughPoint.VectorTo(point3D);
+            var alongVector = v.ProjectOn(this.Direction);
+            return new LineSegment3D(this.ThroughPoint + alongVector, point3D);
         }
 
         /// <summary>
