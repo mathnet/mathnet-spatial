@@ -10,10 +10,10 @@ Frequency=3410107 Hz, Resolution=293.2459 ns, Timer=TSC
 ```
 |                     Method |        Mean |      Error |     StdDev |      Median |  Gen 0 | Allocated |
 |--------------------------- |------------:|-----------:|-----------:|------------:|-------:|----------:|
-| OperatorEqualityRay3DRay3D |    23.79 ns |  0.5716 ns |  0.7020 ns |    23.80 ns |      - |       0 B |
-|             IntersectionOf | 1,247.02 ns | 24.5310 ns | 52.2775 ns | 1,266.49 ns | 0.2747 |    1440 B |
-|                     LineTo |    47.48 ns |  0.9767 ns |  1.8584 ns |    46.97 ns |      - |       0 B |
-|           IntersectionWith |    69.86 ns |  1.4199 ns |  3.2339 ns |    67.56 ns |      - |       0 B |
-|                IsCollinear |    30.17 ns |  0.6470 ns |  1.0073 ns |    29.63 ns |      - |       0 B |
-|                     Equals |    24.26 ns |  0.5172 ns |  1.1244 ns |    24.01 ns |      - |       0 B |
-|        EqualsWithTolerance |    48.77 ns |  1.2742 ns |  1.1919 ns |    48.13 ns |      - |       0 B |
+| OperatorEqualityRay3DRay3D |    25.39 ns |  0.5301 ns |  0.5672 ns |    25.21 ns |      - |       0 B |
+|             IntersectionOf | 1,222.63 ns | 24.2224 ns | 56.6191 ns | 1,223.89 ns | 0.2747 |    1440 B |
+|                     LineTo |    46.20 ns |  0.9477 ns |  1.8926 ns |    44.97 ns |      - |       0 B |
+|           IntersectionWith |    71.98 ns |  1.4763 ns |  3.9407 ns |    71.69 ns |      - |       0 B |
+|                IsCollinear |    30.35 ns |  0.6577 ns |  1.8116 ns |    30.36 ns |      - |       0 B |
+|                     Equals |    23.57 ns |  0.5035 ns |  0.6891 ns |    23.65 ns |      - |       0 B |
+|        EqualsWithTolerance |    49.01 ns |  1.0139 ns |  1.8539 ns |    48.22 ns |      - |       0 B |

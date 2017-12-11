@@ -8,9 +8,9 @@ Frequency=3410107 Hz, Resolution=293.2459 ns, Timer=TSC
 
 
 ```
-|                       Method |          Mean |       Error |      StdDev |        Median |    Gen 0 |    Gen 1 |    Gen 2 |  Allocated |
-|----------------------------- |--------------:|------------:|------------:|--------------:|---------:|---------:|---------:|-----------:|
-|    GetConvexHullFromPoints10 |      4.505 us |   0.0896 us |   0.1706 us |      4.551 us |   0.6180 |        - |        - |     3.2 KB |
-|   GetConvexHullFromPoints100 |     43.881 us |   0.8662 us |   2.3270 us |     44.133 us |   2.9297 |        - |        - |   15.19 KB |
-|  GetConvexHullFromPoints1000 |    576.279 us |  11.5100 us |  29.7110 us |    556.423 us |  25.3906 |   0.9766 |        - |  134.86 KB |
-| GetConvexHullFromPoints10000 | 33,014.561 us | 617.7802 us | 515.8744 us | 33,155.430 us | 250.0000 | 125.0000 | 125.0000 | 1233.61 KB |
+|                       Method |       Mean |      Error |     StdDev |     Median |    Gen 0 |    Gen 1 |    Gen 2 | Allocated |
+|----------------------------- |-----------:|-----------:|-----------:|-----------:|---------:|---------:|---------:|----------:|
+|    GetConvexHullFromPoints10 |   3.617 us |  0.0724 us |  0.2054 us |   3.464 us |   0.5646 |        - |        - |   2.89 KB |
+|   GetConvexHullFromPoints100 |   9.892 us |  0.1969 us |  0.4403 us |   9.907 us |   1.7395 |   0.0153 |        - |   8.95 KB |
+|  GetConvexHullFromPoints1000 |  64.748 us |  1.2914 us |  3.6213 us |  62.101 us |  10.2539 |   0.4883 |        - |  52.83 KB |
+| GetConvexHullFromPoints10000 | 758.106 us | 14.7189 us | 16.9504 us | 749.307 us | 166.0156 | 166.0156 | 166.0156 | 675.06 KB |
