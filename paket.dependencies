@@ -4,7 +4,7 @@ nuget MathNet.Numerics.Signed ~> 3.8
 
 group Build
     source https://www.nuget.org/api/v2
-    nuget FAKE ~> 4.1
+    nuget FAKE ~> 4.6
     nuget NUnit.Runners ~> 3.0
     nuget FSharp.Formatting !~> 2.4
     nuget NuGet.CommandLine
