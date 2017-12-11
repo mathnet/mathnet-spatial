@@ -94,9 +94,9 @@
             var rootPoint = new Point3D(0, 0, 1);
             var plane = new Plane(unitVector, rootPoint);
 
-            var line = new Line3D(new Point3D(0, 0, 0), new Point3D(1, 0, 0));
+            var line = new LineSegment3D(new Point3D(0, 0, 0), new Point3D(1, 0, 0));
             var projectOn = plane.Project(line);
-            AssertGeometry.AreEqual(new Line3D(new Point3D(0, 0, 1), new Point3D(1, 0, 1)), projectOn, float.Epsilon);
+            AssertGeometry.AreEqual(new LineSegment3D(new Point3D(0, 0, 1), new Point3D(1, 0, 1)), projectOn, float.Epsilon);
         }
 
         [Test]
