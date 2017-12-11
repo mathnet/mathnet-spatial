@@ -72,7 +72,11 @@
     <Compile Include="Helpers\AssertGeometry.cs" />
     <Compile Include="ParserTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Serialization\BinaryFormatterTests.cs" />
+    <Compile Include="Serialization\DataContractTests.cs" />
     <Compile Include="Serialization\JsonTests.cs" />
+    <Compile Include="Serialization\ProtobufnetTests.cs" />
+    <Compile Include="Serialization\XmlSerializaerTests.cs" />
     <Compile Include="Units\AngleTests.cs" />
   </ItemGroup>
   <ItemGroup>
