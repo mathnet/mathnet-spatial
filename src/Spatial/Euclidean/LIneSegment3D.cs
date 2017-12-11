@@ -90,9 +90,7 @@
         /// <returns>A new translated linesegment</returns>
         public LineSegment3D TranslateBy(Vector3D vector)
         {
-            var startVector = this.StartPoint.ToVector3D() + vector;
-            var endVector = this.EndPoint.ToVector3D() + vector;
-            return new LineSegment3D(startVector.ToPoint3D(), endVector.ToPoint3D());
+            return new LineSegment3D(this.StartPoint + vector, this.EndPoint + vector);
         }
 
         /// <summary>
