@@ -7,6 +7,9 @@ namespace MathNet.Spatial.Units
     [EditorBrowsable(EditorBrowsableState.Never)]
     public struct Radians : IAngleUnit
     {
+        /// <summary>
+        /// internal name
+        /// </summary>
         internal const string Name = "rad";
 
         /// <inheritdoc />

@@ -91,15 +91,25 @@
     <Compile Include="Euclidean\Vector3D.cs" />
     <Compile Include="Units\Angle.cs" />
     <Compile Include="Units\AngleUnit.cs" />
-    <Compile Include="Obsolete\Parser.cs" />
+    <Compile Include="Obsolete\Parser.cs">
+      <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Units\Degrees.cs" />
     <Compile Include="Units\IAngleUnit.cs" />
-    <Compile Include="Obsolete\IUnit.cs" />
+    <Compile Include="Obsolete\IUnit.cs">
+      <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
+    </Compile>
     <Compile Include="Units\Radians.cs" />
-    <Compile Include="Obsolete\UnitConverter.cs" />
-    <Compile Include="Obsolete\UnitParser.cs" />
-    <Compile Include="Obsolete\XmlExt.cs" />
+    <Compile Include="Obsolete\UnitConverter.cs">
+      <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Obsolete\UnitParser.cs">
+      <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Obsolete\XmlExt.cs">
+      <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Spatial.csproj.paket.references" />

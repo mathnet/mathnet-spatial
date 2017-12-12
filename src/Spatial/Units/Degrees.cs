@@ -10,7 +10,14 @@ namespace MathNet.Spatial.Units
     [EditorBrowsable(EditorBrowsableState.Never)]
     public struct Degrees : IAngleUnit
     {
+        /// <summary>
+        /// Internal name
+        /// </summary>
         internal const string Name = "\u00B0";
+
+        /// <summary>
+        /// Degree to radians conversion factor
+        /// </summary>
         private const double DegToRad = Math.PI / 180.0;
 
         /// <inheritdoc />

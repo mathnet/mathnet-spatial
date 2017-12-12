@@ -199,6 +199,11 @@ namespace MathNet.Spatial.Units
             return new Angle(-1 * angle.Radians);
         }
 
+        /// <summary>
+        /// No function.
+        /// </summary>
+        /// <param name="angle">An angle</param>
+        /// <returns>The angle passed</returns>
         [Obsolete("Unnecessary, made obsolete on 2017-12-07")]
         public static Angle operator +(Angle angle)
         {
