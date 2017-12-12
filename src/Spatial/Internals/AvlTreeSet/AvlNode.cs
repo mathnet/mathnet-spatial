@@ -1,17 +1,43 @@
 ﻿namespace MathNet.Spatial.Internals
 {
+    using System.Diagnostics.CodeAnalysis;
+
+    /// <summary>
+    /// A node of the Avl Tree
+    /// </summary>
+    /// <typeparam name="T">Any type</typeparam>
+    [SuppressMessage("Microsoft.StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "By design")]
     internal sealed class AvlNode<T>
     {
+        /// <summary>
+        /// Gets or sets the parent node
+        /// </summary>
         public AvlNode<T> Parent;
+
+        /// <summary>
+        /// Gets or sets the left node
+        /// </summary>
         public AvlNode<T> Left;
+
+        /// <summary>
+        /// Gets or sets the right node
+        /// </summary>
         public AvlNode<T> Right;
+
+        /// <summary>
+        /// Gets or sets the item
+        /// </summary>
         public T Item;
+
+        /// <summary>
+        /// Gets or sets the Avl balance
+        /// </summary>
         public int Balance;
 
         /// <summary>
         /// Non recursive function that return the next ordered node
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The next node</returns>
         public AvlNode<T> GetNextNode()
         {
             AvlNode<T> current;
@@ -23,6 +49,7 @@
                 {
                     current = current.Left;
                 }
+
                 return current;
             }
 
@@ -43,7 +70,7 @@
         /// <summary>
         /// Non recursive function that return the previous ordered node
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The previous node</returns>
         public AvlNode<T> GetPreviousNode()
         {
             AvlNode<T> current;
@@ -55,6 +82,7 @@
                 {
                     current = current.Right;
                 }
+
                 return current;
             }
 
@@ -72,6 +100,7 @@
             return null;
         }
 
+        /// <inheritdoc/>
         public override string ToString()
         {
             return $"AvlNode [{this.Item}], balance: {this.Balance}, Parent: {this.Parent?.Item.ToString()}, Left: {this.Left?.Item.ToString()}, Right: {this.Right?.Item.ToString()},";
