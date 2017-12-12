@@ -4,6 +4,9 @@
     using System.Xml;
     using System.Xml.Serialization;
 
+    /// <summary>
+    /// An extension class for XmlReader
+    /// </summary>
     internal static class XmlReaderExt
     {
         /// <summary>
@@ -192,6 +195,11 @@
             return false;
         }
 
+        /// <summary>
+        /// Reads until first descentant
+        /// </summary>
+        /// <param name="reader">An xml reader</param>
+        /// <returns>True if successful; otherwise false</returns>
         internal static bool ReadToFirstDescendant(this XmlReader reader)
         {
             var depth = reader.Depth;
@@ -210,6 +218,15 @@
                    reader.NodeType == XmlNodeType.Element;
         }
 
+        /// <summary>
+        /// Attempts to read sibling elements as a pair of doubles
+        /// </summary>
+        /// <param name="subtree">an xml reader</param>
+        /// <param name="xName">The name of the x element</param>
+        /// <param name="yName">The name of the y element</param>
+        /// <param name="x">The x value</param>
+        /// <param name="y">The y value</param>
+        /// <returns>True if successful; otherwise false</returns>
         private static bool TryReadSiblingElementsAsDoubles(this XmlReader subtree, string xName, string yName, out double x, out double y)
         {
             if (subtree.TryReadElementContentAsDouble(xName, out x) &&
