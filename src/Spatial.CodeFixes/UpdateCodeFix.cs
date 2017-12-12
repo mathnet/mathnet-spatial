@@ -19,7 +19,7 @@
         {
             var document = context.Document;
             var syntaxRoot = await document.GetSyntaxRootAsync(context.CancellationToken)
-                                           .ConfigureAwait(false);
+                .ConfigureAwait(false);
 
             foreach (var diagnostic in context.Diagnostics)
             {
@@ -47,8 +47,8 @@
                             diagnostic);
                     }
                     else if (simpleName.Identifier.ValueText == "Angle" &&
-                        objectCreation.ArgumentList != null &&
-                        objectCreation.ArgumentList.Arguments.Count == 2 &&
+                             objectCreation.ArgumentList != null &&
+                             objectCreation.ArgumentList.Arguments.Count == 2 &&
                              objectCreation.ArgumentList.Arguments[1] is ArgumentSyntax argument &&
                              argument.Expression is MemberAccessExpressionSyntax memberAccess &&
                              memberAccess.Name is SimpleNameSyntax unitName)
@@ -80,6 +80,50 @@
                                                 objectCreation.ArgumentList.WithArguments(
                                                     objectCreation.ArgumentList.Arguments.RemoveAt(1))))))),
                                 diagnostic);
+                        }
+                    }
+                }
+                else if (node is InvocationExpressionSyntax invocation &&
+                         invocation.Expression is MemberAccessExpressionSyntax memberAccess)
+                {
+                    if (memberAccess.Expression is IdentifierNameSyntax identifierName &&
+                        identifierName.Identifier.ValueText == "Angle" &&
+                        memberAccess.Name.Identifier.ValueText == "From" &&
+                        invocation.ArgumentList != null &&
+                        invocation.ArgumentList.Arguments.Count == 2 &&
+                        invocation.ArgumentList.Arguments[1] is ArgumentSyntax argument)
+                    {
+                        if (argument.Expression is MemberAccessExpressionSyntax argMemberAccess &&
+                            argMemberAccess.Name is SimpleNameSyntax unitName)
+                        {
+                            if (unitName.Identifier.ValueText == "Degrees")
+                            {
+                                context.RegisterCodeFix(
+                                    CodeAction.Create(
+                                        "Use Create",
+                                        _ => Task.FromResult(document.WithSyntaxRoot(
+                                            syntaxRoot.ReplaceNode(
+                                                invocation,
+                                                SyntaxFactory.InvocationExpression(
+                                                    SyntaxFactory.ParseExpression("Angle.FromDegrees"),
+                                                    invocation.ArgumentList.WithArguments(
+                                                        invocation.ArgumentList.Arguments.RemoveAt(1))))))),
+                                    diagnostic);
+                            }
+                            else if (unitName.Identifier.ValueText == "Radians")
+                            {
+                                context.RegisterCodeFix(
+                                    CodeAction.Create(
+                                        "Use Create",
+                                        _ => Task.FromResult(document.WithSyntaxRoot(
+                                            syntaxRoot.ReplaceNode(
+                                                invocation,
+                                                SyntaxFactory.InvocationExpression(
+                                                    SyntaxFactory.ParseExpression("Angle.FromRadians"),
+                                                    invocation.ArgumentList.WithArguments(
+                                                        invocation.ArgumentList.Arguments.RemoveAt(1))))))),
+                                    diagnostic);
+                            }
                         }
                     }
                 }
