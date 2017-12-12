@@ -2,6 +2,7 @@
 {
     using System.Collections.Immutable;
     using System.Composition;
+    using System.Globalization;
     using System.Threading.Tasks;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CodeActions;
@@ -19,7 +20,7 @@
         {
             var document = context.Document;
             var syntaxRoot = await document.GetSyntaxRootAsync(context.CancellationToken)
-                                           .ConfigureAwait(false);
+                .ConfigureAwait(false);
 
             foreach (var diagnostic in context.Diagnostics)
             {
@@ -31,19 +32,138 @@
 
                 var node = syntaxRoot.FindNode(diagnostic.Location.SourceSpan);
                 if (node is ObjectCreationExpressionSyntax objectCreation &&
-                    objectCreation.Type is SimpleNameSyntax simpleName &&
-                    simpleName.Identifier.ValueText == "UnitVector3D")
+                    objectCreation.Type is SimpleNameSyntax simpleName)
                 {
-                    context.RegisterCodeFix(
-                        CodeAction.Create(
-                            "Use Create",
-                            _ => Task.FromResult(document.WithSyntaxRoot(
-                                syntaxRoot.ReplaceNode(
-                                    objectCreation,
-                                    SyntaxFactory.InvocationExpression(
-                                        SyntaxFactory.ParseExpression("UnitVector3D.Create"),
-                                        objectCreation.ArgumentList))))),
-                        diagnostic);
+                    if (simpleName.Identifier.ValueText == "UnitVector3D")
+                    {
+                        context.RegisterCodeFix(
+                            CodeAction.Create(
+                                "Use Create",
+                                _ => Task.FromResult(document.WithSyntaxRoot(
+                                    syntaxRoot.ReplaceNode(
+                                        objectCreation,
+                                        SyntaxFactory.InvocationExpression(
+                                            SyntaxFactory.ParseExpression("UnitVector3D.Create"),
+                                            objectCreation.ArgumentList))))),
+                            diagnostic);
+                    }
+                    else if (simpleName.Identifier.ValueText == "Angle" &&
+                             objectCreation.ArgumentList != null &&
+                             objectCreation.ArgumentList.Arguments.Count == 2 &&
+                             objectCreation.ArgumentList.Arguments[1] is ArgumentSyntax argument &&
+                             argument.Expression is MemberAccessExpressionSyntax memberAccess &&
+                             memberAccess.Name is SimpleNameSyntax unitName)
+                    {
+                        if (unitName.Identifier.ValueText == "Degrees")
+                        {
+                            context.RegisterCodeFix(
+                                CodeAction.Create(
+                                    "Use Create",
+                                    _ => Task.FromResult(document.WithSyntaxRoot(
+                                        syntaxRoot.ReplaceNode(
+                                            objectCreation,
+                                            SyntaxFactory.InvocationExpression(
+                                                SyntaxFactory.ParseExpression("Angle.FromDegrees"),
+                                                objectCreation.ArgumentList.WithArguments(
+                                                    objectCreation.ArgumentList.Arguments.RemoveAt(1))))))),
+                                diagnostic);
+                        }
+                        else if (unitName.Identifier.ValueText == "Radians")
+                        {
+                            context.RegisterCodeFix(
+                                CodeAction.Create(
+                                    "Use Create",
+                                    _ => Task.FromResult(document.WithSyntaxRoot(
+                                        syntaxRoot.ReplaceNode(
+                                            objectCreation,
+                                            SyntaxFactory.InvocationExpression(
+                                                SyntaxFactory.ParseExpression("Angle.FromRadians"),
+                                                objectCreation.ArgumentList.WithArguments(
+                                                    objectCreation.ArgumentList.Arguments.RemoveAt(1))))))),
+                                diagnostic);
+                        }
+                    }
+                }
+                else if (node is InvocationExpressionSyntax invocation &&
+                         invocation.Expression is MemberAccessExpressionSyntax memberAccess)
+                {
+                    if (memberAccess.Expression is IdentifierNameSyntax identifierName &&
+                        identifierName.Identifier.ValueText == "Angle" &&
+                        memberAccess.Name.Identifier.ValueText == "From" &&
+                        invocation.ArgumentList != null &&
+                        invocation.ArgumentList.Arguments.Count == 2 &&
+                        invocation.ArgumentList.Arguments[1] is ArgumentSyntax argument)
+                    {
+                        if (argument.Expression is MemberAccessExpressionSyntax argMemberAccess &&
+                            argMemberAccess.Name is SimpleNameSyntax unitName)
+                        {
+                            if (unitName.Identifier.ValueText == "Degrees")
+                            {
+                                context.RegisterCodeFix(
+                                    CodeAction.Create(
+                                        "Use Create",
+                                        _ => Task.FromResult(document.WithSyntaxRoot(
+                                            syntaxRoot.ReplaceNode(
+                                                invocation,
+                                                SyntaxFactory.InvocationExpression(
+                                                    SyntaxFactory.ParseExpression("Angle.FromDegrees"),
+                                                    invocation.ArgumentList.WithArguments(
+                                                        invocation.ArgumentList.Arguments.RemoveAt(1))))))),
+                                    diagnostic);
+                            }
+                            else if (unitName.Identifier.ValueText == "Radians")
+                            {
+                                context.RegisterCodeFix(
+                                    CodeAction.Create(
+                                        "Use Create",
+                                        _ => Task.FromResult(document.WithSyntaxRoot(
+                                            syntaxRoot.ReplaceNode(
+                                                invocation,
+                                                SyntaxFactory.InvocationExpression(
+                                                    SyntaxFactory.ParseExpression("Angle.FromRadians"),
+                                                    invocation.ArgumentList.WithArguments(
+                                                        invocation.ArgumentList.Arguments.RemoveAt(1))))))),
+                                    diagnostic);
+                            }
+                        }
+                    }
+                }
+                else if (node is BinaryExpressionSyntax binaryExpression &&
+                         binaryExpression.IsKind(SyntaxKind.MultiplyExpression))
+                {
+                    var message = diagnostic.GetMessage(CultureInfo.InvariantCulture);
+                    if (message.StartsWith("'Degrees.operator *(double, Degrees)' is obsolete"))
+                    {
+                        context.RegisterCodeFix(
+                            CodeAction.Create(
+                                "Use Create",
+                                _ => Task.FromResult(
+                                    document.WithSyntaxRoot(
+                                        syntaxRoot.ReplaceNode(
+                                            binaryExpression,
+                                            SyntaxFactory.InvocationExpression(
+                                                SyntaxFactory.ParseExpression("Angle.FromDegrees"),
+                                                SyntaxFactory.ArgumentList(
+                                                    SyntaxFactory.SingletonSeparatedList(
+                                                        SyntaxFactory.Argument(binaryExpression.Left)))))))),
+                            diagnostic);
+                    }
+                    else if (message.StartsWith("'Radians.operator *(double, Radians)' is obsolete"))
+                    {
+                        context.RegisterCodeFix(
+                            CodeAction.Create(
+                                "Use Create",
+                                _ => Task.FromResult(
+                                    document.WithSyntaxRoot(
+                                        syntaxRoot.ReplaceNode(
+                                            binaryExpression,
+                                            SyntaxFactory.InvocationExpression(
+                                                SyntaxFactory.ParseExpression("Angle.FromRadians"),
+                                                SyntaxFactory.ArgumentList(
+                                                    SyntaxFactory.SingletonSeparatedList(
+                                                        SyntaxFactory.Argument(binaryExpression.Left)))))))),
+                            diagnostic);
+                    }
                 }
             }
         }
