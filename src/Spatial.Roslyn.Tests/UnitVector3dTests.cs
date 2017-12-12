@@ -4,7 +4,7 @@
     using NUnit.Framework;
     using SpatialAnalyzers;
 
-    public class UnitVector3dTests
+    public class UnitVector3DTests
     {
         private static readonly ExpectedDiagnostic CS0618 = ExpectedDiagnostic.Create("CS0618");
 
