@@ -2,6 +2,7 @@
 {
     using System.Collections.Immutable;
     using System.Composition;
+    using System.Globalization;
     using System.Threading.Tasks;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CodeActions;
@@ -125,6 +126,43 @@
                                     diagnostic);
                             }
                         }
+                    }
+                }
+                else if (node is BinaryExpressionSyntax binaryExpression &&
+                         binaryExpression.IsKind(SyntaxKind.MultiplyExpression))
+                {
+                    var message = diagnostic.GetMessage(CultureInfo.InvariantCulture);
+                    if (message.StartsWith("'Degrees.operator *(double, Degrees)' is obsolete"))
+                    {
+                        context.RegisterCodeFix(
+                            CodeAction.Create(
+                                "Use Create",
+                                _ => Task.FromResult(
+                                    document.WithSyntaxRoot(
+                                        syntaxRoot.ReplaceNode(
+                                            binaryExpression,
+                                            SyntaxFactory.InvocationExpression(
+                                                SyntaxFactory.ParseExpression("Angle.FromDegrees"),
+                                                SyntaxFactory.ArgumentList(
+                                                    SyntaxFactory.SingletonSeparatedList(
+                                                        SyntaxFactory.Argument(binaryExpression.Left)))))))),
+                            diagnostic);
+                    }
+                    else if (message.StartsWith("'Radians.operator *(double, Radians)' is obsolete"))
+                    {
+                        context.RegisterCodeFix(
+                            CodeAction.Create(
+                                "Use Create",
+                                _ => Task.FromResult(
+                                    document.WithSyntaxRoot(
+                                        syntaxRoot.ReplaceNode(
+                                            binaryExpression,
+                                            SyntaxFactory.InvocationExpression(
+                                                SyntaxFactory.ParseExpression("Angle.FromRadians"),
+                                                SyntaxFactory.ArgumentList(
+                                                    SyntaxFactory.SingletonSeparatedList(
+                                                        SyntaxFactory.Argument(binaryExpression.Left)))))))),
+                            diagnostic);
                     }
                 }
             }
