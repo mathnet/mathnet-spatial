@@ -1,5 +1,6 @@
 language: csharp
-dotnet: 1.0.4
+dotnet: 2.0
+dist: trusy
 sudo: false
 script: 
   - ./build.sh Test
