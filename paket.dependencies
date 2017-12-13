@@ -33,7 +33,8 @@ group Test
 
 group Benchmarks
     source https://www.nuget.org/api/v2
-    nuget MathNet.Numerics
+    nuget MathNet.Numerics ~> 3.8
+	nuget NUnit ~> 3.7
     nuget BenchmarkDotNet.Diagnostics.Windows
 
 group Roslyn

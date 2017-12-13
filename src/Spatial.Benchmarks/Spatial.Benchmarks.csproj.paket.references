@@ -1,8 +1,6 @@
 group Benchmarks
     MathNet.Numerics
     BenchmarkDotNet.Diagnostics.Windows
-
-group Test
     NUnit
 
 group Analyzers
