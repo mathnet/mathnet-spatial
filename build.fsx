@@ -66,7 +66,7 @@ let spatialPack =
       FsLoader = false
       Dependencies =
         [ { FrameworkVersion=""
-            Dependencies=[ "MathNet.Numerics", GetPackageVersion "packages" "MathNet.Numerics" ] } ]
+            Dependencies=[  ] } ]
       Files =
         [ @"..\..\out\lib\Net40\MathNet.Spatial.*", Some libnet40, None;
           @"..\..\src\Spatial\**\*.cs", Some "src/Common", None ] }
@@ -78,8 +78,8 @@ let spatialSignedPack =
       Description = description + supportSigned
       Tags = spatialPack.Tags + " signed"
       Dependencies =
-        [ { FrameworkVersion=""
-            Dependencies=[ "MathNet.Numerics.Signed", GetPackageVersion "packages" "MathNet.Numerics.Signed" ] } ]
+        [ { FrameworkVersion="net40"
+            Dependencies=[  ] } ]
       Files =
         [ @"..\..\out\lib-signed\Net40\MathNet.Spatial.*", Some libnet40, None;
           @"..\..\src\Spatial\**\*.cs", Some "src/Common", None ] }
@@ -107,6 +107,7 @@ Target "Clean" (fun _ ->
     CleanDirs [ "obj" ]
     CleanDirs [ "out/api"; "out/docs"; "out/packages" ]
     CleanDirs [ "out/lib/Net40" ]
+    CleanDirs [ "out/lib/netstandard2.0" ]
     CleanDirs [ "out/test/Net40" ]
     CleanDirs [ "out/lib-signed/Net40" ])
 

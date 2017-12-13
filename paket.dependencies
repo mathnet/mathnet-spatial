@@ -1,13 +1,24 @@
 source https://www.nuget.org/api/v2
-nuget MathNet.Numerics ~> 3.8
-nuget MathNet.Numerics.Signed ~> 3.8
 
-group Build
+
+group BuildStandard
     source https://www.nuget.org/api/v2
+    framework: netstandard2.0
     nuget FAKE ~> 4.6
-    nuget NUnit.Runners ~> 3.0
-    nuget FSharp.Formatting !~> 2.4
+    nuget NUnit.Console ~> 3.7
+    nuget FSharp.Formatting !~> 2.14.4
     nuget NuGet.CommandLine
+    nuget MathNet.Numerics.Core ~> 3.17.0
+
+group Build40
+    source https://www.nuget.org/api/v2
+    framework: net40
+    nuget FAKE ~> 4.6
+    nuget NUnit.Console ~> 3.7
+    nuget FSharp.Formatting !~> 2.14.4
+    nuget NuGet.CommandLine
+    nuget MathNet.Numerics ~> 3.8
+    nuget MathNet.Numerics.Signed ~> 3.8
 
 group Analyzers
     source https://www.nuget.org/api/v2
@@ -15,9 +26,10 @@ group Analyzers
 
 group Test
     source https://www.nuget.org/api/v2
-    nuget NUnit ~> 3.0
-	nuget Newtonsoft.Json ~> 10.0.3
-	nuget Protobuf-net ~> 2.3.3	
+    nuget MathNet.Numerics ~> 3.8
+    nuget NUnit ~> 3.7
+    nuget Newtonsoft.Json ~> 10.0.3
+    nuget Protobuf-net ~> 2.3.3	
 
 group Benchmarks
     source https://www.nuget.org/api/v2
