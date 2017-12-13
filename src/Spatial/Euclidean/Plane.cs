@@ -9,6 +9,9 @@
     using MathNet.Spatial.Internals;
     using MathNet.Spatial.Units;
 
+    /// <summary>
+    /// A geometric plane
+    /// </summary>
     [Serializable]
     public struct Plane : IEquatable<Plane>, IXmlSerializable
     {
@@ -142,6 +145,13 @@
             return new Plane(cross.Normalize(), p1);
         }
 
+        /// <summary>
+        /// Returns a point of intersection between three planes
+        /// </summary>
+        /// <param name="plane1">The first plane</param>
+        /// <param name="plane2">The second plane</param>
+        /// <param name="plane3">The third plane</param>
+        /// <returns>The intersection point</returns>
         public static Point3D PointFromPlanes(Plane plane1, Plane plane2, Plane plane3)
         {
             return Point3D.IntersectionOf(plane1, plane2, plane3);
@@ -212,6 +222,12 @@
             return Math.Abs(this.SignedDistanceTo(point));
         }
 
+        /// <summary>
+        /// Projects a point onto the plane
+        /// </summary>
+        /// <param name="p">A point</param>
+        /// <param name="projectionDirection">The direction of projection</param>
+        /// <returns>a projected point</returns>
         public Point3D Project(Point3D p, UnitVector3D? projectionDirection = null)
         {
             var dotProduct = this.Normal.DotProduct(p.ToVector3D());
@@ -220,6 +236,11 @@
             return p - projectionVector;
         }
 
+        /// <summary>
+        /// Projects a line onto the plane
+        /// </summary>
+        /// <param name="line3DToProject">The line to project</param>
+        /// <returns>A projected line</returns>
         [Obsolete("Use LineSegment3D instead, obsolete from 2017-12-10")]
         public Line3D Project(Line3D line3DToProject)
         {
@@ -228,6 +249,11 @@
             return new Line3D(projectedStartPoint, projectedEndPoint);
         }
 
+        /// <summary>
+        /// Projects a line onto the plane
+        /// </summary>
+        /// <param name="line3DToProject">The line to project</param>
+        /// <returns>A projected line</returns>
         public LineSegment3D Project(LineSegment3D line3DToProject)
         {
             var projectedStartPoint = this.Project(line3DToProject.StartPoint);
@@ -235,6 +261,11 @@
             return new LineSegment3D(projectedStartPoint, projectedEndPoint);
         }
 
+        /// <summary>
+        /// Projects a ray onto the plane
+        /// </summary>
+        /// <param name="rayToProject">The ray to project</param>
+        /// <returns>A projected ray</returns>
         public Ray3D Project(Ray3D rayToProject)
         {
             var projectedThroughPoint = this.Project(rayToProject.ThroughPoint);
@@ -393,6 +424,12 @@
             return p2 - (1 * d * this.Normal);
         }
 
+        /// <summary>
+        /// Rotates a plane
+        /// </summary>
+        /// <param name="aboutVector">The vector about which to rotate</param>
+        /// <param name="angle">An angle to rotate</param>
+        /// <returns>A rotated plane</returns>
         public Plane Rotate(UnitVector3D aboutVector, Angle angle)
         {
             var rootPoint = this.RootPoint;

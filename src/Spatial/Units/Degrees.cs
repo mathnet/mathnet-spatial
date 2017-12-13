@@ -10,7 +10,14 @@ namespace MathNet.Spatial.Units
     [EditorBrowsable(EditorBrowsableState.Never)]
     public struct Degrees : IAngleUnit
     {
+        /// <summary>
+        /// Internal name
+        /// </summary>
         internal const string Name = "\u00B0";
+
+        /// <summary>
+        /// Degree to radians conversion factor
+        /// </summary>
         private const double DegToRad = Math.PI / 180.0;
 
         /// <inheritdoc />
@@ -22,6 +29,12 @@ namespace MathNet.Spatial.Units
         /// <inheritdoc />
         public string ShortName => Name;
 
+        /// <summary>
+        /// Converts to Degrees
+        /// </summary>
+        /// <param name="left">a double</param>
+        /// <param name="right">a degree instance</param>
+        /// <returns>A new angle from degrees</returns>
         [Obsolete("This operator will be removed, use factory method FromDegrees or FromRadians. Made obsolete 2017-12-04.")]
         public static Angle operator *(double left, Degrees right)
         {

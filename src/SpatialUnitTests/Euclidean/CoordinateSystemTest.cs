@@ -1,6 +1,6 @@
-﻿// ReSharper disable InconsistentNaming
-namespace MathNet.Spatial.UnitTests.Euclidean
+﻿namespace MathNet.Spatial.UnitTests.Euclidean
 {
+    // ReSharper disable InconsistentNaming
     using System;
     using MathNet.Spatial.Euclidean;
     using MathNet.Spatial.Units;
@@ -255,7 +255,7 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         public void XmlRoundTrips()
         {
             var cs = new CoordinateSystem(new Point3D(1, -2, 3), new Vector3D(0, 1, 0), new Vector3D(0, 0, 1), new Vector3D(1, 0, 0));
-            const string expected = @"
+            string expected = @"
 <CoordinateSystem>
     <Origin X=""1"" Y=""-2"" Z=""3"" />
     <XAxis X=""0"" Y=""1"" Z=""0"" />

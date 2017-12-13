@@ -5,8 +5,16 @@ namespace MathNet.Spatial.Euclidean
     using MathNet.Numerics.LinearAlgebra.Double;
     using MathNet.Spatial.Units;
 
+    /// <summary>
+    /// Helper class for working with 3D matrixes
+    /// </summary>
     public static class Matrix3D
     {
+        /// <summary>
+        /// Creates a rotation matrix around the X axis
+        /// </summary>
+        /// <param name="angle">The angle to rotate</param>
+        /// <returns>A rotation matrix</returns>
         public static DenseMatrix RotationAroundXAxis(Angle angle)
         {
             var rotationMatrix = new DenseMatrix(3, 3);
@@ -18,6 +26,11 @@ namespace MathNet.Spatial.Euclidean
             return rotationMatrix;
         }
 
+        /// <summary>
+        /// Creates a rotation matrix around the Y axis
+        /// </summary>
+        /// <param name="angle">The angle to rotate</param>
+        /// <returns>A rotation matrix</returns>
         public static DenseMatrix RotationAroundYAxis(Angle angle)
         {
             var rotationMatrix = new DenseMatrix(3, 3);
@@ -29,6 +42,11 @@ namespace MathNet.Spatial.Euclidean
             return rotationMatrix;
         }
 
+        /// <summary>
+        /// Creates a rotation matrix around the Z axis
+        /// </summary>
+        /// <param name="angle">The angle to rotate</param>
+        /// <returns>A rotation matrix</returns>
         public static Matrix<double> RotationAroundZAxis(Angle angle)
         {
             var rotationMatrix = new DenseMatrix(3, 3);
@@ -46,7 +64,8 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         /// <param name="fromVector">Input Vector object to align from.</param>
         /// <param name="toVector">Input Vector object to align to.</param>
-        /// <param name="axis">Input Vector object. </param>
+        /// <param name="axis">Input Vector object.</param>
+        /// <returns>A transform matrix</returns>
         public static Matrix<double> RotationTo(
             Vector3D fromVector,
             Vector3D toVector,
@@ -62,6 +81,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="fromVector">Input Vector object to align from.</param>
         /// <param name="toVector">Input Vector object to align to.</param>
         /// <param name="axis">Input Vector object. </param>
+        /// <returns>A transform matrix</returns>
         public static Matrix<double> RotationTo(UnitVector3D fromVector, UnitVector3D toVector, UnitVector3D? axis = null)
         {
             if (fromVector == toVector)
@@ -86,18 +106,26 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        ///
+        /// Creates a rotation matrix around an arbitary vector
         /// </summary>
-        /// <param name="aboutVector"></param>
+        /// <param name="aboutVector">The vector</param>
         /// <param name="angle">Angle in degrees</param>
-        /// <param name="angleUnit"></param>
-        /// <returns></returns>
+        /// <param name="angleUnit">The angle unit</param>
+        /// <typeparam name="T">any angle type</typeparam>
+        /// <returns>A transform matrix</returns>
+        [Obsolete("Use Angle instead, Obsolete from 2017-12-12")]
         public static Matrix<double> RotationAroundArbitraryVector<T>(UnitVector3D aboutVector, double angle, T angleUnit)
             where T : IAngleUnit
         {
             return RotationAroundArbitraryVector(aboutVector, Angle.From(angle, angleUnit));
         }
 
+        /// <summary>
+        /// Creates a rotation matrix around an arbitary vector
+        /// </summary>
+        /// <param name="aboutVector">The vector</param>
+        /// <param name="angle">Angle in degrees</param>
+        /// <returns>A transform matrix</returns>
         public static Matrix<double> RotationAroundArbitraryVector(UnitVector3D aboutVector, Angle angle)
         {
             // http://en.wikipedia.org/wiki/Rotation_matrix

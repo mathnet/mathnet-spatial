@@ -1,30 +1,62 @@
 ﻿namespace MathNet.Spatial.Projective
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using MathNet.Numerics.LinearAlgebra.Double;
     using MathNet.Spatial.Units;
 
+    /// <summary>
+    /// An implementation of Matrix3DHomogeneous
+    /// </summary>
     internal class Matrix3DHomogeneous
     {
+        /// <summary>
+        /// internal representation of matrix
+        /// </summary>
         private readonly DenseMatrix matrix;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Matrix3DHomogeneous"/> class.
+        /// </summary>
         public Matrix3DHomogeneous()
         {
             this.matrix = DenseMatrix.CreateIdentity(4);
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Matrix3DHomogeneous"/> class.
+        /// </summary>
+        /// <param name="matrix">An initial matrix</param>
         public Matrix3DHomogeneous(DenseMatrix matrix)
         {
             this.matrix = matrix;
         }
 
-#pragma warning disable SA1117 // Parameters must be on same line or separate lines
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Matrix3DHomogeneous"/> class.
+        /// </summary>
+        /// <param name="m00">Element at position m[0,0]</param>
+        /// <param name="m01">Element at position m[0,1]</param>
+        /// <param name="m02">Element at position m[0,2]</param>
+        /// <param name="m03">Element at position m[0,3]</param>
+        /// <param name="m10">Element at position m[1,0]</param>
+        /// <param name="m11">Element at position m[1,1]</param>
+        /// <param name="m12">Element at position m[1,2]</param>
+        /// <param name="m13">Element at position m[1,3]</param>
+        /// <param name="m20">Element at position m[2,0]</param>
+        /// <param name="m21">Element at position m[2,1]</param>
+        /// <param name="m22">Element at position m[2,2]</param>
+        /// <param name="m23">Element at position m[2,3]</param>
+        /// <param name="m30">Element at position m[3,0]</param>
+        /// <param name="m31">Element at position m[3,1]</param>
+        /// <param name="m32">Element at position m[3,2]</param>
+        /// <param name="m33">Element at position m[3,3]</param>
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "Reviewed.")]
         public Matrix3DHomogeneous(
             double m00, double m01, double m02, double m03,
             double m10, double m11, double m12, double m13,
             double m20, double m21, double m22, double m23,
             double m30, double m31, double m32, double m33)
-#pragma warning restore SA1117 // Parameters must be on same line or separate lines
         {
             this.matrix = DenseMatrix.CreateIdentity(4);
             this.matrix[0, 0] = m00;
@@ -45,7 +77,12 @@
             this.matrix[3, 3] = m33;
         }
 
-        // Multiply two matrices together
+        /// <summary>
+        /// Multiply two matrices together
+        /// </summary>
+        /// <param name="m1">The first matrix</param>
+        /// <param name="m2">The second matrix</param>
+        /// <returns>A Matrix3DHomogeneous</returns>
         public static Matrix3DHomogeneous operator *(Matrix3DHomogeneous m1, Matrix3DHomogeneous m2)
         {
             var result = new Matrix3DHomogeneous();
@@ -235,7 +272,12 @@
             return result;
         }
 
-        // Create an axonometric projection matrix
+        /// <summary>
+        /// Create an axonometric projection matrix
+        /// </summary>
+        /// <param name="alpha">The first angle</param>
+        /// <param name="beta">The second angle</param>
+        /// <returns>A Matrix3DHomogeneous</returns>
         public static Matrix3DHomogeneous Axonometric(Angle alpha, Angle beta)
         {
             var result = new Matrix3DHomogeneous();
@@ -252,7 +294,12 @@
             return result;
         }
 
-        // Oblique projection matrix
+        /// <summary>
+        /// Oblique projection matrix
+        /// </summary>
+        /// <param name="alpha">The first angle</param>
+        /// <param name="theta">The second angle</param>
+        /// <returns>A Matrix3DHomogeneous</returns>
         public static Matrix3DHomogeneous Oblique(Angle alpha, Angle theta)
         {
             var result = new Matrix3DHomogeneous();
@@ -265,7 +312,13 @@
             return result;
         }
 
-        // Create matrix from Euler Angles
+        /// <summary>
+        /// Create matrix from Euler Angles
+        /// </summary>
+        /// <param name="alpha">The first angle</param>
+        /// <param name="beta">The second angle</param>
+        /// <param name="gamma">The third angle</param>
+        /// <returns>A Matrix3DHomogeneous</returns>
         public static Matrix3DHomogeneous Euler(Angle alpha, Angle beta, Angle gamma)
         {
             var result = new Matrix3DHomogeneous();
@@ -289,7 +342,13 @@
             return result;
         }
 
-        // Create matrix from azimuth and elevation
+        /// <summary>
+        /// Create matrix from azimuth and elevation
+        /// </summary>
+        /// <param name="elevation">The elevation</param>
+        /// <param name="azimuth">The azimuth</param>
+        /// <param name="oneOverd">The inverse of d</param>
+        /// <returns>A Matrix3DHomogeneous</returns>
         public static Matrix3DHomogeneous AzimuthElevation(double elevation, double azimuth, double oneOverd)
         {
             var result = new Matrix3DHomogeneous();
@@ -336,8 +395,8 @@
             }
             else if (oneOverd > 0)
             {
-                //Point3DHomogeneous perspective = Point3DHomogeneous.Perspective(1 / oneOverd);
-                //result = perspective * rotate;
+                // Point3DHomogeneous perspective = Point3DHomogeneous.Perspective(1 / oneOverd);
+                // result = perspective * rotate;
             }
 
             return result;

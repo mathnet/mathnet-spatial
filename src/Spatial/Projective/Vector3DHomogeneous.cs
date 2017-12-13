@@ -5,6 +5,9 @@
     using MathNet.Numerics.LinearAlgebra;
     using MathNet.Spatial.Euclidean;
 
+    /// <summary>
+    /// A Vector3DHomogeneous struct
+    /// </summary>
     internal struct Vector3DHomogeneous
     {
         /// <summary>
@@ -27,6 +30,13 @@
         /// </summary>
         public readonly double W;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Vector3DHomogeneous"/> struct.
+        /// </summary>
+        /// <param name="x">The x value</param>
+        /// <param name="y">The y value</param>
+        /// <param name="z">The z value</param>
+        /// <param name="w">The w value</param>
         public Vector3DHomogeneous(double x, double y, double z, double w)
         {
             this.X = x;
@@ -35,6 +45,10 @@
             this.W = w;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Vector3DHomogeneous"/> struct.
+        /// </summary>
+        /// <param name="vector">A mathnet.numerics vector</param>
         private Vector3DHomogeneous(Vector<double> vector)
             : this(vector.At(0), vector.At(1), vector.At(2), vector.At(2))
         {
@@ -44,6 +58,9 @@
             }
         }
 
+        /// <summary>
+        /// Gets a Vector3DHomogeneous with NaN values
+        /// </summary>
         public static Vector3DHomogeneous NaN => new Vector3DHomogeneous(double.NaN, double.NaN, double.NaN, double.NaN);
 
         /// <summary>
@@ -72,6 +89,12 @@
             return this.ToString(null, provider);
         }
 
+        /// <summary>
+        /// Returns a string representation of this instance using the provided <see cref="IFormatProvider"/>
+        /// </summary>
+        /// <param name="format">A format for the string</param>
+        /// <param name="provider">A <see cref="IFormatProvider"/></param>
+        /// <returns>The string representation of this instance.</returns>
         public string ToString(string format, IFormatProvider provider = null)
         {
             var numberFormatInfo = provider != null ? NumberFormatInfo.GetInstance(provider) : CultureInfo.InvariantCulture.NumberFormat;
@@ -85,6 +108,11 @@
                 this.W.ToString(format, numberFormatInfo));
         }
 
+        /// <summary>
+        /// Returns a value to indicate if a pair of Vector3DHomogeneous are equal
+        /// </summary>
+        /// <param name="other">The Vector3DHomogeneous to compare against.</param>
+        /// <returns>True if the Vector3DHomogeneouses are equal; otherwise false</returns>
         public bool Equals(Vector3DHomogeneous other)
         {
             //// ReSharper disable CompareOfFloatsByEqualityOperator
@@ -92,6 +120,12 @@
             //// ReSharper restore CompareOfFloatsByEqualityOperator
         }
 
+        /// <summary>
+        /// Returns a value to indicate if a pair of Vector3DHomogeneous are equal
+        /// </summary>
+        /// <param name="other">The Vector3DHomogeneous to compare against.</param>
+        /// <param name="tolerance">A tolerance (epsilon) to adjust for floating point error</param>
+        /// <returns>True if the Vector3DHomogeneouses are equal; otherwise false</returns>
         public bool Equals(Vector3DHomogeneous other, double tolerance)
         {
             if (tolerance < 0)
@@ -108,7 +142,7 @@
         /// <inheritdoc/>
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj))
+            if (obj is null)
             {
                 return false;
             }
@@ -132,12 +166,17 @@
         /// <summary>
         /// return new Point3DHomogeneous(this.X, this.Y, this.Z, this.W);
         /// </summary>
-        /// <returns> A <see cref="Point3DHomogeneous"/> with the same x, y, z & w as this instance.</returns>
+        /// <returns> A <see cref="Point3DHomogeneous"/> with the same x, y, z and w as this instance.</returns>
         public Point3DHomogeneous ToPoint3DHomogeneous()
         {
             return new Point3DHomogeneous(this.X, this.Y, this.Z, this.W);
         }
 
+        /// <summary>
+        /// Transforms by matrix
+        /// </summary>
+        /// <param name="m">A transform matrix</param>
+        /// <returns>A transformed Vector3DHomogeneous</returns>
         public Vector3DHomogeneous TransformBy(Matrix<double> m)
         {
             return new Vector3DHomogeneous(m.Multiply(this.ToVector()));
@@ -152,6 +191,10 @@
             return Vector<double>.Build.Dense(new[] { this.X, this.Y, this.Z, this.W });
         }
 
+        /// <summary>
+        /// Gets a vector3D
+        /// </summary>
+        /// <returns>A vector</returns>
         public Vector3D ToVector3D()
         {
             // ReSharper disable once CompareOfFloatsByEqualityOperator

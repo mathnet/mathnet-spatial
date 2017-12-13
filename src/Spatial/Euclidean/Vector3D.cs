@@ -634,7 +634,7 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public Vector3D TransformBy(Matrix<double> m)
         {
-            return new Vector3D(m.Multiply(this.ToVector()));
+            return Vector3D.OfVector(m.Multiply(this.ToVector()));
         }
 
         /// <summary>

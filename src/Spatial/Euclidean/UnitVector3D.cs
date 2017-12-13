@@ -69,12 +69,20 @@ namespace MathNet.Spatial.Euclidean
             this.Z = z / norm;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UnitVector3D"/> struct.
+        /// </summary>
+        /// <param name="data">A list of 3 points</param>
         [Obsolete("This constructor will be removed. Made obsolete 2017-12-05.")]
         public UnitVector3D(IEnumerable<double> data)
             : this(data.ToArray())
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UnitVector3D"/> struct.
+        /// </summary>
+        /// <param name="data">A list of 3 points</param>
         [Obsolete("This constructor will be removed. Made obsolete 2017-12-05.")]
         public UnitVector3D(double[] data)
             : this(data[0], data[1], data[2])
@@ -85,14 +93,23 @@ namespace MathNet.Spatial.Euclidean
             }
         }
 
+        /// <summary>
+        /// Gets the X axis
+        /// </summary>
         public static UnitVector3D XAxis { get; } = Create(1, 0, 0);
 
+        /// <summary>
+        /// Gets the Y axis
+        /// </summary>
         public static UnitVector3D YAxis { get; } = Create(0, 1, 0);
 
+        /// <summary>
+        /// Gets the z Axis
+        /// </summary>
         public static UnitVector3D ZAxis { get; } = Create(0, 0, 1);
 
         /// <summary>
-        /// A vector orthogonbal to this
+        /// Gets a vector orthogonal to this
         /// </summary>
         [Pure]
         public UnitVector3D Orthogonal
@@ -101,111 +118,219 @@ namespace MathNet.Spatial.Euclidean
             {
                 if (-this.X - this.Y > 0.1)
                 {
-#pragma warning disable CS0618 // Type or member is obsolete we want this when the ctor is public to avoid scaling
-                    return new UnitVector3D(this.Z, this.Z, -this.X - this.Y);
+                    return UnitVector3D.Create(this.Z, this.Z, -this.X - this.Y);
                 }
 
-                return new UnitVector3D(-this.Y - this.Z, this.X, this.X);
-#pragma warning restore CS0618 // Type or member is obsolete
+                return UnitVector3D.Create(-this.Y - this.Z, this.X, this.X);
             }
         }
 
         /// <summary>
-        /// The length of the vector not the count of elements
+        /// Gets the length of the vector not the count of elements
         /// </summary>
         [Pure]
         public double Length => 1;
 
+        /// <summary>
+        /// Gets the cross product matrix
+        /// </summary>
         [Pure]
         internal Matrix<double> CrossProductMatrix => Matrix<double>.Build.Dense(3, 3, new[] { 0d, this.Z, -this.Y, -this.Z, 0d, this.X, this.Y, -this.X, 0d });
 
+        /// <summary>
+        /// Returns a value that indicates whether each pair of elements in two specified vectors is equal.
+        /// </summary>
+        /// <param name="left">The first vector to compare</param>
+        /// <param name="right">The second vector to compare</param>
+        /// <returns>True if the vectors are the same; otherwise false.</returns>
         public static bool operator ==(UnitVector3D left, UnitVector3D right)
         {
             return left.Equals(right);
         }
 
+        /// <summary>
+        /// Returns a value that indicates whether each pair of elements in two specified vectors is equal.
+        /// </summary>
+        /// <param name="left">The first vector to compare</param>
+        /// <param name="right">The second vector to compare</param>
+        /// <returns>True if the vectors are the same; otherwise false.</returns>
         public static bool operator ==(Vector3D left, UnitVector3D right)
         {
             return left.Equals(right);
         }
 
+        /// <summary>
+        /// Returns a value that indicates whether each pair of elements in two specified vectors is equal.
+        /// </summary>
+        /// <param name="left">The first vector to compare</param>
+        /// <param name="right">The second vector to compare</param>
+        /// <returns>True if the vectors are the same; otherwise false.</returns>
         public static bool operator ==(UnitVector3D left, Vector3D right)
         {
             return left.Equals(right);
         }
 
+        /// <summary>
+        /// Returns a value that indicates whether any pair of elements in two specified vectors is not equal.
+        /// </summary>
+        /// <param name="left">The first vector to compare.</param>
+        /// <param name="right">The second vector to compare.</param>
+        /// <returns>True if the vectors are different; otherwise false.</returns>
         public static bool operator !=(UnitVector3D left, UnitVector3D right)
         {
             return !left.Equals(right);
         }
 
+        /// <summary>
+        /// Returns a value that indicates whether any pair of elements in two specified vectors is not equal.
+        /// </summary>
+        /// <param name="left">The first vector to compare.</param>
+        /// <param name="right">The second vector to compare.</param>
+        /// <returns>True if the vectors are different; otherwise false.</returns>
         public static bool operator !=(Vector3D left, UnitVector3D right)
         {
             return !left.Equals(right);
         }
 
+        /// <summary>
+        /// Returns a value that indicates whether any pair of elements in two specified vectors is not equal.
+        /// </summary>
+        /// <param name="left">The first vector to compare.</param>
+        /// <param name="right">The second vector to compare.</param>
+        /// <returns>True if the vectors are different; otherwise false.</returns>
         public static bool operator !=(UnitVector3D left, Vector3D right)
         {
             return !left.Equals(right);
         }
 
+        /// <summary>
+        /// Adds two vectors
+        /// </summary>
+        /// <param name="v1">The first vector</param>
+        /// <param name="v2">The second vector</param>
+        /// <returns>A new summed vector</returns>
         public static Vector3D operator +(UnitVector3D v1, UnitVector3D v2)
         {
             return new Vector3D(v1.X + v2.X, v1.Y + v2.Y, v1.Z + v2.Z);
         }
 
+        /// <summary>
+        /// Adds two vectors
+        /// </summary>
+        /// <param name="v1">The first vector</param>
+        /// <param name="v2">The second vector</param>
+        /// <returns>A new summed vector</returns>
         public static Vector3D operator +(Vector3D v1, UnitVector3D v2)
         {
             return new Vector3D(v1.X + v2.X, v1.Y + v2.Y, v1.Z + v2.Z);
         }
 
+        /// <summary>
+        /// Adds two vectors
+        /// </summary>
+        /// <param name="v1">The first vector</param>
+        /// <param name="v2">The second vector</param>
+        /// <returns>A new summed vector</returns>
         public static Vector3D operator +(UnitVector3D v1, Vector3D v2)
         {
             return new Vector3D(v1.X + v2.X, v1.Y + v2.Y, v1.Z + v2.Z);
         }
 
+        /// <summary>
+        /// Subtracts two vectors
+        /// </summary>
+        /// <param name="v1">The first vector</param>
+        /// <param name="v2">The second vector</param>
+        /// <returns>A new difference vector</returns>
         public static Vector3D operator -(UnitVector3D v1, UnitVector3D v2)
         {
             return new Vector3D(v1.X - v2.X, v1.Y - v2.Y, v1.Z - v2.Z);
         }
 
+        /// <summary>
+        /// Subtracts two vectors
+        /// </summary>
+        /// <param name="v1">The first vector</param>
+        /// <param name="v2">The second vector</param>
+        /// <returns>A new difference vector</returns>
         public static Vector3D operator -(Vector3D v1, UnitVector3D v2)
         {
             return new Vector3D(v1.X - v2.X, v1.Y - v2.Y, v1.Z - v2.Z);
         }
 
+        /// <summary>
+        /// Subtracts two vectors
+        /// </summary>
+        /// <param name="v1">The first vector</param>
+        /// <param name="v2">The second vector</param>
+        /// <returns>A new difference vector</returns>
         public static Vector3D operator -(UnitVector3D v1, Vector3D v2)
         {
             return new Vector3D(v1.X - v2.X, v1.Y - v2.Y, v1.Z - v2.Z);
         }
 
+        /// <summary>
+        /// Negates the vector
+        /// </summary>
+        /// <param name="v">A vector to negate</param>
+        /// <returns>A new negated vector</returns>
         public static Vector3D operator -(UnitVector3D v)
         {
             return new Vector3D(-1 * v.X, -1 * v.Y, -1 * v.Z);
         }
 
+        /// <summary>
+        /// Multiplies a vector by a scalar
+        /// </summary>
+        /// <param name="d">A scalar</param>
+        /// <param name="v">A vector</param>
+        /// <returns>A scaled vector</returns>
         public static Vector3D operator *(double d, UnitVector3D v)
         {
             return new Vector3D(d * v.X, d * v.Y, d * v.Z);
         }
 
+        /// <summary>
+        /// Divides a vector by a scalar
+        /// </summary>
+        /// <param name="v">A vector</param>
+        /// <param name="d">A scalar</param>
+        /// <returns>A scaled vector</returns>
         public static Vector3D operator /(UnitVector3D v, double d)
         {
             return new Vector3D(v.X / d, v.Y / d, v.Z / d);
         }
 
+        /// <summary>
+        /// Multiplies a Matrix by a Vector
+        /// </summary>
+        /// <param name="left">A Matrix</param>
+        /// <param name="right">A Vector</param>
+        /// <returns>A new vector</returns>
         [Obsolete("Not sure this is nice")]
         public static Vector<double> operator *(Matrix<double> left, UnitVector3D right)
         {
             return left * right.ToVector();
         }
 
+        /// <summary>
+        /// Multiplies a vector by a matrix
+        /// </summary>
+        /// <param name="left">A Vector</param>
+        /// <param name="right">A Matrix</param>
+        /// <returns>A new vector</returns>
         [Obsolete("Not sure this is nice")]
         public static Vector<double> operator *(UnitVector3D left, Matrix<double> right)
         {
             return left.ToVector() * right;
         }
 
+        /// <summary>
+        /// Returns the dot product of two vectors
+        /// </summary>
+        /// <param name="left">The first vector</param>
+        /// <param name="right">The second vector</param>
+        /// <returns>A scalar result</returns>
         public static double operator *(UnitVector3D left, UnitVector3D right)
         {
             return left.DotProduct(right);
@@ -232,10 +357,9 @@ namespace MathNet.Spatial.Euclidean
             {
                 throw new InvalidOperationException("The Euclidean norm of x, y, z differs more than tolerance from 1");
             }
-
-#pragma warning disable CS0618 // Type or member is obsolete needed until the ctor is made private
+#pragma warning disable 618
             return new UnitVector3D(x / norm, y / norm, z / norm);
-#pragma warning restore CS0618 // Type or member is obsolete
+#pragma warning restore 618
         }
 
         /// <summary>
@@ -339,6 +463,11 @@ namespace MathNet.Spatial.Euclidean
             return plane.Project(this.ToVector3D());
         }
 
+        /// <summary>
+        /// Returns the Dot product of the current vector and a unit vector
+        /// </summary>
+        /// <param name="uv">A unit vector</param>
+        /// <returns>Returns a new vector</returns>
         [Pure]
         public Vector3D ProjectOn(UnitVector3D uv)
         {
@@ -347,12 +476,12 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Computes whether or not this unit vector is parallel to another vector using the dot product method and comparing it
+        /// Computes whether or not this vector is parallel to another vector using the dot product method and comparing it
         /// to within a specified tolerance.
         /// </summary>
-        /// <param name="othervector"></param>
+        /// <param name="othervector">The other <see cref="Vector3D"/></param>
         /// <param name="tolerance">A tolerance value for the dot product method.  Values below 2*Precision.DoublePrecision may cause issues.</param>
-        /// <returns>True if the vector dot product is within the given double tolerance of unity, false if not</returns>
+        /// <returns>true if the vector dot product is within the given tolerance of unity, false if it is not</returns>
         [Pure]
         public bool IsParallelTo(Vector3D othervector, double tolerance = 1e-10)
         {
@@ -361,12 +490,12 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Computes whether or not this unit vector is parallel to a unit vector using the dot product method and comparing it
+        /// Computes whether or not this vector is parallel to a unit vector using the dot product method and comparing it
         /// to within a specified tolerance.
         /// </summary>
-        /// <param name="othervector"></param>
+        /// <param name="othervector">The other <see cref="UnitVector3D"/></param>
         /// <param name="tolerance">A tolerance value for the dot product method.  Values below 2*Precision.DoublePrecision may cause issues.</param>
-        /// <returns>True if the vector dot product is within the given double tolerance of unity, false if not</returns>
+        /// <returns>true if the vector dot product is within the given tolerance of unity, false if not</returns>
         [Pure]
         public bool IsParallelTo(UnitVector3D othervector, double tolerance = 1e-10)
         {
@@ -377,10 +506,10 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Determine whether or not this unit vector is parallel to another unit vector within a given angle tolerance.
+        /// Determine whether or not this vector is parallel to another vector within a given angle tolerance.
         /// </summary>
-        /// <param name="othervector"></param>
-        /// <param name="angleTolerance"></param>
+        /// <param name="othervector">The other <see cref="Vector3D"/></param>
+        /// <param name="angleTolerance">The tolerance for when the vectors are considered parallel.</param>
         /// <returns>true if the vectors are parallel within the angle tolerance, false if they are not</returns>
         [Pure]
         public bool IsParallelTo(UnitVector3D othervector, Angle angleTolerance)
@@ -396,10 +525,10 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Determine whether or not this unit vector is parallel to a vector within a given angle tolerance.
+        /// Determine whether or not this vector is parallel to a unit vector within a given angle tolerance.
         /// </summary>
-        /// <param name="othervector"></param>
-        /// <param name="angleTolerance"></param>
+        /// <param name="othervector">The other <see cref="UnitVector3D"/></param>
+        /// <param name="angleTolerance">The tolerance for when the vectors are considered parallel.</param>
         /// <returns>true if the vectors are parallel within the angle tolerance, false if they are not</returns>
         [Pure]
         public bool IsParallelTo(Vector3D othervector, Angle angleTolerance)
@@ -408,6 +537,13 @@ namespace MathNet.Spatial.Euclidean
             return this.IsParallelTo(other, angleTolerance);
         }
 
+        /// <summary>
+        /// Computes whether or not this vector is perpendicular to another vector using the dot product method and
+        /// comparing it to within a specified tolerance
+        /// </summary>
+        /// <param name="othervector">The other <see cref="Vector3D"/></param>
+        /// <param name="tolerance">A tolerance value for the dot product method.  Values below 2*Precision.DoublePrecision may cause issues.</param>
+        /// <returns>true if the vector dot product is within the given tolerance of zero, false if not</returns>
         [Pure]
         public bool IsPerpendicularTo(Vector3D othervector, double tolerance = 1e-10)
         {
@@ -415,26 +551,45 @@ namespace MathNet.Spatial.Euclidean
             return Math.Abs(this.DotProduct(other)) < tolerance;
         }
 
+        /// <summary>
+        /// Computes whether or not this vector is perpendicular to another vector using the dot product method and
+        /// comparing it to within a specified tolerance
+        /// </summary>
+        /// <param name="othervector">The other <see cref="UnitVector3D"/></param>
+        /// <param name="tolerance">A tolerance value for the dot product method.  Values below 2*Precision.DoublePrecision may cause issues.</param>
+        /// <returns>true if the vector dot product is within the given tolerance of zero, false if not</returns>
         [Pure]
         public bool IsPerpendicularTo(UnitVector3D othervector, double tolerance = 1e-10)
         {
             return Math.Abs(this.DotProduct(othervector)) < tolerance;
         }
 
+        /// <summary>
+        /// Inverses the direction of the vector, equivalent to multiplying by -1
+        /// </summary>
+        /// <returns>A <see cref="Vector3D"/> pointing in the opposite direction.</returns>
         [Pure]
         public UnitVector3D Negate()
         {
-#pragma warning disable CS0618 // Type or member is obsolete
-            return new UnitVector3D(-1 * this.X, -1 * this.Y, -1 * this.Z);
-#pragma warning restore CS0618 // Type or member is obsolete
+            return UnitVector3D.Create(-1 * this.X, -1 * this.Y, -1 * this.Z);
         }
 
+        /// <summary>
+        /// Returns the dot product of two vectors.
+        /// </summary>
+        /// <param name="v">The second vector.</param>
+        /// <returns>The dot product.</returns>
         [Pure]
         public double DotProduct(Vector3D v)
         {
             return (this.X * v.X) + (this.Y * v.Y) + (this.Z * v.Z);
         }
 
+        /// <summary>
+        /// Returns the dot product of two vectors.
+        /// </summary>
+        /// <param name="v">The second vector.</param>
+        /// <returns>The dot product.</returns>
         [Pure]
         public double DotProduct(UnitVector3D v)
         {
@@ -442,18 +597,33 @@ namespace MathNet.Spatial.Euclidean
             return Math.Max(-1, Math.Min(dp, 1));
         }
 
+        /// <summary>
+        /// Subtracts a vector from this
+        /// </summary>
+        /// <param name="v">a vector to subtract</param>
+        /// <returns>A new vector</returns>
         [Obsolete("Use - instead")]
         public Vector3D Subtract(UnitVector3D v)
         {
             return new Vector3D(this.X - v.X, this.Y - v.Y, this.Z - v.Z);
         }
 
+        /// <summary>
+        /// Adds a vector to this
+        /// </summary>
+        /// <param name="v">a vector to add</param>
+        /// <returns>A new vector</returns>
         [Obsolete("Use + instead")]
         public Vector3D Add(UnitVector3D v)
         {
             return new Vector3D(this.X + v.X, this.Y + v.Y, this.Z + v.Z);
         }
 
+        /// <summary>
+        /// Returns the cross product of this vector and a vector
+        /// </summary>
+        /// <param name="other">A vector</param>
+        /// <returns>A new vector with the cross product result</returns>
         [Pure]
         public UnitVector3D CrossProduct(UnitVector3D other)
         {
@@ -464,6 +634,11 @@ namespace MathNet.Spatial.Euclidean
             return v;
         }
 
+        /// <summary>
+        /// Returns the cross product of this vector and a unit vector
+        /// </summary>
+        /// <param name="inVector3D">A vector</param>
+        /// <returns>A new vector with the cross product result</returns>
         [Pure]
         public Vector3D CrossProduct(Vector3D inVector3D)
         {
@@ -474,6 +649,10 @@ namespace MathNet.Spatial.Euclidean
             return v;
         }
 
+        /// <summary>
+        /// Returns a dense Matrix with the unit tensor product
+        /// </summary>
+        /// <returns>a dense matrix</returns>
         [Pure]
         public Matrix<double> GetUnitTensorProduct()
         {
@@ -487,8 +666,9 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// Returns signed angle
         /// </summary>
-        /// <param name="v">The fromVector3D to calculate the signed angle to </param>
+        /// <param name="v">The vector to calculate the signed angle to </param>
         /// <param name="about">The vector around which to rotate to get the correct sign</param>
+        /// <returns>A signed Angle</returns>
         [Pure]
         public Angle SignedAngleTo(Vector3D v, UnitVector3D about)
         {
@@ -498,8 +678,9 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// Returns signed angle
         /// </summary>
-        /// <param name="v">The fromVector3D to calculate the signed angle to </param>
+        /// <param name="v">The vector to calculate the signed angle to </param>
         /// <param name="about">The vector around which to rotate to get the correct sign</param>
+        /// <returns>A signed Angle</returns>
         [Pure]
         public Angle SignedAngleTo(UnitVector3D v, UnitVector3D about)
         {
@@ -564,6 +745,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="about">The vector to rotate around.</param>
         /// <param name="angle">The angle positive according to right hand rule.</param>
         /// <param name="unit">The <see cref="IAngleUnit"/></param>
+        /// <typeparam name="T">any angle type</typeparam>
         /// <returns>A rotated vector.</returns>
         [Pure]
         [Obsolete("This method will be removed, prefer the overload taking an Angle. Made obsolete 2017-12-05.")]
@@ -586,24 +768,42 @@ namespace MathNet.Spatial.Euclidean
             return cs.Transform(this).Normalize();
         }
 
+        /// <summary>
+        /// Returns a point equivelent to the vector
+        /// </summary>
+        /// <returns>A point</returns>
         [Pure]
         public Point3D ToPoint3D()
         {
             return new Point3D(this.X, this.Y, this.Z);
         }
 
+        /// <summary>
+        /// Returns a Vector3D equivelent to this unit vector
+        /// </summary>
+        /// <returns>A vector</returns>
         [Pure]
         public Vector3D ToVector3D()
         {
             return new Vector3D(this.X, this.Y, this.Z);
         }
 
+        /// <summary>
+        /// Transforms the vector by a coordinate system and returns the transformed.
+        /// </summary>
+        /// <param name="coordinateSystem">A coordinate system</param>
+        /// <returns>A new transformed vector</returns>
         [Pure]
         public Vector3D TransformBy(CoordinateSystem coordinateSystem)
         {
             return coordinateSystem.Transform(this.ToVector3D());
         }
 
+        /// <summary>
+        /// Transforms a vector by multipying it against a provided patrix
+        /// </summary>
+        /// <param name="m">The matrix to multiply</param>
+        /// <returns>A new transformed vector</returns>
         [Pure]
         public Vector3D TransformBy(Matrix<double> m)
         {
@@ -613,6 +813,7 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// Convert to a Math.NET Numerics dense vector of length 3.
         /// </summary>
+        /// <returns>A dense vector</returns>
         [Pure]
         public Vector<double> ToVector()
         {
@@ -652,6 +853,7 @@ namespace MathNet.Spatial.Euclidean
         {
             // ReSharper disable CompareOfFloatsByEqualityOperator
             return this.X == other.X && this.Y == other.Y && this.Z == other.Z;
+
             // ReSharper restore CompareOfFloatsByEqualityOperator
         }
 
@@ -661,9 +863,16 @@ namespace MathNet.Spatial.Euclidean
         {
             // ReSharper disable CompareOfFloatsByEqualityOperator
             return this.X == other.X && this.Y == other.Y && this.Z == other.Z;
+
             // ReSharper restore CompareOfFloatsByEqualityOperator
         }
 
+        /// <summary>
+        /// Returns a value to indicate if a pair of vectors are equal
+        /// </summary>
+        /// <param name="other">The vector to compare against.</param>
+        /// <param name="tolerance">A tolerance (epsilon) to adjust for floating point error</param>
+        /// <returns>True if the vectors are equal; otherwise false</returns>
         [Pure]
         public bool Equals(UnitVector3D other, double tolerance)
         {
@@ -677,6 +886,12 @@ namespace MathNet.Spatial.Euclidean
                    Math.Abs(other.Z - this.Z) < tolerance;
         }
 
+        /// <summary>
+        /// Returns a value to indicate if a pair of vectors are equal
+        /// </summary>
+        /// <param name="other">The vector to compare against.</param>
+        /// <param name="tolerance">A tolerance (epsilon) to adjust for floating point error</param>
+        /// <returns>True if the vectors are equal; otherwise false</returns>
         [Pure]
         public bool Equals(Vector3D other, double tolerance)
         {
@@ -716,11 +931,13 @@ namespace MathNet.Spatial.Euclidean
             }
         }
 
+        /// <inheritdoc />
         XmlSchema IXmlSerializable.GetSchema()
         {
             return null;
         }
 
+        /// <inheritdoc />
         void IXmlSerializable.ReadXml(XmlReader reader)
         {
             bool TryGetUnitVector(double xv, double yv, double zv, out UnitVector3D result)
@@ -757,6 +974,7 @@ namespace MathNet.Spatial.Euclidean
             throw new XmlException($"Could not read a {this.GetType()}");
         }
 
+        /// <inheritdoc />
         void IXmlSerializable.WriteXml(XmlWriter writer)
         {
             writer.WriteAttribute("X", this.X);
@@ -764,6 +982,11 @@ namespace MathNet.Spatial.Euclidean
             writer.WriteAttribute("Z", this.Z);
         }
 
+        /// <summary>
+        /// Returns the dot product of this vector with a second
+        /// </summary>
+        /// <param name="v">a second vector</param>
+        /// <returns>The dot product</returns>
         [Pure]
         internal double DotProduct(Point3D v)
         {

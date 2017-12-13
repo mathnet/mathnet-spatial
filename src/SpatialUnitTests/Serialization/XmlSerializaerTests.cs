@@ -197,7 +197,7 @@
         public void CoordinateSystemXml()
         {
             var cs = new CoordinateSystem(new Point3D(1, -2, 3), new Vector3D(0, 1, 0), new Vector3D(0, 0, 1), new Vector3D(1, 0, 0));
-            const string xml = @"
+            string xml = @"
 <CoordinateSystem>
     <Origin X=""1"" Y=""-2"" Z=""3"" />
     <XAxis X=""0"" Y=""1"" Z=""0"" />
