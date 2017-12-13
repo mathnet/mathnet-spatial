@@ -602,8 +602,7 @@ NUGET
       System.Xml.XPath (>= 4.3) - restriction: || (&& (< monotouch) (>= netstandard1.3) (< xamarinios) (< xamarinmac) (< xamarintvos) (< xamarinwatchos)) (>= net46)
     TaskParallelLibrary (1.0.2856) - restriction: && (>= net35) (< net40)
 
-GROUP Build40
-RESTRICTION: == net40
+GROUP Build
 NUGET
   remote: https://www.nuget.org/api/v2
     FAKE (4.64.2)
@@ -613,8 +612,6 @@ NUGET
       FSharpVSPowerTools.Core (>= 2.3 < 2.4)
     FSharpVSPowerTools.Core (2.3)
       FSharp.Compiler.Service (>= 2.0.0.3)
-    MathNet.Numerics (3.20)
-    MathNet.Numerics.Signed (3.20)
     NuGet.CommandLine (4.4.1)
     NUnit.Console (3.7)
       NUnit.ConsoleRunner (>= 3.7)
@@ -630,17 +627,17 @@ NUGET
     NUnit.Extension.TeamCityEventListener (1.0.3)
     NUnit.Extension.VSProjectLoader (3.7)
 
+GROUP Build40
+RESTRICTION: == net40
+NUGET
+  remote: https://www.nuget.org/api/v2
+    MathNet.Numerics (3.20)
+    MathNet.Numerics.Signed (3.20)
+
 GROUP BuildStandard
 RESTRICTION: == netstandard2.0
 NUGET
   remote: https://www.nuget.org/api/v2
-    FAKE (4.64.2)
-    FSharp.Compiler.Service (2.0.0.6)
-    FSharp.Formatting (2.14.4)
-      FSharp.Compiler.Service (2.0.0.6)
-      FSharpVSPowerTools.Core (>= 2.3 < 2.4)
-    FSharpVSPowerTools.Core (2.3)
-      FSharp.Compiler.Service (>= 2.0.0.3)
     MathNet.Numerics.Core (3.17)
       Microsoft.Win32.Primitives (>= 4.3)
       System.AppContext (>= 4.3)
@@ -667,20 +664,6 @@ NUGET
       Microsoft.NETCore.Platforms (>= 1.1)
       Microsoft.NETCore.Targets (>= 1.1)
       System.Runtime (>= 4.3)
-    NuGet.CommandLine (4.4.1)
-    NUnit.Console (3.7)
-      NUnit.ConsoleRunner (>= 3.7)
-      NUnit.Extension.NUnitProjectLoader (>= 3.5)
-      NUnit.Extension.NUnitV2Driver (>= 3.6)
-      NUnit.Extension.NUnitV2ResultWriter (>= 3.5)
-      NUnit.Extension.TeamCityEventListener (>= 1.0.2)
-      NUnit.Extension.VSProjectLoader (>= 3.5)
-    NUnit.ConsoleRunner (3.7)
-    NUnit.Extension.NUnitProjectLoader (3.6)
-    NUnit.Extension.NUnitV2Driver (3.7)
-    NUnit.Extension.NUnitV2ResultWriter (3.6)
-    NUnit.Extension.TeamCityEventListener (1.0.3)
-    NUnit.Extension.VSProjectLoader (3.7)
     runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl (4.3.2)
     runtime.fedora.23-x64.runtime.native.System.Security.Cryptography.OpenSsl (4.3.2)
     runtime.fedora.24-x64.runtime.native.System.Security.Cryptography.OpenSsl (4.3.2)
