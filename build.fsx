@@ -129,8 +129,10 @@ Target "Prepare" DoNothing
 // BUILD
 // --------------------------------------------------------------------------------------
 
-Target "BuildMain" (fun _ -> build !! "MathNet.Spatial.sln")
+//Target "BuildMain" (fun _ -> build !! "MathNet.Spatial.sln")
 Target "BuildAll" (fun _ -> build !! "MathNet.Spatial.All.sln")
+
+Target "BuildMain" (fun _ -> DotNetCli.Build (fun c -> { c with Project = "MathNet.Spatial.sln" }))
 
 Target "Build" DoNothing
 "Prepare"
