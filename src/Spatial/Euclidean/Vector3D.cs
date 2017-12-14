@@ -474,37 +474,40 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Returns the cross product of this vector and a vector
+        /// Returns the cross product of this vector and <paramref name="other"/>
         /// </summary>
-        /// <param name="inVector3D">A vector</param>
+        /// <param name="other">A vector</param>
         /// <returns>A new vector with the cross product result</returns>
         [Pure]
-        public Vector3D CrossProduct(Vector3D inVector3D)
+        public Vector3D CrossProduct(Vector3D other)
         {
-            var x = (this.Y * inVector3D.Z) - (this.Z * inVector3D.Y);
-            var y = (this.Z * inVector3D.X) - (this.X * inVector3D.Z);
-            var z = (this.X * inVector3D.Y) - (this.Y * inVector3D.X);
+            var x = (this.Y * other.Z) - (this.Z * other.Y);
+            var y = (this.Z * other.X) - (this.X * other.Z);
+            var z = (this.X * other.Y) - (this.Y * other.X);
             var v = new Vector3D(x, y, z);
             return v;
         }
 
         /// <summary>
-        /// Returns the cross product of this vector and a unit vector
+        /// Returns the cross product of this vector and <paramref name="other"/>
         /// </summary>
-        /// <param name="inVector3D">A vector</param>
+        /// <param name="other">A vector</param>
         /// <returns>A new vector with the cross product result</returns>
         [Pure]
-        public Vector3D CrossProduct(UnitVector3D inVector3D)
+        public Vector3D CrossProduct(UnitVector3D other)
         {
-            var x = (this.Y * inVector3D.Z) - (this.Z * inVector3D.Y);
-            var y = (this.Z * inVector3D.X) - (this.X * inVector3D.Z);
-            var z = (this.X * inVector3D.Y) - (this.Y * inVector3D.X);
+            var x = (this.Y * other.Z) - (this.Z * other.Y);
+            var y = (this.Z * other.X) - (this.X * other.Z);
+            var z = (this.X * other.Y) - (this.Y * other.X);
             var v = new Vector3D(x, y, z);
             return v;
         }
 
         /// <summary>
         /// Returns a dense Matrix with the unit tensor product
+        /// [ux^2,  ux*uy, ux*uz],
+        /// [ux*uy, uy^2,  uy*uz],
+        /// [ux*uz, uy*uz, uz^2]
         /// </summary>
         /// <returns>a dense matrix</returns>
         [Pure]

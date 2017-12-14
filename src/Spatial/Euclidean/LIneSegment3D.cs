@@ -94,17 +94,6 @@
         }
 
         /// <summary>
-        /// Returns a new linesegment between the closest point on this line segment and a point.
-        /// </summary>
-        /// <param name="p">the point to create a line to</param>
-        /// <returns>A linesegment between the nearest point on this segment and the provided point.</returns>
-        [Pure]
-        public LineSegment3D LineTo(Point3D p)
-        {
-            return new LineSegment3D(this.ClosestPointTo(p), p);
-        }
-
-        /// <summary>
         /// Returns the closest point on the line segment to the given point.
         /// </summary>
         /// <param name="p">The point that the returned point is the closest point on the line to</param>
@@ -127,6 +116,17 @@
 
             var alongVector = dotProduct * this.Direction;
             return this.StartPoint + alongVector;
+        }
+
+        /// <summary>
+        /// Returns a new linesegment between the closest point on this line segment and a point.
+        /// </summary>
+        /// <param name="p">the point to create a line to</param>
+        /// <returns>A linesegment between the nearest point on this segment and the provided point.</returns>
+        [Pure]
+        public LineSegment3D LineTo(Point3D p)
+        {
+            return new LineSegment3D(this.ClosestPointTo(p), p);
         }
 
         /// <summary>
