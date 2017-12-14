@@ -7,6 +7,7 @@
     <AssemblyName>MathNet.Numerics.UnitTests</AssemblyName>
     <RootNamespace>MathNet.Numerics.UnitTests</RootNamespace>
     <IsPackable>false</IsPackable>
+    <GenerateProgramFile>false</GenerateProgramFile>
   </PropertyGroup>
   <PropertyGroup Condition="$(TargetFramework.Contains('netcoreapp')) OR $(TargetFramework.Contains('netstandard'))">
     <DefineConstants>NETSTANDARD</DefineConstants>
@@ -23,8 +24,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="NUnit" Version="3.9" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.9.0" />
     <PackageReference Include="NUnitLite" Version="3.9" />
     <PackageReference Include="protobuf-net" Version="2.3.3" />
      <ProjectReference Include="..\Spatial\Spatial.csproj" />
@@ -37,13 +40,13 @@
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
     <Reference Include="MathNet.Numerics">
-      <HintPath>..\..\packages\MathNet\MathNet.Numerics\lib\net40\MathNet.Numerics.dll</HintPath>
+      <HintPath>..\..\packages\mathnet\MathNet.Numerics\lib\net40\MathNet.Numerics.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp1.1'">
     <Reference Include="MathNet.Numerics">
-      <HintPath>..\..\packages\MathNet\MathNet.Numerics\lib\netstandard1.3\MathNet.Numerics.dll</HintPath>
+      <HintPath>..\..\packages\mathnet\MathNet.Numerics\lib\netstandard1.3\MathNet.Numerics.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <PackageReference Include="System.Runtime.Serialization.Formatters">
@@ -53,7 +56,7 @@
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.0'">
     <Reference Include="MathNet.Numerics">
-      <HintPath>..\..\packages\MathNet\MathNet.Numerics\lib\netstandard2.0\MathNet.Numerics.dll</HintPath>
+      <HintPath>..\..\packages\mathnet\MathNet.Numerics\lib\netstandard2.0\MathNet.Numerics.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
