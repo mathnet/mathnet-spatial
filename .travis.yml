@@ -1,10 +1,6 @@
 language: csharp
+dotnet: 2.0.0
+dist: trusty
 sudo: false
-matrix:
-  include:
-    dotnet: 2.0.0
-    mono: latest
-    dist: trusty
-    env: DOTNET=1
 script: 
   - ./build.sh Test
