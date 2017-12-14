@@ -80,6 +80,9 @@ let traceHeader (releases:Release list) =
 let libnet35 = "lib/net35"
 let libnet40 = "lib/net40"
 let libnet45 = "lib/net45"
+let netstandard13 = "lib/netstandard1.3"
+let netstandard16 = "lib/netstandard1.6"
+let netstandard20 = "lib/netstandard2.0"
 let libpcl7 = "lib/portable-net45+netcore45+MonoAndroid1+MonoTouch1"
 let libpcl47 = "lib/portable-net45+sl5+netcore45+MonoAndroid1+MonoTouch1"
 let libpcl78 = "lib/portable-net45+netcore45+wp8+MonoAndroid1+MonoTouch1"
@@ -104,6 +107,19 @@ let patchVersionInResource path (release:Release) =
          >> regex_replace @"\d+,\d+,\d+,\d+" (replace "." "," release.AssemblyVersion))
         path
 
+let patchVersionInProjectFile path (release:Release) =
+    let semverSplit = release.PackageVersion.IndexOf('-')
+    let prefix = if semverSplit <= 0 then release.PackageVersion else release.PackageVersion.Substring(0, semverSplit)
+    let suffix = if semverSplit <= 0 then release.PackageVersion else release.PackageVersion.Substring(semverSplit+1)
+    ReplaceInFile
+        (regex_replace """\<PackageVersion\>.*\</PackageVersion\>""" (sprintf """<PackageVersion>%s</PackageVersion>""" release.PackageVersion)
+        >> regex_replace """\<Version\>.*\</Version\>""" (sprintf """<Version>%s</Version>""" release.PackageVersion)
+        >> regex_replace """\<AssemblyVersion\>.*\</AssemblyVersion\>""" (sprintf """<AssemblyVersion>%s</AssemblyVersion>""" release.AssemblyVersion)
+        >> regex_replace """\<FileVersion\>.*\</FileVersion\>""" (sprintf """<FileVersion>%s</FileVersion>""" release.AssemblyVersion)
+        >> regex_replace """\<VersionPrefix\>.*\</VersionPrefix\>""" (sprintf """<VersionPrefix>%s</VersionPrefix>""" prefix)
+        >> regex_replace """\<VersionSuffix\>.*\</VersionSuffix\>""" (sprintf """<VersionSuffix>%s</VersionSuffix>""" suffix)
+        >> regex_replace """\<PackageReleaseNotes\>.*\</PackageReleaseNotes\>""" (sprintf """<PackageReleaseNotes>%s</PackageReleaseNotes>""" release.ReleaseNotes))
+        path
 
 // --------------------------------------------------------------------------------------
 // BUILD
@@ -185,6 +201,21 @@ let provideNuGetExtraFiles path (bundle:Bundle) (pack:Package) =
                          yield sprintf "#I \"%spackages/%s.%s/lib/net40/\"" root package.Id package.Release.PackageVersion ]
         provideFsLoader includes path
         provideFsIfSharpLoader path
+
+// SIGN
+
+let sign fingerprint timeserver files =
+    files
+    |> Seq.map (sprintf "\"%s\"")
+    |> Seq.map (fun file -> sprintf """sign /v /sha1 "%s" /t "%s" %s""" fingerprint timeserver file)
+    |> Seq.iter (fun arguments ->
+        let result =
+            ExecProcess (fun info ->
+                info.FileName <- """C:\Program Files (x86)\Windows Kits\10\bin\x86\signtool.exe"""
+                info.Arguments <- arguments) TimeSpan.MaxValue
+        if result <> 0 then
+            failwithf "Error during SignTool call ")
+
 
 // ZIP
 

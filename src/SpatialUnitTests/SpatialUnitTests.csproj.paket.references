@@ -2,7 +2,6 @@ group Test
     NUnit
     Newtonsoft.Json
     Protobuf-net
-    MathNet.Numerics
 
 group Analyzers
     StyleCop.Analyzers

@@ -5,16 +5,42 @@
     <AssemblyName>MathNet.Spatial</AssemblyName>
     <RootNamespace>MathNet.Spatial</RootNamespace>
     <CodeAnalysisRuleSet>Spatial.ruleset</CodeAnalysisRuleSet>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <IsPackable>true</IsPackable>
+    <PackageId>MathNet.Numerics</PackageId>
+    <VersionPrefix>0.5.0</VersionPrefix>
+    <VersionSuffix>alpha</VersionSuffix>
+    <PackageVersion>0.5.0-alpha</PackageVersion>
+    <Version>0.5.0-alpha</Version>
+    <AssemblyVersion>0.5.0.0</AssemblyVersion>
+    <FileVersion>0.5.0.0</FileVersion>
+    <Title>Math.NET Spatial</Title>
+    <Authors>Christoph Ruegg, Johan Larsson</Authors>
+    <Company>Math.NET Project</Company>
+    <Product>Math.NET Spatial</Product>
+    <Description>Math.NET Spatial, providing methods and algorithms for geometry computations in science, engineering and every day use. Supports .Net Framework 4.0 or higher and .Net Standard 2.0 on Windows, Linux and Mac.</Description>
+    <Copyright>Copyright Math.NET Project</Copyright>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageLicenseUrl>https://spatial.mathdotnet.com/License.html</PackageLicenseUrl>
+    <PackageProjectUrl>https://spatial.mathdotnet.com/</PackageProjectUrl>
+    <PackageIconUrl>https://www.mathdotnet.com/images/MathNet128.png</PackageIconUrl>
+    <PackageReleaseNotes>
+      Multitargeting
+    </PackageReleaseNotes>
+    <PackageTags>math geometry spatial</PackageTags>
+    <IsTool>false</IsTool>
+    <RepositoryUrl>https://github.com/mathnet/mathnet-spatial</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
     <NeutralLanguage>en-US</NeutralLanguage>
+    <NoPackageAnalysis>false</NoPackageAnalysis>
+    <IncludeBuildOutput>true</IncludeBuildOutput>
+    <IncludeContentInPack>false</IncludeContentInPack>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <EnableDefaultCompileItems>true</EnableDefaultCompileItems>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0'">
-    <DefineConstants>NETCORE;NETSTANDARD;NETSTANDARD2_0</DefineConstants>
-    <DocumentationFile>..\..\out\lib\netstandard2.0\MathNet.Spatial.xml</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'net40'">
-    <DefineConstants>NET40;NETFULL</DefineConstants>
-    <DocumentationFile>..\..\out\lib\net40\MathNet.Spatial.xml</DocumentationFile>
+  <PropertyGroup Condition="$(TargetFramework.Contains('netcoreapp')) OR $(TargetFramework.Contains('netstandard'))">
+    <DefineConstants>NETSTANDARD</DefineConstants>
   </PropertyGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'net40' ">
     <Reference Include="System" />
@@ -25,13 +51,24 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net40' ">
     <Reference Include="MathNet.Numerics">
-      <HintPath>..\..\packages\MathNet.Numerics\lib\net40\MathNet.Numerics.dll</HintPath>
+      <HintPath>..\..\packages\MathNet\MathNet.Numerics\lib\net40\MathNet.Numerics.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0'">
+    <Reference Include="MathNet.Numerics">
+      <HintPath>..\..\packages\MathNet\MathNet.Numerics\lib\netstandard2.0\MathNet.Numerics.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0'">
+    <DocumentationFile>..\..\out\lib\netstandard2.0\MathNet.Spatial.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net40'">
+    <DefineConstants>NET40;NETFULL</DefineConstants>
+    <DocumentationFile>..\..\out\lib\net40\MathNet.Spatial.xml</DocumentationFile>
+  </PropertyGroup>
   <ItemGroup>
     <Analyzer Include="..\..\packages\analyzers\StyleCop.Analyzers\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll">
     </Analyzer>
@@ -44,8 +81,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <OutputPath>..\..\out\lib</OutputPath>
   </PropertyGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0'">
-    <PackageReference Include="MathNet.Numerics.Core" Version="3.17.0" />
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

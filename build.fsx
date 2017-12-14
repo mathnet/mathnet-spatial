@@ -46,18 +46,6 @@ let support = "Supports .Net 4.0 and Mono on Windows, Linux and Mac."
 let supportSigned = "Supports .Net 4.0. This package contains strong-named assemblies for legacy use cases."
 let tags = "math spatial geometry 2D 3D"
 
-let libnet35 = "lib/net35"
-let libnet40 = "lib/net40"
-let libnet45 = "lib/net45"
-let netstandard13 = "lib/netstandard1.3"
-let netstandard16 = "lib/netstandard1.6"
-let netstandard20 = "lib/netstandard2.0"
-let libpcl7 = "lib/portable-net45+netcore45+MonoAndroid1+MonoTouch1"
-let libpcl47 = "lib/portable-net45+sl5+netcore45+MonoAndroid1+MonoTouch1"
-let libpcl78 = "lib/portable-net45+netcore45+wp8+MonoAndroid1+MonoTouch1"
-let libpcl259 = "lib/portable-net45+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1"
-let libpcl328 = "lib/portable-net4+sl5+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1"
-
 let dotnetbuild = environVarOrDefault "DOTNET" "0"
 
 let spatialPack =
@@ -70,10 +58,8 @@ let spatialPack =
       Authors = [ "Christoph Ruegg"; "Johan Larsson" ]
       FsLoader = false
       Dependencies =
-        [ { FrameworkVersion="netstandard2.0"
-            Dependencies=[ "MathNet.Numerics.Core", "3.17" ] };
-          { FrameworkVersion="Net40"
-            Dependencies=[ "MathNet.Numerics", "3.8" ] } ]
+        [ { FrameworkVersion=""
+            Dependencies=[ "MathNet.Numerics", GetPackageVersion "./packages/MathNet/" "MathNet.Numerics"] } ]
       Files =
         [ @"..\..\out\lib\Net40\MathNet.Spatial.*", Some libnet40, None;
           @"..\..\out\lib\netstandard2.0\MathNet.Spatial.*", Some netstandard20, None;
@@ -87,7 +73,7 @@ let spatialSignedPack =
       Tags = spatialPack.Tags + " signed"
       Dependencies =
         [ { FrameworkVersion=""
-            Dependencies=[ "MathNet.Numerics.Signed", "3.8" ] } ]
+            Dependencies=[ "MathNet.Numerics.Signed", GetPackageVersion "./packages/MathNet/" "MathNet.Numerics.Signed" ] } ]
       Files =
         [ @"..\..\out\lib-signed\Net40\MathNet.Spatial.*", Some libnet40, None;
           @"..\..\src\Spatial\**\*.cs", Some "src/Common", None ] }
@@ -138,16 +124,20 @@ Target "Prepare" DoNothing
 // BUILD
 // --------------------------------------------------------------------------------------
 
-Target "BuildMain" (fun _ -> build !! "MathNet.Spatial.sln")
-Target "BuildAll" (fun _ -> build !! "MathNet.Spatial.All.sln")
+let dotnetBuild configuration solution = DotNetCli.Build (fun p ->
+    let defaultArgs = ["--no-restore"]
+    { p with
+        Project = solution
+        Configuration = configuration
+        AdditionalArgs = defaultArgs})
 
-Target "BuildMainDOTNET" (fun _ -> DotNetCli.Build (fun c -> { c with Project = "MathNet.Spatial.sln" }))
+Target "BuildMain" (fun _ -> dotnetBuild "Release" "MathNet.Spatial.sln")
+//Target "BuildMain" (fun _ -> build !! "MathNet.Spatial.sln")
+//Target "BuildAll" (fun _ -> build !! "MathNet.Spatial.All.sln")
 
 Target "Build" DoNothing
 "Prepare"
-  =?> ("BuildAll", hasBuildParam "all" || hasBuildParam "release")
-  =?> ("BuildMain", not (hasBuildParam "all" || hasBuildParam "release" || hasBuildParam "net35" || (dotnetbuild = "1")))
-  =?> ("BuildMainDOTNET", (dotnetbuild = "1"))
+  =?> ("BuildMain", hasBuildParam "release")
   ==> "Build"
 
 
@@ -155,8 +145,32 @@ Target "Build" DoNothing
 // TEST
 // --------------------------------------------------------------------------------------
 
-Target "Test" (fun _ -> test !! "out/test/**/*UnitTests*.dll")
-"Build" ==> "Test"
+let testLibrary testsDir testsProj framework =
+    DotNetCli.RunCommand
+        (fun c -> { c with WorkingDir = testsDir})
+        (sprintf "run -p %s --configuration Release --framework %s"
+            testsProj
+            framework)
+
+let testLibraryCsharp framework = testLibrary "src/SpatialUnitTests" "SpatialUnitTests.csproj" framework
+
+Target "Test" DoNothing
+Target "TestC#" DoNothing
+
+Target "TestC#Core1.1" (fun _ -> testLibraryCsharp "netcoreapp1.1")
+Target "TestC#Core2.0" (fun _ -> testLibraryCsharp "netcoreapp2.0")
+Target "TestC#NET40" (fun _ -> testLibraryCsharp "net40")
+Target "TestC#NET45" (fun _ -> testLibraryCsharp "net45")
+Target "TestC#NET46" (fun _ -> testLibraryCsharp "net46")
+Target "TestC#NET47"  (fun _ -> testLibraryCsharp "net47")
+
+"Build" ==> "TestC#NET45" ==> "TestC#"
+"Build" ==> "TestC#Core2.0" ==> "TestC#"
+
+"TestC#" ==> "Test"
+
+//Target "Test" (fun _ -> test !! "out/test/**/*UnitTests*.dll")
+//"Build" ==> "Test"
 
 
 // --------------------------------------------------------------------------------------
@@ -175,11 +189,15 @@ Target "Zip" (fun _ ->
 
 // NUGET
 
+let dotnetPack solution = DotNetCli.Pack (fun p ->
+    let defaultArgs = ["--no-restore"; "--no-build" ]
+    { p with
+        Project = solution
+        Configuration = "Release"
+        AdditionalArgs = defaultArgs})
+
 Target "NuGet" (fun _ ->
-    CleanDir "out/packages/NuGet"
-    if hasBuildParam "all" || hasBuildParam "release" then
-        nugetPack coreBundle "out/packages/NuGet"
-        nugetPack coreSignedBundle "out/packages/NuGet")
+    dotnetPack "MathNet.Spatial.sln")
 "Build" ==> "NuGet" ==> "Pack"
 
 

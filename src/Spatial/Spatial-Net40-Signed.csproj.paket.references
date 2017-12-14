@@ -1,2 +1,2 @@
-group Build40
+group MathNet
     MathNet.Numerics.Signed framework: net40

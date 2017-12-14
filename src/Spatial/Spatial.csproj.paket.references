@@ -1,8 +1,3 @@
-group BuildStandard
-    MathNet.Numerics.Core framework: netstandard2.0
-
-group Build40
-    MathNet.Numerics framework: net40
 
 group Analyzers
     StyleCop.Analyzers
