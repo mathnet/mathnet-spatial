@@ -46,8 +46,6 @@ let support = "Supports .Net 4.0 and Mono on Windows, Linux and Mac."
 let supportSigned = "Supports .Net 4.0. This package contains strong-named assemblies for legacy use cases."
 let tags = "math spatial geometry 2D 3D"
 
-let dotnetbuild = environVarOrDefault "DOTNET" "0"
-
 let spatialPack =
     { Id = "MathNet.Spatial"
       Release = spatialRelease
@@ -98,6 +96,7 @@ let coreSignedBundle =
 Target "Start" DoNothing
 
 Target "Clean" (fun _ ->
+    DotNetCli.RunCommand id "clean MathNet.spatial.sln"
     CleanDirs [ "obj" ]
     CleanDirs [ "out/api"; "out/docs"; "out/packages" ]
     CleanDirs [ "out/lib/Net40" ]
@@ -110,15 +109,17 @@ Target "ApplyVersion" (fun _ ->
     patchVersionInAssemblyInfo "src/SpatialUnitTests" spatialRelease)
 
 Target "DotnetRestore" (fun _ ->
-    DotNetCli.Restore (fun c -> { c with Project = "MathNet.Spatial.sln" }))
+    DotNetCli.Restore (fun c ->
+       { c with 
+           Project = "MathNet.Spatial.sln" 
+           NoCache = true }))
 
 Target "Prepare" DoNothing
 "Start"
   =?> ("Clean", not (hasBuildParam "incremental"))
+  ==> "DotnetRestore"
   ==> "ApplyVersion"
-  =?> ("DotnetRestore", (dotnetbuild = "0"))
   ==> "Prepare"
-
 
 // --------------------------------------------------------------------------------------
 // BUILD
