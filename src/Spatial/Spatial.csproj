@@ -56,17 +56,16 @@
       <Private>True</Private>
     </Reference>
   </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0'">
+  <ItemGroup Condition="$(TargetFramework.Contains('netcoreapp')) OR $(TargetFramework.Contains('netstandard'))">
     <Reference Include="MathNet.Numerics">
       <HintPath>..\..\packages\MathNet\MathNet.Numerics\lib\netstandard2.0\MathNet.Numerics.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Spatial.csproj.paket.references" />
     <None Include="Spatial.ruleset" />
   </ItemGroup>
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0'">
+  <PropertyGroup Condition="$(TargetFramework.Contains('netcoreapp')) OR $(TargetFramework.Contains('netstandard'))">
     <DocumentationFile>..\..\out\lib\netstandard2.0\MathNet.Spatial.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net40'">
@@ -85,8 +84,4 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <OutputPath>..\..\out\lib</OutputPath>
   </PropertyGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
-  <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

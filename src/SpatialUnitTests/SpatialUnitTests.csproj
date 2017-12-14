@@ -3,7 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFrameworks>netcoreapp2.0;net45</TargetFrameworks>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateAssemblyInfo>True</GenerateAssemblyInfo>
     <AssemblyName>MathNet.Numerics.UnitTests</AssemblyName>
     <RootNamespace>MathNet.Numerics.UnitTests</RootNamespace>
     <IsPackable>false</IsPackable>
