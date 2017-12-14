@@ -166,8 +166,8 @@ Target "TestC#NET45" (fun _ -> testLibraryCsharp "net45")
 Target "TestC#NET46" (fun _ -> testLibraryCsharp "net46")
 Target "TestC#NET47"  (fun _ -> testLibraryCsharp "net47")
 
-"Build" ==> "TestC#NET45" ==> "TestC#"
 "Build" ==> "TestC#Core1.1" ==> "TestC#"
+"Build" ==> "TestC#Core2.0" ==> "TestC#"
 
 "TestC#" ==> "Test"
 
