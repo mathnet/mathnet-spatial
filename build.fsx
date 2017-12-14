@@ -49,6 +49,9 @@ let tags = "math spatial geometry 2D 3D"
 let libnet35 = "lib/net35"
 let libnet40 = "lib/net40"
 let libnet45 = "lib/net45"
+let netstandard13 = "lib/netstandard1.3"
+let netstandard16 = "lib/netstandard1.6"
+let netstandard20 = "lib/netstandard2.0"
 let libpcl7 = "lib/portable-net45+netcore45+MonoAndroid1+MonoTouch1"
 let libpcl47 = "lib/portable-net45+sl5+netcore45+MonoAndroid1+MonoTouch1"
 let libpcl78 = "lib/portable-net45+netcore45+wp8+MonoAndroid1+MonoTouch1"
@@ -67,10 +70,13 @@ let spatialPack =
       Authors = [ "Christoph Ruegg"; "Johan Larsson" ]
       FsLoader = false
       Dependencies =
-        [ { FrameworkVersion=""
-            Dependencies=[  ] } ]
+        [ { FrameworkVersion="netstandard2.0"
+            Dependencies=[ "MathNet.Numerics.Core", "3.17" ] };
+          { FrameworkVersion="Net40"
+            Dependencies=[ "MathNet.Numerics", "3.8" ] } ]
       Files =
         [ @"..\..\out\lib\Net40\MathNet.Spatial.*", Some libnet40, None;
+          @"..\..\out\lib\netstandard2.0\MathNet.Spatial.*", Some netstandard20, None;
           @"..\..\src\Spatial\**\*.cs", Some "src/Common", None ] }
 
 let spatialSignedPack =
@@ -80,8 +86,8 @@ let spatialSignedPack =
       Description = description + supportSigned
       Tags = spatialPack.Tags + " signed"
       Dependencies =
-        [ { FrameworkVersion="net40"
-            Dependencies=[  ] } ]
+        [ { FrameworkVersion=""
+            Dependencies=[ "MathNet.Numerics.Signed", "3.8" ] } ]
       Files =
         [ @"..\..\out\lib-signed\Net40\MathNet.Spatial.*", Some libnet40, None;
           @"..\..\src\Spatial\**\*.cs", Some "src/Common", None ] }
