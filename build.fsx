@@ -55,6 +55,8 @@ let libpcl78 = "lib/portable-net45+netcore45+wp8+MonoAndroid1+MonoTouch1"
 let libpcl259 = "lib/portable-net45+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1"
 let libpcl328 = "lib/portable-net4+sl5+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1"
 
+let dotnetbuild = environVarOrDefault "DOTNET" "0"
+
 let spatialPack =
     { Id = "MathNet.Spatial"
       Release = spatialRelease
@@ -122,7 +124,7 @@ Target "Prepare" DoNothing
 "Start"
   =?> ("Clean", not (hasBuildParam "incremental"))
   ==> "ApplyVersion"
-  ==> "DotnetRestore"
+  =?> ("DotnetRestore", (dotnetbuild = "0"))
   ==> "Prepare"
 
 
@@ -133,12 +135,13 @@ Target "Prepare" DoNothing
 Target "BuildMain" (fun _ -> build !! "MathNet.Spatial.sln")
 Target "BuildAll" (fun _ -> build !! "MathNet.Spatial.All.sln")
 
-//Target "BuildMain" (fun _ -> DotNetCli.Build (fun c -> { c with Project = "MathNet.Spatial.sln" }))
+Target "BuildMainDOTNET" (fun _ -> DotNetCli.Build (fun c -> { c with Project = "MathNet.Spatial.sln" }))
 
 Target "Build" DoNothing
 "Prepare"
   =?> ("BuildAll", hasBuildParam "all" || hasBuildParam "release")
-  =?> ("BuildMain", not (hasBuildParam "all" || hasBuildParam "release" || hasBuildParam "net35"))
+  =?> ("BuildMain", not (hasBuildParam "all" || hasBuildParam "release" || hasBuildParam "net35" || (dotnetbuild = "1")))
+  =?> ("BuildMainDOTNET", (dotnetbuild = "1"))
   ==> "Build"
 
 
