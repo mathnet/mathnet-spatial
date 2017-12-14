@@ -96,11 +96,12 @@ let coreSignedBundle =
 Target "Start" DoNothing
 
 Target "Clean" (fun _ ->
-    DotNetCli.RunCommand id "clean MathNet.SpatialMinimal.sln --verbosity d"
+    DotNetCli.RunCommand id "clean MathNet.SpatialMinimal.sln"
     CleanDirs [ "obj" ]
     CleanDirs [ "out/api"; "out/docs"; "out/packages" ]
     CleanDirs [ "out/lib/Net40" ]
     CleanDirs [ "out/lib/netstandard2.0" ]
+    CleanDirs [ "out/lib/netstandard1.3" ]
     CleanDirs [ "out/test/Net40" ]
     CleanDirs [ "out/lib-signed/Net40" ])
 
@@ -112,8 +113,7 @@ Target "DotnetRestore" (fun _ ->
     DotNetCli.Restore (fun c ->
        { c with 
            Project = "MathNet.SpatialMinimal.sln" 
-           NoCache = true 
-           AdditionalArgs = ["--verbosity d"]}))
+           NoCache = true }))
 
 Target "Prepare" DoNothing
 "Start"
@@ -167,7 +167,7 @@ Target "TestC#NET46" (fun _ -> testLibraryCsharp "net46")
 Target "TestC#NET47"  (fun _ -> testLibraryCsharp "net47")
 
 "Build" ==> "TestC#NET45" ==> "TestC#"
-"Build" ==> "TestC#Core2.0" ==> "TestC#"
+"Build" ==> "TestC#Core1.1" ==> "TestC#"
 
 "TestC#" ==> "Test"
 

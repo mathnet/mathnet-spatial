@@ -4,7 +4,6 @@ namespace MathNet.Spatial.UnitTests.Euclidean
     using System;
     using System.Globalization;
     using System.IO;
-    using System.Runtime.Serialization.Formatters.Binary;
     using System.Xml;
     using System.Xml.Serialization;
     using MathNet.Spatial.Euclidean;
@@ -53,29 +52,6 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             Assert.AreEqual(expectedZ, p.Z);
 
             p = Point3D.Parse(p.ToString());
-            Assert.AreEqual(expectedX, p.X);
-            Assert.AreEqual(expectedY, p.Y);
-            Assert.AreEqual(expectedZ, p.Z);
-        }
-
-        [TestCase("1,2; 3,4; 5,6", 1.2, 3.4, 5.6)]
-        [TestCase("1,2;3,4;5,6", 1.2, 3.4, 5.6)]
-        [TestCase("1,2 3,4 5,6", 1.2, 3.4, 5.6)]
-        [TestCase("(,1 2,3e-4 1)", 0.1, 0.00023000000000000001, 1)]
-        public void ParseSwedish(string text, double expectedX, double expectedY, double expectedZ)
-        {
-            var culture = CultureInfo.GetCultureInfo("sv");
-            Assert.AreEqual(true, Point3D.TryParse(text, culture, out var p));
-            Assert.AreEqual(expectedX, p.X);
-            Assert.AreEqual(expectedY, p.Y);
-            Assert.AreEqual(expectedZ, p.Z);
-
-            p = Point3D.Parse(text, culture);
-            Assert.AreEqual(expectedX, p.X);
-            Assert.AreEqual(expectedY, p.Y);
-            Assert.AreEqual(expectedZ, p.Z);
-
-            p = Point3D.Parse(p.ToString(culture));
             Assert.AreEqual(expectedX, p.X);
             Assert.AreEqual(expectedY, p.Y);
             Assert.AreEqual(expectedZ, p.Z);
@@ -313,21 +289,6 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             var deserialized = (AssertXml.Container<Point3D>)serializer.Deserialize(new StringReader(xml));
             AssertGeometry.AreEqual(new Point3D(1, 2, 3), deserialized.Value1);
             AssertGeometry.AreEqual(new Point3D(4, 5, 6), deserialized.Value2);
-        }
-
-        [Test]
-        public void BinaryRoundtrip()
-        {
-            var v = new Point3D(1, 2, 3);
-            using (var ms = new MemoryStream())
-            {
-                var formatter = new BinaryFormatter();
-                formatter.Serialize(ms, v);
-                ms.Flush();
-                ms.Position = 0;
-                var roundTrip = (Point3D)formatter.Deserialize(ms);
-                AssertGeometry.AreEqual(v, roundTrip);
-            }
         }
     }
 }

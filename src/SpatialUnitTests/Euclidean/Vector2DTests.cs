@@ -4,7 +4,6 @@ namespace MathNet.Spatial.UnitTests.Euclidean
     using System;
     using System.Globalization;
     using System.IO;
-    using System.Runtime.Serialization.Formatters.Binary;
     using System.Xml;
     using System.Xml.Serialization;
     using MathNet.Numerics.LinearAlgebra;
@@ -122,26 +121,6 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             Assert.AreEqual(expectedY, p.Y);
 
             p = Vector2D.Parse(p.ToString());
-            Assert.AreEqual(expectedX, p.X);
-            Assert.AreEqual(expectedY, p.Y);
-        }
-
-        [TestCase("1,2; 3,4", 1.2, 3.4)]
-        [TestCase("1,2;3,4", 1.2, 3.4)]
-        [TestCase("1,2 3,4", 1.2, 3.4)]
-        [TestCase("(,1 2,3e-4)", 0.1, 0.00023000000000000001)]
-        public void ParseSwedish(string text, double expectedX, double expectedY)
-        {
-            var culture = CultureInfo.GetCultureInfo("sv");
-            Assert.AreEqual(true, Vector2D.TryParse(text, culture, out var p));
-            Assert.AreEqual(expectedX, p.X);
-            Assert.AreEqual(expectedY, p.Y);
-
-            p = Vector2D.Parse(text, culture);
-            Assert.AreEqual(expectedX, p.X);
-            Assert.AreEqual(expectedY, p.Y);
-
-            p = Vector2D.Parse(p.ToString(culture));
             Assert.AreEqual(expectedX, p.X);
             Assert.AreEqual(expectedY, p.Y);
         }
@@ -484,21 +463,6 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             var deserialized = (AssertXml.Container<Vector2D>)serializer.Deserialize(new StringReader(xml));
             AssertGeometry.AreEqual(new Vector2D(1, 2), deserialized.Value1);
             AssertGeometry.AreEqual(new Vector2D(3, 4), deserialized.Value2);
-        }
-
-        [Test]
-        public void BinaryRoundtrip()
-        {
-            var v = new Vector2D(1, 2);
-            using (var ms = new MemoryStream())
-            {
-                var formatter = new BinaryFormatter();
-                formatter.Serialize(ms, v);
-                ms.Flush();
-                ms.Position = 0;
-                var roundTrip = (Vector2D)formatter.Deserialize(ms);
-                AssertGeometry.AreEqual(v, roundTrip);
-            }
         }
     }
 }

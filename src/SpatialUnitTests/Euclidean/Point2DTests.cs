@@ -98,27 +98,6 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             Assert.AreEqual(expectedY, p.Y);
         }
 
-        [TestCase("1,2; 3,4", 1.2, 3.4)]
-        [TestCase("1,2;3,4", 1.2, 3.4)]
-        [TestCase("1,2 3,4", 1.2, 3.4)]
-        [TestCase("1,2\u00A03,4", 1.2, 3.4)]
-        [TestCase("(,1 2,3e-4)", 0.1, 0.00023000000000000001)]
-        public void ParseSwedish(string text, double expectedX, double expectedY)
-        {
-            var culture = CultureInfo.GetCultureInfo("sv");
-            Assert.AreEqual(true, Point2D.TryParse(text, culture, out var p));
-            Assert.AreEqual(expectedX, p.X);
-            Assert.AreEqual(expectedY, p.Y);
-
-            p = Point2D.Parse(text, culture);
-            Assert.AreEqual(expectedX, p.X);
-            Assert.AreEqual(expectedY, p.Y);
-
-            p = Point2D.Parse(p.ToString(culture));
-            Assert.AreEqual(expectedX, p.X);
-            Assert.AreEqual(expectedY, p.Y);
-        }
-
         [TestCase("1.2")]
         [TestCase("1; 2; 3")]
         public void ParseFails(string text)

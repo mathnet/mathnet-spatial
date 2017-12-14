@@ -1,6 +1,13 @@
 ﻿namespace MathNet.Spatial.Serialization.Xml.UnitTests
 {
+
+#if NETCOREAPP1_1 == false
+
+    using System.Diagnostics;
+    using System.IO;
     using System.Linq;
+    using System.Runtime.Serialization;
+    using System.Xml;
     using MathNet.Spatial.Euclidean;
     using MathNet.Spatial.Units;
     using MathNet.Spatial.UnitTests;
@@ -15,7 +22,7 @@
         public void AngleDataContract(string vs, string xml)
         {
             var angle = Angle.Parse(vs);
-            var result = AssertXml.DataContractRoundTrip(angle, xml);
+            var result = this.DataContractRoundTrip(angle, xml);
             Assert.AreEqual(angle.Radians, result.Radians, Tolerance);
         }
 
@@ -25,7 +32,7 @@
         {
             var p = new Point2D(1, 2);
             const string ElementXml = @"<Point2D><X>1</X><Y>2</Y></Point2D>";
-            var result = AssertXml.DataContractRoundTrip(p, ElementXml);
+            var result = this.DataContractRoundTrip(p, ElementXml);
             Assert.AreEqual(p, result);
         }
 
@@ -35,7 +42,7 @@
         {
             var p = new Point3D(1, -2, 3);
             const string ElementXml = @"<Point3D><X>1</X><Y>-2</Y><Z>3</Z></Point3D>";
-            var result = AssertXml.DataContractRoundTrip(p, ElementXml);
+            var result = this.DataContractRoundTrip(p, ElementXml);
             Assert.AreEqual(p, result);
         }
 
@@ -45,7 +52,7 @@
         {
             var q = new Quaternion(1, 2, 3, 4);
             const string ElementXml = @"<Quaternion><W>1</W><X>2</X><Y>3</Y><Z>4</Z></Quaternion>";
-            var result = AssertXml.DataContractRoundTrip(q, ElementXml);
+            var result = this.DataContractRoundTrip(q, ElementXml);
             Assert.AreEqual(q, result);
         }
 
@@ -56,7 +63,7 @@
             var q = new Quaternion(0, 0, 0, 0);
             var eulerAngles = q.ToEulerAngles();
             const string ElementXml = @"<EulerAngles><Alpha><Value>0</Value></Alpha><Beta><Value>0</Value></Beta><Gamma><Value>0</Value></Gamma></EulerAngles>";
-            var result = AssertXml.DataContractRoundTrip(eulerAngles, ElementXml);
+            var result = this.DataContractRoundTrip(eulerAngles, ElementXml);
             Assert.AreEqual(eulerAngles, result);
         }
 
@@ -65,7 +72,7 @@
         public void PlaneDataContract(string p1s, string xml)
         {
             var plane = Plane.Parse(p1s);
-            var result = AssertXml.DataContractRoundTrip(plane, xml);
+            var result = this.DataContractRoundTrip(plane, xml);
             Assert.AreEqual(plane, result);
         }
 
@@ -74,7 +81,7 @@
         public void Ray3DDataContract(string ps, string vs, bool asElements, string xml)
         {
             var ray = new Ray3D(Point3D.Parse(ps), UnitVector3D.Parse(vs));
-            var result = AssertXml.DataContractRoundTrip(ray, xml);
+            var result = this.DataContractRoundTrip(ray, xml);
             Assert.AreEqual(ray, result);
             AssertGeometry.AreEqual(ray, result, 1e-6);
         }
@@ -86,7 +93,7 @@
             Point3D p1 = Point3D.Parse(p1s);
             Point3D p2 = Point3D.Parse(p2s);
             var l = new Line3D(p1, p2);
-            var result = AssertXml.DataContractRoundTrip(l, xml);
+            var result = this.DataContractRoundTrip(l, xml);
             Assert.AreEqual(l, result);
         }
 
@@ -97,7 +104,7 @@
             Point3D p1 = Point3D.Parse(p1s);
             Point3D p2 = Point3D.Parse(p2s);
             var l = new LineSegment3D(p1, p2);
-            var result = AssertXml.DataContractRoundTrip(l, xml);
+            var result = this.DataContractRoundTrip(l, xml);
             Assert.AreEqual(l, result);
         }
 
@@ -108,7 +115,7 @@
             Point2D p1 = Point2D.Parse(p1s);
             Point2D p2 = Point2D.Parse(p2s);
             var l = new Line2D(p1, p2);
-            var result = AssertXml.DataContractRoundTrip(l, xml);
+            var result = this.DataContractRoundTrip(l, xml);
             Assert.AreEqual(l, result);
         }
 
@@ -119,7 +126,7 @@
             Point2D p1 = Point2D.Parse(p1s);
             Point2D p2 = Point2D.Parse(p2s);
             var l = new LineSegment2D(p1, p2);
-            var result = AssertXml.DataContractRoundTrip(l, xml);
+            var result = this.DataContractRoundTrip(l, xml);
             Assert.AreEqual(l, result);
         }
 
@@ -129,7 +136,7 @@
         {
             var v = new Vector2D(1, 2);
             const string ElementXml = @"<Vector2D><X>1</X><Y>2</Y></Vector2D>";
-            var result = AssertXml.DataContractRoundTrip(v, ElementXml);
+            var result = this.DataContractRoundTrip(v, ElementXml);
             Assert.AreEqual(v, result);
         }
 
@@ -139,7 +146,7 @@
         {
             var v = new Vector3D(1, -2, 3);
             const string ElementXml = @"<Vector3D><X>1</X><Y>-2</Y><Z>3</Z></Vector3D>";
-            var result = AssertXml.DataContractRoundTrip(v, ElementXml);
+            var result = this.DataContractRoundTrip(v, ElementXml);
             Assert.AreEqual(v, result);
         }
 
@@ -150,7 +157,7 @@
             var center = Point2D.Parse(point);
             var c = new Circle2D(center, radius);
             const string ElementXml = @"<Circle2D><CenterPoint><X>0</X><Y>0</Y></CenterPoint><Radius>3</Radius></Circle2D>";
-            var result = AssertXml.DataContractRoundTrip(c, ElementXml);
+            var result = this.DataContractRoundTrip(c, ElementXml);
             Assert.AreEqual(c, result);
         }
 
@@ -161,7 +168,7 @@
             var center = Point3D.Parse(point);
             var c = new Circle3D(center, UnitVector3D.ZAxis, radius);
             const string ElementXml = @"<Circle3D><Axis><X>0</X><Y>0</Y><Z>1</Z></Axis><CenterPoint><X>0</X><Y>0</Y><Z>0</Z></CenterPoint><Radius>2.5</Radius></Circle3D>";
-            var result = AssertXml.DataContractRoundTrip(c, ElementXml);
+            var result = this.DataContractRoundTrip(c, ElementXml);
             Assert.AreEqual(c, result);
         }
 
@@ -172,7 +179,7 @@
             var points = from x in new string[] { "0.25,0", "0.5,1", "1,-1" } select Point2D.Parse(x);
             var p = new Polygon2D(points);
             const string ElementXml = @"<Polygon2D><Points><Point2D><X>0.25</X><Y>0</Y></Point2D><Point2D><X>0.5</X><Y>1</Y></Point2D><Point2D><X>1</X><Y>-1</Y></Point2D></Points></Polygon2D>";
-            var result = AssertXml.DataContractRoundTrip(p, ElementXml);
+            var result = this.DataContractRoundTrip(p, ElementXml);
             Assert.AreEqual(p, result);
         }
 
@@ -183,7 +190,7 @@
             var points = from x in new string[] { "0.25,0", "0.5,1", "1,-1" } select Point2D.Parse(x);
             var p = new PolyLine2D(points);
             const string ElementXml = @"<PolyLine2D><Points><Point2D><X>0.25</X><Y>0</Y></Point2D><Point2D><X>0.5</X><Y>1</Y></Point2D><Point2D><X>1</X><Y>-1</Y></Point2D></Points></PolyLine2D>";
-            var result = AssertXml.DataContractRoundTrip(p, ElementXml);
+            var result = this.DataContractRoundTrip(p, ElementXml);
             Assert.AreEqual(p, result);
         }
 
@@ -194,7 +201,7 @@
             var points = "0, -1.5, 0; 0,1,0; 1,1,0";
             var p = new PolyLine3D(from x in points.Split(';') select Point3D.Parse(x));
             const string ElementXml = @"<PolyLine3D><Points><Point3D><X>0</X><Y>-1.5</Y><Z>0</Z></Point3D><Point3D><X>0</X><Y>1</Y><Z>0</Z></Point3D><Point3D><X>1</X><Y>1</Y><Z>0</Z></Point3D></Points></PolyLine3D>";
-            var result = AssertXml.DataContractRoundTrip(p, ElementXml);
+            var result = this.DataContractRoundTrip(p, ElementXml);
             Assert.AreEqual(p, result);
         }
 
@@ -210,8 +217,42 @@
     <YAxis><X>0</X><Y>0</Y><Z>1</Z></YAxis>
     <ZAxis><X>1</X><Y>0</Y><Z>0</Z><ZAxis>
 </CoordinateSystem>";
-            var result = AssertXml.DataContractRoundTrip(cs, xml);
+            var result = this.DataContractRoundTrip(cs, xml);
             AssertGeometry.AreEqual(cs, result);
         }
+
+        [Test]
+        public void DataContractRoundTripTest()
+        {
+            var dummy = new AssertXmlTests.XmlSerializableDummy("Meh", 14);
+            var roundTrip = this.DataContractRoundTrip(dummy, @"<AssertXmlTests.XmlSerializableDummy Age=""14""><Name>Meh</Name></AssertXmlTests.XmlSerializableDummy>");
+            Assert.AreEqual(dummy.Name, roundTrip.Name);
+            Assert.AreEqual(dummy.Age, roundTrip.Age);
+        }
+
+        private T DataContractRoundTrip<T>(T item, string expected)
+        {
+            var serializer = new DataContractSerializer(item.GetType());
+            string xml;
+            using (var sw = new StringWriter())
+            using (var writer = XmlWriter.Create(sw, AssertXml.Settings))
+            {
+                serializer.WriteObject(writer, item);
+                writer.Flush();
+                xml = sw.ToString();
+                Debug.WriteLine("DataContractSerializer");
+                Debug.Write(xml);
+                Debug.WriteLine(string.Empty);
+                AssertXml.AreEqual(expected, xml);
+            }
+
+            using (var stringReader = new StringReader(xml))
+            using (var reader = XmlReader.Create(stringReader))
+            {
+                return (T)serializer.ReadObject(reader);
+            }
+        }
     }
+
+#endif
 }

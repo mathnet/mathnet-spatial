@@ -1092,10 +1092,9 @@
         /// Find limits
         /// </summary>
         /// <param name="point">a point</param>
-        /// <param name="state">a state for the loop</param>
         /// <param name="limit">a limit</param>
         /// <returns>The found limit</returns>
-        private Limit FindLimits(MutablePoint point, ParallelLoopState state, Limit limit)
+        private Limit FindLimits(MutablePoint point, Limit limit)
         {
             double x = point.X;
             double y = point.Y;

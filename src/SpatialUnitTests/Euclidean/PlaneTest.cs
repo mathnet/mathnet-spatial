@@ -2,7 +2,6 @@
 {
     using System;
     using System.IO;
-    using System.Runtime.Serialization.Formatters.Binary;
     using MathNet.Spatial.Euclidean;
     using NUnit.Framework;
 
@@ -198,21 +197,6 @@
         {
             var plane = Plane.Parse(p1s);
             AssertXml.XmlRoundTrips(plane, xml, (e, a) => AssertGeometry.AreEqual(e, a));
-        }
-
-        [TestCase("p:{0, 0, 0} v:{0, 0, 1}")]
-        public void BinaryRoundtrip(string pls)
-        {
-            var plane = Plane.Parse(pls);
-            using (var ms = new MemoryStream())
-            {
-                var formatter = new BinaryFormatter();
-                formatter.Serialize(ms, plane);
-                ms.Flush();
-                ms.Position = 0;
-                var roundTrip = (Plane)formatter.Deserialize(ms);
-                AssertGeometry.AreEqual(plane, roundTrip);
-            }
         }
     }
 }
