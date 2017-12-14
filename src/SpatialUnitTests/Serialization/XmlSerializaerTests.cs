@@ -1,10 +1,6 @@
 ﻿namespace MathNet.Spatial.Serialization.Xml.UnitTests
 {
-    using System;
-    using System.IO;
     using System.Linq;
-    using System.Xml;
-    using System.Xml.Serialization;
     using MathNet.Spatial.Euclidean;
     using MathNet.Spatial.Units;
     using MathNet.Spatial.UnitTests;

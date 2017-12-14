@@ -1,7 +1,6 @@
 ﻿namespace Spatial.Roslyn.Tests
 {
     using Gu.Roslyn.Asserts;
-    using MathNet.Spatial.Units;
     using NUnit.Framework;
     using SpatialAnalyzers;
 

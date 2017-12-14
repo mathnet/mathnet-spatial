@@ -61,6 +61,72 @@
       <HintPath>..\..\packages\MathNet\MathNet.Numerics\lib\netstandard2.0\MathNet.Numerics.dll</HintPath>
       <Private>True</Private>
     </Reference>
+  <ItemGroup>
+    <Compile Include="Euclidean\Circle2D.cs" />
+    <Compile Include="Euclidean\LineSegment3D.cs" />
+    <Compile Include="Euclidean\LineSegment2D.cs" />
+    <Compile Include="Internals\ConvexHull\QComparer.cs" />
+    <Compile Include="Internals\AvlTreeSet\AvlNode.cs" />
+    <Compile Include="Internals\AvlTreeSet\AvlNodeItemEnumerator.cs" />
+    <Compile Include="Internals\AvlTreeSet\AvlTreeSet.cs" />
+    <Compile Include="Internals\ConvexHull\ConvexHull.cs" />
+    <Compile Include="Internals\ConvexHull\MutablePoint.cs" />
+    <Compile Include="Internals\ConvexHull\Quadrant.cs" />
+    <Compile Include="Internals\ConvexHull\QuadrantSpecific1.cs" />
+    <Compile Include="Internals\ConvexHull\QuadrantSpecific2.cs" />
+    <Compile Include="Internals\ConvexHull\QuadrantSpecific3.cs" />
+    <Compile Include="Internals\ConvexHull\QuadrantSpecific4.cs" />
+    <Compile Include="Euclidean\EulerAngles.cs" />
+    <Compile Include="Euclidean\Line2D.cs" />
+    <Compile Include="Euclidean\Matrix2D.cs" />
+    <Compile Include="Euclidean\Point2D.cs" />
+    <Compile Include="Euclidean\Polygon2D.cs" />
+    <Compile Include="Euclidean\PolyLine2D.cs" />
+    <Compile Include="Euclidean\PolyLine3D.cs" />
+    <Compile Include="Euclidean\Vector2D.cs" />
+    <Compile Include="Internals\ImmutableList.cs" />
+    <Compile Include="Internals\ImmutableList{T}.cs" />
+    <Compile Include="Internals\Text.cs" />
+    <Compile Include="Internals\XmlWriterExt.cs" />
+    <Compile Include="Internals\XmlReaderExt.cs" />
+    <Compile Include="Projective\Matrix3DHomogeneous.cs" />
+    <Compile Include="Projective\Point3DHomogeneous.cs" />
+    <Compile Include="Projective\Vector3DHomogeneous.cs" />
+    <Compile Include="Euclidean\Circle3D.cs" />
+    <Compile Include="Euclidean\CoordinateSystem.cs" />
+    <Compile Include="Euclidean\Line3D.cs" />
+    <Compile Include="Euclidean\Plane.cs" />
+    <Compile Include="Euclidean\Point3D.cs" />
+    <Compile Include="Euclidean\Quaternion.cs" />
+    <Compile Include="Euclidean\Ray3D.cs" />
+    <Compile Include="Euclidean\Matrix3D.cs" />
+    <Compile Include="Euclidean\UnitVector3D.cs" />
+    <Compile Include="Euclidean\Vector3D.cs" />
+    <Compile Include="Units\Angle.cs" />
+    <Compile Include="Units\AngleUnit.cs" />
+    <Compile Include="Obsolete\Parser.cs">
+      <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Units\Degrees.cs" />
+    <Compile Include="Units\IAngleUnit.cs" />
+    <Compile Include="Obsolete\IUnit.cs">
+      <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Units\Radians.cs" />
+    <Compile Include="Obsolete\UnitConverter.cs">
+      <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Obsolete\UnitParser.cs">
+      <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Obsolete\XmlExt.cs">
+      <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Spatial.csproj.paket.references" />
+    <None Include="Spatial.ruleset" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0'">
     <DocumentationFile>..\..\out\lib\netstandard2.0\MathNet.Spatial.xml</DocumentationFile>
