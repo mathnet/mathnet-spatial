@@ -268,7 +268,6 @@
         /// <inheritdoc/>
         public void CopyTo(T[] array, int arrayIndex)
         {
-            SortedSet<double> t = new SortedSet<double>();
             this.CopyTo(array, arrayIndex, this.Count);
         }
 

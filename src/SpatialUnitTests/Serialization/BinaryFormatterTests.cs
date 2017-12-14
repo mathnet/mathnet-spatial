@@ -1,6 +1,5 @@
 ﻿namespace MathNet.Spatial.UnitTests
 {
-    using System;
     using System.IO;
     using System.Linq;
     using System.Runtime.Serialization.Formatters.Binary;

@@ -1,6 +1,5 @@
 ﻿namespace MathNet.Spatial.Serialization.Xml.UnitTests
 {
-    using System;
     using System.IO;
     using System.Linq;
     using MathNet.Spatial.Euclidean;
@@ -14,6 +13,7 @@
 
         public ProtobufNetTests()
         {
+            // ReSharper disable once UnusedVariable
             var model = ProtoBuf.Meta.RuntimeTypeModel.Default;
         }
 
@@ -208,7 +208,6 @@
                 ProtoBuf.Serializer.Serialize(ms, test);
 
                 ms.Flush();
-                var xml = ms.ToString();
                 ms.Position = 0;
                 return ProtoBuf.Serializer.Deserialize<T>(ms);
             }

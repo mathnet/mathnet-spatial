@@ -135,8 +135,7 @@
             var l1 = LineSegment3D.Parse(s1, e1);
             var l2 = LineSegment3D.Parse(s2, e2);
 
-            var success = l1.TryShortestLineTo(l2, Angle.FromRadians(0.00001), out var result);
-
+            Assert.AreEqual(true, l1.TryShortestLineTo(l2, Angle.FromRadians(0.00001), out var result));
             AssertGeometry.AreEqual(Point3D.Parse(cp1), result.StartPoint);
             AssertGeometry.AreEqual(Point3D.Parse(cp2), result.EndPoint);
         }
