@@ -96,7 +96,7 @@ let coreSignedBundle =
 Target "Start" DoNothing
 
 Target "Clean" (fun _ ->
-    DotNetCli.RunCommand id "clean MathNet.spatial.sln"
+    DotNetCli.RunCommand id "clean MathNet.SpatialMinimal.sln --verbosity d"
     CleanDirs [ "obj" ]
     CleanDirs [ "out/api"; "out/docs"; "out/packages" ]
     CleanDirs [ "out/lib/Net40" ]
@@ -111,8 +111,9 @@ Target "ApplyVersion" (fun _ ->
 Target "DotnetRestore" (fun _ ->
     DotNetCli.Restore (fun c ->
        { c with 
-           Project = "MathNet.Spatial.sln" 
-           NoCache = true }))
+           Project = "MathNet.SpatialMinimal.sln" 
+           NoCache = true 
+           AdditionalArgs = ["--verbosity d"]}))
 
 Target "Prepare" DoNothing
 "Start"
@@ -132,7 +133,7 @@ let dotnetBuild configuration solution = DotNetCli.Build (fun p ->
         Configuration = configuration
         AdditionalArgs = defaultArgs})
 
-Target "BuildMain" (fun _ -> dotnetBuild "Release" "MathNet.Spatial.sln")
+Target "BuildMain" (fun _ -> dotnetBuild "Release" "MathNet.SpatialMinimal.sln")
 //Target "BuildMain" (fun _ -> build !! "MathNet.Spatial.sln")
 //Target "BuildAll" (fun _ -> build !! "MathNet.Spatial.All.sln")
 
