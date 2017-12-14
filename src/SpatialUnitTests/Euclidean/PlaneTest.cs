@@ -1,4 +1,5 @@
-﻿namespace MathNet.Spatial.UnitTests.Euclidean
+﻿// ReSharper disable InconsistentNaming
+namespace MathNet.Spatial.UnitTests.Euclidean
 {
     using System;
     using System.IO;
@@ -15,7 +16,7 @@
         private const string ZeroPoint = "0; 0; 0";
 
         [Test]
-        public void CtorTest()
+        public void Ctor()
         {
             var plane1 = new Plane(new Point3D(0, 0, 3), UnitVector3D.ZAxis);
             var plane2 = new Plane(0, 0, 3, -3);
@@ -28,7 +29,7 @@
 
         [TestCase("p:{0, 0, 0} v:{1, 0, 0}", "0, 0, 0", "1, 0, 0")]
         [TestCase("1, 0, 0, 0", "0, 0, 0", "1, 0, 0")]
-        public void ParseTest(string s, string pds, string vds)
+        public void Parse(string s, string pds, string vds)
         {
             var plane = Plane.Parse(s);
             AssertGeometry.AreEqual(Point3D.Parse(pds), plane.RootPoint);
@@ -39,7 +40,7 @@
         [TestCase(ZeroPoint, "p:{0, 0, -1} v:{0, 0, 1}", "0; 0;-1")]
         [TestCase(ZeroPoint, "p:{0, 0, 1} v:{0, 0, -1}", "0; 0; 1")]
         [TestCase("1; 2; 3", "p:{0, 0, 0} v:{0, 0, 1}", "1; 2; 0")]
-        public void ProjectPointOnTest(string ps, string pls, string eps)
+        public void ProjectPointOn(string ps, string pls, string eps)
         {
             var plane = Plane.Parse(pls);
             var projectedPoint = plane.Project(Point3D.Parse(ps));
@@ -88,7 +89,7 @@
         }
 
         [Test]
-        public void ProjectLineOnTest()
+        public void ProjectLineOn()
         {
             var unitVector = UnitVector3D.ZAxis;
             var rootPoint = new Point3D(0, 0, 1);
@@ -100,7 +101,7 @@
         }
 
         [Test]
-        public void ProjectVectorOnTest()
+        public void ProjectVectorOn()
         {
             var unitVector = UnitVector3D.ZAxis;
             var rootPoint = new Point3D(0, 0, 1);
@@ -113,7 +114,7 @@
 
         [TestCase("p:{0, 0, 0} v:{0, 0, 1}", "p:{0, 0, 0} v:{0, 1, 0}", "0, 0, 0", "-1, 0, 0")]
         [TestCase("p:{0, 0, 2} v:{0, 0, 1}", "p:{0, 0, 0} v:{0, 1, 0}", "0, 0, 2", "-1, 0, 0")]
-        public void InterSectionWithPlaneTest(string pl1s, string pl2s, string eps, string evs)
+        public void InterSectionWithPlane(string pl1s, string pl2s, string eps, string evs)
         {
             var plane1 = Plane.Parse(pl1s);
             var plane2 = Plane.Parse(pl2s);
@@ -140,7 +141,7 @@
         }
 
         [Test]
-        public void MirrorPointTest()
+        public void MirrorPoint()
         {
             var plane = new Plane(UnitVector3D.ZAxis, new Point3D(0, 0, 0));
             var point3D = new Point3D(1, 2, 3);
@@ -156,7 +157,7 @@
         }
 
         [Test]
-        public void InterSectionPointDifferentOrderTest()
+        public void InterSectionPointDifferentOrder()
         {
             var plane1 = new Plane(UnitVector3D.Create(0.8, 0.3, 0.01), new Point3D(20, 0, 0));
             var plane2 = new Plane(UnitVector3D.Create(0.002, 1, 0.1), new Point3D(0, 0, 0));

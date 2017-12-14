@@ -490,7 +490,7 @@
         [Pure]
         public override string ToString()
         {
-            return string.Format("A:{0} B:{1} C:{2} D:{3}", Math.Round(this.A, 4), Math.Round(this.B, 4), Math.Round(this.C, 4), Math.Round(this.D, 4));
+            return $"A:{Math.Round(this.A, 4)} B:{Math.Round(this.B, 4)} C:{Math.Round(this.C, 4)} D:{Math.Round(this.D, 4)}";
         }
 
         /// <inheritdoc />

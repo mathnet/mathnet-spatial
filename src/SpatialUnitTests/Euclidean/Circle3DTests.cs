@@ -1,4 +1,5 @@
-﻿namespace MathNet.Spatial.UnitTests.Euclidean
+﻿// ReSharper disable InconsistentNaming
+namespace MathNet.Spatial.UnitTests.Euclidean
 {
     using System;
     using MathNet.Spatial.Euclidean;
@@ -12,10 +13,10 @@
         public void CircleCenterRadius(string p1s, double radius)
         {
             var center = Point3D.Parse(p1s);
-            var cicle3D = new Circle3D(center, UnitVector3D.ZAxis, radius);
-            Assert.AreEqual(2 * radius, cicle3D.Diameter, double.Epsilon);
-            Assert.AreEqual(2 * Math.PI * radius, cicle3D.Circumference, double.Epsilon);
-            Assert.AreEqual(Math.PI * radius * radius, cicle3D.Area, double.Epsilon);
+            var circle = new Circle3D(center, UnitVector3D.ZAxis, radius);
+            Assert.AreEqual(2 * radius, circle.Diameter, double.Epsilon);
+            Assert.AreEqual(2 * Math.PI * radius, circle.Circumference, double.Epsilon);
+            Assert.AreEqual(Math.PI * radius * radius, circle.Area, double.Epsilon);
         }
 
         [TestCase("0,0,0", "5,0,0", "2.5,0,0", 2.5)]
@@ -48,7 +49,7 @@
             var p3 = Point3D.Parse(p3s);
             var center = Point3D.Parse(centers);
 
-            var circle = new Circle3D(p1, p2, p3);
+            var circle = Circle3D.FromPoints(p1, p2, p3);
 
             AssertGeometry.AreEqual(center, circle.CenterPoint);
             Assert.AreEqual(radius, circle.Radius, 1e-6);
