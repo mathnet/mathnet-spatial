@@ -59,13 +59,11 @@
                             context.RegisterCodeFix(
                                 CodeAction.Create(
                                     "Use Create",
-                                    _ => Task.FromResult(document.WithSyntaxRoot(
-                                        syntaxRoot.ReplaceNode(
-                                            objectCreation,
-                                            SyntaxFactory.InvocationExpression(
-                                                SyntaxFactory.ParseExpression("Angle.FromDegrees"),
-                                                objectCreation.ArgumentList.WithArguments(
-                                                    objectCreation.ArgumentList.Arguments.RemoveAt(1))))))),
+                                    _ => Task.FromResult(
+                                        document.WithSyntaxRoot(
+                                            syntaxRoot.ReplaceNode(
+                                                objectCreation,
+                                                AngleFromDegrees(objectCreation.ArgumentList.Arguments[0]))))),
                                 diagnostic);
                         }
                         else if (unitName.Identifier.ValueText == "Radians")
@@ -76,10 +74,7 @@
                                     _ => Task.FromResult(document.WithSyntaxRoot(
                                         syntaxRoot.ReplaceNode(
                                             objectCreation,
-                                            SyntaxFactory.InvocationExpression(
-                                                SyntaxFactory.ParseExpression("Angle.FromRadians"),
-                                                objectCreation.ArgumentList.WithArguments(
-                                                    objectCreation.ArgumentList.Arguments.RemoveAt(1))))))),
+                                            AngleFromRadians(objectCreation.ArgumentList.Arguments[0]))))),
                                 diagnostic);
                         }
                     }
@@ -92,37 +87,75 @@
                         memberAccess.Name.Identifier.ValueText == "From" &&
                         invocation.ArgumentList != null &&
                         invocation.ArgumentList.Arguments.Count == 2 &&
-                        invocation.ArgumentList.Arguments[1] is ArgumentSyntax argument)
+                        invocation.ArgumentList.Arguments[1] is ArgumentSyntax angleArgument)
                     {
-                        if (argument.Expression is MemberAccessExpressionSyntax argMemberAccess &&
+                        if (angleArgument.Expression is MemberAccessExpressionSyntax argMemberAccess &&
                             argMemberAccess.Name is SimpleNameSyntax unitName)
                         {
                             if (unitName.Identifier.ValueText == "Degrees")
                             {
                                 context.RegisterCodeFix(
                                     CodeAction.Create(
-                                        "Use Create",
+                                        "Use FromDegrees",
                                         _ => Task.FromResult(document.WithSyntaxRoot(
                                             syntaxRoot.ReplaceNode(
                                                 invocation,
-                                                SyntaxFactory.InvocationExpression(
-                                                    SyntaxFactory.ParseExpression("Angle.FromDegrees"),
-                                                    invocation.ArgumentList.WithArguments(
-                                                        invocation.ArgumentList.Arguments.RemoveAt(1))))))),
+                                                AngleFromDegrees(invocation.ArgumentList.Arguments[0]))))),
                                     diagnostic);
                             }
                             else if (unitName.Identifier.ValueText == "Radians")
                             {
                                 context.RegisterCodeFix(
                                     CodeAction.Create(
-                                        "Use Create",
+                                        "Use FromRadians",
                                         _ => Task.FromResult(document.WithSyntaxRoot(
                                             syntaxRoot.ReplaceNode(
                                                 invocation,
-                                                SyntaxFactory.InvocationExpression(
-                                                    SyntaxFactory.ParseExpression("Angle.FromRadians"),
+                                                AngleFromRadians(invocation.ArgumentList.Arguments[0]))))),
+                                    diagnostic);
+                            }
+                        }
+                    }
+                    else if (memberAccess.Name.Identifier.ValueText == "Rotate" &&
+                             invocation.ArgumentList != null &&
+                             invocation.ArgumentList.Arguments.Count == 3 &&
+                             invocation.ArgumentList.Arguments[2] is ArgumentSyntax angleArg)
+                    {
+                        if (angleArg.Expression is MemberAccessExpressionSyntax argMemberAccess &&
+                            argMemberAccess.Name is SimpleNameSyntax unitName)
+                        {
+                            if (unitName.Identifier.ValueText == "Degrees")
+                            {
+                                context.RegisterCodeFix(
+                                    CodeAction.Create(
+                                        "Use Angle.FromDegrees",
+                                        _ => Task.FromResult(
+                                            document.WithSyntaxRoot(
+                                                syntaxRoot.ReplaceNode(
+                                                    invocation.ArgumentList,
                                                     invocation.ArgumentList.WithArguments(
-                                                        invocation.ArgumentList.Arguments.RemoveAt(1))))))),
+                                                        invocation.ArgumentList.Arguments
+                                                                  .Replace(
+                                                                      angleArg,
+                                                                      angleArg.WithExpression(AngleFromDegrees(invocation.ArgumentList.Arguments[1])))
+                                                                  .RemoveAt(1)))))),
+                                    diagnostic);
+                            }
+                            else if (unitName.Identifier.ValueText == "Radians")
+                            {
+                                context.RegisterCodeFix(
+                                    CodeAction.Create(
+                                        "Use Angle.FromRadians",
+                                        _ => Task.FromResult(
+                                            document.WithSyntaxRoot(
+                                                syntaxRoot.ReplaceNode(
+                                                    invocation.ArgumentList,
+                                                    invocation.ArgumentList.WithArguments(
+                                                        invocation.ArgumentList.Arguments
+                                                                  .Replace(
+                                                                      angleArg,
+                                                                      angleArg.WithExpression(AngleFromRadians(invocation.ArgumentList.Arguments[1])))
+                                                                  .RemoveAt(1)))))),
                                     diagnostic);
                             }
                         }
@@ -166,6 +199,22 @@
                     }
                 }
             }
+        }
+
+        private static InvocationExpressionSyntax AngleFromDegrees(ArgumentSyntax valueArgument)
+        {
+            return SyntaxFactory.InvocationExpression(
+                SyntaxFactory.ParseExpression("Angle.FromDegrees"),
+                SyntaxFactory.ArgumentList(
+                    SyntaxFactory.SingletonSeparatedList(valueArgument)));
+        }
+
+        private static InvocationExpressionSyntax AngleFromRadians(ArgumentSyntax valueArgument)
+        {
+            return SyntaxFactory.InvocationExpression(
+                SyntaxFactory.ParseExpression("Angle.FromRadians"),
+                SyntaxFactory.ArgumentList(
+                    SyntaxFactory.SingletonSeparatedList(valueArgument)));
         }
     }
 }
