@@ -26,6 +26,7 @@ open System.IO
 #load "build/build-framework.fsx"
 open BuildFramework
 
+let dotnetbuild = environVarOrDefault "DOTNET" "0"
 
 // --------------------------------------------------------------------------------------
 // PROJECT INFO
@@ -168,6 +169,9 @@ Target "TestC#NET47"  (fun _ -> testLibraryCsharp "net47")
 
 "Build" ==> "TestC#Core1.1" ==> "TestC#"
 "Build" ==> "TestC#Core2.0" ==> "TestC#"
+"Build"
+=?> ("TestC#NET45", dotnetbuild = "1")
+==> "TestC#"
 
 "TestC#" ==> "Test"
 
