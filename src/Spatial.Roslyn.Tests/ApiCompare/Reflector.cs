@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.Linq;
     using System.Reflection;
 
@@ -11,11 +10,7 @@
         private Assembly legacy;
         private Assembly current;
 
-        private string oldAssemblyPath;
-        private string newAssemblyPath;
-
         private List<Type> lostTypes = new List<Type>();
-        private List<Type> toCompareTypes = new List<Type>();
         private List<EntityChange> allChanges = new List<EntityChange>();
 
         public Assembly Legacy => this.legacy;
@@ -28,8 +23,6 @@
 
         public bool LoadAssemblies(string oldassembly, string newassembly)
         {
-            this.oldAssemblyPath = oldassembly;
-            this.newAssemblyPath = newassembly;
             AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += new ResolveEventHandler(this.CurrentDomain_ReflectionOnlyAssemblyResolve);
 
             try

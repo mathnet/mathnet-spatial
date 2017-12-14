@@ -1,9 +1,5 @@
-﻿/// <summary>
-/// Based upon the work of Lui, Chen and Ouellet - https://www.codeproject.com/Articles/1210225/Fast-and-improved-D-Convex-Hull-algorithm-and-its
-/// </summary>
-namespace MathNet.Spatial.Internals
+﻿namespace MathNet.Spatial.Internals
 {
-    using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
@@ -12,6 +8,7 @@ namespace MathNet.Spatial.Internals
 
     /// <summary>
     /// An implementation of the work of Lui, Chen and Ouellet for solving the convex hull problem
+    /// https://www.codeproject.com/Articles/1210225/Fast-and-improved-D-Convex-Hull-algorithm-and-its
     /// <para>
     ///  Quadrant: Q2 | Q1
     ///            -------
