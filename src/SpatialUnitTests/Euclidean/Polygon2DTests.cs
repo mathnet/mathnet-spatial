@@ -9,34 +9,10 @@
     [TestFixture]
     public class Polygon2DTests
     {
-        private Polygon2D TestPolygon1()
-        {
-            var points = from x in new[] { "0,0", "0.25,0.5", "1,1", "-1,1", "0.5,-0.5" } select Point2D.Parse(x);
-            return new Polygon2D(points);
-        }
-
-        private Polygon2D TestPolygon2()
-        {
-            var points = from x in new[] { "0,0", "0.25,0.5", "1,1", "-1,1", "0.5,-0.5", "0,0" } select Point2D.Parse(x);
-            return new Polygon2D(points);
-        }
-
-        private Polygon2D TestPolygon3()
-        {
-            var points = from x in new[] { "0.25,0", "0.5,1", "1,-1" } select Point2D.Parse(x);
-            return new Polygon2D(points);
-        }
-
-        private Polygon2D TestPolygon4()
-        {
-            var points = from x in new[] { "0.5,1", "1,-1", "0.25,0" } select Point2D.Parse(x);
-            return new Polygon2D(points);
-        }
-
         [Test]
         public void ConstructorTest()
         {
-            var polygon = this.TestPolygon1();
+            var polygon = TestPolygon1();
             var checkList = new List<Point2D> { new Point2D(0, 0), new Point2D(0.25, 0.5), new Point2D(1, 1), new Point2D(-1, 1), new Point2D(0.5, -0.5) };
             CollectionAssert.AreEqual(checkList, polygon.Vertices);
         }
@@ -77,7 +53,7 @@
         {
             // Test to make sure that if the constructor point list is given to the polygon constructor with the first and last points
             // being duplicates, the point at the beginning of the list is removed
-            var polygon = this.TestPolygon2();
+            var polygon = TestPolygon2();
             var checkList = new List<Point2D> { new Point2D(0.25, 0.5), new Point2D(1, 1), new Point2D(-1, 1), new Point2D(0.5, -0.5), new Point2D(0, 0) };
             CollectionAssert.AreEqual(checkList, polygon);
         }
@@ -95,7 +71,7 @@
         public void IsPointInPolygonTest1(double x, double y, bool outcome)
         {
             var testPoint = new Point2D(x, y);
-            var testPoly = this.TestPolygon3();
+            var testPoly = TestPolygon3();
 
             Assert.AreEqual(outcome, testPoly.EnclosesPoint(testPoint));
         }
@@ -113,7 +89,7 @@
         public void IsPointInPolygonTest2(double x, double y, bool outcome)
         {
             var testPoint = new Point2D(x, y);
-            var testPoly = this.TestPolygon4();
+            var testPoly = TestPolygon4();
 
             Assert.AreEqual(outcome, testPoly.EnclosesPoint(testPoint));
         }
@@ -132,8 +108,8 @@
 
             var hullClockwise = Polygon2D.GetConvexHullFromPoints(testPoints, true);
 
-            var ClockwiseVerticies = hullClockwise.Vertices;
-            CollectionAssert.AreEqual(expectedPoints, ClockwiseVerticies);
+            var clockwiseVertices = hullClockwise.Vertices;
+            CollectionAssert.AreEqual(expectedPoints, clockwiseVertices);
             /*
             for (var i = 0; i < hullClockwise.VertexCount; i++)
             {
@@ -142,9 +118,9 @@
             */
 
             var hullCounterClockwise = Polygon2D.GetConvexHullFromPoints(testPoints, false);
-            var counterClockwiseVerticies = hullCounterClockwise.Vertices;
+            var counterClockwiseVertices = hullCounterClockwise.Vertices;
             expectedPoints.Reverse();
-            CollectionAssert.AreEqual(expectedPoints, counterClockwiseVerticies);
+            CollectionAssert.AreEqual(expectedPoints, counterClockwiseVertices);
             /*
             for (var i = 0; i < hullCounterClockwise.VertexCount; i++)
             {
@@ -162,8 +138,7 @@
             // second check: if we remove any point from the convex hull and build a new convex hull
             // then that point should be outside the new convex hull; if it's inside then our new
             // convex hull is the actual convex hull, which means the original one wasn't!
-
-            foreach (var pointToRemove in counterClockwiseVerticies)
+            foreach (var pointToRemove in counterClockwiseVertices)
             {
                 var convexHullWithPointRemoved = new Polygon2D(hullCounterClockwise.Except(new[] { pointToRemove }));
                 var pointIsInsideConvexHull =
@@ -182,6 +157,30 @@
             var thinned = poly.ReduceComplexity(0.00001);
 
             CollectionAssert.AreEqual(expected, thinned);
+        }
+
+        private static Polygon2D TestPolygon1()
+        {
+            var points = from x in new[] { "0,0", "0.25,0.5", "1,1", "-1,1", "0.5,-0.5" } select Point2D.Parse(x);
+            return new Polygon2D(points);
+        }
+
+        private static Polygon2D TestPolygon2()
+        {
+            var points = from x in new[] { "0,0", "0.25,0.5", "1,1", "-1,1", "0.5,-0.5", "0,0" } select Point2D.Parse(x);
+            return new Polygon2D(points);
+        }
+
+        private static Polygon2D TestPolygon3()
+        {
+            var points = from x in new[] { "0.25,0", "0.5,1", "1,-1" } select Point2D.Parse(x);
+            return new Polygon2D(points);
+        }
+
+        private static Polygon2D TestPolygon4()
+        {
+            var points = from x in new[] { "0.5,1", "1,-1", "0.25,0" } select Point2D.Parse(x);
+            return new Polygon2D(points);
         }
     }
 }

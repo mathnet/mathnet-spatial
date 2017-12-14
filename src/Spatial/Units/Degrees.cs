@@ -20,11 +20,13 @@ namespace MathNet.Spatial.Units
         /// </summary>
         private const double DegToRad = Math.PI / 180.0;
 
+#pragma warning disable CS3005 // Identifier differing only in case is not CLS-compliant
         /// <inheritdoc />
         double IUnit.Conversionfactor => this.ConversionFactor;
 
-        /// <inheritdoc />
+                              /// <inheritdoc />
         public double ConversionFactor => DegToRad;
+#pragma warning restore CS3005 // Identifier differing only in case is not CLS-compliant
 
         /// <inheritdoc />
         public string ShortName => Name;

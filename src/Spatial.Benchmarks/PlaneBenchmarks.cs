@@ -121,7 +121,7 @@
         }
 
         [Benchmark]
-        public Nullable<Point3D> IntersectionWithLine3D()
+        public Point3D? IntersectionWithLine3D()
         {
             return Plane1.IntersectionWith(Line3D, 2);
         }

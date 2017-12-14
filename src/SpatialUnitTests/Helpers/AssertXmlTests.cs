@@ -46,7 +46,7 @@ namespace MathNet.Spatial.UnitTests
 
             public int Age { get; set; }
 
-            public XmlSchema GetSchema() { return null; }
+            public XmlSchema GetSchema() => null;
 
             public void ReadXml(XmlReader reader)
             {

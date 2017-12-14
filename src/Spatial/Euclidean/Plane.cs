@@ -1,6 +1,7 @@
 ﻿namespace MathNet.Spatial.Euclidean
 {
     using System;
+    using System.Diagnostics.Contracts;
     using System.Xml;
     using System.Xml.Linq;
     using System.Xml.Schema;
@@ -173,6 +174,7 @@
         /// </summary>
         /// <param name="point">The <see cref="Point3D"/></param>
         /// <returns>The distance.</returns>
+        [Pure]
         public double SignedDistanceTo(Point3D point)
         {
             var p = this.Project(point);
@@ -186,6 +188,7 @@
         /// </summary>
         /// <param name="other">The <see cref="Point3D"/></param>
         /// <returns>The distance.</returns>
+        [Pure]
         public double SignedDistanceTo(Plane other)
         {
             if (!this.Normal.IsParallelTo(other.Normal, tolerance: 1E-15))
@@ -202,6 +205,7 @@
         /// </summary>
         /// <param name="ray">The <see cref="Point3D"/></param>
         /// <returns>The distance.</returns>
+        [Pure]
         public double SignedDistanceTo(Ray3D ray)
         {
             if (Math.Abs(ray.Direction.DotProduct(this.Normal) - 0) < 1E-15)
@@ -217,6 +221,7 @@
         /// </summary>
         /// <param name="point">The <see cref="Point3D"/></param>
         /// <returns>The distance.</returns>
+        [Pure]
         public double AbsoluteDistanceTo(Point3D point)
         {
             return Math.Abs(this.SignedDistanceTo(point));
@@ -228,6 +233,7 @@
         /// <param name="p">A point</param>
         /// <param name="projectionDirection">The direction of projection</param>
         /// <returns>a projected point</returns>
+        [Pure]
         public Point3D Project(Point3D p, UnitVector3D? projectionDirection = null)
         {
             var dotProduct = this.Normal.DotProduct(p.ToVector3D());
@@ -254,6 +260,7 @@
         /// </summary>
         /// <param name="line3DToProject">The line to project</param>
         /// <returns>A projected line</returns>
+        [Pure]
         public LineSegment3D Project(LineSegment3D line3DToProject)
         {
             var projectedStartPoint = this.Project(line3DToProject.StartPoint);
@@ -266,6 +273,7 @@
         /// </summary>
         /// <param name="rayToProject">The ray to project</param>
         /// <returns>A projected ray</returns>
+        [Pure]
         public Ray3D Project(Ray3D rayToProject)
         {
             var projectedThroughPoint = this.Project(rayToProject.ThroughPoint);
@@ -278,6 +286,7 @@
         /// </summary>
         /// <param name="vector3DToProject">The Vector3D to project</param>
         /// <returns>The projected Vector3D</returns>
+        [Pure]
         public Ray3D Project(Vector3D vector3DToProject)
         {
             var projectedEndPoint = this.Project(vector3DToProject.ToPoint3D());
@@ -290,6 +299,7 @@
         /// </summary>
         /// <param name="vector3DToProject">The Vector3D to project</param>
         /// <returns>The projected Vector3D</returns>
+        [Pure]
         public Ray3D Project(UnitVector3D vector3DToProject)
         {
             return this.Project(vector3DToProject.ToVector3D());
@@ -302,6 +312,7 @@
         /// <param name="intersectingPlane">a plane which intersects</param>
         /// <param name="tolerance">A tolerance (epsilon) to account for floating point error.</param>
         /// <returns>A ray at the intersection.</returns>
+        [Pure]
         public Ray3D IntersectionWith(Plane intersectingPlane, double tolerance = float.Epsilon)
         {
             var a = new DenseMatrix(2, 3);
@@ -367,6 +378,7 @@
         /// <param name="line">A line segment</param>
         /// <param name="tolerance">A tolerance (epsilon) to account for floating point error.</param>
         /// <returns>Intersection Point or null</returns>
+        [Pure]
         public Point3D? IntersectionWith(LineSegment3D line, double tolerance = float.Epsilon)
         {
             if (line.Direction.IsPerpendicularTo(this.Normal, tolerance))
@@ -400,6 +412,7 @@
         /// <param name="ray">A ray</param>
         /// <param name="tolerance">A tolerance (epsilon) to account for floating point error.</param>
         /// <returns>The point of intersection.</returns>
+        [Pure]
         public Point3D IntersectionWith(Ray3D ray, double tolerance = float.Epsilon)
         {
             if (this.Normal.IsPerpendicularTo(ray.Direction, tolerance))
@@ -417,6 +430,7 @@
         /// </summary>
         /// <param name="p">The <see cref="Point3D"/></param>
         /// <returns>The mirrored point.</returns>
+        [Pure]
         public Point3D MirrorAbout(Point3D p)
         {
             var p2 = this.Project(p);
@@ -430,6 +444,7 @@
         /// <param name="aboutVector">The vector about which to rotate</param>
         /// <param name="angle">An angle to rotate</param>
         /// <returns>A rotated plane</returns>
+        [Pure]
         public Plane Rotate(UnitVector3D aboutVector, Angle angle)
         {
             var rootPoint = this.RootPoint;
@@ -439,12 +454,14 @@
         }
 
         /// <inheritdoc />
+        [Pure]
         public bool Equals(Plane other)
         {
             return this.RootPoint == other.RootPoint && this.Normal == other.Normal;
         }
 
         /// <inheritdoc />
+        [Pure]
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj))
@@ -456,6 +473,7 @@
         }
 
         /// <inheritdoc />
+        [Pure]
         public override int GetHashCode()
         {
             unchecked
@@ -469,6 +487,7 @@
         }
 
         /// <inheritdoc />
+        [Pure]
         public override string ToString()
         {
             return string.Format("A:{0} B:{1} C:{2} D:{3}", Math.Round(this.A, 4), Math.Round(this.B, 4), Math.Round(this.C, 4), Math.Round(this.D, 4));

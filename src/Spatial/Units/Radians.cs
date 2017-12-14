@@ -12,11 +12,13 @@ namespace MathNet.Spatial.Units
         /// </summary>
         internal const string Name = "rad";
 
+#pragma warning disable CS3005 // Identifier differing only in case is not CLS-compliant
         /// <inheritdoc />
-        public double Conversionfactor => 1.0;
+        double IUnit.Conversionfactor => 1.0;
 
-        /// <inheritdoc />
+                              /// <inheritdoc />
         public double ConversionFactor => 1.0;
+#pragma warning restore CS3005 // Identifier differing only in case is not CLS-compliant
 
         /// <inheritdoc />
         public string ShortName => Name;

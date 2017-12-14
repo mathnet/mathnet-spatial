@@ -188,7 +188,6 @@
             AssertGeometry.AreEqual(cs, result);
         }
 
-
         private T BinaryFormmaterRoundTrip<T>(T test)
         {
             using (var ms = new MemoryStream())
