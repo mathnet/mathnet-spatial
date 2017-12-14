@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net40</TargetFrameworks>
+    <TargetFrameworks>net40;netstandard2.0</TargetFrameworks>
     <AssemblyName>MathNet.Spatial</AssemblyName>
     <RootNamespace>MathNet.Spatial</RootNamespace>
     <CodeAnalysisRuleSet>Spatial.ruleset</CodeAnalysisRuleSet>

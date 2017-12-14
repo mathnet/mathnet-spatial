@@ -1,7 +1,0 @@
-group Test
-    NUnit
-    Newtonsoft.Json
-    Protobuf-net
-
-group Analyzers
-    StyleCop.Analyzers

@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>netcoreapp2.0;net45</TargetFrameworks>
+    <TargetFrameworks>net45;netcoreapp2.0</TargetFrameworks>
     <GenerateAssemblyInfo>True</GenerateAssemblyInfo>
     <AssemblyName>MathNet.Numerics.UnitTests</AssemblyName>
     <RootNamespace>MathNet.Numerics.UnitTests</RootNamespace>
@@ -29,17 +29,22 @@
     <PackageReference Include="protobuf-net" Version="2.3.3" />
     <ProjectReference Include="..\Spatial\Spatial.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\..\packages\analyzers\StyleCop.Analyzers\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll">
+    </Analyzer>
+    <Analyzer Include="..\..\packages\analyzers\StyleCop.Analyzers\analyzers\dotnet\cs\StyleCop.Analyzers.dll">
+    </Analyzer>
+  </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
     <Reference Include="MathNet.Numerics">
       <HintPath>..\..\packages\MathNet\MathNet.Numerics\lib\net40\MathNet.Numerics.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
-  <ItemGroup Condition="$(TargetFramework.Contains('netcoreapp')) OR $(TargetFramework.Contains('netstandard'))">
-    <Reference Include="MathNet.Numerics.core">
+  <ItemGroup Condition="$(TargetFramework.Contains('netcoreapp2.0'))">
+    <Reference Include="MathNet.Numerics">
       <HintPath>..\..\packages\MathNet\MathNet.Numerics\lib\netstandard2.0\MathNet.Numerics.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
-  <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>
