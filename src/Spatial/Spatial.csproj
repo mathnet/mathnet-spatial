@@ -6,7 +6,7 @@
     <RootNamespace>MathNet.Spatial</RootNamespace>
     <CodeAnalysisRuleSet>Spatial.ruleset</CodeAnalysisRuleSet>
     <IsPackable>true</IsPackable>
-    <PackageId>MathNet.Numerics</PackageId>
+    <PackageId>MathNet.Spatial</PackageId>
     <VersionPrefix>0.5.0</VersionPrefix>
     <VersionSuffix>alpha</VersionSuffix>
     <PackageVersion>0.5.0-alpha</PackageVersion>
