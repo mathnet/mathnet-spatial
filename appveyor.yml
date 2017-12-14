@@ -1,10 +1,6 @@
 image: Visual Studio 2017
 build_script:
-  - build.cmd Build
-test:
-  # only assemblies to test
-  assemblies:
-    only:
-      - '**\MathNet.Spatial.UnitTests.dll'
+  - build.cmd
+test: none
 deploy: off
 shallow_clone: true
