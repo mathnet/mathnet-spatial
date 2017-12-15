@@ -220,25 +220,31 @@
         {
             var angle = Angle.Parse(s);
             var toString = angle.ToString(CultureInfo.InvariantCulture);
+
             // var toStringComma = angle.ToString(CultureInfo.GetCultureInfo("sv"));
             Assert.AreEqual(expected, toString);
+
             // Assert.AreEqual(expected.Replace('.', ','), toStringComma);
             Assert.IsTrue(angle.Equals(Angle.Parse(toString), Tolerance));
             Assert.IsTrue(angle.Equals(Angle.Parse(toString), Angle.FromRadians(Tolerance)));
+
             // Assert.IsTrue(angle.Equals(Angle.Parse(toStringComma), Tolerance));
         }
 
-        [TestCase("15°", "F2", "15.00°")]
+        [TestCase("15°", "D2", "15.00°")]
         public void ToString(string s, string format, string expected)
         {
             var angle = Angle.Parse(s);
-            var toString = angle.ToString(format, CultureInfo.InvariantCulture, AngleUnit.Degrees);
-            // var toStringComma = angle.ToString(format, CultureInfo.GetCultureInfo("sv"), AngleUnit.Degrees);
+            var toString = angle.ToString(format, CultureInfo.InvariantCulture);
             Assert.AreEqual(expected, toString);
-            //Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
-            Assert.AreEqual(angle.Radians, Angle.Parse(angle.ToString(format)).Radians, 1E-2);
+
+            // var toStringComma = angle.ToString(format, CultureInfo.GetCultureInfo("sv"), AngleUnit.Degrees);
+            // Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+            Assert.AreEqual(angle.Radians, Angle.Parse(angle.ToString(format, CultureInfo.InvariantCulture)).Radians, 1E-2);
+
             // Assert.AreEqual(expected.Replace('.', ','), toStringComma);
             Assert.IsTrue(angle.Equals(Angle.Parse(toString), Tolerance));
+
             // Assert.IsTrue(angle.Equals(Angle.Parse(toStringComma), Tolerance));
         }
 
@@ -311,8 +317,26 @@
         {
             int number = 1;
             var angle = Angle.FromRadians(number);
-            string expected = number + " rad";
+            string expected = number + "\u00A0rad";
             Assert.AreEqual(expected, angle.ToString());
+        }
+
+        [Test]
+        public void StringFormatRadiansTest()
+        {
+            int number = 1;
+            var angle = Angle.FromRadians(number);
+            string expected = number + "\u00A0rad";
+            Assert.AreEqual(expected, string.Format(new AngleFormatProvider(), "{0:R}", angle));
+        }
+
+        [Test]
+        public void StringFormatDegreesTest()
+        {
+            int number = 90;
+            var angle = Angle.FromDegrees(number);
+            string expected = number + "°";
+            Assert.AreEqual(expected, string.Format(new AngleFormatProvider(), "{0:D}", angle));
         }
 
         [Test]
