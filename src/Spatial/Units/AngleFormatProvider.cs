@@ -8,6 +8,12 @@
     /// </summary>
     public class AngleFormatProvider : IFormatProvider, ICustomFormatter
     {
+        private const string DegreeSymbol = "°";
+
+        private const string RadianSymbol = "\u00A0rad";
+
+        private const string SexagesimalFormat = "{0}° {1}' {2}\"";
+
         /// <summary>
         /// Initializes a new instance of the <see cref="AngleFormatProvider"/> class.
         /// </summary>
@@ -50,36 +56,37 @@
 
                 if (format == null || format == string.Empty)
                 {
-                    return angle.Radians.ToString(provider) + "\u00A0rad";
+                    return angle.Radians.ToString(provider) + RadianSymbol;
                 }
 
-                int precision;
                 string fmtString = string.Empty;
                 if (format.Length > 1)
                 {
-                    try
+                    if (int.TryParse(format.Substring(1), out int precision))
                     {
-                        precision = int.Parse(format.Substring(1));
+                        fmtString = "N" + precision.ToString();
                     }
-                    catch (FormatException)
+                    else
                     {
-                        precision = 0;
+                        fmtString = format.Substring(1);
                     }
-
-                    fmtString = "N" + precision.ToString();
                 }
 
                 if (format.Substring(0, 1).Equals("D", StringComparison.OrdinalIgnoreCase))
                 {
-                    return angle.Degrees.ToString(fmtString, provider) + "°";
+                    return angle.Degrees.ToString(fmtString, provider) + DegreeSymbol;
                 }
                 else if (format.Substring(0, 1).Equals("R", StringComparison.OrdinalIgnoreCase))
                 {
-                    return angle.Radians.ToString(fmtString, provider) + "\u00A0rad";
+                    return angle.Radians.ToString(fmtString, provider) + RadianSymbol;
+                }
+                else if (format.Substring(0, 1).Equals("S", StringComparison.OrdinalIgnoreCase))
+                {
+                    return ToSexagesimalString(angle.Degrees, fmtString, provider);
                 }
                 else
                 {
-                    return angle.Radians.ToString(format, provider) + "\u00A0rad";
+                    return angle.Radians.ToString(format, provider) + RadianSymbol;
                 }
             }
             else
@@ -97,6 +104,25 @@
                     return string.Empty;
                 }
             }
+        }
+
+        private static string ToSexagesimalString(double degrees, string format, IFormatProvider provider)
+        {
+            while (degrees < -180.0F)
+            {
+                degrees += 360.0F;
+            }
+
+            while (degrees > 180.0F)
+            {
+                degrees -= 360.0F;
+            }
+
+            int degint = (int)Math.Truncate(degrees);
+            int minutes = (int)Math.Truncate((degrees - degint) * 60);
+            double seconds = (((degrees - degint) * 60) - minutes) * 60;
+            string secString = seconds.ToString(format, provider);
+            return string.Format(SexagesimalFormat, degint, minutes, secString);
         }
     }
 }

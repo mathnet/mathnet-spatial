@@ -322,6 +322,35 @@
         }
 
         [Test]
+        public void ToDoubleTest()
+        {
+            var angle = Angle.FromDegrees(30.123);
+            var t = angle.Radians.ToString() + "\u00A0rad";
+            var y = angle.ToString();
+            Assert.AreEqual(t, y);
+        }
+
+        [Test]
+        public void ToStringCustomFormatTest()
+        {
+            var angle = Angle.FromDegrees(30.12122);
+            var u = string.Format("{0:0.##}°", angle.Degrees);
+            var x2 = angle.ToString("D0.##");
+            var x3 = string.Format(new AngleFormatProvider(), "{0:D0.##}", angle);
+            Assert.AreEqual(u, x2);
+            Assert.AreEqual(u, x3);
+        }
+
+        [Test]
+        public void ToSexagesimal()
+        {
+            var angle = Angle.FromSexagesimal(30, 20, 11.22);
+            var t = angle.ToString("S0");
+            var y = "30° 20' 11\"";
+            Assert.AreEqual(y, t);
+        }
+
+        [Test]
         public void StringFormatRadiansTest()
         {
             int number = 1;
