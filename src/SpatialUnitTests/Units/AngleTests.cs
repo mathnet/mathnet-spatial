@@ -346,7 +346,7 @@
         {
             var angle = Angle.FromSexagesimal(30, 20, 11.22);
             var t = angle.ToString("S0");
-            var y = "30° 20' 11\"";
+            var y = "30° 20′ 11″";
             Assert.AreEqual(y, t);
         }
 

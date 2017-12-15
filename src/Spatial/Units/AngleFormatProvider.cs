@@ -12,7 +12,7 @@
 
         private const string RadianSymbol = "\u00A0rad";
 
-        private const string SexagesimalFormat = "{0}° {1}' {2}\"";
+        private const string SexagesimalFormat = "{0}° {1}′ {2}″";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AngleFormatProvider"/> class.
