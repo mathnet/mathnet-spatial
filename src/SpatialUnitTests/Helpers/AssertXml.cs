@@ -12,7 +12,7 @@
 
     public static class AssertXml
     {
-        private static XmlWriterSettings Settings
+        public static XmlWriterSettings Settings
         {
             get
             {
@@ -47,8 +47,7 @@
         {
             var roundtrips = new[]
             {
-                XmlSerializerRoundTrip(item, expectedXml),
-                DataContractRoundTrip(item, expectedXml)
+                XmlSerializerRoundTrip(item, expectedXml)
             };
             foreach (var roundtrip in roundtrips)
             {
@@ -75,29 +74,6 @@
             using (var reader = new StringReader(xml))
             {
                 return (T)serializer.Deserialize(reader);
-            }
-        }
-
-        public static T DataContractRoundTrip<T>(T item, string expected)
-        {
-            var serializer = new DataContractSerializer(item.GetType());
-            string xml;
-            using (var sw = new StringWriter())
-            using (var writer = XmlWriter.Create(sw, Settings))
-            {
-                serializer.WriteObject(writer, item);
-                writer.Flush();
-                xml = sw.ToString();
-                Debug.WriteLine("DataContractSerializer");
-                Debug.Write(xml);
-                Debug.WriteLine(string.Empty);
-                AreEqual(expected, xml);
-            }
-
-            using (var stringReader = new StringReader(xml))
-            using (var reader = XmlReader.Create(stringReader))
-            {
-                return (T)serializer.ReadObject(reader);
             }
         }
 

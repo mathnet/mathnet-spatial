@@ -15,6 +15,9 @@ namespace MathNet.Spatial
     [Obsolete("This class should not have been public, will be removed in a future version. Made obsolete 2017-12-03")]
     public static class XmlExt
     {
+
+#if NETSTANDARD1_3 == false
+
         public static void WriteValueToReadonlyField<TClass, TProperty>(
             TClass item,
             TProperty value,
@@ -38,6 +41,34 @@ namespace MathNet.Spatial
             return t.GetFields(bindingAttr)
                     .Concat(GetAllFields(t.BaseType));
         }
+
+        public static void SetReadonlyFields<TItem>(ref TItem self, string[] fields, double[] values)
+                where TItem : struct
+        {
+            object boxed = self;
+            for (int i = 0; i < fields.Length; i++)
+            {
+                var fieldInfo = self.GetType().GetField(fields[i]);
+                fieldInfo.SetValue(boxed, values[i]);
+            }
+
+            self = (TItem)boxed;
+        }
+
+        internal static void SetReadonlyField<TItem, TValue>(
+            ref TItem self,
+            Expression<Func<TItem, TValue>> func,
+            TValue value)
+            where TItem : struct
+        {
+            var fieldInfo = self.GetType()
+                                .GetField(((MemberExpression)func.Body).Member.Name);
+            object boxed = self;
+            fieldInfo.SetValue(boxed, value);
+            self = (TItem)boxed;
+        }
+
+#endif
 
         public static string ReadAttributeOrDefault(this XElement e, string localName)
         {
@@ -156,32 +187,6 @@ namespace MathNet.Spatial
             writer.WriteValue(value);
             writer.WriteEndAttribute();
             return writer;
-        }
-
-        public static void SetReadonlyFields<TItem>(ref TItem self, string[] fields, double[] values)
-            where TItem : struct
-        {
-            object boxed = self;
-            for (int i = 0; i < fields.Length; i++)
-            {
-                var fieldInfo = self.GetType().GetField(fields[i]);
-                fieldInfo.SetValue(boxed, values[i]);
-            }
-
-            self = (TItem)boxed;
-        }
-
-        internal static void SetReadonlyField<TItem, TValue>(
-            ref TItem self,
-            Expression<Func<TItem, TValue>> func,
-            TValue value)
-            where TItem : struct
-        {
-            var fieldInfo = self.GetType()
-                                .GetField(((MemberExpression)func.Body).Member.Name);
-            object boxed = self;
-            fieldInfo.SetValue(boxed, value);
-            self = (TItem)boxed;
         }
     }
 }

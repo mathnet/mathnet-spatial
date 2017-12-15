@@ -2,7 +2,6 @@
 namespace MathNet.Spatial.UnitTests.Euclidean
 {
     using System.IO;
-    using System.Runtime.Serialization.Formatters.Binary;
     using MathNet.Spatial.Euclidean;
     using NUnit.Framework;
 
@@ -55,21 +54,6 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         {
             var ray = new Ray3D(Point3D.Parse(ps), UnitVector3D.Parse(vs));
             AssertXml.XmlRoundTrips(ray, xml, (e, a) => AssertGeometry.AreEqual(e, a, 1e-6));
-        }
-
-        [Test]
-        public void BinaryRoundtrip()
-        {
-            var v = new Ray3D(new Point3D(1, 2, -3), UnitVector3D.Create(1, 2, 3));
-            using (var ms = new MemoryStream())
-            {
-                var formatter = new BinaryFormatter();
-                formatter.Serialize(ms, v);
-                ms.Flush();
-                ms.Position = 0;
-                var roundTrip = (Ray3D)formatter.Deserialize(ms);
-                AssertGeometry.AreEqual(v, roundTrip);
-            }
         }
     }
 }

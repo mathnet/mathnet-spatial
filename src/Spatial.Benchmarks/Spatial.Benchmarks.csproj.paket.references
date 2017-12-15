@@ -1,9 +1,7 @@
 group Benchmarks
-    MathNet.Numerics
     BenchmarkDotNet.Diagnostics.Windows
-
-group Test
     NUnit
+    MathNet.Numerics
 
 group Analyzers
     StyleCop.Analyzers

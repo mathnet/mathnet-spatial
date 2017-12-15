@@ -1,13 +1,14 @@
-source https://www.nuget.org/api/v2
-nuget MathNet.Numerics ~> 3.8
-nuget MathNet.Numerics.Signed ~> 3.8
-
 group Build
     source https://www.nuget.org/api/v2
     nuget FAKE ~> 4.6
-    nuget NUnit.Runners ~> 3.0
-    nuget FSharp.Formatting !~> 2.4
+    nuget NUnit.Console ~> 3.7
+    nuget FSharp.Formatting !~> 2.14.4
     nuget NuGet.CommandLine
+
+group MathNet
+    source https://www.nuget.org/api/v2
+    nuget MathNet.Numerics ~> 4.0.0-alpha02
+    nuget MathNet.Numerics.Signed ~> 3.8
 
 group Analyzers
     source https://www.nuget.org/api/v2
@@ -15,14 +16,16 @@ group Analyzers
 
 group Test
     source https://www.nuget.org/api/v2
-    nuget NUnit ~> 3.0
-	nuget Newtonsoft.Json ~> 10.0.3
-	nuget Protobuf-net ~> 2.3.3	
+    nuget NUnit ~> 3.8
+    nuget NUnitLite ~> 3.8
+    nuget Newtonsoft.Json ~> 10.0.3
+    nuget Protobuf-net ~> 2.3.3	
 
 group Benchmarks
     source https://www.nuget.org/api/v2
-    nuget MathNet.Numerics
+    nuget NUnit ~> 3.8
     nuget BenchmarkDotNet.Diagnostics.Windows
+    nuget MathNet.Numerics ~> 3.8
 
 group Roslyn
     storage: none

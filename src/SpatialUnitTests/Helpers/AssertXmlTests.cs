@@ -1,5 +1,7 @@
 namespace MathNet.Spatial.UnitTests
 {
+#if NETCOREAPP1_1 == false
+
     using System.Globalization;
     using System.Xml;
     using System.Xml.Linq;
@@ -14,15 +16,6 @@ namespace MathNet.Spatial.UnitTests
         {
             var dummy = new XmlSerializableDummy("Meh", 14);
             var roundTrip = AssertXml.XmlSerializerRoundTrip(dummy, @"<XmlSerializableDummy Age=""14""><Name>Meh</Name></XmlSerializableDummy>");
-            Assert.AreEqual(dummy.Name, roundTrip.Name);
-            Assert.AreEqual(dummy.Age, roundTrip.Age);
-        }
-
-        [Test]
-        public void DataContractRoundTripTest()
-        {
-            var dummy = new XmlSerializableDummy("Meh", 14);
-            var roundTrip = AssertXml.DataContractRoundTrip(dummy, @"<AssertXmlTests.XmlSerializableDummy Age=""14""><Name>Meh</Name></AssertXmlTests.XmlSerializableDummy>");
             Assert.AreEqual(dummy.Name, roundTrip.Name);
             Assert.AreEqual(dummy.Age, roundTrip.Age);
         }
@@ -63,4 +56,7 @@ namespace MathNet.Spatial.UnitTests
             }
         }
     }
+
+#endif
+
 }

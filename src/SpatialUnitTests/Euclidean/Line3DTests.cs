@@ -2,7 +2,6 @@
 {
     using System;
     using System.IO;
-    using System.Runtime.Serialization.Formatters.Binary;
     using MathNet.Spatial.Euclidean;
     using MathNet.Spatial.Units;
     using NUnit.Framework;
@@ -108,21 +107,6 @@
             var e = Point3D.Parse(expected);
 
             Assert.AreEqual(e, line.ClosestPointTo(p, false));
-        }
-
-        [Test]
-        public void BinaryRountrip()
-        {
-            var line = new Line3D(new Point3D(1, 2, 3), new Point3D(4, 5, 6));
-            using (var ms = new MemoryStream())
-            {
-                var formatter = new BinaryFormatter();
-                formatter.Serialize(ms, line);
-                ms.Flush();
-                ms.Position = 0;
-                var roundTrip = (Line3D)formatter.Deserialize(ms);
-                AssertGeometry.AreEqual(line, roundTrip);
-            }
         }
 
         [TestCase("0,0,0", "0,0,1", "0,1,1", "0,1,2", true)]

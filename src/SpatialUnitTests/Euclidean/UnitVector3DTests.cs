@@ -4,7 +4,6 @@ namespace MathNet.Spatial.UnitTests.Euclidean
     using System;
     using System.Globalization;
     using System.IO;
-    using System.Runtime.Serialization.Formatters.Binary;
     using System.Xml;
     using System.Xml.Serialization;
     using MathNet.Spatial.Euclidean;
@@ -50,28 +49,6 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             Assert.AreEqual(expectedZ, p.Z);
 
             p = UnitVector3D.Parse(p.ToString());
-            Assert.AreEqual(expectedX, p.X);
-            Assert.AreEqual(expectedY, p.Y);
-            Assert.AreEqual(expectedZ, p.Z);
-        }
-
-        [TestCase("1,0; 0; 0,0", 1, 0, 0)]
-        [TestCase("0; 1,0; 0,0", 0, 1, 0)]
-        [TestCase("0; 0,0; 1,0", 0, 0, 1)]
-        public void ParseSwedish(string text, double expectedX, double expectedY, double expectedZ)
-        {
-            var culture = CultureInfo.GetCultureInfo("sv");
-            Assert.AreEqual(true, UnitVector3D.TryParse(text, culture, out var p));
-            Assert.AreEqual(expectedX, p.X);
-            Assert.AreEqual(expectedY, p.Y);
-            Assert.AreEqual(expectedZ, p.Z);
-
-            p = UnitVector3D.Parse(text, culture);
-            Assert.AreEqual(expectedX, p.X);
-            Assert.AreEqual(expectedY, p.Y);
-            Assert.AreEqual(expectedZ, p.Z);
-
-            p = UnitVector3D.Parse(p.ToString(culture));
             Assert.AreEqual(expectedX, p.X);
             Assert.AreEqual(expectedY, p.Y);
             Assert.AreEqual(expectedZ, p.Z);
@@ -238,21 +215,6 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             var deserialized = (AssertXml.Container<UnitVector3D>)serializer.Deserialize(new StringReader(xml));
             AssertGeometry.AreEqual(UnitVector3D.Create(0.2672612419124244, -0.53452248382484879, 0.80178372573727319), deserialized.Value1);
             AssertGeometry.AreEqual(UnitVector3D.Create(1, 0, 0), deserialized.Value2);
-        }
-
-        [Test]
-        public void BinaryRoundtrip()
-        {
-            var uv = UnitVector3D.Create(0.2672612419124244, -0.53452248382484879, 0.80178372573727319);
-            using (var ms = new MemoryStream())
-            {
-                var formatter = new BinaryFormatter();
-                formatter.Serialize(ms, uv);
-                ms.Flush();
-                ms.Position = 0;
-                var roundTrip = (UnitVector3D)formatter.Deserialize(ms);
-                AssertGeometry.AreEqual(uv, roundTrip);
-            }
         }
     }
 }

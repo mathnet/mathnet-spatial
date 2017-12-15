@@ -14,7 +14,7 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\MathNet.snk</AssemblyOriginatorKeyFile>
     <TargetFrameworkProfile />
-	<CodeAnalysisRuleSet>Spatial.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>Spatial.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>..\..\out\lib-signed\Net40\</OutputPath>
@@ -49,7 +49,7 @@
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.0'">
       <ItemGroup>
         <Reference Include="MathNet.Numerics">
-          <HintPath>..\..\packages\MathNet.Numerics.Signed\lib\net40\MathNet.Numerics.dll</HintPath>
+          <HintPath>..\..\packages\mathnet\MathNet.Numerics.Signed\lib\net40\MathNet.Numerics.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
