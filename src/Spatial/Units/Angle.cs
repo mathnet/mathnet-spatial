@@ -24,9 +24,19 @@ namespace MathNet.Spatial.Units
         private const double RadToDeg = 180.0 / Math.PI;
 
         /// <summary>
+        /// Conversion factor for converting Radians to Degrees
+        /// </summary>
+        private const double DegToGrad = 10.0 / 9.0;
+
+        /// <summary>
         /// Conversion factor for converting Degrees to Radians
         /// </summary>
         private const double DegToRad = Math.PI / 180.0;
+
+        /// <summary>
+        /// A lazy loaded string formatter
+        /// </summary>
+        private static Lazy<AngleFormatProvider> formatter = new Lazy<AngleFormatProvider>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Angle"/> struct.
@@ -64,9 +74,19 @@ namespace MathNet.Spatial.Units
         }
 
         /// <summary>
+        /// Gets a string formatter
+        /// </summary>
+        public static AngleFormatProvider Formatter => formatter.Value;
+
+        /// <summary>
         /// Gets the value in degrees
         /// </summary>
         public double Degrees => this.Radians * RadToDeg;
+
+        /// <summary>
+        /// Gets the value in degrees
+        /// </summary>
+        public double Gradians => this.Degrees * DegToGrad;
 
         /// <summary>
         /// Returns a value that indicates whether two specified Angles are equal.
@@ -343,7 +363,7 @@ namespace MathNet.Spatial.Units
         /// <inheritdoc />
         public string ToString(string format, IFormatProvider provider)
         {
-            return new AngleFormatProvider().Format(format, this, provider);
+            return Angle.Formatter.Format(format, this, provider);
         }
 
         /// <summary>
@@ -354,6 +374,7 @@ namespace MathNet.Spatial.Units
         /// <param name="provider">A <see cref="IFormatProvider"/></param>
         /// <param name="unit">Degrees or Radians</param>
         /// <returns>The string representation of this instance.</returns>
+        [Obsolete("Use other overloads of ToString, obsolete from 2017-12-18")]
         public string ToString<T>(string format, IFormatProvider provider, T unit)
             where T : IAngleUnit
         {

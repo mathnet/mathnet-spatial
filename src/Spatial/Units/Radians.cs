@@ -3,8 +3,12 @@ namespace MathNet.Spatial.Units
     using System;
     using System.ComponentModel;
 
+    /// <summary>
+    /// Obsolete - Use methods on Angle directly
+    /// </summary>
     [Serializable]
     [EditorBrowsable(EditorBrowsableState.Never)]
+    [Obsolete("No longer required, use Angle methods directly; Obsolete since 2017-12-18")]
     public struct Radians : IAngleUnit
     {
         /// <summary>

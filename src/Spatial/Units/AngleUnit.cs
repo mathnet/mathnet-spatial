@@ -1,8 +1,11 @@
 ﻿namespace MathNet.Spatial.Units
 {
+    using System;
+
     /// <summary>
     /// Utility class providing static units for angles
     /// </summary>
+    [Obsolete("No longer required, use Angle methods directly; Obsolete since 2017-12-18")]
     public static class AngleUnit
     {
         /// <summary>

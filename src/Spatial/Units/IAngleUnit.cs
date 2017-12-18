@@ -1,5 +1,11 @@
 namespace MathNet.Spatial.Units
 {
+    using System;
+
+    /// <summary>
+    /// Obsolete Interface
+    /// </summary>
+    [Obsolete("No longer required, use Angle methods directly; Obsolete since 2017-12-18")]
     public interface IAngleUnit : IUnit
     {
 #pragma warning disable CS3005

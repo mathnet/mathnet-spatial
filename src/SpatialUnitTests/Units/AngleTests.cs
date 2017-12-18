@@ -369,6 +369,33 @@
         }
 
         [Test]
+        public void StringFormatGradsTest()
+        {
+            int number = 90;
+            var angle = Angle.FromDegrees(number);
+            string expected = "100ᵍ";
+            Assert.AreEqual(expected, string.Format(new AngleFormatProvider(), "{0:G}", angle));
+        }
+
+        [Test]
+        public void StringFormatMilTest()
+        {
+            double number = 90;
+            var angle = Angle.FromDegrees(number);
+            string expected = "1600\u00A0mil";
+            Assert.AreEqual(expected, string.Format(new AngleFormatProvider(), "{0:M#}", angle));
+        }
+
+        [Test]
+        public void StringFormatMinuteArcTest()
+        {
+            double number = 90.34;
+            var angle = Angle.FromDegrees(number);
+            string expected = "5420.4′";
+            Assert.AreEqual(expected, string.Format(new AngleFormatProvider(), "{0:N}", angle));
+        }
+
+        [Test]
         public void ObjectEqualsTest()
         {
             var angle = Angle.FromRadians(1);
