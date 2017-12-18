@@ -312,6 +312,19 @@
             }
         }
 
+#if NETCOREAPP1_1 == false
+
+        [TestCase("15°", "D2", "15,00°")]
+        public void ToCulturedString(string s, string format, string expected)
+        {
+            var angle = Angle.Parse(s);
+            var toString = angle.ToString(format, CultureInfo.GetCultureInfo("sv"));
+            Assert.AreEqual(expected, toString);
+            Assert.IsTrue(angle.Equals(Angle.Parse(toString), Tolerance));
+        }
+
+#endif
+
         [Test]
         public void ToStringTest()
         {
