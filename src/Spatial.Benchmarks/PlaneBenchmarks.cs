@@ -16,7 +16,7 @@
         private static readonly Ray3D Ray3D = new Ray3D(Point3D.Origin, UnitVector3D.ZAxis);
         private static readonly Vector3D Vector3D = new Vector3D(5, 6, 7);
         private static readonly UnitVector3D UnitVector3D = UnitVector3D.Create(0.2, 0.4, 0.7, 1);
-        private static readonly Line3D Line3D = new Line3D(new Point3D(2, 3, 4), new Point3D(5, 6, 7));
+        private static readonly LineSegment3D LineSegment3D = new LineSegment3D(new Point3D(2, 3, 4), new Point3D(5, 6, 7));
 
         [Benchmark]
         public double A()
@@ -91,9 +91,9 @@
         }
 
         [Benchmark]
-        public Line3D ProjectLine3D()
+        public LineSegment3D ProjectLine3D()
         {
-            return Plane1.Project(Line3D);
+            return Plane1.Project(LineSegment3D);
         }
 
         [Benchmark]
@@ -123,7 +123,7 @@
         [Benchmark]
         public Point3D? IntersectionWithLine3D()
         {
-            return Plane1.IntersectionWith(Line3D, 2);
+            return Plane1.IntersectionWith(LineSegment3D, 2);
         }
 
         [Benchmark]
