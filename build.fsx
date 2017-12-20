@@ -112,17 +112,21 @@ Target "ApplyVersion" (fun _ ->
     patchVersionInAssemblyInfo "src/Spatial" spatialRelease
     patchVersionInAssemblyInfo "src/SpatialUnitTests" spatialRelease)
 
-Target "DotnetRestore" (fun _ ->
-    DotNetCli.Restore (fun c ->
+let dotnetRestore project = DotNetCli.Restore (fun c ->
        { c with 
-           Project = "MathNet.SpatialMinimal.sln" 
-           NoCache = true }))
+           Project = project 
+           NoCache = true })
+
+Target "DotnetRestore" (fun _ -> dotnetRestore "MathNet.SpatialMinimal.sln")
+
+Target "DotnetRestoreBenchmark" (fun _ -> dotnetRestore "MathNet.Spatial.Benchmarks.sln")
 
 Target "Prepare" DoNothing
 "Start"
   =?> ("Clean", not (hasBuildParam "incremental"))
   =?> ("CleanDotnet",  dotnetbuild = "1")
   ==> "DotnetRestore"
+  =?> ("DotnetRestoreBenchmark",  dotnetbuild = "1")
   ==> "ApplyVersion"
   ==> "Prepare"
 
@@ -205,7 +209,8 @@ Target "Benchmark#Net47" (fun _ ->
 "BuildBenchmarks" ==> "Benchmark#Core" ==> "RunBenchmarks"
 "BuildBenchmarks" =?> ("Benchmark#Net47", dotnetbuild = "1") ==> "RunBenchmarks"
 
-"CleanBenchmarks"
+"DotnetRestoreBenchmark"
+==> "CleanBenchmarks"
 ==> "BuildBenchmarks"
 ==> "RunBenchmarks"
 ==> "Benchmarks"
