@@ -134,10 +134,10 @@
             Assert.AreEqual(p, result);
         }
 
-        [TestCase("p:{0, 0, 0} v:{0, 0, 1}", @"<Plane><RootPoint X=""0"" Y=""0"" Z=""0"" /><Normal X=""0"" Y=""0"" Z=""1"" /></Plane>")]
-        public void PlaneXml(string p1s, string xml)
+        [TestCase("0, 0, 0", "0, 0, 1", @"<Plane><RootPoint X=""0"" Y=""0"" Z=""0"" /><Normal X=""0"" Y=""0"" Z=""1"" /></Plane>")]
+        public void PlaneXml(string rootPoint, string unitVector, string xml)
         {
-            var plane = Plane.Parse(p1s);
+            var plane = new Plane(Point3D.Parse(rootPoint), UnitVector3D.Parse(unitVector));
             var result = AssertXml.XmlSerializerRoundTrip(plane, xml);
             Assert.AreEqual(plane, result);
         }

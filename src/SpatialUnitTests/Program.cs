@@ -1,7 +1,7 @@
 // <copyright file="Program.cs" company="Math.NET">
-// Math.NET Numerics, part of the Math.NET Project
-// http://numerics.mathdotnet.com
-// http://github.com/mathnet/mathnet-numerics
+// Math.NET Spatial, part of the Math.NET Project
+// http://spatial.mathdotnet.com
+// http://github.com/mathnet/mathnet-spatial
 //
 // Copyright (c) 2009-2017 Math.NET
 //
@@ -26,13 +26,12 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 // </copyright>
-
-using NUnitLite;
-using System.Reflection;
-
 namespace MathNet.Numerics.UnitTests
 {
-    class Program
+    using System.Reflection;
+    using NUnitLite;
+
+    public class Program
     {
         public static int Main(string[] args)
         {

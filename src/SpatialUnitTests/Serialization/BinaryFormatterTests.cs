@@ -1,6 +1,5 @@
 ﻿namespace MathNet.Spatial.UnitTests
 {
-
 #if NETCOREAPP1_1 == false
 
     using System.IO;
@@ -57,10 +56,10 @@
             Assert.AreEqual(eulerAngles, result);
         }
 
-        [TestCase("p:{0, 0, 0} v:{0, 0, 1}")]
-        public void PlaneBinaryFormatter(string p1s)
+        [TestCase("0, 0, 0", "0, 0, 1")]
+        public void PlaneBinaryFormatter(string rootPoint, string unitVector)
         {
-            var plane = Plane.Parse(p1s);
+            var plane = new Plane(Point3D.Parse(rootPoint), UnitVector3D.Parse(unitVector));
             var result = this.BinaryFormmaterRoundTrip(plane);
             Assert.AreEqual(plane, result);
         }

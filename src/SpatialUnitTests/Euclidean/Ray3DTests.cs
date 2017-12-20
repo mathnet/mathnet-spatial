@@ -8,20 +8,20 @@ namespace MathNet.Spatial.UnitTests.Euclidean
     [TestFixture]
     public class Ray3DTests
     {
-        [TestCase("p:{1, 2, 3} v:{0, 0, 1}", "1, 2, 3", "0, 0, 1")]
-        public void Parse(string rs, string eps, string evs)
+        [TestCase("1, 2, 3", "0, 0, 1", "1, 2, 3", "0, 0, 1")]
+        public void Parse(string rootPoint, string unitVector, string eps, string evs)
         {
-            var ray = Ray3D.Parse(rs);
+            var ray = new Ray3D(Point3D.Parse(rootPoint), UnitVector3D.Parse(unitVector));
             AssertGeometry.AreEqual(Point3D.Parse(eps), ray.ThroughPoint);
             AssertGeometry.AreEqual(Vector3D.Parse(evs), ray.Direction);
         }
 
-        [TestCase("p:{0, 0, 0} v:{0, 0, 1}", "p:{0, 0, 0} v:{0, 1, 0}", "0, 0, 0", "-1, 0, 0")]
-        [TestCase("p:{0, 0, 2} v:{0, 0, 1}", "p:{0, 0, 0} v:{0, 1, 0}", "0, 0, 2", "-1, 0, 0")]
-        public void IntersectionOf(string pl1s, string pl2s, string eps, string evs)
+        [TestCase("0, 0, 0", "0, 0, 1", "0, 0, 0", "0, 1, 0", "0, 0, 0", "-1, 0, 0")]
+        [TestCase("0, 0, 2", "0, 0, 1", "0, 0, 0", "0, 1, 0", "0, 0, 2", "-1, 0, 0")]
+        public void IntersectionOf(string rootPoint1, string unitVector1, string rootPoint2, string unitVector2, string eps, string evs)
         {
-            var plane1 = Plane.Parse(pl1s);
-            var plane2 = Plane.Parse(pl2s);
+            var plane1 = new Plane(Point3D.Parse(rootPoint1), UnitVector3D.Parse(unitVector1));
+            var plane2 = new Plane(Point3D.Parse(rootPoint2), UnitVector3D.Parse(unitVector2));
             var actual = Ray3D.IntersectionOf(plane1, plane2);
             var expected = Ray3D.Parse(eps, evs);
             AssertGeometry.AreEqual(expected, actual);

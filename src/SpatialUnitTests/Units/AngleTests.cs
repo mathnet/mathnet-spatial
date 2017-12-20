@@ -220,12 +220,9 @@
         {
             var angle = Angle.Parse(s);
             var toString = angle.ToString(CultureInfo.InvariantCulture);
-            // var toStringComma = angle.ToString(CultureInfo.GetCultureInfo("sv"));
             Assert.AreEqual(expected, toString);
-            // Assert.AreEqual(expected.Replace('.', ','), toStringComma);
             Assert.IsTrue(angle.Equals(Angle.Parse(toString), Tolerance));
             Assert.IsTrue(angle.Equals(Angle.Parse(toString), Angle.FromRadians(Tolerance)));
-            // Assert.IsTrue(angle.Equals(Angle.Parse(toStringComma), Tolerance));
         }
 
         [TestCase("15°", "F2", "15.00°")]
@@ -233,13 +230,9 @@
         {
             var angle = Angle.Parse(s);
             var toString = angle.ToString(format, CultureInfo.InvariantCulture, AngleUnit.Degrees);
-            // var toStringComma = angle.ToString(format, CultureInfo.GetCultureInfo("sv"), AngleUnit.Degrees);
             Assert.AreEqual(expected, toString);
-            //Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
             Assert.AreEqual(angle.Radians, Angle.Parse(angle.ToString(format)).Radians, 1E-2);
-            // Assert.AreEqual(expected.Replace('.', ','), toStringComma);
             Assert.IsTrue(angle.Equals(Angle.Parse(toString), Tolerance));
-            // Assert.IsTrue(angle.Equals(Angle.Parse(toStringComma), Tolerance));
         }
 
         [TestCase("15°", @"<Angle Value=""0.26179938779914941"" />")]
@@ -334,8 +327,10 @@
         {
             string test = "test";
             var angle = Angle.FromRadians(1);
-            var lookup = new System.Collections.Generic.Dictionary<Angle, string>();
-            lookup.Add(angle, test);
+            var lookup = new System.Collections.Generic.Dictionary<Angle, string>
+            {
+                { angle, test }
+            };
 
             Assert.AreEqual(test, lookup[angle]);
         }

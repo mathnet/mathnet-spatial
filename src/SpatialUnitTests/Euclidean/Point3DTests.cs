@@ -127,13 +127,13 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             AssertGeometry.AreEqual(ep, centroid, 1e-9);
         }
 
-        [TestCase("p:{0, 0, 0} v:{0, 0, 1}", "p:{0, 0, 0} v:{0, 1, 0}", "p:{0, 0, 0} v:{1, 0, 0}", "0, 0, 0")]
-        [TestCase("p:{0, 0, 5} v:{0, 0, 1}", "p:{0, 4, 0} v:{0, 1, 0}", "p:{3, 0, 0} v:{1, 0, 0}", "3, 4, 5")]
-        public void FromPlanes(string pl1s, string pl2s, string pl3s, string eps)
+        [TestCase("0, 0, 0", "0, 0, 1", "0, 0, 0", "0, 1, 0", "0, 0, 0", "1, 0, 0", "0, 0, 0")]
+        [TestCase("0, 0, 5", "0, 0, 1", "0, 4, 0", "0, 1, 0", "3, 0, 0", "1, 0, 0", "3, 4, 5")]
+        public void FromPlanes(string rootPoint1, string unitVector1, string rootPoint2, string unitVector2, string rootPoint3, string unitVector3, string eps)
         {
-            var plane1 = Plane.Parse(pl1s);
-            var plane2 = Plane.Parse(pl2s);
-            var plane3 = Plane.Parse(pl3s);
+            var plane1 = new Plane(Point3D.Parse(rootPoint1), UnitVector3D.Parse(unitVector1));
+            var plane2 = new Plane(Point3D.Parse(rootPoint2), UnitVector3D.Parse(unitVector2));
+            var plane3 = new Plane(Point3D.Parse(rootPoint3), UnitVector3D.Parse(unitVector3));
             var p1 = Point3D.IntersectionOf(plane1, plane2, plane3);
             var p2 = Point3D.IntersectionOf(plane2, plane1, plane3);
             var p3 = Point3D.IntersectionOf(plane2, plane3, plane1);
@@ -146,25 +146,25 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             }
         }
 
-        [TestCase("0, 0, 0", "p:{0, 0, 0} v:{0, 0, 1}", "0, 0, 0")]
-        [TestCase("0, 0, 1", "p:{0, 0, 0} v:{0, 0, 1}", "0, 0, -1")]
-        public void MirrorAbout(string ps, string pls, string eps)
+        [TestCase("0, 0, 0", "0, 0, 0", "0, 0, 1", "0, 0, 0")]
+        [TestCase("0, 0, 1", "0, 0, 0", "0, 0, 1", "0, 0, -1")]
+        public void MirrorAbout(string ps, string rootPoint, string unitVector, string eps)
         {
             var p = Point3D.Parse(ps);
-            var p2 = Plane.Parse(pls);
+            var p2 = new Plane(Point3D.Parse(rootPoint), UnitVector3D.Parse(unitVector));
             var actual = p.MirrorAbout(p2);
 
             var ep = Point3D.Parse(eps);
             AssertGeometry.AreEqual(ep, actual);
         }
 
-        [TestCase("0, 0, 0", "p:{0, 0, 0} v:{0, 0, 1}", "0, 0, 0")]
-        [TestCase("0, 0, 1", "p:{0, 0, 0} v:{0, 0, 1}", "0, 0, 0")]
-        [TestCase("0, 0, 1", "p:{0, 10, 0} v:{0, 1, 0}", "0, 10, 1")]
-        public void ProjectOnTests(string ps, string pls, string eps)
+        [TestCase("0, 0, 0", "0, 0, 0", "0, 0, 1", "0, 0, 0")]
+        [TestCase("0, 0, 1", "0, 0, 0", "0, 0, 1", "0, 0, 0")]
+        [TestCase("0, 0, 1", "0, 10, 0", "0, 1, 0", "0, 10, 1")]
+        public void ProjectOnTests(string ps, string rootPoint, string unitVector, string eps)
         {
             var p = Point3D.Parse(ps);
-            var p2 = Plane.Parse(pls);
+            var p2 = new Plane(Point3D.Parse(rootPoint), UnitVector3D.Parse(unitVector));
             var actual = p.ProjectOn(p2);
 
             var ep = Point3D.Parse(eps);

@@ -23,13 +23,13 @@
             AssertGeometry.AreEqual(excpected, l.Direction);
         }
 
-        [TestCase("0, 0, 0", "1, -1, 1", "p:{0, 0, 0} v:{1, 0, 0}", "0, 0, 0", "0, -1, 1")]
-        public void ProjectOn(string p1s, string p2s, string pls, string ep1s, string ep2s)
+        [TestCase("0, 0, 0", "1, -1, 1", "0, 0, 0", "1, 0, 0", "0, 0, 0", "0, -1, 1")]
+        public void ProjectOn(string p1s, string p2s, string rootPoint, string unitVector, string ep1s, string ep2s)
         {
             var p1 = Point3D.Parse(p1s);
             var p2 = Point3D.Parse(p2s);
             var line = new Line3D(p1, p2);
-            var plane = Plane.Parse(pls);
+            var plane = new Plane(Point3D.Parse(rootPoint), UnitVector3D.Parse(unitVector));
             var expected = new Line3D(Point3D.Parse(ep1s), Point3D.Parse(ep2s));
             AssertGeometry.AreEqual(expected, line.ProjectOn(plane));
         }
