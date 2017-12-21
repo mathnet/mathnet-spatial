@@ -79,12 +79,6 @@
         }
 
         [Benchmark]
-        public Point3D ToPoint3D()
-        {
-            return P1.ToPoint3D();
-        }
-
-        [Benchmark]
         public object ToVector()
         {
             return P1.ToVector();
