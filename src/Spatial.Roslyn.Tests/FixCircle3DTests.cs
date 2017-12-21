@@ -78,7 +78,7 @@ namespace RoslynSandbox
             var p1 = new Point3D(1, 2, 0);
             var p2 = new Point3D(3, 5, 0);
             var p3 = new Point3D(-1, 0, 0);
-            var c = new Circle3D.FromPoints(p1, p2, p3);
+            var c = Circle3D.FromPoints(p1, p2, p3);
         }
     }
 }";
