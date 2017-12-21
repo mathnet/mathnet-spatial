@@ -3,6 +3,7 @@ namespace MathNet.Spatial.UnitTests.Euclidean
 {
     using System;
     using System.IO;
+    using System.Linq;
     using MathNet.Spatial.Euclidean;
     using NUnit.Framework;
 
@@ -26,22 +27,29 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             AssertGeometry.AreEqual(plane1, plane4);
         }
 
-        [TestCase("p:{0, 0, 0} v:{1, 0, 0}", "0, 0, 0", "1, 0, 0")]
-        [TestCase("1, 0, 0, 0", "0, 0, 0", "1, 0, 0")]
-        public void Parse(string s, string pds, string vds)
+        [TestCase("0, 0, 0", "1, 0, 0", "0, 0, 0", "1, 0, 0")]
+        public void Parse(string rootPoint, string unitVector, string pds, string vds)
         {
-            var plane = Plane.Parse(s);
+            var plane = new Plane(Point3D.Parse(rootPoint), UnitVector3D.Parse(unitVector));
             AssertGeometry.AreEqual(Point3D.Parse(pds), plane.RootPoint);
             AssertGeometry.AreEqual(Vector3D.Parse(vds), plane.Normal);
         }
 
-        [TestCase(ZeroPoint, "p:{0, 0, 0} v:{0, 0, 1}", ZeroPoint)]
-        [TestCase(ZeroPoint, "p:{0, 0, -1} v:{0, 0, 1}", "0; 0;-1")]
-        [TestCase(ZeroPoint, "p:{0, 0, 1} v:{0, 0, -1}", "0; 0; 1")]
-        [TestCase("1; 2; 3", "p:{0, 0, 0} v:{0, 0, 1}", "1; 2; 0")]
-        public void ProjectPointOn(string ps, string pls, string eps)
+        [TestCase("1, 0, 0, 0", "0, 0, 0", "1, 0, 0")]
+        public void Parse2(string s, string pds, string vds)
         {
-            var plane = Plane.Parse(pls);
+            var plane = this.GetPlaneFrom4Doubles(s);
+            AssertGeometry.AreEqual(Point3D.Parse(pds), plane.RootPoint);
+            AssertGeometry.AreEqual(Vector3D.Parse(vds), plane.Normal);
+        }
+
+        [TestCase(ZeroPoint, "0, 0, 0", "0, 0, 1", ZeroPoint)]
+        [TestCase(ZeroPoint, "0, 0, -1", "0, 0, 1", "0; 0;-1")]
+        [TestCase(ZeroPoint, "0, 0, 1", "0, 0, -1", "0; 0; 1")]
+        [TestCase("1; 2; 3", "0, 0, 0", "0, 0, 1", "1; 2; 0")]
+        public void ProjectPointOn(string ps, string rootPoint, string unitVector, string eps)
+        {
+            var plane = new Plane(Point3D.Parse(rootPoint), UnitVector3D.Parse(unitVector));
             var projectedPoint = plane.Project(Point3D.Parse(ps));
             var expected = Point3D.Parse(eps);
             AssertGeometry.AreEqual(expected, projectedPoint, float.Epsilon);
@@ -111,12 +119,12 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             AssertGeometry.AreEqual(new Point3D(0, 0, 1), projectOn.ThroughPoint, float.Epsilon);
         }
 
-        [TestCase("p:{0, 0, 0} v:{0, 0, 1}", "p:{0, 0, 0} v:{0, 1, 0}", "0, 0, 0", "-1, 0, 0")]
-        [TestCase("p:{0, 0, 2} v:{0, 0, 1}", "p:{0, 0, 0} v:{0, 1, 0}", "0, 0, 2", "-1, 0, 0")]
-        public void InterSectionWithPlane(string pl1s, string pl2s, string eps, string evs)
+        [TestCase("0, 0, 0", "0, 0, 1", "0, 0, 0", "0, 1, 0", "0, 0, 0", "-1, 0, 0")]
+        [TestCase("0, 0, 2", "0, 0, 1", "0, 0, 0", "0, 1, 0", "0, 0, 2", "-1, 0, 0")]
+        public void InterSectionWithPlane(string rootPoint1, string unitVector1, string rootPoint2, string unitVector2, string eps, string evs)
         {
-            var plane1 = Plane.Parse(pl1s);
-            var plane2 = Plane.Parse(pl2s);
+            var plane1 = new Plane(Point3D.Parse(rootPoint1), UnitVector3D.Parse(unitVector1));
+            var plane2 = new Plane(Point3D.Parse(rootPoint2), UnitVector3D.Parse(unitVector2));
             var intersections = new[]
             {
                 plane1.IntersectionWith(plane2),
@@ -129,11 +137,11 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             }
         }
 
-        [TestCase("p:{0, 0, 0} v:{0, 0, 1}", "p:{0, 0, 0} v:{0, 0, 1}", "0, 0, 0", "0, 0, 0")]
-        public void InterSectionWithPlaneTest_BadArgument(string pl1s, string pl2s, string eps, string evs)
+        [TestCase("0, 0, 0", "0, 0, 1", "0, 0, 0", "0, 0, 1", "0, 0, 0", "0, 0, 0")]
+        public void InterSectionWithPlaneTest_BadArgument(string rootPoint1, string unitVector1, string rootPoint2, string unitVector2, string eps, string evs)
         {
-            var plane1 = Plane.Parse(pl1s);
-            var plane2 = Plane.Parse(pl2s);
+            var plane1 = new Plane(Point3D.Parse(rootPoint1), UnitVector3D.Parse(unitVector1));
+            var plane2 = new Plane(Point3D.Parse(rootPoint2), UnitVector3D.Parse(unitVector2));
 
             Assert.Throws<ArgumentException>(() => plane1.IntersectionWith(plane2));
             Assert.Throws<ArgumentException>(() => plane2.IntersectionWith(plane1));
@@ -168,15 +176,14 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             AssertGeometry.AreEqual(pointFromPlanes3, pointFromPlanes2, 1E-10);
         }
 
-        [TestCase("p:{0, 0, 0} v:{1, 0, 0}", "p:{0, 0, 0} v:{0, 1, 0}", "p:{0, 0, 0} v:{0, 0, 1}", "0, 0, 0")]
-        [TestCase("p:{0, 0, 0} v:{-1, 0, 0}", "p:{0, 0, 0} v:{0, 1, 0}", "p:{0, 0, 0} v:{0, 0, 1}", "0, 0, 0")]
-        [TestCase("p:{20, 0, 0} v:{1, 0, 0}", "p:{0, 0, 0} v:{0, 1, 0}", "p:{0, 0, -30} v:{0, 0, 1}", "20, 0, -30")]
-        [TestCase("1, 1, 0, -12", "-1, 1, 0, -12", "0, 0, 1, -5", "0, 16.970563, 5")]
-        public void PointFromPlanes(string pl1s, string pl2s, string pl3s, string eps)
+        [TestCase("0, 0, 0", "1, 0, 0", "0, 0, 0", "0, 1, 0", "0, 0, 0", "0, 0, 1", "0, 0, 0")]
+        [TestCase("0, 0, 0", "-1, 0, 0", "0, 0, 0", "0, 1, 0", "0, 0, 0", "0, 0, 1", "0, 0, 0")]
+        [TestCase("20, 0, 0", "1, 0, 0", "0, 0, 0", "0, 1, 0", "0, 0, -30", "0, 0, 1", "20, 0, -30")]
+        public void PointFromPlanes(string rootPoint1, string unitVector1, string rootPoint2, string unitVector2, string rootPoint3, string unitVector3, string eps)
         {
-            var plane1 = Plane.Parse(pl1s);
-            var plane2 = Plane.Parse(pl2s);
-            var plane3 = Plane.Parse(pl3s);
+            var plane1 = new Plane(Point3D.Parse(rootPoint1), UnitVector3D.Parse(unitVector1));
+            var plane2 = new Plane(Point3D.Parse(rootPoint2), UnitVector3D.Parse(unitVector2));
+            var plane3 = new Plane(Point3D.Parse(rootPoint3), UnitVector3D.Parse(unitVector3));
             var points = new[]
             {
                 Plane.PointFromPlanes(plane1, plane2, plane3),
@@ -193,11 +200,39 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             }
         }
 
-        [TestCase("p:{0, 0, 0} v:{0, 0, 1}", @"<Plane><RootPoint X=""0"" Y=""0"" Z=""0"" /><Normal X=""0"" Y=""0"" Z=""1"" /></Plane>")]
-        public void XmlRoundTrips(string p1s, string xml)
+        [TestCase("1, 1, 0, -12", "-1, 1, 0, -12", "0, 0, 1, -5", "0, 16.970563, 5")]
+        public void PointFromPlanes2(string planeString1, string planeString2, string planeString3, string eps)
         {
-            var plane = Plane.Parse(p1s);
+            var plane1 = this.GetPlaneFrom4Doubles(planeString1);
+            var plane2 = this.GetPlaneFrom4Doubles(planeString2);
+            var plane3 = this.GetPlaneFrom4Doubles(planeString3);
+            var points = new[]
+            {
+                Plane.PointFromPlanes(plane1, plane2, plane3),
+                Plane.PointFromPlanes(plane2, plane1, plane3),
+                Plane.PointFromPlanes(plane1, plane3, plane2),
+                Plane.PointFromPlanes(plane2, plane3, plane1),
+                Plane.PointFromPlanes(plane3, plane2, plane1),
+                Plane.PointFromPlanes(plane3, plane1, plane2),
+            };
+            var expected = Point3D.Parse(eps);
+            foreach (var point in points)
+            {
+                AssertGeometry.AreEqual(expected, point);
+            }
+        }
+
+        [TestCase("0, 0, 0", "0, 0, 1", @"<Plane><RootPoint X=""0"" Y=""0"" Z=""0"" /><Normal X=""0"" Y=""0"" Z=""1"" /></Plane>")]
+        public void XmlRoundTrips(string rootPoint, string unitVector, string xml)
+        {
+            var plane = new Plane(Point3D.Parse(rootPoint), UnitVector3D.Parse(unitVector));
             AssertXml.XmlRoundTrips(plane, xml, (e, a) => AssertGeometry.AreEqual(e, a));
+        }
+
+        private Plane GetPlaneFrom4Doubles(string inputstring)
+        {
+            var numbers = inputstring.Split(',').Select(t => double.Parse(t)).ToArray();
+            return new Plane(numbers[0], numbers[1], numbers[2], numbers[3]);
         }
     }
 }

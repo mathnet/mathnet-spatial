@@ -13,7 +13,7 @@
     /// Based on http://web.cs.iastate.edu/~cs577/handouts/quaternion.pdf and my own calculations
     /// </remarks>
     [TestFixture]
-    public class Quaternions32Tests
+    public class QuaternionTests
     {
         [Test]
         public void CanConstructQuaternion()
@@ -24,6 +24,7 @@
             Assert.AreEqual(2, a1.ImagX);
             Assert.AreEqual(3, a1.ImagY);
             Assert.AreEqual(4, a1.ImagZ);
+
             // From DenseVector :
             var v1 = new Quaternion(new MathNet.Numerics.LinearAlgebra.Double.DenseVector(new double[] { 1, 2, 3, 4 }));
             Assert.AreEqual(1, v1.Real);
@@ -265,7 +266,7 @@
             {
                 get
                 {
-                    //yield return new TestCaseData(bigNumber, bigNumber, bigNumber, bigNumber).Returns(2*bigNumber); // This test is supposted to work after making Norm more robust
+                    // yield return new TestCaseData(bigNumber, bigNumber, bigNumber, bigNumber).Returns(2*bigNumber); // This test is supposted to work after making Norm more robust
                     yield return new TestCaseData(0, 0, 0, 0).Returns(0.0);
                     yield return new TestCaseData(1, 1, 1, 1).Returns(2.0);
                     yield return new TestCaseData(1, 1, 1, 0).Returns(Math.Sqrt(3));
