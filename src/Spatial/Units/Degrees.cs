@@ -5,9 +5,11 @@ namespace MathNet.Spatial.Units
 
     /// <summary>
     /// A degree or degree of arc typically denoted by °.  It is defined such that a full rotation is 360 degrees.
+    /// Obsolete - use methods on Angle directly
     /// </summary>
     [Serializable]
     [EditorBrowsable(EditorBrowsableState.Never)]
+    [Obsolete("No longer required, use Angle methods directly; Obsolete since 2017-12-18")]
     public struct Degrees : IAngleUnit
     {
         /// <summary>
