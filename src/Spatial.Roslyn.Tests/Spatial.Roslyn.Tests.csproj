@@ -15,6 +15,9 @@
     <AssemblyOriginatorKeyFile>..\MathNet.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Spatial.Analyzers\Spatial.Analyzers.csproj" />
     <ProjectReference Include="..\Spatial.CodeFixes\Spatial.CodeFixes.csproj" />
     <ProjectReference Include="..\Spatial\Spatial.csproj" />

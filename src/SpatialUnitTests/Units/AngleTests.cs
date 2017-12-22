@@ -220,32 +220,19 @@
         {
             var angle = Angle.Parse(s);
             var toString = angle.ToString(CultureInfo.InvariantCulture);
-
-            // var toStringComma = angle.ToString(CultureInfo.GetCultureInfo("sv"));
             Assert.AreEqual(expected, toString);
-
-            // Assert.AreEqual(expected.Replace('.', ','), toStringComma);
             Assert.IsTrue(angle.Equals(Angle.Parse(toString), Tolerance));
             Assert.IsTrue(angle.Equals(Angle.Parse(toString), Angle.FromRadians(Tolerance)));
-
-            // Assert.IsTrue(angle.Equals(Angle.Parse(toStringComma), Tolerance));
         }
 
         [TestCase("15°", "D2", "15.00°")]
         public void ToString(string s, string format, string expected)
         {
             var angle = Angle.Parse(s);
-            var toString = angle.ToString(format, CultureInfo.InvariantCulture);
+            var toString = angle.ToString(format, CultureInfo.InvariantCulture, AngleUnit.Degrees);
             Assert.AreEqual(expected, toString);
-
-            // var toStringComma = angle.ToString(format, CultureInfo.GetCultureInfo("sv"), AngleUnit.Degrees);
-            // Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
-            Assert.AreEqual(angle.Radians, Angle.Parse(angle.ToString(format, CultureInfo.InvariantCulture)).Radians, 1E-2);
-
-            // Assert.AreEqual(expected.Replace('.', ','), toStringComma);
+            Assert.AreEqual(angle.Radians, Angle.Parse(angle.ToString(format)).Radians, 1E-2);
             Assert.IsTrue(angle.Equals(Angle.Parse(toString), Tolerance));
-
-            // Assert.IsTrue(angle.Equals(Angle.Parse(toStringComma), Tolerance));
         }
 
         [TestCase("15°", @"<Angle Value=""0.26179938779914941"" />")]
@@ -427,8 +414,10 @@
         {
             string test = "test";
             var angle = Angle.FromRadians(1);
-            var lookup = new System.Collections.Generic.Dictionary<Angle, string>();
-            lookup.Add(angle, test);
+            var lookup = new System.Collections.Generic.Dictionary<Angle, string>
+            {
+                { angle, test }
+            };
 
             Assert.AreEqual(test, lookup[angle]);
         }

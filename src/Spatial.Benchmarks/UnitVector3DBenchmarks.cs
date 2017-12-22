@@ -209,13 +209,13 @@
         [Benchmark]
         public Vector3D Subtract()
         {
-            return UnitVector3D1.Subtract(UnitVector3D2);
+            return UnitVector3D1 - UnitVector3D2;
         }
 
         [Benchmark]
         public Vector3D Add()
         {
-            return UnitVector3D1.Add(UnitVector3D2);
+            return UnitVector3D1 + UnitVector3D2;
         }
 
         [Benchmark]

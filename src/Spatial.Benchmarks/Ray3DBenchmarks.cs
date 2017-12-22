@@ -25,9 +25,9 @@
         }
 
         [Benchmark]
-        public Line3D LineTo()
+        public LineSegment3D LineTo()
         {
-            return Ray3D1.LineTo(Point3D);
+            return Ray3D1.ShortestLineTo(Point3D);
         }
 
         [Benchmark]

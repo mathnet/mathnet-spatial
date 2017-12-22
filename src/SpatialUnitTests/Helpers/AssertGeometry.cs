@@ -141,8 +141,8 @@ namespace MathNet.Spatial.UnitTests
         {
             Assert.AreEqual(expected.RowCount, actual.RowCount);
             Assert.AreEqual(expected.ColumnCount, actual.ColumnCount);
-            var expectedRowWiseArray = expected.ToRowWiseArray();
-            var actualRowWiseArray = actual.ToRowWiseArray();
+            var expectedRowWiseArray = expected.ToRowMajorArray();
+            var actualRowWiseArray = actual.ToRowMajorArray();
             for (var i = 0; i < expectedRowWiseArray.Length; i++)
             {
                 Assert.AreEqual(expectedRowWiseArray[i], actualRowWiseArray[i], tolerance);

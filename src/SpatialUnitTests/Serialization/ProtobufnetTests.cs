@@ -62,10 +62,10 @@
         }
 
         [Explicit("fix later")]
-        [TestCase("p:{0, 0, 0} v:{0, 0, 1}")]
-        public void PlaneProtoBuf(string p1s)
+        [TestCase("0, 0, 0", "0, 0, 1")]
+        public void PlaneProtoBuf(string rootPoint, string unitVector)
         {
-            var plane = Plane.Parse(p1s);
+            var plane = new Plane(Point3D.Parse(rootPoint), UnitVector3D.Parse(unitVector));
             var result = this.ProtobufRoundTrip(plane);
             Assert.AreEqual(plane, result);
         }

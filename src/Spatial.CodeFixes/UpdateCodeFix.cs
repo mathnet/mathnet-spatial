@@ -3,6 +3,7 @@
     using System.Collections.Immutable;
     using System.Composition;
     using System.Globalization;
+    using System.Linq;
     using System.Threading.Tasks;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CodeActions;
@@ -21,6 +22,7 @@
             var document = context.Document;
             var syntaxRoot = await document.GetSyntaxRootAsync(context.CancellationToken)
                 .ConfigureAwait(false);
+            var model = await document.GetSemanticModelAsync();
 
             foreach (var diagnostic in context.Diagnostics)
             {
@@ -46,6 +48,40 @@
                                             SyntaxFactory.ParseExpression("UnitVector3D.Create"),
                                             objectCreation.ArgumentList))))),
                             diagnostic);
+                    }
+                    else if (simpleName.Identifier.ValueText == "Circle3D")
+                    {
+                        var args = objectCreation.ArgumentList;
+                        if (args.Arguments.Count == 3)
+                        {
+                            var arg3 = args.Arguments[2];
+                            if (model.GetTypeInfo(arg3.ChildNodes().First()).Type.Name == "Point3D")
+                            {
+                                context.RegisterCodeFix(
+                                    CodeAction.Create(
+                                        "Use Create",
+                                        _ => Task.FromResult(document.WithSyntaxRoot(
+                                            syntaxRoot.ReplaceNode(
+                                                objectCreation,
+                                                SyntaxFactory.InvocationExpression(
+                                                    SyntaxFactory.ParseExpression("Circle3D.FromPoints"),
+                                                    objectCreation.ArgumentList))))),
+                                    diagnostic);
+                            }
+                            else if (model.GetTypeInfo(arg3.ChildNodes().First()).Type.Name == "UnitVector3D")
+                            {
+                                context.RegisterCodeFix(
+                                    CodeAction.Create(
+                                        "Use Create",
+                                        _ => Task.FromResult(document.WithSyntaxRoot(
+                                            syntaxRoot.ReplaceNode(
+                                                objectCreation,
+                                                SyntaxFactory.InvocationExpression(
+                                                    SyntaxFactory.ParseExpression("Circle3D.FromPointsAndAxis"),
+                                                    objectCreation.ArgumentList))))),
+                                    diagnostic);
+                             }
+                        }
                     }
                     else if (simpleName.Identifier.ValueText == "Angle" &&
                              objectCreation.ArgumentList != null &&

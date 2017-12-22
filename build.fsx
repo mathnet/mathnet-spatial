@@ -106,20 +106,27 @@ Target "Clean" (fun _ ->
     CleanDirs [ "out/test/Net40" ]
     CleanDirs [ "out/lib-signed/Net40" ])
 
+Target "CleanDotnet" (fun _ -> DotNetCli.RunCommand id "clean MathNet.Spatial.Benchmarks.sln")
+
 Target "ApplyVersion" (fun _ ->
     patchVersionInAssemblyInfo "src/Spatial" spatialRelease
     patchVersionInAssemblyInfo "src/SpatialUnitTests" spatialRelease)
 
-Target "DotnetRestore" (fun _ ->
-    DotNetCli.Restore (fun c ->
+let dotnetRestore project = DotNetCli.Restore (fun c ->
        { c with 
-           Project = "MathNet.SpatialMinimal.sln" 
-           NoCache = true }))
+           Project = project 
+           NoCache = true })
+
+Target "DotnetRestore" (fun _ -> dotnetRestore "MathNet.SpatialMinimal.sln")
+
+Target "DotnetRestoreBenchmark" (fun _ -> dotnetRestore "MathNet.Spatial.Benchmarks.sln")
 
 Target "Prepare" DoNothing
 "Start"
   =?> ("Clean", not (hasBuildParam "incremental"))
+  =?> ("CleanDotnet",  dotnetbuild = "1")
   ==> "DotnetRestore"
+  =?> ("DotnetRestoreBenchmark",  dotnetbuild = "1")
   ==> "ApplyVersion"
   ==> "Prepare"
 
@@ -135,12 +142,16 @@ let dotnetBuild configuration solution = DotNetCli.Build (fun p ->
         AdditionalArgs = defaultArgs})
 
 Target "BuildMain" (fun _ -> dotnetBuild "Release" "MathNet.SpatialMinimal.sln")
+
+Target "BuildBenchmarks" (fun _ -> dotnetBuild "Release" "MathNet.Spatial.Benchmarks.sln")
+
 //Target "BuildMain" (fun _ -> build !! "MathNet.Spatial.sln")
 //Target "BuildAll" (fun _ -> build !! "MathNet.Spatial.All.sln")
 
 Target "Build" DoNothing
 "Prepare"
   =?> ("BuildMain", hasBuildParam "release")
+  =?> ("BuildBenchmarks",  dotnetbuild = "1")
   ==> "Build"
 
 
@@ -178,6 +189,31 @@ Target "TestC#NET47"  (fun _ -> testLibraryCsharp "net47")
 //Target "Test" (fun _ -> test !! "out/test/**/*UnitTests*.dll")
 //"Build" ==> "Test"
 
+// --------------------------------------------------------------------------------------
+// BENCHMARKS
+// --------------------------------------------------------------------------------------
+
+let benchmarkLibrary framework = testLibrary "" "src/Spatial.Benchmarks/Spatial.Benchmarks.csproj" framework
+
+Target "Benchmarks" DoNothing
+Target "RunBenchmarks" DoNothing
+Target "CleanBenchmarks" (fun _ -> CleanDirs [ "BenchmarkDotNet.Artifacts" ])
+
+Target "Benchmark#Core" (fun _ ->
+        benchmarkLibrary "netcoreapp2.0"
+        Rename "BenchmarkDotNet.Artifacts/netcoreapp2.0" "BenchmarkDotNet.Artifacts/results")
+Target "Benchmark#Net47" (fun _ ->
+        benchmarkLibrary "net47"
+        Rename "BenchmarkDotNet.Artifacts/net47" "BenchmarkDotNet.Artifacts/results")
+
+"BuildBenchmarks" ==> "Benchmark#Core" ==> "RunBenchmarks"
+"BuildBenchmarks" =?> ("Benchmark#Net47", dotnetbuild = "1") ==> "RunBenchmarks"
+
+"DotnetRestoreBenchmark"
+==> "CleanBenchmarks"
+==> "BuildBenchmarks"
+==> "RunBenchmarks"
+==> "Benchmarks"
 
 // --------------------------------------------------------------------------------------
 // PACKAGES

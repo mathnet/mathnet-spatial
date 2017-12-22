@@ -5,34 +5,40 @@ namespace Spatial.Benchmarks
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using BenchmarkDotNet.Configs;
     using BenchmarkDotNet.Reports;
     using BenchmarkDotNet.Running;
 
     internal class Program
     {
-        private static readonly string BenchmarksDirectory = Path.Combine(Directory.GetCurrentDirectory(), "..\\..\\");
-
-        private static string ArtifactsDirectory { get; } = Path.Combine(Directory.GetCurrentDirectory(), "BenchmarkDotNet.Artifacts", "results");
+        private static string ArtifactsDirectory { get; set; } = Path.Combine(Directory.GetCurrentDirectory(), "BenchmarkDotNet.Artifacts", "results");
 
         // ReSharper disable once UnusedParameter.Local
         private static void Main(string[] args)
         {
-            var file = Path.Combine(BenchmarksDirectory, "Spatial.Benchmarks.csproj");
-            if (!File.Exists(file))
-            {
-                throw new FileNotFoundException(file);
-            }
+            var config = new SpatialConfig();
 
-            foreach (var summary in RunAll())
+            if (args.Length > 0)
             {
-                CopyResult(summary);
+                RunAll(config, args);
+            }
+            else
+            {
+                RunAll(config);
             }
         }
 
-        private static IEnumerable<Summary> RunAll()
+        private static IEnumerable<Summary> RunAll(IConfig config)
         {
             var switcher = new BenchmarkSwitcher(typeof(Program).Assembly);
-            var summaries = switcher.Run(new[] { "*" });
+            var summaries = switcher.Run(new[] { "*" }, config);
+            return summaries;
+        }
+
+        private static IEnumerable<Summary> RunAll(IConfig config, string[] args)
+        {
+            var switcher = new BenchmarkSwitcher(typeof(Program).Assembly);
+            var summaries = switcher.Run(args, config);
             return summaries;
         }
 
@@ -40,15 +46,6 @@ namespace Spatial.Benchmarks
         {
             var summaries = new[] { BenchmarkRunner.Run<T>() };
             return summaries;
-        }
-
-        private static void CopyResult(Summary summary)
-        {
-            var sourceFileName = Directory.EnumerateFiles(summary.ResultsDirectoryPath)
-                                          .Single(x => x.EndsWith($".{summary.Title}-report-github.md"));
-            var destinationFileName = Path.Combine(BenchmarksDirectory, summary.Title + ".md");
-            Console.WriteLine($"Copy: {sourceFileName} -> {destinationFileName}");
-            File.Copy(sourceFileName, destinationFileName, overwrite: true);
         }
     }
 }
