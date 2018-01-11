@@ -101,6 +101,13 @@ let patchVersionInAssemblyInfo path (release:Release) =
             AssemblyFileVersion = release.AssemblyVersion
             AssemblyInformationalVersion = release.PackageVersion })
 
+let private regexes_sl = new System.Collections.Generic.Dictionary<string, System.Text.RegularExpressions.Regex>()
+let private getRegexSingleLine pattern =
+    match regexes_sl.TryGetValue pattern with
+    | true, regex -> regex
+    | _ -> (new System.Text.RegularExpressions.Regex(pattern, System.Text.RegularExpressions.RegexOptions.Singleline))
+let regex_replace_singleline pattern (replacement : string) text = (getRegexSingleLine pattern).Replace(text, replacement)
+
 let patchVersionInResource path (release:Release) =
     ReplaceInFile
         (regex_replace @"\d+\.\d+\.\d+\.\d+" release.AssemblyVersion
@@ -118,7 +125,7 @@ let patchVersionInProjectFile path (release:Release) =
         >> regex_replace """\<FileVersion\>.*\</FileVersion\>""" (sprintf """<FileVersion>%s</FileVersion>""" release.AssemblyVersion)
         >> regex_replace """\<VersionPrefix\>.*\</VersionPrefix\>""" (sprintf """<VersionPrefix>%s</VersionPrefix>""" prefix)
         >> regex_replace """\<VersionSuffix\>.*\</VersionSuffix\>""" (sprintf """<VersionSuffix>%s</VersionSuffix>""" suffix)
-        >> regex_replace """\<PackageReleaseNotes\>.*\</PackageReleaseNotes\>""" (sprintf """<PackageReleaseNotes>%s</PackageReleaseNotes>""" release.ReleaseNotes))
+        >> regex_replace_singleline """\<PackageReleaseNotes\>.*\</PackageReleaseNotes\>""" (sprintf """<PackageReleaseNotes>%s</PackageReleaseNotes>""" release.ReleaseNotes))
         path
 
 // --------------------------------------------------------------------------------------
@@ -205,16 +212,15 @@ let provideNuGetExtraFiles path (bundle:Bundle) (pack:Package) =
 // SIGN
 
 let sign fingerprint timeserver files =
-    files
-    |> Seq.map (sprintf "\"%s\"")
-    |> Seq.map (fun file -> sprintf """sign /v /sha1 "%s" /t "%s" %s""" fingerprint timeserver file)
-    |> Seq.iter (fun arguments ->
-        let result =
-            ExecProcess (fun info ->
-                info.FileName <- """C:\Program Files (x86)\Windows Kits\10\bin\x86\signtool.exe"""
-                info.Arguments <- arguments) TimeSpan.MaxValue
-        if result <> 0 then
-            failwithf "Error during SignTool call ")
+    let fileArgs = files |> Seq.map (sprintf "\"%s\"") |> String.concat " "
+    let optionsArgs = sprintf """/v /fd sha256 /sha1 "%s" /tr "%s" /td sha256""" fingerprint timeserver
+    let arguments = sprintf """sign %s %s""" optionsArgs fileArgs
+    let result =
+        ExecProcess (fun info ->
+            info.FileName <- findToolInSubPath "signtool.exe" """C:\Program Files (x86)\Windows Kits\10\bin\x64"""
+            info.Arguments <- arguments) TimeSpan.MaxValue
+    if result <> 0 then
+        failwithf "Error during SignTool call "
 
 
 // ZIP
