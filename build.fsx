@@ -98,6 +98,8 @@ Target "Start" DoNothing
 
 Target "Clean" (fun _ ->
     DotNetCli.RunCommand id "clean MathNet.SpatialMinimal.sln"
+    CleanDirs [ "src/Spatial/bin"; "src/SpatialUnitTests/bin" ]
+    CleanDirs [ "src/Spatial/obj"; "src/SpatialUnitTests/obj" ]
     CleanDirs [ "obj" ]
     CleanDirs [ "out/api"; "out/docs"; "out/packages" ]
     CleanDirs [ "out/lib" ]
@@ -148,7 +150,7 @@ Target "BuildBenchmarks" (fun _ -> dotnetBuild "Release" "MathNet.Spatial.Benchm
 
 Target "Build" DoNothing
 "Prepare"
-  =?> ("BuildMain", hasBuildParam "release")
+  ==> "BuildMain"
   =?> ("BuildBenchmarks",  dotnetbuild = "1")
   ==> "Build"
 
