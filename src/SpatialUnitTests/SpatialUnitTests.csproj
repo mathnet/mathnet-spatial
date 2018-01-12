@@ -3,6 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFrameworks>net45;netcoreapp1.1;netcoreapp2.0</TargetFrameworks>
+    <RunTimeIdentifiers Condition="'$(TargetFramework)' == 'net45'">win-x86;win-x64</RunTimeIdentifiers>
     <GenerateAssemblyInfo>True</GenerateAssemblyInfo>
     <AssemblyName>MathNet.Numerics.UnitTests</AssemblyName>
     <RootNamespace>MathNet.Numerics.UnitTests</RootNamespace>
