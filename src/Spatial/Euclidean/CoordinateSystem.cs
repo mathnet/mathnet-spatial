@@ -85,7 +85,7 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         /// <param name="matrix">A matrix</param>
         public CoordinateSystem(Matrix<double> matrix)
-            : base(4, 4, matrix.ToColumnWiseArray())
+            : base(4, 4, matrix.ToColumnMajorArray())
         {
             if (matrix.RowCount != 4)
             {
@@ -105,7 +105,7 @@ namespace MathNet.Spatial.Euclidean
         {
             get
             {
-                var row = this.SubMatrix(0, 3, 0, 1).ToRowWiseArray();
+                var row = this.SubMatrix(0, 3, 0, 1).ToRowMajorArray();
                 return new Vector3D(row[0], row[1], row[2]);
             }
         }
@@ -117,7 +117,7 @@ namespace MathNet.Spatial.Euclidean
         {
             get
             {
-                var row = this.SubMatrix(0, 3, 1, 1).ToRowWiseArray();
+                var row = this.SubMatrix(0, 3, 1, 1).ToRowMajorArray();
                 return new Vector3D(row[0], row[1], row[2]);
             }
         }
@@ -129,7 +129,7 @@ namespace MathNet.Spatial.Euclidean
         {
             get
             {
-                var row = this.SubMatrix(0, 3, 2, 1).ToRowWiseArray();
+                var row = this.SubMatrix(0, 3, 2, 1).ToRowMajorArray();
                 return new Vector3D(row[0], row[1], row[2]);
             }
         }
@@ -141,7 +141,7 @@ namespace MathNet.Spatial.Euclidean
         {
             get
             {
-                var row = this.SubMatrix(0, 3, 3, 1).ToRowWiseArray();
+                var row = this.SubMatrix(0, 3, 3, 1).ToRowMajorArray();
                 return new Point3D(row[0], row[1], row[2]);
             }
         }

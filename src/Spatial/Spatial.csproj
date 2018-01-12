@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <OutputType>Library</OutputType>
     <TargetFrameworks>net40;netstandard1.3;netstandard2.0</TargetFrameworks>
+    <RunTimeIdentifiers Condition="'$(TargetFramework)' == 'net40'">win-x86;win-x64</RunTimeIdentifiers>
     <AssemblyName>MathNet.Spatial</AssemblyName>
     <RootNamespace>MathNet.Spatial</RootNamespace>
     <CodeAnalysisRuleSet>Spatial.ruleset</CodeAnalysisRuleSet>
@@ -9,8 +11,8 @@
     <PackageId>MathNet.Spatial</PackageId>
     <VersionPrefix>0.5.0</VersionPrefix>
     <VersionSuffix>alpha</VersionSuffix>
-    <PackageVersion>0.5.0-alpha</PackageVersion>
-    <Version>0.5.0-alpha</Version>
+    <PackageVersion>0.5.0-beta01</PackageVersion>
+    <Version>0.5.0-beta01</Version>
     <AssemblyVersion>0.5.0.0</AssemblyVersion>
     <FileVersion>0.5.0.0</FileVersion>
     <Title>Math.NET Spatial</Title>
@@ -30,12 +32,12 @@
     <IsTool>false</IsTool>
     <RepositoryUrl>https://github.com/mathnet/mathnet-spatial</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <NeutralLanguage>en-US</NeutralLanguage>
+    <NeutralLanguage>en</NeutralLanguage>
     <NoPackageAnalysis>false</NoPackageAnalysis>
     <IncludeBuildOutput>true</IncludeBuildOutput>
     <IncludeContentInPack>false</IncludeContentInPack>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <EnableDefaultCompileItems>true</EnableDefaultCompileItems>
   </PropertyGroup>
@@ -65,12 +67,8 @@
   <ItemGroup>
     <None Include="Spatial.ruleset" />
   </ItemGroup>
-  <PropertyGroup Condition="$(TargetFramework.Contains('netcoreapp')) OR $(TargetFramework.Contains('netstandard'))">
-    <DocumentationFile>..\..\out\lib\netstandard2.0\MathNet.Spatial.xml</DocumentationFile>
-  </PropertyGroup>
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net40'">
     <DefineConstants>NET40;NETFULL</DefineConstants>
-    <DocumentationFile>..\..\out\lib\net40\MathNet.Spatial.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Analyzer Include="..\..\packages\analyzers\StyleCop.Analyzers\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll">
@@ -90,10 +88,4 @@
       <Private>True</Private>
     </Reference>
   </ItemGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>..\..\out\lib-debug\</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <OutputPath>..\..\out\lib</OutputPath>
-  </PropertyGroup>
 </Project>

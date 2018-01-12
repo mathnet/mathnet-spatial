@@ -98,11 +98,11 @@ Target "Start" DoNothing
 
 Target "Clean" (fun _ ->
     DotNetCli.RunCommand id "clean MathNet.SpatialMinimal.sln"
+    CleanDirs [ "src/Spatial/bin"; "src/SpatialUnitTests/bin" ]
+    CleanDirs [ "src/Spatial/obj"; "src/SpatialUnitTests/obj" ]
     CleanDirs [ "obj" ]
     CleanDirs [ "out/api"; "out/docs"; "out/packages" ]
-    CleanDirs [ "out/lib/Net40" ]
-    CleanDirs [ "out/lib/netstandard2.0" ]
-    CleanDirs [ "out/lib/netstandard1.3" ]
+    CleanDirs [ "out/lib" ]
     CleanDirs [ "out/test/Net40" ]
     CleanDirs [ "out/lib-signed/Net40" ])
 
@@ -239,7 +239,8 @@ let dotnetPack solution = DotNetCli.Pack (fun p ->
         AdditionalArgs = defaultArgs})
 
 Target "NuGet" (fun _ ->
-    dotnetPack "MathNet.Spatial.sln")
+    dotnetPack "MathNet.Spatial.sln"
+    CopyDir "out/packages/NuGet" "src/Spatial/bin/Release/" (fun n -> n.EndsWith(".nupkg")))
 "Build" ==> "NuGet" ==> "Pack"
 
 
@@ -288,7 +289,7 @@ Target "DocsWatch" (fun _ ->
 Target "CleanApi" (fun _ -> CleanDirs ["out/api"])
 
 Target "Api" (fun _ ->
-    !! "out/lib/Net40/MathNet.Spatial.dll"
+    !! "src/Spatial/bin/Release/net40/MathNet.Spatial.dll"
     |> Docu (fun p ->
         { p with
             ToolPath = "tools/docu/docu.exe"
