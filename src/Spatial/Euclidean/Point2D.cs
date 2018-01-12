@@ -394,15 +394,6 @@ namespace MathNet.Spatial.Euclidean
             return $"({this.X.ToString(format, numberFormatInfo)}{separator}\u00A0{this.Y.ToString(format, numberFormatInfo)})";
         }
 
-        /// <inheritdoc />
-        [Pure]
-        public bool Equals(Point2D other)
-        {
-            //// ReSharper disable CompareOfFloatsByEqualityOperator
-            return this.X == other.X && this.Y == other.Y;
-            //// ReSharper restore CompareOfFloatsByEqualityOperator
-        }
-
         /// <summary>
         /// Returns a value to indicate if a pair of points are equal
         /// </summary>
@@ -423,25 +414,15 @@ namespace MathNet.Spatial.Euclidean
 
         /// <inheritdoc />
         [Pure]
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj))
-            {
-                return false;
-            }
-
-            return obj is Point2D p && this.Equals(p);
-        }
+        public bool Equals(Point2D other) => this.X.Equals(other.X) && this.Y.Equals(other.Y);
 
         /// <inheritdoc />
         [Pure]
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                return (this.X.GetHashCode() * 397) ^ this.Y.GetHashCode();
-            }
-        }
+        public override bool Equals(object obj) => obj is Point2D p && this.Equals(p);
+
+        /// <inheritdoc />
+        [Pure]
+        public override int GetHashCode() => HashCode.Combine(this.X, this.Y);
 
         /// <inheritdoc />
         XmlSchema IXmlSerializable.GetSchema() => null;
