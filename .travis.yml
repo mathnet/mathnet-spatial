@@ -19,5 +19,6 @@ addons:
     - dotnet-hostfxr-1.0.1
     - dotnet-sharedframework-microsoft.netcore.app-1.1.2
 
-
+install:
+  - nuget restore MathNet.SpatialMinimal.sln
 
