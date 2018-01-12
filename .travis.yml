@@ -1,5 +1,4 @@
 language: csharp
-solution: MathNet.SpatialMinimal.sln
 
 env:
   - HOME=/home/travis APPDATA=/home/travis LocalAppData=/home/travis
@@ -19,10 +18,5 @@ addons:
     - dotnet-hostfxr-1.0.1
     - dotnet-sharedframework-microsoft.netcore.app-1.1.2
 
-install:
-  - nuget restore MathNet.SpatialMinimal.sln
-  - nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
-
 script:
-  - xbuild /p:Configuration=Release MathNet.SpatialMinimal.sln
-  - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./src/SpatialUnitTests/bin/Release/netcoreapp2.0/MathNet.Numerics.UnitTests.dll
+  - ./build.sh Test

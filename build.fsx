@@ -150,7 +150,7 @@ Target "BuildBenchmarks" (fun _ -> dotnetBuild "Release" "MathNet.Spatial.Benchm
 
 Target "Build" DoNothing
 "Prepare"
-  ==> "BuildMain"
+  =?> ("BuildMain", hasBuildParam "release")
   =?> ("BuildBenchmarks",  dotnetbuild = "1")
   ==> "Build"
 
@@ -162,7 +162,7 @@ Target "Build" DoNothing
 let testLibrary testsDir testsProj framework =
     DotNetCli.RunCommand
         (fun c -> { c with WorkingDir = testsDir})
-        (sprintf "run -p %s --configuration Release --framework %s --no-restore --no-build"
+        (sprintf "run -p %s --configuration Release --framework %s"
             testsProj
             framework)
 
