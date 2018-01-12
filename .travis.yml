@@ -21,4 +21,8 @@ addons:
 
 install:
   - nuget restore MathNet.SpatialMinimal.sln
+  - nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
 
+script:
+  - xbuild /p:Configuration=Release MathNet.SpatialMinimal.sln
+  - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./src/SpatialUnitTests/bin/Release/netcoreapp2.0/MathNet.Numerics.UnitTests.dll
