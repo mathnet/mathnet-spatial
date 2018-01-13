@@ -156,10 +156,12 @@
             return new Quaternion(real, x, y, z).Norm;
         }
 
+        [Test]
         [TestCaseSource(typeof(QuaternionCalculationTestClass), "DivisionTests")]
-        public Quaternion CanDivideQuaternionsUsingOperator(double a, double b, double c, double d, double w, double x, double y, double z)
+        public void CanDivideQuaternionsUsingOperator(Quaternion q1, Quaternion q2, Quaternion expected)
         {
-            return new Quaternion(a, b, c, d) / new Quaternion(w, x, y, z);
+            var result = q1 / q2;
+            Assert.IsTrue(result.Equals(expected, TestTolerance));
         }
 
         [Test]
@@ -286,21 +288,24 @@
             {
                 get
                 {
+                    var qexpected = new Quaternion(1, 0, 0, 0);
                     for (var i = 0; i < 10; ++i)
                     {
                         var a = new[] { random.NextDouble(), random.NextDouble(), random.NextDouble(), random.NextDouble() };
-                        yield return new TestCaseData(a[0], a[1], a[2], a[3], a[0], a[1], a[2], a[3]).Returns(new Quaternion(1, 0, 0, 0));
+                        var test1 = new Quaternion(a[0], a[1], a[2], a[3]);
+                        var test2 = new Quaternion(a[0], a[1], a[2], a[3]);
+                        yield return new TestCaseData(test1, test2, qexpected);
                     }
 
-                    yield return new TestCaseData(0, 0, 0, 0, 1, 1, 1, 1).Returns(new Quaternion(0, 0, 0, 0));
-                    yield return new TestCaseData(4, 4, 4, 4, 2, 2, 2, 2).Returns(new Quaternion(2, 0, 0, 0));
-                    yield return new TestCaseData(9, 9, 9, 9, 3, 3, 3, 3).Returns(new Quaternion(3, 0, 0, 0));
-                    yield return new TestCaseData(1, 0, 0, 0, 1, 2, 3, 4).Returns(new Quaternion(1d / 30, -1d / 15, -1d / 10, -2d / 15));
-                    yield return new TestCaseData(4, 6, 9, 18, 2, 3, 3, 9).Returns(new Quaternion(215d / 103, 27d / 103, 6d / 103, -9d / 103));
-                    yield return new TestCaseData(1, 2, 3, 4, 5, 6, 7, 8).Returns(new Quaternion(70d / 174, 0d, 16d / 174, 8d / 174));
-                    yield return new TestCaseData(1, 1, 1, 1, 0, 0, 0, 0).Returns(posInf);
-                    yield return new TestCaseData(0, 0, 0, 0, 0, 0, 0, 0).Returns(nanQuaternion);
-                    yield return new TestCaseData(-1, -1, -1, -1, 0, 0, 0, 0).Returns(posInf);
+                    yield return new TestCaseData(new Quaternion(0, 0, 0, 0), new Quaternion(1, 1, 1, 1), new Quaternion(0, 0, 0, 0));
+                    yield return new TestCaseData(new Quaternion(4, 4, 4, 4), new Quaternion(2, 2, 2, 2), new Quaternion(2, 0, 0, 0));
+                    yield return new TestCaseData(new Quaternion(9, 9, 9, 9), new Quaternion(3, 3, 3, 3), new Quaternion(3, 0, 0, 0));
+                    yield return new TestCaseData(new Quaternion(1, 0, 0, 0), new Quaternion(1, 2, 3, 4), new Quaternion(1d / 30, -1d / 15, -1d / 10, -2d / 15));
+                    yield return new TestCaseData(new Quaternion(4, 6, 9, 18), new Quaternion(2, 3, 3, 9), new Quaternion(215d / 103, 27d / 103, 6d / 103, -9d / 103));
+                    yield return new TestCaseData(new Quaternion(1, 2, 3, 4), new Quaternion(5, 6, 7, 8), new Quaternion(70d / 174, 0d, 16d / 174, 8d / 174));
+                    yield return new TestCaseData(new Quaternion(1, 1, 1, 1), new Quaternion(0, 0, 0, 0), posInf);
+                    yield return new TestCaseData(new Quaternion(0, 0, 0, 0), new Quaternion(0, 0, 0, 0), nanQuaternion);
+                    yield return new TestCaseData(new Quaternion(-1, -1, -1, -1), new Quaternion(0, 0, 0, 0), posInf);
                 }
             }
 
