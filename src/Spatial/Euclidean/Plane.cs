@@ -108,11 +108,23 @@
         /// </summary>
         public Point3D RootPoint => (-this.D * this.Normal).ToPoint3D();
 
+        /// <summary>
+        /// Returns a value that indicates whether each pair of elements in two specified geometric planes is equal.
+        /// </summary>
+        /// <param name="left">The first plane to compare.</param>
+        /// <param name="right">The second plane to compare.</param>
+        /// <returns>True if the geometric planes are the same; otherwise false.</returns>
         public static bool operator ==(Plane left, Plane right)
         {
             return left.Equals(right);
         }
 
+        /// <summary>
+        /// Returns a value that indicates whether any pair of elements in two specified geometric planes is not equal.
+        /// </summary>
+        /// <param name="left">The first plane to compare.</param>
+        /// <param name="right">The second plane to compare.</param>
+        /// <returns>True if the geometric planes are different; otherwise false.</returns>
         public static bool operator !=(Plane left, Plane right)
         {
             return !left.Equals(right);
@@ -453,38 +465,34 @@
             return new Plane(rotatedPlaneVector, rotatedPoint);
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Returns a value to indicate if a pair of geometric planes are equal
+        /// </summary>
+        /// <param name="other">The geometric plane to compare against.</param>
+        /// <param name="tolerance">A tolerance (epsilon) to adjust for floating point error</param>
+        /// <returns>true if the geometric planes are equal; otherwise false</returns>
         [Pure]
-        public bool Equals(Plane other)
+        public bool Equals(Plane other, double tolerance)
         {
-            return this.RootPoint == other.RootPoint && this.Normal == other.Normal;
-        }
-
-        /// <inheritdoc />
-        [Pure]
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj))
+            if (tolerance < 0)
             {
-                return false;
+                throw new ArgumentException("epsilon < 0");
             }
 
-            return obj is Plane && this.Equals((Plane)obj);
+            return Math.Abs(other.D - this.D) < tolerance && this.Normal.Equals(other.Normal, tolerance);
         }
 
         /// <inheritdoc />
         [Pure]
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                var result = this.A.GetHashCode();
-                result = (result * 397) ^ this.C.GetHashCode();
-                result = (result * 397) ^ this.B.GetHashCode();
-                result = (result * 397) ^ this.D.GetHashCode();
-                return result;
-            }
-        }
+        public bool Equals(Plane p) => this.D.Equals(p.D) && this.Normal.Equals(p.Normal);
+
+        /// <inheritdoc />
+        [Pure]
+        public override bool Equals(object obj) => obj is Plane p && this.Equals(p);
+
+        /// <inheritdoc />
+        [Pure]
+        public override int GetHashCode() => HashCode.Combine(this.Normal, this.D);
 
         /// <inheritdoc />
         [Pure]

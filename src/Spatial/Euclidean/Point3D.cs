@@ -453,16 +453,6 @@ namespace MathNet.Spatial.Euclidean
             return string.Format("({0}{1} {2}{1} {3})", this.X.ToString(format, numberFormatInfo), separator, this.Y.ToString(format, numberFormatInfo), this.Z.ToString(format, numberFormatInfo));
         }
 
-        /// <inheritdoc />
-        [Pure]
-        public bool Equals(Point3D other)
-        {
-            // ReSharper disable CompareOfFloatsByEqualityOperator
-            return this.X == other.X && this.Y == other.Y && this.Z == other.Z;
-
-            // ReSharper restore CompareOfFloatsByEqualityOperator
-        }
-
         /// <summary>
         /// Returns a value to indicate if a pair of points are equal
         /// </summary>
@@ -484,28 +474,18 @@ namespace MathNet.Spatial.Euclidean
 
         /// <inheritdoc />
         [Pure]
-        public override bool Equals(object obj)
+        public bool Equals(Point3D other)
         {
-            if (ReferenceEquals(null, obj))
-            {
-                return false;
-            }
-
-            return obj is Point3D && this.Equals((Point3D)obj);
+            return this.X.Equals(other.X) && this.Y.Equals(other.Y) && this.Z.Equals(other.Z);
         }
 
         /// <inheritdoc />
         [Pure]
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                var hashCode = this.X.GetHashCode();
-                hashCode = (hashCode * 397) ^ this.Y.GetHashCode();
-                hashCode = (hashCode * 397) ^ this.Z.GetHashCode();
-                return hashCode;
-            }
-        }
+        public override bool Equals(object obj) => obj is Point3D p && this.Equals(p);
+
+        /// <inheritdoc />
+        [Pure]
+        public override int GetHashCode() => HashCode.Combine(this.X, this.Y, this.Z);
 
         /// <inheritdoc />
         XmlSchema IXmlSerializable.GetSchema() => null;

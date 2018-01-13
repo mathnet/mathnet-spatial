@@ -2,6 +2,7 @@
 {
     using System;
     using System.Diagnostics.Contracts;
+    using MathNet.Spatial.Internals;
 
     /// <summary>
     /// Describes a 3 dimensional circle
@@ -153,38 +154,40 @@
             return new Circle3D(cp, axis, cp.DistanceTo(p1));
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Returns a value to indicate if a pair of circles are equal
+        /// </summary>
+        /// <param name="c">The circle to compare against.</param>
+        /// <param name="tolerance">A tolerance (epsilon) to adjust for floating point error</param>
+        /// <returns>true if the points are equal; otherwise false</returns>
         [Pure]
-        public bool Equals(Circle3D other)
+        public bool Equals(Circle3D c, double tolerance)
         {
-            return this.CenterPoint.Equals(other.CenterPoint)
-                   && this.Axis.Equals(other.Axis)
-                   && this.Radius.Equals(other.Radius);
-        }
-
-        /// <inheritdoc />
-        [Pure]
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj))
+            if (tolerance < 0)
             {
-                return false;
+                throw new ArgumentException("epsilon < 0");
             }
 
-            return obj is Circle3D d && this.Equals(d);
+            return Math.Abs(c.Radius - this.Radius) < tolerance
+                && this.Axis.Equals(c.Axis, tolerance)
+                && this.CenterPoint.Equals(c.CenterPoint, tolerance);
         }
 
         /// <inheritdoc />
         [Pure]
-        public override int GetHashCode()
+        public bool Equals(Circle3D c)
         {
-            unchecked
-            {
-                var hashCode = this.CenterPoint.GetHashCode();
-                hashCode = (hashCode * 397) ^ this.Axis.GetHashCode();
-                hashCode = (hashCode * 397) ^ this.Radius.GetHashCode();
-                return hashCode;
-            }
+            return this.CenterPoint.Equals(c.CenterPoint)
+                   && this.Axis.Equals(c.Axis)
+                   && this.Radius.Equals(c.Radius);
         }
+
+        /// <inheritdoc />
+        [Pure]
+        public override bool Equals(object obj) => obj is Circle3D c && this.Equals(c);
+
+        /// <inheritdoc />
+        [Pure]
+        public override int GetHashCode() => HashCode.Combine(this.CenterPoint, this.Axis, this.Radius);
     }
 }

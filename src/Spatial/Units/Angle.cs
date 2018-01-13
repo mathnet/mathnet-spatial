@@ -374,13 +374,6 @@ namespace MathNet.Spatial.Units
             return this.Radians.CompareTo(value.Radians);
         }
 
-        /// <inheritdoc />
-        public bool Equals(Angle other)
-        {
-            // ReSharper disable once CompareOfFloatsByEqualityOperator
-            return this.Radians == other.Radians;
-        }
-
         /// <summary>
         /// Returns a value indicating whether this instance is equal to a specified <see cref="T:MathNet.Spatial.Units.Angle"/> object within the given tolerance.
         /// </summary>
@@ -408,21 +401,13 @@ namespace MathNet.Spatial.Units
         }
 
         /// <inheritdoc />
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj))
-            {
-                return false;
-            }
-
-            return obj is Angle angle && this.Equals(angle);
-        }
+        public bool Equals(Angle other) => this.Radians.Equals(other.Radians);
 
         /// <inheritdoc />
-        public override int GetHashCode()
-        {
-            return this.Radians.GetHashCode();
-        }
+        public override bool Equals(object obj) => obj is Angle a && this.Equals(a);
+
+        /// <inheritdoc />
+        public override int GetHashCode() => HashCode.Combine(this.Radians);
 
         /// <inheritdoc />
         XmlSchema IXmlSerializable.GetSchema()

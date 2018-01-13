@@ -15,8 +15,7 @@
         {
             var testElement = new PolyLine2D(from x in points.Split(';') select Point2D.Parse(x));
             var checkElement = Point2D.Parse(expected);
-
-            Assert.AreEqual(checkElement, testElement[index]);
+            AssertGeometry.AreEqual(checkElement, testElement.Vertices.Skip(index).First());
         }
 
         [TestCase("0,0;0,1", 1.0)]

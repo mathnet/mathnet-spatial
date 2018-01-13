@@ -154,14 +154,6 @@ namespace MathNet.Spatial.Euclidean
             return this.Direction.IsParallelTo(otherRay.Direction, tolerance);
         }
 
-        /// <inheritdoc/>
-        [Pure]
-        public bool Equals(Ray3D other)
-        {
-            return this.Direction.Equals(other.Direction) &&
-                   this.ThroughPoint.Equals(other.ThroughPoint);
-        }
-
         /// <summary>
         /// Returns a value to indicate if a pair of rays are equal
         /// </summary>
@@ -177,27 +169,15 @@ namespace MathNet.Spatial.Euclidean
 
         /// <inheritdoc/>
         [Pure]
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj))
-            {
-                return false;
-            }
-
-            return obj is Ray3D d && this.Equals(d);
-        }
+        public bool Equals(Ray3D r) => this.Direction.Equals(r.Direction) && this.ThroughPoint.Equals(r.ThroughPoint);
 
         /// <inheritdoc/>
         [Pure]
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                var hashCode = this.ThroughPoint.GetHashCode();
-                hashCode = (hashCode * 397) ^ this.Direction.GetHashCode();
-                return hashCode;
-            }
-        }
+        public override bool Equals(object obj) => obj is Ray3D r && this.Equals(r);
+
+        /// <inheritdoc/>
+        [Pure]
+        public override int GetHashCode() => HashCode.Combine(this.ThroughPoint, this.Direction);
 
         /// <inheritdoc/>
         [Pure]

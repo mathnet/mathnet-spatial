@@ -847,26 +847,6 @@ namespace MathNet.Spatial.Euclidean
             return string.Format("({0}{1} {2}{1} {3})", this.X.ToString(format, numberFormatInfo), separator, this.Y.ToString(format, numberFormatInfo), this.Z.ToString(format, numberFormatInfo));
         }
 
-        /// <inheritdoc />
-        [Pure]
-        public bool Equals(Vector3D other)
-        {
-            // ReSharper disable CompareOfFloatsByEqualityOperator
-            return this.X == other.X && this.Y == other.Y && this.Z == other.Z;
-
-            // ReSharper restore CompareOfFloatsByEqualityOperator
-        }
-
-        /// <inheritdoc />
-        [Pure]
-        public bool Equals(UnitVector3D other)
-        {
-            // ReSharper disable CompareOfFloatsByEqualityOperator
-            return this.X == other.X && this.Y == other.Y && this.Z == other.Z;
-
-            // ReSharper restore CompareOfFloatsByEqualityOperator
-        }
-
         /// <summary>
         /// Returns a value to indicate if a pair of vectors are equal
         /// </summary>
@@ -907,29 +887,28 @@ namespace MathNet.Spatial.Euclidean
 
         /// <inheritdoc />
         [Pure]
+        public bool Equals(Vector3D other)
+        {
+            return this.X.Equals(other.X) && this.Y.Equals(other.Y) && this.Z.Equals(other.Z);
+        }
+
+        /// <inheritdoc />
+        [Pure]
+        public bool Equals(UnitVector3D other)
+        {
+            return this.X.Equals(other.X) && this.Y.Equals(other.Y) && this.Z.Equals(other.Z);
+        }
+
+        /// <inheritdoc />
+        [Pure]
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj))
-            {
-                return false;
-            }
-
-            return (obj is UnitVector3D && this.Equals((UnitVector3D)obj)) ||
-                   (obj is Vector3D && this.Equals((Vector3D)obj));
+            return (obj is UnitVector3D u && this.Equals(u)) || (obj is Vector3D v && this.Equals(v));
         }
 
         /// <inheritdoc/>
         [Pure]
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                var hashCode = this.X.GetHashCode();
-                hashCode = (hashCode * 397) ^ this.Y.GetHashCode();
-                hashCode = (hashCode * 397) ^ this.Z.GetHashCode();
-                return hashCode;
-            }
-        }
+        public override int GetHashCode() => HashCode.Combine(this.X, this.Y, this.Z);
 
         /// <inheritdoc />
         XmlSchema IXmlSerializable.GetSchema()
