@@ -534,15 +534,6 @@
             return Vector<double>.Build.Dense(new[] { this.X, this.Y });
         }
 
-        /// <inheritdoc />
-        [Pure]
-        public bool Equals(Vector2D other)
-        {
-            //// ReSharper disable CompareOfFloatsByEqualityOperator
-            return this.X == other.X && this.Y == other.Y;
-            //// ReSharper restore CompareOfFloatsByEqualityOperator
-        }
-
         /// <summary>
         /// Compare this instance with <paramref name="other"/>
         /// </summary>
@@ -563,25 +554,15 @@
 
         /// <inheritdoc />
         [Pure]
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj))
-            {
-                return false;
-            }
-
-            return obj is Vector2D v && this.Equals(v);
-        }
+        public bool Equals(Vector2D other) => this.X.Equals(other.X) && this.Y.Equals(other.Y);
 
         /// <inheritdoc />
         [Pure]
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                return (this.X.GetHashCode() * 397) ^ this.Y.GetHashCode();
-            }
-        }
+        public override bool Equals(object obj) => obj is Vector2D v && this.Equals(v);
+
+        /// <inheritdoc />
+        [Pure]
+        public override int GetHashCode() => HashCode.Combine(this.X, this.Y);
 
         /// <inheritdoc />
         [Pure]

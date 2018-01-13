@@ -133,6 +133,28 @@
         }
 
         /// <summary>
+        /// Returns a value that indicates whether each point in two specified polygons is equal.
+        /// </summary>
+        /// <param name="left">The first polygon to compare</param>
+        /// <param name="right">The second polygon to compare</param>
+        /// <returns>True if the polygons are the same; otherwise false.</returns>
+        public static bool operator ==(Polygon2D left, Polygon2D right)
+        {
+            return left.Equals(right);
+        }
+
+        /// <summary>
+        /// Returns a value that indicates whether any point in two specified polygons is not equal.
+        /// </summary>
+        /// <param name="left">The first polygon to compare</param>
+        /// <param name="right">The second polygon to compare</param>
+        /// <returns>True if the polygons are different; otherwise false.</returns>
+        public static bool operator !=(Polygon2D left, Polygon2D right)
+        {
+            return !left.Equals(right);
+        }
+
+        /// <summary>
         /// Compute whether or not two polygons are colliding based on whether or not the vertices of
         /// either are enclosed within the shape of the other. This is a simple means of detecting collisions
         /// that can fail if the two polygons are heavily overlapped in such a way that one protrudes through
@@ -143,7 +165,7 @@
         /// <returns>True if the vertices collide; otherwise false.</returns>
         public static bool ArePolygonVerticesColliding(Polygon2D a, Polygon2D b)
         {
-            return a.Any(b.EnclosesPoint) || b.Any(a.EnclosesPoint);
+            return a.points.Any(b.EnclosesPoint) || b.points.Any(a.EnclosesPoint);
         }
 
         /// <summary>
@@ -314,21 +336,6 @@
             return this.GetEnumerator();
         }
 
-        /// <inheritdoc />
-        [Pure]
-        public bool Equals(Polygon2D other)
-        {
-            for (var i = 0; i < this.points.Count; i++)
-            {
-                if (this.points[i] != other.points[i])
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
         /// <summary>
         /// Returns a value to indicate if a pair of polygons are equal
         /// </summary>
@@ -338,6 +345,11 @@
         [Pure]
         public bool Equals(Polygon2D other, double tolerance)
         {
+            if (this.VertexCount != other.VertexCount)
+            {
+                return false;
+            }
+
             for (var i = 0; i < this.points.Count; i++)
             {
                 if (!this.points[i].Equals(other.points[i], tolerance))
@@ -351,9 +363,29 @@
 
         /// <inheritdoc />
         [Pure]
+        public bool Equals(Polygon2D other)
+        {
+            if (this.VertexCount != other.VertexCount)
+            {
+                return false;
+            }
+
+            for (var i = 0; i < this.points.Count; i++)
+            {
+                if (!this.points[i].Equals(other.points[i]))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        /// <inheritdoc />
+        [Pure]
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj))
+            if (obj is null)
             {
                 return false;
             }
@@ -365,7 +397,17 @@
         [Pure]
         public override int GetHashCode()
         {
-            return this.Vertices.GetHashCode();
+            unchecked
+            {
+                int hashcode = 0;
+                for (var i = 0; i < this.points.Count; i++)
+                {
+                    // HashCode.Combine(single) is partially diffuse so should be ok for this.
+                    hashcode += HashCode.Combine(this.points[i]);
+                }
+
+                return hashcode;
+            }
         }
 
         /// <summary>

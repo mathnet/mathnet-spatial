@@ -2,6 +2,7 @@
 {
     using System;
     using System.Diagnostics.Contracts;
+    using MathNet.Spatial.Internals;
 
     /// <summary>
     /// Describes a standard 2 dimensional circle
@@ -104,34 +105,33 @@
             return new Circle2D(center, center.DistanceTo(pointA));
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Returns a value to indicate if a pair of circles are equal
+        /// </summary>
+        /// <param name="c">The circle to compare against.</param>
+        /// <param name="tolerance">A tolerance (epsilon) to adjust for floating point error</param>
+        /// <returns>true if the points are equal; otherwise false</returns>
         [Pure]
-        public bool Equals(Circle2D other)
+        public bool Equals(Circle2D c, double tolerance)
         {
-            // ReSharper disable once CompareOfFloatsByEqualityOperator
-            return this.Radius == other.Radius && this.Center == other.Center;
-        }
-
-        /// <inheritdoc />
-        [Pure]
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj))
+            if (tolerance < 0)
             {
-                return false;
+                throw new ArgumentException("epsilon < 0");
             }
 
-            return obj is Circle2D d && this.Equals(d);
+            return Math.Abs(c.Radius - this.Radius) < tolerance && this.Center.Equals(c.Center, tolerance);
         }
 
         /// <inheritdoc />
         [Pure]
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                return (this.Center.GetHashCode() * 397) ^ this.Radius.GetHashCode();
-            }
-        }
+        public bool Equals(Circle2D c) => this.Radius.Equals(c.Radius) && this.Center.Equals(c.Center);
+
+        /// <inheritdoc />
+        [Pure]
+        public override bool Equals(object obj) => obj is Circle2D c && this.Equals(c);
+
+        /// <inheritdoc />
+        [Pure]
+        public override int GetHashCode() => HashCode.Combine(this.Center, this.Radius);
     }
 }
