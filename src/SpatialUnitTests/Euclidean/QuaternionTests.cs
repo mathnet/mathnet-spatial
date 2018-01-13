@@ -15,6 +15,8 @@
     [TestFixture]
     public class QuaternionTests
     {
+        private const double TestTolerance = 0.000001;
+
         [Test]
         public void CanConstructQuaternion()
         {
@@ -137,13 +139,15 @@
             var quat = new Quaternion(real, x, y, z);
             var eulerAngles = quat.ToEulerAngles();
             var expected = new EulerAngles(Angle.FromRadians(expectedAsArray[0]), Angle.FromRadians(expectedAsArray[1]), Angle.FromRadians(expectedAsArray[2]));
-            Assert.AreEqual(expected, eulerAngles);
+            Assert.IsTrue(eulerAngles.Equals(expected, TestTolerance));
         }
 
+        [Test]
         [TestCaseSource(typeof(QuaternionCalculationTestClass), "LogTests")]
-        public Quaternion CanCalculateLog(Quaternion quat)
+        public void CanCalculateLog(Quaternion quat, Quaternion expected)
         {
-            return quat.Log();
+            var log = quat.Log();
+            Assert.IsTrue(log.Equals(expected, TestTolerance));
         }
 
         [TestCaseSource(typeof(QuaternionCalculationTestClass), "NormTests")]
@@ -181,9 +185,10 @@
 
         [Test]
         [TestCaseSource(typeof(QuaternionCalculationTestClass), "CanCalculatePower")]
-        public Quaternion CanCalculatePower(Quaternion q1, double k)
+        public void CanCalculatePower(Quaternion q1, double k, Quaternion expected)
         {
-            return q1.Pow(k);
+            var result = q1.Pow(k);
+            Assert.IsTrue(result.Equals(expected, TestTolerance));
         }
 
         [Test]
@@ -195,9 +200,10 @@
 
         [Test]
         [TestCaseSource(typeof(QuaternionCalculationTestClass), "CanCalculatePower")]
-        public Quaternion CanCalculatePowerUsingOperator(Quaternion q1, double k)
+        public void CanCalculatePowerUsingOperator(Quaternion q1, double k, Quaternion expected)
         {
-            return q1 ^ k;
+            var result = q1 ^ k;
+            Assert.IsTrue(result.Equals(expected, TestTolerance));
         }
 
         [Test]
@@ -342,17 +348,22 @@
                 get
                 {
                     var q0 = new Quaternion(0, 0, 0, 0);
-                    yield return new TestCaseData(q0, 3.981).Returns(q0);
+                    var q00 = new Quaternion(0, 0, 0, 0);
+                    yield return new TestCaseData(q0, 3.981, q00);
 
                     var q1 = new Quaternion(1, 0, 0, 0);
-                    yield return new TestCaseData(q1, 3.981).Returns(q1);
+                    var q11 = new Quaternion(1, 0, 0, 0);
+                    yield return new TestCaseData(q1, 3.981, q11);
 
                     var q2 = new Quaternion(1, 1, 1, 1).Normalized;
-                    yield return new TestCaseData(q2, 9.0).Returns(q2 * q2 * q2 * q2 * q2 * q2 * q2 * q2 * q2);
-                    yield return new TestCaseData(q2, 3.0).Returns(q2 * q2 * q2);
+                    var q29 = q2 * q2 * q2 * q2 * q2 * q2 * q2 * q2 * q2;
+                    var q23 = q2 * q2 * q2;
+                    yield return new TestCaseData(q2, 9.0, q29);
+                    yield return new TestCaseData(q2, 3.0, q23);
 
                     var q3 = new Quaternion(2, 2, 2, 2).Normalized;
-                    yield return new TestCaseData(q3, 9.0).Returns(q3 * q3 * q3 * q3 * q3 * q3 * q3 * q3 * q3);
+                    var q39 = q3 * q3 * q3 * q3 * q3 * q3 * q3 * q3 * q3;
+                    yield return new TestCaseData(q3, 9.0, q39);
                 }
             }
 
@@ -378,21 +389,28 @@
                 }
             }
 
-            public static IEnumerable LogTests
+            public static object[] LogTests
             {
                 get
                 {
                     var q0 = new Quaternion(1, 0, 0, 0);
+                    var q00 = new Quaternion(1, 0, 0, 0);
                     var q1 = new Quaternion(0, 0, 0, 1);
+                    var q10 = new Quaternion(0, 0, 0, Math.PI / 2);
                     var q2 = new Quaternion(1, 1, 1, 1);
-                    yield return new TestCaseData(q0).Returns(new Quaternion(1, 0, 0, 0));
-                    yield return new TestCaseData(q1).Returns(new Quaternion(0, 0, 0, Math.PI / 2));
-                    yield return new TestCaseData(q2).Returns(
-                        new Quaternion(
+                    var q20 = new Quaternion(
                             Math.Log(2),
                             1 / Math.Sqrt(3) * Math.PI / 3,
                             1 / Math.Sqrt(3) * Math.PI / 3,
-                            1 / Math.Sqrt(3) * Math.PI / 3));
+                            1 / Math.Sqrt(3) * Math.PI / 3);
+
+                    var tests = new object[]
+                    {
+                        new object[] { q0, q00 },
+                        new object[] { q1, q10 },
+                        new object[] {q2, q20 }
+                    };
+                    return tests;
                 }
             }
         }
