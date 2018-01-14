@@ -4,11 +4,12 @@
     using System.Globalization;
     using MathNet.Numerics.LinearAlgebra;
     using MathNet.Spatial.Euclidean;
+    using MathNet.Spatial.Internals;
 
     /// <summary>
     /// A Point3DHomogeneous struct
     /// </summary>
-    internal struct Point3DHomogeneous
+    internal struct Point3DHomogeneous : IEquatable<Point3DHomogeneous>
     {
         /// <summary>
         /// Using public fields cos: http://blogs.msdn.com/b/ricom/archive/2006/08/31/performance-quiz-11-ten-questions-on-value-based-programming.aspx
@@ -64,6 +65,28 @@
         public static Point3DHomogeneous NaN => new Point3DHomogeneous(double.NaN, double.NaN, double.NaN, double.NaN);
 
         /// <summary>
+        /// Returns a value that indicates whether each pair of elements in two specified points is equal.
+        /// </summary>
+        /// <param name="left">The first point to compare.</param>
+        /// <param name="right">The second point to compare.</param>
+        /// <returns>True if the points are the same; otherwise false.</returns>
+        public static bool operator ==(Point3DHomogeneous left, Point3DHomogeneous right)
+        {
+            return left.Equals(right);
+        }
+
+        /// <summary>
+        /// Returns a value that indicates whether any pair of elements in two specified points is not equal.
+        /// </summary>
+        /// <param name="left">The first point to compare.</param>
+        /// <param name="right">The second point to compare.</param>
+        /// <returns>True if the points are different; otherwise false.</returns>
+        public static bool operator !=(Point3DHomogeneous left, Point3DHomogeneous right)
+        {
+            return !left.Equals(right);
+        }
+
+        /// <summary>
         /// Create a new Point3DHomogeneous from a Math.NET Numerics vector of length 4.
         /// </summary>
         /// <param name="vector"> A vector with length 4 to populate the created instance with.</param>
@@ -106,18 +129,6 @@
         /// Returns a value to indicate if a pair of Point3DHomogeneous are equal
         /// </summary>
         /// <param name="other">The Point3DHomogeneous to compare against.</param>
-        /// <returns>True if the Point3DHomogeneouses are equal; otherwise false</returns>
-        public bool Equals(Point3DHomogeneous other)
-        {
-            //// ReSharper disable CompareOfFloatsByEqualityOperator
-            return this.X == other.X && this.Y == other.Y && this.Z == other.Z && this.W == other.W;
-            //// ReSharper restore CompareOfFloatsByEqualityOperator
-        }
-
-        /// <summary>
-        /// Returns a value to indicate if a pair of Point3DHomogeneous are equal
-        /// </summary>
-        /// <param name="other">The Point3DHomogeneous to compare against.</param>
         /// <param name="tolerance">A tolerance (epsilon) to adjust for floating point error</param>
         /// <returns>True if the Point3DHomogeneouses are equal; otherwise false</returns>
         public bool Equals(Point3DHomogeneous other, double tolerance)
@@ -134,28 +145,16 @@
         }
 
         /// <inheritdoc/>
-        public override bool Equals(object obj)
+        public bool Equals(Point3DHomogeneous other)
         {
-            if (obj is null)
-            {
-                return false;
-            }
-
-            return obj is Point3DHomogeneous homogeneous && this.Equals(homogeneous);
+            return this.X.Equals(other.X) && this.Y.Equals(other.Y) && this.Z.Equals(other.Z) && this.W.Equals(other.W);
         }
 
         /// <inheritdoc/>
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                var hashCode = this.X.GetHashCode();
-                hashCode = (hashCode * 397) ^ this.Y.GetHashCode();
-                hashCode = (hashCode * 397) ^ this.Z.GetHashCode();
-                hashCode = (hashCode * 397) ^ this.W.GetHashCode();
-                return hashCode;
-            }
-        }
+        public override bool Equals(object obj) => obj is Point3DHomogeneous p && this.Equals(p);
+
+        /// <inheritdoc/>
+        public override int GetHashCode() => HashCode.Combine(this.X, this.Y, this.Z, this.W);
 
         /// <summary>
         /// Gets a vector3D
