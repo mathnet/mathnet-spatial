@@ -3,6 +3,7 @@
     using System;
     using System.Diagnostics.Contracts;
     using MathNet.Numerics;
+    using MathNet.Spatial.Internals;
     using MathNet.Spatial.Units;
 
     /// <summary>
@@ -73,42 +74,51 @@
         }
 
         /// <summary>
-        /// Compares two <see cref="EulerAngles"/>
+        /// Returns a value to indicate if this EulerAngles is equivelent to a given EulerAngles
         /// </summary>
-        /// <param name="other">the other <see cref="EulerAngles"/> to compare</param>
-        /// <returns>true if the angles are equal to within a fixed error of 0.000001</returns>
+        /// <param name="other">The EulerAngles to compare against.</param>
+        /// <param name="tolerance">A tolerance (epsilon) to adjust for floating point error</param>
+        /// <returns>true if the EulerAngles are equal; otherwise false</returns>
+        [Pure]
+        public bool Equals(EulerAngles other, double tolerance)
+        {
+            if (tolerance < 0)
+            {
+                throw new ArgumentException("epsilon < 0");
+            }
+
+            return this.Alpha.Equals(other.Alpha, tolerance) &&
+                   this.Beta.Equals(other.Beta, tolerance) &&
+                   this.Gamma.Equals(other.Gamma, tolerance);
+        }
+
+        /// <summary>
+        /// Returns a value to indicate if this EulerAngles is equivelent to a given EulerAngles
+        /// </summary>
+        /// <param name="other">The EulerAngles to compare against.</param>
+        /// <param name="tolerance">A tolerance (epsilon) to adjust for floating point error</param>
+        /// <returns>true if the EulerAngles are equal; otherwise false</returns>
+        [Pure]
+        public bool Equals(EulerAngles other, Angle tolerance)
+        {
+            return this.Alpha.Equals(other.Alpha, tolerance) &&
+                   this.Beta.Equals(other.Beta, tolerance) &&
+                   this.Gamma.Equals(other.Gamma, tolerance);
+        }
+
+        /// <inheritdoc/>
         [Pure]
         public bool Equals(EulerAngles other)
         {
-            const double DefaultAbsoluteError = 0.000001;
-            return this.Alpha.Radians.AlmostEqual(other.Alpha.Radians, DefaultAbsoluteError) &&
-                   this.Beta.Radians.AlmostEqual(other.Beta.Radians, DefaultAbsoluteError) &&
-                   this.Gamma.Radians.AlmostEqual(other.Gamma.Radians, DefaultAbsoluteError);
+            return this.Alpha.Equals(other.Alpha) && this.Beta.Equals(other.Beta) && this.Gamma.Equals(other.Gamma);
         }
 
         /// <inheritdoc/>
         [Pure]
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj))
-            {
-                return false;
-            }
-
-            return obj is EulerAngles angles && this.Equals(angles);
-        }
+        public override bool Equals(object obj) => obj is EulerAngles angles && this.Equals(angles);
 
         /// <inheritdoc/>
         [Pure]
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                var hashCode = this.Alpha.GetHashCode();
-                hashCode = (hashCode * 397) ^ this.Beta.GetHashCode();
-                hashCode = (hashCode * 397) ^ this.Gamma.GetHashCode();
-                return hashCode;
-            }
-        }
+        public override int GetHashCode() => HashCode.Combine(this.Alpha, this.Beta, this.Gamma);
     }
 }

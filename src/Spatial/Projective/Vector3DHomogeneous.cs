@@ -4,11 +4,12 @@
     using System.Globalization;
     using MathNet.Numerics.LinearAlgebra;
     using MathNet.Spatial.Euclidean;
+    using MathNet.Spatial.Internals;
 
     /// <summary>
     /// A Vector3DHomogeneous struct
     /// </summary>
-    internal struct Vector3DHomogeneous
+    internal struct Vector3DHomogeneous : IEquatable<Vector3DHomogeneous>
     {
         /// <summary>
         /// Using public fields cos: http://blogs.msdn.com/b/ricom/archive/2006/08/31/performance-quiz-11-ten-questions-on-value-based-programming.aspx
@@ -64,6 +65,28 @@
         public static Vector3DHomogeneous NaN => new Vector3DHomogeneous(double.NaN, double.NaN, double.NaN, double.NaN);
 
         /// <summary>
+        /// Returns a value that indicates whether each pair of elements in two specified vectors is equal.
+        /// </summary>
+        /// <param name="left">The first vector to compare.</param>
+        /// <param name="right">The second vector to compare.</param>
+        /// <returns>True if the vectors are the same; otherwise false.</returns>
+        public static bool operator ==(Vector3DHomogeneous left, Vector3DHomogeneous right)
+        {
+            return left.Equals(right);
+        }
+
+        /// <summary>
+        /// Returns a value that indicates whether any pair of elements in two specified vectors is not equal.
+        /// </summary>
+        /// <param name="left">The first vector to compare.</param>
+        /// <param name="right">The second vector to compare.</param>
+        /// <returns>True if the vectors are different; otherwise false.</returns>
+        public static bool operator !=(Vector3DHomogeneous left, Vector3DHomogeneous right)
+        {
+            return !left.Equals(right);
+        }
+
+        /// <summary>
         /// Create a new Vector3DHomogeneous from a Math.NET Numerics vector of length 4.
         /// </summary>
         /// <param name="vector"> A vector with length 4 to populate the created instance with.</param>
@@ -112,18 +135,6 @@
         /// Returns a value to indicate if a pair of Vector3DHomogeneous are equal
         /// </summary>
         /// <param name="other">The Vector3DHomogeneous to compare against.</param>
-        /// <returns>True if the Vector3DHomogeneouses are equal; otherwise false</returns>
-        public bool Equals(Vector3DHomogeneous other)
-        {
-            //// ReSharper disable CompareOfFloatsByEqualityOperator
-            return this.X == other.X && this.Y == other.Y && this.Z == other.Z && this.W == other.W;
-            //// ReSharper restore CompareOfFloatsByEqualityOperator
-        }
-
-        /// <summary>
-        /// Returns a value to indicate if a pair of Vector3DHomogeneous are equal
-        /// </summary>
-        /// <param name="other">The Vector3DHomogeneous to compare against.</param>
         /// <param name="tolerance">A tolerance (epsilon) to adjust for floating point error</param>
         /// <returns>True if the Vector3DHomogeneouses are equal; otherwise false</returns>
         public bool Equals(Vector3DHomogeneous other, double tolerance)
@@ -139,29 +150,21 @@
                    Math.Abs(other.W - this.W) < tolerance;
         }
 
-        /// <inheritdoc/>
-        public override bool Equals(object obj)
+        /// <summary>
+        /// Returns a value to indicate if a pair of Vector3DHomogeneous are equal
+        /// </summary>
+        /// <param name="other">The Vector3DHomogeneous to compare against.</param>
+        /// <returns>True if the Vector3DHomogeneouses are equal; otherwise false</returns>
+        public bool Equals(Vector3DHomogeneous other)
         {
-            if (obj is null)
-            {
-                return false;
-            }
-
-            return obj is Vector3DHomogeneous && this.Equals((Vector3DHomogeneous)obj);
+            return this.X.Equals(other.X) && this.Y.Equals(other.Y) && this.Z.Equals(other.Z) && this.W.Equals(other.W);
         }
 
         /// <inheritdoc/>
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                var hashCode = this.X.GetHashCode();
-                hashCode = (hashCode * 397) ^ this.Y.GetHashCode();
-                hashCode = (hashCode * 397) ^ this.Z.GetHashCode();
-                hashCode = (hashCode * 397) ^ this.W.GetHashCode();
-                return hashCode;
-            }
-        }
+        public override bool Equals(object obj) => obj is Vector3DHomogeneous v && this.Equals(v);
+
+        /// <inheritdoc/>
+        public override int GetHashCode() => HashCode.Combine(this.X, this.Y, this.Z, this.W);
 
         /// <summary>
         /// return new Point3DHomogeneous(this.X, this.Y, this.Z, this.W);

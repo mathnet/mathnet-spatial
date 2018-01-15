@@ -2,6 +2,7 @@
 {
     using System;
     using System.Diagnostics.Contracts;
+    using MathNet.Spatial.Internals;
     using MathNet.Spatial.Units;
 
     /// <summary>
@@ -238,32 +239,15 @@
 
         /// <inheritdoc/>
         [Pure]
-        public bool Equals(LineSegment3D other)
-        {
-            return this.StartPoint.Equals(other.StartPoint) && this.EndPoint.Equals(other.EndPoint);
-        }
+        public bool Equals(LineSegment3D l) => this.StartPoint.Equals(l.StartPoint) && this.EndPoint.Equals(l.EndPoint);
 
         /// <inheritdoc />
         [Pure]
-        public override bool Equals(object obj)
-        {
-            if (obj is null)
-            {
-                return false;
-            }
-
-            return obj is LineSegment3D d && this.Equals(d);
-        }
+        public override bool Equals(object obj) => obj is LineSegment3D l && this.Equals(l);
 
         /// <inheritdoc />
         [Pure]
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                return (this.StartPoint.GetHashCode() * 397) ^ this.EndPoint.GetHashCode();
-            }
-        }
+        public override int GetHashCode() => HashCode.Combine(this.StartPoint, this.EndPoint);
 
         /// <summary>
         /// Extends the segment to a infinite line and finds the closest point on that line to the provided point.

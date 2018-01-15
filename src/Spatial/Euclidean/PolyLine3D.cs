@@ -3,12 +3,14 @@
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Diagnostics.Contracts;
     using System.Linq;
+    using MathNet.Spatial.Internals;
 
     /// <summary>
     /// A PolyLine is an ordered series of line segments in space represented as list of connected Point3Ds.
     /// </summary>
-    public class PolyLine3D : IEnumerable<Point3D>
+    public class PolyLine3D : IEnumerable<Point3D>, IEquatable<PolyLine3D>
     {
         /// <summary>
         /// An internal list of points
@@ -28,7 +30,13 @@
         /// <summary>
         /// Gets an integer representing the number of Point3D objects in the polyline
         /// </summary>
+        [Obsolete("Use VertexCount instead, obsolete since 2018-01-12")]
         public int Count => this.points.Count;
+
+        /// <summary>
+        /// Gets the number of vertices in the polyline.
+        /// </summary>
+        public int VertexCount => this.points.Count;
 
         /// <summary>
         /// Gets the length of the polyline, computed as the sum of the lengths of every segment
@@ -36,12 +44,17 @@
         public double Length => this.GetPolyLineLength();
 
         /// <summary>
-        /// Gets a value indicating whether or not the collection of points in the polyline are planar within
-        /// the floating point tolerance
+        /// Gets a list of vertices
         /// </summary>
-        public bool IsPlanar
+        public IEnumerable<Point3D> Vertices
         {
-            get { throw new NotImplementedException(); }
+            get
+            {
+                foreach (var point in this.points)
+                {
+                    yield return point;
+                }
+            }
         }
 
         /// <summary>
@@ -49,7 +62,30 @@
         /// </summary>
         /// <param name="key">The index of a point</param>
         /// <returns>The indexed point</returns>
+        [Obsolete("Use Vertices instead, obsolete since 2018-01-12")]
         public Point3D this[int key] => this.points[key];
+
+        /// <summary>
+        /// Returns a value that indicates whether each pair of elements in two specified lines is equal.
+        /// </summary>
+        /// <param name="left">The first line to compare</param>
+        /// <param name="right">The second line to compare</param>
+        /// <returns>True if the lines are the same; otherwise false.</returns>
+        public static bool operator ==(PolyLine3D left, PolyLine3D right)
+        {
+            return left.Equals(right);
+        }
+
+        /// <summary>
+        /// Returns a value that indicates whether any pair of elements in two specified lines is not equal.
+        /// </summary>
+        /// <param name="left">The first line to compare</param>
+        /// <param name="right">The second line to compare</param>
+        /// <returns>True if the lines are different; otherwise false.</returns>
+        public static bool operator !=(PolyLine3D left, PolyLine3D right)
+        {
+            return !left.Equals(right);
+        }
 
         /// <summary>
         /// Get the point at a fractional distance along the curve.  For instance, fraction=0.5 will return
@@ -78,24 +114,24 @@
             var length = this.Length;
             if (lengthFromStart >= length)
             {
-                return this.Last();
+                return this.points.Last();
             }
 
             if (lengthFromStart <= 0)
             {
-                return this.First();
+                return this.points.First();
             }
 
             double cumulativeLength = 0;
             var i = 0;
             while (true)
             {
-                var nextLength = cumulativeLength + this[i].DistanceTo(this[i + 1]);
+                var nextLength = cumulativeLength + this.points[i].DistanceTo(this.points[i + 1]);
                 if (cumulativeLength <= lengthFromStart && nextLength > lengthFromStart)
                 {
                     var leftover = lengthFromStart - cumulativeLength;
-                    var direction = this[i].VectorTo(this[i + 1]).Normalize();
-                    return this[i] + (leftover * direction);
+                    var direction = this.points[i].VectorTo(this.points[i + 1]).Normalize();
+                    return this.points[i] + (leftover * direction);
                 }
 
                 cumulativeLength = nextLength;
@@ -113,9 +149,9 @@
             var minError = double.MaxValue;
             var closest = default(Point3D);
 
-            for (var i = 0; i < this.Count - 1; i++)
+            for (var i = 0; i < this.VertexCount - 1; i++)
             {
-                var segment = new LineSegment3D(this[i], this[i + 1]);
+                var segment = new LineSegment3D(this.points[i], this.points[i + 1]);
                 var projected = segment.ClosestPointTo(p);
                 var error = p.DistanceTo(projected);
                 if (error < minError)
@@ -128,13 +164,89 @@
             return closest;
         }
 
+        /// <summary>
+        /// Returns a value to indicate if a pair of polylines are equal
+        /// </summary>
+        /// <param name="other">The polyline to compare against.</param>
+        /// <param name="tolerance">A tolerance (epsilon) to adjust for floating point error</param>
+        /// <returns>true if the polylines are equal; otherwise false</returns>
+        [Pure]
+        public bool Equals(PolyLine3D other, double tolerance)
+        {
+            if (this.VertexCount != other.VertexCount)
+            {
+                return false;
+            }
+
+            for (var i = 0; i < this.points.Count; i++)
+            {
+                if (!this.points[i].Equals(other.points[i], tolerance))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         /// <inheritdoc />
+        [Pure]
+        public bool Equals(PolyLine3D other)
+        {
+            if (this.VertexCount != other.VertexCount)
+            {
+                return false;
+            }
+
+            for (var i = 0; i < this.points.Count; i++)
+            {
+                if (!this.points[i].Equals(other.points[i]))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        /// <inheritdoc />
+        [Pure]
+        public override bool Equals(object obj)
+        {
+            if (obj is null)
+            {
+                return false;
+            }
+
+            return obj is PolyLine3D d && this.Equals(d);
+        }
+
+        /// <inheritdoc />
+        [Pure]
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hashcode = 0;
+                for (var i = 0; i < this.points.Count; i++)
+                {
+                    // HashCode.Combine(single) is partially diffuse so should be ok for this.
+                    hashcode += HashCode.Combine(this.points[i]);
+                }
+
+                return hashcode;
+            }
+        }
+
+        /// <inheritdoc />
+        [Obsolete("Use Vertices instead, obsolete since 2018-01-12")]
         public IEnumerator<Point3D> GetEnumerator()
         {
             return this.points.GetEnumerator();
         }
 
         /// <inheritdoc />
+        [Obsolete("Use Vertices instead, obsolete since 2018-01-12")]
         IEnumerator IEnumerable.GetEnumerator()
         {
             return this.GetEnumerator();
@@ -149,7 +261,7 @@
             double length = 0;
             for (var i = 0; i < this.points.Count - 1; ++i)
             {
-                length += this[i].DistanceTo(this[i + 1]);
+                length += this.points[i].DistanceTo(this.points[i + 1]);
             }
 
             return length;

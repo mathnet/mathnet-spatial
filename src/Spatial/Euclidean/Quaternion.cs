@@ -1,6 +1,8 @@
 ﻿namespace MathNet.Spatial.Euclidean
 {
     using System;
+    using System.Diagnostics.Contracts;
+    using MathNet.Spatial.Internals;
     using Numerics;
     using Numerics.LinearAlgebra.Double;
     using Units;
@@ -364,12 +366,12 @@
         /// <summary>
         /// Equality operator for two quaternions
         /// </summary>
-        /// <param name="q1">The first quaternion</param>
-        /// <param name="q2">The second quaternion</param>
+        /// <param name="left">The first quaternion</param>
+        /// <param name="right">The second quaternion</param>
         /// <returns>True if the quaternions are equal; otherwise false</returns>
-        public static bool operator ==(Quaternion q1, Quaternion q2)
+        public static bool operator ==(Quaternion left, Quaternion right)
         {
-            return q1.Equals(q2);
+            return left.Equals(right);
         }
 
         /// <summary>
@@ -403,12 +405,12 @@
         /// <summary>
         /// Inequality operator for two quaternions
         /// </summary>
-        /// <param name="q1">The first quaternion</param>
-        /// <param name="q2">The second quaternion</param>
+        /// <param name="left">The first quaternion</param>
+        /// <param name="right">The second quaternion</param>
         /// <returns>True if the quaternions are different; otherwise false</returns>
-        public static bool operator !=(Quaternion q1, Quaternion q2)
+        public static bool operator !=(Quaternion left, Quaternion right)
         {
-            return !(q1 == q2);
+            return !left.Equals(right);
         }
 
         /// <summary>
@@ -720,7 +722,29 @@
                 this.ImagZ);
         }
 
+        /// <summary>
+        /// Returns a value to indicate if this vector is equivelent to a given unit vector
+        /// </summary>
+        /// <param name="other">The unit vector to compare against.</param>
+        /// <param name="tolerance">A tolerance (epsilon) to adjust for floating point error</param>
+        /// <returns>true if the vectors are equal; otherwise false</returns>
+        [Pure]
+        public bool Equals(Quaternion other, double tolerance)
+        {
+            if ((other.IsNan && this.IsNan) ||
+                (other.IsInfinity && this.IsInfinity))
+            {
+                return true;
+            }
+
+            return Math.Abs(other.w - this.w) < tolerance
+                && Math.Abs(other.x - this.x) < tolerance
+                && Math.Abs(other.y - this.y) < tolerance
+                && Math.Abs(other.z - this.z) < tolerance;
+        }
+
         /// <inheritdoc />
+        [Pure]
         public bool Equals(Quaternion other)
         {
             if ((other.IsNan && this.IsNan) ||
@@ -729,35 +753,19 @@
                 return true;
             }
 
-            return this.Real.AlmostEqual(other.Real)
-                && this.ImagX.AlmostEqual(other.ImagX)
-                && this.ImagY.AlmostEqual(other.ImagY)
-                && this.ImagZ.AlmostEqual(other.ImagZ);
+            return this.w.Equals(other.w)
+                && this.x.Equals(other.x)
+                && this.y.Equals(other.y)
+                && this.z.Equals(other.z);
         }
 
         /// <inheritdoc />
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj))
-            {
-                return false;
-            }
-
-            return obj is Quaternion && this.Equals((Quaternion)obj);
-        }
+        [Pure]
+        public override bool Equals(object obj) => obj is Quaternion q && this.Equals(q);
 
         /// <inheritdoc />
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                var hashCode = this.w.GetHashCode();
-                hashCode = (hashCode * 397) ^ this.x.GetHashCode();
-                hashCode = (hashCode * 397) ^ this.y.GetHashCode();
-                hashCode = (hashCode * 397) ^ this.z.GetHashCode();
-                return hashCode;
-            }
-        }
+        [Pure]
+        public override int GetHashCode() => HashCode.Combine(this.w, this.x, this.y, this.z);
 
         /// <summary>
         /// Calculates norm of quaternion from it's algebraical notation

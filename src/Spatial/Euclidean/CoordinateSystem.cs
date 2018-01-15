@@ -1,6 +1,7 @@
 namespace MathNet.Spatial.Euclidean
 {
     using System;
+    using System.Diagnostics.Contracts;
     using System.Linq;
     using System.Text.RegularExpressions;
     using System.Xml;
@@ -176,7 +177,7 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>True if the coordinate system are the same; otherwise false.</returns>
         public static bool operator ==(CoordinateSystem left, CoordinateSystem right)
         {
-            return CoordinateSystem.Equals(left, right);
+            return left.Equals(right);
         }
 
         /// <summary>
@@ -187,7 +188,7 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>True if the coordinate systems are different; otherwise false.</returns>
         public static bool operator !=(CoordinateSystem left, CoordinateSystem right)
         {
-            return !CoordinateSystem.Equals(left, right);
+            return !left.Equals(right);
         }
 
         /// <summary>
@@ -742,17 +743,18 @@ namespace MathNet.Spatial.Euclidean
             return new CoordinateSystem(this.Inverse());
         }
 
-        /// <inheritdoc />
-        public bool Equals(CoordinateSystem other)
+        /// <summary>
+        /// Returns a value to indicate if this CoordinateSystem is equivelent to a another CoordinateSystem
+        /// </summary>
+        /// <param name="other">The CoordinateSystem to compare against.</param>
+        /// <param name="tolerance">A tolerance (epsilon) to adjust for floating point error</param>
+        /// <returns>true if the CoordinateSystems are equal; otherwise false</returns>
+        [Pure]
+        public bool Equals(CoordinateSystem other, double tolerance)
         {
-            if (CoordinateSystem.ReferenceEquals(null, other))
+            if (other is null)
             {
                 return false;
-            }
-
-            if (CoordinateSystem.ReferenceEquals(this, other))
-            {
-                return true;
             }
 
             if (other.Values.Length != this.Values.Length)
@@ -760,42 +762,41 @@ namespace MathNet.Spatial.Euclidean
                 return false;
             }
 
-            return !this.Values.Where((t, i) => Math.Abs(other.Values[i] - t) > 1E-15).Any();
+            return !this.Values.Where((t, i) => Math.Abs(other.Values[i] - t) > tolerance).Any();
         }
 
         /// <inheritdoc />
+        [Pure]
+        public bool Equals(CoordinateSystem other)
+        {
+            if (other is null)
+            {
+                return false;
+            }
+
+            if (other.Values.Length != this.Values.Length)
+            {
+                return false;
+            }
+
+            return this.Values.SequenceEqual(other.Values);
+        }
+
+        /// <inheritdoc />
+        [Pure]
         public override bool Equals(object obj)
         {
-            if (CoordinateSystem.ReferenceEquals(null, obj))
+            if (obj is null)
             {
                 return false;
             }
 
-            if (CoordinateSystem.ReferenceEquals(this, obj))
-            {
-                return true;
-            }
-
-            if (obj.GetType() != typeof(CoordinateSystem))
-            {
-                return false;
-            }
-
-            return this.Equals((CoordinateSystem)obj);
+            return obj is CoordinateSystem cs && this.Equals(cs);
         }
 
         /// <inheritdoc />
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                var result = this.XAxis.GetHashCode();
-                result = (result * 397) ^ this.YAxis.GetHashCode();
-                result = (result * 397) ^ this.ZAxis.GetHashCode();
-                result = (result * 397) ^ this.OffsetToBase.GetHashCode();
-                return result;
-            }
-        }
+        [Pure]
+        public override int GetHashCode() => HashCode.Combine(this.XAxis, this.YAxis, this.ZAxis, this.OffsetToBase);
 
         /// <summary>
         /// Returns a string representation of the coordinate system

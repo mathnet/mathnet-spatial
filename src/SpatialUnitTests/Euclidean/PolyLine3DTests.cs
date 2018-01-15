@@ -15,8 +15,7 @@
         {
             var testElement = new PolyLine3D(from x in points.Split(';') select Point3D.Parse(x));
             var checkElement = Point3D.Parse(expected);
-
-            AssertGeometry.AreEqual(checkElement, testElement[index]);
+            AssertGeometry.AreEqual(checkElement, testElement.Vertices.Skip(index).First());
         }
 
         [TestCase("0,0,0;0,1,0", 1.0)]
