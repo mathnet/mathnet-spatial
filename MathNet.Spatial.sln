@@ -34,6 +34,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{4A482849-F
 		docs\tools\templates\template.cshtml = docs\tools\templates\template.cshtml
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spatial.Serialization.Json", "src\Spatial.Serialization.Json\Spatial.Serialization.Json.csproj", "{B27C2390-B83F-4E67-A890-D9C6230B4213}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spatial.Benchmarks", "src\Spatial.Benchmarks\Spatial.Benchmarks.csproj", "{3D8A4A0D-0282-4C17-8673-9FCFB52728F6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Roslyn", "Roslyn", "{10988BA6-86DC-41B9-9CD2-A1F1B34591C6}"
