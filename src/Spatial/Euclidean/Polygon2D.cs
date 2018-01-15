@@ -16,7 +16,7 @@
         /// <summary>
         /// A list of vertices.
         /// </summary>
-        private ImmutableList<Point2D> points;
+        private readonly ImmutableList<Point2D> points;
 
         /// <summary>
         /// A list of edges.  This list is lazy loaded on demand.
@@ -140,7 +140,7 @@
         /// <returns>True if the polygons are the same; otherwise false.</returns>
         public static bool operator ==(Polygon2D left, Polygon2D right)
         {
-            return left.Equals(right);
+            return left?.Equals(right) == true;
         }
 
         /// <summary>
@@ -151,7 +151,7 @@
         /// <returns>True if the polygons are different; otherwise false.</returns>
         public static bool operator !=(Polygon2D left, Polygon2D right)
         {
-            return !left.Equals(right);
+            return left?.Equals(right) != true;
         }
 
         /// <summary>
@@ -345,7 +345,7 @@
         [Pure]
         public bool Equals(Polygon2D other, double tolerance)
         {
-            if (this.VertexCount != other.VertexCount)
+            if (this.VertexCount != other?.VertexCount)
             {
                 return false;
             }
@@ -365,7 +365,7 @@
         [Pure]
         public bool Equals(Polygon2D other)
         {
-            if (this.VertexCount != other.VertexCount)
+            if (this.VertexCount != other?.VertexCount)
             {
                 return false;
             }
@@ -397,17 +397,7 @@
         [Pure]
         public override int GetHashCode()
         {
-            unchecked
-            {
-                int hashcode = 0;
-                for (var i = 0; i < this.points.Count; i++)
-                {
-                    // HashCode.Combine(single) is partially diffuse so should be ok for this.
-                    hashcode += HashCode.Combine(this.points[i]);
-                }
-
-                return hashcode;
-            }
+            return HashCode.CombineMany(this.points);
         }
 
         /// <summary>
