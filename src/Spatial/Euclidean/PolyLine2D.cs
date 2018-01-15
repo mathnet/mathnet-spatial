@@ -202,6 +202,11 @@
         [Pure]
         public bool Equals(PolyLine2D other, double tolerance)
         {
+            if (other == null)
+            {
+                return false;
+            }
+
             if (this.VertexCount != other.VertexCount)
             {
                 return false;
@@ -222,6 +227,11 @@
         [Pure]
         public bool Equals(PolyLine2D other)
         {
+            if (other == null)
+            {
+                return false;
+            }
+
             if (this.VertexCount != other.VertexCount)
             {
                 return false;
@@ -242,12 +252,8 @@
         [Pure]
         public override bool Equals(object obj)
         {
-            if (obj is null)
-            {
-                return false;
-            }
-
-            return obj is PolyLine2D d && this.Equals(d);
+            return obj is PolyLine2D polyLine2D &&
+                   this.Equals(polyLine2D);
         }
 
         /// <inheritdoc />

@@ -140,7 +140,7 @@
         /// <returns>True if the polygons are the same; otherwise false.</returns>
         public static bool operator ==(Polygon2D left, Polygon2D right)
         {
-            return left.Equals(right);
+            return left?.Equals(right) == true;
         }
 
         /// <summary>
@@ -151,7 +151,7 @@
         /// <returns>True if the polygons are different; otherwise false.</returns>
         public static bool operator !=(Polygon2D left, Polygon2D right)
         {
-            return !left.Equals(right);
+            return left?.Equals(right) != true;
         }
 
         /// <summary>
