@@ -74,7 +74,7 @@
         /// <returns>True if the lines are the same; otherwise false.</returns>
         public static bool operator ==(PolyLine2D left, PolyLine2D right)
         {
-            return left.Equals(right);
+            return left?.Equals(right) == true;
         }
 
         /// <summary>
@@ -85,7 +85,7 @@
         /// <returns>True if the lines are different; otherwise false.</returns>
         public static bool operator !=(PolyLine2D left, PolyLine2D right)
         {
-            return !left.Equals(right);
+            return left?.Equals(right) != true;
         }
 
         /// <summary>
@@ -202,7 +202,7 @@
         [Pure]
         public bool Equals(PolyLine2D other, double tolerance)
         {
-            if (this.VertexCount != other.VertexCount)
+            if (this.VertexCount != other?.VertexCount)
             {
                 return false;
             }
@@ -222,7 +222,7 @@
         [Pure]
         public bool Equals(PolyLine2D other)
         {
-            if (this.VertexCount != other.VertexCount)
+            if (this.VertexCount != other?.VertexCount)
             {
                 return false;
             }
@@ -242,29 +242,15 @@
         [Pure]
         public override bool Equals(object obj)
         {
-            if (obj is null)
-            {
-                return false;
-            }
-
-            return obj is PolyLine2D d && this.Equals(d);
+            return obj is PolyLine2D polyLine2D &&
+                   this.Equals(polyLine2D);
         }
 
         /// <inheritdoc />
         [Pure]
         public override int GetHashCode()
         {
-            unchecked
-            {
-                int hashcode = 0;
-                for (var i = 0; i < this.points.Count; i++)
-                {
-                    // HashCode.Combine(single) is partially diffuse so should be ok for this.
-                    hashcode += HashCode.Combine(this.points[i]);
-                }
-
-                return hashcode;
-            }
+            return HashCode.CombineMany(this.points);
         }
 
         /// <inheritdoc />

@@ -49,8 +49,6 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Runtime.CompilerServices;
 
     // xxHash32 is used for the hash code.
     // https://github.com/Cyan4973/xxHash
@@ -98,6 +96,66 @@
 
             hash = MixFinal(hash);
             return (int)hash;
+        }
+
+        public static int CombineMany<T>(T[] items)
+        {
+            if (items == null)
+            {
+                return 0;
+            }
+
+            unchecked
+            {
+                int hashcode = 0;
+                for (var i = 0; i < items.Length; i++)
+                {
+                    // HashCode.Combine(single) is partially diffuse so should be ok for this.
+                    hashcode += Combine(items[i]);
+                }
+
+                return hashcode;
+            }
+        }
+
+        public static int CombineMany<T>(List<T> items)
+        {
+            if (items == null)
+            {
+                return 0;
+            }
+
+            unchecked
+            {
+                int hashcode = 0;
+                for (var i = 0; i < items.Count; i++)
+                {
+                    // HashCode.Combine(single) is partially diffuse so should be ok for this.
+                    hashcode += Combine(items[i]);
+                }
+
+                return hashcode;
+            }
+        }
+
+        public static int CombineMany<T>(IEnumerable<T> items)
+        {
+            if (items == null)
+            {
+                return 0;
+            }
+
+            unchecked
+            {
+                int hashcode = 0;
+                foreach (var item in items)
+                {
+                    // HashCode.Combine(single) is partially diffuse so should be ok for this.
+                    hashcode += Combine(item);
+                }
+
+                return hashcode;
+            }
         }
 
         public static int Combine<T1, T2>(T1 value1, T2 value2)
