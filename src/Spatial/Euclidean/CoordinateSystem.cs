@@ -751,7 +751,7 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public bool Equals(CoordinateSystem other, double tolerance)
         {
-            if (other.Values.Length != this.Values?.Length)
+            if (this.Values.Length != other?.Values.Length)
             {
                 return false;
             }
@@ -771,7 +771,7 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public bool Equals(CoordinateSystem other)
         {
-            if (other.Values.Length != this.Values?.Length)
+            if (this.Values.Length != other?.Values.Length)
             {
                 return false;
             }
