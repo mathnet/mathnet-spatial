@@ -1,0 +1,55 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFrameworks>netstandard2.0;net40</TargetFrameworks>
+    <AssemblyName>MathNet.Spatial.Serialization.Json</AssemblyName>
+    <RootNamespace>MathNet.Spatial.Serialization.Json</RootNamespace>
+    <CodeAnalysisRuleSet>Spatial.ruleset</CodeAnalysisRuleSet>
+    <IsPackable>true</IsPackable>
+    <PackageId>MathNet.Spatial.Serialization.Json</PackageId>
+    <VersionPrefix>0.5.0</VersionPrefix>
+    <VersionSuffix>beta01</VersionSuffix>
+    <PackageVersion>0.5.0-beta01</PackageVersion>
+    <Version>0.5.0-beta01</Version>
+    <AssemblyVersion>0.5.0.0</AssemblyVersion>
+    <FileVersion>0.5.0.0</FileVersion>
+    <Title>Math.NET Spatial</Title>
+    <Authors>Adam Jones, Christoph Ruegg, Johan Larsson</Authors>
+    <Company>Math.NET Project</Company>
+    <Product>Math.NET Spatial</Product>
+    <Description>Json serialization support for Math.NET Spatial.</Description>
+    <Copyright>Copyright Math.NET Project</Copyright>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageLicenseUrl>https://spatial.mathdotnet.com/License.html</PackageLicenseUrl>
+    <PackageProjectUrl>https://spatial.mathdotnet.com/</PackageProjectUrl>
+    <PackageIconUrl>https://www.mathdotnet.com/images/MathNet128.png</PackageIconUrl>
+    <PackageReleaseNotes>
+      First Release
+    </PackageReleaseNotes>
+    <PackageTags>math geometry spatial json serialization</PackageTags>
+    <IsTool>false</IsTool>
+    <RepositoryUrl>https://github.com/mathnet/mathnet-spatial</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <NeutralLanguage>en</NeutralLanguage>
+    <NoPackageAnalysis>false</NoPackageAnalysis>
+    <IncludeBuildOutput>true</IncludeBuildOutput>
+    <IncludeContentInPack>false</IncludeContentInPack>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <EnableDefaultCompileItems>true</EnableDefaultCompileItems>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Spatial\Spatial.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\..\packages\analyzers\StyleCop.Analyzers\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll">
+    </Analyzer>
+    <Analyzer Include="..\..\packages\analyzers\StyleCop.Analyzers\analyzers\dotnet\cs\StyleCop.Analyzers.dll">
+    </Analyzer>
+  </ItemGroup>
+</Project>

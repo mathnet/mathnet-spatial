@@ -27,16 +27,20 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <ProjectReference Include="..\Spatial.Serialization.Json\Spatial.Serialization.Json.csproj" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.0'">
+    <ProjectReference Include="..\Spatial.Serialization.Json\Spatial.Serialization.Json.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="MathNet.Numerics" Version="4.0.0-alpha02" />
+    <PackageReference Include="MathNet.Numerics" Version="4.0.0-beta03" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="NUnit" Version="3.9" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.9.0" />
     <PackageReference Include="NUnitLite" Version="3.9" />
     <PackageReference Include="protobuf-net" Version="2.3.3" />
-     <ProjectReference Include="..\Spatial\Spatial.csproj" />
+    <ProjectReference Include="..\Spatial\Spatial.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\..\packages\analyzers\StyleCop.Analyzers\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll">
