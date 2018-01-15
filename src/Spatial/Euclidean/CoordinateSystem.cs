@@ -176,7 +176,7 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>True if the coordinate system are the same; otherwise false.</returns>
         public static bool operator ==(CoordinateSystem left, CoordinateSystem right)
         {
-            return left?.Equals(right) == true;
+            return CoordinateSystem.Equals(left, right);
         }
 
         /// <summary>
@@ -187,7 +187,7 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>True if the coordinate systems are different; otherwise false.</returns>
         public static bool operator !=(CoordinateSystem left, CoordinateSystem right)
         {
-            return left?.Equals(right) != true;
+            return !CoordinateSystem.Equals(left, right);
         }
 
         /// <summary>
