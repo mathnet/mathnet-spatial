@@ -1,4 +1,4 @@
-﻿namespace MathNet.Spatial.UnitTests
+﻿namespace MathNet.Spatial.Serialization.UnitTests
 {
 #if NETCOREAPP1_1 == false
 
@@ -6,7 +6,9 @@
     using System.Linq;
     using System.Runtime.Serialization.Formatters.Binary;
     using MathNet.Spatial.Euclidean;
+    using MathNet.Spatial.Serialization.Binary;
     using MathNet.Spatial.Units;
+    using MathNet.Spatial.UnitTests;
     using NUnit.Framework;
 
     public class BinaryFormatterTests
@@ -37,7 +39,6 @@
             Assert.AreEqual(p, result);
         }
 
-        [Explicit("fix later")]
         [Test]
         public void QuaternionBinaryFormatter()
         {
@@ -46,7 +47,6 @@
             Assert.AreEqual(q, result);
         }
 
-        [Explicit("fix later")]
         [Test]
         public void EulerAnglesBinaryFormatter()
         {
@@ -64,8 +64,7 @@
             Assert.AreEqual(plane, result);
         }
 
-        [Explicit("fix later")]
-        [TestCase("1, 2, 3", "-1, 2, 3", false)]
+        [TestCase("1, 2, 3", "0, 0, 1", false)]
         public void Ray3DBinaryFormatter(string ps, string vs, bool asElements)
         {
             var ray = new Ray3D(Point3D.Parse(ps), UnitVector3D.Parse(vs));
@@ -74,17 +73,6 @@
             AssertGeometry.AreEqual(ray, result, 1e-6);
         }
 
-        [TestCase("1, 2, 3", "4, 5, 6")]
-        public void Line3DBinaryFormatter(string p1s, string p2s)
-        {
-            Point3D p1 = Point3D.Parse(p1s);
-            Point3D p2 = Point3D.Parse(p2s);
-            var l = new Line3D(p1, p2);
-            var result = this.BinaryFormmaterRoundTrip(l);
-            Assert.AreEqual(l, result);
-        }
-
-        [Explicit("fix later")]
         [TestCase("1, 2, 3", "4, 5, 6")]
         public void LineSegment3DBinaryFormatter(string p1s, string p2s)
         {
@@ -95,18 +83,6 @@
             Assert.AreEqual(l, result);
         }
 
-        [Explicit("fix later")]
-        [TestCase("1, 2", "4, 5")]
-        public void Line2DBinaryFormatter(string p1s, string p2s)
-        {
-            Point2D p1 = Point2D.Parse(p1s);
-            Point2D p2 = Point2D.Parse(p2s);
-            var l = new Line2D(p1, p2);
-            var result = this.BinaryFormmaterRoundTrip(l);
-            Assert.AreEqual(l, result);
-        }
-
-        [Explicit("fix later")]
         [TestCase("1, 2", "4, 5")]
         public void LineSegment2DBinaryFormatter(string p1s, string p2s)
         {
@@ -133,7 +109,6 @@
             Assert.AreEqual(v, result);
         }
 
-        [Explicit("fix later")]
         [TestCase("0, 0", 3)]
         public void Circle2DBinaryFormatter(string point, double radius)
         {
@@ -152,7 +127,6 @@
             Assert.AreEqual(c, result);
         }
 
-        [Explicit("fix later")]
         [Test]
         public void Polygon2DBinaryFormatter()
         {
@@ -162,7 +136,6 @@
             Assert.AreEqual(p, result);
         }
 
-        [Explicit("fix later")]
         [Test]
         public void PolyLine2DBinaryFormatter()
         {
@@ -172,7 +145,6 @@
             Assert.AreEqual(p, result);
         }
 
-        [Explicit("fix later")]
         [Test]
         public void PolyLine3DBinaryFormatter()
         {
@@ -182,13 +154,20 @@
             Assert.AreEqual(p, result);
         }
 
-        [Explicit("fix later")]
         [Test]
         public void CoordinateSystemBinaryFormatter()
         {
-            var cs = new CoordinateSystem(new Point3D(1, -2, 3), new Vector3D(0, 1, 0), new Vector3D(0, 0, 1), new Vector3D(1, 0, 0));
+            var cs = new Spatial.Euclidean.CoordinateSystem(new Point3D(1, -2, 3), new Vector3D(0, 1, 0), new Vector3D(0, 0, 1), new Vector3D(1, 0, 0));
             var result = this.BinaryFormmaterRoundTrip(cs);
             AssertGeometry.AreEqual(cs, result);
+        }
+
+        [Test]
+        public void UnitVector3DBinaryFormatter()
+        {
+            var uv = UnitVector3D.Create(0.2672612419124244, -0.53452248382484879, 0.80178372573727319);
+            var result = this.BinaryFormmaterRoundTrip(uv);
+            AssertGeometry.AreEqual(uv, result);
         }
 
         private T BinaryFormmaterRoundTrip<T>(T test)
@@ -197,7 +176,7 @@
             {
                 var formatter = new BinaryFormatter();
 
-                // formatter.SurrogateSelector = SerializerFactory.CreateSurrogateSelector();
+                formatter.SurrogateSelector = BinaryHelper.CreateSurrogateSelector();
                 formatter.Serialize(ms, test);
                 ms.Flush();
                 ms.Position = 0;
