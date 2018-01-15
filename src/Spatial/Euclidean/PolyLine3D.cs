@@ -173,12 +173,7 @@
         [Pure]
         public bool Equals(PolyLine3D other, double tolerance)
         {
-            if (other == null)
-            {
-                return false;
-            }
-
-            if (this.VertexCount != other.VertexCount)
+            if (this.VertexCount != other?.VertexCount)
             {
                 return false;
             }
@@ -198,12 +193,7 @@
         [Pure]
         public bool Equals(PolyLine3D other)
         {
-            if (other == null)
-            {
-                return false;
-            }
-
-            if (this.VertexCount != other.VertexCount)
+            if (this.VertexCount != other?.VertexCount)
             {
                 return false;
             }

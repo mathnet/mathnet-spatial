@@ -202,12 +202,7 @@
         [Pure]
         public bool Equals(PolyLine2D other, double tolerance)
         {
-            if (other == null)
-            {
-                return false;
-            }
-
-            if (this.VertexCount != other.VertexCount)
+            if (this.VertexCount != other?.VertexCount)
             {
                 return false;
             }
@@ -227,12 +222,7 @@
         [Pure]
         public bool Equals(PolyLine2D other)
         {
-            if (other == null)
-            {
-                return false;
-            }
-
-            if (this.VertexCount != other.VertexCount)
+            if (this.VertexCount != other?.VertexCount)
             {
                 return false;
             }
