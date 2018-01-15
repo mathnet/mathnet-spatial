@@ -74,7 +74,7 @@
         /// <returns>True if the lines are the same; otherwise false.</returns>
         public static bool operator ==(PolyLine2D left, PolyLine2D right)
         {
-            return left.Equals(right);
+            return left?.Equals(right) == true;
         }
 
         /// <summary>
@@ -85,7 +85,7 @@
         /// <returns>True if the lines are different; otherwise false.</returns>
         public static bool operator !=(PolyLine2D left, PolyLine2D right)
         {
-            return !left.Equals(right);
+            return left?.Equals(right) != true;
         }
 
         /// <summary>
