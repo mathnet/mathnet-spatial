@@ -153,6 +153,51 @@
             Assert.Inconclusive("Test this?");
         }
 
+        [Test]
+        public void EqualityNullOperator()
+        {
+            string test = "o:{1, 2e-6, -3} x:{1, 2, 3} y:{3, 3, 3} z:{4, 4, 4}";
+            var cs = CoordinateSystem.Parse(test);
+
+            Assert.IsFalse(cs == null);
+        }
+
+        [Test]
+        public void EqualityNullOperatorTrue()
+        {
+            string test = "o:{1, 2e-6, -3} x:{1, 2, 3} y:{3, 3, 3} z:{4, 4, 4}";
+            CoordinateSystem cs = null;
+
+            Assert.IsTrue(cs == null);
+        }
+
+        [Test]
+        public void EqualityNotNullOperator()
+        {
+            string test = "o:{1, 2e-6, -3} x:{1, 2, 3} y:{3, 3, 3} z:{4, 4, 4}";
+            var cs = CoordinateSystem.Parse(test);
+
+            Assert.IsTrue(cs != null);
+        }
+
+        [Test]
+        public void EqualityNotNullOperatorFalse()
+        {
+            string test = "o:{1, 2e-6, -3} x:{1, 2, 3} y:{3, 3, 3} z:{4, 4, 4}";
+            CoordinateSystem cs = null;
+
+            Assert.IsFalse(cs != null);
+        }
+
+        [Test]
+        public void EqualityNull()
+        {
+            string test = "o:{1, 2e-6, -3} x:{1, 2, 3} y:{3, 3, 3} z:{4, 4, 4}";
+            var cs = CoordinateSystem.Parse(test);
+
+            Assert.IsFalse(cs.Equals(null));
+        }
+
         [TestCase("1; -5; 3", "1; -5; 3", "o:{0, 0, 0} x:{1, 0, 0} y:{0, 1, 0} z:{0, 0, 1}")]
         public void TransformPoint(string ps, string eps, string css)
         {
