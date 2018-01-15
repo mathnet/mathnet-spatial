@@ -254,17 +254,7 @@
         [Pure]
         public override int GetHashCode()
         {
-            unchecked
-            {
-                int hashcode = 0;
-                for (var i = 0; i < this.points.Count; i++)
-                {
-                    // HashCode.Combine(single) is partially diffuse so should be ok for this.
-                    hashcode += HashCode.Combine(this.points[i]);
-                }
-
-                return hashcode;
-            }
+            return HashCode.CombineMany(this.points);
         }
 
         /// <inheritdoc />

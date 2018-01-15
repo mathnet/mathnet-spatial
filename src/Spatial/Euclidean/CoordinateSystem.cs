@@ -2,7 +2,6 @@ namespace MathNet.Spatial.Euclidean
 {
     using System;
     using System.Diagnostics.Contracts;
-    using System.Linq;
     using System.Text.RegularExpressions;
     using System.Xml;
     using System.Xml.Linq;
@@ -177,7 +176,7 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>True if the coordinate system are the same; otherwise false.</returns>
         public static bool operator ==(CoordinateSystem left, CoordinateSystem right)
         {
-            return left.Equals(right);
+            return left?.Equals(right) == true;
         }
 
         /// <summary>
@@ -188,7 +187,7 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>True if the coordinate systems are different; otherwise false.</returns>
         public static bool operator !=(CoordinateSystem left, CoordinateSystem right)
         {
-            return !left.Equals(right);
+            return left?.Equals(right) != true;
         }
 
         /// <summary>
@@ -695,10 +694,10 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Transforms a line segement.
+        /// Transforms a line segment.
         /// </summary>
         /// <param name="l">A line segment</param>
-        /// <returns>The transformed line sgement</returns>
+        /// <returns>The transformed line segment</returns>
         public LineSegment3D Transform(LineSegment3D l)
         {
             return new LineSegment3D(this.Transform(l.StartPoint), this.Transform(l.EndPoint));
@@ -725,7 +724,7 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Transfomes this by the coordinate system and returns the tranformed.
+        /// Transforms this by the coordinate system and returns the transformed.
         /// </summary>
         /// <param name="cs">a coordinate system</param>
         /// <returns>a transformed coordinate system</returns>
@@ -744,7 +743,7 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Returns a value to indicate if this CoordinateSystem is equivelent to a another CoordinateSystem
+        /// Returns a value to indicate if this CoordinateSystem is equivalent to a another CoordinateSystem
         /// </summary>
         /// <param name="other">The CoordinateSystem to compare against.</param>
         /// <param name="tolerance">A tolerance (epsilon) to adjust for floating point error</param>
@@ -752,7 +751,7 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public bool Equals(CoordinateSystem other, double tolerance)
         {
-            if (other is null)
+            if (other == null)
             {
                 return false;
             }
@@ -762,14 +761,22 @@ namespace MathNet.Spatial.Euclidean
                 return false;
             }
 
-            return !this.Values.Where((t, i) => Math.Abs(other.Values[i] - t) > tolerance).Any();
+            for (var i = 0; i < this.Values.Length; i++)
+            {
+                if (Math.Abs(this.Values[i] - other.Values[i]) > tolerance)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         /// <inheritdoc />
         [Pure]
         public bool Equals(CoordinateSystem other)
         {
-            if (other is null)
+            if (other == null)
             {
                 return false;
             }
@@ -779,7 +786,16 @@ namespace MathNet.Spatial.Euclidean
                 return false;
             }
 
-            return this.Values.SequenceEqual(other.Values);
+            for (var i = 0; i < this.Values.Length; i++)
+            {
+                // ReSharper disable once CompareOfFloatsByEqualityOperator
+                if (this.Values[i] != other.Values[i])
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         /// <inheritdoc />
@@ -796,7 +812,7 @@ namespace MathNet.Spatial.Euclidean
 
         /// <inheritdoc />
         [Pure]
-        public override int GetHashCode() => HashCode.Combine(this.XAxis, this.YAxis, this.ZAxis, this.OffsetToBase);
+        public override int GetHashCode() => HashCode.CombineMany(this.Values);
 
         /// <summary>
         /// Returns a string representation of the coordinate system
@@ -804,7 +820,7 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>a string</returns>
         public new string ToString()
         {
-            return string.Format("Origin: {0}, XAxis: {1}, YAxis: {2}, ZAxis: {3}", this.Origin, this.XAxis, this.YAxis, this.ZAxis);
+            return $"Origin: {this.Origin}, XAxis: {this.XAxis}, YAxis: {this.YAxis}, ZAxis: {this.ZAxis}";
         }
 
         /// <inheritdoc />
