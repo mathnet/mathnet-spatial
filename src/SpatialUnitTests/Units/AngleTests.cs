@@ -161,10 +161,10 @@
         [TestCase(Math.PI, 0, Math.PI * 2, Math.PI)]
         [TestCase(3 * Math.PI, 0, Math.PI * 2, Math.PI)]
         [TestCase(5 * Math.PI / 4, -Math.PI, Math.PI, -3 * Math.PI / 4)]
-        public void Normalize(double radians, double start, double end, double expected)
+        public void Clamp(double radians, double start, double end, double expected)
         {
             Angle a = Angle.FromRadians(radians);
-            Assert.AreEqual(expected, a.Normalize((Angle)start, (Angle)end).Radians, Tolerance);
+            Assert.AreEqual(expected, a.Clamp((Angle)start, (Angle)end).Radians, Tolerance);
         }
 
         [TestCase("5 °", 5 * DegToRad)]
