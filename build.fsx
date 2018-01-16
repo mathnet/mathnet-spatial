@@ -26,7 +26,7 @@ open System.IO
 #load "build/build-framework.fsx"
 open BuildFramework
 
-let dotnetbuild = environVarOrDefault "DOTNET" "0"
+let coreonlybuild = environVarOrDefault "COREONLY" "0"
 
 // --------------------------------------------------------------------------------------
 // PROJECT INFO
@@ -124,9 +124,9 @@ Target "DotnetRestoreBenchmark" (fun _ -> dotnetRestore "MathNet.Spatial.Benchma
 Target "Prepare" DoNothing
 "Start"
   =?> ("Clean", not (hasBuildParam "incremental"))
-  =?> ("CleanDotnet",  dotnetbuild = "1")
+  =?> ("CleanDotnet",  coreonlybuild = "0")
   ==> "DotnetRestore"
-  =?> ("DotnetRestoreBenchmark",  dotnetbuild = "1")
+  =?> ("DotnetRestoreBenchmark",  coreonlybuild = "0")
   ==> "ApplyVersion"
   ==> "Prepare"
 
@@ -151,7 +151,7 @@ Target "BuildBenchmarks" (fun _ -> dotnetBuild "Release" "MathNet.Spatial.Benchm
 Target "Build" DoNothing
 "Prepare"
   =?> ("BuildMain", hasBuildParam "release")
-  =?> ("BuildBenchmarks",  dotnetbuild = "1")
+  =?> ("BuildBenchmarks",  coreonlybuild = "0")
   ==> "Build"
 
 
@@ -181,7 +181,7 @@ Target "TestC#NET47"  (fun _ -> testLibraryCsharp "net47")
 "Build" ==> "TestC#Core1.1" ==> "TestC#"
 "Build" ==> "TestC#Core2.0" ==> "TestC#"
 "Build"
-=?> ("TestC#NET45", dotnetbuild = "1")
+=?> ("TestC#NET45", coreonlybuild = "0")
 ==> "TestC#"
 
 "TestC#" ==> "Test"
@@ -207,7 +207,7 @@ Target "Benchmark#Net47" (fun _ ->
         Rename "BenchmarkDotNet.Artifacts/net47" "BenchmarkDotNet.Artifacts/results")
 
 "BuildBenchmarks" ==> "Benchmark#Core" ==> "RunBenchmarks"
-"BuildBenchmarks" =?> ("Benchmark#Net47", dotnetbuild = "1") ==> "RunBenchmarks"
+"BuildBenchmarks" =?> ("Benchmark#Net47", coreonlybuild = "0") ==> "RunBenchmarks"
 
 "DotnetRestoreBenchmark"
 ==> "CleanBenchmarks"
@@ -239,7 +239,7 @@ let dotnetPack solution = DotNetCli.Pack (fun p ->
         AdditionalArgs = defaultArgs})
 
 Target "NuGet" (fun _ ->
-    dotnetPack "MathNet.Spatial.sln"
+    dotnetPack "MathNet.SpatialMinimal.sln"
     CopyDir "out/packages/NuGet" "src/Spatial/bin/Release/" (fun n -> n.EndsWith(".nupkg")))
 "Build" ==> "NuGet" ==> "Pack"
 

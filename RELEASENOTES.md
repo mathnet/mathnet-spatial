@@ -1,8 +1,18 @@
 ### 0.5.0
+* New Types: Circle2D, LineSegment2D, LineSegment3D
+* Improved implemention of Polygon2D.GetConvexHullFromPoints
+* Angle now support sexidecimal format
+* Polygon2D now offers edges iterator
+* Breaking: Line2D/3D obsolete in favor of LineSegement2D/3D
+* Breaking: Polygon2D, PolyLine2D, Polyline3D enumerators are obsolete
+* Breaking: Equality has default no tolerance with a tolerance overload for all types
+* Breaking: UnitParser, UnitConverter, XmlExt, Parser, IUnit all made obsolete
+* Breaking: Constructors in multiple places replaced by factory methods 
 * Breaking: Parse methods throws FormatException, was ArgumentException
 * Breaking: Make implementation of IXmlSerializable explicit, adds noise to the API.
 * Breaking: use nobreaking space, \u00A0, in Angle.ToString().
 * Breaking: require length to be 1 ± 0.1 when parsing UnitVector3D
+* Updated documentation
 
 ### 0.4.0 - 2017-05-01
 * Build: extra *.Signed packages with strong named assemblies for legacy use cases
