@@ -10,7 +10,7 @@
     <IsPackable>true</IsPackable>
     <PackageId>MathNet.Spatial</PackageId>
     <VersionPrefix>0.5.0</VersionPrefix>
-    <VersionSuffix>alpha</VersionSuffix>
+    <VersionSuffix>beta01</VersionSuffix>
     <PackageVersion>0.5.0-beta01</PackageVersion>
     <Version>0.5.0-beta01</Version>
     <AssemblyVersion>0.5.0.0</AssemblyVersion>

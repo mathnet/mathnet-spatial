@@ -3,6 +3,6 @@ build_script:
   - build.cmd
 test: none
 environment:
-  DOTNET: '1'
+  COREONLY: '0'
 deploy: off
 shallow_clone: true

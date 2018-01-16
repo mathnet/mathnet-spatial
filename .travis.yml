@@ -2,6 +2,7 @@ language: csharp
 
 env:
   - HOME=/home/travis APPDATA=/home/travis LocalAppData=/home/travis
+  - COREONLY=1
 
 sudo: required #false
 dist: trusty
