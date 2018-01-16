@@ -20,11 +20,13 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// A local regex pattern for 3D items
         /// </summary>
+        [Obsolete("This should not be part of this class. Made obsolete 2018-01-16.")]
         private static readonly string Item3DPattern = Parser.Vector3DPattern.Trim('^', '$');
 
         /// <summary>
         /// A local regex pattern for a coordinate system
         /// </summary>
+        [Obsolete("This should not be part of this class. Made obsolete 2018-01-16.")]
         private static readonly string CsPattern = string.Format(@"^ *o: *{{(?<op>{0})}} *x: *{{(?<xv>{0})}} *y: *{{(?<yv>{0})}} *z: *{{(?<zv>{0})}} *$", Item3DPattern);
 
         /// <summary>
@@ -195,6 +197,7 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         /// <param name="s">The string</param>
         /// <returns>A coordinate system</returns>
+        [Obsolete("This should not have been made public. Made obsolete 2018-01-16.")]
         public static CoordinateSystem Parse(string s)
         {
             var match = Regex.Match(s, CsPattern, RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Singleline);
