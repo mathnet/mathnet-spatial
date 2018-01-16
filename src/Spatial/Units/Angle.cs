@@ -29,6 +29,11 @@ namespace MathNet.Spatial.Units
         public static readonly Angle Degrees360 = Angle.FromRadians(2 * Math.PI);
 
         /// <summary>
+        /// An angle representing 0 degrees or 0 radians
+        /// </summary>
+        public static readonly Angle Degrees0 = Angle.FromRadians(0);
+
+        /// <summary>
         /// The value in radians
         /// </summary>
         public readonly double Radians;
@@ -363,14 +368,14 @@ namespace MathNet.Spatial.Units
         }
 
         /// <summary>
-        /// Normalizes an angle to be constrained within start and end.
+        /// Clamps an angle to be constrained within start and end.
         /// </summary>
         /// <param name="start">The start angle</param>
         /// <param name="end">The end angle</param>
-        /// <returns>The normalized angle</returns>
-        public Angle Normalize(Angle start, Angle end)
+        /// <returns>The clamped angle</returns>
+        public Angle Clamp(Angle start, Angle end)
         {
-            return this.Normalize(start.Radians, end.Radians);
+            return this.Clamp(start.Radians, end.Radians);
         }
 
         /// <inheritdoc />
@@ -533,12 +538,12 @@ namespace MathNet.Spatial.Units
         }
 
         /// <summary>
-        /// Normalizes an angle to be constrained within start and end.
+        /// Clamps an angle to be constrained within start and end.
         /// </summary>
         /// <param name="start">The start angle in radians</param>
         /// <param name="end">The end angle in radians</param>
-        /// <returns>The normalized angle</returns>
-        internal Angle Normalize(double start, double end)
+        /// <returns>The clamped angle</returns>
+        internal Angle Clamp(double start, double end)
         {
             double width = end - start;
             double offset = this.Radians - start;
