@@ -128,6 +128,45 @@
             Assert.AreEqual(expected, Angle.FromSexagesimal(degrees, minutes, seconds).Radians, 1E-6);
         }
 
+        [TestCase(0, 0)]
+        [TestCase(Math.PI / 6, 0.5)]
+        [TestCase(Math.PI / 2, 1)]
+        [TestCase(4 * Math.PI / 3, -0.8660254037844386468)]
+        public void Sin(double radians, double expected)
+        {
+            Angle a = (Angle)radians;
+            Assert.AreEqual(expected, a.Sin(), Tolerance);
+        }
+
+        [TestCase(0, 1)]
+        [TestCase(Math.PI / 6, 0.8660254037844386468)]
+        [TestCase(Math.PI / 2, 0)]
+        [TestCase(4 * Math.PI / 3, -0.5)]
+        public void Cos(double radians, double expected)
+        {
+            Angle a = (Angle)radians;
+            Assert.AreEqual(expected, a.Cos(), Tolerance);
+        }
+
+        [TestCase(0, 0)]
+        [TestCase(Math.PI / 6, 0.57735026918962576451)]
+        [TestCase(Math.PI, 0)]
+        [TestCase(4 * Math.PI / 3, 1.73205080756887729353)]
+        public void Tan(double radians, double expected)
+        {
+            Angle a = (Angle)radians;
+            Assert.AreEqual(expected, a.Tan(), Tolerance);
+        }
+
+        [TestCase(Math.PI, 0, Math.PI * 2, Math.PI)]
+        [TestCase(3 * Math.PI, 0, Math.PI * 2, Math.PI)]
+        [TestCase(5 * Math.PI / 4, -Math.PI, Math.PI, -3 * Math.PI / 4)]
+        public void Clamp(double radians, double start, double end, double expected)
+        {
+            Angle a = Angle.FromRadians(radians);
+            Assert.AreEqual(expected, a.Clamp((Angle)start, (Angle)end).Radians, Tolerance);
+        }
+
         [TestCase("5 °", 5 * DegToRad)]
         [TestCase("5°", 5 * DegToRad)]
         [TestCase("-5.34 rad", -5.34)]

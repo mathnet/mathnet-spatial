@@ -14,6 +14,26 @@ namespace MathNet.Spatial.Units
     public struct Angle : IComparable<Angle>, IEquatable<Angle>, IFormattable, IXmlSerializable
     {
         /// <summary>
+        /// An angle representing 180 degrees or PI radians
+        /// </summary>
+        public static readonly Angle Degrees180 = Angle.FromRadians(Math.PI);
+
+        /// <summary>
+        /// An angle representing 90 degrees or PI / 2 radians
+        /// </summary>
+        public static readonly Angle Degrees90 = Angle.FromRadians(Math.PI / 2);
+
+        /// <summary>
+        /// An angle representing 360 degrees or 2 * PI radians
+        /// </summary>
+        public static readonly Angle Degrees360 = Angle.FromRadians(2 * Math.PI);
+
+        /// <summary>
+        /// An angle representing 0 degrees or 0 radians
+        /// </summary>
+        public static readonly Angle Degrees0 = Angle.FromRadians(0);
+
+        /// <summary>
         /// The value in radians
         /// </summary>
         public readonly double Radians;
@@ -67,6 +87,15 @@ namespace MathNet.Spatial.Units
         /// Gets the value in degrees
         /// </summary>
         public double Degrees => this.Radians * RadToDeg;
+
+        /// <summary>
+        /// Explicit conversion from a numeric angle in radians to an Angle object
+        /// </summary>
+        /// <param name="radians">The angle in radians</param>
+        public static explicit operator Angle(double radians)
+        {
+            return Angle.FromRadians(radians);
+        }
 
         /// <summary>
         /// Returns a value that indicates whether two specified Angles are equal.
@@ -311,6 +340,44 @@ namespace MathNet.Spatial.Units
             return reader.ReadElementAs<Angle>();
         }
 
+        /// <summary>
+        /// Gets the sine of the angle
+        /// </summary>
+        /// <returns>The sine of the angle</returns>
+        public double Sin()
+        {
+            return Math.Sin(this.Radians);
+        }
+
+        /// <summary>
+        /// Gets the cosine of the angle
+        /// </summary>
+        /// <returns>The cosine of the angle</returns>
+        public double Cos()
+        {
+            return Math.Cos(this.Radians);
+        }
+
+        /// <summary>
+        /// Gets the tangent of the angle
+        /// </summary>
+        /// <returns>The tangent of the angle</returns>
+        public double Tan()
+        {
+            return Math.Tan(this.Radians);
+        }
+
+        /// <summary>
+        /// Clamps an angle to be constrained within start and end.
+        /// </summary>
+        /// <param name="start">The start angle</param>
+        /// <param name="end">The end angle</param>
+        /// <returns>The clamped angle</returns>
+        public Angle Clamp(Angle start, Angle end)
+        {
+            return this.Clamp(start.Radians, end.Radians);
+        }
+
         /// <inheritdoc />
         public override string ToString()
         {
@@ -468,6 +535,20 @@ namespace MathNet.Spatial.Units
         void IXmlSerializable.WriteXml(XmlWriter writer)
         {
             writer.WriteAttribute("Value", this.Radians);
+        }
+
+        /// <summary>
+        /// Clamps an angle to be constrained within start and end.
+        /// </summary>
+        /// <param name="start">The start angle in radians</param>
+        /// <param name="end">The end angle in radians</param>
+        /// <returns>The clamped angle</returns>
+        internal Angle Clamp(double start, double end)
+        {
+            double width = end - start;
+            double offset = this.Radians - start;
+
+            return Angle.FromRadians((offset - (Math.Floor(offset / width) * width)) + start);
         }
     }
 }
