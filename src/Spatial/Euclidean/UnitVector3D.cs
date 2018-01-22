@@ -769,7 +769,7 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Returns a point equivelent to the vector
+        /// Returns a point equivalent to the vector
         /// </summary>
         /// <returns>A point</returns>
         [Pure]
@@ -779,7 +779,7 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Returns a Vector3D equivelent to this unit vector
+        /// Returns a Vector3D equivalent to this unit vector
         /// </summary>
         /// <returns>A vector</returns>
         [Pure]
@@ -800,7 +800,7 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Transforms a vector by multipying it against a provided patrix
+        /// Transforms a vector by multiplying it against a provided matrix
         /// </summary>
         /// <param name="m">The matrix to multiply</param>
         /// <returns>A new transformed vector</returns>

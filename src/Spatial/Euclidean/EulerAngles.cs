@@ -74,7 +74,7 @@
         }
 
         /// <summary>
-        /// Returns a value to indicate if this EulerAngles is equivelent to a given EulerAngles
+        /// Returns a value to indicate if this EulerAngles is equivalent to a given EulerAngles
         /// </summary>
         /// <param name="other">The EulerAngles to compare against.</param>
         /// <param name="tolerance">A tolerance (epsilon) to adjust for floating point error</param>
@@ -93,7 +93,7 @@
         }
 
         /// <summary>
-        /// Returns a value to indicate if this EulerAngles is equivelent to a given EulerAngles
+        /// Returns a value to indicate if this EulerAngles is equivalent to a given EulerAngles
         /// </summary>
         /// <param name="other">The EulerAngles to compare against.</param>
         /// <param name="tolerance">A tolerance (epsilon) to adjust for floating point error</param>

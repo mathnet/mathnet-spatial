@@ -513,7 +513,7 @@
         }
 
         /// <summary>
-        /// Transforms a vector by multipying it against a provided patrix
+        /// Transforms a vector by multiplying it against a provided matrix
         /// </summary>
         /// <param name="m">The matrix to multiply</param>
         /// <returns>A new transformed vector</returns>

@@ -573,7 +573,7 @@ namespace MathNet.Spatial.Euclidean
         /// Rotates a Vector
         /// </summary>
         /// <typeparam name="T">An Angleunit</typeparam>
-        /// <param name="about">A unitvector</param>
+        /// <param name="about">A unit vector</param>
         /// <param name="angle">An angle</param>
         /// <param name="angleUnit">A type of angle</param>
         /// <returns>A new vector</returns>
@@ -610,7 +610,7 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Returns a point equivelent to the vector
+        /// Returns a point equivalent to the vector
         /// </summary>
         /// <returns>A point</returns>
         public Point3D ToPoint3D()
@@ -630,7 +630,7 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Transforms a vector by multipying it against a provided patrix
+        /// Transforms a vector by multiplying it against a provided matrix
         /// </summary>
         /// <param name="m">The matrix to multiply</param>
         /// <returns>A new transformed vector</returns>
@@ -701,7 +701,7 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Returns a value to indicate if this vector is equivelent to a given unit vector
+        /// Returns a value to indicate if this vector is equivalent to a given unit vector
         /// </summary>
         /// <param name="other">The unit vector to compare against.</param>
         /// <param name="tolerance">A tolerance (epsilon) to adjust for floating point error</param>

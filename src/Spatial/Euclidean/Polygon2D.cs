@@ -257,7 +257,7 @@
         /// <summary>
         /// Creates a new polygon from the existing polygon by removing any edges whose adjacent segments are considered colinear within the provided tolerance
         /// </summary>
-        /// <param name="singleStepTolerance">The tolerance by which adjactent edges should be considered collinear.</param>
+        /// <param name="singleStepTolerance">The tolerance by which adjacent edges should be considered collinear.</param>
         /// <returns>A polygon</returns>
         public Polygon2D ReduceComplexity(double singleStepTolerance)
         {
@@ -320,7 +320,7 @@
         /// Returns an enumerator for the vertices
         /// </summary>
         /// <returns>An enumerator for the vertices</returns>
-        [Obsolete("Use Verticies instead, obsolete since 6/12/2017")]
+        [Obsolete("Use Vertices instead, obsolete since 6/12/2017")]
         public IEnumerator<Point2D> GetEnumerator()
         {
             return this.points.GetEnumerator();
@@ -330,7 +330,7 @@
         /// Returns an enumerator for the vertices
         /// </summary>
         /// <returns>An enumerator for the vertices</returns>
-        [Obsolete("Use Verticies instead, obsolete since 6/12/2017")]
+        [Obsolete("Use Vertices instead, obsolete since 6/12/2017")]
         IEnumerator IEnumerable.GetEnumerator()
         {
             return this.GetEnumerator();

@@ -34,7 +34,7 @@
         /// </summary>
         /// <param name="reader">A <see cref="XmlReader"/></param>
         /// <param name="localName">The name of the attribute to read the value of.</param>
-        /// <param name="value">The value read from from <paramref name="reader"/></param>
+        /// <param name="value">The value read from <paramref name="reader"/></param>
         /// <returns>True if the attribute was found.</returns>
         internal static bool TryReadAttributeAsDouble(this XmlReader reader, string localName, out double value)
         {
@@ -56,7 +56,7 @@
         }
 
         /// <summary>
-        /// Reads the values oif the elements named <paramref name="localName"/> and <paramref name="localName"/> if they exist on the current element.
+        /// Reads the values of the elements named <paramref name="localName"/> and <paramref name="localName"/> if they exist on the current element.
         /// This is not a proper try method as it checks if <paramref name="reader"/> is null and throws.
         /// </summary>
         /// <remarks>
@@ -64,7 +64,7 @@
         /// </remarks>
         /// <param name="reader">A <see cref="XmlReader"/></param>
         /// <param name="localName">The local name of the element to read value from.</param>
-        /// <param name="value">The value read from from <paramref name="reader"/></param>
+        /// <param name="value">The value read from <paramref name="reader"/></param>
         /// <returns>True if both elements were found.</returns>
         internal static bool TryReadElementContentAsDouble(this XmlReader reader, string localName, out double value)
         {
@@ -86,7 +86,7 @@
         }
 
         /// <summary>
-        /// Reads the values oif the elements named <paramref name="xName"/> and <paramref name="xName"/> if they exist on the current element.
+        /// Reads the values of the elements named <paramref name="xName"/> and <paramref name="xName"/> if they exist on the current element.
         /// This is not a proper try method as it checks if <paramref name="reader"/> is null and throws.
         /// </summary>
         /// <remarks>
@@ -95,8 +95,8 @@
         /// <param name="reader">A <see cref="XmlReader"/></param>
         /// <param name="xName">The local name of the x element.</param>
         /// <param name="yName">The local name of the y element.</param>
-        /// <param name="x">The x value read from from <paramref name="reader"/></param>
-        /// <param name="y">The y value read from from <paramref name="reader"/></param>
+        /// <param name="x">The x value read from <paramref name="reader"/></param>
+        /// <param name="y">The y value read from <paramref name="reader"/></param>
         /// <returns>True if both elements were found.</returns>
         internal static bool TryReadChildElementsAsDoubles(this XmlReader reader, string xName, string yName, out double x, out double y)
         {
@@ -126,7 +126,7 @@
         }
 
         /// <summary>
-        /// Reads the values oif the elements named <paramref name="xName"/> and <paramref name="xName"/> if they exist on the current element.
+        /// Reads the values of the elements named <paramref name="xName"/> and <paramref name="xName"/> if they exist on the current element.
         /// This is not a proper try method as it checks if <paramref name="reader"/> is null and throws.
         /// </summary>
         /// <remarks>
@@ -136,9 +136,9 @@
         /// <param name="xName">The local name of the x element.</param>
         /// <param name="yName">The local name of the y element.</param>
         /// <param name="zName">The local name of the z element.</param>
-        /// <param name="x">The x value read from from <paramref name="reader"/></param>
-        /// <param name="y">The y value read from from <paramref name="reader"/></param>
-        /// <param name="z">The z value read from from <paramref name="reader"/></param>
+        /// <param name="x">The x value read from <paramref name="reader"/></param>
+        /// <param name="y">The y value read from <paramref name="reader"/></param>
+        /// <param name="z">The z value read from <paramref name="reader"/></param>
         /// <returns>True if both elements were found.</returns>
         internal static bool TryReadChildElementsAsDoubles(this XmlReader reader, string xName, string yName, string zName, out double x, out double y, out double z)
         {
@@ -196,7 +196,7 @@
         }
 
         /// <summary>
-        /// Reads until first descentant
+        /// Reads until first descendant
         /// </summary>
         /// <param name="reader">An xml reader</param>
         /// <returns>True if successful; otherwise false</returns>

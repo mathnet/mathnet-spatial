@@ -814,7 +814,7 @@
         }
 
         /// <summary>
-        /// Shoould always be called for any removed node
+        /// Should always be called for any removed node
         /// </summary>
         /// <param name="node">a node</param>
         /// <param name="balance">the node balance</param>

@@ -88,7 +88,7 @@
         /// Translates a line according to a provided vector
         /// </summary>
         /// <param name="vector">A vector to apply</param>
-        /// <returns>A new translated linesegment</returns>
+        /// <returns>A new translated line segment</returns>
         public LineSegment2D TranslateBy(Vector2D vector)
         {
             var startVector = this.StartPoint.ToVector2D().Add(vector);
@@ -97,10 +97,10 @@
         }
 
         /// <summary>
-        /// Returns a new linesegment between the clostes point on this line segment and a point.
+        /// Returns a new line segment between the closest point on this line segment and a point.
         /// </summary>
         /// <param name="p">the point to create a line to</param>
-        /// <returns>A linesegment between the point and the nearest point on this segment.</returns>
+        /// <returns>A line segment between the point and the nearest point on this segment.</returns>
         [Pure]
         public LineSegment2D LineTo(Point2D p)
         {
