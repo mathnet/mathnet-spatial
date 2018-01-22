@@ -106,7 +106,7 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Creates a rotation matrix around an arbitary vector
+        /// Creates a rotation matrix around an arbitrary vector
         /// </summary>
         /// <param name="aboutVector">The vector</param>
         /// <param name="angle">Angle in degrees</param>
@@ -121,7 +121,7 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Creates a rotation matrix around an arbitary vector
+        /// Creates a rotation matrix around an arbitrary vector
         /// </summary>
         /// <param name="aboutVector">The vector</param>
         /// <param name="angle">Angle in degrees</param>

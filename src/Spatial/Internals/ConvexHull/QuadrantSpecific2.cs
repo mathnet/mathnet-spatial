@@ -152,7 +152,7 @@
                     }
                 }
 
-                // Should insert but no invalidation is required. (That's why we need to insert... can't replace an adjacent neightbor)
+                // Should insert but no invalidation is required. (That's why we need to insert... can't replace an adjacent neighbor)
                 AvlNode<MutablePoint> newNode = new AvlNode<MutablePoint>();
                 if (insertionSide == Side.Right)
                 {

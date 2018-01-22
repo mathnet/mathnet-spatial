@@ -89,12 +89,12 @@ namespace MathNet.Spatial.Euclidean
         {
             if (matrix.RowCount != 4)
             {
-                throw new ArgumentException("Rowcount must be 4");
+                throw new ArgumentException("RowCount must be 4");
             }
 
             if (matrix.ColumnCount != 4)
             {
-                throw new ArgumentException("Rowcount must be 4");
+                throw new ArgumentException("ColumnCount must be 4");
             }
         }
 
@@ -449,7 +449,7 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// Gets a rotation submatrix from a coordinate system
         /// </summary>
-        /// <param name="coordinateSystem">a cooridnate system</param>
+        /// <param name="coordinateSystem">a coordinate system</param>
         /// <returns>A rotation matrix</returns>
         public static Matrix<double> GetRotationSubMatrix(CoordinateSystem coordinateSystem)
         {
@@ -561,7 +561,7 @@ namespace MathNet.Spatial.Euclidean
             var p = r.ThroughPoint;
             var uv = r.Direction;
 
-            // positionen och vektorn transformeras
+            // The position and the vector are transformed
             var baseChangeMatrix = this.BaseChangeMatrix;
             var point = baseChangeMatrix.Transform(p) + this.OffsetToBase;
             var direction = uv.TransformBy(baseChangeMatrix);
@@ -590,7 +590,7 @@ namespace MathNet.Spatial.Euclidean
             var p = r.ThroughPoint;
             var uv = r.Direction;
 
-            // positionen och vektorn transformeras
+            // The position and the vector are transformed
             var point = this.BaseChangeMatrix.Invert().Transform(p) + this.OffsetToBase;
             var direction = this.BaseChangeMatrix.Invert().Transform(uv);
             return new Ray3D(point, direction);

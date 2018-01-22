@@ -88,7 +88,7 @@
         /// Translates a line according to a provided vector
         /// </summary>
         /// <param name="vector">A vector to apply</param>
-        /// <returns>A new translated linesegment</returns>
+        /// <returns>A new translated line segment</returns>
         public LineSegment3D TranslateBy(Vector3D vector)
         {
             return new LineSegment3D(this.StartPoint + vector, this.EndPoint + vector);
@@ -120,10 +120,10 @@
         }
 
         /// <summary>
-        /// Returns a new linesegment between the closest point on this line segment and a point.
+        /// Returns a new line segment between the closest point on this line segment and a point.
         /// </summary>
         /// <param name="p">the point to create a line to</param>
-        /// <returns>A linesegment between the nearest point on this segment and the provided point.</returns>
+        /// <returns>A line segment between the nearest point on this segment and the provided point.</returns>
         [Pure]
         public LineSegment3D LineTo(Point3D p)
         {

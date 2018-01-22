@@ -94,8 +94,8 @@
         /// single step tolerance if removed.  Iterate until no further changes are made.
         /// </summary>
         /// <param name="points">A list of points.</param>
-        /// <param name="singleStepTolerance">The tolerance (epsilon) for comparing sameness of line segements</param>
-        /// <returns>A new PolyLine2D with same segements merged.</returns>
+        /// <param name="singleStepTolerance">The tolerance (epsilon) for comparing sameness of line segments</param>
+        /// <returns>A new PolyLine2D with same segments merged.</returns>
         public static PolyLine2D ReduceComplexity(IEnumerable<Point2D> points, double singleStepTolerance)
         {
             var manifold = points.ToList();
@@ -274,7 +274,7 @@
         /// reduced size manifold.
         /// </summary>
         /// <param name="points">A list of points</param>
-        /// <param name="tolerance">Tolerance (Epislon) to apply to determine if segments are to be merged.</param>
+        /// <param name="tolerance">Tolerance (Epsilon) to apply to determine if segments are to be merged.</param>
         /// <returns>A new list of points minus any segment which was merged.</returns>
         private static IEnumerable<Point2D> ReduceComplexitySingleStep(IEnumerable<Point2D> points, double tolerance)
         {

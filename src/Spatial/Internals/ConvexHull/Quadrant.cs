@@ -53,7 +53,7 @@
         internal enum Side
         {
             /// <summary>
-            /// Unkown side
+            /// Unknown side
             /// </summary>
             Unknown = 0,
 
@@ -102,7 +102,7 @@
         protected abstract void SetQuadrantLimits();
 
         /// <summary>
-        /// To know if to the right. It is meaninful when p1 is first and p2 is next.
+        /// To know if to the right. It is meaningful when p1 is first and p2 is next.
         /// </summary>
         /// <param name="p1">The first point</param>
         /// <param name="p2">The second point</param>

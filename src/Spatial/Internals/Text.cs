@@ -11,7 +11,7 @@
     internal static class Text
     {
         /// <summary>
-        /// reged pattern with period
+        /// regex pattern with period
         /// </summary>
         private const string DoublePatternPointProvider = "[+-]?\\d*(?:[.]\\d+)?(?:[eE][+-]?\\d+)?";
 
@@ -358,7 +358,7 @@
             }
 
             /// <summary>
-            /// Attempts to match Radians with either . or , seperators
+            /// Attempts to match Radians with either . or , separators
             /// </summary>
             /// <param name="text">a string</param>
             /// <param name="formatProvider">a format provider</param>
@@ -393,7 +393,7 @@
             }
 
             /// <summary>
-            /// Attempts to match Degrees with either . or , seperators
+            /// Attempts to match Degrees with either . or , separators
             /// </summary>
             /// <param name="text">a string</param>
             /// <param name="provider">a format provider</param>

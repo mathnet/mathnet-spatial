@@ -257,7 +257,7 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Returns the centroid of an arbitary collection of points
+        /// Returns the centroid of an arbitrary collection of points
         /// </summary>
         /// <param name="points">a list of points</param>
         /// <returns>The centroid of the points</returns>
@@ -267,7 +267,7 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Returns the centroid of an arbitary collection of points
+        /// Returns the centroid of an arbitrary collection of points
         /// </summary>
         /// <param name="points">a list of points</param>
         /// <returns>The centroid of the points</returns>
@@ -395,7 +395,7 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Applies a transform coordinatesystem to the point
+        /// Applies a transform coordinate system to the point
         /// </summary>
         /// <param name="cs">A coordinate system</param>
         /// <returns>A new 3D point</returns>

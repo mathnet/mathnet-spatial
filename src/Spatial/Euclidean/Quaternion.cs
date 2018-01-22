@@ -92,7 +92,7 @@
         public double ImagZ => this.z;
 
         /// <summary>
-        /// Gets the the sum of the squares of the four components.
+        /// Gets the sum of the squares of the four components.
         /// </summary>
         public double NormSquared => ToNormSquared(this.Real, this.ImagX, this.ImagY, this.ImagZ);
 
@@ -505,7 +505,7 @@
         }
 
         /// <summary>
-        /// Roatates the provided rotation quaternion with this quaternion
+        /// Rotates the provided rotation quaternion with this quaternion
         /// </summary>
         /// <param name="rotation">The rotation quaternion to rotate</param>
         /// <returns>A rotated quaternion</returns>
@@ -520,7 +520,7 @@
         }
 
         /// <summary>
-        /// Roatates the provided unit quaternion with this quaternion
+        /// Rotates the provided unit quaternion with this quaternion
         /// </summary>
         /// <param name="unitQuaternion">The unit quaternion to rotate</param>
         /// <returns>A rotated quaternion</returns>
@@ -659,7 +659,7 @@
         /// Raise the quaternion to a given power.
         /// </summary>
         /// <param name="power">a quaternion to use as the power</param>
-        /// <returns>The quaternion raied to a power of another quaternion</returns>
+        /// <returns>The quaternion raised to a power of another quaternion</returns>
         public Quaternion Pow(Quaternion power)
         {
             if (this == Zero)
@@ -690,7 +690,7 @@
         /// </summary>
         /// <param name="format">A format string to pass to the format provider</param>
         /// <param name="formatProvider">a format provider</param>
-        /// <returns>A string represention of the quaternion</returns>
+        /// <returns>A string representation of the quaternion</returns>
         public string ToString(string format, IFormatProvider formatProvider)
         {
             return string.Format(
@@ -708,7 +708,7 @@
         /// <summary>
         /// returns quaternion as real+ImagXi+ImagYj+ImagZk
         /// </summary>
-        /// <returns>a string represention of the quaternion</returns>
+        /// <returns>a string representation of the quaternion</returns>
         public override string ToString()
         {
             return string.Format(
@@ -723,7 +723,7 @@
         }
 
         /// <summary>
-        /// Returns a value to indicate if this vector is equivelent to a given unit vector
+        /// Returns a value to indicate if this vector is equivalent to a given unit vector
         /// </summary>
         /// <param name="other">The unit vector to compare against.</param>
         /// <param name="tolerance">A tolerance (epsilon) to adjust for floating point error</param>

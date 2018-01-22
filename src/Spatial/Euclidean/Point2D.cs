@@ -346,7 +346,7 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Applies a transform coordinatesystem to the point
+        /// Applies a transform coordinate system to the point
         /// </summary>
         /// <param name="cs">A coordinate system</param>
         /// <returns>A new 3D point</returns>
