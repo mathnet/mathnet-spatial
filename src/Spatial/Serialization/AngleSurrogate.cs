@@ -3,6 +3,7 @@
 #pragma warning disable SA1600
     using System;
     using System.Runtime.Serialization;
+    using System.Xml.Serialization;
     using MathNet.Spatial.Units;
 
     /// <summary>
@@ -13,6 +14,7 @@
     public class AngleSurrogate
     {
         [DataMember(Order = 1)]
+        [XmlAttribute]
         public double Value;
 
         public static implicit operator AngleSurrogate(Angle angle) => new AngleSurrogate { Value = angle.Radians };
