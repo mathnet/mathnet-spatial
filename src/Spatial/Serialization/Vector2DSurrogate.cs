@@ -3,6 +3,7 @@
 #pragma warning disable SA1600
     using System;
     using System.Runtime.Serialization;
+    using System.Xml.Serialization;
     using MathNet.Spatial.Euclidean;
 
     [DataContract(Name = "Vector2D")]
@@ -10,8 +11,10 @@
     public class Vector2DSurrogate
     {
         [DataMember(Order = 1)]
+        [XmlAttribute]
         public double X;
         [DataMember(Order = 2)]
+        [XmlAttribute]
         public double Y;
 
         public static implicit operator Vector2DSurrogate(Vector2D vector) => new Vector2DSurrogate { X = vector.X, Y = vector.Y };

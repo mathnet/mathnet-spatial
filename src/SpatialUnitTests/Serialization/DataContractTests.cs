@@ -8,7 +8,7 @@
     using System.Xml;
     using MathNet.Spatial;
     using MathNet.Spatial.Euclidean;
-    using MathNet.Spatial.Serialization.DataContracts;
+    using MathNet.Spatial.Serialization;
     using MathNet.Spatial.Units;
     using MathNet.Spatial.UnitTests;
     using NUnit.Framework;
@@ -194,7 +194,7 @@
         private T DataContractRoundTrip<T>(T item, string expected)
         {
             var serializer = new DataContractSerializer(item.GetType());
-            serializer.SetSerializationSurrogateProvider(new SpatialSerializationProvider());
+            serializer.SetSerializationSurrogateProvider(new SpatialSerializationSurrogateProvider());
             string xml;
             using (var sw = new StringWriter())
             using (var writer = XmlWriter.Create(sw, AssertXml.Settings))
