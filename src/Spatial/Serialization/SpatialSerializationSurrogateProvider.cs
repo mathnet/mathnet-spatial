@@ -1,4 +1,4 @@
-﻿namespace MathNet.Spatial.Serialization.DataContracts
+﻿namespace MathNet.Spatial.Serialization
 {
     using System;
 #if NETSTANDARD2_0 == true
@@ -8,7 +8,7 @@
     /// <summary>
     /// An implementation of ISerializationSurrogateProvider to support data contract serialization
     /// </summary>
-    public class SpatialSerializationProvider : ISerializationSurrogateProvider
+    public class SpatialSerializationSurrogateProvider : ISerializationSurrogateProvider
     {
         /// <summary>
         /// Converts a surrogate object into a known Spatial object.  If type is unknown the original object is simply returned
