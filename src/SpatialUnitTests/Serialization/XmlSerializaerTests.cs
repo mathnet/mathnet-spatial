@@ -1,5 +1,6 @@
 ﻿namespace MathNet.Spatial.Serialization.Xml.UnitTests
 {
+#if NETCOREAPP2_0 == true
     using System.Linq;
     using MathNet.Spatial.Euclidean;
     using MathNet.Spatial.Units;
@@ -10,8 +11,7 @@
     {
         private const double Tolerance = 1e-6;
 
-        [Explicit("fix later")]
-        [TestCase("1, 2, 3", "-1, 2, 3", false, @"<Ray3D><ThroughPoint X=""1"" Y=""2"" Z=""3"" /><Direction X=""-0.2672612419124244"" Y=""0.53452248382484879"" Z=""0.80178372573727319"" /></Ray3D>")]
+        [TestCase("1, 2, 3", "0, 0, 1", false, @"<Ray3D><ThroughPoint X=""1"" Y=""2"" Z=""3"" /><Direction X=""0"" Y=""0"" Z=""1"" /></Ray3D>")]
         public void Ray3DXml(string ps, string vs, bool asElements, string xml)
         {
             var ray = new Ray3D(Point3D.Parse(ps), UnitVector3D.Parse(vs));
@@ -20,29 +20,7 @@
             AssertGeometry.AreEqual(ray, result, Tolerance);
         }
 
-        [TestCase("1, 2, 3", "4, 5, 6", @"<Line3D><StartPoint X=""1"" Y=""2"" Z=""3"" /><EndPoint X=""4"" Y=""5"" Z=""6"" /></Line3D>")]
-        public void Line3DXml(string p1s, string p2s, string xml)
-        {
-            Point3D p1 = Point3D.Parse(p1s);
-            Point3D p2 = Point3D.Parse(p2s);
-            var l = new Line3D(p1, p2);
-            var result = AssertXml.XmlSerializerRoundTrip(l, xml);
-            Assert.AreEqual(l, result);
-        }
-
-        [Explicit("fix later")]
-        [TestCase("1, 2", "4, 5", @"<Line2D><StartPoint X=""1"" Y=""2"" /><EndPoint X=""4"" Y=""5"" /></Line2D>")]
-        public void Line2DXml(string p1s, string p2s, string xml)
-        {
-            Point2D p1 = Point2D.Parse(p1s);
-            Point2D p2 = Point2D.Parse(p2s);
-            var l = new Line2D(p1, p2);
-            var result = AssertXml.XmlSerializerRoundTrip(l, xml);
-            Assert.AreEqual(l, result);
-        }
-
-        [Explicit("fix later")]
-        [TestCase("1, 2, 3", "4, 5, 6", @"<LineSegement3D><StartPoint X=""1"" Y=""2"" Z=""3"" /><EndPoint X=""4"" Y=""5"" Z=""6"" /></LineSegment3D>")]
+        [TestCase("1, 2, 3", "4, 5, 6", @"<LineSegment3D><StartPoint X=""1"" Y=""2"" Z=""3"" /><EndPoint X=""4"" Y=""5"" Z=""6"" /></LineSegment3D>")]
         public void LineSegment3DXml(string p1s, string p2s, string xml)
         {
             Point3D p1 = Point3D.Parse(p1s);
@@ -52,7 +30,6 @@
             Assert.AreEqual(l, result);
         }
 
-        [Explicit("fix later")]
         [TestCase("1, 2", "4, 5", @"<LineSegment2D><StartPoint X=""1"" Y=""2"" /><EndPoint X=""4"" Y=""5"" /></LineSegment2D>")]
         public void LineSegement2DXml(string p1s, string p2s, string xml)
         {
@@ -81,8 +58,7 @@
             Assert.AreEqual(v, result);
         }
 
-        [Explicit("fix later")]
-        [TestCase("1, 1", 3, @"<Circle2D><CenterPoint X=""1"" Y=""1"" /><Radius>3</Radius></Circle2D>")]
+        [TestCase("1, 1", 3, @"<Circle2D><Center X=""1"" Y=""1"" /><Radius>3</Radius></Circle2D>")]
         public void Circle2DXml(string point, double radius, string xml)
         {
             var center = Point2D.Parse(point);
@@ -91,7 +67,6 @@
             Assert.AreEqual(c, result);
         }
 
-        [Explicit("fix later")]
         [TestCase("0, 0, 0", 2.5, @"<Circle3D><CenterPoint X=""0"" Y=""0"" Z=""0"" /><Axis X=""0"" Y=""0"" Z=""1"" /><Radius>2.5</Radius></Circle3D>")]
         public void Circle3DXml(string point, double radius, string xml)
         {
@@ -101,35 +76,32 @@
             Assert.AreEqual(c, result);
         }
 
-        [Explicit("fix later")]
         [Test]
         public void Polygon2DXml()
         {
             var points = from x in new string[] { "0.25,0", "0.5,1", "1,-1" } select Point2D.Parse(x);
             var p = new Polygon2D(points);
-            const string Xml = @"<Polygon2D><Points><Point X=""0.25"" Y=""0"" /><Point X=""0.5"" Y=""1"" /><Point X=""1"" Y=""-1"" /></Points></Polygon2D>";
+            const string Xml = @"<Polygon2D><Points><Point2D X=""0.25"" Y=""0"" /><Point2D X=""0.5"" Y=""1"" /><Point2D X=""1"" Y=""-1"" /></Points></Polygon2D>";
             var result = AssertXml.XmlSerializerRoundTrip(p, Xml);
             Assert.AreEqual(p, result);
         }
 
-        [Explicit("fix later")]
         [Test]
         public void PolyLine2DXml()
         {
             var points = from x in new string[] { "0.25,0", "0.5,1", "1,-1" } select Point2D.Parse(x);
             var p = new PolyLine2D(points);
-            const string Xml = @"<PolyLine2D><Points><Point X=""0.25"" Y=""0"" /><Point X=""0.5"" Y=""1"" /><Point X=""1"" Y=""-1"" /></Points></PolyLine2D>";
+            const string Xml = @"<PolyLine2D><Points><Point2D X=""0.25"" Y=""0"" /><Point2D X=""0.5"" Y=""1"" /><Point2D X=""1"" Y=""-1"" /></Points></PolyLine2D>";
             var result = AssertXml.XmlSerializerRoundTrip(p, Xml);
             Assert.AreEqual(p, result);
         }
 
-        [Explicit("fix later")]
         [Test]
         public void PolyLine3DXml()
         {
-            var points = "0, -1.5, 0; 0,1,0; 1,1,0";
+            var points = "0, -1.5, 0; 0,1,0; 1,1,0.5";
             var p = new PolyLine3D(from x in points.Split(';') select Point3D.Parse(x));
-            const string Xml = @"<PolyLine3D><Points><Point X=""0.25"" Y=""0"" /><Point X=""0.5"" Y=""1"" /><Point X=""1"" Y=""-1"" /></Points></PolyLine3D>";
+            const string Xml = @"<PolyLine3D><Points><Point3D X=""0"" Y=""-1.5"" Z=""0"" /><Point3D X=""0"" Y=""1"" Z=""0""  /><Point3D X=""1"" Y=""1"" Z=""0.5"" /></Points></PolyLine3D>";
             var result = AssertXml.XmlSerializerRoundTrip(p, Xml);
             Assert.AreEqual(p, result);
         }
@@ -160,7 +132,6 @@
             Assert.AreEqual(p, result);
         }
 
-        [Explicit("fix later")]
         [Test]
         public void QuaternionXml()
         {
@@ -170,7 +141,6 @@
             Assert.AreEqual(q, result);
         }
 
-        [Explicit("fix later")]
         [Test]
         public void EulerAnglesXml()
         {
@@ -204,4 +174,5 @@
             AssertGeometry.AreEqual(cs, result);
         }
     }
+#endif
 }

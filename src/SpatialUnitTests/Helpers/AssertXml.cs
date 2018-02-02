@@ -1,5 +1,6 @@
 ﻿namespace MathNet.Spatial.UnitTests
 {
+
     using System;
     using System.Diagnostics;
     using System.IO;
@@ -8,6 +9,12 @@
     using System.Xml;
     using System.Xml.Linq;
     using System.Xml.Serialization;
+#if NETCOREAPP2_0 == true
+    using ExtendedXmlSerializer.Configuration;
+    using ExtendedXmlSerializer.ExtensionModel;
+    using ExtendedXmlSerializer.ExtensionModel.Xml;
+    using MathNet.Spatial.Serialization;
+#endif
     using NUnit.Framework;
 
     public static class AssertXml
@@ -34,6 +41,7 @@
             Assert.AreEqual(x1, x2);
         }
 
+
         /// <summary>
         /// Serializes using XmlSerializer & DataContractSerializer
         /// Compares the generated xml
@@ -57,14 +65,23 @@
 
         public static T XmlSerializerRoundTrip<T>(T item, string expected)
         {
+#if NETCOREAPP2_0 == true
+            var serializer = new ConfigurationContainer().Register(new SpatialSerializationSurrogateProvider())
+                                                         .Create();
+#else
             var serializer = new XmlSerializer(item.GetType());
+#endif
             string xml;
 
             using (var sw = new StringWriter())
             using (var writer = XmlWriter.Create(sw, Settings))
             {
+#if NETCOREAPP2_0 == true
+                xml = serializer.Serialize(item);
+#else
                 serializer.Serialize(writer, item);
                 xml = sw.ToString();
+#endif
                 Debug.WriteLine("XmlSerializer");
                 Debug.Write(xml);
                 Debug.WriteLine(string.Empty);
@@ -73,9 +90,14 @@
 
             using (var reader = new StringReader(xml))
             {
+#if NETCOREAPP2_0 == true
+                return serializer.Deserialize<T>(reader);
+#else
                 return (T)serializer.Deserialize(reader);
+#endif
             }
         }
+
 
         private static string Normalize(XElement e)
         {
