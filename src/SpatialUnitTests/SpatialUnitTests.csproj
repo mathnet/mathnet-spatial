@@ -18,6 +18,9 @@
     <DefineConstants>NETSTANDARD</DefineConstants>
   </PropertyGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
+    <PackageReference Include="ExtendedXmlSerializer">
+      <Version>2.1.1</Version>
+    </PackageReference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
@@ -30,6 +33,9 @@
     <ProjectReference Include="..\Spatial.Serialization.Json\Spatial.Serialization.Json.csproj" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.0'">
+    <PackageReference Include="ExtendedXmlSerializer">
+      <Version>2.1.1</Version>
+    </PackageReference>
     <ProjectReference Include="..\Spatial.Serialization.Json\Spatial.Serialization.Json.csproj" />
   </ItemGroup>
   <ItemGroup>
@@ -39,7 +45,7 @@
     <PackageReference Include="NUnit" Version="3.9" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.9.0" />
     <PackageReference Include="NUnitLite" Version="3.9" />
-    <PackageReference Include="protobuf-net" Version="2.3.3" />
+    <PackageReference Include="protobuf-net" Version="2.3.6" />
     <ProjectReference Include="..\Spatial\Spatial.csproj" />
   </ItemGroup>
   <ItemGroup>
