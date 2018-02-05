@@ -41,7 +41,6 @@
             Assert.AreEqual(x1, x2);
         }
 
-
         /// <summary>
         /// Serializes using XmlSerializer & DataContractSerializer
         /// Compares the generated xml
@@ -65,23 +64,14 @@
 
         public static T XmlSerializerRoundTrip<T>(T item, string expected)
         {
-#if NETCOREAPP2_0 == true
-            var serializer = new ConfigurationContainer().Register(new SpatialSerializationSurrogateProvider())
-                                                         .Create();
-#else
             var serializer = new XmlSerializer(item.GetType());
-#endif
             string xml;
 
             using (var sw = new StringWriter())
             using (var writer = XmlWriter.Create(sw, Settings))
             {
-#if NETCOREAPP2_0 == true
-                xml = serializer.Serialize(item);
-#else
                 serializer.Serialize(writer, item);
                 xml = sw.ToString();
-#endif
                 Debug.WriteLine("XmlSerializer");
                 Debug.Write(xml);
                 Debug.WriteLine(string.Empty);
@@ -90,14 +80,34 @@
 
             using (var reader = new StringReader(xml))
             {
-#if NETCOREAPP2_0 == true
-                return serializer.Deserialize<T>(reader);
-#else
                 return (T)serializer.Deserialize(reader);
-#endif
             }
         }
 
+#if NETCOREAPP2_0 == true
+        public static T ExtendedXmlSerializerRoundTrip<T>(T item, string expected)
+        {
+
+            var serializer = new ConfigurationContainer().Register(new SpatialSerializationSurrogateProvider())
+                                                         .Create();
+            string xml;
+
+            using (var sw = new StringWriter())
+            using (var writer = XmlWriter.Create(sw, Settings))
+            {
+                xml = serializer.Serialize(item);
+                Debug.WriteLine("XmlSerializer");
+                Debug.Write(xml);
+                Debug.WriteLine(string.Empty);
+                AreEqual(expected, xml);
+            }
+
+            using (var reader = new StringReader(xml))
+            {
+                return serializer.Deserialize<T>(reader);
+            }
+        }
+#endif
 
         private static string Normalize(XElement e)
         {

@@ -7,7 +7,7 @@
     using MathNet.Spatial.UnitTests;
     using NUnit.Framework;
 
-    public class XmlSerializaerTests
+    public class ExtendedXmlSerializaerTests
     {
         private const double Tolerance = 1e-6;
 
@@ -15,7 +15,7 @@
         public void Ray3DXml(string ps, string vs, bool asElements, string xml)
         {
             var ray = new Ray3D(Point3D.Parse(ps), UnitVector3D.Parse(vs));
-            var result = AssertXml.XmlSerializerRoundTrip(ray, xml);
+            var result = AssertXml.ExtendedXmlSerializerRoundTrip(ray, xml);
             Assert.AreEqual(ray, result);
             AssertGeometry.AreEqual(ray, result, Tolerance);
         }
@@ -26,7 +26,7 @@
             Point3D p1 = Point3D.Parse(p1s);
             Point3D p2 = Point3D.Parse(p2s);
             var l = new LineSegment3D(p1, p2);
-            var result = AssertXml.XmlSerializerRoundTrip(l, xml);
+            var result = AssertXml.ExtendedXmlSerializerRoundTrip(l, xml);
             Assert.AreEqual(l, result);
         }
 
@@ -36,7 +36,7 @@
             Point2D p1 = Point2D.Parse(p1s);
             Point2D p2 = Point2D.Parse(p2s);
             var l = new LineSegment2D(p1, p2);
-            var result = AssertXml.XmlSerializerRoundTrip(l, xml);
+            var result = AssertXml.ExtendedXmlSerializerRoundTrip(l, xml);
             Assert.AreEqual(l, result);
         }
 
@@ -45,7 +45,7 @@
         {
             var v = new Vector2D(1, 2);
             const string Xml = @"<Vector2D X=""1"" Y=""2"" />";
-            var result = AssertXml.XmlSerializerRoundTrip(v, Xml);
+            var result = AssertXml.ExtendedXmlSerializerRoundTrip(v, Xml);
             Assert.AreEqual(v, result);
         }
 
@@ -54,7 +54,7 @@
         {
             var v = new Vector3D(1, -2, 3);
             const string Xml = @"<Vector3D X=""1"" Y=""-2"" Z=""3"" />";
-            var result = AssertXml.XmlSerializerRoundTrip(v, Xml);
+            var result = AssertXml.ExtendedXmlSerializerRoundTrip(v, Xml);
             Assert.AreEqual(v, result);
         }
 
@@ -63,7 +63,7 @@
         {
             var center = Point2D.Parse(point);
             var c = new Circle2D(center, radius);
-            var result = AssertXml.XmlSerializerRoundTrip(c, xml);
+            var result = AssertXml.ExtendedXmlSerializerRoundTrip(c, xml);
             Assert.AreEqual(c, result);
         }
 
@@ -72,7 +72,7 @@
         {
             var center = Point3D.Parse(point);
             var c = new Circle3D(center, UnitVector3D.ZAxis, radius);
-            var result = AssertXml.XmlSerializerRoundTrip(c, xml);
+            var result = AssertXml.ExtendedXmlSerializerRoundTrip(c, xml);
             Assert.AreEqual(c, result);
         }
 
@@ -82,7 +82,7 @@
             var points = from x in new string[] { "0.25,0", "0.5,1", "1,-1" } select Point2D.Parse(x);
             var p = new Polygon2D(points);
             const string Xml = @"<Polygon2D><Points><Point2D X=""0.25"" Y=""0"" /><Point2D X=""0.5"" Y=""1"" /><Point2D X=""1"" Y=""-1"" /></Points></Polygon2D>";
-            var result = AssertXml.XmlSerializerRoundTrip(p, Xml);
+            var result = AssertXml.ExtendedXmlSerializerRoundTrip(p, Xml);
             Assert.AreEqual(p, result);
         }
 
@@ -92,7 +92,7 @@
             var points = from x in new string[] { "0.25,0", "0.5,1", "1,-1" } select Point2D.Parse(x);
             var p = new PolyLine2D(points);
             const string Xml = @"<PolyLine2D><Points><Point2D X=""0.25"" Y=""0"" /><Point2D X=""0.5"" Y=""1"" /><Point2D X=""1"" Y=""-1"" /></Points></PolyLine2D>";
-            var result = AssertXml.XmlSerializerRoundTrip(p, Xml);
+            var result = AssertXml.ExtendedXmlSerializerRoundTrip(p, Xml);
             Assert.AreEqual(p, result);
         }
 
@@ -102,7 +102,7 @@
             var points = "0, -1.5, 0; 0,1,0; 1,1,0.5";
             var p = new PolyLine3D(from x in points.Split(';') select Point3D.Parse(x));
             const string Xml = @"<PolyLine3D><Points><Point3D X=""0"" Y=""-1.5"" Z=""0"" /><Point3D X=""0"" Y=""1"" Z=""0""  /><Point3D X=""1"" Y=""1"" Z=""0.5"" /></Points></PolyLine3D>";
-            var result = AssertXml.XmlSerializerRoundTrip(p, Xml);
+            var result = AssertXml.ExtendedXmlSerializerRoundTrip(p, Xml);
             Assert.AreEqual(p, result);
         }
 
@@ -110,7 +110,7 @@
         public void PlaneXml(string rootPoint, string unitVector, string xml)
         {
             var plane = new Plane(Point3D.Parse(rootPoint), UnitVector3D.Parse(unitVector));
-            var result = AssertXml.XmlSerializerRoundTrip(plane, xml);
+            var result = AssertXml.ExtendedXmlSerializerRoundTrip(plane, xml);
             Assert.AreEqual(plane, result);
         }
 
@@ -119,7 +119,7 @@
         {
             var p = new Point3D(1, -2, 3);
             const string Xml = @"<Point3D X=""1"" Y=""-2"" Z=""3"" />";
-            var result = AssertXml.XmlSerializerRoundTrip(p, Xml);
+            var result = AssertXml.ExtendedXmlSerializerRoundTrip(p, Xml);
             Assert.AreEqual(p, result);
         }
 
@@ -128,7 +128,7 @@
         {
             var p = new Point2D(1, 2);
             const string Xml = @"<Point2D X=""1"" Y=""2"" />";
-            var result = AssertXml.XmlSerializerRoundTrip(p, Xml);
+            var result = AssertXml.ExtendedXmlSerializerRoundTrip(p, Xml);
             Assert.AreEqual(p, result);
         }
 
@@ -137,7 +137,7 @@
         {
             var q = new Quaternion(1, 2, 3, 4);
             const string Xml = @"<Quaternion W=""1"" X=""2"" Y=""3"" Z=""4"" />";
-            var result = AssertXml.XmlSerializerRoundTrip(q, Xml);
+            var result = AssertXml.ExtendedXmlSerializerRoundTrip(q, Xml);
             Assert.AreEqual(q, result);
         }
 
@@ -147,7 +147,7 @@
             var q = new Quaternion(0, 0, 0, 0);
             var eulerAngles = q.ToEulerAngles();
             const string Xml = @"<EulerAngles><Alpha Value=""0""></Alpha><Beta Value=""0""></Beta><Gamma Value=""0""></Gamma></EulerAngles>";
-            var result = AssertXml.XmlSerializerRoundTrip(eulerAngles, Xml);
+            var result = AssertXml.ExtendedXmlSerializerRoundTrip(eulerAngles, Xml);
             Assert.AreEqual(eulerAngles, result);
         }
 
@@ -155,7 +155,7 @@
         public void AngleXml(string vs, string xml)
         {
             var angle = Angle.Parse(vs);
-            var result = AssertXml.XmlSerializerRoundTrip(angle, xml);
+            var result = AssertXml.ExtendedXmlSerializerRoundTrip(angle, xml);
             Assert.AreEqual(angle.Radians, result.Radians, Tolerance);
         }
 
@@ -170,7 +170,7 @@
     <YAxis X=""0"" Y=""0"" Z=""1"" />
     <ZAxis X=""1"" Y=""0"" Z=""0"" />
 </CoordinateSystem>";
-            var result = AssertXml.XmlSerializerRoundTrip(cs, xml);
+            var result = AssertXml.ExtendedXmlSerializerRoundTrip(cs, xml);
             AssertGeometry.AreEqual(cs, result);
         }
     }
