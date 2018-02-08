@@ -2,6 +2,4 @@ group Roslyn
   Microsoft.CodeAnalysis.CSharp.Workspaces
   NUnit
   Gu.Roslyn.Asserts
-
-group Analyzers
   StyleCop.Analyzers

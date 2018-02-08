@@ -165,7 +165,6 @@
         [Test]
         public void EqualityNullOperatorTrue()
         {
-            string test = "o:{1, 2e-6, -3} x:{1, 2, 3} y:{3, 3, 3} z:{4, 4, 4}";
             CoordinateSystem cs = null;
 
             Assert.IsTrue(cs == null);
@@ -183,7 +182,6 @@
         [Test]
         public void EqualityNotNullOperatorFalse()
         {
-            string test = "o:{1, 2e-6, -3} x:{1, 2, 3} y:{3, 3, 3} z:{4, 4, 4}";
             CoordinateSystem cs = null;
 
             Assert.IsFalse(cs != null);

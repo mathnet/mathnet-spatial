@@ -1,8 +1,6 @@
 image: Visual Studio 2017
 build_script:
-  - build.cmd
-test: none
-environment:
-  COREONLY: '0'
+  - build.cmd Test
+test: off
 deploy: off
 shallow_clone: true
