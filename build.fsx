@@ -112,6 +112,10 @@ Target "ApplyVersion" (fun _ ->
 Target "Restore" (fun _ ->
     restore "MathNet.SpatialMinimal.sln")
 
+Target "RestoreBenchmark" (fun _ ->
+    clean "MathNet.Spatial.Benchmarks.sln"
+    restore "MathNet.Spatial.Benchmarks.sln")
+
 Target "Prepare" DoNothing
 "Start"
   =?> ("Clean", not (hasBuildParam "incremental"))
@@ -164,11 +168,6 @@ Target "Test" DoNothing
 // BENCHMARKS
 // --------------------------------------------------------------------------------------
 
-let dotnetRestore project = DotNetCli.Restore (fun c ->
-       { c with 
-           Project = project 
-           NoCache = true })
-
 let dotnetBuild configuration solution = DotNetCli.Build (fun p ->
     let defaultArgs = ["--no-restore"]
     { p with
@@ -176,24 +175,42 @@ let dotnetBuild configuration solution = DotNetCli.Build (fun p ->
         Configuration = configuration
         AdditionalArgs = defaultArgs})
 
-let benchmarkLibrary framework = testLibrary "" "src/Spatial.Benchmarks/Spatial.Benchmarks.csproj" framework
-Target "DotnetRestoreBenchmark" (fun _ -> dotnetRestore "MathNet.Spatial.Benchmarks.sln")
+let CopyBenchmarks target source framework = 
+    Directory.GetFiles(source, "*.md", SearchOption.TopDirectoryOnly)
+    |> Seq.iter (fun file -> 
+           let fi = 
+               file
+               |> replaceFirst source ""
+               |> replaceFirst "\Spatial.Benchmarks." ""
+               |> replaceFirst "Benchmarks-report-github" (sprintf ".%s" framework)
+               |> trimSeparator
+           trace fi
+           let newFile = target @@ fi
+           logVerbosefn "%s => %s" file newFile
+           DirectoryName newFile |> ensureDirectory
+           File.Copy(file, newFile, true))
+    |> ignore
+
+let benchmarkLibrary framework = testLibrary "src/Spatial.Benchmarks/" "Spatial.Benchmarks.csproj" framework
+let benchmarkRootDir = currentDirectory </> "src" </> "Spatial.Benchmarks"
+let benchmarkSourceFiles = benchmarkRootDir </> "BenchmarkDotNet.Artifacts" </> "results"
+let benchmarkDestination = benchmarkRootDir
 
 Target "Benchmarks" DoNothing
 Target "RunBenchmarks" DoNothing
-Target "CleanBenchmarks" (fun _ -> CleanDirs [ "BenchmarkDotNet.Artifacts" ])
+Target "CleanBenchmarks" (fun _ -> CleanDirs [ benchmarkRootDir </> "BenchmarkDotNet.Artifacts" ])
 
 Target "Benchmark#Core" (fun _ ->
         benchmarkLibrary "netcoreapp2.0"
-        Rename "BenchmarkDotNet.Artifacts/netcoreapp2.0" "BenchmarkDotNet.Artifacts/results")
-Target "Benchmark#Net47" (fun _ ->
+        CopyBenchmarks benchmarkDestination benchmarkSourceFiles "netstandard20")
+Target "Benchmark#Net471" (fun _ ->
         benchmarkLibrary "net471"
-        Rename "BenchmarkDotNet.Artifacts/net471" "BenchmarkDotNet.Artifacts/results")
+        CopyBenchmarks benchmarkDestination benchmarkSourceFiles "net471")
 
 "BuildBenchmarks" ==> "Benchmark#Core" ==> "RunBenchmarks"
-"BuildBenchmarks" =?> ("Benchmark#Net47", isWindows) ==> "RunBenchmarks"
+"BuildBenchmarks" =?> ("Benchmark#Net471", isWindows) ==> "RunBenchmarks"
 
-"DotnetRestoreBenchmark"
+"RestoreBenchmark"
 ==> "CleanBenchmarks"
 ==> "BuildBenchmarks"
 ==> "RunBenchmarks"
