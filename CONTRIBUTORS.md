@@ -16,9 +16,9 @@ The Math.NET project is a community effort. We accept contributions and pull req
 Feel free to add a link to your personal site/blog and/or twitter handle.*
 
 - Johan Larsson
+- Adam Jones
 - [Christoph Rüegg](http://christoph.ruegg.name/) (@cdrnet)
 - Matt Jarvis
-- Adam Jones
 - Mostafa Ali
 - MaLiN22223
 - Per Kuijpers
@@ -28,4 +28,5 @@ Feel free to add a link to your personal site/blog and/or twitter handle.*
 - Ralle
 - Roger
 - ippei
+- jnyrup
 - luisllamasbinaburo
