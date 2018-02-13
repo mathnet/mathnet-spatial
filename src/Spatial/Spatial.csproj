@@ -10,9 +10,9 @@
     <IsPackable>true</IsPackable>
     <PackageId>MathNet.Spatial</PackageId>
     <VersionPrefix>0.5.0</VersionPrefix>
-    <VersionSuffix>0.5.0</VersionSuffix>
-    <PackageVersion>0.5.0</PackageVersion>
-    <Version>0.5.0</Version>
+    <VersionSuffix>beta03</VersionSuffix>
+    <PackageVersion>0.5.0-beta03</PackageVersion>
+    <Version>0.5.0-beta03</Version>
     <AssemblyVersion>0.5.0.0</AssemblyVersion>
     <FileVersion>0.5.0.0</FileVersion>
     <Title>Math.NET Spatial</Title>
@@ -25,20 +25,8 @@
     <PackageLicenseUrl>https://spatial.mathdotnet.com/License.html</PackageLicenseUrl>
     <PackageProjectUrl>https://spatial.mathdotnet.com/</PackageProjectUrl>
     <PackageIconUrl>https://www.mathdotnet.com/images/MathNet128.png</PackageIconUrl>
-    <PackageReleaseNotes>New Types: Circle2D, LineSegment2D, LineSegment3D
-Improved implemention of Polygon2D.GetConvexHullFromPoints
-Angle now support sexidecimal format
-Polygon2D now offers edges iterator
-Breaking: Line2D/3D obsolete in favor of LineSegement2D/3D
-Breaking: Polygon2D, PolyLine2D, Polyline3D enumerators are obsolete
-Breaking: Equality has default no tolerance with a tolerance overload for all types
-Breaking: UnitParser, UnitConverter, XmlExt, Parser, IUnit all made obsolete
-Breaking: Constructors in multiple places replaced by factory methods
-Breaking: Parse methods throws FormatException, was ArgumentException
-Breaking: Make implementation of IXmlSerializable explicit, adds noise to the API.
-Breaking: use nobreaking space, \u00A0, in Angle.ToString().
-Breaking: require length to be 1 ? 0.1 when parsing UnitVector3D
-Updated documentation</PackageReleaseNotes>
+    <PackageReleaseNotes>Update to released version of Mathnet.Numerics 4.0.0
+Cleanup Paket config</PackageReleaseNotes>
     <PackageTags>math geometry spatial</PackageTags>
     <IsTool>false</IsTool>
     <RepositoryUrl>https://github.com/mathnet/mathnet-spatial</RepositoryUrl>

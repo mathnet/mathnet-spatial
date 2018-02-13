@@ -250,12 +250,6 @@ Target "Zip" (fun _ ->
 
 // NUGET
 
-let dotnetPack solution = DotNetCli.Pack (fun p ->
-    { p with
-        Project = solution
-        Configuration = "Release"
-        AdditionalArgs = ["--no-restore"; "--no-build" ]})
-
 Target "NuGet" (fun _ ->
     pack "MathNet.SpatialMinimal.sln"
     CopyDir "out/packages/NuGet" "src/Spatial/bin/Release/" (fun n -> n.EndsWith(".nupkg")))

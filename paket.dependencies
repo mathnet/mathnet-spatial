@@ -1,12 +1,15 @@
 source https://api.nuget.org/v3/index.json
 storage: packages
 
-nuget System.Runtime framework:netstandard1.3,netstandard1.6,netcoreapp1.1
-nuget System.Runtime.Serialization.Xml framework:netstandard1.3,netstandard1.6,netcoreapp1.1
-nuget System.Runtime.Serialization.Primitives framework:netstandard1.3,netstandard1.6,netcoreapp1.1
-nuget System.Runtime.Serialization.Formatters framework:netstandard1.3,netstandard1.6,netcoreapp1.1
+nuget System.Runtime framework:netstandard1.3,netcoreapp1.1
+nuget System.Runtime.Serialization.Xml framework:netstandard1.3,netcoreapp1.1
+nuget System.Runtime.Serialization.Primitives framework:netstandard1.3,netcoreapp1.1
+nuget System.Runtime.Serialization.Formatters framework:netstandard1.3,netcoreapp1.1
 
-nuget NETStandard.Library 2.0.1 strategy:min, framework:netstandard1.3,netstandard1.6,netcoreapp1.1,netcoreapp2.0
+// .NET Standard
+nuget NETStandard.Library 2.0.1 strategy:min, framework:netstandard1.3,netcoreapp1.1,netcoreapp2.0
+
+// .NET Core
 nuget Microsoft.NETCore.App 2.0.5 strategy:min, framework:netcoreapp1.1,netcoreapp2.0
 nuget Microsoft.NETCore.DotNetHost 2.0.5 strategy:min, framework:netcoreapp1.1,netcoreapp2.0
 nuget Microsoft.NETCore.DotNetAppHost 2.0.5 strategy:min, framework:netcoreapp1.1,netcoreapp2.0
@@ -27,7 +30,7 @@ group MathNet
     source https://api.nuget.org/v3/index.json
     storage: packages
     framework: net40, netstandard1.3, netstandard2.0, net45, netcoreapp1.1, netcoreapp2.0
-    nuget MathNet.Numerics 4.0.0-beta06 prerelease
+    nuget MathNet.Numerics ~> 4.0.0
     nuget MathNet.Numerics.Signed 3.20.2
     nuget StyleCop.Analyzers
     nuget System.Diagnostics.Contracts framework:netstandard1.3
@@ -39,8 +42,9 @@ group Test
     nuget NUnitLite ~> 3.9
     nuget Newtonsoft.Json ~> 10.0.3
     nuget Protobuf-net ~> 2.3.3	
-    nuget MathNet.Numerics 4.0.0-beta06 prerelease
+    nuget MathNet.Numerics ~> 4.0.0
     nuget StyleCop.Analyzers
+    nuget Microsoft.NET.Test.Sdk
 
 group Benchmark
     source https://api.nuget.org/v3/index.json
@@ -51,7 +55,7 @@ group Benchmark
     nuget BenchmarkDotNet.Diagnostics.Windows content:none, strategy:min, framework:net471
     nuget Microsoft.NET.Test.Sdk
     nuget NUnit ~> 3.9 strategy:min
-    nuget MathNet.Numerics 4.0.0-beta06 prerelease
+    nuget MathNet.Numerics ~> 4.0.0
     nuget StyleCop.Analyzers
 
 group Roslyn

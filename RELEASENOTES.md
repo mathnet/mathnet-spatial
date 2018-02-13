@@ -1,3 +1,7 @@
+### 0.5.0-beta03 - 2018-02-13
+* Update to released version of Mathnet.Numerics 4.0.0
+* Cleanup Paket config
+
 ### 0.5.0-beta02 - 2018-02-09
 * Update to Mathnet.Numerics 4.0.0-beta06
 
