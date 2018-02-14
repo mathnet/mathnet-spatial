@@ -26,7 +26,6 @@ open System.IO
 #load "build/build-framework.fsx"
 open BuildFramework
 
-let coreonlybuild = environVarOrDefault "COREONLY" "0"
 
 // --------------------------------------------------------------------------------------
 // PROJECT INFO
@@ -57,7 +56,7 @@ let spatialPack =
       Authors = [ "Christoph Ruegg"; "Johan Larsson" ]
       FsLoader = false
       Dependencies =
-        [ { FrameworkVersion=""
+        [ { FrameworkVersion="net40"
             Dependencies=[ "MathNet.Numerics", GetPackageVersion "./packages/mathnet/" "MathNet.Numerics"] } ]
       Files =
         [ @"..\..\out\lib\Net40\MathNet.Spatial.*", Some libnet40, None;
@@ -71,10 +70,10 @@ let spatialSignedPack =
       Description = description + supportSigned
       Tags = spatialPack.Tags + " signed"
       Dependencies =
-        [ { FrameworkVersion=""
+        [ { FrameworkVersion="net40"
             Dependencies=[ "MathNet.Numerics.Signed", GetPackageVersion "./packages/mathnet/" "MathNet.Numerics.Signed" ] } ]
       Files =
-        [ @"..\..\out\lib-signed\Net40\MathNet.Spatial.*", Some libnet40, None;
+        [ @"..\..\out\lib\Net40\MathNet.Spatial.*", Some libnet40, None;
           @"..\..\src\Spatial\**\*.cs", Some "src/Common", None ] }
 
 let coreBundle =
@@ -97,62 +96,43 @@ let coreSignedBundle =
 Target "Start" DoNothing
 
 Target "Clean" (fun _ ->
-    DotNetCli.RunCommand id "clean MathNet.SpatialMinimal.sln"
     CleanDirs [ "src/Spatial/bin"; "src/SpatialUnitTests/bin" ]
     CleanDirs [ "src/Spatial/obj"; "src/SpatialUnitTests/obj" ]
     CleanDirs [ "obj" ]
     CleanDirs [ "out/api"; "out/docs"; "out/packages" ]
     CleanDirs [ "out/lib" ]
     CleanDirs [ "out/test/Net40" ]
-    CleanDirs [ "out/lib-signed/Net40" ])
+    clean "MathNet.SpatialMinimal.sln")
 
-Target "CleanDotnet" (fun _ -> DotNetCli.RunCommand id "clean MathNet.Spatial.Benchmarks.sln")
 
 Target "ApplyVersion" (fun _ ->
-    patchVersionInAssemblyInfo "src/Spatial" spatialRelease
-    patchVersionInAssemblyInfo "src/SpatialUnitTests" spatialRelease)
+    patchVersionInProjectFile "src/Spatial/Spatial.csproj" spatialRelease
+    patchVersionInProjectFile "src/SpatialUnitTests/SpatialUnitTests.csproj" spatialRelease)
 
-let dotnetRestore project = DotNetCli.Restore (fun c ->
-       { c with 
-           Project = project 
-           NoCache = true })
+Target "Restore" (fun _ ->
+    restore "MathNet.SpatialMinimal.sln")
 
-Target "DotnetRestore" (fun _ -> dotnetRestore "MathNet.SpatialMinimal.sln")
-
-Target "DotnetRestoreBenchmark" (fun _ -> dotnetRestore "MathNet.Spatial.Benchmarks.sln")
+Target "RestoreBenchmark" (fun _ ->
+    clean "MathNet.Spatial.Benchmarks.sln"
+    restore "MathNet.Spatial.Benchmarks.sln")
 
 Target "Prepare" DoNothing
 "Start"
   =?> ("Clean", not (hasBuildParam "incremental"))
-  =?> ("CleanDotnet",  coreonlybuild = "0")
-  ==> "DotnetRestore"
-  =?> ("DotnetRestoreBenchmark",  coreonlybuild = "0")
+  ==> "Restore"
   ==> "ApplyVersion"
   ==> "Prepare"
+
 
 // --------------------------------------------------------------------------------------
 // BUILD
 // --------------------------------------------------------------------------------------
 
-let dotnetBuild configuration solution = DotNetCli.Build (fun p ->
-    let defaultArgs = ["--no-restore"]
-    { p with
-        Project = solution
-        Configuration = configuration
-        AdditionalArgs = defaultArgs})
+Target "Build" (fun _ -> build "MathNet.SpatialMinimal.sln")
+"Prepare" ==> "Build"
 
-Target "BuildMain" (fun _ -> dotnetBuild "Release" "MathNet.SpatialMinimal.sln")
+Target "BuildBenchmarks" (fun _ -> build "MathNet.Spatial.Benchmarks.sln")
 
-Target "BuildBenchmarks" (fun _ -> dotnetBuild "Release" "MathNet.Spatial.Benchmarks.sln")
-
-//Target "BuildMain" (fun _ -> build !! "MathNet.Spatial.sln")
-//Target "BuildAll" (fun _ -> build !! "MathNet.Spatial.All.sln")
-
-Target "Build" DoNothing
-"Prepare"
-  =?> ("BuildMain", hasBuildParam "release")
-  =?> ("BuildBenchmarks",  coreonlybuild = "0")
-  ==> "Build"
 
 
 // --------------------------------------------------------------------------------------
@@ -162,58 +142,89 @@ Target "Build" DoNothing
 let testLibrary testsDir testsProj framework =
     DotNetCli.RunCommand
         (fun c -> { c with WorkingDir = testsDir})
-        (sprintf "run -p %s --configuration Release --framework %s"
+        (sprintf "run -p %s --configuration Release --framework %s --no-restore --no-build"
             testsProj
             framework)
 
-let testLibraryCsharp framework = testLibrary "src/SpatialUnitTests" "SpatialUnitTests.csproj" framework
+let testSpatial framework = testLibrary "src/SpatialUnitTests" "SpatialUnitTests.csproj" framework
+Target "TestSpatial" DoNothing
+Target "TestSpatialCore1.1" (fun _ -> testSpatial "netcoreapp1.1")
+Target "TestSpatialCore2.0" (fun _ -> testSpatial "netcoreapp2.0")
+Target "TestSpatialNET40" (fun _ -> testSpatial "net40")
+Target "TestSpatialNET45" (fun _ -> testSpatial "net45")
+Target "TestSpatialNET46" (fun _ -> testSpatial "net46")
+Target "TestSpatialNET47"  (fun _ -> testSpatial "net47")
 
+"Build" ==> "TestSpatialCore1.1" ==> "TestSpatial"
+"Build" ==> "TestSpatialCore2.0" ==> "TestSpatial"
+"Build" =?> ("TestSpatialNET40", isWindows)
+"Build" =?> ("TestSpatialNET45", isWindows) ==> "TestSpatial"
+"Build" =?> ("TestSpatialNET46", isWindows)
+"Build" =?> ("TestSpatialNET47", isWindows)
 Target "Test" DoNothing
-Target "TestC#" DoNothing
-
-Target "TestC#Core1.1" (fun _ -> testLibraryCsharp "netcoreapp1.1")
-Target "TestC#Core2.0" (fun _ -> testLibraryCsharp "netcoreapp2.0")
-Target "TestC#NET40" (fun _ -> testLibraryCsharp "net40")
-Target "TestC#NET45" (fun _ -> testLibraryCsharp "net45")
-Target "TestC#NET46" (fun _ -> testLibraryCsharp "net46")
-Target "TestC#NET47"  (fun _ -> testLibraryCsharp "net47")
-
-"Build" ==> "TestC#Core1.1" ==> "TestC#"
-"Build" ==> "TestC#Core2.0" ==> "TestC#"
-"Build"
-=?> ("TestC#NET45", coreonlybuild = "0")
-==> "TestC#"
-
-"TestC#" ==> "Test"
-
-//Target "Test" (fun _ -> test !! "out/test/**/*UnitTests*.dll")
-//"Build" ==> "Test"
+"TestSpatial" ==> "Test"
 
 // --------------------------------------------------------------------------------------
 // BENCHMARKS
 // --------------------------------------------------------------------------------------
 
-let benchmarkLibrary framework = testLibrary "" "src/Spatial.Benchmarks/Spatial.Benchmarks.csproj" framework
+let dotnetBuild configuration solution = DotNetCli.Build (fun p ->
+    let defaultArgs = ["--no-restore"]
+    { p with
+        Project = solution
+        Configuration = configuration
+        AdditionalArgs = defaultArgs})
+
+let CopyBenchmarks target source framework = 
+    Directory.GetFiles(source, "*.md", SearchOption.TopDirectoryOnly)
+    |> Seq.iter (fun file -> 
+           let fi = 
+               file
+               |> replaceFirst source ""
+               |> replaceFirst "\Spatial.Benchmarks." ""
+               |> replaceFirst "Benchmarks-report-github" (sprintf ".%s" framework)
+               |> trimSeparator
+           trace fi
+           let newFile = target @@ fi
+           logVerbosefn "%s => %s" file newFile
+           DirectoryName newFile |> ensureDirectory
+           File.Copy(file, newFile, true))
+    |> ignore
+
+let benchmarkLibrary framework = testLibrary "src/Spatial.Benchmarks/" "Spatial.Benchmarks.csproj" framework
+let benchmarkRootDir = currentDirectory </> "src" </> "Spatial.Benchmarks"
+let benchmarkSourceFiles = benchmarkRootDir </> "BenchmarkDotNet.Artifacts" </> "results"
+let benchmarkDestination = benchmarkRootDir
 
 Target "Benchmarks" DoNothing
 Target "RunBenchmarks" DoNothing
-Target "CleanBenchmarks" (fun _ -> CleanDirs [ "BenchmarkDotNet.Artifacts" ])
+Target "CleanBenchmarks" (fun _ -> CleanDirs [ benchmarkRootDir </> "BenchmarkDotNet.Artifacts" ])
 
 Target "Benchmark#Core" (fun _ ->
         benchmarkLibrary "netcoreapp2.0"
-        Rename "BenchmarkDotNet.Artifacts/netcoreapp2.0" "BenchmarkDotNet.Artifacts/results")
-Target "Benchmark#Net47" (fun _ ->
-        benchmarkLibrary "net47"
-        Rename "BenchmarkDotNet.Artifacts/net47" "BenchmarkDotNet.Artifacts/results")
+        CopyBenchmarks benchmarkDestination benchmarkSourceFiles "netstandard20")
+Target "Benchmark#Net471" (fun _ ->
+        benchmarkLibrary "net471"
+        CopyBenchmarks benchmarkDestination benchmarkSourceFiles "net471")
 
 "BuildBenchmarks" ==> "Benchmark#Core" ==> "RunBenchmarks"
-"BuildBenchmarks" =?> ("Benchmark#Net47", coreonlybuild = "0") ==> "RunBenchmarks"
+"BuildBenchmarks" =?> ("Benchmark#Net471", isWindows) ==> "RunBenchmarks"
 
-"DotnetRestoreBenchmark"
+"RestoreBenchmark"
 ==> "CleanBenchmarks"
 ==> "BuildBenchmarks"
 ==> "RunBenchmarks"
 ==> "Benchmarks"
+
+
+// --------------------------------------------------------------------------------------
+// CODE SIGN
+// --------------------------------------------------------------------------------------
+
+Target "Sign" (fun _ ->
+    let fingerprint = "5dbea70701b40cab1b2ca62c75401342b4f0f03a"
+    let timeserver = "http://time.certum.pl/"
+    sign fingerprint timeserver (!! "src/Spatial/bin/Release/**/MathNet.Spatial.dll"))
 
 // --------------------------------------------------------------------------------------
 // PACKAGES
@@ -221,27 +232,28 @@ Target "Benchmark#Net47" (fun _ ->
 
 Target "Pack" DoNothing
 
+// COLLECT
+
+Target "Collect" (fun _ ->
+    // It is important that the libs have been signed before we collect them (that's why we cannot copy them right after the build)
+    CopyDir "out/lib" "src/Spatial/bin/Release" (fun n -> n.Contains("MathNet.Spatial.dll") || n.Contains("MathNet.Spatial.pdb") || n.Contains("MathNet.Spatial.xml")))
+"Build" =?> ("Sign", hasBuildParam "sign") ==> "Collect"
+
+
 // ZIP
 
 Target "Zip" (fun _ ->
     CleanDir "out/packages/Zip"
-    coreBundle |> zip "out/packages/Zip" "out/lib" (fun f -> f.Contains("MathNet.Spatial.") || f.Contains("MathNet.Numerics."))
-    coreSignedBundle |> zip "out/packages/Zip" "out/lib-signed" (fun f -> f.Contains("MathNet.Spatial.") || f.Contains("MathNet.Numerics.")))
-"Build" ==> "Zip" ==> "Pack"
+    coreBundle |> zip "out/packages/Zip" "out/lib" (fun f -> f.Contains("MathNet.Spatial.") || f.Contains("MathNet.Numerics.")))
+"Collect" ==> "Zip" ==> "Pack"
+
 
 // NUGET
 
-let dotnetPack solution = DotNetCli.Pack (fun p ->
-    let defaultArgs = ["--no-restore"; "--no-build" ]
-    { p with
-        Project = solution
-        Configuration = "Release"
-        AdditionalArgs = defaultArgs})
-
 Target "NuGet" (fun _ ->
-    dotnetPack "MathNet.SpatialMinimal.sln"
+    pack "MathNet.SpatialMinimal.sln"
     CopyDir "out/packages/NuGet" "src/Spatial/bin/Release/" (fun n -> n.EndsWith(".nupkg")))
-"Build" ==> "NuGet" ==> "Pack"
+"Collect" ==> "NuGet" ==> "Pack"
 
 
 // --------------------------------------------------------------------------------------
@@ -261,10 +273,10 @@ Target "Docs" (fun _ ->
     provideDocExtraFiles extraDocs releases
     generateDocs true false)
 Target "DocsDev" (fun _ ->
-    provideDocExtraFiles extraDocs releases
+    provideDocExtraFiles  extraDocs releases
     generateDocs true true)
 Target "DocsWatch" (fun _ ->
-    provideDocExtraFiles extraDocs releases
+    provideDocExtraFiles  extraDocs releases
     use watcher = new FileSystemWatcher(DirectoryInfo("docs/content").FullName, "*.*")
     watcher.EnableRaisingEvents <- true
     watcher.Changed.Add(fun e -> generateDocs false true)

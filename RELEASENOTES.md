@@ -1,7 +1,14 @@
-### 0.5.0
+### 0.5.0-beta03 - 2018-02-13
+* Update to released version of Mathnet.Numerics 4.0.0
+* Cleanup Paket config
+
+### 0.5.0-beta02 - 2018-02-09
+* Update to Mathnet.Numerics 4.0.0-beta06
+
+### 0.5.0-beta01 - 2018-01-16
 * New Types: Circle2D, LineSegment2D, LineSegment3D
 * Improved implemention of Polygon2D.GetConvexHullFromPoints
-* Angle now support sexidecimal format
+* Angle now supports sexagesimal format
 * Polygon2D now offers edges iterator
 * Breaking: Line2D/3D obsolete in favor of LineSegement2D/3D
 * Breaking: Polygon2D, PolyLine2D, Polyline3D enumerators are obsolete
@@ -11,7 +18,7 @@
 * Breaking: Parse methods throws FormatException, was ArgumentException
 * Breaking: Make implementation of IXmlSerializable explicit, adds noise to the API.
 * Breaking: use nobreaking space, \u00A0, in Angle.ToString().
-* Breaking: require length to be 1 ± 0.1 when parsing UnitVector3D
+* Breaking: require length to be 1 - 0.1 when parsing UnitVector3D
 * Updated documentation
 
 ### 0.4.0 - 2017-05-01

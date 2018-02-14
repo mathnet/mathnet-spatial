@@ -132,9 +132,25 @@ let patchVersionInProjectFile path (release:Release) =
 // BUILD
 // --------------------------------------------------------------------------------------
 
-let buildConfig config subject = MSBuild "" (if hasBuildParam "incremental" then "Build" else "Rebuild") [ "Configuration", config ] subject |> ignore
-let build subject = buildConfig "Release" subject
-let buildSigned subject = buildConfig "Release-Signed" subject
+let msbuild targets configuration project =
+    MSBuildHelper.build (fun p ->
+        { p with
+            NoLogo = true
+            NodeReuse = true
+            Targets = targets
+            Properties = [ "Configuration", configuration ]
+            RestorePackagesFlag = false
+            Verbosity = Some MSBuildVerbosity.Minimal
+        }) project
+
+let clean project = msbuild [ "Clean" ] "Release" project
+let restore project = msbuild [ "Restore" ] "Release" project
+let build project = msbuild [ (if hasBuildParam "incremental" then "Build" else "Rebuild") ] "Release" project
+let pack project = msbuild [ "Pack" ] "Release" project
+
+//let buildConfig config subject = MSBuild "" (if hasBuildParam "incremental" then "Build" else "Rebuild") [ "Configuration", config ] subject |> ignore
+//let build subject = buildConfig "Release" subject
+//let buildSigned subject = buildConfig "Release-Signed" subject
 let buildConfig32 config subject = MSBuild "" (if hasBuildParam "incremental" then "Build" else "Rebuild") [("Configuration", config); ("Platform","Win32")] subject |> ignore
 let buildConfig64 config subject = MSBuild "" (if hasBuildParam "incremental" then "Build" else "Rebuild") [("Configuration", config); ("Platform","x64")] subject |> ignore
 
@@ -349,7 +365,7 @@ let publishNuGet packageFiles =
     let rec impl trials file =
         trace ("NuGet Push: " + System.IO.Path.GetFileName(file) + ".")
         try
-            let args = sprintf "push \"%s\" -Source https://www.nuget.org/api/v2/package" (FullName file)
+            let args = sprintf "push \"%s\"" (FullName file)
             let result =
                 ExecProcess (fun info ->
                     info.FileName <- "packages/build/NuGet.CommandLine/tools/NuGet.exe"

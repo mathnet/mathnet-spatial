@@ -1,0 +1,5 @@
+
+group MathNet
+    MathNet.Numerics
+    StyleCop.Analyzers
+    System.Diagnostics.Contracts

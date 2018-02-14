@@ -413,7 +413,7 @@
                     {
                         new object[] { q0, q00 },
                         new object[] { q1, q10 },
-                        new object[] {q2, q20 }
+                        new object[] { q2, q20 }
                     };
                     return tests;
                 }

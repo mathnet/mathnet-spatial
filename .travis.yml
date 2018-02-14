@@ -1,13 +1,15 @@
 language: csharp
 
 env:
-  - HOME=/home/travis APPDATA=/home/travis LocalAppData=/home/travis COREONLY=1
+  - HOME=/home/travis APPDATA=/home/travis LocalAppData=/home/travis
 
 sudo: required #false
 dist: trusty
-dotnet: 2.0.0
+dotnet: 2.1.4
 mono:
 - latest
+os:
+- linux
 
 addons:
   apt:
