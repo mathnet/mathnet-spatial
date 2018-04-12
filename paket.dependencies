@@ -1,6 +1,7 @@
 source https://api.nuget.org/v3/index.json
 storage: packages
 
+// Legacy .Net Core
 nuget System.Runtime framework:netstandard1.3,netcoreapp1.1
 nuget System.Runtime.Serialization.Xml framework:netstandard1.3,netcoreapp1.1
 nuget System.Runtime.Serialization.Primitives framework:netstandard1.3,netcoreapp1.1
@@ -8,6 +9,7 @@ nuget System.Runtime.Serialization.Formatters framework:netstandard1.3,netcoreap
 
 // .NET Standard
 nuget NETStandard.Library 2.0.1 strategy:min, framework:netstandard1.3,netcoreapp1.1,netcoreapp2.0
+nuget Microsoft.NETCore.Platforms 2.0.1 strategy:min, framework:netstandard1.3,netcoreapp1.1,netcoreapp2.0
 
 // .NET Core
 nuget Microsoft.NETCore.App 2.0.5 strategy:min, framework:netcoreapp1.1,netcoreapp2.0
@@ -23,39 +25,41 @@ group Build
     storage: packages
     nuget FAKE ~> 4.6
     nuget NUnit.Console ~> 3.7
-    nuget FSharp.Formatting !~> 2.14.4
+    nuget FSharp.Formatting !~> 2.4
     nuget NuGet.CommandLine
 
 group MathNet
     source https://api.nuget.org/v3/index.json
     storage: packages
-    framework: net40, netstandard1.3, netstandard2.0, net45, netcoreapp1.1, netcoreapp2.0
-    nuget MathNet.Numerics ~> 4.0.0
-    nuget MathNet.Numerics.Signed 3.20.2
+    framework: net40, netstandard1.3, netstandard2.0, net461, netcoreapp1.1, netcoreapp2.0
+    nuget MathNet.Numerics ~> 4.4
     nuget StyleCop.Analyzers
     nuget System.Diagnostics.Contracts framework:netstandard1.3
 
 group Test
     source https://api.nuget.org/v3/index.json
     storage: none
+    framework: net45, net471, netcoreapp1.1, netcoreapp2.0
     nuget NUnit ~> 3.9
     nuget NUnitLite ~> 3.9
-    nuget Newtonsoft.Json ~> 10.0.3
-    nuget Protobuf-net ~> 2.3.3	
-    nuget MathNet.Numerics ~> 4.0.0
+    nuget Newtonsoft.Json ~> 11.0
+    nuget Protobuf-net ~> 2.3
+    nuget MathNet.Numerics ~> 4.4
     nuget StyleCop.Analyzers
     nuget Microsoft.NET.Test.Sdk
+    nuget NUnit3TestAdapter ~> 3.10
 
 group Benchmark
     source https://api.nuget.org/v3/index.json
     storage: none
-    framework: net471, netstandard2.0, netcoreapp2.0
-    nuget System.Runtime.InteropServices.RuntimeInformation ~> 4.3 strategy:min
-    nuget BenchmarkDotNet content:none, strategy:max
+    framework: net471, netstandard2.0, netcoreapp1.1, netcoreapp2.0
+    nuget Microsoft.NETCore.App 2.0.5 strategy:min, framework:netcoreapp2.0
+    nuget Microsoft.NETCore.DotNetAppHost 2.0.5 strategy:min, framework:netcoreapp2.0
+    nuget BenchmarkDotNet content:none, strategy:max, framework:net471,netcoreapp2.0
     nuget BenchmarkDotNet.Diagnostics.Windows content:none, strategy:min, framework:net471
     nuget Microsoft.NET.Test.Sdk
     nuget NUnit ~> 3.9 strategy:min
-    nuget MathNet.Numerics ~> 4.0.0
+    nuget MathNet.Numerics ~> 4.4
     nuget StyleCop.Analyzers
 
 group Roslyn

@@ -2,10 +2,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>net45;netcoreapp1.1;netcoreapp2.0</TargetFrameworks>
+    <TargetFrameworks>net471;net45;netcoreapp1.1;netcoreapp2.0</TargetFrameworks>
     <GenerateAssemblyInfo>True</GenerateAssemblyInfo>
-    <AssemblyName>MathNet.Numerics.UnitTests</AssemblyName>
-    <RootNamespace>MathNet.Numerics.UnitTests</RootNamespace>
+    <AssemblyName>MathNet.Spatial.UnitTests</AssemblyName>
+    <RootNamespace>MathNet.Spatial.UnitTests</RootNamespace>
     <IsPackable>false</IsPackable>
     <Copyright>Copyright Math.NET Project</Copyright>
     <GenerateProgramFile>false</GenerateProgramFile>
@@ -13,17 +13,6 @@
     <EnableDefaultCompileItems>true</EnableDefaultCompileItems>
     <CodeAnalysisRuleSet>SpatialUnitTests.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Spatial\Spatial.csproj" />
   </ItemGroup>

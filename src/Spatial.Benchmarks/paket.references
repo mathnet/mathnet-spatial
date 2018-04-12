@@ -1,6 +1,7 @@
 group Benchmark
+    Microsoft.NETCore.App
+    Microsoft.NETCore.DotNetAppHost
     Microsoft.NET.Test.Sdk
-    System.Runtime.InteropServices.RuntimeInformation
     BenchmarkDotNet
     BenchmarkDotNet.Diagnostics.Windows
     NUnit

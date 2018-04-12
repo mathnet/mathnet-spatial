@@ -40,16 +40,6 @@ Cleanup Paket config</PackageReleaseNotes>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <EnableDefaultCompileItems>true</EnableDefaultCompileItems>
   </PropertyGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net40' ">
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
   <ItemGroup>
     <None Include="Spatial.ruleset" />
   </ItemGroup>

@@ -6,3 +6,4 @@ group Test
     MathNet.Numerics
     StyleCop.Analyzers
     Microsoft.NET.Test.Sdk
+    NUnit3TestAdapter

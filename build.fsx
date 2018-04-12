@@ -63,30 +63,11 @@ let spatialPack =
           @"..\..\out\lib\netstandard2.0\MathNet.Spatial.*", Some netstandard20, None;
           @"..\..\src\Spatial\**\*.cs", Some "src/Common", None ] }
 
-let spatialSignedPack =
-  { spatialPack with
-      Id = spatialPack.Id + ".Signed"
-      Title = spatialPack.Title + " - Signed Edition"
-      Description = description + supportSigned
-      Tags = spatialPack.Tags + " signed"
-      Dependencies =
-        [ { FrameworkVersion="net40"
-            Dependencies=[ "MathNet.Numerics.Signed", GetPackageVersion "./packages/mathnet/" "MathNet.Numerics.Signed" ] } ]
-      Files =
-        [ @"..\..\out\lib\Net40\MathNet.Spatial.*", Some libnet40, None;
-          @"..\..\src\Spatial\**\*.cs", Some "src/Common", None ] }
-
 let coreBundle =
     { Id = spatialPack.Id
       Release = spatialRelease
       Title = spatialPack.Title
       Packages = [ spatialPack ] }
-
-let coreSignedBundle =
-    { Id = spatialSignedPack.Id
-      Release = spatialRelease
-      Title = spatialSignedPack.Title
-      Packages = [ spatialSignedPack ] }
 
 
 // --------------------------------------------------------------------------------------
@@ -152,15 +133,15 @@ Target "TestSpatialCore1.1" (fun _ -> testSpatial "netcoreapp1.1")
 Target "TestSpatialCore2.0" (fun _ -> testSpatial "netcoreapp2.0")
 Target "TestSpatialNET40" (fun _ -> testSpatial "net40")
 Target "TestSpatialNET45" (fun _ -> testSpatial "net45")
-Target "TestSpatialNET46" (fun _ -> testSpatial "net46")
-Target "TestSpatialNET47"  (fun _ -> testSpatial "net47")
+Target "TestSpatialNET461" (fun _ -> testSpatial "net461")
+Target "TestSpatialNET471"  (fun _ -> testSpatial "net471")
 
 "Build" ==> "TestSpatialCore1.1" ==> "TestSpatial"
 "Build" ==> "TestSpatialCore2.0" ==> "TestSpatial"
 "Build" =?> ("TestSpatialNET40", isWindows)
 "Build" =?> ("TestSpatialNET45", isWindows) ==> "TestSpatial"
-"Build" =?> ("TestSpatialNET46", isWindows)
-"Build" =?> ("TestSpatialNET47", isWindows)
+"Build" =?> ("TestSpatialNET461", isWindows)
+"Build" =?> ("TestSpatialNET471", isWindows) ==> "TestSpatial"
 Target "Test" DoNothing
 "TestSpatial" ==> "Test"
 
@@ -323,7 +304,7 @@ Target "PublishMirrors" (fun _ -> publishMirrors ())
 Target "PublishDocs" (fun _ -> publishDocs spatialRelease)
 Target "PublishApi" (fun _ -> publishApi spatialRelease)
 
-Target "PublishArchive" (fun _ -> publishArchive "out/packages/Zip" "out/packages/NuGet" [coreBundle; coreSignedBundle])
+Target "PublishArchive" (fun _ -> publishArchive "out/packages/Zip" "out/packages/NuGet" [coreBundle])
 
 Target "PublishNuGet" (fun _ -> !! "out/packages/NuGet/*.nupkg" -- "out/packages/NuGet/*.symbols.nupkg" |> publishNuGet)
 
