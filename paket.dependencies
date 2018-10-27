@@ -41,7 +41,7 @@ group Test
     nuget NUnit ~> 3.9
     nuget NUnitLite ~> 3.9
     nuget Newtonsoft.Json ~> 10.0.3
-    nuget Protobuf-net ~> 2.3.3	
+    nuget Protobuf-net ~> 2.3.3
     nuget MathNet.Numerics ~> 4.0.0
     nuget StyleCop.Analyzers
     nuget Microsoft.NET.Test.Sdk

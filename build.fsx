@@ -175,10 +175,10 @@ let dotnetBuild configuration solution = DotNetCli.Build (fun p ->
         Configuration = configuration
         AdditionalArgs = defaultArgs})
 
-let CopyBenchmarks target source framework = 
+let CopyBenchmarks target source framework =
     Directory.GetFiles(source, "*.md", SearchOption.TopDirectoryOnly)
-    |> Seq.iter (fun file -> 
-           let fi = 
+    |> Seq.iter (fun file ->
+           let fi =
                file
                |> replaceFirst source ""
                |> replaceFirst "\Spatial.Benchmarks." ""
@@ -222,7 +222,7 @@ Target "Benchmark#Net471" (fun _ ->
 // --------------------------------------------------------------------------------------
 
 Target "Sign" (fun _ ->
-    let fingerprint = "5dbea70701b40cab1b2ca62c75401342b4f0f03a"
+    let fingerprint = "490408de3618bed0a28e68dc5face46e5a3a97dd"
     let timeserver = "http://time.certum.pl/"
     sign fingerprint timeserver (!! "src/Spatial/bin/Release/**/MathNet.Spatial.dll"))
 
