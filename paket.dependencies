@@ -30,8 +30,8 @@ group MathNet
     source https://api.nuget.org/v3/index.json
     storage: packages
     framework: net40, netstandard1.3, netstandard2.0, net45, netcoreapp1.1, netcoreapp2.0
-    nuget MathNet.Numerics ~> 4.0.0
-    nuget MathNet.Numerics.Signed 3.20.2
+    nuget MathNet.Numerics ~> 4.6.0
+    nuget MathNet.Numerics.Signed ~> 4.6.0
     nuget StyleCop.Analyzers
     nuget System.Diagnostics.Contracts framework:netstandard1.3
 
@@ -47,7 +47,7 @@ group Test
     nuget NUnitLite ~> 3.9
     nuget Newtonsoft.Json ~> 10.0.3
     nuget Protobuf-net ~> 2.3.3
-    nuget MathNet.Numerics ~> 4.0.0
+    nuget MathNet.Numerics ~> 4.6.0
     nuget StyleCop.Analyzers
     nuget Microsoft.NET.Test.Sdk
 
@@ -60,7 +60,7 @@ group Benchmark
     nuget BenchmarkDotNet.Diagnostics.Windows content:none, strategy:min, framework:net471
     nuget Microsoft.NET.Test.Sdk
     nuget NUnit ~> 3.9 strategy:min
-    nuget MathNet.Numerics ~> 4.0.0
+    nuget MathNet.Numerics ~> 4.6.0
     nuget StyleCop.Analyzers
 
 group Roslyn
