@@ -1,22 +1,26 @@
 source https://api.nuget.org/v3/index.json
 storage: packages
 
-nuget System.Runtime framework:netstandard1.3,netcoreapp1.1
-nuget System.Runtime.Serialization.Xml framework:netstandard1.3,netcoreapp1.1
-nuget System.Runtime.Serialization.Primitives framework:netstandard1.3,netcoreapp1.1
-nuget System.Runtime.Serialization.Formatters framework:netstandard1.3,netcoreapp1.1
+// Legacy .Net Core
+nuget System.Runtime framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp1.1,netcoreapp2.0
+nuget System.Runtime.Numerics framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp1.1,netcoreapp2.0
+nuget System.Runtime.Serialization.Xml framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp1.1,netcoreapp2.0
+nuget System.Runtime.Serialization.Primitives framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp1.1,netcoreapp2.0
+nuget System.Runtime.Serialization.Formatters framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp1.1,netcoreapp2.0
+nuget System.Security.Cryptography.Algorithms framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp1.1,netcoreapp2.0
 
 // .NET Standard
-nuget NETStandard.Library 2.0.1 strategy:min, framework:netstandard1.3,netcoreapp1.1,netcoreapp2.0
+nuget NETStandard.Library 2.0.3 strategy:min, framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp1.1,netcoreapp2.0
+nuget Microsoft.NETCore.Platforms 2.0.2 strategy:min, framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp1.1,netcoreapp2.0
 
 // .NET Core
-nuget Microsoft.NETCore.App 2.0.5 strategy:min, framework:netcoreapp1.1,netcoreapp2.0
-nuget Microsoft.NETCore.DotNetHost 2.0.5 strategy:min, framework:netcoreapp1.1,netcoreapp2.0
-nuget Microsoft.NETCore.DotNetAppHost 2.0.5 strategy:min, framework:netcoreapp1.1,netcoreapp2.0
-nuget Microsoft.NETCore.DotNetHostPolicy 2.0.5 strategy:min, framework:netcoreapp1.1,netcoreapp2.0
-nuget Microsoft.NETCore.DotNetHostResolver 2.0.5 strategy:min, framework:netcoreapp1.1,netcoreapp2.0
-nuget Microsoft.NETCore.Jit 2.0.5 strategy:min, framework:netcoreapp1.1,netcoreapp2.0
-nuget Microsoft.NETCore.Runtime.CoreCLR 2.0.5 strategy:min, framework:netcoreapp1.1,netcoreapp2.0
+nuget Microsoft.NETCore.App 2.0.7 strategy:min, framework:netcoreapp1.1,netcoreapp2.0
+nuget Microsoft.NETCore.DotNetHost 2.0.7 strategy:min, framework:netcoreapp1.1,netcoreapp2.0
+nuget Microsoft.NETCore.DotNetAppHost 2.0.7 strategy:min, framework:netcoreapp1.1,netcoreapp2.0
+nuget Microsoft.NETCore.DotNetHostPolicy 2.0.7 strategy:min, framework:netcoreapp1.1,netcoreapp2.0
+nuget Microsoft.NETCore.DotNetHostResolver 2.0.7 strategy:min, framework:netcoreapp1.1,netcoreapp2.0
+nuget Microsoft.NETCore.Jit 2.0.7 strategy:min, framework:netcoreapp1.1,netcoreapp2.0
+nuget Microsoft.NETCore.Runtime.CoreCLR 2.0.7 strategy:min, framework:netcoreapp1.1,netcoreapp2.0
 
 group Build
     source https://api.nuget.org/v3/index.json

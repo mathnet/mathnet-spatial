@@ -155,7 +155,7 @@ Target "TestSpatialNET45" (fun _ -> testSpatial "net45")
 Target "TestSpatialNET46" (fun _ -> testSpatial "net46")
 Target "TestSpatialNET47"  (fun _ -> testSpatial "net47")
 
-"Build" ==> "TestSpatialCore1.1" ==> "TestSpatial"
+"Build" ==> "TestSpatialCore1.1"
 "Build" ==> "TestSpatialCore2.0" ==> "TestSpatial"
 "Build" =?> ("TestSpatialNET40", isWindows)
 "Build" =?> ("TestSpatialNET45", isWindows) ==> "TestSpatial"
