@@ -35,6 +35,11 @@ group MathNet
     nuget StyleCop.Analyzers
     nuget System.Diagnostics.Contracts framework:netstandard1.3
 
+group Analyzers
+    source https://api.nuget.org/v3/index.json
+    storage: none
+    nuget PublicApiAnalyzer prerelease
+
 group Test
     source https://api.nuget.org/v3/index.json
     storage: none

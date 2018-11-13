@@ -51,6 +51,10 @@ Cleanup Paket config</PackageReleaseNotes>
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <AdditionalFiles Include="PublicAPI.Shipped.txt" />
+    <AdditionalFiles Include="PublicAPI.Unshipped.txt" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="Spatial.ruleset" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />

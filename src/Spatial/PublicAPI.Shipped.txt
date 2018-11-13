@@ -1,0 +1,741 @@
+﻿MathNet.Spatial.Euclidean.Circle2D
+MathNet.Spatial.Euclidean.Circle2D.Area.get -> double
+MathNet.Spatial.Euclidean.Circle2D.Center.get -> MathNet.Spatial.Euclidean.Point2D
+MathNet.Spatial.Euclidean.Circle2D.Circle2D(MathNet.Spatial.Euclidean.Point2D center, double radius) -> void
+MathNet.Spatial.Euclidean.Circle2D.Circumference.get -> double
+MathNet.Spatial.Euclidean.Circle2D.Diameter.get -> double
+MathNet.Spatial.Euclidean.Circle2D.Equals(MathNet.Spatial.Euclidean.Circle2D c) -> bool
+MathNet.Spatial.Euclidean.Circle2D.Equals(MathNet.Spatial.Euclidean.Circle2D c, double tolerance) -> bool
+MathNet.Spatial.Euclidean.Circle2D.Radius.get -> double
+MathNet.Spatial.Euclidean.Circle3D
+MathNet.Spatial.Euclidean.Circle3D.Area.get -> double
+MathNet.Spatial.Euclidean.Circle3D.Circle3D(MathNet.Spatial.Euclidean.Point3D centerPoint, MathNet.Spatial.Euclidean.UnitVector3D axis, double radius) -> void
+MathNet.Spatial.Euclidean.Circle3D.Circle3D(MathNet.Spatial.Euclidean.Point3D p1, MathNet.Spatial.Euclidean.Point3D p2, MathNet.Spatial.Euclidean.Point3D p3) -> void
+MathNet.Spatial.Euclidean.Circle3D.Circle3D(MathNet.Spatial.Euclidean.Point3D p1, MathNet.Spatial.Euclidean.Point3D p2, MathNet.Spatial.Euclidean.UnitVector3D axis) -> void
+MathNet.Spatial.Euclidean.Circle3D.Circumference.get -> double
+MathNet.Spatial.Euclidean.Circle3D.Diameter.get -> double
+MathNet.Spatial.Euclidean.Circle3D.Equals(MathNet.Spatial.Euclidean.Circle3D c) -> bool
+MathNet.Spatial.Euclidean.Circle3D.Equals(MathNet.Spatial.Euclidean.Circle3D c, double tolerance) -> bool
+MathNet.Spatial.Euclidean.CoordinateSystem
+MathNet.Spatial.Euclidean.CoordinateSystem.BaseChangeMatrix.get -> MathNet.Spatial.Euclidean.CoordinateSystem
+MathNet.Spatial.Euclidean.CoordinateSystem.CoordinateSystem() -> void
+MathNet.Spatial.Euclidean.CoordinateSystem.CoordinateSystem(MathNet.Numerics.LinearAlgebra.Matrix<double> matrix) -> void
+MathNet.Spatial.Euclidean.CoordinateSystem.CoordinateSystem(MathNet.Spatial.Euclidean.Point3D origin, MathNet.Spatial.Euclidean.UnitVector3D xAxis, MathNet.Spatial.Euclidean.UnitVector3D yAxis, MathNet.Spatial.Euclidean.UnitVector3D zAxis) -> void
+MathNet.Spatial.Euclidean.CoordinateSystem.CoordinateSystem(MathNet.Spatial.Euclidean.Point3D origin, MathNet.Spatial.Euclidean.Vector3D xAxis, MathNet.Spatial.Euclidean.Vector3D yAxis, MathNet.Spatial.Euclidean.Vector3D zAxis) -> void
+MathNet.Spatial.Euclidean.CoordinateSystem.CoordinateSystem(MathNet.Spatial.Euclidean.Vector3D xAxis, MathNet.Spatial.Euclidean.Vector3D yAxis, MathNet.Spatial.Euclidean.Vector3D zAxis, MathNet.Spatial.Euclidean.Point3D origin) -> void
+MathNet.Spatial.Euclidean.CoordinateSystem.Equals(MathNet.Spatial.Euclidean.CoordinateSystem other) -> bool
+MathNet.Spatial.Euclidean.CoordinateSystem.Equals(MathNet.Spatial.Euclidean.CoordinateSystem other, double tolerance) -> bool
+MathNet.Spatial.Euclidean.CoordinateSystem.GetRotationSubMatrix() -> MathNet.Numerics.LinearAlgebra.Matrix<double>
+MathNet.Spatial.Euclidean.CoordinateSystem.Invert() -> MathNet.Spatial.Euclidean.CoordinateSystem
+MathNet.Spatial.Euclidean.CoordinateSystem.OffsetBy(MathNet.Spatial.Euclidean.UnitVector3D v) -> MathNet.Spatial.Euclidean.CoordinateSystem
+MathNet.Spatial.Euclidean.CoordinateSystem.OffsetBy(MathNet.Spatial.Euclidean.Vector3D v) -> MathNet.Spatial.Euclidean.CoordinateSystem
+MathNet.Spatial.Euclidean.CoordinateSystem.OffsetToBase.get -> MathNet.Spatial.Euclidean.Vector3D
+MathNet.Spatial.Euclidean.CoordinateSystem.Origin.get -> MathNet.Spatial.Euclidean.Point3D
+MathNet.Spatial.Euclidean.CoordinateSystem.ResetRotations() -> MathNet.Spatial.Euclidean.CoordinateSystem
+MathNet.Spatial.Euclidean.CoordinateSystem.RotateCoordSysAroundVector(MathNet.Spatial.Euclidean.UnitVector3D about, MathNet.Spatial.Units.Angle angle) -> MathNet.Spatial.Euclidean.CoordinateSystem
+MathNet.Spatial.Euclidean.CoordinateSystem.RotateCoordSysAroundVector<T>(MathNet.Spatial.Euclidean.Vector3D aboutVector3D, double angle, T angleUnit) -> MathNet.Spatial.Euclidean.CoordinateSystem
+MathNet.Spatial.Euclidean.CoordinateSystem.RotateNoReset(MathNet.Spatial.Units.Angle yaw, MathNet.Spatial.Units.Angle pitch, MathNet.Spatial.Units.Angle roll) -> MathNet.Spatial.Euclidean.CoordinateSystem
+MathNet.Spatial.Euclidean.CoordinateSystem.RotateNoReset<T>(double yaw, double pitch, double roll, T unit) -> MathNet.Spatial.Euclidean.CoordinateSystem
+MathNet.Spatial.Euclidean.CoordinateSystem.SetRotationSubMatrix(MathNet.Numerics.LinearAlgebra.Matrix<double> r) -> MathNet.Spatial.Euclidean.CoordinateSystem
+MathNet.Spatial.Euclidean.CoordinateSystem.SetTranslation(MathNet.Spatial.Euclidean.Vector3D v) -> MathNet.Spatial.Euclidean.CoordinateSystem
+MathNet.Spatial.Euclidean.CoordinateSystem.ToString() -> string
+MathNet.Spatial.Euclidean.CoordinateSystem.Transform(MathNet.Spatial.Euclidean.CoordinateSystem cs) -> MathNet.Spatial.Euclidean.CoordinateSystem
+MathNet.Spatial.Euclidean.CoordinateSystem.Transform(MathNet.Spatial.Euclidean.Line3D l) -> MathNet.Spatial.Euclidean.Line3D
+MathNet.Spatial.Euclidean.CoordinateSystem.Transform(MathNet.Spatial.Euclidean.LineSegment3D l) -> MathNet.Spatial.Euclidean.LineSegment3D
+MathNet.Spatial.Euclidean.CoordinateSystem.Transform(MathNet.Spatial.Euclidean.Point3D p) -> MathNet.Spatial.Euclidean.Point3D
+MathNet.Spatial.Euclidean.CoordinateSystem.Transform(MathNet.Spatial.Euclidean.Ray3D ray) -> MathNet.Spatial.Euclidean.Ray3D
+MathNet.Spatial.Euclidean.CoordinateSystem.Transform(MathNet.Spatial.Euclidean.UnitVector3D v) -> MathNet.Spatial.Euclidean.Vector3D
+MathNet.Spatial.Euclidean.CoordinateSystem.Transform(MathNet.Spatial.Euclidean.Vector3D v) -> MathNet.Spatial.Euclidean.Vector3D
+MathNet.Spatial.Euclidean.CoordinateSystem.TransformBy(MathNet.Numerics.LinearAlgebra.Matrix<double> matrix) -> MathNet.Spatial.Euclidean.CoordinateSystem
+MathNet.Spatial.Euclidean.CoordinateSystem.TransformBy(MathNet.Spatial.Euclidean.CoordinateSystem cs) -> MathNet.Spatial.Euclidean.CoordinateSystem
+MathNet.Spatial.Euclidean.CoordinateSystem.TransformFromCoordSys(MathNet.Spatial.Euclidean.Point3D p) -> MathNet.Spatial.Euclidean.Point3D
+MathNet.Spatial.Euclidean.CoordinateSystem.TransformFromCoordSys(MathNet.Spatial.Euclidean.Ray3D r) -> MathNet.Spatial.Euclidean.Ray3D
+MathNet.Spatial.Euclidean.CoordinateSystem.TransformToCoordSys(MathNet.Spatial.Euclidean.Point3D p) -> MathNet.Spatial.Euclidean.Point3D
+MathNet.Spatial.Euclidean.CoordinateSystem.TransformToCoordSys(MathNet.Spatial.Euclidean.Ray3D r) -> MathNet.Spatial.Euclidean.Ray3D
+MathNet.Spatial.Euclidean.CoordinateSystem.XAxis.get -> MathNet.Spatial.Euclidean.Vector3D
+MathNet.Spatial.Euclidean.CoordinateSystem.YAxis.get -> MathNet.Spatial.Euclidean.Vector3D
+MathNet.Spatial.Euclidean.CoordinateSystem.ZAxis.get -> MathNet.Spatial.Euclidean.Vector3D
+MathNet.Spatial.Euclidean.EulerAngles
+MathNet.Spatial.Euclidean.EulerAngles.Equals(MathNet.Spatial.Euclidean.EulerAngles other) -> bool
+MathNet.Spatial.Euclidean.EulerAngles.Equals(MathNet.Spatial.Euclidean.EulerAngles other, MathNet.Spatial.Units.Angle tolerance) -> bool
+MathNet.Spatial.Euclidean.EulerAngles.Equals(MathNet.Spatial.Euclidean.EulerAngles other, double tolerance) -> bool
+MathNet.Spatial.Euclidean.EulerAngles.EulerAngles(MathNet.Spatial.Units.Angle alpha, MathNet.Spatial.Units.Angle beta, MathNet.Spatial.Units.Angle gamma) -> void
+MathNet.Spatial.Euclidean.EulerAngles.IsEmpty() -> bool
+MathNet.Spatial.Euclidean.Line2D
+MathNet.Spatial.Euclidean.Line2D.ClosestPointTo(MathNet.Spatial.Euclidean.Point2D p, bool mustBeOnSegment) -> MathNet.Spatial.Euclidean.Point2D
+MathNet.Spatial.Euclidean.Line2D.Direction.get -> MathNet.Spatial.Euclidean.Vector2D
+MathNet.Spatial.Euclidean.Line2D.Equals(MathNet.Spatial.Euclidean.Line2D other) -> bool
+MathNet.Spatial.Euclidean.Line2D.IntersectWith(MathNet.Spatial.Euclidean.Line2D other) -> MathNet.Spatial.Euclidean.Point2D?
+MathNet.Spatial.Euclidean.Line2D.IntersectWith(MathNet.Spatial.Euclidean.Line2D other, MathNet.Spatial.Units.Angle tolerance) -> MathNet.Spatial.Euclidean.Point2D?
+MathNet.Spatial.Euclidean.Line2D.IsParallelTo(MathNet.Spatial.Euclidean.Line2D other) -> bool
+MathNet.Spatial.Euclidean.Line2D.IsParallelTo(MathNet.Spatial.Euclidean.Line2D other, MathNet.Spatial.Units.Angle tolerance) -> bool
+MathNet.Spatial.Euclidean.Line2D.Length.get -> double
+MathNet.Spatial.Euclidean.Line2D.Line2D(MathNet.Spatial.Euclidean.Point2D startPoint, MathNet.Spatial.Euclidean.Point2D endPoint) -> void
+MathNet.Spatial.Euclidean.Line2D.LineTo(MathNet.Spatial.Euclidean.Point2D p, bool mustStartBetweenAndEnd) -> MathNet.Spatial.Euclidean.Line2D
+MathNet.Spatial.Euclidean.Line3D
+MathNet.Spatial.Euclidean.Line3D.ClosestPointTo(MathNet.Spatial.Euclidean.Point3D p, bool mustBeOnSegment) -> MathNet.Spatial.Euclidean.Point3D
+MathNet.Spatial.Euclidean.Line3D.ClosestPointsBetween(MathNet.Spatial.Euclidean.Line3D other) -> System.Tuple<MathNet.Spatial.Euclidean.Point3D, MathNet.Spatial.Euclidean.Point3D>
+MathNet.Spatial.Euclidean.Line3D.ClosestPointsBetween(MathNet.Spatial.Euclidean.Line3D other, bool mustBeOnSegments) -> System.Tuple<MathNet.Spatial.Euclidean.Point3D, MathNet.Spatial.Euclidean.Point3D>
+MathNet.Spatial.Euclidean.Line3D.Direction.get -> MathNet.Spatial.Euclidean.UnitVector3D
+MathNet.Spatial.Euclidean.Line3D.Equals(MathNet.Spatial.Euclidean.Line3D other) -> bool
+MathNet.Spatial.Euclidean.Line3D.IntersectionWith(MathNet.Spatial.Euclidean.Plane plane, double tolerance = 4.94065645841247E-324) -> MathNet.Spatial.Euclidean.Point3D?
+MathNet.Spatial.Euclidean.Line3D.IsParallelTo(MathNet.Spatial.Euclidean.Line3D other) -> bool
+MathNet.Spatial.Euclidean.Line3D.IsParallelTo(MathNet.Spatial.Euclidean.Line3D other, MathNet.Spatial.Units.Angle angleTolerance) -> bool
+MathNet.Spatial.Euclidean.Line3D.Length.get -> double
+MathNet.Spatial.Euclidean.Line3D.Line3D(MathNet.Spatial.Euclidean.Point3D startPoint, MathNet.Spatial.Euclidean.Point3D endPoint) -> void
+MathNet.Spatial.Euclidean.Line3D.LineTo(MathNet.Spatial.Euclidean.Point3D p, bool mustStartBetweenStartAndEnd) -> MathNet.Spatial.Euclidean.Line3D
+MathNet.Spatial.Euclidean.Line3D.ProjectOn(MathNet.Spatial.Euclidean.Plane plane) -> MathNet.Spatial.Euclidean.Line3D
+MathNet.Spatial.Euclidean.LineSegment2D
+MathNet.Spatial.Euclidean.LineSegment2D.ClosestPointTo(MathNet.Spatial.Euclidean.Point2D p) -> MathNet.Spatial.Euclidean.Point2D
+MathNet.Spatial.Euclidean.LineSegment2D.Direction.get -> MathNet.Spatial.Euclidean.Vector2D
+MathNet.Spatial.Euclidean.LineSegment2D.Equals(MathNet.Spatial.Euclidean.LineSegment2D l) -> bool
+MathNet.Spatial.Euclidean.LineSegment2D.Equals(MathNet.Spatial.Euclidean.LineSegment2D other, double tolerance) -> bool
+MathNet.Spatial.Euclidean.LineSegment2D.IsParallelTo(MathNet.Spatial.Euclidean.LineSegment2D other, MathNet.Spatial.Units.Angle tolerance) -> bool
+MathNet.Spatial.Euclidean.LineSegment2D.Length.get -> double
+MathNet.Spatial.Euclidean.LineSegment2D.LineSegment2D(MathNet.Spatial.Euclidean.Point2D startPoint, MathNet.Spatial.Euclidean.Point2D endPoint) -> void
+MathNet.Spatial.Euclidean.LineSegment2D.LineTo(MathNet.Spatial.Euclidean.Point2D p) -> MathNet.Spatial.Euclidean.LineSegment2D
+MathNet.Spatial.Euclidean.LineSegment2D.TranslateBy(MathNet.Spatial.Euclidean.Vector2D vector) -> MathNet.Spatial.Euclidean.LineSegment2D
+MathNet.Spatial.Euclidean.LineSegment2D.TryIntersect(MathNet.Spatial.Euclidean.LineSegment2D other, out MathNet.Spatial.Euclidean.Point2D intersection, MathNet.Spatial.Units.Angle tolerance) -> bool
+MathNet.Spatial.Euclidean.LineSegment3D
+MathNet.Spatial.Euclidean.LineSegment3D.ClosestPointTo(MathNet.Spatial.Euclidean.Point3D p) -> MathNet.Spatial.Euclidean.Point3D
+MathNet.Spatial.Euclidean.LineSegment3D.Direction.get -> MathNet.Spatial.Euclidean.UnitVector3D
+MathNet.Spatial.Euclidean.LineSegment3D.Equals(MathNet.Spatial.Euclidean.LineSegment3D l) -> bool
+MathNet.Spatial.Euclidean.LineSegment3D.Equals(MathNet.Spatial.Euclidean.LineSegment3D other, double tolerance) -> bool
+MathNet.Spatial.Euclidean.LineSegment3D.IsParallelTo(MathNet.Spatial.Euclidean.LineSegment3D other, MathNet.Spatial.Units.Angle tolerance) -> bool
+MathNet.Spatial.Euclidean.LineSegment3D.Length.get -> double
+MathNet.Spatial.Euclidean.LineSegment3D.LineSegment3D(MathNet.Spatial.Euclidean.Point3D startPoint, MathNet.Spatial.Euclidean.Point3D endPoint) -> void
+MathNet.Spatial.Euclidean.LineSegment3D.LineTo(MathNet.Spatial.Euclidean.Point3D p) -> MathNet.Spatial.Euclidean.LineSegment3D
+MathNet.Spatial.Euclidean.LineSegment3D.TranslateBy(MathNet.Spatial.Euclidean.Vector3D vector) -> MathNet.Spatial.Euclidean.LineSegment3D
+MathNet.Spatial.Euclidean.LineSegment3D.TryShortestLineTo(MathNet.Spatial.Euclidean.LineSegment3D other, MathNet.Spatial.Units.Angle tolerance, out MathNet.Spatial.Euclidean.LineSegment3D closestLine) -> bool
+MathNet.Spatial.Euclidean.Matrix2D
+MathNet.Spatial.Euclidean.Matrix3D
+MathNet.Spatial.Euclidean.Plane
+MathNet.Spatial.Euclidean.Plane.A.get -> double
+MathNet.Spatial.Euclidean.Plane.AbsoluteDistanceTo(MathNet.Spatial.Euclidean.Point3D point) -> double
+MathNet.Spatial.Euclidean.Plane.B.get -> double
+MathNet.Spatial.Euclidean.Plane.C.get -> double
+MathNet.Spatial.Euclidean.Plane.Equals(MathNet.Spatial.Euclidean.Plane other, double tolerance) -> bool
+MathNet.Spatial.Euclidean.Plane.Equals(MathNet.Spatial.Euclidean.Plane p) -> bool
+MathNet.Spatial.Euclidean.Plane.IntersectionWith(MathNet.Spatial.Euclidean.Line3D line, double tolerance = 1.4012984643248171E-45) -> MathNet.Spatial.Euclidean.Point3D?
+MathNet.Spatial.Euclidean.Plane.IntersectionWith(MathNet.Spatial.Euclidean.LineSegment3D line, double tolerance = 1.4012984643248171E-45) -> MathNet.Spatial.Euclidean.Point3D?
+MathNet.Spatial.Euclidean.Plane.IntersectionWith(MathNet.Spatial.Euclidean.Plane intersectingPlane, double tolerance = 1.4012984643248171E-45) -> MathNet.Spatial.Euclidean.Ray3D
+MathNet.Spatial.Euclidean.Plane.IntersectionWith(MathNet.Spatial.Euclidean.Ray3D ray, double tolerance = 1.4012984643248171E-45) -> MathNet.Spatial.Euclidean.Point3D
+MathNet.Spatial.Euclidean.Plane.MirrorAbout(MathNet.Spatial.Euclidean.Point3D p) -> MathNet.Spatial.Euclidean.Point3D
+MathNet.Spatial.Euclidean.Plane.Plane(MathNet.Spatial.Euclidean.Point3D p1, MathNet.Spatial.Euclidean.Point3D p2, MathNet.Spatial.Euclidean.Point3D p3) -> void
+MathNet.Spatial.Euclidean.Plane.Plane(MathNet.Spatial.Euclidean.Point3D rootPoint, MathNet.Spatial.Euclidean.UnitVector3D normal) -> void
+MathNet.Spatial.Euclidean.Plane.Plane(MathNet.Spatial.Euclidean.UnitVector3D normal, MathNet.Spatial.Euclidean.Point3D rootPoint) -> void
+MathNet.Spatial.Euclidean.Plane.Plane(MathNet.Spatial.Euclidean.UnitVector3D normal, double offset = 0) -> void
+MathNet.Spatial.Euclidean.Plane.Plane(double x, double y, double z, double d) -> void
+MathNet.Spatial.Euclidean.Plane.Project(MathNet.Spatial.Euclidean.Line3D line3DToProject) -> MathNet.Spatial.Euclidean.Line3D
+MathNet.Spatial.Euclidean.Plane.Project(MathNet.Spatial.Euclidean.LineSegment3D line3DToProject) -> MathNet.Spatial.Euclidean.LineSegment3D
+MathNet.Spatial.Euclidean.Plane.Project(MathNet.Spatial.Euclidean.Point3D p, MathNet.Spatial.Euclidean.UnitVector3D? projectionDirection = null) -> MathNet.Spatial.Euclidean.Point3D
+MathNet.Spatial.Euclidean.Plane.Project(MathNet.Spatial.Euclidean.Ray3D rayToProject) -> MathNet.Spatial.Euclidean.Ray3D
+MathNet.Spatial.Euclidean.Plane.Project(MathNet.Spatial.Euclidean.UnitVector3D vector3DToProject) -> MathNet.Spatial.Euclidean.Ray3D
+MathNet.Spatial.Euclidean.Plane.Project(MathNet.Spatial.Euclidean.Vector3D vector3DToProject) -> MathNet.Spatial.Euclidean.Ray3D
+MathNet.Spatial.Euclidean.Plane.RootPoint.get -> MathNet.Spatial.Euclidean.Point3D
+MathNet.Spatial.Euclidean.Plane.Rotate(MathNet.Spatial.Euclidean.UnitVector3D aboutVector, MathNet.Spatial.Units.Angle angle) -> MathNet.Spatial.Euclidean.Plane
+MathNet.Spatial.Euclidean.Plane.SignedDistanceTo(MathNet.Spatial.Euclidean.Plane other) -> double
+MathNet.Spatial.Euclidean.Plane.SignedDistanceTo(MathNet.Spatial.Euclidean.Point3D point) -> double
+MathNet.Spatial.Euclidean.Plane.SignedDistanceTo(MathNet.Spatial.Euclidean.Ray3D ray) -> double
+MathNet.Spatial.Euclidean.Point2D
+MathNet.Spatial.Euclidean.Point2D.DistanceTo(MathNet.Spatial.Euclidean.Point2D otherPoint) -> double
+MathNet.Spatial.Euclidean.Point2D.Equals(MathNet.Spatial.Euclidean.Point2D other) -> bool
+MathNet.Spatial.Euclidean.Point2D.Equals(MathNet.Spatial.Euclidean.Point2D other, double tolerance) -> bool
+MathNet.Spatial.Euclidean.Point2D.Point2D(System.Collections.Generic.IEnumerable<double> data) -> void
+MathNet.Spatial.Euclidean.Point2D.Point2D(double r, MathNet.Spatial.Units.Angle a) -> void
+MathNet.Spatial.Euclidean.Point2D.Point2D(double x, double y) -> void
+MathNet.Spatial.Euclidean.Point2D.Point2D(double[] data) -> void
+MathNet.Spatial.Euclidean.Point2D.ToPoint3D() -> MathNet.Spatial.Euclidean.Point3D
+MathNet.Spatial.Euclidean.Point2D.ToString(System.IFormatProvider provider) -> string
+MathNet.Spatial.Euclidean.Point2D.ToString(string format, System.IFormatProvider provider = null) -> string
+MathNet.Spatial.Euclidean.Point2D.ToVector() -> MathNet.Numerics.LinearAlgebra.Vector<double>
+MathNet.Spatial.Euclidean.Point2D.ToVector2D() -> MathNet.Spatial.Euclidean.Vector2D
+MathNet.Spatial.Euclidean.Point2D.TransformBy(MathNet.Numerics.LinearAlgebra.Matrix<double> m) -> MathNet.Spatial.Euclidean.Point2D
+MathNet.Spatial.Euclidean.Point2D.TransformBy(MathNet.Spatial.Euclidean.CoordinateSystem cs) -> MathNet.Spatial.Euclidean.Point3D
+MathNet.Spatial.Euclidean.Point2D.VectorTo(MathNet.Spatial.Euclidean.Point2D otherPoint) -> MathNet.Spatial.Euclidean.Vector2D
+MathNet.Spatial.Euclidean.Point3D
+MathNet.Spatial.Euclidean.Point3D.DistanceTo(MathNet.Spatial.Euclidean.Point3D p) -> double
+MathNet.Spatial.Euclidean.Point3D.Equals(MathNet.Spatial.Euclidean.Point3D other) -> bool
+MathNet.Spatial.Euclidean.Point3D.Equals(MathNet.Spatial.Euclidean.Point3D other, double tolerance) -> bool
+MathNet.Spatial.Euclidean.Point3D.MirrorAbout(MathNet.Spatial.Euclidean.Plane plane) -> MathNet.Spatial.Euclidean.Point3D
+MathNet.Spatial.Euclidean.Point3D.Point3D(System.Collections.Generic.IEnumerable<double> data) -> void
+MathNet.Spatial.Euclidean.Point3D.Point3D(double x, double y, double z) -> void
+MathNet.Spatial.Euclidean.Point3D.Point3D(double[] data) -> void
+MathNet.Spatial.Euclidean.Point3D.ProjectOn(MathNet.Spatial.Euclidean.Plane plane) -> MathNet.Spatial.Euclidean.Point3D
+MathNet.Spatial.Euclidean.Point3D.Rotate(MathNet.Spatial.Euclidean.UnitVector3D aboutVector, MathNet.Spatial.Units.Angle angle) -> MathNet.Spatial.Euclidean.Point3D
+MathNet.Spatial.Euclidean.Point3D.Rotate(MathNet.Spatial.Euclidean.Vector3D aboutVector, MathNet.Spatial.Units.Angle angle) -> MathNet.Spatial.Euclidean.Point3D
+MathNet.Spatial.Euclidean.Point3D.ToString(System.IFormatProvider provider) -> string
+MathNet.Spatial.Euclidean.Point3D.ToString(string format, System.IFormatProvider provider = null) -> string
+MathNet.Spatial.Euclidean.Point3D.ToVector() -> MathNet.Numerics.LinearAlgebra.Vector<double>
+MathNet.Spatial.Euclidean.Point3D.ToVector3D() -> MathNet.Spatial.Euclidean.Vector3D
+MathNet.Spatial.Euclidean.Point3D.TransformBy(MathNet.Numerics.LinearAlgebra.Matrix<double> m) -> MathNet.Spatial.Euclidean.Point3D
+MathNet.Spatial.Euclidean.Point3D.TransformBy(MathNet.Spatial.Euclidean.CoordinateSystem cs) -> MathNet.Spatial.Euclidean.Point3D
+MathNet.Spatial.Euclidean.Point3D.VectorTo(MathNet.Spatial.Euclidean.Point3D p) -> MathNet.Spatial.Euclidean.Vector3D
+MathNet.Spatial.Euclidean.PolyLine2D
+MathNet.Spatial.Euclidean.PolyLine2D.ClosestPointTo(MathNet.Spatial.Euclidean.Point2D p) -> MathNet.Spatial.Euclidean.Point2D
+MathNet.Spatial.Euclidean.PolyLine2D.Count.get -> int
+MathNet.Spatial.Euclidean.PolyLine2D.Equals(MathNet.Spatial.Euclidean.PolyLine2D other) -> bool
+MathNet.Spatial.Euclidean.PolyLine2D.Equals(MathNet.Spatial.Euclidean.PolyLine2D other, double tolerance) -> bool
+MathNet.Spatial.Euclidean.PolyLine2D.GetEnumerator() -> System.Collections.Generic.IEnumerator<MathNet.Spatial.Euclidean.Point2D>
+MathNet.Spatial.Euclidean.PolyLine2D.GetPointAtFractionAlongCurve(double fraction) -> MathNet.Spatial.Euclidean.Point2D
+MathNet.Spatial.Euclidean.PolyLine2D.GetPointAtLengthFromStart(double lengthFromStart) -> MathNet.Spatial.Euclidean.Point2D
+MathNet.Spatial.Euclidean.PolyLine2D.Length.get -> double
+MathNet.Spatial.Euclidean.PolyLine2D.PolyLine2D(System.Collections.Generic.IEnumerable<MathNet.Spatial.Euclidean.Point2D> points) -> void
+MathNet.Spatial.Euclidean.PolyLine2D.VertexCount.get -> int
+MathNet.Spatial.Euclidean.PolyLine2D.Vertices.get -> System.Collections.Generic.IEnumerable<MathNet.Spatial.Euclidean.Point2D>
+MathNet.Spatial.Euclidean.PolyLine2D.this[int key].get -> MathNet.Spatial.Euclidean.Point2D
+MathNet.Spatial.Euclidean.PolyLine3D
+MathNet.Spatial.Euclidean.PolyLine3D.ClosestPointTo(MathNet.Spatial.Euclidean.Point3D p) -> MathNet.Spatial.Euclidean.Point3D
+MathNet.Spatial.Euclidean.PolyLine3D.Count.get -> int
+MathNet.Spatial.Euclidean.PolyLine3D.Equals(MathNet.Spatial.Euclidean.PolyLine3D other) -> bool
+MathNet.Spatial.Euclidean.PolyLine3D.Equals(MathNet.Spatial.Euclidean.PolyLine3D other, double tolerance) -> bool
+MathNet.Spatial.Euclidean.PolyLine3D.GetEnumerator() -> System.Collections.Generic.IEnumerator<MathNet.Spatial.Euclidean.Point3D>
+MathNet.Spatial.Euclidean.PolyLine3D.GetPointAtFractionAlongCurve(double fraction) -> MathNet.Spatial.Euclidean.Point3D
+MathNet.Spatial.Euclidean.PolyLine3D.GetPointAtLengthFromStart(double lengthFromStart) -> MathNet.Spatial.Euclidean.Point3D
+MathNet.Spatial.Euclidean.PolyLine3D.Length.get -> double
+MathNet.Spatial.Euclidean.PolyLine3D.PolyLine3D(System.Collections.Generic.IEnumerable<MathNet.Spatial.Euclidean.Point3D> points) -> void
+MathNet.Spatial.Euclidean.PolyLine3D.VertexCount.get -> int
+MathNet.Spatial.Euclidean.PolyLine3D.Vertices.get -> System.Collections.Generic.IEnumerable<MathNet.Spatial.Euclidean.Point3D>
+MathNet.Spatial.Euclidean.PolyLine3D.this[int key].get -> MathNet.Spatial.Euclidean.Point3D
+MathNet.Spatial.Euclidean.Polygon2D
+MathNet.Spatial.Euclidean.Polygon2D.Count.get -> int
+MathNet.Spatial.Euclidean.Polygon2D.Edges.get -> System.Collections.Generic.IEnumerable<MathNet.Spatial.Euclidean.LineSegment2D>
+MathNet.Spatial.Euclidean.Polygon2D.EnclosesPoint(MathNet.Spatial.Euclidean.Point2D p) -> bool
+MathNet.Spatial.Euclidean.Polygon2D.Equals(MathNet.Spatial.Euclidean.Polygon2D other) -> bool
+MathNet.Spatial.Euclidean.Polygon2D.Equals(MathNet.Spatial.Euclidean.Polygon2D other, double tolerance) -> bool
+MathNet.Spatial.Euclidean.Polygon2D.GetEnumerator() -> System.Collections.Generic.IEnumerator<MathNet.Spatial.Euclidean.Point2D>
+MathNet.Spatial.Euclidean.Polygon2D.Polygon2D(System.Collections.Generic.IEnumerable<MathNet.Spatial.Euclidean.Point2D> vertices) -> void
+MathNet.Spatial.Euclidean.Polygon2D.Polygon2D(params MathNet.Spatial.Euclidean.Point2D[] vertices) -> void
+MathNet.Spatial.Euclidean.Polygon2D.ReduceComplexity(double singleStepTolerance) -> MathNet.Spatial.Euclidean.Polygon2D
+MathNet.Spatial.Euclidean.Polygon2D.Rotate(MathNet.Spatial.Units.Angle angle) -> MathNet.Spatial.Euclidean.Polygon2D
+MathNet.Spatial.Euclidean.Polygon2D.RotateAround(MathNet.Spatial.Units.Angle angle, MathNet.Spatial.Euclidean.Point2D center) -> MathNet.Spatial.Euclidean.Polygon2D
+MathNet.Spatial.Euclidean.Polygon2D.ToPolyLine2D() -> MathNet.Spatial.Euclidean.PolyLine2D
+MathNet.Spatial.Euclidean.Polygon2D.TranslateBy(MathNet.Spatial.Euclidean.Vector2D vector) -> MathNet.Spatial.Euclidean.Polygon2D
+MathNet.Spatial.Euclidean.Polygon2D.VertexCount.get -> int
+MathNet.Spatial.Euclidean.Polygon2D.Vertices.get -> System.Collections.Generic.IEnumerable<MathNet.Spatial.Euclidean.Point2D>
+MathNet.Spatial.Euclidean.Polygon2D.this[int key].get -> MathNet.Spatial.Euclidean.Point2D
+MathNet.Spatial.Euclidean.Quaternion
+MathNet.Spatial.Euclidean.Quaternion.Arg.get -> double
+MathNet.Spatial.Euclidean.Quaternion.Conjugate() -> MathNet.Spatial.Euclidean.Quaternion
+MathNet.Spatial.Euclidean.Quaternion.Equals(MathNet.Spatial.Euclidean.Quaternion other) -> bool
+MathNet.Spatial.Euclidean.Quaternion.Equals(MathNet.Spatial.Euclidean.Quaternion other, double tolerance) -> bool
+MathNet.Spatial.Euclidean.Quaternion.Exp() -> MathNet.Spatial.Euclidean.Quaternion
+MathNet.Spatial.Euclidean.Quaternion.ImagX.get -> double
+MathNet.Spatial.Euclidean.Quaternion.ImagY.get -> double
+MathNet.Spatial.Euclidean.Quaternion.ImagZ.get -> double
+MathNet.Spatial.Euclidean.Quaternion.Inversed.get -> MathNet.Spatial.Euclidean.Quaternion
+MathNet.Spatial.Euclidean.Quaternion.IsInfinity.get -> bool
+MathNet.Spatial.Euclidean.Quaternion.IsNan.get -> bool
+MathNet.Spatial.Euclidean.Quaternion.IsUnitQuaternion.get -> bool
+MathNet.Spatial.Euclidean.Quaternion.Log() -> MathNet.Spatial.Euclidean.Quaternion
+MathNet.Spatial.Euclidean.Quaternion.Log(double lbase) -> MathNet.Spatial.Euclidean.Quaternion
+MathNet.Spatial.Euclidean.Quaternion.Log10() -> MathNet.Spatial.Euclidean.Quaternion
+MathNet.Spatial.Euclidean.Quaternion.Negate() -> MathNet.Spatial.Euclidean.Quaternion
+MathNet.Spatial.Euclidean.Quaternion.Norm.get -> double
+MathNet.Spatial.Euclidean.Quaternion.NormSquared.get -> double
+MathNet.Spatial.Euclidean.Quaternion.Normalized.get -> MathNet.Spatial.Euclidean.Quaternion
+MathNet.Spatial.Euclidean.Quaternion.NormalizedVector.get -> MathNet.Spatial.Euclidean.Quaternion
+MathNet.Spatial.Euclidean.Quaternion.Pow(MathNet.Spatial.Euclidean.Quaternion power) -> MathNet.Spatial.Euclidean.Quaternion
+MathNet.Spatial.Euclidean.Quaternion.Pow(double power) -> MathNet.Spatial.Euclidean.Quaternion
+MathNet.Spatial.Euclidean.Quaternion.Pow(int power) -> MathNet.Spatial.Euclidean.Quaternion
+MathNet.Spatial.Euclidean.Quaternion.Quaternion(MathNet.Numerics.LinearAlgebra.Double.DenseVector v) -> void
+MathNet.Spatial.Euclidean.Quaternion.Quaternion(double real, double imagX, double imagY, double imagZ) -> void
+MathNet.Spatial.Euclidean.Quaternion.Real.get -> double
+MathNet.Spatial.Euclidean.Quaternion.RotateRotationQuaternion(MathNet.Spatial.Euclidean.Quaternion rotation) -> MathNet.Spatial.Euclidean.Quaternion
+MathNet.Spatial.Euclidean.Quaternion.RotateUnitQuaternion(MathNet.Spatial.Euclidean.Quaternion unitQuaternion) -> MathNet.Spatial.Euclidean.Quaternion
+MathNet.Spatial.Euclidean.Quaternion.Scalar.get -> MathNet.Spatial.Euclidean.Quaternion
+MathNet.Spatial.Euclidean.Quaternion.Sqrt() -> MathNet.Spatial.Euclidean.Quaternion
+MathNet.Spatial.Euclidean.Quaternion.ToEulerAngles() -> MathNet.Spatial.Euclidean.EulerAngles
+MathNet.Spatial.Euclidean.Quaternion.ToString(string format, System.IFormatProvider formatProvider) -> string
+MathNet.Spatial.Euclidean.Quaternion.Vector.get -> MathNet.Spatial.Euclidean.Quaternion
+MathNet.Spatial.Euclidean.Ray3D
+MathNet.Spatial.Euclidean.Ray3D.Equals(MathNet.Spatial.Euclidean.Ray3D other, double tolerance) -> bool
+MathNet.Spatial.Euclidean.Ray3D.Equals(MathNet.Spatial.Euclidean.Ray3D r) -> bool
+MathNet.Spatial.Euclidean.Ray3D.IntersectionWith(MathNet.Spatial.Euclidean.Plane plane) -> MathNet.Spatial.Euclidean.Point3D?
+MathNet.Spatial.Euclidean.Ray3D.IsCollinear(MathNet.Spatial.Euclidean.Ray3D otherRay, double tolerance = 1.4012984643248171E-45) -> bool
+MathNet.Spatial.Euclidean.Ray3D.LineTo(MathNet.Spatial.Euclidean.Point3D point3D) -> MathNet.Spatial.Euclidean.Line3D
+MathNet.Spatial.Euclidean.Ray3D.Ray3D(MathNet.Spatial.Euclidean.Point3D throughPoint, MathNet.Spatial.Euclidean.UnitVector3D direction) -> void
+MathNet.Spatial.Euclidean.Ray3D.Ray3D(MathNet.Spatial.Euclidean.Point3D throughPoint, MathNet.Spatial.Euclidean.Vector3D direction) -> void
+MathNet.Spatial.Euclidean.Ray3D.ShortestLineTo(MathNet.Spatial.Euclidean.Point3D point3D) -> MathNet.Spatial.Euclidean.LineSegment3D
+MathNet.Spatial.Euclidean.Ray3D.ToString(string format, System.IFormatProvider formatProvider) -> string
+MathNet.Spatial.Euclidean.UnitVector3D
+MathNet.Spatial.Euclidean.UnitVector3D.Add(MathNet.Spatial.Euclidean.UnitVector3D v) -> MathNet.Spatial.Euclidean.Vector3D
+MathNet.Spatial.Euclidean.UnitVector3D.AngleTo(MathNet.Spatial.Euclidean.UnitVector3D v) -> MathNet.Spatial.Units.Angle
+MathNet.Spatial.Euclidean.UnitVector3D.AngleTo(MathNet.Spatial.Euclidean.Vector3D v) -> MathNet.Spatial.Units.Angle
+MathNet.Spatial.Euclidean.UnitVector3D.CrossProduct(MathNet.Spatial.Euclidean.UnitVector3D other) -> MathNet.Spatial.Euclidean.UnitVector3D
+MathNet.Spatial.Euclidean.UnitVector3D.CrossProduct(MathNet.Spatial.Euclidean.Vector3D inVector3D) -> MathNet.Spatial.Euclidean.Vector3D
+MathNet.Spatial.Euclidean.UnitVector3D.DotProduct(MathNet.Spatial.Euclidean.UnitVector3D v) -> double
+MathNet.Spatial.Euclidean.UnitVector3D.DotProduct(MathNet.Spatial.Euclidean.Vector3D v) -> double
+MathNet.Spatial.Euclidean.UnitVector3D.Equals(MathNet.Spatial.Euclidean.UnitVector3D other) -> bool
+MathNet.Spatial.Euclidean.UnitVector3D.Equals(MathNet.Spatial.Euclidean.UnitVector3D other, double tolerance) -> bool
+MathNet.Spatial.Euclidean.UnitVector3D.Equals(MathNet.Spatial.Euclidean.Vector3D other) -> bool
+MathNet.Spatial.Euclidean.UnitVector3D.Equals(MathNet.Spatial.Euclidean.Vector3D other, double tolerance) -> bool
+MathNet.Spatial.Euclidean.UnitVector3D.GetUnitTensorProduct() -> MathNet.Numerics.LinearAlgebra.Matrix<double>
+MathNet.Spatial.Euclidean.UnitVector3D.IsParallelTo(MathNet.Spatial.Euclidean.UnitVector3D othervector, MathNet.Spatial.Units.Angle angleTolerance) -> bool
+MathNet.Spatial.Euclidean.UnitVector3D.IsParallelTo(MathNet.Spatial.Euclidean.UnitVector3D othervector, double tolerance = 1E-10) -> bool
+MathNet.Spatial.Euclidean.UnitVector3D.IsParallelTo(MathNet.Spatial.Euclidean.Vector3D othervector, MathNet.Spatial.Units.Angle angleTolerance) -> bool
+MathNet.Spatial.Euclidean.UnitVector3D.IsParallelTo(MathNet.Spatial.Euclidean.Vector3D othervector, double tolerance = 1E-10) -> bool
+MathNet.Spatial.Euclidean.UnitVector3D.IsPerpendicularTo(MathNet.Spatial.Euclidean.UnitVector3D othervector, double tolerance = 1E-10) -> bool
+MathNet.Spatial.Euclidean.UnitVector3D.IsPerpendicularTo(MathNet.Spatial.Euclidean.Vector3D othervector, double tolerance = 1E-10) -> bool
+MathNet.Spatial.Euclidean.UnitVector3D.Length.get -> double
+MathNet.Spatial.Euclidean.UnitVector3D.Negate() -> MathNet.Spatial.Euclidean.UnitVector3D
+MathNet.Spatial.Euclidean.UnitVector3D.Orthogonal.get -> MathNet.Spatial.Euclidean.UnitVector3D
+MathNet.Spatial.Euclidean.UnitVector3D.ProjectOn(MathNet.Spatial.Euclidean.Plane plane) -> MathNet.Spatial.Euclidean.Ray3D
+MathNet.Spatial.Euclidean.UnitVector3D.ProjectOn(MathNet.Spatial.Euclidean.UnitVector3D uv) -> MathNet.Spatial.Euclidean.Vector3D
+MathNet.Spatial.Euclidean.UnitVector3D.Rotate(MathNet.Spatial.Euclidean.UnitVector3D about, MathNet.Spatial.Units.Angle angle) -> MathNet.Spatial.Euclidean.UnitVector3D
+MathNet.Spatial.Euclidean.UnitVector3D.Rotate<T>(MathNet.Spatial.Euclidean.UnitVector3D about, double angle, T unit) -> MathNet.Spatial.Euclidean.UnitVector3D
+MathNet.Spatial.Euclidean.UnitVector3D.ScaleBy(double factor) -> MathNet.Spatial.Euclidean.Vector3D
+MathNet.Spatial.Euclidean.UnitVector3D.SignedAngleTo(MathNet.Spatial.Euclidean.UnitVector3D v, MathNet.Spatial.Euclidean.UnitVector3D about) -> MathNet.Spatial.Units.Angle
+MathNet.Spatial.Euclidean.UnitVector3D.SignedAngleTo(MathNet.Spatial.Euclidean.Vector3D v, MathNet.Spatial.Euclidean.UnitVector3D about) -> MathNet.Spatial.Units.Angle
+MathNet.Spatial.Euclidean.UnitVector3D.Subtract(MathNet.Spatial.Euclidean.UnitVector3D v) -> MathNet.Spatial.Euclidean.Vector3D
+MathNet.Spatial.Euclidean.UnitVector3D.ToPoint3D() -> MathNet.Spatial.Euclidean.Point3D
+MathNet.Spatial.Euclidean.UnitVector3D.ToString(System.IFormatProvider provider) -> string
+MathNet.Spatial.Euclidean.UnitVector3D.ToString(string format, System.IFormatProvider provider = null) -> string
+MathNet.Spatial.Euclidean.UnitVector3D.ToVector() -> MathNet.Numerics.LinearAlgebra.Vector<double>
+MathNet.Spatial.Euclidean.UnitVector3D.ToVector3D() -> MathNet.Spatial.Euclidean.Vector3D
+MathNet.Spatial.Euclidean.UnitVector3D.TransformBy(MathNet.Numerics.LinearAlgebra.Matrix<double> m) -> MathNet.Spatial.Euclidean.Vector3D
+MathNet.Spatial.Euclidean.UnitVector3D.TransformBy(MathNet.Spatial.Euclidean.CoordinateSystem coordinateSystem) -> MathNet.Spatial.Euclidean.Vector3D
+MathNet.Spatial.Euclidean.UnitVector3D.UnitVector3D(System.Collections.Generic.IEnumerable<double> data) -> void
+MathNet.Spatial.Euclidean.UnitVector3D.UnitVector3D(double x, double y, double z) -> void
+MathNet.Spatial.Euclidean.UnitVector3D.UnitVector3D(double[] data) -> void
+MathNet.Spatial.Euclidean.Vector2D
+MathNet.Spatial.Euclidean.Vector2D.Add(MathNet.Spatial.Euclidean.Vector2D v) -> MathNet.Spatial.Euclidean.Vector2D
+MathNet.Spatial.Euclidean.Vector2D.AngleTo(MathNet.Spatial.Euclidean.Vector2D other) -> MathNet.Spatial.Units.Angle
+MathNet.Spatial.Euclidean.Vector2D.CrossProduct(MathNet.Spatial.Euclidean.Vector2D other) -> double
+MathNet.Spatial.Euclidean.Vector2D.DotProduct(MathNet.Spatial.Euclidean.Vector2D other) -> double
+MathNet.Spatial.Euclidean.Vector2D.Equals(MathNet.Spatial.Euclidean.Vector2D other) -> bool
+MathNet.Spatial.Euclidean.Vector2D.Equals(MathNet.Spatial.Euclidean.Vector2D other, double tolerance) -> bool
+MathNet.Spatial.Euclidean.Vector2D.IsParallelTo(MathNet.Spatial.Euclidean.Vector2D other, MathNet.Spatial.Units.Angle tolerance) -> bool
+MathNet.Spatial.Euclidean.Vector2D.IsParallelTo(MathNet.Spatial.Euclidean.Vector2D other, double tolerance = 1E-10) -> bool
+MathNet.Spatial.Euclidean.Vector2D.IsPerpendicularTo(MathNet.Spatial.Euclidean.Vector2D other, MathNet.Spatial.Units.Angle tolerance) -> bool
+MathNet.Spatial.Euclidean.Vector2D.IsPerpendicularTo(MathNet.Spatial.Euclidean.Vector2D other, double tolerance = 1E-10) -> bool
+MathNet.Spatial.Euclidean.Vector2D.Length.get -> double
+MathNet.Spatial.Euclidean.Vector2D.Negate() -> MathNet.Spatial.Euclidean.Vector2D
+MathNet.Spatial.Euclidean.Vector2D.Normalize() -> MathNet.Spatial.Euclidean.Vector2D
+MathNet.Spatial.Euclidean.Vector2D.ProjectOn(MathNet.Spatial.Euclidean.Vector2D other) -> MathNet.Spatial.Euclidean.Vector2D
+MathNet.Spatial.Euclidean.Vector2D.Rotate(MathNet.Spatial.Units.Angle angle) -> MathNet.Spatial.Euclidean.Vector2D
+MathNet.Spatial.Euclidean.Vector2D.Rotate<T>(double angle, T angleUnit) -> MathNet.Spatial.Euclidean.Vector2D
+MathNet.Spatial.Euclidean.Vector2D.ScaleBy(double d) -> MathNet.Spatial.Euclidean.Vector2D
+MathNet.Spatial.Euclidean.Vector2D.SignedAngleTo(MathNet.Spatial.Euclidean.Vector2D other, bool clockWise = false, bool returnNegative = false) -> MathNet.Spatial.Units.Angle
+MathNet.Spatial.Euclidean.Vector2D.Subtract(MathNet.Spatial.Euclidean.Vector2D v) -> MathNet.Spatial.Euclidean.Vector2D
+MathNet.Spatial.Euclidean.Vector2D.ToString(System.IFormatProvider provider) -> string
+MathNet.Spatial.Euclidean.Vector2D.ToString(string format, System.IFormatProvider provider = null) -> string
+MathNet.Spatial.Euclidean.Vector2D.ToVector() -> MathNet.Numerics.LinearAlgebra.Vector<double>
+MathNet.Spatial.Euclidean.Vector2D.TransformBy(MathNet.Numerics.LinearAlgebra.Matrix<double> m) -> MathNet.Spatial.Euclidean.Vector2D
+MathNet.Spatial.Euclidean.Vector2D.Vector2D(System.Collections.Generic.IEnumerable<double> data) -> void
+MathNet.Spatial.Euclidean.Vector2D.Vector2D(double r, MathNet.Spatial.Units.Angle a) -> void
+MathNet.Spatial.Euclidean.Vector2D.Vector2D(double x, double y) -> void
+MathNet.Spatial.Euclidean.Vector2D.Vector2D(double[] data) -> void
+MathNet.Spatial.Euclidean.Vector3D
+MathNet.Spatial.Euclidean.Vector3D.Add(MathNet.Spatial.Euclidean.Vector3D v) -> MathNet.Spatial.Euclidean.Vector3D
+MathNet.Spatial.Euclidean.Vector3D.AngleTo(MathNet.Spatial.Euclidean.UnitVector3D v) -> MathNet.Spatial.Units.Angle
+MathNet.Spatial.Euclidean.Vector3D.AngleTo(MathNet.Spatial.Euclidean.Vector3D v) -> MathNet.Spatial.Units.Angle
+MathNet.Spatial.Euclidean.Vector3D.CrossProduct(MathNet.Spatial.Euclidean.UnitVector3D other) -> MathNet.Spatial.Euclidean.Vector3D
+MathNet.Spatial.Euclidean.Vector3D.CrossProduct(MathNet.Spatial.Euclidean.Vector3D other) -> MathNet.Spatial.Euclidean.Vector3D
+MathNet.Spatial.Euclidean.Vector3D.DotProduct(MathNet.Spatial.Euclidean.UnitVector3D v) -> double
+MathNet.Spatial.Euclidean.Vector3D.DotProduct(MathNet.Spatial.Euclidean.Vector3D v) -> double
+MathNet.Spatial.Euclidean.Vector3D.Equals(MathNet.Spatial.Euclidean.UnitVector3D other) -> bool
+MathNet.Spatial.Euclidean.Vector3D.Equals(MathNet.Spatial.Euclidean.UnitVector3D other, double tolerance) -> bool
+MathNet.Spatial.Euclidean.Vector3D.Equals(MathNet.Spatial.Euclidean.Vector3D other) -> bool
+MathNet.Spatial.Euclidean.Vector3D.Equals(MathNet.Spatial.Euclidean.Vector3D other, double tolerance) -> bool
+MathNet.Spatial.Euclidean.Vector3D.GetUnitTensorProduct() -> MathNet.Numerics.LinearAlgebra.Matrix<double>
+MathNet.Spatial.Euclidean.Vector3D.IsParallelTo(MathNet.Spatial.Euclidean.UnitVector3D other, MathNet.Spatial.Units.Angle tolerance) -> bool
+MathNet.Spatial.Euclidean.Vector3D.IsParallelTo(MathNet.Spatial.Euclidean.UnitVector3D other, double tolerance = 1E-10) -> bool
+MathNet.Spatial.Euclidean.Vector3D.IsParallelTo(MathNet.Spatial.Euclidean.Vector3D other, MathNet.Spatial.Units.Angle tolerance) -> bool
+MathNet.Spatial.Euclidean.Vector3D.IsParallelTo(MathNet.Spatial.Euclidean.Vector3D other, double tolerance = 1E-10) -> bool
+MathNet.Spatial.Euclidean.Vector3D.IsPerpendicularTo(MathNet.Spatial.Euclidean.UnitVector3D other, double tolerance = 1E-06) -> bool
+MathNet.Spatial.Euclidean.Vector3D.IsPerpendicularTo(MathNet.Spatial.Euclidean.Vector3D other, double tolerance = 1E-06) -> bool
+MathNet.Spatial.Euclidean.Vector3D.Length.get -> double
+MathNet.Spatial.Euclidean.Vector3D.Negate() -> MathNet.Spatial.Euclidean.Vector3D
+MathNet.Spatial.Euclidean.Vector3D.Normalize() -> MathNet.Spatial.Euclidean.UnitVector3D
+MathNet.Spatial.Euclidean.Vector3D.Orthogonal.get -> MathNet.Spatial.Euclidean.UnitVector3D
+MathNet.Spatial.Euclidean.Vector3D.ProjectOn(MathNet.Spatial.Euclidean.Plane planeToProjectOn) -> MathNet.Spatial.Euclidean.Ray3D
+MathNet.Spatial.Euclidean.Vector3D.ProjectOn(MathNet.Spatial.Euclidean.UnitVector3D uv) -> MathNet.Spatial.Euclidean.Vector3D
+MathNet.Spatial.Euclidean.Vector3D.Rotate(MathNet.Spatial.Euclidean.UnitVector3D about, MathNet.Spatial.Units.Angle angle) -> MathNet.Spatial.Euclidean.Vector3D
+MathNet.Spatial.Euclidean.Vector3D.Rotate(MathNet.Spatial.Euclidean.Vector3D about, MathNet.Spatial.Units.Angle angle) -> MathNet.Spatial.Euclidean.Vector3D
+MathNet.Spatial.Euclidean.Vector3D.Rotate<T>(MathNet.Spatial.Euclidean.UnitVector3D about, double angle, T angleUnit) -> MathNet.Spatial.Euclidean.Vector3D
+MathNet.Spatial.Euclidean.Vector3D.ScaleBy(double scaleFactor) -> MathNet.Spatial.Euclidean.Vector3D
+MathNet.Spatial.Euclidean.Vector3D.SignedAngleTo(MathNet.Spatial.Euclidean.UnitVector3D v, MathNet.Spatial.Euclidean.UnitVector3D about) -> MathNet.Spatial.Units.Angle
+MathNet.Spatial.Euclidean.Vector3D.SignedAngleTo(MathNet.Spatial.Euclidean.Vector3D v, MathNet.Spatial.Euclidean.UnitVector3D about) -> MathNet.Spatial.Units.Angle
+MathNet.Spatial.Euclidean.Vector3D.Subtract(MathNet.Spatial.Euclidean.Vector3D v) -> MathNet.Spatial.Euclidean.Vector3D
+MathNet.Spatial.Euclidean.Vector3D.ToPoint3D() -> MathNet.Spatial.Euclidean.Point3D
+MathNet.Spatial.Euclidean.Vector3D.ToString(System.IFormatProvider provider) -> string
+MathNet.Spatial.Euclidean.Vector3D.ToString(string format, System.IFormatProvider provider = null) -> string
+MathNet.Spatial.Euclidean.Vector3D.ToVector() -> MathNet.Numerics.LinearAlgebra.Vector<double>
+MathNet.Spatial.Euclidean.Vector3D.TransformBy(MathNet.Numerics.LinearAlgebra.Matrix<double> m) -> MathNet.Spatial.Euclidean.Vector3D
+MathNet.Spatial.Euclidean.Vector3D.TransformBy(MathNet.Spatial.Euclidean.CoordinateSystem coordinateSystem) -> MathNet.Spatial.Euclidean.Vector3D
+MathNet.Spatial.Euclidean.Vector3D.Vector3D(System.Collections.Generic.IEnumerable<double> data) -> void
+MathNet.Spatial.Euclidean.Vector3D.Vector3D(double x, double y, double z) -> void
+MathNet.Spatial.Euclidean.Vector3D.Vector3D(double[] data) -> void
+MathNet.Spatial.Parser
+MathNet.Spatial.Units.Angle
+MathNet.Spatial.Units.Angle.Angle(double radians, MathNet.Spatial.Units.Radians unit) -> void
+MathNet.Spatial.Units.Angle.Angle(double value, MathNet.Spatial.Units.Degrees unit) -> void
+MathNet.Spatial.Units.Angle.CompareTo(MathNet.Spatial.Units.Angle value) -> int
+MathNet.Spatial.Units.Angle.Degrees.get -> double
+MathNet.Spatial.Units.Angle.Equals(MathNet.Spatial.Units.Angle other) -> bool
+MathNet.Spatial.Units.Angle.Equals(MathNet.Spatial.Units.Angle other, MathNet.Spatial.Units.Angle tolerance) -> bool
+MathNet.Spatial.Units.Angle.Equals(MathNet.Spatial.Units.Angle other, double tolerance) -> bool
+MathNet.Spatial.Units.Angle.ToString(System.IFormatProvider provider) -> string
+MathNet.Spatial.Units.Angle.ToString(string format) -> string
+MathNet.Spatial.Units.Angle.ToString(string format, System.IFormatProvider provider) -> string
+MathNet.Spatial.Units.Angle.ToString<T>(string format, System.IFormatProvider provider, T unit) -> string
+MathNet.Spatial.Units.AngleUnit
+MathNet.Spatial.Units.Degrees
+MathNet.Spatial.Units.Degrees.ConversionFactor.get -> double
+MathNet.Spatial.Units.Degrees.Degrees() -> void
+MathNet.Spatial.Units.Degrees.ShortName.get -> string
+MathNet.Spatial.Units.IAngleUnit
+MathNet.Spatial.Units.IAngleUnit.ConversionFactor.get -> double
+MathNet.Spatial.Units.IAngleUnit.ShortName.get -> string
+MathNet.Spatial.Units.IUnit
+MathNet.Spatial.Units.IUnit.Conversionfactor.get -> double
+MathNet.Spatial.Units.IUnit.ShortName.get -> string
+MathNet.Spatial.Units.Radians
+MathNet.Spatial.Units.Radians.ConversionFactor.get -> double
+MathNet.Spatial.Units.Radians.Radians() -> void
+MathNet.Spatial.Units.Radians.ShortName.get -> string
+MathNet.Spatial.Units.UnitConverter
+MathNet.Spatial.Units.UnitParser
+MathNet.Spatial.XmlExt
+const MathNet.Spatial.Parser.SeparatorPattern = " *[,;] *" -> string
+override MathNet.Spatial.Euclidean.Circle2D.Equals(object obj) -> bool
+override MathNet.Spatial.Euclidean.Circle2D.GetHashCode() -> int
+override MathNet.Spatial.Euclidean.Circle3D.Equals(object obj) -> bool
+override MathNet.Spatial.Euclidean.Circle3D.GetHashCode() -> int
+override MathNet.Spatial.Euclidean.CoordinateSystem.Equals(object obj) -> bool
+override MathNet.Spatial.Euclidean.CoordinateSystem.GetHashCode() -> int
+override MathNet.Spatial.Euclidean.EulerAngles.Equals(object obj) -> bool
+override MathNet.Spatial.Euclidean.EulerAngles.GetHashCode() -> int
+override MathNet.Spatial.Euclidean.Line2D.Equals(object obj) -> bool
+override MathNet.Spatial.Euclidean.Line2D.GetHashCode() -> int
+override MathNet.Spatial.Euclidean.Line2D.ToString() -> string
+override MathNet.Spatial.Euclidean.Line3D.Equals(object obj) -> bool
+override MathNet.Spatial.Euclidean.Line3D.GetHashCode() -> int
+override MathNet.Spatial.Euclidean.Line3D.ToString() -> string
+override MathNet.Spatial.Euclidean.LineSegment2D.Equals(object obj) -> bool
+override MathNet.Spatial.Euclidean.LineSegment2D.GetHashCode() -> int
+override MathNet.Spatial.Euclidean.LineSegment2D.ToString() -> string
+override MathNet.Spatial.Euclidean.LineSegment3D.Equals(object obj) -> bool
+override MathNet.Spatial.Euclidean.LineSegment3D.GetHashCode() -> int
+override MathNet.Spatial.Euclidean.LineSegment3D.ToString() -> string
+override MathNet.Spatial.Euclidean.Plane.Equals(object obj) -> bool
+override MathNet.Spatial.Euclidean.Plane.GetHashCode() -> int
+override MathNet.Spatial.Euclidean.Plane.ToString() -> string
+override MathNet.Spatial.Euclidean.Point2D.Equals(object obj) -> bool
+override MathNet.Spatial.Euclidean.Point2D.GetHashCode() -> int
+override MathNet.Spatial.Euclidean.Point2D.ToString() -> string
+override MathNet.Spatial.Euclidean.Point3D.Equals(object obj) -> bool
+override MathNet.Spatial.Euclidean.Point3D.GetHashCode() -> int
+override MathNet.Spatial.Euclidean.Point3D.ToString() -> string
+override MathNet.Spatial.Euclidean.PolyLine2D.Equals(object obj) -> bool
+override MathNet.Spatial.Euclidean.PolyLine2D.GetHashCode() -> int
+override MathNet.Spatial.Euclidean.PolyLine3D.Equals(object obj) -> bool
+override MathNet.Spatial.Euclidean.PolyLine3D.GetHashCode() -> int
+override MathNet.Spatial.Euclidean.Polygon2D.Equals(object obj) -> bool
+override MathNet.Spatial.Euclidean.Polygon2D.GetHashCode() -> int
+override MathNet.Spatial.Euclidean.Quaternion.Equals(object obj) -> bool
+override MathNet.Spatial.Euclidean.Quaternion.GetHashCode() -> int
+override MathNet.Spatial.Euclidean.Quaternion.ToString() -> string
+override MathNet.Spatial.Euclidean.Ray3D.Equals(object obj) -> bool
+override MathNet.Spatial.Euclidean.Ray3D.GetHashCode() -> int
+override MathNet.Spatial.Euclidean.Ray3D.ToString() -> string
+override MathNet.Spatial.Euclidean.UnitVector3D.Equals(object obj) -> bool
+override MathNet.Spatial.Euclidean.UnitVector3D.GetHashCode() -> int
+override MathNet.Spatial.Euclidean.UnitVector3D.ToString() -> string
+override MathNet.Spatial.Euclidean.Vector2D.Equals(object obj) -> bool
+override MathNet.Spatial.Euclidean.Vector2D.GetHashCode() -> int
+override MathNet.Spatial.Euclidean.Vector2D.ToString() -> string
+override MathNet.Spatial.Euclidean.Vector3D.Equals(object obj) -> bool
+override MathNet.Spatial.Euclidean.Vector3D.GetHashCode() -> int
+override MathNet.Spatial.Euclidean.Vector3D.ToString() -> string
+override MathNet.Spatial.Units.Angle.Equals(object obj) -> bool
+override MathNet.Spatial.Units.Angle.GetHashCode() -> int
+override MathNet.Spatial.Units.Angle.ToString() -> string
+readonly MathNet.Spatial.Euclidean.Circle3D.Axis -> MathNet.Spatial.Euclidean.UnitVector3D
+readonly MathNet.Spatial.Euclidean.Circle3D.CenterPoint -> MathNet.Spatial.Euclidean.Point3D
+readonly MathNet.Spatial.Euclidean.Circle3D.Radius -> double
+readonly MathNet.Spatial.Euclidean.EulerAngles.Alpha -> MathNet.Spatial.Units.Angle
+readonly MathNet.Spatial.Euclidean.EulerAngles.Beta -> MathNet.Spatial.Units.Angle
+readonly MathNet.Spatial.Euclidean.EulerAngles.Gamma -> MathNet.Spatial.Units.Angle
+readonly MathNet.Spatial.Euclidean.Line2D.EndPoint -> MathNet.Spatial.Euclidean.Point2D
+readonly MathNet.Spatial.Euclidean.Line2D.StartPoint -> MathNet.Spatial.Euclidean.Point2D
+readonly MathNet.Spatial.Euclidean.Line3D.EndPoint -> MathNet.Spatial.Euclidean.Point3D
+readonly MathNet.Spatial.Euclidean.Line3D.StartPoint -> MathNet.Spatial.Euclidean.Point3D
+readonly MathNet.Spatial.Euclidean.LineSegment2D.EndPoint -> MathNet.Spatial.Euclidean.Point2D
+readonly MathNet.Spatial.Euclidean.LineSegment2D.StartPoint -> MathNet.Spatial.Euclidean.Point2D
+readonly MathNet.Spatial.Euclidean.LineSegment3D.EndPoint -> MathNet.Spatial.Euclidean.Point3D
+readonly MathNet.Spatial.Euclidean.LineSegment3D.StartPoint -> MathNet.Spatial.Euclidean.Point3D
+readonly MathNet.Spatial.Euclidean.Plane.D -> double
+readonly MathNet.Spatial.Euclidean.Plane.Normal -> MathNet.Spatial.Euclidean.UnitVector3D
+readonly MathNet.Spatial.Euclidean.Point2D.X -> double
+readonly MathNet.Spatial.Euclidean.Point2D.Y -> double
+readonly MathNet.Spatial.Euclidean.Point3D.X -> double
+readonly MathNet.Spatial.Euclidean.Point3D.Y -> double
+readonly MathNet.Spatial.Euclidean.Point3D.Z -> double
+readonly MathNet.Spatial.Euclidean.Ray3D.Direction -> MathNet.Spatial.Euclidean.UnitVector3D
+readonly MathNet.Spatial.Euclidean.Ray3D.ThroughPoint -> MathNet.Spatial.Euclidean.Point3D
+readonly MathNet.Spatial.Euclidean.UnitVector3D.X -> double
+readonly MathNet.Spatial.Euclidean.UnitVector3D.Y -> double
+readonly MathNet.Spatial.Euclidean.UnitVector3D.Z -> double
+readonly MathNet.Spatial.Euclidean.Vector2D.X -> double
+readonly MathNet.Spatial.Euclidean.Vector2D.Y -> double
+readonly MathNet.Spatial.Euclidean.Vector3D.X -> double
+readonly MathNet.Spatial.Euclidean.Vector3D.Y -> double
+readonly MathNet.Spatial.Euclidean.Vector3D.Z -> double
+readonly MathNet.Spatial.Units.Angle.Radians -> double
+static MathNet.Spatial.Euclidean.Circle2D.FromPoints(MathNet.Spatial.Euclidean.Point2D pointA, MathNet.Spatial.Euclidean.Point2D pointB, MathNet.Spatial.Euclidean.Point2D pointC) -> MathNet.Spatial.Euclidean.Circle2D
+static MathNet.Spatial.Euclidean.Circle2D.operator !=(MathNet.Spatial.Euclidean.Circle2D left, MathNet.Spatial.Euclidean.Circle2D right) -> bool
+static MathNet.Spatial.Euclidean.Circle2D.operator ==(MathNet.Spatial.Euclidean.Circle2D left, MathNet.Spatial.Euclidean.Circle2D right) -> bool
+static MathNet.Spatial.Euclidean.Circle3D.FromPoints(MathNet.Spatial.Euclidean.Point3D p1, MathNet.Spatial.Euclidean.Point3D p2, MathNet.Spatial.Euclidean.Point3D p3) -> MathNet.Spatial.Euclidean.Circle3D
+static MathNet.Spatial.Euclidean.Circle3D.FromPointsAndAxis(MathNet.Spatial.Euclidean.Point3D p1, MathNet.Spatial.Euclidean.Point3D p2, MathNet.Spatial.Euclidean.UnitVector3D axis) -> MathNet.Spatial.Euclidean.Circle3D
+static MathNet.Spatial.Euclidean.Circle3D.operator !=(MathNet.Spatial.Euclidean.Circle3D left, MathNet.Spatial.Euclidean.Circle3D right) -> bool
+static MathNet.Spatial.Euclidean.Circle3D.operator ==(MathNet.Spatial.Euclidean.Circle3D left, MathNet.Spatial.Euclidean.Circle3D right) -> bool
+static MathNet.Spatial.Euclidean.CoordinateSystem.CreateMappingCoordinateSystem(MathNet.Spatial.Euclidean.CoordinateSystem fromCs, MathNet.Spatial.Euclidean.CoordinateSystem toCs) -> MathNet.Spatial.Euclidean.CoordinateSystem
+static MathNet.Spatial.Euclidean.CoordinateSystem.GetRotationSubMatrix(MathNet.Spatial.Euclidean.CoordinateSystem coordinateSystem) -> MathNet.Numerics.LinearAlgebra.Matrix<double>
+static MathNet.Spatial.Euclidean.CoordinateSystem.Parse(string s) -> MathNet.Spatial.Euclidean.CoordinateSystem
+static MathNet.Spatial.Euclidean.CoordinateSystem.Pitch(MathNet.Spatial.Units.Angle av) -> MathNet.Spatial.Euclidean.CoordinateSystem
+static MathNet.Spatial.Euclidean.CoordinateSystem.Pitch<T>(double a, T unit) -> MathNet.Spatial.Euclidean.CoordinateSystem
+static MathNet.Spatial.Euclidean.CoordinateSystem.Roll(MathNet.Spatial.Units.Angle av) -> MathNet.Spatial.Euclidean.CoordinateSystem
+static MathNet.Spatial.Euclidean.CoordinateSystem.Roll<T>(double a, T unit) -> MathNet.Spatial.Euclidean.CoordinateSystem
+static MathNet.Spatial.Euclidean.CoordinateSystem.RotateTo(MathNet.Spatial.Euclidean.UnitVector3D fromVector3D, MathNet.Spatial.Euclidean.UnitVector3D toVector3D, MathNet.Spatial.Euclidean.UnitVector3D? axis = null) -> MathNet.Spatial.Euclidean.CoordinateSystem
+static MathNet.Spatial.Euclidean.CoordinateSystem.Rotation(MathNet.Spatial.Units.Angle angle, MathNet.Spatial.Euclidean.UnitVector3D v) -> MathNet.Spatial.Euclidean.CoordinateSystem
+static MathNet.Spatial.Euclidean.CoordinateSystem.Rotation(MathNet.Spatial.Units.Angle angle, MathNet.Spatial.Euclidean.Vector3D v) -> MathNet.Spatial.Euclidean.CoordinateSystem
+static MathNet.Spatial.Euclidean.CoordinateSystem.Rotation(MathNet.Spatial.Units.Angle yaw, MathNet.Spatial.Units.Angle pitch, MathNet.Spatial.Units.Angle roll) -> MathNet.Spatial.Euclidean.CoordinateSystem
+static MathNet.Spatial.Euclidean.CoordinateSystem.Rotation<T>(double a, T unit, MathNet.Spatial.Euclidean.UnitVector3D v) -> MathNet.Spatial.Euclidean.CoordinateSystem
+static MathNet.Spatial.Euclidean.CoordinateSystem.Rotation<T>(double a, T unit, MathNet.Spatial.Euclidean.Vector3D v) -> MathNet.Spatial.Euclidean.CoordinateSystem
+static MathNet.Spatial.Euclidean.CoordinateSystem.Rotation<T>(double yaw, double pitch, double roll, T unit) -> MathNet.Spatial.Euclidean.CoordinateSystem
+static MathNet.Spatial.Euclidean.CoordinateSystem.SetRotationSubMatrix(MathNet.Numerics.LinearAlgebra.Matrix<double> r, MathNet.Spatial.Euclidean.CoordinateSystem coordinateSystem) -> MathNet.Spatial.Euclidean.CoordinateSystem
+static MathNet.Spatial.Euclidean.CoordinateSystem.SetToAlignCoordinateSystems(MathNet.Spatial.Euclidean.Point3D fromOrigin, MathNet.Spatial.Euclidean.Vector3D fromXAxis, MathNet.Spatial.Euclidean.Vector3D fromYAxis, MathNet.Spatial.Euclidean.Vector3D fromZAxis, MathNet.Spatial.Euclidean.Point3D toOrigin, MathNet.Spatial.Euclidean.Vector3D toXAxis, MathNet.Spatial.Euclidean.Vector3D toYAxis, MathNet.Spatial.Euclidean.Vector3D toZAxis) -> MathNet.Spatial.Euclidean.CoordinateSystem
+static MathNet.Spatial.Euclidean.CoordinateSystem.Translation(MathNet.Spatial.Euclidean.Vector3D translation) -> MathNet.Spatial.Euclidean.CoordinateSystem
+static MathNet.Spatial.Euclidean.CoordinateSystem.Yaw(MathNet.Spatial.Units.Angle av) -> MathNet.Spatial.Euclidean.CoordinateSystem
+static MathNet.Spatial.Euclidean.CoordinateSystem.Yaw<T>(double a, T unit) -> MathNet.Spatial.Euclidean.CoordinateSystem
+static MathNet.Spatial.Euclidean.CoordinateSystem.operator !=(MathNet.Spatial.Euclidean.CoordinateSystem left, MathNet.Spatial.Euclidean.CoordinateSystem right) -> bool
+static MathNet.Spatial.Euclidean.CoordinateSystem.operator ==(MathNet.Spatial.Euclidean.CoordinateSystem left, MathNet.Spatial.Euclidean.CoordinateSystem right) -> bool
+static MathNet.Spatial.Euclidean.EulerAngles.operator !=(MathNet.Spatial.Euclidean.EulerAngles left, MathNet.Spatial.Euclidean.EulerAngles right) -> bool
+static MathNet.Spatial.Euclidean.EulerAngles.operator ==(MathNet.Spatial.Euclidean.EulerAngles left, MathNet.Spatial.Euclidean.EulerAngles right) -> bool
+static MathNet.Spatial.Euclidean.Line2D.Parse(string startPointString, string endPointString) -> MathNet.Spatial.Euclidean.Line2D
+static MathNet.Spatial.Euclidean.Line2D.operator !=(MathNet.Spatial.Euclidean.Line2D left, MathNet.Spatial.Euclidean.Line2D right) -> bool
+static MathNet.Spatial.Euclidean.Line2D.operator +(MathNet.Spatial.Euclidean.Line2D line, MathNet.Spatial.Euclidean.Vector2D offset) -> MathNet.Spatial.Euclidean.Line2D
+static MathNet.Spatial.Euclidean.Line2D.operator +(MathNet.Spatial.Euclidean.Vector2D offset, MathNet.Spatial.Euclidean.Line2D line) -> MathNet.Spatial.Euclidean.Line2D
+static MathNet.Spatial.Euclidean.Line2D.operator -(MathNet.Spatial.Euclidean.Line2D line, MathNet.Spatial.Euclidean.Vector2D offset) -> MathNet.Spatial.Euclidean.Line2D
+static MathNet.Spatial.Euclidean.Line2D.operator ==(MathNet.Spatial.Euclidean.Line2D left, MathNet.Spatial.Euclidean.Line2D right) -> bool
+static MathNet.Spatial.Euclidean.Line3D.Parse(string startPoint, string endPoint) -> MathNet.Spatial.Euclidean.Line3D
+static MathNet.Spatial.Euclidean.Line3D.operator !=(MathNet.Spatial.Euclidean.Line3D left, MathNet.Spatial.Euclidean.Line3D right) -> bool
+static MathNet.Spatial.Euclidean.Line3D.operator ==(MathNet.Spatial.Euclidean.Line3D left, MathNet.Spatial.Euclidean.Line3D right) -> bool
+static MathNet.Spatial.Euclidean.LineSegment2D.Parse(string startPointString, string endPointString) -> MathNet.Spatial.Euclidean.LineSegment2D
+static MathNet.Spatial.Euclidean.LineSegment2D.operator !=(MathNet.Spatial.Euclidean.LineSegment2D left, MathNet.Spatial.Euclidean.LineSegment2D right) -> bool
+static MathNet.Spatial.Euclidean.LineSegment2D.operator ==(MathNet.Spatial.Euclidean.LineSegment2D left, MathNet.Spatial.Euclidean.LineSegment2D right) -> bool
+static MathNet.Spatial.Euclidean.LineSegment3D.Parse(string startPointString, string endPointString) -> MathNet.Spatial.Euclidean.LineSegment3D
+static MathNet.Spatial.Euclidean.LineSegment3D.operator !=(MathNet.Spatial.Euclidean.LineSegment3D left, MathNet.Spatial.Euclidean.LineSegment3D right) -> bool
+static MathNet.Spatial.Euclidean.LineSegment3D.operator ==(MathNet.Spatial.Euclidean.LineSegment3D left, MathNet.Spatial.Euclidean.LineSegment3D right) -> bool
+static MathNet.Spatial.Euclidean.Matrix2D.Create(double m11, double m12, double m21, double m22) -> MathNet.Numerics.LinearAlgebra.Double.DenseMatrix
+static MathNet.Spatial.Euclidean.Matrix2D.Rotation(MathNet.Spatial.Units.Angle rotation) -> MathNet.Numerics.LinearAlgebra.Double.DenseMatrix
+static MathNet.Spatial.Euclidean.Matrix3D.RotationAroundArbitraryVector(MathNet.Spatial.Euclidean.UnitVector3D aboutVector, MathNet.Spatial.Units.Angle angle) -> MathNet.Numerics.LinearAlgebra.Matrix<double>
+static MathNet.Spatial.Euclidean.Matrix3D.RotationAroundArbitraryVector<T>(MathNet.Spatial.Euclidean.UnitVector3D aboutVector, double angle, T angleUnit) -> MathNet.Numerics.LinearAlgebra.Matrix<double>
+static MathNet.Spatial.Euclidean.Matrix3D.RotationAroundXAxis(MathNet.Spatial.Units.Angle angle) -> MathNet.Numerics.LinearAlgebra.Double.DenseMatrix
+static MathNet.Spatial.Euclidean.Matrix3D.RotationAroundYAxis(MathNet.Spatial.Units.Angle angle) -> MathNet.Numerics.LinearAlgebra.Double.DenseMatrix
+static MathNet.Spatial.Euclidean.Matrix3D.RotationAroundZAxis(MathNet.Spatial.Units.Angle angle) -> MathNet.Numerics.LinearAlgebra.Matrix<double>
+static MathNet.Spatial.Euclidean.Matrix3D.RotationTo(MathNet.Spatial.Euclidean.UnitVector3D fromVector, MathNet.Spatial.Euclidean.UnitVector3D toVector, MathNet.Spatial.Euclidean.UnitVector3D? axis = null) -> MathNet.Numerics.LinearAlgebra.Matrix<double>
+static MathNet.Spatial.Euclidean.Matrix3D.RotationTo(MathNet.Spatial.Euclidean.Vector3D fromVector, MathNet.Spatial.Euclidean.Vector3D toVector, MathNet.Spatial.Euclidean.UnitVector3D? axis = null) -> MathNet.Numerics.LinearAlgebra.Matrix<double>
+static MathNet.Spatial.Euclidean.Plane.FromPoints(MathNet.Spatial.Euclidean.Point3D p1, MathNet.Spatial.Euclidean.Point3D p2, MathNet.Spatial.Euclidean.Point3D p3) -> MathNet.Spatial.Euclidean.Plane
+static MathNet.Spatial.Euclidean.Plane.Parse(string s) -> MathNet.Spatial.Euclidean.Plane
+static MathNet.Spatial.Euclidean.Plane.PointFromPlanes(MathNet.Spatial.Euclidean.Plane plane1, MathNet.Spatial.Euclidean.Plane plane2, MathNet.Spatial.Euclidean.Plane plane3) -> MathNet.Spatial.Euclidean.Point3D
+static MathNet.Spatial.Euclidean.Plane.operator !=(MathNet.Spatial.Euclidean.Plane left, MathNet.Spatial.Euclidean.Plane right) -> bool
+static MathNet.Spatial.Euclidean.Plane.operator ==(MathNet.Spatial.Euclidean.Plane left, MathNet.Spatial.Euclidean.Plane right) -> bool
+static MathNet.Spatial.Euclidean.Point2D.Centroid(System.Collections.Generic.IEnumerable<MathNet.Spatial.Euclidean.Point2D> points) -> MathNet.Spatial.Euclidean.Point2D
+static MathNet.Spatial.Euclidean.Point2D.Centroid(params MathNet.Spatial.Euclidean.Point2D[] points) -> MathNet.Spatial.Euclidean.Point2D
+static MathNet.Spatial.Euclidean.Point2D.FromPolar(double radius, MathNet.Spatial.Units.Angle angle) -> MathNet.Spatial.Euclidean.Point2D
+static MathNet.Spatial.Euclidean.Point2D.MidPoint(MathNet.Spatial.Euclidean.Point2D point1, MathNet.Spatial.Euclidean.Point2D point2) -> MathNet.Spatial.Euclidean.Point2D
+static MathNet.Spatial.Euclidean.Point2D.OfVector(MathNet.Numerics.LinearAlgebra.Vector<double> vector) -> MathNet.Spatial.Euclidean.Point2D
+static MathNet.Spatial.Euclidean.Point2D.Origin.get -> MathNet.Spatial.Euclidean.Point2D
+static MathNet.Spatial.Euclidean.Point2D.Parse(string value, System.IFormatProvider formatProvider = null) -> MathNet.Spatial.Euclidean.Point2D
+static MathNet.Spatial.Euclidean.Point2D.ReadFrom(System.Xml.XmlReader reader) -> MathNet.Spatial.Euclidean.Point2D
+static MathNet.Spatial.Euclidean.Point2D.TryParse(string text, System.IFormatProvider formatProvider, out MathNet.Spatial.Euclidean.Point2D result) -> bool
+static MathNet.Spatial.Euclidean.Point2D.TryParse(string text, out MathNet.Spatial.Euclidean.Point2D result) -> bool
+static MathNet.Spatial.Euclidean.Point2D.operator !=(MathNet.Spatial.Euclidean.Point2D left, MathNet.Spatial.Euclidean.Point2D right) -> bool
+static MathNet.Spatial.Euclidean.Point2D.operator +(MathNet.Spatial.Euclidean.Point2D point, MathNet.Spatial.Euclidean.Vector2D vector) -> MathNet.Spatial.Euclidean.Point2D
+static MathNet.Spatial.Euclidean.Point2D.operator +(MathNet.Spatial.Euclidean.Point2D point, MathNet.Spatial.Euclidean.Vector3D vector) -> MathNet.Spatial.Euclidean.Point3D
+static MathNet.Spatial.Euclidean.Point2D.operator -(MathNet.Spatial.Euclidean.Point2D left, MathNet.Spatial.Euclidean.Point2D right) -> MathNet.Spatial.Euclidean.Vector2D
+static MathNet.Spatial.Euclidean.Point2D.operator -(MathNet.Spatial.Euclidean.Point2D left, MathNet.Spatial.Euclidean.Vector2D right) -> MathNet.Spatial.Euclidean.Point2D
+static MathNet.Spatial.Euclidean.Point2D.operator -(MathNet.Spatial.Euclidean.Point2D left, MathNet.Spatial.Euclidean.Vector3D right) -> MathNet.Spatial.Euclidean.Point3D
+static MathNet.Spatial.Euclidean.Point2D.operator ==(MathNet.Spatial.Euclidean.Point2D left, MathNet.Spatial.Euclidean.Point2D right) -> bool
+static MathNet.Spatial.Euclidean.Point3D.Centroid(System.Collections.Generic.IEnumerable<MathNet.Spatial.Euclidean.Point3D> points) -> MathNet.Spatial.Euclidean.Point3D
+static MathNet.Spatial.Euclidean.Point3D.Centroid(params MathNet.Spatial.Euclidean.Point3D[] points) -> MathNet.Spatial.Euclidean.Point3D
+static MathNet.Spatial.Euclidean.Point3D.IntersectionOf(MathNet.Spatial.Euclidean.Plane plane, MathNet.Spatial.Euclidean.Ray3D ray) -> MathNet.Spatial.Euclidean.Point3D
+static MathNet.Spatial.Euclidean.Point3D.IntersectionOf(MathNet.Spatial.Euclidean.Plane plane1, MathNet.Spatial.Euclidean.Plane plane2, MathNet.Spatial.Euclidean.Plane plane3) -> MathNet.Spatial.Euclidean.Point3D
+static MathNet.Spatial.Euclidean.Point3D.MidPoint(MathNet.Spatial.Euclidean.Point3D p1, MathNet.Spatial.Euclidean.Point3D p2) -> MathNet.Spatial.Euclidean.Point3D
+static MathNet.Spatial.Euclidean.Point3D.NaN.get -> MathNet.Spatial.Euclidean.Point3D
+static MathNet.Spatial.Euclidean.Point3D.OfVector(MathNet.Numerics.LinearAlgebra.Vector<double> vector) -> MathNet.Spatial.Euclidean.Point3D
+static MathNet.Spatial.Euclidean.Point3D.Origin.get -> MathNet.Spatial.Euclidean.Point3D
+static MathNet.Spatial.Euclidean.Point3D.Parse(string value, System.IFormatProvider formatProvider = null) -> MathNet.Spatial.Euclidean.Point3D
+static MathNet.Spatial.Euclidean.Point3D.ReadFrom(System.Xml.XmlReader reader) -> MathNet.Spatial.Euclidean.Point3D
+static MathNet.Spatial.Euclidean.Point3D.TryParse(string text, System.IFormatProvider formatProvider, out MathNet.Spatial.Euclidean.Point3D result) -> bool
+static MathNet.Spatial.Euclidean.Point3D.TryParse(string text, out MathNet.Spatial.Euclidean.Point3D result) -> bool
+static MathNet.Spatial.Euclidean.Point3D.operator !=(MathNet.Spatial.Euclidean.Point3D left, MathNet.Spatial.Euclidean.Point3D right) -> bool
+static MathNet.Spatial.Euclidean.Point3D.operator *(MathNet.Numerics.LinearAlgebra.Matrix<double> left, MathNet.Spatial.Euclidean.Point3D right) -> MathNet.Numerics.LinearAlgebra.Vector<double>
+static MathNet.Spatial.Euclidean.Point3D.operator *(MathNet.Spatial.Euclidean.Point3D left, MathNet.Numerics.LinearAlgebra.Matrix<double> right) -> MathNet.Numerics.LinearAlgebra.Vector<double>
+static MathNet.Spatial.Euclidean.Point3D.operator +(MathNet.Spatial.Euclidean.Point3D point, MathNet.Spatial.Euclidean.UnitVector3D vector) -> MathNet.Spatial.Euclidean.Point3D
+static MathNet.Spatial.Euclidean.Point3D.operator +(MathNet.Spatial.Euclidean.Point3D point, MathNet.Spatial.Euclidean.Vector3D vector) -> MathNet.Spatial.Euclidean.Point3D
+static MathNet.Spatial.Euclidean.Point3D.operator -(MathNet.Spatial.Euclidean.Point3D left, MathNet.Spatial.Euclidean.Point3D right) -> MathNet.Spatial.Euclidean.Vector3D
+static MathNet.Spatial.Euclidean.Point3D.operator -(MathNet.Spatial.Euclidean.Point3D point, MathNet.Spatial.Euclidean.UnitVector3D vector) -> MathNet.Spatial.Euclidean.Point3D
+static MathNet.Spatial.Euclidean.Point3D.operator -(MathNet.Spatial.Euclidean.Point3D point, MathNet.Spatial.Euclidean.Vector3D vector) -> MathNet.Spatial.Euclidean.Point3D
+static MathNet.Spatial.Euclidean.Point3D.operator ==(MathNet.Spatial.Euclidean.Point3D left, MathNet.Spatial.Euclidean.Point3D right) -> bool
+static MathNet.Spatial.Euclidean.PolyLine2D.ReduceComplexity(System.Collections.Generic.IEnumerable<MathNet.Spatial.Euclidean.Point2D> points, double singleStepTolerance) -> MathNet.Spatial.Euclidean.PolyLine2D
+static MathNet.Spatial.Euclidean.PolyLine2D.operator !=(MathNet.Spatial.Euclidean.PolyLine2D left, MathNet.Spatial.Euclidean.PolyLine2D right) -> bool
+static MathNet.Spatial.Euclidean.PolyLine2D.operator ==(MathNet.Spatial.Euclidean.PolyLine2D left, MathNet.Spatial.Euclidean.PolyLine2D right) -> bool
+static MathNet.Spatial.Euclidean.PolyLine3D.operator !=(MathNet.Spatial.Euclidean.PolyLine3D left, MathNet.Spatial.Euclidean.PolyLine3D right) -> bool
+static MathNet.Spatial.Euclidean.PolyLine3D.operator ==(MathNet.Spatial.Euclidean.PolyLine3D left, MathNet.Spatial.Euclidean.PolyLine3D right) -> bool
+static MathNet.Spatial.Euclidean.Polygon2D.ArePolygonVerticesColliding(MathNet.Spatial.Euclidean.Polygon2D a, MathNet.Spatial.Euclidean.Polygon2D b) -> bool
+static MathNet.Spatial.Euclidean.Polygon2D.GetConvexHullFromPoints(System.Collections.Generic.IEnumerable<MathNet.Spatial.Euclidean.Point2D> pointList, bool clockWise = true) -> MathNet.Spatial.Euclidean.Polygon2D
+static MathNet.Spatial.Euclidean.Polygon2D.IsPointInPolygon(MathNet.Spatial.Euclidean.Point2D p, MathNet.Spatial.Euclidean.Polygon2D poly) -> bool
+static MathNet.Spatial.Euclidean.Polygon2D.operator !=(MathNet.Spatial.Euclidean.Polygon2D left, MathNet.Spatial.Euclidean.Polygon2D right) -> bool
+static MathNet.Spatial.Euclidean.Polygon2D.operator +(MathNet.Spatial.Euclidean.Polygon2D poly, MathNet.Spatial.Euclidean.Vector2D shift) -> MathNet.Spatial.Euclidean.Polygon2D
+static MathNet.Spatial.Euclidean.Polygon2D.operator +(MathNet.Spatial.Euclidean.Vector2D shift, MathNet.Spatial.Euclidean.Polygon2D poly) -> MathNet.Spatial.Euclidean.Polygon2D
+static MathNet.Spatial.Euclidean.Polygon2D.operator ==(MathNet.Spatial.Euclidean.Polygon2D left, MathNet.Spatial.Euclidean.Polygon2D right) -> bool
+static MathNet.Spatial.Euclidean.Quaternion.ChybyshevCosPoli(int n, double x) -> double
+static MathNet.Spatial.Euclidean.Quaternion.ChybyshevSinPoli(int n, double x) -> double
+static MathNet.Spatial.Euclidean.Quaternion.Distance(MathNet.Spatial.Euclidean.Quaternion a, MathNet.Spatial.Euclidean.Quaternion b) -> double
+static MathNet.Spatial.Euclidean.Quaternion.operator !=(MathNet.Spatial.Euclidean.Quaternion left, MathNet.Spatial.Euclidean.Quaternion right) -> bool
+static MathNet.Spatial.Euclidean.Quaternion.operator !=(MathNet.Spatial.Euclidean.Quaternion q, double d) -> bool
+static MathNet.Spatial.Euclidean.Quaternion.operator !=(double d, MathNet.Spatial.Euclidean.Quaternion q) -> bool
+static MathNet.Spatial.Euclidean.Quaternion.operator *(MathNet.Spatial.Euclidean.Quaternion q, double d) -> MathNet.Spatial.Euclidean.Quaternion
+static MathNet.Spatial.Euclidean.Quaternion.operator *(MathNet.Spatial.Euclidean.Quaternion q1, MathNet.Spatial.Euclidean.Quaternion q2) -> MathNet.Spatial.Euclidean.Quaternion
+static MathNet.Spatial.Euclidean.Quaternion.operator *(double d, MathNet.Spatial.Euclidean.Quaternion q) -> MathNet.Spatial.Euclidean.Quaternion
+static MathNet.Spatial.Euclidean.Quaternion.operator +(MathNet.Spatial.Euclidean.Quaternion q1, MathNet.Spatial.Euclidean.Quaternion q2) -> MathNet.Spatial.Euclidean.Quaternion
+static MathNet.Spatial.Euclidean.Quaternion.operator +(MathNet.Spatial.Euclidean.Quaternion q1, double d) -> MathNet.Spatial.Euclidean.Quaternion
+static MathNet.Spatial.Euclidean.Quaternion.operator +(double d, MathNet.Spatial.Euclidean.Quaternion q) -> MathNet.Spatial.Euclidean.Quaternion
+static MathNet.Spatial.Euclidean.Quaternion.operator -(MathNet.Spatial.Euclidean.Quaternion q) -> MathNet.Spatial.Euclidean.Quaternion
+static MathNet.Spatial.Euclidean.Quaternion.operator -(MathNet.Spatial.Euclidean.Quaternion q, double d) -> MathNet.Spatial.Euclidean.Quaternion
+static MathNet.Spatial.Euclidean.Quaternion.operator -(MathNet.Spatial.Euclidean.Quaternion q1, MathNet.Spatial.Euclidean.Quaternion q2) -> MathNet.Spatial.Euclidean.Quaternion
+static MathNet.Spatial.Euclidean.Quaternion.operator -(double d, MathNet.Spatial.Euclidean.Quaternion q) -> MathNet.Spatial.Euclidean.Quaternion
+static MathNet.Spatial.Euclidean.Quaternion.operator /(MathNet.Spatial.Euclidean.Quaternion q, MathNet.Spatial.Euclidean.Quaternion r) -> MathNet.Spatial.Euclidean.Quaternion
+static MathNet.Spatial.Euclidean.Quaternion.operator /(MathNet.Spatial.Euclidean.Quaternion q, double d) -> MathNet.Spatial.Euclidean.Quaternion
+static MathNet.Spatial.Euclidean.Quaternion.operator ==(MathNet.Spatial.Euclidean.Quaternion left, MathNet.Spatial.Euclidean.Quaternion right) -> bool
+static MathNet.Spatial.Euclidean.Quaternion.operator ==(MathNet.Spatial.Euclidean.Quaternion q, double d) -> bool
+static MathNet.Spatial.Euclidean.Quaternion.operator ==(double d, MathNet.Spatial.Euclidean.Quaternion q) -> bool
+static MathNet.Spatial.Euclidean.Quaternion.operator ^(MathNet.Spatial.Euclidean.Quaternion q, double d) -> MathNet.Spatial.Euclidean.Quaternion
+static MathNet.Spatial.Euclidean.Quaternion.operator ^(MathNet.Spatial.Euclidean.Quaternion q1, MathNet.Spatial.Euclidean.Quaternion q2) -> MathNet.Spatial.Euclidean.Quaternion
+static MathNet.Spatial.Euclidean.Ray3D.IntersectionOf(MathNet.Spatial.Euclidean.Plane plane1, MathNet.Spatial.Euclidean.Plane plane2) -> MathNet.Spatial.Euclidean.Ray3D
+static MathNet.Spatial.Euclidean.Ray3D.Parse(string point, string direction) -> MathNet.Spatial.Euclidean.Ray3D
+static MathNet.Spatial.Euclidean.Ray3D.Parse(string s) -> MathNet.Spatial.Euclidean.Ray3D
+static MathNet.Spatial.Euclidean.Ray3D.operator !=(MathNet.Spatial.Euclidean.Ray3D left, MathNet.Spatial.Euclidean.Ray3D right) -> bool
+static MathNet.Spatial.Euclidean.Ray3D.operator ==(MathNet.Spatial.Euclidean.Ray3D left, MathNet.Spatial.Euclidean.Ray3D right) -> bool
+static MathNet.Spatial.Euclidean.UnitVector3D.Create(double x, double y, double z, double tolerance = Infinity) -> MathNet.Spatial.Euclidean.UnitVector3D
+static MathNet.Spatial.Euclidean.UnitVector3D.OfVector(MathNet.Numerics.LinearAlgebra.Vector<double> vector) -> MathNet.Spatial.Euclidean.UnitVector3D
+static MathNet.Spatial.Euclidean.UnitVector3D.Parse(string value, System.IFormatProvider formatProvider = null, double tolerance = 0.1) -> MathNet.Spatial.Euclidean.UnitVector3D
+static MathNet.Spatial.Euclidean.UnitVector3D.ReadFrom(System.Xml.XmlReader reader) -> MathNet.Spatial.Euclidean.UnitVector3D
+static MathNet.Spatial.Euclidean.UnitVector3D.TryParse(string text, System.IFormatProvider formatProvider, out MathNet.Spatial.Euclidean.UnitVector3D result, double tolerance = 0.1) -> bool
+static MathNet.Spatial.Euclidean.UnitVector3D.TryParse(string text, out MathNet.Spatial.Euclidean.UnitVector3D result, double tolerance = 0.1) -> bool
+static MathNet.Spatial.Euclidean.UnitVector3D.XAxis.get -> MathNet.Spatial.Euclidean.UnitVector3D
+static MathNet.Spatial.Euclidean.UnitVector3D.YAxis.get -> MathNet.Spatial.Euclidean.UnitVector3D
+static MathNet.Spatial.Euclidean.UnitVector3D.ZAxis.get -> MathNet.Spatial.Euclidean.UnitVector3D
+static MathNet.Spatial.Euclidean.UnitVector3D.operator !=(MathNet.Spatial.Euclidean.UnitVector3D left, MathNet.Spatial.Euclidean.UnitVector3D right) -> bool
+static MathNet.Spatial.Euclidean.UnitVector3D.operator !=(MathNet.Spatial.Euclidean.UnitVector3D left, MathNet.Spatial.Euclidean.Vector3D right) -> bool
+static MathNet.Spatial.Euclidean.UnitVector3D.operator !=(MathNet.Spatial.Euclidean.Vector3D left, MathNet.Spatial.Euclidean.UnitVector3D right) -> bool
+static MathNet.Spatial.Euclidean.UnitVector3D.operator *(MathNet.Numerics.LinearAlgebra.Matrix<double> left, MathNet.Spatial.Euclidean.UnitVector3D right) -> MathNet.Numerics.LinearAlgebra.Vector<double>
+static MathNet.Spatial.Euclidean.UnitVector3D.operator *(MathNet.Spatial.Euclidean.UnitVector3D left, MathNet.Numerics.LinearAlgebra.Matrix<double> right) -> MathNet.Numerics.LinearAlgebra.Vector<double>
+static MathNet.Spatial.Euclidean.UnitVector3D.operator *(MathNet.Spatial.Euclidean.UnitVector3D left, MathNet.Spatial.Euclidean.UnitVector3D right) -> double
+static MathNet.Spatial.Euclidean.UnitVector3D.operator *(double d, MathNet.Spatial.Euclidean.UnitVector3D v) -> MathNet.Spatial.Euclidean.Vector3D
+static MathNet.Spatial.Euclidean.UnitVector3D.operator +(MathNet.Spatial.Euclidean.UnitVector3D v1, MathNet.Spatial.Euclidean.UnitVector3D v2) -> MathNet.Spatial.Euclidean.Vector3D
+static MathNet.Spatial.Euclidean.UnitVector3D.operator +(MathNet.Spatial.Euclidean.UnitVector3D v1, MathNet.Spatial.Euclidean.Vector3D v2) -> MathNet.Spatial.Euclidean.Vector3D
+static MathNet.Spatial.Euclidean.UnitVector3D.operator +(MathNet.Spatial.Euclidean.Vector3D v1, MathNet.Spatial.Euclidean.UnitVector3D v2) -> MathNet.Spatial.Euclidean.Vector3D
+static MathNet.Spatial.Euclidean.UnitVector3D.operator -(MathNet.Spatial.Euclidean.UnitVector3D v) -> MathNet.Spatial.Euclidean.Vector3D
+static MathNet.Spatial.Euclidean.UnitVector3D.operator -(MathNet.Spatial.Euclidean.UnitVector3D v1, MathNet.Spatial.Euclidean.UnitVector3D v2) -> MathNet.Spatial.Euclidean.Vector3D
+static MathNet.Spatial.Euclidean.UnitVector3D.operator -(MathNet.Spatial.Euclidean.UnitVector3D v1, MathNet.Spatial.Euclidean.Vector3D v2) -> MathNet.Spatial.Euclidean.Vector3D
+static MathNet.Spatial.Euclidean.UnitVector3D.operator -(MathNet.Spatial.Euclidean.Vector3D v1, MathNet.Spatial.Euclidean.UnitVector3D v2) -> MathNet.Spatial.Euclidean.Vector3D
+static MathNet.Spatial.Euclidean.UnitVector3D.operator /(MathNet.Spatial.Euclidean.UnitVector3D v, double d) -> MathNet.Spatial.Euclidean.Vector3D
+static MathNet.Spatial.Euclidean.UnitVector3D.operator ==(MathNet.Spatial.Euclidean.UnitVector3D left, MathNet.Spatial.Euclidean.UnitVector3D right) -> bool
+static MathNet.Spatial.Euclidean.UnitVector3D.operator ==(MathNet.Spatial.Euclidean.UnitVector3D left, MathNet.Spatial.Euclidean.Vector3D right) -> bool
+static MathNet.Spatial.Euclidean.UnitVector3D.operator ==(MathNet.Spatial.Euclidean.Vector3D left, MathNet.Spatial.Euclidean.UnitVector3D right) -> bool
+static MathNet.Spatial.Euclidean.Vector2D.FromPolar(double radius, MathNet.Spatial.Units.Angle angle) -> MathNet.Spatial.Euclidean.Vector2D
+static MathNet.Spatial.Euclidean.Vector2D.OfVector(MathNet.Numerics.LinearAlgebra.Vector<double> vector) -> MathNet.Spatial.Euclidean.Vector2D
+static MathNet.Spatial.Euclidean.Vector2D.Parse(string value, System.IFormatProvider formatProvider = null) -> MathNet.Spatial.Euclidean.Vector2D
+static MathNet.Spatial.Euclidean.Vector2D.ReadFrom(System.Xml.XmlReader reader) -> MathNet.Spatial.Euclidean.Vector2D
+static MathNet.Spatial.Euclidean.Vector2D.TryParse(string text, System.IFormatProvider formatProvider, out MathNet.Spatial.Euclidean.Vector2D result) -> bool
+static MathNet.Spatial.Euclidean.Vector2D.TryParse(string text, out MathNet.Spatial.Euclidean.Vector2D result) -> bool
+static MathNet.Spatial.Euclidean.Vector2D.XAxis.get -> MathNet.Spatial.Euclidean.Vector2D
+static MathNet.Spatial.Euclidean.Vector2D.YAxis.get -> MathNet.Spatial.Euclidean.Vector2D
+static MathNet.Spatial.Euclidean.Vector2D.operator !=(MathNet.Spatial.Euclidean.Vector2D left, MathNet.Spatial.Euclidean.Vector2D right) -> bool
+static MathNet.Spatial.Euclidean.Vector2D.operator *(MathNet.Spatial.Euclidean.Vector2D v, double d) -> MathNet.Spatial.Euclidean.Vector2D
+static MathNet.Spatial.Euclidean.Vector2D.operator *(double d, MathNet.Spatial.Euclidean.Vector2D v) -> MathNet.Spatial.Euclidean.Vector2D
+static MathNet.Spatial.Euclidean.Vector2D.operator +(MathNet.Spatial.Euclidean.Vector2D left, MathNet.Spatial.Euclidean.Vector2D right) -> MathNet.Spatial.Euclidean.Vector2D
+static MathNet.Spatial.Euclidean.Vector2D.operator -(MathNet.Spatial.Euclidean.Vector2D left, MathNet.Spatial.Euclidean.Vector2D right) -> MathNet.Spatial.Euclidean.Vector2D
+static MathNet.Spatial.Euclidean.Vector2D.operator -(MathNet.Spatial.Euclidean.Vector2D v) -> MathNet.Spatial.Euclidean.Vector2D
+static MathNet.Spatial.Euclidean.Vector2D.operator /(MathNet.Spatial.Euclidean.Vector2D v, double d) -> MathNet.Spatial.Euclidean.Vector2D
+static MathNet.Spatial.Euclidean.Vector2D.operator ==(MathNet.Spatial.Euclidean.Vector2D left, MathNet.Spatial.Euclidean.Vector2D right) -> bool
+static MathNet.Spatial.Euclidean.Vector3D.NaN.get -> MathNet.Spatial.Euclidean.Vector3D
+static MathNet.Spatial.Euclidean.Vector3D.OfVector(MathNet.Numerics.LinearAlgebra.Vector<double> vector) -> MathNet.Spatial.Euclidean.Vector3D
+static MathNet.Spatial.Euclidean.Vector3D.Parse(string value, System.IFormatProvider formatProvider = null) -> MathNet.Spatial.Euclidean.Vector3D
+static MathNet.Spatial.Euclidean.Vector3D.ReadFrom(System.Xml.XmlReader reader) -> MathNet.Spatial.Euclidean.Vector3D
+static MathNet.Spatial.Euclidean.Vector3D.TryParse(string text, System.IFormatProvider formatProvider, out MathNet.Spatial.Euclidean.Vector3D result) -> bool
+static MathNet.Spatial.Euclidean.Vector3D.TryParse(string text, out MathNet.Spatial.Euclidean.Vector3D result) -> bool
+static MathNet.Spatial.Euclidean.Vector3D.operator !=(MathNet.Spatial.Euclidean.Vector3D left, MathNet.Spatial.Euclidean.Vector3D right) -> bool
+static MathNet.Spatial.Euclidean.Vector3D.operator *(MathNet.Numerics.LinearAlgebra.Matrix<double> left, MathNet.Spatial.Euclidean.Vector3D right) -> MathNet.Numerics.LinearAlgebra.Vector<double>
+static MathNet.Spatial.Euclidean.Vector3D.operator *(MathNet.Spatial.Euclidean.Vector3D left, MathNet.Numerics.LinearAlgebra.Matrix<double> right) -> MathNet.Numerics.LinearAlgebra.Vector<double>
+static MathNet.Spatial.Euclidean.Vector3D.operator *(MathNet.Spatial.Euclidean.Vector3D left, MathNet.Spatial.Euclidean.Vector3D right) -> double
+static MathNet.Spatial.Euclidean.Vector3D.operator *(double d, MathNet.Spatial.Euclidean.Vector3D v) -> MathNet.Spatial.Euclidean.Vector3D
+static MathNet.Spatial.Euclidean.Vector3D.operator +(MathNet.Spatial.Euclidean.Vector3D left, MathNet.Spatial.Euclidean.Vector3D right) -> MathNet.Spatial.Euclidean.Vector3D
+static MathNet.Spatial.Euclidean.Vector3D.operator -(MathNet.Spatial.Euclidean.Vector3D left, MathNet.Spatial.Euclidean.Vector3D right) -> MathNet.Spatial.Euclidean.Vector3D
+static MathNet.Spatial.Euclidean.Vector3D.operator -(MathNet.Spatial.Euclidean.Vector3D v) -> MathNet.Spatial.Euclidean.Vector3D
+static MathNet.Spatial.Euclidean.Vector3D.operator /(MathNet.Spatial.Euclidean.Vector3D v, double d) -> MathNet.Spatial.Euclidean.Vector3D
+static MathNet.Spatial.Euclidean.Vector3D.operator ==(MathNet.Spatial.Euclidean.Vector3D left, MathNet.Spatial.Euclidean.Vector3D right) -> bool
+static MathNet.Spatial.Parser.ParseDouble(System.Text.RegularExpressions.Group group) -> double
+static MathNet.Spatial.Parser.ParseDouble(string s) -> double
+static MathNet.Spatial.Parser.ParsePlane(string s) -> MathNet.Spatial.Euclidean.Plane
+static MathNet.Spatial.Parser.ParseRay3D(string s) -> MathNet.Spatial.Euclidean.Ray3D
+static MathNet.Spatial.Units.Angle.From<T>(double value, T unit) -> MathNet.Spatial.Units.Angle
+static MathNet.Spatial.Units.Angle.FromDegrees(double value) -> MathNet.Spatial.Units.Angle
+static MathNet.Spatial.Units.Angle.FromRadians(double value) -> MathNet.Spatial.Units.Angle
+static MathNet.Spatial.Units.Angle.FromSexagesimal(int degrees, int minutes, double seconds) -> MathNet.Spatial.Units.Angle
+static MathNet.Spatial.Units.Angle.Parse(string value, System.IFormatProvider formatProvider = null) -> MathNet.Spatial.Units.Angle
+static MathNet.Spatial.Units.Angle.ReadFrom(System.Xml.XmlReader reader) -> MathNet.Spatial.Units.Angle
+static MathNet.Spatial.Units.Angle.TryParse(string text, System.IFormatProvider formatProvider, out MathNet.Spatial.Units.Angle result) -> bool
+static MathNet.Spatial.Units.Angle.TryParse(string text, out MathNet.Spatial.Units.Angle result) -> bool
+static MathNet.Spatial.Units.Angle.operator !=(MathNet.Spatial.Units.Angle left, MathNet.Spatial.Units.Angle right) -> bool
+static MathNet.Spatial.Units.Angle.operator *(MathNet.Spatial.Units.Angle left, double right) -> MathNet.Spatial.Units.Angle
+static MathNet.Spatial.Units.Angle.operator *(double left, MathNet.Spatial.Units.Angle right) -> MathNet.Spatial.Units.Angle
+static MathNet.Spatial.Units.Angle.operator +(MathNet.Spatial.Units.Angle angle) -> MathNet.Spatial.Units.Angle
+static MathNet.Spatial.Units.Angle.operator +(MathNet.Spatial.Units.Angle left, MathNet.Spatial.Units.Angle right) -> MathNet.Spatial.Units.Angle
+static MathNet.Spatial.Units.Angle.operator -(MathNet.Spatial.Units.Angle angle) -> MathNet.Spatial.Units.Angle
+static MathNet.Spatial.Units.Angle.operator -(MathNet.Spatial.Units.Angle left, MathNet.Spatial.Units.Angle right) -> MathNet.Spatial.Units.Angle
+static MathNet.Spatial.Units.Angle.operator /(MathNet.Spatial.Units.Angle left, double right) -> MathNet.Spatial.Units.Angle
+static MathNet.Spatial.Units.Angle.operator <(MathNet.Spatial.Units.Angle left, MathNet.Spatial.Units.Angle right) -> bool
+static MathNet.Spatial.Units.Angle.operator <=(MathNet.Spatial.Units.Angle left, MathNet.Spatial.Units.Angle right) -> bool
+static MathNet.Spatial.Units.Angle.operator ==(MathNet.Spatial.Units.Angle left, MathNet.Spatial.Units.Angle right) -> bool
+static MathNet.Spatial.Units.Angle.operator >(MathNet.Spatial.Units.Angle left, MathNet.Spatial.Units.Angle right) -> bool
+static MathNet.Spatial.Units.Angle.operator >=(MathNet.Spatial.Units.Angle left, MathNet.Spatial.Units.Angle right) -> bool
+static MathNet.Spatial.Units.Degrees.operator *(double left, MathNet.Spatial.Units.Degrees right) -> MathNet.Spatial.Units.Angle
+static MathNet.Spatial.Units.Radians.operator *(double left, MathNet.Spatial.Units.Radians right) -> MathNet.Spatial.Units.Angle
+static MathNet.Spatial.Units.UnitConverter.ConvertFrom<TUnit>(double value, TUnit toUnit) -> double
+static MathNet.Spatial.Units.UnitConverter.ConvertTo<TUnit>(double value, TUnit toUnit) -> double
+static MathNet.Spatial.Units.UnitParser.Parse<T>(string s, System.Func<double, MathNet.Spatial.Units.IAngleUnit, T> creator) -> T
+static MathNet.Spatial.Units.UnitParser.ParseUnit(string s) -> object
+static MathNet.Spatial.XmlExt.AsDouble(this System.Xml.Linq.XAttribute e, bool throwIfNull = true) -> double
+static MathNet.Spatial.XmlExt.AsDouble(this System.Xml.Linq.XElement e, bool throwIfNull = true, double valueIfNull = 0) -> double
+static MathNet.Spatial.XmlExt.AsEnum<T>(this System.Xml.Linq.XAttribute e) -> T
+static MathNet.Spatial.XmlExt.AsEnum<T>(this System.Xml.Linq.XElement e) -> T
+static MathNet.Spatial.XmlExt.ElementsNamed(this System.Xml.Linq.XElement e, string localName) -> System.Collections.Generic.IEnumerable<System.Xml.Linq.XElement>
+static MathNet.Spatial.XmlExt.GetAllFields(System.Type t) -> System.Collections.Generic.IEnumerable<System.Reflection.FieldInfo>
+static MathNet.Spatial.XmlExt.ReadAttributeOrDefault(this System.Xml.Linq.XElement e, string localName) -> string
+static MathNet.Spatial.XmlExt.ReadAttributeOrElement(this System.Xml.Linq.XElement e, string localName) -> string
+static MathNet.Spatial.XmlExt.ReadAttributeOrElementEnum<T>(this System.Xml.Linq.XElement e, string localName) -> T
+static MathNet.Spatial.XmlExt.ReadAttributeOrElementOrDefault(this System.Xml.Linq.XElement e, string localName) -> string
+static MathNet.Spatial.XmlExt.SetReadonlyFields<TItem>(ref TItem self, string[] fields, double[] values) -> void
+static MathNet.Spatial.XmlExt.SingleAttribute(this System.Xml.Linq.XElement e, string localName) -> System.Xml.Linq.XAttribute
+static MathNet.Spatial.XmlExt.SingleElement(this System.Xml.Linq.XElement e, string localName) -> System.Xml.Linq.XElement
+static MathNet.Spatial.XmlExt.SingleElementOrDefault(this System.Xml.Linq.XElement e, string localName) -> System.Xml.Linq.XElement
+static MathNet.Spatial.XmlExt.SingleElementReader(this System.Xml.Linq.XElement e, string localName) -> System.Xml.XmlReader
+static MathNet.Spatial.XmlExt.WriteAttribute<T>(this System.Xml.XmlWriter writer, string name, T value) -> System.Xml.XmlWriter
+static MathNet.Spatial.XmlExt.WriteValueToReadonlyField<TClass, TProperty>(TClass item, TProperty value, System.Linq.Expressions.Expression<System.Func<TProperty>> fieldExpression) -> void
+static readonly MathNet.Spatial.Euclidean.Quaternion.One -> MathNet.Spatial.Euclidean.Quaternion
+static readonly MathNet.Spatial.Euclidean.Quaternion.Zero -> MathNet.Spatial.Euclidean.Quaternion
+static readonly MathNet.Spatial.Parser.DoublePattern -> string
+static readonly MathNet.Spatial.Parser.Item3DPattern -> string
+static readonly MathNet.Spatial.Parser.PlaneAbcdPattern -> string
+static readonly MathNet.Spatial.Parser.PlanePointVectorPattern -> string
+static readonly MathNet.Spatial.Parser.Vector2DPattern -> string
+static readonly MathNet.Spatial.Parser.Vector3DPattern -> string
+static readonly MathNet.Spatial.Units.AngleUnit.Degrees -> MathNet.Spatial.Units.Degrees
+static readonly MathNet.Spatial.Units.AngleUnit.Radians -> MathNet.Spatial.Units.Radians
+static readonly MathNet.Spatial.Units.UnitParser.UnitValuePattern -> string
