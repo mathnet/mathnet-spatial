@@ -2,7 +2,7 @@
 {
     using System;
     using System.Diagnostics.Contracts;
-    using MathNet.Spatial.Internals;
+    using HashCode = Internals.HashCode;
 
     /// <summary>
     /// Describes a standard 2 dimensional circle

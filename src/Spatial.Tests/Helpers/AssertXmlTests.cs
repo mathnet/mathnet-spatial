@@ -1,7 +1,5 @@
 namespace MathNet.Spatial.UnitTests
 {
-#if NETCOREAPP1_1 == false
-
     using System.Globalization;
     using System.Xml;
     using System.Xml.Linq;
@@ -56,7 +54,4 @@ namespace MathNet.Spatial.UnitTests
             }
         }
     }
-
-#endif
-
 }

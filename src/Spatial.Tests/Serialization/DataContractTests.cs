@@ -1,7 +1,5 @@
 ﻿namespace MathNet.Spatial.Serialization.Xml.UnitTests
 {
-#if NETCOREAPP1_1 == false
-
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
@@ -252,6 +250,4 @@
             }
         }
     }
-
-#endif
 }

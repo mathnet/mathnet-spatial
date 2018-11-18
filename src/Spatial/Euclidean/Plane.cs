@@ -9,6 +9,7 @@
     using MathNet.Numerics.LinearAlgebra.Double;
     using MathNet.Spatial.Internals;
     using MathNet.Spatial.Units;
+    using HashCode = Internals.HashCode;
 
     /// <summary>
     /// A geometric plane

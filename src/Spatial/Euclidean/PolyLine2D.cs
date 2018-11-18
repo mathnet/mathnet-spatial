@@ -5,7 +5,7 @@
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
     using System.Linq;
-    using MathNet.Spatial.Internals;
+    using HashCode = Internals.HashCode;
 
     /// <summary>
     /// The PolyLine2D class represents a 2D curve in space made up of line segments joined end-to-end, and is

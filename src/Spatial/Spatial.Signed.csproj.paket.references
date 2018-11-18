@@ -1,0 +1,4 @@
+MathNet.Numerics.Signed
+StyleCop.Analyzers
+System.Diagnostics.Contracts
+PublicApiAnalyzer

@@ -23,7 +23,7 @@
             this.Add(DefaultConfig.Instance.GetDiagnosers().ToArray());
             this.Add(DefaultConfig.Instance.GetColumnProviders().ToArray());
             this.Add(MarkdownExporter.GitHub);
-#if NET47 == true
+#if NET461
             this.Add(Job.Default
                 .With(Platform.X86)
                 .With(Jit.LegacyJit)
@@ -37,7 +37,7 @@
                 .With(Jit.RyuJit)
                 .With(Runtime.Clr));
 #endif
-#if NETCOREAPP2_0 == true
+#if NETCOREAPP2_1
             this.Add(Job.Default
                 .With(Platform.X64)
                 .With(Jit.RyuJit)

@@ -2,10 +2,10 @@
 {
     using System;
     using System.Diagnostics.Contracts;
-    using MathNet.Spatial.Internals;
     using Numerics;
     using Numerics.LinearAlgebra.Double;
     using Units;
+    using HashCode = Internals.HashCode;
 
     /// <summary>Quaternion Number</summary>
     /// <remarks>

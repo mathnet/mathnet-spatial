@@ -1,7 +1,5 @@
 ﻿namespace MathNet.Spatial.UnitTests
 {
-#if NETCOREAPP1_1 == false
-
     using System.IO;
     using System.Linq;
     using System.Runtime.Serialization.Formatters.Binary;
@@ -205,7 +203,4 @@
             }
         }
     }
-
-#endif
-
 }

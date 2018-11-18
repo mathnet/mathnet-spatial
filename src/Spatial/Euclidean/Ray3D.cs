@@ -8,6 +8,7 @@ namespace MathNet.Spatial.Euclidean
     using System.Xml.Schema;
     using System.Xml.Serialization;
     using MathNet.Spatial.Internals;
+    using HashCode = Internals.HashCode;
 
     /// <summary>
     /// A ray in 3D space

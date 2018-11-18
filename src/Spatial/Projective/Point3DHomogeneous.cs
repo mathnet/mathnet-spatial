@@ -4,7 +4,7 @@
     using System.Globalization;
     using MathNet.Numerics.LinearAlgebra;
     using MathNet.Spatial.Euclidean;
-    using MathNet.Spatial.Internals;
+    using HashCode = Internals.HashCode;
 
     /// <summary>
     /// A Point3DHomogeneous struct

@@ -7,6 +7,7 @@
     using System.Linq;
     using MathNet.Spatial.Internals;
     using MathNet.Spatial.Units;
+    using HashCode = Internals.HashCode;
 
     /// <summary>
     /// Class to represent a closed polygon.

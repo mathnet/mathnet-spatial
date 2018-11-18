@@ -2,8 +2,8 @@
 {
     using System;
     using System.Diagnostics.Contracts;
-    using MathNet.Spatial.Internals;
     using MathNet.Spatial.Units;
+    using HashCode = Internals.HashCode;
 
     /// <summary>
     /// This structure represents a line between two points in 2-space.  It allows for operations such as

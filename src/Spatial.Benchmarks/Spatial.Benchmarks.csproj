@@ -2,17 +2,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>net471;netcoreapp2.0</TargetFrameworks>
-    <NetStandardImplicitPackageVersion>2.0.3</NetStandardImplicitPackageVersion>
+    <TargetFrameworks>net461;netcoreapp2.1</TargetFrameworks>
     <AssemblyName>Spatial.Benchmarks</AssemblyName>
     <RootNamespace>Spatial.Benchmarks</RootNamespace>
     <CodeAnalysisRuleSet>Spatial.Benchmarks.ruleset</CodeAnalysisRuleSet>
     <NeutralLanguage>en-US</NeutralLanguage>
     <IsPackable>false</IsPackable>
-    <Copyright>Copyright Math.NET Project</Copyright>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
-    <GenerateDocumentationFile>false</GenerateDocumentationFile>
-    <EnableDefaultCompileItems>true</EnableDefaultCompileItems>
     <StartupObject>Spatial.Benchmarks.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>

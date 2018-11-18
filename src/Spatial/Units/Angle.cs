@@ -6,6 +6,7 @@ namespace MathNet.Spatial.Units
     using System.Xml.Schema;
     using System.Xml.Serialization;
     using MathNet.Spatial.Internals;
+    using HashCode = Internals.HashCode;
 
     /// <summary>
     /// An angle

@@ -2,9 +2,8 @@
 {
     using System;
     using System.Diagnostics.Contracts;
-    using MathNet.Numerics;
-    using MathNet.Spatial.Internals;
     using MathNet.Spatial.Units;
+    using HashCode = Internals.HashCode;
 
     /// <summary>
     /// A means of representing spatial orientation of any reference frame.

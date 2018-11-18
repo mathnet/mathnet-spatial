@@ -27,7 +27,7 @@
             Assert.AreEqual(expected, double.Parse(s, CultureInfo.InvariantCulture));
         }
 
-#if NET45 == true
+#if NET461
 
         // All the swedish tests seem to have a problem on Travis
         [TestCase("5 °", 5 * DegToRad)]

@@ -10,6 +10,7 @@ namespace MathNet.Spatial.Euclidean
     using MathNet.Numerics.LinearAlgebra;
     using MathNet.Spatial.Internals;
     using MathNet.Spatial.Units;
+    using HashCode = Internals.HashCode;
 
     /// <summary>
     /// A coordinate system

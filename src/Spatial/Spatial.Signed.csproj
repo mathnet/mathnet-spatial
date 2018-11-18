@@ -6,11 +6,11 @@
     <AssemblyName>MathNet.Spatial</AssemblyName>
     <RootNamespace>MathNet.Spatial</RootNamespace>
     <IsPackable>true</IsPackable>
-    <PackageId>MathNet.Spatial</PackageId>
+    <PackageId>MathNet.Spatial.Signed</PackageId>
     <VersionPrefix>0.5.0</VersionPrefix>
     <VersionSuffix>beta03</VersionSuffix>
-    <Title>Math.NET Spatial</Title>
-    <Description>Math.NET Spatial, providing methods and algorithms for geometry computations in science, engineering and every day use. Supports .Net Framework 4.0 or higher and .Net Standard 2.0 on Windows, Linux and Mac.</Description>
+    <Title>Math.NET Spatial - Strong Name Edition</Title>
+    <Description>Math.NET Spatial, providing methods and algorithms for geometry computations in science, engineering and every day use. Supports .Net Framework 4.0 or higher and .Net Standard 2.0 on Windows, Linux and Mac. This package contains strong-named assemblies for legacy use cases (not recommended).</Description>
     <PackageReleaseNotes>Update to released version of Mathnet.Numerics 4.0.0
 Cleanup Paket config</PackageReleaseNotes>
     <PackageTags>math geometry spatial</PackageTags>
@@ -24,6 +24,9 @@ Cleanup Paket config</PackageReleaseNotes>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <EnableDefaultCompileItems>true</EnableDefaultCompileItems>
     <CodeAnalysisRuleSet>Spatial.ruleset</CodeAnalysisRuleSet>
+    <SignAssembly>true</SignAssembly>
+    <DelaySign>false</DelaySign>
+    <AssemblyOriginatorKeyFile>..\MathNet.Spatial.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'net40' ">
     <Reference Include="System" />

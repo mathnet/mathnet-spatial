@@ -11,6 +11,7 @@ namespace MathNet.Spatial.Euclidean
     using MathNet.Numerics.LinearAlgebra;
     using MathNet.Spatial.Internals;
     using MathNet.Spatial.Units;
+    using HashCode = Internals.HashCode;
 
     /// <summary>
     /// Represents a point in 2 dimensional space

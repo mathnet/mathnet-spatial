@@ -16,7 +16,7 @@ namespace MathNet.Spatial
     public static class XmlExt
     {
 
-#if NETSTANDARD1_3 == false
+#if !NETSTANDARD1_3
 
         public static void WriteValueToReadonlyField<TClass, TProperty>(
             TClass item,
