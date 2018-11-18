@@ -1,8 +1,8 @@
 source https://api.nuget.org/v3/index.json
 storage: packages
 
-nuget MathNet.Numerics ~> 4.6
-nuget MathNet.Numerics.Signed ~> 4.6
+nuget MathNet.Numerics ~> 4.7
+nuget MathNet.Numerics.Signed ~> 4.7
 
 nuget Newtonsoft.Json ~> 10.0.3
 nuget Protobuf-net ~> 2.3.3

@@ -1,7 +1,7 @@
 ### 0.5.0-beta04 - 2018-11-18
 * Many changes on API and implementation *~Johan Larsson, Adam Jones*
 * Support for .Net Standard 1.3 and 2.0 or newer and .Net Framework 4.0 or newer
-* Update to Math.NET Numerics v4.6
+* Update to Math.NET Numerics v4.7
 
 ### 0.5.0-beta03 - 2018-02-13
 * Update to released version of Mathnet.Numerics 4.0.0
