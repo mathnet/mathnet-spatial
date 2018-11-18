@@ -48,7 +48,7 @@ let spatialSolution = solution "Spatial" "MathNet.Spatial.sln" [spatialProject] 
 let spatialStrongNameZipPackage = zipPackage "MathNet.Spatial.Signed" "Math.NET Spatial" spatialRelease false
 let spatialStrongNameNuGetPackage = nugetPackage "MathNet.Spatial.Signed" spatialRelease
 let spatialStrongNameProject = project "MathNet.Spatial" "src/Spatial/Spatial.Signed.csproj" [spatialStrongNameNuGetPackage]
-let spatialStrongNameSolution = solution "Spatial.Signed" "MathNet.Spatial.Signed.sln" [spatialStrongNameProject] [spatialStrongNameZipPackage]
+let spatialStrongNameSolution = solution "Spatial" "MathNet.Spatial.Signed.sln" [spatialStrongNameProject] [spatialStrongNameZipPackage]
 
 
 // ALL
