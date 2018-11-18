@@ -48,7 +48,7 @@ let spatialSolution = solution "Spatial" "MathNet.Spatial.sln" [spatialProject] 
 let spatialStrongNameZipPackage = zipPackage "MathNet.Spatial.Signed" "Math.NET Spatial" spatialRelease false
 let spatialStrongNameNuGetPackage = nugetPackage "MathNet.Spatial.Signed" spatialRelease
 let spatialStrongNameProject = project "MathNet.Spatial" "src/Spatial/Spatial.Signed.csproj" [spatialStrongNameNuGetPackage]
-let spatialStrongNameSolution = solution "Spatial" "MathNet.Spatial.Signed.sln" [spatialStrongNameProject] [spatialStrongNameZipPackage]
+let spatialStrongNameSolution = solution "Spatial.Signed" "MathNet.Spatial.Signed.sln" [spatialStrongNameProject] [spatialStrongNameZipPackage]
 
 
 // ALL
@@ -118,7 +118,7 @@ Target "Build" (fun _ ->
         collectNuGetPackages spatialSolution
 
     // NuGet Sign (all or nothing)
-    if isWindows && hasBuildParam "sign" then signNuGet fingerprint timeserver spatialSolution
+    if isWindows && hasBuildParam "sign" then signNuGet fingerprint timeserver [spatialSolution; spatialStrongNameSolution]
 
     )
 "Prepare" ==> "Build"
@@ -271,11 +271,9 @@ Target "PublishMirrors" (fun _ -> publishMirrors ())
 Target "PublishDocs" (fun _ -> publishDocs spatialRelease)
 Target "PublishApi" (fun _ -> publishApi spatialRelease)
 
-Target "PublishArchive" (fun _ ->
-    publishArchive spatialSolution
-    publishArchive spatialStrongNameSolution)
+Target "PublishArchive" (fun _ -> publishArchives [spatialSolution; spatialStrongNameSolution])
 
-Target "PublishNuGet" (fun _ -> publishNuGet !! (spatialSolution.OutputNuGetDir </> "*.nupkg"))
+Target "PublishNuGet" (fun _ -> publishNuGet [spatialSolution; spatialStrongNameSolution])
 
 Target "Publish" DoNothing
 Dependencies "Publish" [ "PublishTag"; "PublishDocs"; "PublishApi"; "PublishArchive"; "PublishNuGet" ]
