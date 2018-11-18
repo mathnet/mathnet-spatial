@@ -96,8 +96,8 @@ let coreSignedBundle =
 Target "Start" DoNothing
 
 Target "Clean" (fun _ ->
-    CleanDirs [ "src/Spatial/bin"; "src/SpatialUnitTests/bin" ]
-    CleanDirs [ "src/Spatial/obj"; "src/SpatialUnitTests/obj" ]
+    CleanDirs [ "src/Spatial/bin"; "src/Spatial.Tests/bin" ]
+    CleanDirs [ "src/Spatial/obj"; "src/Spatial.Tests/obj" ]
     CleanDirs [ "obj" ]
     CleanDirs [ "out/api"; "out/docs"; "out/packages" ]
     CleanDirs [ "out/lib" ]
@@ -107,7 +107,7 @@ Target "Clean" (fun _ ->
 
 Target "ApplyVersion" (fun _ ->
     patchVersionInProjectFile "src/Spatial/Spatial.csproj" spatialRelease
-    patchVersionInProjectFile "src/SpatialUnitTests/SpatialUnitTests.csproj" spatialRelease)
+    patchVersionInProjectFile "src/Spatial.Tests/Spatial.Tests.csproj" spatialRelease)
 
 Target "Restore" (fun _ ->
     restore "MathNet.SpatialMinimal.sln")
@@ -146,20 +146,18 @@ let testLibrary testsDir testsProj framework =
             testsProj
             framework)
 
-let testSpatial framework = testLibrary "src/SpatialUnitTests" "SpatialUnitTests.csproj" framework
+let testSpatial framework = testLibrary "src/Spatial.Tests" "Spatial.Tests.csproj" framework
 Target "TestSpatial" DoNothing
-Target "TestSpatialCore1.1" (fun _ -> testSpatial "netcoreapp1.1")
-Target "TestSpatialCore2.0" (fun _ -> testSpatial "netcoreapp2.0")
+Target "TestSpatialCore2.1" (fun _ -> testSpatial "netcoreapp2.1")
 Target "TestSpatialNET40" (fun _ -> testSpatial "net40")
 Target "TestSpatialNET45" (fun _ -> testSpatial "net45")
-Target "TestSpatialNET46" (fun _ -> testSpatial "net46")
+Target "TestSpatialNET461" (fun _ -> testSpatial "net461")
 Target "TestSpatialNET47"  (fun _ -> testSpatial "net47")
 
-"Build" ==> "TestSpatialCore1.1"
-"Build" ==> "TestSpatialCore2.0" ==> "TestSpatial"
+"Build" ==> "TestSpatialCore2.1" ==> "TestSpatial"
 "Build" =?> ("TestSpatialNET40", isWindows)
-"Build" =?> ("TestSpatialNET45", isWindows) ==> "TestSpatial"
-"Build" =?> ("TestSpatialNET46", isWindows)
+"Build" =?> ("TestSpatialNET45", isWindows)
+"Build" =?> ("TestSpatialNET461", isWindows) ==> "TestSpatial"
 "Build" =?> ("TestSpatialNET47", isWindows)
 Target "Test" DoNothing
 "TestSpatial" ==> "Test"

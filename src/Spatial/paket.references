@@ -1,7 +1,6 @@
+MathNet.Numerics
+StyleCop.Analyzers
+System.Diagnostics.Contracts
+
 group Analyzers
     PublicApiAnalyzer
-
-group MathNet
-    MathNet.Numerics
-    StyleCop.Analyzers
-    System.Diagnostics.Contracts

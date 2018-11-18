@@ -1,0 +1,7 @@
+NUnit
+NUnitLite content:none
+Newtonsoft.Json
+Protobuf-net
+MathNet.Numerics
+StyleCop.Analyzers
+Microsoft.NET.Test.Sdk

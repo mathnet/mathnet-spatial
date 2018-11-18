@@ -2,15 +2,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>net45;netcoreapp1.1;netcoreapp2.0</TargetFrameworks>
-    <GenerateAssemblyInfo>True</GenerateAssemblyInfo>
-    <AssemblyName>MathNet.Numerics.UnitTests</AssemblyName>
-    <RootNamespace>MathNet.Numerics.UnitTests</RootNamespace>
-    <IsPackable>false</IsPackable>
-    <Copyright>Copyright Math.NET Project</Copyright>
     <GenerateProgramFile>false</GenerateProgramFile>
-    <GenerateDocumentationFile>false</GenerateDocumentationFile>
-    <EnableDefaultCompileItems>true</EnableDefaultCompileItems>
+    <TargetFrameworks>net461;netcoreapp2.1</TargetFrameworks>
+    <GenerateAssemblyInfo>True</GenerateAssemblyInfo>
+    <AssemblyName>MathNet.Spatial.Tests</AssemblyName>
+    <RootNamespace>MathNet.Spatial.Tests</RootNamespace>
+    <IsPackable>false</IsPackable>
     <CodeAnalysisRuleSet>SpatialUnitTests.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
@@ -26,6 +23,9 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Spatial\Spatial.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>
