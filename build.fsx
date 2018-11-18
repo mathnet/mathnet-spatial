@@ -57,7 +57,7 @@ let spatialPack =
       FsLoader = false
       Dependencies =
         [ { FrameworkVersion="net40"
-            Dependencies=[ "MathNet.Numerics", GetPackageVersion "./packages/mathnet/" "MathNet.Numerics"] } ]
+            Dependencies=[ "MathNet.Numerics", GetPackageVersion "./packages/" "MathNet.Numerics"] } ]
       Files =
         [ @"..\..\out\lib\Net40\MathNet.Spatial.*", Some libnet40, None;
           @"..\..\out\lib\netstandard2.0\MathNet.Spatial.*", Some netstandard20, None;
@@ -71,7 +71,7 @@ let spatialSignedPack =
       Tags = spatialPack.Tags + " signed"
       Dependencies =
         [ { FrameworkVersion="net40"
-            Dependencies=[ "MathNet.Numerics.Signed", GetPackageVersion "./packages/mathnet/" "MathNet.Numerics.Signed" ] } ]
+            Dependencies=[ "MathNet.Numerics.Signed", GetPackageVersion "./packages/" "MathNet.Numerics.Signed" ] } ]
       Files =
         [ @"..\..\out\lib\Net40\MathNet.Spatial.*", Some libnet40, None;
           @"..\..\src\Spatial\**\*.cs", Some "src/Common", None ] }

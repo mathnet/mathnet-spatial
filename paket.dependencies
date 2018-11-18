@@ -8,6 +8,13 @@ nuget Newtonsoft.Json ~> 10.0.3
 nuget Protobuf-net ~> 2.3.3
 
 nuget StyleCop.Analyzers
+nuget Microsoft.CodeAnalysis.CSharp.Workspaces
+nuget Microsoft.Composition
+nuget Gu.Roslyn.Asserts
+nuget PublicApiAnalyzer prerelease
+
+nuget System.Collections.Immutable
+nuget System.Reflection.Metadata
 
 // Testing
 nuget NUnit ~> 3.0 framework:net461,netcoreapp2.1
@@ -45,19 +52,3 @@ group Build
     nuget NUnit.ConsoleRunner
     nuget FSharp.Formatting !~> 2.4
     nuget NuGet.CommandLine
-
-group Analyzers
-    source https://api.nuget.org/v3/index.json
-    storage: none
-    nuget PublicApiAnalyzer prerelease
-
-group Roslyn
-    source https://api.nuget.org/v3/index.json
-    storage: none
-    nuget Microsoft.CodeAnalysis.CSharp.Workspaces 1.2.1
-    nuget System.Collections.Immutable 1.1.37
-    nuget System.Reflection.Metadata 1.2.0
-    nuget Microsoft.Composition 1.0.27
-    nuget NUnit ~> 3.9
-    nuget Gu.Roslyn.Asserts 1.2.0
-    nuget StyleCop.Analyzers

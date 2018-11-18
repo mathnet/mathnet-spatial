@@ -1,6 +1,4 @@
 MathNet.Numerics
 StyleCop.Analyzers
 System.Diagnostics.Contracts
-
-group Analyzers
-    PublicApiAnalyzer
+PublicApiAnalyzer

@@ -1,3 +1,2 @@
-group Roslyn
-  Microsoft.CodeAnalysis.CSharp
-  StyleCop.Analyzers
+Microsoft.CodeAnalysis.CSharp
+StyleCop.Analyzers
