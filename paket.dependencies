@@ -7,14 +7,16 @@ nuget MathNet.Numerics.Signed ~> 4.7
 nuget Newtonsoft.Json ~> 10.0.3
 nuget Protobuf-net ~> 2.3.3
 
-nuget StyleCop.Analyzers
-nuget Microsoft.CodeAnalysis.CSharp.Workspaces
-nuget Microsoft.Composition
-nuget Gu.Roslyn.Asserts
-nuget PublicApiAnalyzer prerelease
+nuget StyleCop.Analyzers copy_local:true, strategy:min
+nuget PublicApiAnalyzer prerelease copy_local:true, strategy:min
+nuget System.Diagnostics.Contracts copy_local:true, strategy:min
 
-nuget System.Collections.Immutable
-nuget System.Reflection.Metadata
+nuget Microsoft.CodeAnalysis.CSharp.Workspaces strategy:min
+nuget Microsoft.Composition strategy:min
+nuget Gu.Roslyn.Asserts strategy:min
+
+nuget System.Collections.Immutable strategy:min
+nuget System.Reflection.Metadata strategy:min
 
 // Testing
 nuget NUnit ~> 3.0 framework:net461,netcoreapp2.1
@@ -32,7 +34,6 @@ nuget System.Runtime.Serialization.Xml strategy:min, framework:netstandard1.3,ne
 nuget System.Runtime.Serialization.Primitives strategy:min, framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp2.1
 nuget System.Runtime.Serialization.Formatters strategy:min, framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp2.1
 nuget System.Security.Cryptography.Algorithms strategy:min, framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp2.1
-nuget System.Diagnostics.Contracts strategy:min, framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp2.1
  
 nuget NETStandard.Library 2.0.3 strategy:min, framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp2.1
 nuget Microsoft.NETCore.Platforms 2.1.1 strategy:min, framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp2.1
