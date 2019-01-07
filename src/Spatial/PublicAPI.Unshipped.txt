@@ -1,1 +1,1 @@
-﻿
+﻿MathNet.Spatial.Euclidean.Vector2D.Orthogonal.get -> MathNet.Spatial.Euclidean.Vector2D
