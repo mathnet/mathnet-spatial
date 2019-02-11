@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        <title>Contribute to Math.NET Spatial
+</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <meta name="description" content="Math.NET Spatial. .Net 4, .Net 3.5, SL5, Win8, WP8, PCL 47 and 136, Mono, Xamarin Android/iOS."/>
+        <meta name="author" content="Christoph Ruegg, Johan Larsson"/>
+
+        <script src="https://code.jquery.com/jquery-1.8.0.js"></script>
+        <script src="https://code.jquery.com/ui/1.8.23/jquery-ui.js"></script>
+        <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+        <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet" />
+
+        <link type="text/css" rel="stylesheet" href="https://spatial.mathdotnet.com/content/style.css" />
+        <style>
+          #main table:not(.pre) {
+              border: 1px solid #dddddd;
+              max-width: 100%;
+              border-style: solid;
+              border-width: 1px;
+              border-color: gray;
+              border-collapse: collapse;
+              border-right-width: 1px;
+              border-bottom-width: 1px;
+              margin-top: 15px;
+              margin-bottom: 25px;
+          }
+          #main table:not(.pre) th, #main table:not(.pre) td {
+              border: 1px solid #dddddd;
+              padding: 6px;
+          }
+          #main table:not(.pre) th p, #main table:not(.pre) td p {
+              margin-bottom: 5px;
+          }
+        </style>
+        <script type="text/javascript" src="https://spatial.mathdotnet.com/content/tips.js"></script>
+        <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+        <!--[if lt IE 9]>
+            <script src="https://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body>
+        <div class="container">
+            <div class="masthead">
+                <ul class="nav nav-pills pull-right">
+                    <li><a href="https://www.mathdotnet.com">Math.NET Project</a></li>
+                    <li><a href="https://spatial.mathdotnet.com">Math.NET Spatial</a></li>
+                    <li><a href="https://github.com/mathnet/mathnet-spatial">GitHub</a></li>
+                </ul>
+                <h3 class="muted">Math.NET Spatial</h3>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="span9" id="main">
+                    
+<h1><a name="Contribute-to-Math-NET-Spatial" class="anchor" href="#Contribute-to-Math-NET-Spatial">Contribute to Math.NET Spatial</a></h1>
+<p>Math.NET Spatial is driven by the community and contributors like you. I'm excited that you're interested to help us move forward and improve Spatial. We usually accept contributions and try to attribute them properly, provided they keep the library consistent, focused and mathematically accurate. Have a look at the following tips to get started quickly. I'm looking forward to your pull requests! Thanks!</p>
+<p>— <em>Christoph Rüegg (@cdrnet)</em></p>
+<h2><a name="Getting-Started" class="anchor" href="#Getting-Started">Getting Started</a></h2>
+<ul>
+<li>Make sure you have a <a href="https://github.com/signup/free">GitHub account</a>, it's free.</li>
+<li>Please configure a proper name and email address in git (<a href="https://help.github.com/articles/set-up-git">how to</a>). Real names are preferred, but it is acceptable to use an alias or even an obviously fake email address if you wish not to be contacted, as long as something is explicitly configured (not the default).</li>
+<li>Fork the <a href="https://github.com/mathnet/mathnet-spatial">mainline repository</a> on GitHub (<a href="https://help.github.com/articles/fork-a-repo">how to</a>).</li>
+</ul>
+<p>We use the <a href="https://help.github.com/articles/using-pull-requests/">Fork &amp; Pull Model</a>, as common for GitHub projects. If you've already contributed to another GitHub project then you're all set. If not, <a href="https://gun.io/blog/how-to-github-fork-branch-and-pull-request/">here is another  introduction</a>.</p>
+<p><strong>Separate Branch per Pull Request</strong><br />
+We recommend that you create a separate branch for each pull request, as opposed to using master. This makes it much easier to continue working on a pull request even after it has been opened on GitHub. Remember that GitHub automatically includes all future commits of the same branch to the pull request.</p>
+<p><strong>Focused</strong><br />
+We prefer a couple small pull requests over a single large one that targets multiple things at once.</p>
+<h3><a name="When-fixing-a-bug" class="anchor" href="#When-fixing-a-bug">When fixing a bug ...</a></h3>
+<p>If you have a good idea how to fix it, directly open a pull request. Otherwise you may want to open an issue first (at GitHub) and discuss it there. If you can reproduce the bug with simple enough code, please consider adding a Unit Test that fails to confirm the bug.</p>
+<h3><a name="When-extending-features" class="anchor" href="#When-extending-features">When extending features ...</a></h3>
+<p>If you're extending some feature which is similar and close to existing code, for example adding a new probability distribution or a new Bessel-related special function, it's fine to directly open a pull request. We're likely to accept such pulls.</p>
+<h3><a name="When-adding-new-features" class="anchor" href="#When-adding-new-features">When adding new features ...</a></h3>
+<p>If you intend to add completely new features, say some linear algebra routines for, we recommend to talk to us first. This is mostly to avoid wasting your time in case we decide not to accept it, or require major refactoring. If the features is quite small it is perfectly fine to just open a pull request though. Sometimes it's easier to just show code instead of lengthy explanations.</p>
+<p>Note that your work does not need to be finished or complete at the time you open the pull request (but please do mention this in the message), as GitHub pull requests are an excellent tool to discuss an early prototype or skeleton before it is fully implemented.</p>
+<h3><a name="When-you-wish-to-contribute-but-do-not-know-where-to-start" class="anchor" href="#When-you-wish-to-contribute-but-do-not-know-where-to-start">When you wish to contribute but do not know where to start ...</a></h3>
+<p>Issues marked with "up-for-grabs" should be good candidates for a first contribution, but you can start with whatever you wish. If you decide to work on an existing issue, consider to add a comment to mention you're working on it.</p>
+<p>What works very well is to try to build something with real world data that uses Math.NET Spatial: you either end up with a nice example that we would love to include or refer to, or you run into things which are missing, unintuitive, broken or just a bit weird, which we'd love to hear about so we (or you?) can fix it.</p>
+<p>Should you stumble on weird English grammar or wording please do fix it - most of the contributors are not native English speakers. That includes this document.</p>
+<h2><a name="What-to-Avoid" class="anchor" href="#What-to-Avoid">What to Avoid</a></h2>
+<p><strong>Code Reformatting and Refactoring:</strong><br />
+Please avoid starting with a major refactoring or any code reformatting without talking to us first.</p>
+<p><strong>Breaking Compatibility:</strong><br />
+We try to follow <a href="http://semver.org/">semantic versioning</a>, meaning that we cannot break compatibility until the next major version. Since Spatial intentionally permits straight access to raw algorithms, a lot of member declarations are public and thus cannot be modified. Instead of breaking compatibility, it is often possible to create a new better version side by side though and mark the original implementation as obsolete and scheduled for removal on the next major version.</p>
+<p><strong>Merges:</strong><br />
+Please avoid merging mainline back into your pull request branch. If you need to leverage some changes recently added to mainline, consider to rebase instead. In other words, please make sure your commits sit directly on top of a recent mainline master.</p>
+
+
+                </div>
+                <div class="span3">
+                    <ul class="nav nav-list" id="menu">
+
+                        <li class="nav-header">Math.NET Spatial</li>
+                        <li><a href="https://spatial.mathdotnet.com">Project Website</a></li>
+                        <li><a href="https://spatial.mathdotnet.com/ReleaseNotes.html">Release Notes</a></li>
+                        <li><a href="https://spatial.mathdotnet.com/License.html">MIT/X11 License</a></li>
+                        <li><a href="https://spatial.mathdotnet.com/api/">Class Reference</a></li>
+                        <li><a href="https://github.com/mathnet/mathnet-spatial/issues">Issues & Bugs</a></li>
+
+                        <li class="nav-header">Contributing</li>
+                        <li><a href="https://spatial.mathdotnet.com/Contributors.html">Contributors</a></li>
+                        <li><a href="https://spatial.mathdotnet.com/Contributing.html">Contributing</a></li>
+                        <li><a href="https://spatial.mathdotnet.com/Build.html">Build & Tools</a></li>
+
+                        <li class="nav-header">Getting Help</li>
+                        <li><a href="https://discuss.mathdotnet.com/c/spatial">Discuss</a></li>
+                        <li><a href="https://stackoverflow.com/questions/tagged/mathdotnet">Stack Overflow</a></li>
+                        <li><a href="https://gitter.im/mathnet/mathnet-spatial">Chat</a></li>
+
+                        <li class="nav-header">Getting Started</li>
+                        <li><a href="https://spatial.mathdotnet.com/">Getting started</a></li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
