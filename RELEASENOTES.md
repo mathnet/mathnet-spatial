@@ -1,3 +1,6 @@
+### 0.5.0-beta05 - 2019-02-17
+* Packaging fixes
+
 ### 0.5.0-beta04 - 2018-11-18
 * Many changes on API and implementation *~Johan Larsson, Adam Jones*
 * Support for .Net Standard 1.3 and 2.0 or newer and .Net Framework 4.0 or newer

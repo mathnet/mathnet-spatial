@@ -34,7 +34,7 @@ nuget System.Runtime.Serialization.Xml strategy:min, framework:netstandard1.3,ne
 nuget System.Runtime.Serialization.Primitives strategy:min, framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp2.1
 nuget System.Runtime.Serialization.Formatters strategy:min, framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp2.1
 nuget System.Security.Cryptography.Algorithms strategy:min, framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp2.1
- 
+
 nuget NETStandard.Library 2.0.3 strategy:min, framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp2.1
 nuget Microsoft.NETCore.Platforms 2.1.1 strategy:min, framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp2.1
 nuget Microsoft.NETCore.App 2.1.5 strategy:min, framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp2.1
@@ -44,7 +44,7 @@ nuget Microsoft.NETCore.DotNetHostPolicy 2.1.5 strategy:min, framework:netstanda
 nuget Microsoft.NETCore.DotNetHostResolver 2.1.5 strategy:min, framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp2.1
 nuget Microsoft.NETCore.Jit 2.0.8 strategy:min, framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp2.1
 nuget Microsoft.NETCore.Runtime.CoreCLR 2.0.8 strategy:min, framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp2.1
- 
+
 
 group Build
     source https://api.nuget.org/v3/index.json
