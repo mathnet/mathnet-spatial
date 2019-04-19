@@ -157,9 +157,10 @@
             var s = other.StartPoint.VectorTo(other.EndPoint);
 
             var t = (q - p).CrossProduct(s) / r.CrossProduct(s);
+            var u = (p - q).CrossProduct(r) / s.CrossProduct(r);
 
             intersection = p + (t * r);
-            return true;
+            return (0.0 <= t && t <= 1.0) && (0.0 <= u && u <= 1.0);
         }
 
         /// <summary>
