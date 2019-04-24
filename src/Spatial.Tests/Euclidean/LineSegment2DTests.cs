@@ -128,7 +128,7 @@
 
         [TestCase("0,0", "2,2", "1,0", "1,2", "1,1")]
         [TestCase("0,0", "2,2", "0,1", "2,1", "1,1")]
-        [TestCase("0,0", "2,2", "-1,-5", "-1,0", "-1,-1")]
+        [TestCase("-1,-1", "2,2", "-1,-5", "-1,0", "-1,-1")]
         public void IntersectWithTest(string s1, string e1, string s2, string e2, string expected)
         {
             var line1 = LineSegment2D.Parse(s1, e1);
@@ -136,6 +136,19 @@
             var e = string.IsNullOrEmpty(expected) ? (Point2D?)null : Point2D.Parse(expected);
             bool success = line1.TryIntersect(line2, out var result, Angle.FromRadians(0.001));
             Assert.IsTrue(success);
+            Assert.AreEqual(e, result);
+        }
+
+        [TestCase("0,0", "-2,-2", "1,0", "1,2", "1,1")]
+        [TestCase("0,0", "-2,-2", "0,1", "2,1", "1,1")]
+        [TestCase("0,0", "2,2", "-1,-5", "-1,0", "-1,-1")]
+        public void IntersectWithTest2(string s1, string e1, string s2, string e2, string expected)
+        {
+            var line1 = LineSegment2D.Parse(s1, e1);
+            var line2 = LineSegment2D.Parse(s2, e2);
+            var e = string.IsNullOrEmpty(expected) ? (Point2D?)null : Point2D.Parse(expected);
+            bool success = line1.TryIntersect(line2, out var result, Angle.FromRadians(0.001));
+            Assert.IsFalse(success);
             Assert.AreEqual(e, result);
         }
 
