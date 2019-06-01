@@ -1,45 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <OutputType>Library</OutputType>
-    <TargetFrameworks>net461;netstandard2.0</TargetFrameworks>
-    <AssemblyName>MathNet.Spatial</AssemblyName>
-    <RootNamespace>MathNet.Spatial</RootNamespace>
-    <IsPackable>true</IsPackable>
-    <PackageId>MathNet.Spatial</PackageId>
-    <VersionPrefix>0.5.0</VersionPrefix>
-    <VersionSuffix>beta05</VersionSuffix>
-    <Title>Math.NET Spatial</Title>
-    <Description>Math.NET Spatial, providing methods and algorithms for geometry computations in science, engineering and every day use. Supports .Net Framework 4.6.1 or higher and .Net Standard 2.0 or higher on Windows, Linux and Mac.</Description>
-    <PackageReleaseNotes>Packaging fixes</PackageReleaseNotes>
-    <PackageTags>math geometry spatial</PackageTags>
-    <IsTool>false</IsTool>
-    <NeutralLanguage>en</NeutralLanguage>
-    <NoPackageAnalysis>false</NoPackageAnalysis>
-    <IncludeBuildOutput>true</IncludeBuildOutput>
-    <IncludeContentInPack>false</IncludeContentInPack>
-    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <EnableDefaultCompileItems>true</EnableDefaultCompileItems>
-    <CodeAnalysisRuleSet>Spatial.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net40' ">
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AdditionalFiles Include="PublicAPI.Shipped.txt" />
-    <AdditionalFiles Include="PublicAPI.Unshipped.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Spatial.ruleset" />
-  </ItemGroup>
-  <Import Project="..\..\.paket\Paket.Restore.targets" />
+    <PropertyGroup>
+        <OutputType>Library</OutputType>
+        <TargetFrameworks>net461;netstandard2.0</TargetFrameworks>
+        <AssemblyName>MathNet.Spatial</AssemblyName>
+        <RootNamespace>MathNet.Spatial</RootNamespace>
+        <IsPackable>true</IsPackable>
+        <PackageId>MathNet.Spatial</PackageId>
+        <VersionPrefix>0.5.0</VersionPrefix>
+        <VersionSuffix>beta05</VersionSuffix>
+        <Title>Math.NET Spatial</Title>
+        <Description>Math.NET Spatial, providing methods and algorithms for geometry computations in science, engineering and every day use. Supports .Net Framework 4.6.1 or higher and .Net Standard 2.0 or higher on Windows, Linux and Mac.</Description>
+        <PackageReleaseNotes>Packaging fixes</PackageReleaseNotes>
+        <PackageTags>math geometry spatial</PackageTags>
+        <IsTool>false</IsTool>
+        <NeutralLanguage>en</NeutralLanguage>
+        <NoPackageAnalysis>false</NoPackageAnalysis>
+        <IncludeBuildOutput>true</IncludeBuildOutput>
+        <IncludeContentInPack>false</IncludeContentInPack>
+        <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+        <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <EnableDefaultCompileItems>true</EnableDefaultCompileItems>
+        <NoWarn>1701;1702;1705;1591;1573</NoWarn>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net461|AnyCPU'">
+      <CodeAnalysisRuleSet />
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net461|AnyCPU'">
+      <CodeAnalysisRuleSet />
+    </PropertyGroup>
+    <ItemGroup>
+        <AdditionalFiles Include="PublicAPI.Shipped.txt" />
+        <AdditionalFiles Include="PublicAPI.Unshipped.txt" />
+    </ItemGroup>
+    <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

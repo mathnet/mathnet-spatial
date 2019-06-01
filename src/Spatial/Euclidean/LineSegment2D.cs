@@ -1,10 +1,10 @@
-﻿namespace MathNet.Spatial.Euclidean
-{
-    using System;
-    using System.Diagnostics.Contracts;
-    using MathNet.Spatial.Units;
-    using HashCode = Internals.HashCode;
+﻿using System;
+using System.Diagnostics.Contracts;
+using MathNet.Spatial.Internals;
+using MathNet.Spatial.Units;
 
+namespace MathNet.Spatial.Euclidean
+{
     /// <summary>
     /// This structure represents a line between two points in 2-space.  It allows for operations such as
     /// computing the length, direction, comparisons, and shifting by a vector.

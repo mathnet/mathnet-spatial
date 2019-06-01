@@ -1,8 +1,8 @@
+using System.Collections.Generic;
+using System.Linq;
+
 namespace MathNet.Spatial.Internals
 {
-    using System.Collections.Generic;
-    using System.Linq;
-
     /// <summary>
     /// Internal implementation of an immutable list
     /// </summary>

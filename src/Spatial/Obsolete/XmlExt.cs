@@ -1,30 +1,27 @@
-﻿#pragma warning disable SA1600 // Elements must be documented
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
+using System.Xml;
+using System.Xml.Linq;
+
 namespace MathNet.Spatial
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Linq.Expressions;
-    using System.Reflection;
-    using System.Xml;
-    using System.Xml.Linq;
-
     /// <summary>
     /// Extensions for Xml generation
     /// </summary>
     [Obsolete("This class should not have been public, will be removed in a future version. Made obsolete 2017-12-03")]
     public static class XmlExt
     {
-
-#if !NETSTANDARD1_3
-
         public static void WriteValueToReadonlyField<TClass, TProperty>(
             TClass item,
             TProperty value,
             Expression<Func<TProperty>> fieldExpression)
         {
             string name = ((MemberExpression)fieldExpression.Body).Member.Name;
-            GetAllFields(item.GetType())
+            var allFields = GetAllFields(item.GetType()).ToList();
+            allFields
                 .Single(x => x.Name == name)
                 .SetValue(item, value);
         }
@@ -39,11 +36,11 @@ namespace MathNet.Spatial
             BindingFlags bindingAttr = BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Static |
                                        BindingFlags.Public | BindingFlags.NonPublic;
             return t.GetFields(bindingAttr)
-                    .Concat(GetAllFields(t.BaseType));
+                .Concat(GetAllFields(t.BaseType));
         }
 
         public static void SetReadonlyFields<TItem>(ref TItem self, string[] fields, double[] values)
-                where TItem : struct
+            where TItem : struct
         {
             object boxed = self;
             for (int i = 0; i < fields.Length; i++)
@@ -62,13 +59,11 @@ namespace MathNet.Spatial
             where TItem : struct
         {
             var fieldInfo = self.GetType()
-                                .GetField(((MemberExpression)func.Body).Member.Name);
+                .GetField(((MemberExpression)func.Body).Member.Name);
             object boxed = self;
             fieldInfo.SetValue(boxed, value);
             self = (TItem)boxed;
         }
-
-#endif
 
         public static string ReadAttributeOrDefault(this XElement e, string localName)
         {
@@ -78,13 +73,13 @@ namespace MathNet.Spatial
         public static XElement SingleElement(this XElement e, string localName)
         {
             return e.Elements()
-                    .Single(x => x.Name.LocalName == localName);
+                .Single(x => x.Name.LocalName == localName);
         }
 
         public static XElement SingleElementOrDefault(this XElement e, string localName)
         {
             return e.Elements()
-                    .SingleOrDefault(x => x.Name.LocalName == localName);
+                .SingleOrDefault(x => x.Name.LocalName == localName);
         }
 
         public static double AsDouble(this XElement e, bool throwIfNull = true, double valueIfNull = 0)
@@ -122,32 +117,32 @@ namespace MathNet.Spatial
         public static IEnumerable<XElement> ElementsNamed(this XElement e, string localName)
         {
             return e.Elements()
-                    .Where(x => x.Name.LocalName == localName);
+                .Where(x => x.Name.LocalName == localName);
         }
 
         public static XAttribute SingleAttribute(this XElement e, string localName)
         {
             return e.Attributes()
-                    .Single(x => x.Name.LocalName == localName);
+                .Single(x => x.Name.LocalName == localName);
         }
 
         public static XmlReader SingleElementReader(this XElement e, string localName)
         {
             return e.SingleElement(localName)
-                    .CreateReader();
+                .CreateReader();
         }
 
         public static string ReadAttributeOrElement(this XElement e, string localName)
         {
             XAttribute xattribute = e.Attributes()
-                                     .SingleOrDefault(x => x.Name.LocalName == localName);
+                .SingleOrDefault(x => x.Name.LocalName == localName);
             if (xattribute != null)
             {
                 return xattribute.Value;
             }
 
             XElement xelement = e.Elements()
-                                 .SingleOrDefault(x => x.Name.LocalName == localName);
+                .SingleOrDefault(x => x.Name.LocalName == localName);
             if (xelement != null)
             {
                 return xelement.Value;
@@ -165,14 +160,14 @@ namespace MathNet.Spatial
         public static string ReadAttributeOrElementOrDefault(this XElement e, string localName)
         {
             XAttribute xattribute = e.Attributes()
-                                     .SingleOrDefault(x => x.Name.LocalName == localName);
+                .SingleOrDefault(x => x.Name.LocalName == localName);
             if (xattribute != null)
             {
                 return xattribute.Value;
             }
 
             XElement xelement = e.Elements()
-                                 .SingleOrDefault(x => x.Name.LocalName == localName);
+                .SingleOrDefault(x => x.Name.LocalName == localName);
             if (xelement != null)
             {
                 return xelement.Value;

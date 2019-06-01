@@ -1,10 +1,10 @@
-﻿namespace MathNet.Spatial.UnitTests.Euclidean
-{
-    using System;
-    using MathNet.Spatial.Euclidean;
-    using MathNet.Spatial.Units;
-    using NUnit.Framework;
+﻿using System;
+using MathNet.Spatial.Euclidean;
+using MathNet.Spatial.Units;
+using NUnit.Framework;
 
+namespace MathNet.Spatial.UnitTests.Euclidean
+{
     [TestFixture]
     public class LineSegment2DTests
     {

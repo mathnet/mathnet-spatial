@@ -1,12 +1,12 @@
-﻿namespace MathNet.Spatial.UnitTests
-{
-    using System;
-    using System.Globalization;
-    using System.Text.RegularExpressions;
-    using MathNet.Spatial.Euclidean;
-    using MathNet.Spatial.Units;
-    using NUnit.Framework;
+﻿using System;
+using System.Globalization;
+using System.Text.RegularExpressions;
+using MathNet.Spatial.Euclidean;
+using MathNet.Spatial.Units;
+using NUnit.Framework;
 
+namespace MathNet.Spatial.UnitTests
+{
     public class ParserTests
     {
         private const double Tolerance = 1e-6;
@@ -28,7 +28,6 @@
         }
 
 #if NET461
-
         // All the swedish tests seem to have a problem on Travis
         [TestCase("5 °", 5 * DegToRad)]
         [TestCase("5°", 5 * DegToRad)]
@@ -161,6 +160,5 @@
         }
 
 #endif
-
     }
 }

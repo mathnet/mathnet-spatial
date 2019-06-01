@@ -1,9 +1,9 @@
-﻿namespace Spatial.Roslyn.Tests.ApiCompare
-{
-    using System.Diagnostics;
-    using System.IO;
-    using NUnit.Framework;
+﻿using System.Diagnostics;
+using System.IO;
+using NUnit.Framework;
 
+namespace Spatial.Roslyn.Tests.ApiCompare
+{
     public class ApiCompareTest
     {
         [Explicit("Script")]

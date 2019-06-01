@@ -1,11 +1,11 @@
-﻿namespace Spatial.Benchmarks
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using BenchmarkDotNet.Attributes;
-    using MathNet.Spatial.Euclidean;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using BenchmarkDotNet.Attributes;
+using MathNet.Spatial.Euclidean;
 
+namespace Spatial.Benchmarks
+{
     public class Polygon2DBenchmarks
     {
         private static readonly Random Random = new Random();

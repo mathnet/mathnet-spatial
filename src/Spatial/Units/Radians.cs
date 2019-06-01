@@ -1,8 +1,8 @@
+using System;
+using System.ComponentModel;
+
 namespace MathNet.Spatial.Units
 {
-    using System;
-    using System.ComponentModel;
-
     [Serializable]
     [EditorBrowsable(EditorBrowsableState.Never)]
     public struct Radians : IAngleUnit
@@ -16,7 +16,7 @@ namespace MathNet.Spatial.Units
         /// <inheritdoc />
         double IUnit.Conversionfactor => 1.0;
 
-                              /// <inheritdoc />
+        /// <inheritdoc />
         public double ConversionFactor => 1.0;
 #pragma warning restore CS3005 // Identifier differing only in case is not CLS-compliant
 

@@ -1,16 +1,15 @@
-﻿namespace MathNet.Spatial.Euclidean
-{
-    using System;
-    using System.Diagnostics.Contracts;
-    using System.Xml;
-    using System.Xml.Linq;
-    using System.Xml.Schema;
-    using System.Xml.Serialization;
-    using MathNet.Numerics.LinearAlgebra.Double;
-    using MathNet.Spatial.Internals;
-    using MathNet.Spatial.Units;
-    using HashCode = Internals.HashCode;
+﻿using System;
+using System.Diagnostics.Contracts;
+using System.Xml;
+using System.Xml.Linq;
+using System.Xml.Schema;
+using System.Xml.Serialization;
+using MathNet.Numerics.LinearAlgebra.Double;
+using MathNet.Spatial.Internals;
+using MathNet.Spatial.Units;
 
+namespace MathNet.Spatial.Euclidean
+{
     /// <summary>
     /// A geometric plane
     /// </summary>

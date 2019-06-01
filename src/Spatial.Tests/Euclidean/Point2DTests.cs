@@ -1,16 +1,16 @@
 ﻿// ReSharper disable InconsistentNaming
+
+using System;
+using System.IO;
+using System.Xml;
+using System.Xml.Serialization;
+using MathNet.Numerics.LinearAlgebra.Double;
+using MathNet.Spatial.Euclidean;
+using MathNet.Spatial.Units;
+using NUnit.Framework;
+
 namespace MathNet.Spatial.UnitTests.Euclidean
 {
-    using System;
-    using System.Globalization;
-    using System.IO;
-    using System.Xml;
-    using System.Xml.Serialization;
-    using MathNet.Numerics.LinearAlgebra.Double;
-    using MathNet.Spatial.Euclidean;
-    using MathNet.Spatial.Units;
-    using NUnit.Framework;
-
     public class Point2DTests
     {
         [Test]
@@ -153,10 +153,10 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             var p1 = Point2D.Parse(p1s);
             var p2 = Point2D.Parse(p2s);
             var centroids = new[]
-                           {
-                               Point2D.Centroid(p1, p2),
-                               Point2D.MidPoint(p1, p2),
-                           };
+            {
+                Point2D.Centroid(p1, p2),
+                Point2D.MidPoint(p1, p2),
+            };
             var expected = Point2D.Parse(eps);
             foreach (var centroid in centroids)
             {
@@ -265,10 +265,10 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         public void XmlContainerElements()
         {
             var container = new AssertXml.Container<Point2D>
-                            {
-                                Value1 = new Point2D(1, 2),
-                                Value2 = new Point2D(3, 4)
-                            };
+            {
+                Value1 = new Point2D(1, 2),
+                Value2 = new Point2D(3, 4)
+            };
             var xml = "<ContainerOfPoint2D>\r\n" +
                       "  <Value1><X>1</X><Y>2</Y></Value1>\r\n" +
                       "  <Value2><X>3</X><Y>4</Y></Value2>\r\n" +

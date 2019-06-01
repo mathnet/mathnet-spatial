@@ -1,22 +1,22 @@
+using System;
+using System.Diagnostics.Contracts;
+using System.Text.RegularExpressions;
+using System.Xml;
+using System.Xml.Linq;
+using System.Xml.Schema;
+using System.Xml.Serialization;
+using MathNet.Numerics.LinearAlgebra;
+using MathNet.Numerics.LinearAlgebra.Double;
+using MathNet.Spatial.Internals;
+using MathNet.Spatial.Units;
+
 namespace MathNet.Spatial.Euclidean
 {
-    using System;
-    using System.Diagnostics.Contracts;
-    using System.Text.RegularExpressions;
-    using System.Xml;
-    using System.Xml.Linq;
-    using System.Xml.Schema;
-    using System.Xml.Serialization;
-    using MathNet.Numerics.LinearAlgebra;
-    using MathNet.Spatial.Internals;
-    using MathNet.Spatial.Units;
-    using HashCode = Internals.HashCode;
-
     /// <summary>
     /// A coordinate system
     /// </summary>
     [Serializable]
-    public class CoordinateSystem : Numerics.LinearAlgebra.Double.DenseMatrix, IEquatable<CoordinateSystem>, IXmlSerializable
+    public class CoordinateSystem : DenseMatrix, IEquatable<CoordinateSystem>, IXmlSerializable
     {
         /// <summary>
         /// A local regex pattern for 3D items
@@ -177,7 +177,7 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>True if the coordinate system are the same; otherwise false.</returns>
         public static bool operator ==(CoordinateSystem left, CoordinateSystem right)
         {
-            return CoordinateSystem.Equals(left, right);
+            return Equals(left, right);
         }
 
         /// <summary>
@@ -188,7 +188,7 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>True if the coordinate systems are different; otherwise false.</returns>
         public static bool operator !=(CoordinateSystem left, CoordinateSystem right)
         {
-            return !CoordinateSystem.Equals(left, right);
+            return !Equals(left, right);
         }
 
         /// <summary>

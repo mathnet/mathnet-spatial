@@ -1,21 +1,18 @@
-﻿namespace Spatial.Roslyn.Tests.ApiCompare
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Reflection;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
+namespace Spatial.Roslyn.Tests.ApiCompare
+{
     public class Reflector
     {
-        private Assembly legacy;
-        private Assembly current;
+        private readonly List<Type> lostTypes = new List<Type>();
+        private readonly List<EntityChange> allChanges = new List<EntityChange>();
 
-        private List<Type> lostTypes = new List<Type>();
-        private List<EntityChange> allChanges = new List<EntityChange>();
+        public Assembly Legacy { get; set; }
 
-        public Assembly Legacy => this.legacy;
-
-        public Assembly Current => this.current;
+        public Assembly Current { get; set; }
 
         public int RemovedTypes => this.lostTypes.Count;
 
@@ -27,13 +24,13 @@
 
             try
             {
-                this.legacy = Assembly.ReflectionOnlyLoadFrom(oldassembly);
-                this.current = Assembly.ReflectionOnlyLoadFrom(newassembly);
+                this.Legacy = Assembly.ReflectionOnlyLoadFrom(oldassembly);
+                this.Current = Assembly.ReflectionOnlyLoadFrom(newassembly);
                 return true;
             }
             catch (Exception ex)
             {
-                if (ex is System.Reflection.ReflectionTypeLoadException)
+                if (ex is ReflectionTypeLoadException)
                 {
                     var typeLoadException = ex as ReflectionTypeLoadException;
                     var loaderExceptions = typeLoadException.LoaderExceptions;
@@ -178,7 +175,7 @@
         private Assembly CurrentDomain_ReflectionOnlyAssemblyResolve(object sender, ResolveEventArgs args)
         {
             // TODO: also search in the local directory where the files were
-            return System.Reflection.Assembly.ReflectionOnlyLoad(args.Name);
+            return Assembly.ReflectionOnlyLoad(args.Name);
         }
     }
 }

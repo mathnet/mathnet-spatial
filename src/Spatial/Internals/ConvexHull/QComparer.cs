@@ -1,8 +1,8 @@
-﻿namespace MathNet.Spatial.Internals
-{
-    using System;
-    using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
+namespace MathNet.Spatial.Internals
+{
     /// <summary>
     /// A comparer for convex hull's use of an Avl tree
     /// </summary>

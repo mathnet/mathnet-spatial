@@ -1,10 +1,10 @@
-﻿namespace MathNet.Spatial.UnitTests.Euclidean
-{
-    using System;
-    using System.Linq;
-    using MathNet.Spatial.Euclidean;
-    using NUnit.Framework;
+﻿using System;
+using System.Linq;
+using MathNet.Spatial.Euclidean;
+using NUnit.Framework;
 
+namespace MathNet.Spatial.UnitTests.Euclidean
+{
     [TestFixture]
     public class PolyLine2DTests
     {
@@ -43,7 +43,7 @@
         }
 
         [TestCase("0,-1.5;0,1;1,1", 2.0, "1,1")]
-        [TestCase("0,-1.5;0,1;1,1", -5,  "0,-1.5")]
+        [TestCase("0,-1.5;0,1;1,1", -5, "0,-1.5")]
         public void GetPointAtFractionAlongCurveThrowsArgumentException(string points, double fraction, string expected)
         {
             var testElement = new PolyLine2D(from x in points.Split(';') select Point2D.Parse(x));

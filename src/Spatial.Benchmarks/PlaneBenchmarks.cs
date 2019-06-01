@@ -1,10 +1,9 @@
-﻿namespace Spatial.Benchmarks
-{
-    using System;
-    using BenchmarkDotNet.Attributes;
-    using MathNet.Spatial.Euclidean;
-    using MathNet.Spatial.Units;
+﻿using BenchmarkDotNet.Attributes;
+using MathNet.Spatial.Euclidean;
+using MathNet.Spatial.Units;
 
+namespace Spatial.Benchmarks
+{
     public class PlaneBenchmarks
     {
         private static readonly Plane Plane1 = new Plane(new Point3D(1, 2, 3), UnitVector3D.Create(1, 0, 0));

@@ -1,9 +1,9 @@
-﻿namespace MathNet.Spatial.Internals
-{
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 
+namespace MathNet.Spatial.Internals
+{
     /// <summary>
     /// An enumerator for AvlNodeItems
     /// </summary>

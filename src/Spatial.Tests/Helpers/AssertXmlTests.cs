@@ -1,12 +1,12 @@
+using System.Globalization;
+using System.Xml;
+using System.Xml.Linq;
+using System.Xml.Schema;
+using System.Xml.Serialization;
+using NUnit.Framework;
+
 namespace MathNet.Spatial.UnitTests
 {
-    using System.Globalization;
-    using System.Xml;
-    using System.Xml.Linq;
-    using System.Xml.Schema;
-    using System.Xml.Serialization;
-    using NUnit.Framework;
-
     public class AssertXmlTests
     {
         [Test]

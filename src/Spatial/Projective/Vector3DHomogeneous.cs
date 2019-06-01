@@ -1,11 +1,11 @@
-﻿namespace MathNet.Spatial.Projective
-{
-    using System;
-    using System.Globalization;
-    using MathNet.Numerics.LinearAlgebra;
-    using MathNet.Spatial.Euclidean;
-    using HashCode = Internals.HashCode;
+﻿using System;
+using System.Globalization;
+using MathNet.Numerics.LinearAlgebra;
+using MathNet.Spatial.Euclidean;
+using MathNet.Spatial.Internals;
 
+namespace MathNet.Spatial.Projective
+{
     /// <summary>
     /// A Vector3DHomogeneous struct
     /// </summary>

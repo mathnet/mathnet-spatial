@@ -1,9 +1,9 @@
-﻿namespace Spatial.Roslyn.Tests
-{
-    using Gu.Roslyn.Asserts;
-    using NUnit.Framework;
-    using SpatialAnalyzers;
+﻿using Gu.Roslyn.Asserts;
+using NUnit.Framework;
+using SpatialAnalyzers;
 
+namespace Spatial.Roslyn.Tests
+{
     public class FixRay3DTests
     {
         // ReSharper disable once InconsistentNaming

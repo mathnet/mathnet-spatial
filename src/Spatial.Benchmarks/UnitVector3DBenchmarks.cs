@@ -1,11 +1,11 @@
-﻿namespace Spatial.Benchmarks
-{
-    using System.Globalization;
-    using BenchmarkDotNet.Attributes;
-    using MathNet.Numerics.LinearAlgebra;
-    using MathNet.Spatial.Euclidean;
-    using MathNet.Spatial.Units;
+﻿using System.Globalization;
+using BenchmarkDotNet.Attributes;
+using MathNet.Numerics.LinearAlgebra;
+using MathNet.Spatial.Euclidean;
+using MathNet.Spatial.Units;
 
+namespace Spatial.Benchmarks
+{
     public class UnitVector3DBenchmarks
     {
         private static readonly UnitVector3D UnitVector3D1 = UnitVector3D.Create(1, 0, 0);

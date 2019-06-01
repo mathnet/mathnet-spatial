@@ -1,18 +1,17 @@
+using System;
+using System.Collections.Generic;
+using System.Diagnostics.Contracts;
+using System.Globalization;
+using System.Linq;
+using System.Xml;
+using System.Xml.Schema;
+using System.Xml.Serialization;
+using MathNet.Numerics.LinearAlgebra;
+using MathNet.Spatial.Internals;
+using MathNet.Spatial.Units;
+
 namespace MathNet.Spatial.Euclidean
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
-    using System.Globalization;
-    using System.Linq;
-    using System.Xml;
-    using System.Xml.Schema;
-    using System.Xml.Serialization;
-    using MathNet.Numerics.LinearAlgebra;
-    using MathNet.Spatial.Internals;
-    using MathNet.Spatial.Units;
-    using HashCode = Internals.HashCode;
-
     /// <summary>
     /// A struct representing a vector in 3D space
     /// </summary>
@@ -638,7 +637,7 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public Vector3D TransformBy(Matrix<double> m)
         {
-            return Vector3D.OfVector(m.Multiply(this.ToVector()));
+            return OfVector(m.Multiply(this.ToVector()));
         }
 
         /// <summary>

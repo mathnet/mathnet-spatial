@@ -1,15 +1,14 @@
-﻿namespace MathNet.Spatial.UnitTests
-{
-    using System;
-    using System.Diagnostics;
-    using System.IO;
-    using System.Linq;
-    using System.Runtime.Serialization;
-    using System.Xml;
-    using System.Xml.Linq;
-    using System.Xml.Serialization;
-    using NUnit.Framework;
+﻿using System;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Xml;
+using System.Xml.Linq;
+using System.Xml.Serialization;
+using NUnit.Framework;
 
+namespace MathNet.Spatial.UnitTests
+{
     public static class AssertXml
     {
         public static XmlWriterSettings Settings

@@ -1,11 +1,11 @@
-﻿namespace MathNet.Spatial.Projective
-{
-    using System;
-    using System.Globalization;
-    using MathNet.Numerics.LinearAlgebra;
-    using MathNet.Spatial.Euclidean;
-    using HashCode = Internals.HashCode;
+﻿using System;
+using System.Globalization;
+using MathNet.Numerics.LinearAlgebra;
+using MathNet.Spatial.Euclidean;
+using MathNet.Spatial.Internals;
 
+namespace MathNet.Spatial.Projective
+{
     /// <summary>
     /// A Point3DHomogeneous struct
     /// </summary>
@@ -196,7 +196,7 @@
         /// <returns>A transformed Point3DHomogeneous</returns>
         public Point3DHomogeneous TransformBy(Matrix<double> m)
         {
-           return new Point3DHomogeneous(m.Multiply(Vector<double>.Build.Dense(new[] { this.X, this.Y, this.Z, this.W })));
+            return new Point3DHomogeneous(m.Multiply(Vector<double>.Build.Dense(new[] { this.X, this.Y, this.Z, this.W })));
         }
     }
 }

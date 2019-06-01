@@ -1,18 +1,17 @@
+using System;
+using System.Collections.Generic;
+using System.Diagnostics.Contracts;
+using System.Globalization;
+using System.Linq;
+using System.Xml;
+using System.Xml.Schema;
+using System.Xml.Serialization;
+using MathNet.Numerics.LinearAlgebra;
+using MathNet.Spatial.Internals;
+using MathNet.Spatial.Units;
+
 namespace MathNet.Spatial.Euclidean
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
-    using System.Globalization;
-    using System.Linq;
-    using System.Xml;
-    using System.Xml.Schema;
-    using System.Xml.Serialization;
-    using MathNet.Numerics.LinearAlgebra;
-    using MathNet.Spatial.Internals;
-    using MathNet.Spatial.Units;
-    using HashCode = Internals.HashCode;
-
     /// <summary>
     /// A unit vector, this is used to describe a direction in 3D
     /// </summary>
@@ -119,10 +118,10 @@ namespace MathNet.Spatial.Euclidean
             {
                 if (-this.X - this.Y > 0.1)
                 {
-                    return UnitVector3D.Create(this.Z, this.Z, -this.X - this.Y);
+                    return Create(this.Z, this.Z, -this.X - this.Y);
                 }
 
-                return UnitVector3D.Create(-this.Y - this.Z, this.X, this.X);
+                return Create(-this.Y - this.Z, this.X, this.X);
             }
         }
 
@@ -572,7 +571,7 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public UnitVector3D Negate()
         {
-            return UnitVector3D.Create(-1 * this.X, -1 * this.Y, -1 * this.Z);
+            return Create(-1 * this.X, -1 * this.Y, -1 * this.Z);
         }
 
         /// <summary>

@@ -1,11 +1,11 @@
-﻿namespace Spatial.Benchmarks
-{
-    using System.Globalization;
-    using BenchmarkDotNet.Attributes;
-    using MathNet.Numerics.LinearAlgebra;
-    using MathNet.Spatial.Euclidean;
-    using MathNet.Spatial.Units;
+﻿using System.Globalization;
+using BenchmarkDotNet.Attributes;
+using MathNet.Numerics.LinearAlgebra;
+using MathNet.Spatial.Euclidean;
+using MathNet.Spatial.Units;
 
+namespace Spatial.Benchmarks
+{
     public class Vector2DBenchmarks
     {
         private static readonly Vector2D P1 = new Vector2D(1, 2);

@@ -1,9 +1,9 @@
-﻿namespace Spatial.Roslyn.Tests.ApiCompare
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
+namespace Spatial.Roslyn.Tests.ApiCompare
+{
     public class EntityChange
     {
         public Type OriginalType { get; set; }
@@ -14,10 +14,7 @@
 
         public bool IsChanged
         {
-            get
-            {
-                return this.IsRemoved || this.MethodChanges.Count > 0;
-            }
+            get { return this.IsRemoved || this.MethodChanges.Count > 0; }
         }
 
         public bool IsRemoved

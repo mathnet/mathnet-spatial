@@ -1,11 +1,13 @@
-﻿namespace MathNet.Spatial.UnitTests.Euclidean
-{
-    using System;
-    using System.Collections;
-    using NUnit.Framework;
-    using Spatial.Euclidean;
-    using Spatial.Units;
+﻿using System;
+using System.Collections;
+using MathNet.Numerics;
+using MathNet.Numerics.LinearAlgebra.Double;
+using MathNet.Spatial.Euclidean;
+using MathNet.Spatial.Units;
+using NUnit.Framework;
 
+namespace MathNet.Spatial.UnitTests.Euclidean
+{
     /// <summary>
     /// Complex32 tests.
     /// </summary>
@@ -28,7 +30,7 @@
             Assert.AreEqual(4, a1.ImagZ);
 
             // From DenseVector :
-            var v1 = new Quaternion(new MathNet.Numerics.LinearAlgebra.Double.DenseVector(new double[] { 1, 2, 3, 4 }));
+            var v1 = new Quaternion(new DenseVector(new double[] { 1, 2, 3, 4 }));
             Assert.AreEqual(1, v1.Real);
             Assert.AreEqual(2, v1.ImagX);
             Assert.AreEqual(3, v1.ImagY);
@@ -129,11 +131,11 @@
 #pragma warning restore SA1131 // Use readable conditions
         }
 
-        [TestCase(1.0, 1.0, 1.0, 1.0, new[] { MathNet.Numerics.Constants.PiOver2, 0.0, MathNet.Numerics.Constants.PiOver2 })]
-        [TestCase(0.0, 1.0, 0.0, 0.0, new[] { MathNet.Numerics.Constants.Pi, 0.0, 0.0 })]
-        [TestCase(0.0, 1.0, 0.5, 0.0, new[] { MathNet.Numerics.Constants.Pi, 0.0, 0.92729522 })]
+        [TestCase(1.0, 1.0, 1.0, 1.0, new[] { Constants.PiOver2, 0.0, Constants.PiOver2 })]
+        [TestCase(0.0, 1.0, 0.0, 0.0, new[] { Constants.Pi, 0.0, 0.0 })]
+        [TestCase(0.0, 1.0, 0.5, 0.0, new[] { Constants.Pi, 0.0, 0.92729522 })]
         [TestCase(0.0, 0.0, 0.0, 0.0, new[] { 0.0, 0.0, 0.0 })]
-        [TestCase(0.0, 1.0, 0.5, 0.5, new[] { 2.67794504, -MathNet.Numerics.Constants.PiOver2, 1.10714872 })]
+        [TestCase(0.0, 1.0, 0.5, 0.5, new[] { 2.67794504, -Constants.PiOver2, 1.10714872 })]
         public void ToEulerAnglesTest(double real, double x, double y, double z, double[] expectedAsArray)
         {
             var quat = new Quaternion(real, x, y, z);
@@ -265,10 +267,10 @@
 
         public class QuaternionCalculationTestClass
         {
-            private static double smallNumber = float.Epsilon;
-            private static Random random = new Random();
-            private static Quaternion posInf = new Quaternion(double.PositiveInfinity, 0, 0, 0);
-            private static Quaternion nanQuaternion = new Quaternion(double.NaN, 0, 0, 0);
+            private static readonly double smallNumber = float.Epsilon;
+            private static readonly Random random = new Random();
+            private static readonly Quaternion posInf = new Quaternion(double.PositiveInfinity, 0, 0, 0);
+            private static readonly Quaternion nanQuaternion = new Quaternion(double.NaN, 0, 0, 0);
 
             public static IEnumerable NormTests
             {
@@ -404,10 +406,10 @@
                     var q10 = new Quaternion(0, 0, 0, Math.PI / 2);
                     var q2 = new Quaternion(1, 1, 1, 1);
                     var q20 = new Quaternion(
-                            Math.Log(2),
-                            1 / Math.Sqrt(3) * Math.PI / 3,
-                            1 / Math.Sqrt(3) * Math.PI / 3,
-                            1 / Math.Sqrt(3) * Math.PI / 3);
+                        Math.Log(2),
+                        1 / Math.Sqrt(3) * Math.PI / 3,
+                        1 / Math.Sqrt(3) * Math.PI / 3,
+                        1 / Math.Sqrt(3) * Math.PI / 3);
 
                     var tests = new object[]
                     {

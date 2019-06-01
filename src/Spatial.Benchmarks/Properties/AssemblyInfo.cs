@@ -1,4 +1,4 @@
-﻿using System.Reflection;
-using System.Runtime.InteropServices;
+﻿using BenchmarkDotNet.Attributes;
+using Spatial.Benchmarks.Properties;
 
-[assembly: BenchmarkDotNet.Attributes.Config(typeof(Spatial.Benchmarks.Properties.MemoryDiagnoserConfig))]
+[assembly: Config(typeof(MemoryDiagnoserConfig))]

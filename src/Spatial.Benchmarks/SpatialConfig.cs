@@ -1,18 +1,11 @@
-﻿namespace Spatial.Benchmarks
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-    using BenchmarkDotNet.Analysers;
-    using BenchmarkDotNet.Configs;
-    using BenchmarkDotNet.Environments;
-    using BenchmarkDotNet.Exporters;
-    using BenchmarkDotNet.Jobs;
-    using BenchmarkDotNet.Loggers;
-    using BenchmarkDotNet.Toolchains.CsProj;
+﻿using System.Linq;
+using BenchmarkDotNet.Configs;
+using BenchmarkDotNet.Environments;
+using BenchmarkDotNet.Exporters;
+using BenchmarkDotNet.Jobs;
 
+namespace Spatial.Benchmarks
+{
     internal class SpatialConfig : ManualConfig
     {
         public SpatialConfig()
@@ -37,7 +30,7 @@
                 .With(Jit.RyuJit)
                 .With(Runtime.Clr));
 #endif
-#if NETCOREAPP2_1
+#if NETCOREAPP2_2
             this.Add(Job.Default
                 .With(Platform.X64)
                 .With(Jit.RyuJit)

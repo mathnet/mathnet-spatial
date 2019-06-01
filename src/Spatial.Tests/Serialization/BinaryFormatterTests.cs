@@ -1,12 +1,12 @@
-﻿namespace MathNet.Spatial.UnitTests
-{
-    using System.IO;
-    using System.Linq;
-    using System.Runtime.Serialization.Formatters.Binary;
-    using MathNet.Spatial.Euclidean;
-    using MathNet.Spatial.Units;
-    using NUnit.Framework;
+﻿using System.IO;
+using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
+using MathNet.Spatial.Euclidean;
+using MathNet.Spatial.Units;
+using NUnit.Framework;
 
+namespace MathNet.Spatial.UnitTests
+{
     public class BinaryFormatterTests
     {
         private const double Tolerance = 1e-6;

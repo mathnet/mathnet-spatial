@@ -1,10 +1,10 @@
-﻿namespace MathNet.Spatial.Internals
-{
-    using System;
-    using System.Globalization;
-    using System.Text.RegularExpressions;
-    using MathNet.Spatial.Units;
+﻿using System;
+using System.Globalization;
+using System.Text.RegularExpressions;
+using MathNet.Spatial.Units;
 
+namespace MathNet.Spatial.Internals
+{
     /// <summary>
     /// Internal text processing
     /// </summary>

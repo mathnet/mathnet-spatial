@@ -1,10 +1,11 @@
-﻿namespace MathNet.Spatial.UnitTests.Euclidean
+﻿using MathNet.Spatial.Euclidean;
+using MathNet.Spatial.Units;
+using NUnit.Framework;
+
+namespace MathNet.Spatial.UnitTests.Euclidean
 {
     // ReSharper disable InconsistentNaming
     using System;
-    using MathNet.Spatial.Euclidean;
-    using MathNet.Spatial.Units;
-    using NUnit.Framework;
 
     [TestFixture]
     public class CoordinateSystemTest
@@ -62,10 +63,10 @@
             var p = Point3D.Parse(ps);
             var angle = Angle.Parse(@as);
             var coordinateSystems = new[]
-                {
-                    CoordinateSystem.Rotation(angle, UnitVector3D.Parse(vs)),
-                    CoordinateSystem.Rotation(angle, Vector3D.Parse(vs)),
-                };
+            {
+                CoordinateSystem.Rotation(angle, UnitVector3D.Parse(vs)),
+                CoordinateSystem.Rotation(angle, Vector3D.Parse(vs)),
+            };
             var expected = Point3D.Parse(eps);
             foreach (var coordinateSystem in coordinateSystems)
             {
@@ -88,9 +89,9 @@
             var pitch = Angle.Parse(pitchs);
             var roll = Angle.Parse(rolls);
             var coordinateSystems = new[]
-                {
-                    CoordinateSystem.Rotation(yaw, pitch, roll),
-                };
+            {
+                CoordinateSystem.Rotation(yaw, pitch, roll),
+            };
             var expected = Point3D.Parse(eps);
             foreach (var coordinateSystem in coordinateSystems)
             {

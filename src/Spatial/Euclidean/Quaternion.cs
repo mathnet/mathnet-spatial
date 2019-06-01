@@ -1,12 +1,12 @@
-﻿namespace MathNet.Spatial.Euclidean
-{
-    using System;
-    using System.Diagnostics.Contracts;
-    using Numerics;
-    using Numerics.LinearAlgebra.Double;
-    using Units;
-    using HashCode = Internals.HashCode;
+﻿using System;
+using System.Diagnostics.Contracts;
+using MathNet.Numerics;
+using MathNet.Numerics.LinearAlgebra.Double;
+using MathNet.Spatial.Internals;
+using MathNet.Spatial.Units;
 
+namespace MathNet.Spatial.Euclidean
+{
     /// <summary>Quaternion Number</summary>
     /// <remarks>
     /// http://en.wikipedia.org/wiki/Quaternion
@@ -738,9 +738,9 @@
             }
 
             return Math.Abs(other.w - this.w) < tolerance
-                && Math.Abs(other.x - this.x) < tolerance
-                && Math.Abs(other.y - this.y) < tolerance
-                && Math.Abs(other.z - this.z) < tolerance;
+                   && Math.Abs(other.x - this.x) < tolerance
+                   && Math.Abs(other.y - this.y) < tolerance
+                   && Math.Abs(other.z - this.z) < tolerance;
         }
 
         /// <inheritdoc />
@@ -754,9 +754,9 @@
             }
 
             return this.w.Equals(other.w)
-                && this.x.Equals(other.x)
-                && this.y.Equals(other.y)
-                && this.z.Equals(other.z);
+                   && this.x.Equals(other.x)
+                   && this.y.Equals(other.y)
+                   && this.z.Equals(other.z);
         }
 
         /// <inheritdoc />

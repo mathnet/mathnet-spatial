@@ -1,8 +1,8 @@
+using System.Reflection;
+using NUnitLite;
+
 namespace MathNet.Spatial.Tests
 {
-    using System.Reflection;
-    using NUnitLite;
-
     public class Program
     {
         /// <summary>

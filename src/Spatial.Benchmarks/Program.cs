@@ -1,14 +1,13 @@
 ﻿// ReSharper disable UnusedMember.Local
+
+using System.Collections.Generic;
+using System.IO;
+using BenchmarkDotNet.Configs;
+using BenchmarkDotNet.Reports;
+using BenchmarkDotNet.Running;
+
 namespace Spatial.Benchmarks
 {
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using BenchmarkDotNet.Configs;
-    using BenchmarkDotNet.Reports;
-    using BenchmarkDotNet.Running;
-
     internal class Program
     {
         private static string ArtifactsDirectory { get; set; } = Path.Combine(Directory.GetCurrentDirectory(), "BenchmarkDotNet.Artifacts", "results");

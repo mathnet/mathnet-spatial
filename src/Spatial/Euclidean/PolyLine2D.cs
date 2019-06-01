@@ -1,12 +1,12 @@
-﻿namespace MathNet.Spatial.Euclidean
-{
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
-    using System.Linq;
-    using HashCode = Internals.HashCode;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics.Contracts;
+using System.Linq;
+using MathNet.Spatial.Internals;
 
+namespace MathNet.Spatial.Euclidean
+{
     /// <summary>
     /// The PolyLine2D class represents a 2D curve in space made up of line segments joined end-to-end, and is
     /// stored as a sequential list of 2D points.

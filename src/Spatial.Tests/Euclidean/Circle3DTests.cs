@@ -1,10 +1,11 @@
 ﻿// ReSharper disable InconsistentNaming
+
+using System;
+using MathNet.Spatial.Euclidean;
+using NUnit.Framework;
+
 namespace MathNet.Spatial.UnitTests.Euclidean
 {
-    using System;
-    using MathNet.Spatial.Euclidean;
-    using NUnit.Framework;
-
     [TestFixture]
     public class Circle3DTests
     {

@@ -1,10 +1,10 @@
+using System;
+using MathNet.Numerics.LinearAlgebra;
+using MathNet.Numerics.LinearAlgebra.Double;
+using MathNet.Spatial.Units;
+
 namespace MathNet.Spatial.Euclidean
 {
-    using System;
-    using MathNet.Numerics.LinearAlgebra;
-    using MathNet.Numerics.LinearAlgebra.Double;
-    using MathNet.Spatial.Units;
-
     /// <summary>
     /// Helper class for working with 3D matrixes
     /// </summary>

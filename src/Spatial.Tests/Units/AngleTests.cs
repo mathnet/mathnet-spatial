@@ -1,14 +1,14 @@
-﻿namespace MathNet.Spatial.UnitTests.Units
-{
-    using System;
-    using System.Globalization;
-    using System.IO;
-    using System.Threading;
-    using System.Xml;
-    using System.Xml.Serialization;
-    using MathNet.Spatial.Units;
-    using NUnit.Framework;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Xml;
+using System.Xml.Serialization;
+using MathNet.Spatial.Units;
+using NUnit.Framework;
 
+namespace MathNet.Spatial.UnitTests.Units
+{
     public class AngleTests
     {
         private const double Tolerance = 1e-6;
@@ -239,10 +239,7 @@
         public void XmlRoundTrips(string vs, string xml)
         {
             var angle = Angle.Parse(vs);
-            AssertXml.XmlRoundTrips(angle, xml, (e, a) =>
-            {
-                Assert.AreEqual(e.Radians, a.Radians, Tolerance);
-            });
+            AssertXml.XmlRoundTrips(angle, xml, (e, a) => { Assert.AreEqual(e.Radians, a.Radians, Tolerance); });
         }
 
         [Test]
@@ -271,9 +268,9 @@
                 Value2 = Angle.FromRadians(2),
             };
             var xml = "<ContainerOfAngle>\r\n" +
-                           "  <Value1>1</Value1>\r\n" +
-                           "  <Value2>2</Value2>\r\n" +
-                           "</ContainerOfAngle>";
+                      "  <Value1>1</Value1>\r\n" +
+                      "  <Value2>2</Value2>\r\n" +
+                      "</ContainerOfAngle>";
             var serializer = new XmlSerializer(typeof(AssertXml.Container<Angle>));
             using (var reader = new StringReader(xml))
             {
@@ -327,7 +324,7 @@
         {
             string test = "test";
             var angle = Angle.FromRadians(1);
-            var lookup = new System.Collections.Generic.Dictionary<Angle, string>
+            var lookup = new Dictionary<Angle, string>
             {
                 { angle, test }
             };

@@ -1,9 +1,9 @@
-﻿namespace MathNet.Spatial.Internals
-{
-    using System.Globalization;
-    using System.Xml;
-    using System.Xml.Serialization;
+﻿using System.Globalization;
+using System.Xml;
+using System.Xml.Serialization;
 
+namespace MathNet.Spatial.Internals
+{
     /// <summary>
     /// An extension class for XmlWriter
     /// </summary>

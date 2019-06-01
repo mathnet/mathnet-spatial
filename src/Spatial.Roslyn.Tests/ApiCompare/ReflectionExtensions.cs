@@ -1,10 +1,11 @@
-﻿namespace Spatial.Roslyn.Tests.ApiCompare
-{
-    using System;
-    using System.Linq;
-    using System.Reflection;
-    using System.Text;
+﻿using System;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Text;
 
+namespace Spatial.Roslyn.Tests.ApiCompare
+{
     public static class ReflectionExtensions
     {
         /// <summary>
@@ -73,7 +74,7 @@
                 if (firstParam)
                 {
                     firstParam = false;
-                    if (method.IsDefinedReflectOnly(typeof(System.Runtime.CompilerServices.ExtensionAttribute)))
+                    if (method.IsDefinedReflectOnly(typeof(ExtensionAttribute)))
                     {
                         sigBuilder.Append("this ");
                     }
@@ -175,7 +176,7 @@
                 if (firstParam)
                 {
                     firstParam = false;
-                    if (method.IsDefinedReflectOnly(typeof(System.Runtime.CompilerServices.ExtensionAttribute)))
+                    if (method.IsDefinedReflectOnly(typeof(ExtensionAttribute)))
                     {
                         sigBuilder.Append("this ");
                     }
@@ -287,11 +288,11 @@
                     case "Object": return "object";
                     case "Void": return "void";
                     default:
-                        {
-                            return type.Name;
+                    {
+                        return type.Name;
 
-                            // return string.IsNullOrWhiteSpace(type.FullName) ? type.Name : type.FullName;
-                        }
+                        // return string.IsNullOrWhiteSpace(type.FullName) ? type.Name : type.FullName;
+                    }
                 }
             }
 
@@ -359,7 +360,7 @@
                     continue;
                 }
 
-                if (param.RawDefaultValue != System.DBNull.Value)
+                if (param.RawDefaultValue != DBNull.Value)
                 {
                     continue;
                 }
@@ -367,7 +368,7 @@
                 if (firstParam)
                 {
                     firstParam = false;
-                    if (method.IsDefinedReflectOnly(typeof(System.Runtime.CompilerServices.ExtensionAttribute)))
+                    if (method.IsDefinedReflectOnly(typeof(ExtensionAttribute)))
                     {
                         sigBuilder.Append("this ");
                     }

@@ -1,22 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFrameworks>net461</TargetFrameworks>
-    <CodeAnalysisRuleSet>Spatial.Roslyn.Tests.ruleset</CodeAnalysisRuleSet>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
-    <NoWarn>NU1605</NoWarn>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Spatial.Analyzers\Spatial.Analyzers.csproj" />
-    <ProjectReference Include="..\Spatial.CodeFixes\Spatial.CodeFixes.csproj" />
-    <ProjectReference Include="..\Spatial\Spatial.csproj" />
-  </ItemGroup>
-  <Import Project="..\..\.paket\Paket.Restore.targets" />
+    <PropertyGroup>
+        <TargetFrameworks>net461</TargetFrameworks>
+        <CodeAnalysisRuleSet>Spatial.Roslyn.Tests.ruleset</CodeAnalysisRuleSet>
+        <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+        <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+        <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+        <NoWarn>1701;1702;1705;1591;1573</NoWarn>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Spatial.Analyzers\Spatial.Analyzers.csproj" />
+        <ProjectReference Include="..\Spatial.CodeFixes\Spatial.CodeFixes.csproj" />
+        <ProjectReference Include="..\Spatial\Spatial.csproj" />
+    </ItemGroup>
+    <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

@@ -1,15 +1,15 @@
-﻿namespace MathNet.Spatial.Serialization.Xml.UnitTests
-{
-    using System.Diagnostics;
-    using System.IO;
-    using System.Linq;
-    using System.Runtime.Serialization;
-    using System.Xml;
-    using MathNet.Spatial.Euclidean;
-    using MathNet.Spatial.Units;
-    using MathNet.Spatial.UnitTests;
-    using NUnit.Framework;
+﻿using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Runtime.Serialization;
+using System.Xml;
+using MathNet.Spatial.Euclidean;
+using MathNet.Spatial.Units;
+using MathNet.Spatial.UnitTests;
+using NUnit.Framework;
 
+namespace MathNet.Spatial.Serialization.Xml.UnitTests
+{
     public class DataContractTests
     {
         private const double Tolerance = 1e-6;

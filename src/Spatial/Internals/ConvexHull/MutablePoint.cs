@@ -1,7 +1,7 @@
-﻿namespace MathNet.Spatial.Internals
-{
-    using System;
+﻿using System;
 
+namespace MathNet.Spatial.Internals
+{
     /// <summary>
     /// Provides a working surface for points for ConvextHull - do not use otherwise
     /// </summary>

@@ -1,16 +1,16 @@
 ﻿// ReSharper disable InconsistentNaming
+
+using System;
+using System.IO;
+using System.Xml;
+using System.Xml.Serialization;
+using MathNet.Numerics.LinearAlgebra;
+using MathNet.Spatial.Euclidean;
+using MathNet.Spatial.Units;
+using NUnit.Framework;
+
 namespace MathNet.Spatial.UnitTests.Euclidean
 {
-    using System;
-    using System.Globalization;
-    using System.IO;
-    using System.Xml;
-    using System.Xml.Serialization;
-    using MathNet.Numerics.LinearAlgebra;
-    using MathNet.Spatial.Euclidean;
-    using MathNet.Spatial.Units;
-    using NUnit.Framework;
-
     public class Vector2DTests
     {
         [Test]

@@ -1,14 +1,14 @@
-﻿namespace Spatial.Benchmarks
-{
-    using System;
-    using System.Linq;
-    using System.Reflection;
-    using System.Text;
-    using System.Xml;
-    using MathNet.Spatial.Euclidean;
-    using MathNet.Spatial.Units;
-    using NUnit.Framework;
+﻿using System;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Xml;
+using MathNet.Spatial.Euclidean;
+using MathNet.Spatial.Units;
+using NUnit.Framework;
 
+namespace Spatial.Benchmarks
+{
     public class CodeGen
     {
         [Explicit("Script")]
@@ -26,11 +26,11 @@
             foreach (var property in type.GetProperties(BindingFlags.Instance | BindingFlags.Public))
             {
                 builder.AppendLine("        [Benchmark]")
-                       .AppendLine($"        public {property.PropertyType} {property.Name}()")
-                       .AppendLine("        {")
-                       .AppendLine($"             return {type.Name}1.{property.Name};")
-                       .AppendLine("        }")
-                       .AppendLine();
+                    .AppendLine($"        public {property.PropertyType} {property.Name}()")
+                    .AppendLine("        {")
+                    .AppendLine($"             return {type.Name}1.{property.Name};")
+                    .AppendLine("        }")
+                    .AppendLine();
             }
 
             foreach (var method in type.GetMethods(BindingFlags.Static | BindingFlags.Public).Where(m => m.Name.StartsWith("op")))
@@ -43,20 +43,20 @@
                 if (method.Name == "op_UnaryNegation")
                 {
                     builder.AppendLine("        [Benchmark]")
-                           .AppendLine($"        public {method.ReturnType.Name} Operator{method.Name.Substring(3)}()")
-                           .AppendLine("        {")
-                           .AppendLine($"             return -{type.Name}1;")
-                           .AppendLine("        }")
-                           .AppendLine();
+                        .AppendLine($"        public {method.ReturnType.Name} Operator{method.Name.Substring(3)}()")
+                        .AppendLine("        {")
+                        .AppendLine($"             return -{type.Name}1;")
+                        .AppendLine("        }")
+                        .AppendLine();
                 }
                 else
                 {
                     builder.AppendLine("        [Benchmark]")
-                           .AppendLine($"        public {method.ReturnType.Name} Operator{method.Name.Substring(3)}{method.GetParameters()[0].ParameterType.Name}{method.GetParameters()[1].ParameterType.Name}()")
-                           .AppendLine("        {")
-                           .AppendLine($"             return {type.Name}1 {Operator(method)} {Argument(method.GetParameters().Last())};")
-                           .AppendLine("        }")
-                           .AppendLine();
+                        .AppendLine($"        public {method.ReturnType.Name} Operator{method.Name.Substring(3)}{method.GetParameters()[0].ParameterType.Name}{method.GetParameters()[1].ParameterType.Name}()")
+                        .AppendLine("        {")
+                        .AppendLine($"             return {type.Name}1 {Operator(method)} {Argument(method.GetParameters().Last())};")
+                        .AppendLine("        }")
+                        .AppendLine();
                 }
             }
 
@@ -70,11 +70,11 @@
 
                 var parameters = string.Join(", ", method.GetParameters().Select(Argument));
                 builder.AppendLine("        [Benchmark]")
-                       .AppendLine($"        public {method.ReturnType.Name} {method.Name}()")
-                       .AppendLine("        {")
-                       .AppendLine($"             return {type.Name}.{method.Name}({parameters});")
-                       .AppendLine("        }")
-                       .AppendLine();
+                    .AppendLine($"        public {method.ReturnType.Name} {method.Name}()")
+                    .AppendLine("        {")
+                    .AppendLine($"             return {type.Name}.{method.Name}({parameters});")
+                    .AppendLine("        }")
+                    .AppendLine();
             }
 
             foreach (var method in type.GetMethods(BindingFlags.Instance | BindingFlags.Public))
@@ -89,11 +89,11 @@
 
                 var parameters = string.Join(", ", method.GetParameters().Select(Argument));
                 builder.AppendLine("        [Benchmark]")
-                       .AppendLine($"        public {method.ReturnType.Name} {method.Name}()")
-                       .AppendLine("        {")
-                       .AppendLine($"             return {type.Name}1.{method.Name}({parameters});")
-                       .AppendLine("        }")
-                       .AppendLine();
+                    .AppendLine($"        public {method.ReturnType.Name} {method.Name}()")
+                    .AppendLine("        {")
+                    .AppendLine($"             return {type.Name}1.{method.Name}({parameters});")
+                    .AppendLine("        }")
+                    .AppendLine();
             }
 
             var code = builder.ToString();

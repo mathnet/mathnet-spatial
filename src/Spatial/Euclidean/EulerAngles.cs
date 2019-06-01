@@ -1,10 +1,10 @@
-﻿namespace MathNet.Spatial.Euclidean
-{
-    using System;
-    using System.Diagnostics.Contracts;
-    using MathNet.Spatial.Units;
-    using HashCode = Internals.HashCode;
+﻿using System;
+using System.Diagnostics.Contracts;
+using MathNet.Spatial.Internals;
+using MathNet.Spatial.Units;
 
+namespace MathNet.Spatial.Euclidean
+{
     /// <summary>
     /// A means of representing spatial orientation of any reference frame.
     /// More information can be found https://en.wikipedia.org/wiki/Euler_angles

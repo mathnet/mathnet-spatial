@@ -1,10 +1,10 @@
-﻿namespace Spatial.Benchmarks
-{
-    using System.Globalization;
-    using BenchmarkDotNet.Attributes;
-    using MathNet.Spatial.Euclidean;
-    using MathNet.Spatial.Units;
+﻿using System.Globalization;
+using BenchmarkDotNet.Attributes;
+using MathNet.Spatial.Euclidean;
+using MathNet.Spatial.Units;
 
+namespace Spatial.Benchmarks
+{
     public class Point2DBenchmarks
     {
         private static readonly Point2D P1 = new Point2D(1, 2);

@@ -1,15 +1,15 @@
 ﻿// ReSharper disable InconsistentNaming
+
+using System;
+using System.IO;
+using System.Xml;
+using System.Xml.Serialization;
+using MathNet.Spatial.Euclidean;
+using MathNet.Spatial.Units;
+using NUnit.Framework;
+
 namespace MathNet.Spatial.UnitTests.Euclidean
 {
-    using System;
-    using System.Globalization;
-    using System.IO;
-    using System.Xml;
-    using System.Xml.Serialization;
-    using MathNet.Spatial.Euclidean;
-    using MathNet.Spatial.Units;
-    using NUnit.Framework;
-
     [TestFixture]
     public class Vector3DTests
     {
@@ -127,7 +127,10 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         {
             var v = Vector3D.Parse(vs);
 #pragma warning disable SA1312 // Variable names must begin with lower-case letter
-            Assert.Throws<InvalidOperationException>(() => { var _ = v.Orthogonal; });
+            Assert.Throws<InvalidOperationException>(() =>
+            {
+                var _ = v.Orthogonal;
+            });
 #pragma warning restore SA1312 // Variable names must begin with lower-case letter
         }
 
@@ -243,10 +246,10 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             var v1 = Vector3D.Parse(v1s);
             var v2 = Vector3D.Parse(v2s);
             var angles = new[]
-                {
-                    v1.AngleTo(v2),
-                    v2.AngleTo(v1)
-                };
+            {
+                v1.AngleTo(v2),
+                v2.AngleTo(v1)
+            };
             var expected = Angle.Parse(ea);
             foreach (var angle in angles)
             {

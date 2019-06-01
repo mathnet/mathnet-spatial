@@ -1,10 +1,9 @@
-﻿#pragma warning disable SA1600 // Elements must be documented
+﻿using System;
+using System.Text.RegularExpressions;
+
 // ReSharper disable once CheckNamespace
 namespace MathNet.Spatial.Units
 {
-    using System;
-    using System.Text.RegularExpressions;
-
     [Obsolete("This class will be removed, should not have been public. Made obsolete 2017-12-03.")]
     public static class UnitParser
     {

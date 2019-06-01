@@ -1,9 +1,9 @@
-﻿namespace MathNet.Spatial.Internals
-{
-    using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Linq;
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
+namespace MathNet.Spatial.Internals
+{
     /// <summary>
     /// An avl node for convex hull representing a quadrant
     /// </summary>
@@ -139,7 +139,7 @@
             if (pointPrevious != null)
             {
                 AvlNode<MutablePoint> previousPrevious = pointPrevious.GetPreviousNode();
-                for (; ;)
+                for (;;)
                 {
                     if (previousPrevious == null)
                     {
@@ -163,7 +163,7 @@
             if (pointNext != null)
             {
                 AvlNode<MutablePoint> nextNext = pointNext.GetNextNode();
-                for (; ;)
+                for (;;)
                 {
                     if (nextNext == null)
                     {

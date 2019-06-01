@@ -1,7 +1,15 @@
+using System.Data.Common;
+using System.Diagnostics;
+using System.Drawing;
+using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
+using System.Xml.Serialization;
 using Gu.Roslyn.Asserts;
 using MathNet.Spatial.Euclidean;
+using NUnit.Framework;
 
 [assembly: AssemblyTitle("Math.NET Spatial Unit Tests")]
 [assembly: AssemblyDescription("")]
@@ -18,13 +26,13 @@ using MathNet.Spatial.Euclidean;
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 [assembly: MetadataReference(typeof(object), new[] { "global", "mscorlib" })]
-[assembly: MetadataReference(typeof(System.Diagnostics.Debug), new[] { "global", "System" })]
+[assembly: MetadataReference(typeof(Debug), new[] { "global", "System" })]
 [assembly: MetadataReferences(
     typeof(UnitVector3D),
-    typeof(System.Linq.Enumerable),
-    typeof(System.Net.WebClient),
-    typeof(System.Drawing.Bitmap),
-    typeof(System.Data.Common.DbConnection),
-    typeof(System.Xml.Serialization.XmlSerializer),
-    typeof(System.Runtime.Serialization.DataContractSerializer),
-    typeof(NUnit.Framework.Assert))]
+    typeof(Enumerable),
+    typeof(WebClient),
+    typeof(Bitmap),
+    typeof(DbConnection),
+    typeof(XmlSerializer),
+    typeof(DataContractSerializer),
+    typeof(Assert))]

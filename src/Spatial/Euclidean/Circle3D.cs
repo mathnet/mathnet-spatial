@@ -1,9 +1,9 @@
-﻿namespace MathNet.Spatial.Euclidean
-{
-    using System;
-    using System.Diagnostics.Contracts;
-    using HashCode = Internals.HashCode;
+﻿using System;
+using System.Diagnostics.Contracts;
+using MathNet.Spatial.Internals;
 
+namespace MathNet.Spatial.Euclidean
+{
     /// <summary>
     /// Describes a 3 dimensional circle
     /// </summary>
@@ -169,8 +169,8 @@
             }
 
             return Math.Abs(c.Radius - this.Radius) < tolerance
-                && this.Axis.Equals(c.Axis, tolerance)
-                && this.CenterPoint.Equals(c.CenterPoint, tolerance);
+                   && this.Axis.Equals(c.Axis, tolerance)
+                   && this.CenterPoint.Equals(c.CenterPoint, tolerance);
         }
 
         /// <inheritdoc />

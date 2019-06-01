@@ -1,10 +1,10 @@
-﻿namespace MathNet.Spatial.UnitTests.Euclidean
-{
-    using System;
-    using System.Linq;
-    using MathNet.Spatial.Euclidean;
-    using NUnit.Framework;
+﻿using System;
+using System.Linq;
+using MathNet.Spatial.Euclidean;
+using NUnit.Framework;
 
+namespace MathNet.Spatial.UnitTests.Euclidean
+{
     [TestFixture]
     public class PolyLine3DTests
     {

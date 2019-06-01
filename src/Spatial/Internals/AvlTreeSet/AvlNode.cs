@@ -1,7 +1,7 @@
-﻿namespace MathNet.Spatial.Internals
-{
-    using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 
+namespace MathNet.Spatial.Internals
+{
     /// <summary>
     /// A node of the Avl Tree
     /// </summary>

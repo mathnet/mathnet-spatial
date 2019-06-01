@@ -1,12 +1,12 @@
 ﻿// ReSharper disable InconsistentNaming
+
+using System;
+using System.Linq;
+using MathNet.Spatial.Euclidean;
+using NUnit.Framework;
+
 namespace MathNet.Spatial.UnitTests.Euclidean
 {
-    using System;
-    using System.IO;
-    using System.Linq;
-    using MathNet.Spatial.Euclidean;
-    using NUnit.Framework;
-
     [TestFixture]
     public class PlaneTest
     {

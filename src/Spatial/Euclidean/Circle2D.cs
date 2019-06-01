@@ -1,9 +1,9 @@
-﻿namespace MathNet.Spatial.Euclidean
-{
-    using System;
-    using System.Diagnostics.Contracts;
-    using HashCode = Internals.HashCode;
+﻿using System;
+using System.Diagnostics.Contracts;
+using MathNet.Spatial.Internals;
 
+namespace MathNet.Spatial.Euclidean
+{
     /// <summary>
     /// Describes a standard 2 dimensional circle
     /// </summary>

@@ -1,10 +1,10 @@
-﻿namespace MathNet.Spatial.Internals
-{
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Threading;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Threading;
 
+namespace MathNet.Spatial.Internals
+{
     /// <summary>
     /// 2016-12-08, Eric Ouellet
     /// The code is an adapted version of BitLush AvlTree: https://bitlush.com/blog/efficient-avl-tree-in-c-sharp

@@ -1,18 +1,17 @@
+using System;
+using System.Collections.Generic;
+using System.Diagnostics.Contracts;
+using System.Globalization;
+using System.Linq;
+using System.Xml;
+using System.Xml.Schema;
+using System.Xml.Serialization;
+using MathNet.Numerics.LinearAlgebra;
+using MathNet.Spatial.Internals;
+using MathNet.Spatial.Units;
+
 namespace MathNet.Spatial.Euclidean
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
-    using System.Globalization;
-    using System.Linq;
-    using System.Xml;
-    using System.Xml.Schema;
-    using System.Xml.Serialization;
-    using MathNet.Numerics.LinearAlgebra;
-    using MathNet.Spatial.Internals;
-    using MathNet.Spatial.Units;
-    using HashCode = Internals.HashCode;
-
     /// <summary>
     /// Represents a point in 3 dimensional space
     /// </summary>

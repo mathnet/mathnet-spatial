@@ -1,12 +1,12 @@
-﻿namespace MathNet.Spatial.Serialization.Xml.UnitTests
-{
-    using System.Linq;
-    using MathNet.Spatial.Euclidean;
-    using MathNet.Spatial.Units;
-    using MathNet.Spatial.UnitTests;
-    using Newtonsoft.Json;
-    using NUnit.Framework;
+﻿using System.Linq;
+using MathNet.Spatial.Euclidean;
+using MathNet.Spatial.Units;
+using MathNet.Spatial.UnitTests;
+using Newtonsoft.Json;
+using NUnit.Framework;
 
+namespace MathNet.Spatial.Serialization.Xml.UnitTests
+{
     public class JsonTests
     {
         private const double Tolerance = 1e-6;

@@ -1,16 +1,16 @@
-﻿namespace SpatialAnalyzers
-{
-    using System.Collections.Immutable;
-    using System.Composition;
-    using System.Globalization;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using Microsoft.CodeAnalysis;
-    using Microsoft.CodeAnalysis.CodeActions;
-    using Microsoft.CodeAnalysis.CodeFixes;
-    using Microsoft.CodeAnalysis.CSharp;
-    using Microsoft.CodeAnalysis.CSharp.Syntax;
+﻿using System.Collections.Immutable;
+using System.Composition;
+using System.Globalization;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CodeActions;
+using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
+namespace SpatialAnalyzers
+{
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(UpdateCodeFix))]
     [Shared]
     public class UpdateCodeFix : CodeFixProvider
@@ -80,7 +80,7 @@
                                                     SyntaxFactory.ParseExpression("Circle3D.FromPointsAndAxis"),
                                                     objectCreation.ArgumentList))))),
                                     diagnostic);
-                             }
+                            }
                         }
                     }
                     else if (simpleName.Identifier.ValueText == "Angle" &&
@@ -171,10 +171,10 @@
                                                     invocation.ArgumentList,
                                                     invocation.ArgumentList.WithArguments(
                                                         invocation.ArgumentList.Arguments
-                                                                  .Replace(
-                                                                      angleArg,
-                                                                      angleArg.WithExpression(AngleFromDegrees(invocation.ArgumentList.Arguments[1])))
-                                                                  .RemoveAt(1)))))),
+                                                            .Replace(
+                                                                angleArg,
+                                                                angleArg.WithExpression(AngleFromDegrees(invocation.ArgumentList.Arguments[1])))
+                                                            .RemoveAt(1)))))),
                                     diagnostic);
                             }
                             else if (unitName.Identifier.ValueText == "Radians")
@@ -188,10 +188,10 @@
                                                     invocation.ArgumentList,
                                                     invocation.ArgumentList.WithArguments(
                                                         invocation.ArgumentList.Arguments
-                                                                  .Replace(
-                                                                      angleArg,
-                                                                      angleArg.WithExpression(AngleFromRadians(invocation.ArgumentList.Arguments[1])))
-                                                                  .RemoveAt(1)))))),
+                                                            .Replace(
+                                                                angleArg,
+                                                                angleArg.WithExpression(AngleFromRadians(invocation.ArgumentList.Arguments[1])))
+                                                            .RemoveAt(1)))))),
                                     diagnostic);
                             }
                         }

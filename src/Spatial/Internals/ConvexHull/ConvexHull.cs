@@ -1,10 +1,24 @@
-﻿namespace MathNet.Spatial.Internals
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using MathNet.Spatial.Euclidean;
+
+namespace MathNet.Spatial.Internals
 {
+/* Unmerged change from project 'Spatial (netstandard2.0)'
+Before:
     using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Linq;
+After:
+    using MathNet.Spatial.Euclidean;
+    using System.Collections.Generic;
+*/
+/* Unmerged change from project 'Spatial (netstandard2.0)'
+Before:
     using System.Threading.Tasks;
     using MathNet.Spatial.Euclidean;
+After:
+    using System.Threading.Tasks;
+*/
 
     /// <summary>
     /// An implementation of the work of Lui, Chen and Ouellet for solving the convex hull problem
@@ -50,7 +64,7 @@
         /// <summary>
         /// A lock object
         /// </summary>
-        private object findLimitFinalLock = new object();
+        private readonly object findLimitFinalLock = new object();
 
         /// <summary>
         /// A limit

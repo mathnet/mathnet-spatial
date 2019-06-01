@@ -1,14 +1,14 @@
 ﻿// ReSharper disable InconsistentNaming
+
+using System;
+using System.IO;
+using System.Xml;
+using System.Xml.Serialization;
+using MathNet.Spatial.Euclidean;
+using NUnit.Framework;
+
 namespace MathNet.Spatial.UnitTests.Euclidean
 {
-    using System;
-    using System.Globalization;
-    using System.IO;
-    using System.Xml;
-    using System.Xml.Serialization;
-    using MathNet.Spatial.Euclidean;
-    using NUnit.Framework;
-
     [TestFixture]
     public class Point3DTests
     {
@@ -178,10 +178,10 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         {
             var p = Point3D.Parse(ps);
             var actuals = new[]
-                          {
-                              p + Vector3D.Parse(vs),
-                              p + UnitVector3D.Parse(vs)
-                          };
+            {
+                p + Vector3D.Parse(vs),
+                p + UnitVector3D.Parse(vs)
+            };
             var expected = Point3D.Parse(eps);
             foreach (var actual in actuals)
             {
@@ -196,10 +196,10 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         {
             var p = Point3D.Parse(ps);
             var actuals = new[]
-                          {
-                              p - Vector3D.Parse(vs),
-                              p - UnitVector3D.Parse(vs)
-                          };
+            {
+                p - Vector3D.Parse(vs),
+                p - UnitVector3D.Parse(vs)
+            };
             var expected = Point3D.Parse(eps);
             foreach (var actual in actuals)
             {

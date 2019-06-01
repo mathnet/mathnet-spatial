@@ -1,8 +1,8 @@
-﻿namespace MathNet.Spatial.Internals
-{
-    using System;
-    using System.Linq;
+﻿using System;
+using System.Linq;
 
+namespace MathNet.Spatial.Internals
+{
     /// <summary>
     /// Class to process quadrant 4
     /// </summary>

@@ -1,12 +1,12 @@
-﻿namespace MathNet.Spatial.Euclidean
-{
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
-    using System.Linq;
-    using HashCode = Internals.HashCode;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics.Contracts;
+using System.Linq;
+using MathNet.Spatial.Internals;
 
+namespace MathNet.Spatial.Euclidean
+{
     /// <summary>
     /// A PolyLine is an ordered series of line segments in space represented as list of connected Point3Ds.
     /// </summary>

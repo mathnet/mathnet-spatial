@@ -1,11 +1,12 @@
-﻿namespace MathNet.Spatial.UnitTests.Euclidean
-{
-    using System.Collections.Generic;
-    using System.Linq;
-    using MathNet.Spatial.Euclidean;
-    using MathNet.Spatial.Units;
-    using NUnit.Framework;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using MathNet.Spatial.Euclidean;
+using MathNet.Spatial.Units;
+using NUnit.Framework;
 
+namespace MathNet.Spatial.UnitTests.Euclidean
+{
     [TestFixture]
     public class Polygon2DTests
     {
@@ -28,7 +29,7 @@
             Assert.AreEqual(expected, result);
         }
 
-        [TestCase("0,0;1,2;-1,2", System.Math.PI, "0,0;-1,-2;1,-2")]
+        [TestCase("0,0;1,2;-1,2", Math.PI, "0,0;-1,-2;1,-2")]
         public void RotatePolygon(string points, double angle, string expectedPolygon)
         {
             var testElement = new Polygon2D(from x in points.Split(';') select Point2D.Parse(x));

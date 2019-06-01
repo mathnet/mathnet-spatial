@@ -1,9 +1,9 @@
-﻿namespace MathNet.Spatial.Internals
-{
-    using System;
-    using System.Xml;
-    using System.Xml.Serialization;
+﻿using System;
+using System.Xml;
+using System.Xml.Serialization;
 
+namespace MathNet.Spatial.Internals
+{
     /// <summary>
     /// An extension class for XmlReader
     /// </summary>

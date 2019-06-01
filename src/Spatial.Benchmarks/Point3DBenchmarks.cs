@@ -1,11 +1,11 @@
-﻿namespace Spatial.Benchmarks
-{
-    using System.Globalization;
-    using BenchmarkDotNet.Attributes;
-    using MathNet.Numerics.LinearAlgebra;
-    using MathNet.Spatial.Euclidean;
-    using MathNet.Spatial.Units;
+﻿using System.Globalization;
+using BenchmarkDotNet.Attributes;
+using MathNet.Numerics.LinearAlgebra;
+using MathNet.Spatial.Euclidean;
+using MathNet.Spatial.Units;
 
+namespace Spatial.Benchmarks
+{
     public class Point3DBenchmarks
     {
         private static readonly Point3D P1 = new Point3D(1, 2, 3);

@@ -1,12 +1,14 @@
-﻿namespace MathNet.Spatial.Serialization.Xml.UnitTests
-{
-    using System.IO;
-    using System.Linq;
-    using MathNet.Spatial.Euclidean;
-    using MathNet.Spatial.Units;
-    using MathNet.Spatial.UnitTests;
-    using NUnit.Framework;
+﻿using System.IO;
+using System.Linq;
+using MathNet.Spatial.Euclidean;
+using MathNet.Spatial.Units;
+using MathNet.Spatial.UnitTests;
+using NUnit.Framework;
+using ProtoBuf;
+using ProtoBuf.Meta;
 
+namespace MathNet.Spatial.Serialization.Xml.UnitTests
+{
     public class ProtobufNetTests
     {
         private const double Tolerance = 1e-6;
@@ -14,7 +16,7 @@
         public ProtobufNetTests()
         {
             // ReSharper disable once UnusedVariable
-            var model = ProtoBuf.Meta.RuntimeTypeModel.Default;
+            var model = RuntimeTypeModel.Default;
         }
 
         [Explicit("fix later")]
@@ -205,11 +207,11 @@
         {
             using (var ms = new MemoryStream())
             {
-                ProtoBuf.Serializer.Serialize(ms, test);
+                Serializer.Serialize(ms, test);
 
                 ms.Flush();
                 ms.Position = 0;
-                return ProtoBuf.Serializer.Deserialize<T>(ms);
+                return Serializer.Deserialize<T>(ms);
             }
         }
     }

@@ -1,10 +1,10 @@
-﻿namespace Spatial.Benchmarks
-{
-    using System.Runtime.CompilerServices;
-    using BenchmarkDotNet.Attributes;
-    using MathNet.Spatial.Euclidean;
-    using MathNet.Spatial.Units;
+﻿using System.Runtime.CompilerServices;
+using BenchmarkDotNet.Attributes;
+using MathNet.Spatial.Euclidean;
+using MathNet.Spatial.Units;
 
+namespace Spatial.Benchmarks
+{
     public class Vector3DBenchmarks
     {
         private static readonly Vector3D V1 = new Vector3D(1, 2, 3);

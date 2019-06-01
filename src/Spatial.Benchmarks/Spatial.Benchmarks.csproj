@@ -1,18 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFrameworks>net461;netcoreapp2.2</TargetFrameworks>
-    <AssemblyName>Spatial.Benchmarks</AssemblyName>
-    <RootNamespace>Spatial.Benchmarks</RootNamespace>
-    <CodeAnalysisRuleSet>Spatial.Benchmarks.ruleset</CodeAnalysisRuleSet>
-    <NeutralLanguage>en-US</NeutralLanguage>
-    <IsPackable>false</IsPackable>
-    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
-    <StartupObject>Spatial.Benchmarks.Program</StartupObject>
-  </PropertyGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Spatial\Spatial.csproj" />
-  </ItemGroup>
-   <Import Project="..\..\.paket\Paket.Restore.targets" />
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFrameworks>net461;netcoreapp2.2</TargetFrameworks>
+        <AssemblyName>Spatial.Benchmarks</AssemblyName>
+        <RootNamespace>Spatial.Benchmarks</RootNamespace>
+        <NeutralLanguage>en-US</NeutralLanguage>
+        <IsPackable>false</IsPackable>
+        <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+        <StartupObject>Spatial.Benchmarks.Program</StartupObject>
+        <NoWarn>1701;1702;1705;1591;1573</NoWarn>
+    </PropertyGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Spatial\Spatial.csproj" />
+    </ItemGroup>
+    <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

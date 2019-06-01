@@ -1,31 +1,31 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <GenerateProgramFile>false</GenerateProgramFile>
-    <TargetFrameworks>net461;netcoreapp2.2</TargetFrameworks>
-    <GenerateAssemblyInfo>True</GenerateAssemblyInfo>
-    <AssemblyName>MathNet.Spatial.Tests</AssemblyName>
-    <RootNamespace>MathNet.Spatial.Tests</RootNamespace>
-    <IsPackable>false</IsPackable>
-    <CodeAnalysisRuleSet>SpatialUnitTests.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Spatial\Spatial.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
-  </ItemGroup>
-  <Import Project="..\..\.paket\Paket.Restore.targets" />
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <GenerateProgramFile>false</GenerateProgramFile>
+        <TargetFrameworks>net461;netcoreapp2.2</TargetFrameworks>
+        <GenerateAssemblyInfo>True</GenerateAssemblyInfo>
+        <AssemblyName>MathNet.Spatial.Tests</AssemblyName>
+        <RootNamespace>MathNet.Spatial.Tests</RootNamespace>
+        <IsPackable>false</IsPackable>
+        <NoWarn>1701;1702;1705;1591;1573</NoWarn>
+    </PropertyGroup>
+    <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
+        <Reference Include="System" />
+        <Reference Include="System.Core" />
+        <Reference Include="System.Numerics" />
+        <Reference Include="System.Runtime.Serialization" />
+        <Reference Include="System.Xml.Linq" />
+        <Reference Include="System.Data.DataSetExtensions" />
+        <Reference Include="Microsoft.CSharp" />
+        <Reference Include="System.Data" />
+        <Reference Include="System.Xml" />
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Spatial\Spatial.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+        <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
+    </ItemGroup>
+    <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

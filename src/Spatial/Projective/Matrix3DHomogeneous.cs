@@ -1,10 +1,10 @@
-﻿namespace MathNet.Spatial.Projective
-{
-    using System;
-    using System.Diagnostics.CodeAnalysis;
-    using MathNet.Numerics.LinearAlgebra.Double;
-    using MathNet.Spatial.Units;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
+using MathNet.Numerics.LinearAlgebra.Double;
+using MathNet.Spatial.Units;
 
+namespace MathNet.Spatial.Projective
+{
     /// <summary>
     /// An implementation of Matrix3DHomogeneous
     /// </summary>
@@ -122,14 +122,14 @@
         public static Matrix3DHomogeneous CreateTranslation(double dx, double dy, double dz)
         {
             var result = new Matrix3DHomogeneous
-                                         {
-                                             matrix =
-                                             {
-                                                 [0, 3] = dx,
-                                                 [1, 3] = dy,
-                                                 [2, 3] = dz
-                                             }
-                                         };
+            {
+                matrix =
+                {
+                    [0, 3] = dx,
+                    [1, 3] = dy,
+                    [2, 3] = dz
+                }
+            };
             return result;
         }
 
@@ -143,14 +143,14 @@
         public static Matrix3DHomogeneous CreateScale(double sx, double sy, double sz)
         {
             var result = new Matrix3DHomogeneous
-                         {
-                             matrix =
-                             {
-                                 [0, 0] = sx,
-                                 [1, 1] = sy,
-                                 [2, 2] = sz
-                             }
-                         };
+            {
+                matrix =
+                {
+                    [0, 0] = sx,
+                    [1, 1] = sy,
+                    [2, 2] = sz
+                }
+            };
             return result;
         }
 

@@ -1,4 +1,8 @@
-﻿namespace MathNet.Spatial.Internals
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+
+namespace MathNet.Spatial.Internals
 {
     // The contents of this file is taken from https://github.com/dotnet/coreclr/blob/master/src/mscorlib/shared/System/HashCode.cs
     // To be replaced by the framework implementation when released for the appropriate builds
@@ -46,10 +50,6 @@
       - xxHash source repository : https://github.com/Cyan4973/xxHash
 
     */
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-
     // xxHash32 is used for the hash code.
     // https://github.com/Cyan4973/xxHash
 
@@ -472,10 +472,10 @@
         }
 
 #pragma warning disable 0809
-        // Obsolete member 'memberA' overrides non-obsolete member 'memberB'. 
+        // Obsolete member 'memberA' overrides non-obsolete member 'memberB'.
         // Disallowing GetHashCode and Equals is by design
 
-        // * We decided to not override GetHashCode() to produce the hash code 
+        // * We decided to not override GetHashCode() to produce the hash code
         //   as this would be weird, both naming-wise as well as from a
         //   behavioral standpoint (GetHashCode() should return the object's
         //   hash code, not the one being computed).

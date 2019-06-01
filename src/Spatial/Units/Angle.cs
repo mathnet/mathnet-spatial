@@ -1,13 +1,12 @@
+using System;
+using System.Globalization;
+using System.Xml;
+using System.Xml.Schema;
+using System.Xml.Serialization;
+using MathNet.Spatial.Internals;
+
 namespace MathNet.Spatial.Units
 {
-    using System;
-    using System.Globalization;
-    using System.Xml;
-    using System.Xml.Schema;
-    using System.Xml.Serialization;
-    using MathNet.Spatial.Internals;
-    using HashCode = Internals.HashCode;
-
     /// <summary>
     /// An angle
     /// </summary>
@@ -299,7 +298,7 @@ namespace MathNet.Spatial.Units
         /// <returns>A new instance of the <see cref="Angle"/> struct.</returns>
         public static Angle FromSexagesimal(int degrees, int minutes, double seconds)
         {
-            return Angle.FromDegrees(degrees + (minutes / 60.0F) + (seconds / 3600.0F));
+            return FromDegrees(degrees + (minutes / 60.0F) + (seconds / 3600.0F));
         }
 
         /// <summary>

@@ -1,8 +1,8 @@
-﻿namespace Spatial.Benchmarks
-{
-    using BenchmarkDotNet.Attributes;
-    using MathNet.Spatial.Euclidean;
+﻿using BenchmarkDotNet.Attributes;
+using MathNet.Spatial.Euclidean;
 
+namespace Spatial.Benchmarks
+{
     public class Ray3DBenchmarks
     {
         private static readonly Ray3D Ray3D1 = new Ray3D(new Point3D(1, 2, 3), UnitVector3D.Create(1, 0, 0));

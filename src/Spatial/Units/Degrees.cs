@@ -1,8 +1,8 @@
+using System;
+using System.ComponentModel;
+
 namespace MathNet.Spatial.Units
 {
-    using System;
-    using System.ComponentModel;
-
     /// <summary>
     /// A degree or degree of arc typically denoted by °.  It is defined such that a full rotation is 360 degrees.
     /// </summary>
@@ -24,7 +24,7 @@ namespace MathNet.Spatial.Units
         /// <inheritdoc />
         double IUnit.Conversionfactor => this.ConversionFactor;
 
-                              /// <inheritdoc />
+        /// <inheritdoc />
         public double ConversionFactor => DegToRad;
 #pragma warning restore CS3005 // Identifier differing only in case is not CLS-compliant
 
