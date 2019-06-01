@@ -4,8 +4,8 @@ storage: packages
 nuget MathNet.Numerics ~> 4.7
 nuget MathNet.Numerics.Signed ~> 4.7
 
-nuget Newtonsoft.Json ~> 10.0.3
-nuget Protobuf-net ~> 2.3.3
+nuget Newtonsoft.Json
+nuget Protobuf-net
 
 nuget StyleCop.Analyzers copy_local:true, strategy:min
 nuget PublicApiAnalyzer prerelease copy_local:true, strategy:min
@@ -19,31 +19,31 @@ nuget System.Collections.Immutable strategy:min
 nuget System.Reflection.Metadata strategy:min
 
 // Testing
-nuget NUnit ~> 3.0 framework:net461,netcoreapp2.1
-nuget NUnitLite ~> 3.0 framework:net461,netcoreapp2.1
+nuget NUnit ~> 3.0 framework:net461,netcoreapp2.2
+nuget NUnitLite ~> 3.0 framework:net461,netcoreapp2.2
 nuget Microsoft.NET.Test.Sdk
 nuget NUnit3TestAdapter
 
 // Benchmarks
-nuget BenchmarkDotNet content:none, strategy:min, framework:net461,netcoreapp2.1
+nuget BenchmarkDotNet content:none, strategy:min, framework:net461,netcoreapp2.2
 nuget BenchmarkDotNet.Diagnostics.Windows content:none, strategy:min, framework:net461
 
-nuget System.Runtime strategy:min, framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp2.1
-nuget System.Runtime.Numerics strategy:min, framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp2.1
-nuget System.Runtime.Serialization.Xml strategy:min, framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp2.1
-nuget System.Runtime.Serialization.Primitives strategy:min, framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp2.1
-nuget System.Runtime.Serialization.Formatters strategy:min, framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp2.1
-nuget System.Security.Cryptography.Algorithms strategy:min, framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp2.1
+nuget System.Runtime strategy:min, framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp2.2
+nuget System.Runtime.Numerics strategy:min, framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp2.2
+nuget System.Runtime.Serialization.Xml strategy:min, framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp2.2
+nuget System.Runtime.Serialization.Primitives strategy:min, framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp2.2
+nuget System.Runtime.Serialization.Formatters strategy:min, framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp2.2
+nuget System.Security.Cryptography.Algorithms strategy:min, framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp2.2
 
-nuget NETStandard.Library 2.0.3 strategy:min, framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp2.1
-nuget Microsoft.NETCore.Platforms 2.1.1 strategy:min, framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp2.1
-nuget Microsoft.NETCore.App 2.1.5 strategy:min, framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp2.1
-nuget Microsoft.NETCore.DotNetHost 2.1.5 strategy:min, framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp2.1
-nuget Microsoft.NETCore.DotNetAppHost 2.1.5 strategy:min, framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp2.1
-nuget Microsoft.NETCore.DotNetHostPolicy 2.1.5 strategy:min, framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp2.1
-nuget Microsoft.NETCore.DotNetHostResolver 2.1.5 strategy:min, framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp2.1
-nuget Microsoft.NETCore.Jit 2.0.8 strategy:min, framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp2.1
-nuget Microsoft.NETCore.Runtime.CoreCLR 2.0.8 strategy:min, framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp2.1
+nuget NETStandard.Library 2.0.3 strategy:min, framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp2.2
+nuget Microsoft.NETCore.Platforms 2.2.0 strategy:min, framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp2.2
+nuget Microsoft.NETCore.App 2.2.4 strategy:min, framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp2.2
+nuget Microsoft.NETCore.DotNetHost 2.2.4 strategy:min, framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp2.2
+nuget Microsoft.NETCore.DotNetAppHost 2.2.4 strategy:min, framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp2.2
+nuget Microsoft.NETCore.DotNetHostPolicy 2.2.4 strategy:min, framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp2.2
+nuget Microsoft.NETCore.DotNetHostResolver 2.2.4 strategy:min, framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp2.2
+nuget Microsoft.NETCore.Jit 2.0.8 strategy:min, framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp2.2
+nuget Microsoft.NETCore.Runtime.CoreCLR 2.0.8 strategy:min, framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp2.2
 
 
 group Build

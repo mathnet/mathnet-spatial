@@ -33,19 +33,19 @@ open BuildFramework
 
 // VERSION OVERVIEW
 
-let spatialRelease = release "Math.NET Spatial" "RELEASENOTES.md"
+let spatialRelease = release "spatial" "Math.NET Spatial" "RELEASENOTES.md"
 let releases = [ spatialRelease ]
 traceHeader releases
 
 
 // SPATIAL PACKAGES
 
-let spatialZipPackage = zipPackage "MathNet.Spatial" "Math.NET Spatial" spatialRelease false
+let spatialZipPackage = zipPackage "MathNet.Spatial" "Math.NET Spatial" spatialRelease
 let spatialNuGetPackage = nugetPackage "MathNet.Spatial" spatialRelease
 let spatialProject = project "MathNet.Spatial" "src/Spatial/Spatial.csproj" [spatialNuGetPackage]
 let spatialSolution = solution "Spatial" "MathNet.Spatial.sln" [spatialProject] [spatialZipPackage]
 
-let spatialStrongNameZipPackage = zipPackage "MathNet.Spatial.Signed" "Math.NET Spatial" spatialRelease false
+let spatialStrongNameZipPackage = zipPackage "MathNet.Spatial.Signed" "Math.NET Spatial" spatialRelease
 let spatialStrongNameNuGetPackage = nugetPackage "MathNet.Spatial.Signed" spatialRelease
 let spatialStrongNameProject = project "MathNet.Spatial" "src/Spatial/Spatial.Signed.csproj" [spatialStrongNameNuGetPackage]
 let spatialStrongNameSolution = solution "Spatial.Signed" "MathNet.Spatial.Signed.sln" [spatialStrongNameProject] [spatialStrongNameZipPackage]
@@ -137,14 +137,10 @@ let testLibrary testsDir testsProj framework =
 
 let testSpatial framework = testLibrary "src/Spatial.Tests" "Spatial.Tests.csproj" framework
 Target "TestSpatial" DoNothing
-Target "TestSpatialCore2.1" (fun _ -> testSpatial "netcoreapp2.1")
-Target "TestSpatialNET40" (fun _ -> testSpatial "net40")
-Target "TestSpatialNET45" (fun _ -> testSpatial "net45")
+Target "TestSpatialCore2.2" (fun _ -> testSpatial "netcoreapp2.2")
 Target "TestSpatialNET461" (fun _ -> testSpatial "net461")
 Target "TestSpatialNET47"  (fun _ -> testSpatial "net47")
-"Build" ==> "TestSpatialCore2.1" ==> "TestSpatial"
-"Build" =?> ("TestSpatialNET40", isWindows)
-"Build" =?> ("TestSpatialNET45", isWindows)
+"Build" ==> "TestSpatialCore2.2" ==> "TestSpatial"
 "Build" =?> ("TestSpatialNET461", isWindows) ==> "TestSpatial"
 "Build" =?> ("TestSpatialNET47", isWindows)
 Target "Test" DoNothing
@@ -249,7 +245,7 @@ Target "DocsWatch" (fun _ ->
 Target "CleanApi" (fun _ -> CleanDirs ["out/api"])
 
 Target "Api" (fun _ ->
-    !! "src/Spatial/bin/Release/net40/MathNet.Spatial.dll"
+    !! "src/Spatial/bin/Release/net461/MathNet.Spatial.dll"
     |> Docu (fun p ->
         { p with
             ToolPath = "tools/docu/docu.exe"
@@ -267,7 +263,6 @@ Target "Api" (fun _ ->
 
 Target "PublishTag" (fun _ -> publishReleaseTag "Math.NET Spatial" "" spatialRelease)
 
-Target "PublishMirrors" (fun _ -> publishMirrors ())
 Target "PublishDocs" (fun _ -> publishDocs spatialRelease)
 Target "PublishApi" (fun _ -> publishApi spatialRelease)
 

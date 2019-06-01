@@ -19,8 +19,6 @@ module BuildFramework
 open FSharp.Core
 open Fake
 open Fake.ReleaseNotesHelper
-open Fake.StringHelper
-open Fake.Testing.NUnit3
 open System
 open System.IO
 
@@ -68,7 +66,6 @@ let msbuildSN targets configuration project =
 let dotnet workingDir command =
     let properties =
         [
-            yield "StrongName", "False"
         ]
     let suffix = properties |> List.map (fun (name, value) -> sprintf """ /p:%s="%s" """ name value) |> String.concat ""
     DotNetCli.RunCommand
@@ -93,7 +90,8 @@ let dotnetSN workingDir command =
 let header = ReadFile(__SOURCE_DIRECTORY__ </> __SOURCE_FILE__) |> Seq.take 10 |> Seq.map (fun s -> s.Substring(2)) |> toLines
 
 type Release =
-    { Title: string
+    { RepoKey: string
+      Title: string
       AssemblyVersion: string
       PackageVersion: string
       ReleaseNotes: string
@@ -102,8 +100,7 @@ type Release =
 type ZipPackage =
     { Id: string
       Release: Release
-      Title: string
-      FsLoader: bool }
+      Title: string }
 
 type NuGetPackage =
     { Id: string
@@ -153,23 +150,23 @@ type NuGetSpecification =
       Title: string }
 
 
-let release title releaseNotesFile : Release =
+let release repoKey title releaseNotesFile : Release =
     let info = LoadReleaseNotes releaseNotesFile
     let buildPart = "0"
     let assemblyVersion = info.AssemblyVersion + "." + buildPart
     let packageVersion = info.NugetVersion
     let notes = info.Notes |> List.map (fun l -> l.Replace("*","").Replace("`","")) |> toLines
-    { Release.Title = title
+    { Release.RepoKey = repoKey
+      Title = title
       AssemblyVersion = assemblyVersion
       PackageVersion = packageVersion
       ReleaseNotes = notes
       ReleaseNotesFile = releaseNotesFile }
 
-let zipPackage packageId title release fsLoader =
+let zipPackage packageId title release =
     { ZipPackage.Id = packageId
       Title = title
-      Release = release
-      FsLoader = fsLoader }
+      Release = release }
 
 let nugetPackage packageId release =
     { NuGetPackage.Id = packageId
@@ -351,21 +348,6 @@ let provideReadme title (release:Release) path =
     |> ConvertTextToWindowsLineBreaks
     |> ReplaceFile (path </> "readme.txt")
 
-let provideFsLoader includes path =
-    // inspired by FsLab/tpetricek
-    let fullScript = ReadFile "src/FSharp/MathNet.Spatial.fsx" |> Array.ofSeq
-    let startIndex = fullScript |> Seq.findIndex (fun s -> s.Contains "***MathNet.Spatial.fsx***")
-    let extraScript = fullScript .[startIndex + 1 ..] |> List.ofSeq
-    let assemblies = [ "MathNet.Spatial.dll"; "MathNet.Spatial.FSharp.dll" ]
-    let nowarn = ["#nowarn \"211\""]
-    let references = [ for assembly in assemblies -> sprintf "#r \"%s\"" assembly ]
-    ReplaceFile (path </> "MathNet.Spatial.fsx") (nowarn @ includes @ references @ extraScript |> toLines)
-
-let provideFsIfSharpLoader path =
-    let fullScript = ReadFile "src/FSharp/MathNet.Spatial.IfSharp.fsx" |> Array.ofSeq
-    let startIndex = fullScript |> Seq.findIndex (fun s -> s.Contains "***MathNet.Spatial.IfSharp.fsx***")
-    ReplaceFile (path </> "MathNet.Spatial.IfSharp.fsx") (fullScript .[startIndex + 1 ..] |> toLines)
-
 
 // SIGN
 
@@ -407,10 +389,6 @@ let zip (package:ZipPackage) zipDir filesDir filesFilter =
     CopyDir workPath filesDir filesFilter
     provideLicense workPath
     provideReadme (sprintf "%s v%s" package.Title package.Release.PackageVersion) package.Release workPath
-    if package.FsLoader then
-        let includes = [ for root in [ ""; "../"; "../../" ] -> sprintf "#I \"%sNet40\"" root ]
-        provideFsLoader includes workPath
-        provideFsIfSharpLoader workPath
     Zip "obj/Zip/" (zipDir </> sprintf "%s-%s.zip" package.Id package.Release.PackageVersion) !! (workPath + "/**/*.*")
     DeleteDir "obj/Zip"
 
@@ -499,7 +477,7 @@ let publishReleaseTag title prefix (release:Release) =
     let cmd = sprintf """tag -a %s -m "%s" """ tagName tagMessage
     Git.CommandHelper.runSimpleGitCommand "." cmd |> printfn "%s"
     let _, remotes, _ = Git.CommandHelper.runGitCommand "." "remote -v"
-    let main = remotes |> Seq.find (fun s -> s.Contains("(push)") && s.Contains("mathnet/mathnet-spatial"))
+    let main = remotes |> Seq.find (fun s -> s.Contains("(push)") && s.Contains("mathnet/mathnet-" + release.RepoKey))
     let remoteName = main.Split('\t').[0]
     Git.Branches.pushTag "." remoteName tagName
 
@@ -524,27 +502,22 @@ let publishNuGet (solutions: Solution list) =
     |> Seq.iter (impl 3)
     DeleteDir "obj/NuGet"
 
-let publishMirrors () =
-    let repo = "../mirror-spatial"
-    Git.CommandHelper.runSimpleGitCommand repo "remote update" |> printfn "%s"
-    Git.CommandHelper.runSimpleGitCommand repo "push mirrors" |> printfn "%s"
-
 let publishDocs (release:Release) =
-    let repo = "../mathnet-websites"
-    Git.Branches.pull repo "origin" "master"
-    CopyRecursive "out/docs" "../mathnet-websites/spatial" true |> printfn "%A"
+    let repo = "../web-mathnet-" + release.RepoKey
+    Git.Branches.pull repo "origin" "gh-pages"
+    CopyRecursive "out/docs" repo true |> printfn "%A"
     Git.Staging.StageAll repo
-    Git.Commit.Commit repo (sprintf "Spatial: %s docs update" release.PackageVersion)
-    Git.Branches.pushBranch repo "origin" "master"
+    Git.Commit.Commit repo (sprintf "%s: %s docs update" release.Title release.PackageVersion)
+    Git.Branches.pushBranch repo "origin" "gh-pages"
 
 let publishApi (release:Release) =
-    let repo = "../mathnet-websites"
-    Git.Branches.pull repo "origin" "master"
-    CleanDir "../mathnet-websites/spatial/api"
-    CopyRecursive "out/api" "../mathnet-websites/spatial/api" true |> printfn "%A"
+    let repo = "../web-mathnet-" + release.RepoKey
+    Git.Branches.pull repo "origin" "gh-pages"
+    CleanDir (repo + "/api")
+    CopyRecursive "out/api" (repo + "/api") true |> printfn "%A"
     Git.Staging.StageAll repo
-    Git.Commit.Commit repo (sprintf "Spatial: %s api update" release.PackageVersion)
-    Git.Branches.pushBranch repo "origin" "master"
+    Git.Commit.Commit repo (sprintf "%s: %s api update" release.Title release.PackageVersion)
+    Git.Branches.pushBranch repo "origin" "gh-pages"
 
 let publishNuGetToArchive (package:NuGetPackage) archivePath nupkgFile =
     let tempDir = Path.GetTempPath() </> Path.GetRandomFileName()
@@ -558,8 +531,8 @@ let publishNuGetToArchive (package:NuGetPackage) archivePath nupkgFile =
     !! (tempDir </> "*.nuspec") |> Copy archiveDir
     DeleteDir tempDir
 
-let publishArchiveManual zipOutPath nugetOutPath (zipPackages:ZipPackage list) (nugetPackages:NuGetPackage list) =
-    let archivePath = (environVarOrFail "MathNetReleaseArchive") </> "Math.NET Spatial"
+let publishArchiveManual title zipOutPath nugetOutPath (zipPackages:ZipPackage list) (nugetPackages:NuGetPackage list) =
+    let archivePath = (environVarOrFail "MathNetReleaseArchive") </> title
     if directoryExists archivePath |> not then failwith "Release archive directory does not exists. Safety Check failed."
     for zipPackage in zipPackages do
         let zipFile = zipOutPath </> sprintf "%s-%s.zip" zipPackage.Id zipPackage.Release.PackageVersion
@@ -579,6 +552,6 @@ let publishArchive (solution:Solution) =
     let nugetOutPath = solution.OutputNuGetDir
     let zipPackages = solution.ZipPackages
     let nugetPackages = solution.Projects |> List.collect projectNuGetPackages |> List.distinct
-    publishArchiveManual zipOutPath nugetOutPath zipPackages nugetPackages
+    publishArchiveManual solution.Release.Title zipOutPath nugetOutPath zipPackages nugetPackages
 
 let publishArchives (solutions: Solution list) = solutions |> List.iter publishArchive

@@ -13,8 +13,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{5DFFCA1B
 		build\build-framework.fsx = build\build-framework.fsx
 		build.fsx = build.fsx
 		src\Directory.Build.props = src\Directory.Build.props
-		build\MathNet.Spatial.Extension.nuspec = build\MathNet.Spatial.Extension.nuspec
-		build\MathNet.Spatial.nuspec = build\MathNet.Spatial.nuspec
 		paket.dependencies = paket.dependencies
 		paket.lock = paket.lock
 	EndProjectSection

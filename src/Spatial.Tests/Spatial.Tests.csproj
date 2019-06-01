@@ -3,7 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <GenerateProgramFile>false</GenerateProgramFile>
-    <TargetFrameworks>net461;netcoreapp2.1</TargetFrameworks>
+    <TargetFrameworks>net461;netcoreapp2.2</TargetFrameworks>
     <GenerateAssemblyInfo>True</GenerateAssemblyInfo>
     <AssemblyName>MathNet.Spatial.Tests</AssemblyName>
     <RootNamespace>MathNet.Spatial.Tests</RootNamespace>
