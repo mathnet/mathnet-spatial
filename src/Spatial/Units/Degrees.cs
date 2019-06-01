@@ -20,27 +20,10 @@ namespace MathNet.Spatial.Units
         /// </summary>
         private const double DegToRad = Math.PI / 180.0;
 
-#pragma warning disable CS3005 // Identifier differing only in case is not CLS-compliant
-        /// <inheritdoc />
-        double IUnit.Conversionfactor => this.ConversionFactor;
-
         /// <inheritdoc />
         public double ConversionFactor => DegToRad;
-#pragma warning restore CS3005 // Identifier differing only in case is not CLS-compliant
 
         /// <inheritdoc />
         public string ShortName => Name;
-
-        /// <summary>
-        /// Converts to Degrees
-        /// </summary>
-        /// <param name="left">a double</param>
-        /// <param name="right">a degree instance</param>
-        /// <returns>A new angle from degrees</returns>
-        [Obsolete("This operator will be removed, use factory method FromDegrees or FromRadians. Made obsolete 2017-12-04.")]
-        public static Angle operator *(double left, Degrees right)
-        {
-            return Angle.FromDegrees(left);
-        }
     }
 }

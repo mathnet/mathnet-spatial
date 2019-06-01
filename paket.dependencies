@@ -7,7 +7,6 @@ nuget MathNet.Numerics.Signed ~> 4.7
 nuget Newtonsoft.Json
 nuget Protobuf-net
 
-nuget PublicApiAnalyzer prerelease copy_local:true, strategy:min
 nuget System.Diagnostics.Contracts copy_local:true, strategy:min
 
 nuget Microsoft.CodeAnalysis.CSharp.Workspaces strategy:min

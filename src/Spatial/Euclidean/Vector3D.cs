@@ -47,30 +47,6 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Vector3D"/> struct.
-        /// </summary>
-        /// <param name="data">A list of 3 doubles</param>
-        [Obsolete("This constructor will be removed. Made obsolete 2017-12-05.")]
-        public Vector3D(IEnumerable<double> data)
-            : this(data.ToArray())
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Vector3D"/> struct.
-        /// </summary>
-        /// <param name="data">A list of 3 doubles</param>
-        [Obsolete("This constructor will be removed. Made obsolete 2017-12-05.")]
-        public Vector3D(double[] data)
-            : this(data[0], data[1], data[2])
-        {
-            if (data.Length != 3)
-            {
-                throw new ArgumentException("Size must be 3");
-            }
-        }
-
-        /// <summary>
         /// Gets an invalid vector with no values
         /// </summary>
         public static Vector3D NaN => new Vector3D(double.NaN, double.NaN, double.NaN);
@@ -124,30 +100,6 @@ namespace MathNet.Spatial.Euclidean
         public static bool operator !=(Vector3D left, Vector3D right)
         {
             return !left.Equals(right);
-        }
-
-        /// <summary>
-        /// Multiplies a Matrix by a Vector
-        /// </summary>
-        /// <param name="left">A Matrix</param>
-        /// <param name="right">A Vector</param>
-        /// <returns>A new vector</returns>
-        [Obsolete("Not sure this is nice")]
-        public static Vector<double> operator *(Matrix<double> left, Vector3D right)
-        {
-            return left * right.ToVector();
-        }
-
-        /// <summary>
-        /// Multiplies a vector by a matrix
-        /// </summary>
-        /// <param name="left">A Vector</param>
-        /// <param name="right">A Matrix</param>
-        /// <returns>A new vector</returns>
-        [Obsolete("Not sure this is nice")]
-        public static Vector<double> operator *(Vector3D left, Matrix<double> right)
-        {
-            return left.ToVector() * right;
         }
 
         /// <summary>
@@ -451,29 +403,6 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Subtracts a vector from this
-        /// </summary>
-        /// <param name="v">a vector to subtract</param>
-        /// <returns>A new vector</returns>
-        [Obsolete("Use - instead")]
-        public Vector3D Subtract(Vector3D v)
-        {
-            return new Vector3D(this.X - v.X, this.Y - v.Y, this.Z - v.Z);
-        }
-
-        /// <summary>
-        /// Adds a vector to this
-        /// </summary>
-        /// <param name="v">a vector to add</param>
-        /// <returns>A new vector</returns>
-        [Obsolete("Use + instead")]
-        [Pure]
-        public Vector3D Add(Vector3D v)
-        {
-            return new Vector3D(this.X + v.X, this.Y + v.Y, this.Z + v.Z);
-        }
-
-        /// <summary>
         /// Returns the cross product of this vector and <paramref name="other"/>
         /// </summary>
         /// <param name="other">A vector</param>
@@ -567,21 +496,6 @@ namespace MathNet.Spatial.Euclidean
         {
             var uv = this.Normalize();
             return uv.AngleTo(v);
-        }
-
-        /// <summary>
-        /// Rotates a Vector
-        /// </summary>
-        /// <typeparam name="T">An Angleunit</typeparam>
-        /// <param name="about">A unit vector</param>
-        /// <param name="angle">An angle</param>
-        /// <param name="angleUnit">A type of angle</param>
-        /// <returns>A new vector</returns>
-        [Obsolete("This method will be removed prefer the other overload.. Made obsolete 2017-12-05.")]
-        public Vector3D Rotate<T>(UnitVector3D about, double angle, T angleUnit)
-            where T : IAngleUnit
-        {
-            return this.Rotate(about, Angle.From(angle, angleUnit));
         }
 
         /// <summary>

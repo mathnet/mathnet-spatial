@@ -110,21 +110,6 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         /// <param name="aboutVector">The vector</param>
         /// <param name="angle">Angle in degrees</param>
-        /// <param name="angleUnit">The angle unit</param>
-        /// <typeparam name="T">any angle type</typeparam>
-        /// <returns>A transform matrix</returns>
-        [Obsolete("Use Angle instead, Obsolete from 2017-12-12")]
-        public static Matrix<double> RotationAroundArbitraryVector<T>(UnitVector3D aboutVector, double angle, T angleUnit)
-            where T : IAngleUnit
-        {
-            return RotationAroundArbitraryVector(aboutVector, Angle.From(angle, angleUnit));
-        }
-
-        /// <summary>
-        /// Creates a rotation matrix around an arbitrary vector
-        /// </summary>
-        /// <param name="aboutVector">The vector</param>
-        /// <param name="angle">Angle in degrees</param>
         /// <returns>A transform matrix</returns>
         public static Matrix<double> RotationAroundArbitraryVector(UnitVector3D aboutVector, Angle angle)
         {

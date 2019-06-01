@@ -41,50 +41,6 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Point2D"/> struct.
-        /// Creates a point r from origin rotated a counterclockwise from X-Axis
-        /// </summary>
-        /// <param name="r">distance from origin</param>
-        /// <param name="a">the angle</param>
-        [Obsolete("This constructor will be removed, use FromPolar. Made obsolete 2017-12-03.")]
-        public Point2D(double r, Angle a)
-            : this(r * Math.Cos(a.Radians), r * Math.Sin(a.Radians))
-        {
-            if (r < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(r), r, "Expected a radius greater than or equal to zero.");
-            }
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Point2D"/> struct.
-        /// Creates a point from a list of coordinates (x, y)
-        /// </summary>
-        /// <param name="data">a pair of coordinates in the order x, y</param>
-        /// <exception cref="ArgumentException">Exception thrown if more than 2 coordinates are passed</exception>
-        [Obsolete("This constructor will be removed. Made obsolete 2017-12-03.")]
-        public Point2D(IEnumerable<double> data)
-            : this(data.ToArray())
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Point2D"/> struct.
-        /// Creates a point from a list of coordinates (x, y)
-        /// </summary>
-        /// <param name="data">a pair of coordinates in the order x, y</param>
-        /// <exception cref="ArgumentException">Exception thrown if more than 2 coordinates are passed</exception>
-        [Obsolete("This constructor will be removed. Made obsolete 2017-12-03.")]
-        public Point2D(double[] data)
-            : this(data[0], data[1])
-        {
-            if (data.Length != 2)
-            {
-                throw new ArgumentException("data.Length != 2!");
-            }
-        }
-
-        /// <summary>
         /// Gets a point at the origin (0,0)
         /// </summary>
         public static Point2D Origin => new Point2D(0, 0);
@@ -101,18 +57,6 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Adds a point and a 3D vector together
-        /// </summary>
-        /// <param name="point">A point</param>
-        /// <param name="vector">A 3D vector</param>
-        /// <returns>A new point at the summed location ignoring the Z dimension</returns>
-        [Obsolete("This weird operator will be removed in a future version. Made obsolete 2017-12-03.")]
-        public static Point3D operator +(Point2D point, Vector3D vector)
-        {
-            return new Point3D(point.X + vector.X, point.Y + vector.Y, vector.Z);
-        }
-
-        /// <summary>
         /// Subtracts a vector from a point
         /// </summary>
         /// <param name="left">A point</param>
@@ -121,18 +65,6 @@ namespace MathNet.Spatial.Euclidean
         public static Point2D operator -(Point2D left, Vector2D right)
         {
             return new Point2D(left.X - right.X, left.Y - right.Y);
-        }
-
-        /// <summary>
-        /// Subtracts a 3D vector from a point
-        /// </summary>
-        /// <param name="left">A point</param>
-        /// <param name="right">A 3D vector</param>
-        /// <returns>A new point at the difference excluding the z dimension</returns>
-        [Obsolete("This weird operator will be removed in a future version. Made obsolete 2017-12-03.")]
-        public static Point3D operator -(Point2D left, Vector3D right)
-        {
-            return new Point3D(left.X - right.X, left.Y - right.Y, -1 * right.Z);
         }
 
         /// <summary>
@@ -332,29 +264,6 @@ namespace MathNet.Spatial.Euclidean
         public Vector2D ToVector2D()
         {
             return new Vector2D(this.X, this.Y);
-        }
-
-        /// <summary>
-        /// return new Point3D(X, Y, 0);
-        /// </summary>
-        /// <returns>A <see cref="Point3D"/> with x and y from this instance and z = 0</returns>
-        [Obsolete("Use projections instead, Obsolete on 2017-12-10")]
-        [Pure]
-        public Point3D ToPoint3D()
-        {
-            return new Point3D(this.X, this.Y, 0);
-        }
-
-        /// <summary>
-        /// Applies a transform coordinate system to the point
-        /// </summary>
-        /// <param name="cs">A coordinate system</param>
-        /// <returns>A new 3D point</returns>
-        [Obsolete("Use projections instead, Obsolete on 2017-12-10")]
-        [Pure]
-        public Point3D TransformBy(CoordinateSystem cs)
-        {
-            return cs.Transform(this.ToPoint3D());
         }
 
         /// <summary>

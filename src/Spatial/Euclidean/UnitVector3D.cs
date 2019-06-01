@@ -40,8 +40,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="x">The x component.</param>
         /// <param name="y">The y component.</param>
         /// <param name="z">The z component.</param>
-        [Obsolete("This constructor will be made private, prefer the factory method Create. Made obsolete 2017-12-05.")]
-        public UnitVector3D(double x, double y, double z)
+        UnitVector3D(double x, double y, double z)
         {
             if (double.IsNaN(x) || double.IsInfinity(x))
             {
@@ -67,30 +66,6 @@ namespace MathNet.Spatial.Euclidean
             this.X = x / norm;
             this.Y = y / norm;
             this.Z = z / norm;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="UnitVector3D"/> struct.
-        /// </summary>
-        /// <param name="data">A list of 3 points</param>
-        [Obsolete("This constructor will be removed. Made obsolete 2017-12-05.")]
-        public UnitVector3D(IEnumerable<double> data)
-            : this(data.ToArray())
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="UnitVector3D"/> struct.
-        /// </summary>
-        /// <param name="data">A list of 3 points</param>
-        [Obsolete("This constructor will be removed. Made obsolete 2017-12-05.")]
-        public UnitVector3D(double[] data)
-            : this(data[0], data[1], data[2])
-        {
-            if (data.Length != 3)
-            {
-                throw new ArgumentException("Size must be 3");
-            }
         }
 
         /// <summary>
@@ -299,30 +274,6 @@ namespace MathNet.Spatial.Euclidean
         public static Vector3D operator /(UnitVector3D v, double d)
         {
             return new Vector3D(v.X / d, v.Y / d, v.Z / d);
-        }
-
-        /// <summary>
-        /// Multiplies a Matrix by a Vector
-        /// </summary>
-        /// <param name="left">A Matrix</param>
-        /// <param name="right">A Vector</param>
-        /// <returns>A new vector</returns>
-        [Obsolete("Not sure this is nice")]
-        public static Vector<double> operator *(Matrix<double> left, UnitVector3D right)
-        {
-            return left * right.ToVector();
-        }
-
-        /// <summary>
-        /// Multiplies a vector by a matrix
-        /// </summary>
-        /// <param name="left">A Vector</param>
-        /// <param name="right">A Matrix</param>
-        /// <returns>A new vector</returns>
-        [Obsolete("Not sure this is nice")]
-        public static Vector<double> operator *(UnitVector3D left, Matrix<double> right)
-        {
-            return left.ToVector() * right;
         }
 
         /// <summary>
@@ -598,28 +549,6 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Subtracts a vector from this
-        /// </summary>
-        /// <param name="v">a vector to subtract</param>
-        /// <returns>A new vector</returns>
-        [Obsolete("Use - instead")]
-        public Vector3D Subtract(UnitVector3D v)
-        {
-            return new Vector3D(this.X - v.X, this.Y - v.Y, this.Z - v.Z);
-        }
-
-        /// <summary>
-        /// Adds a vector to this
-        /// </summary>
-        /// <param name="v">a vector to add</param>
-        /// <returns>A new vector</returns>
-        [Obsolete("Use + instead")]
-        public Vector3D Add(UnitVector3D v)
-        {
-            return new Vector3D(this.X + v.X, this.Y + v.Y, this.Z + v.Z);
-        }
-
-        /// <summary>
         /// Returns the cross product of this vector and a vector
         /// </summary>
         /// <param name="other">A vector</param>
@@ -737,22 +666,6 @@ namespace MathNet.Spatial.Euclidean
             var dp = this.DotProduct(v);
             var angle = Math.Acos(dp);
             return Angle.FromRadians(angle);
-        }
-
-        /// <summary>
-        /// Returns a vector that is this vector rotated the signed angle around the about vector
-        /// </summary>
-        /// <param name="about">The vector to rotate around.</param>
-        /// <param name="angle">The angle positive according to right hand rule.</param>
-        /// <param name="unit">The <see cref="IAngleUnit"/></param>
-        /// <typeparam name="T">any angle type</typeparam>
-        /// <returns>A rotated vector.</returns>
-        [Pure]
-        [Obsolete("This method will be removed, prefer the overload taking an Angle. Made obsolete 2017-12-05.")]
-        public UnitVector3D Rotate<T>(UnitVector3D about, double angle, T unit)
-            where T : IAngleUnit
-        {
-            return this.Rotate(about, Angle.From(angle, unit));
         }
 
         /// <summary>

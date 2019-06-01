@@ -7,8 +7,7 @@ using MathNet.Spatial.Euclidean;
 
 namespace MathNet.Spatial
 {
-    [Obsolete("This should not have been public, will be removed in a future version. Made obsolete 2017-12-03")]
-    public static class Parser
+    internal static class Parser
     {
         public const string SeparatorPattern = @" *[,;] *";
         public static readonly string DoublePattern = @"[+-]?\d*(?:[.,]\d+)?(?:[eE][+-]?\d+)?";

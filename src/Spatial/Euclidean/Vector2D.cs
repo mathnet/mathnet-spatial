@@ -40,48 +40,6 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Vector2D"/> struct.
-        /// Creates a vector with length r rotated a counterclockwise from X-Axis
-        /// </summary>
-        /// <param name="r">The radius</param>
-        /// <param name="a">The angle</param>
-        [Obsolete("This constructor will be removed, use FromPolar. Made obsolete 2017-12-03.")]
-        //// ReSharper disable once UnusedMember.Global
-        public Vector2D(double r, Angle a)
-            : this(r * Math.Cos(a.Radians), r * Math.Sin(a.Radians))
-        {
-            if (r < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(r), r, "Expected a radius greater than or equal to zero.");
-            }
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Vector2D"/> struct.
-        /// </summary>
-        /// <param name="data">A list of 2 doubles</param>
-        [Obsolete("This constructor will be removed. Made obsolete 2017-12-03.")]
-        //// ReSharper disable once UnusedMember.Global
-        public Vector2D(IEnumerable<double> data)
-            : this(data.ToArray())
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Vector2D"/> struct.
-        /// </summary>
-        /// <param name="data">A list of 2 doubles</param>
-        [Obsolete("This constructor will be removed. Made obsolete 2017-12-03.")]
-        public Vector2D(double[] data)
-            : this(data[0], data[1])
-        {
-            if (data.Length != 2)
-            {
-                throw new ArgumentException("data.Length != 2!");
-            }
-        }
-
-        /// <summary>
         /// Gets a vector representing the X Axis
         /// </summary>
         public static Vector2D XAxis { get; } = new Vector2D(1, 0);
@@ -389,21 +347,6 @@ namespace MathNet.Spatial.Euclidean
                     Math.Atan2(
                         (this.X * other.Y) - (other.X * this.Y),
                         (this.X * other.X) + (this.Y * other.Y))));
-        }
-
-        /// <summary>
-        /// Rotates a Vector
-        /// </summary>
-        /// <typeparam name="T">An Angleunit</typeparam>
-        /// <param name="angle">An angle</param>
-        /// <param name="angleUnit">A type of angle</param>
-        /// <returns>A new vector</returns>
-        [Obsolete("This method will be removed, use the overload that takes an Angle. Made obsolete 2017-12-03.")]
-        //// ReSharper disable once UnusedMember.Global
-        public Vector2D Rotate<T>(double angle, T angleUnit)
-            where T : IAngleUnit
-        {
-            return this.Rotate(Angle.From(angle, angleUnit));
         }
 
         /// <summary>

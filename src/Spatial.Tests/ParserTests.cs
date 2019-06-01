@@ -23,7 +23,7 @@ namespace MathNet.Spatial.UnitTests
         [TestCase("1.2e-3", 1.2E-3)]
         public void DoublePattern(string s, double expected)
         {
-            Assert.IsTrue(Regex.IsMatch(s, Parser.DoublePattern));
+            Assert.IsTrue(Regex.IsMatch(s, @"[+-]?\d*(?:[.,]\d+)?(?:[eE][+-]?\d+)?"));
             Assert.AreEqual(expected, double.Parse(s, CultureInfo.InvariantCulture));
         }
 

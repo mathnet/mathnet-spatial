@@ -31,32 +31,6 @@ namespace MathNet.Spatial.Units
         /// <summary>
         /// Initializes a new instance of the <see cref="Angle"/> struct.
         /// </summary>
-        /// <param name="radians">The value in radians.</param>
-        /// <param name="unit">The radians unit.</param>
-        [Obsolete("This constructor will be removed, use factory method FromRadians. Made obsolete 2017-12-03.")]
-        //// ReSharper disable once UnusedMember.Global
-        //// ReSharper disable once UnusedParameter.Local
-        public Angle(double radians, Radians unit)
-        {
-            this.Radians = radians;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Angle"/> struct.
-        /// </summary>
-        /// <param name="value">The value in degrees.</param>
-        /// <param name="unit">The radians unit.</param>
-        [Obsolete("This constructor will be removed, use factory method FromDegrees. Made obsolete 2017-12-03.")]
-        //// ReSharper disable once UnusedMember.Global
-        //// ReSharper disable once UnusedParameter.Local
-        public Angle(double value, Degrees unit)
-        {
-            this.Radians = value * DegToRad;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Angle"/> struct.
-        /// </summary>
         /// <param name="radians">The value in Radians</param>
         private Angle(double radians)
         {
@@ -200,17 +174,6 @@ namespace MathNet.Spatial.Units
         }
 
         /// <summary>
-        /// No function.
-        /// </summary>
-        /// <param name="angle">An angle</param>
-        /// <returns>The angle passed</returns>
-        [Obsolete("Unnecessary, made obsolete on 2017-12-07")]
-        public static Angle operator +(Angle angle)
-        {
-            return angle;
-        }
-
-        /// <summary>
         /// Attempts to convert a string into an <see cref="Angle"/>
         /// </summary>
         /// <param name="text">The string to be converted</param>
@@ -253,20 +216,6 @@ namespace MathNet.Spatial.Units
             }
 
             throw new FormatException($"Could not parse an Angle from the string {value}");
-        }
-
-        /// <summary>
-        /// Creates a new instance of Angle.
-        /// </summary>
-        /// <typeparam name="T">The type of the unit</typeparam>
-        /// <param name="value">The value</param>
-        /// <param name="unit">the unit</param>
-        /// <returns> A new instance of the <see cref="Angle"/> struct.</returns>
-        [Obsolete("This method will be removed, use factory method FromDegrees or FromRadians. Made obsolete 2017-12-03.")]
-        public static Angle From<T>(double value, T unit)
-            where T : IAngleUnit
-        {
-            return new Angle(value * unit.ConversionFactor);
         }
 
         /// <summary>
