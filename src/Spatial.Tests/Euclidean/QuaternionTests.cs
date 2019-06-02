@@ -114,7 +114,6 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         [Test]
         public void CanEqalAndNotEqualQuaternionsAndFloatsUsingOperator()
         {
-#pragma warning disable SA1131 // Use readable conditions
             Assert.IsTrue(new Quaternion(1, 0, 0, 0) == 1);
             Assert.IsTrue(new Quaternion(2, 0, 0, 0) == 2);
             Assert.IsTrue(1 == new Quaternion(1, 0, 0, 0));
@@ -125,10 +124,10 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             Assert.IsTrue(99 != new Quaternion(1, 0, 0, 1));
             Assert.IsTrue(99 != new Quaternion(1, 0, 0, 0));
             Assert.IsTrue(1 != new Quaternion(1, 0, 0, 1));
+            // ReSharper disable once EqualExpressionComparison
             Assert.IsTrue(new Quaternion(1, 0, 0, 1) == new Quaternion(1, 0, 0, 1));
             Assert.IsTrue(new Quaternion(1, 1, 1, 1) == new Quaternion(2, 2, 2, 2) / 2);
             Assert.IsTrue(new Quaternion(1, 1, 1, 1) != new Quaternion(0, 2, 2, 2) / 2);
-#pragma warning restore SA1131 // Use readable conditions
         }
 
         [TestCase(1.0, 1.0, 1.0, 1.0, new[] { Constants.PiOver2, 0.0, Constants.PiOver2 })]

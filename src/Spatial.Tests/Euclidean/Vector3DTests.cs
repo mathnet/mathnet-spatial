@@ -126,12 +126,10 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         public void Orthogonal_BadArgument(string vs)
         {
             var v = Vector3D.Parse(vs);
-#pragma warning disable SA1312 // Variable names must begin with lower-case letter
             Assert.Throws<InvalidOperationException>(() =>
             {
                 var _ = v.Orthogonal;
             });
-#pragma warning restore SA1312 // Variable names must begin with lower-case letter
         }
 
         [TestCase(X, Y, Z)]

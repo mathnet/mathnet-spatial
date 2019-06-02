@@ -307,9 +307,8 @@ namespace MathNet.Spatial.Euclidean
             {
                 throw new InvalidOperationException("The Euclidean norm of x, y, z differs more than tolerance from 1");
             }
-#pragma warning disable 618
+
             return new UnitVector3D(x / norm, y / norm, z / norm);
-#pragma warning restore 618
         }
 
         /// <summary>
