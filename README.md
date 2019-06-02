@@ -5,7 +5,7 @@ Math.NET Spatial
 
 Math.NET Spatial is an opensource **geometry library for .Net, Silverlight and Mono**.
 
-Supports Mono and .Net Framework 4.0 or higher and .Net Standard 1.3 and 2.0 or higher on Linux, Mac and Windows.
+Supports Mono and .Net Framework 4.6.1 or higher and .Net Standard 2.0 or higher on Linux, Mac and Windows.
 
 Math.NET Spatial is covered under the terms of the [MIT/X11](LICENSE.md) license. You may therefore link to it and use it in both opensource and proprietary software projects.
 
@@ -38,9 +38,8 @@ If you do not want to use the official binaries, or if you like to modify, debug
 ### How to build with MSBuild/XBuild
 
     restore.cmd (or restore.sh)
-    msbuild MathNet.Spatial.sln            # only build for .Net 4 (main solution)
-    msbuild MathNet.Spatial.Net35Only.sln  # only build for .Net 3.5
-    msbuild MathNet.Spatial.All.sln        # full build with .Net 4, 3.5 and PCL profiles
+    dotnet build MathNet.Spatial.sln       # build with .Net SDK tools
+    msbuild MathNet.Spatial.sln            # build with MsBuild
     xbuild MathNet.Spatial.sln             # build with Mono, e.g. on Linux or Mac
 
 ### How to build with FAKE
@@ -49,25 +48,17 @@ If you do not want to use the official binaries, or if you like to modify, debug
     ./build.sh   # normal build (.Net 4.0), run unit tests - on Linux or Mac
     ./buildn.sh  # normal build (.Net 4.0), run unit tests - bash on Windows (.Net instead of mono)
 
-    build.cmd Build              # normal build (.Net 4.0)
-    build.cmd Build incremental  # normal build, incremental (.Net 4.0)
-    build.cmd Build all          # full build (.Net 4.0, 3.5, PCL)
-    build.cmd Build net35        # compatibility build (.Net 3.5)
+    build.cmd Build              # normal build
+    build.cmd Build incremental  # normal build, incremental
 
-    build.cmd Test        # normal build (.Net 4.0), run unit tests
-    build.cmd Test quick  # normal build (.Net 4.0), run unit tests except long running ones
-    build.cmd Test all    # full build (.Net 4.0, 3.5, PCL), run all unit tests
-    build.cmd Test net35  # compatibility build (.Net 3.5), run unit testss
+    build.cmd Test        # normal build, run unit tests
+    build.cmd Test quick  # normal build, run unit tests except long running ones
 
     build.cmd Clean  # cleanup build artifacts
     build.cmd Docs   # generate documentation
     build.cmd Api    # generate api reference
 
-    build.cmd NuGet all     # generate normal NuGet packages (.Net 4.0, 3.5, PCL)
-    build.cmd NuGet signed  # generate signed/strong named NuGet packages (.Net 4.0)
-
-    build.cmd All          # build, test, docs, api reference (.Net 4.0)
-    build.cmd All release  # release build
+    build.cmd All          # build, test, docs, api reference
 
 FAKE itself is not included in the repository but it will download and bootstrap itself automatically when build.cmd is run the first time. Note that this step is *not* required when using Visual Studio or `msbuild` directly.
 
