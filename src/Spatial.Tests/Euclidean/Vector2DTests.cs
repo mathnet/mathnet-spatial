@@ -196,6 +196,16 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             Assert.AreEqual(2, actual[1]);
         }
 
+        [TestCase("1, 0")]
+        [TestCase("1, 1")]
+        [TestCase("1, -1")]
+        public void Orthogonal(string vs)
+        {
+            var v = Vector2D.Parse(vs);
+            var orthogonal = v.Orthogonal;
+            Assert.IsTrue(orthogonal.DotProduct(v) < 1e-6);
+        }
+
         [TestCase("1, 0", "1, 0", 1e-4, false)]
         [TestCase("1, 0", "0, -1", 1e-4, true)]
         [TestCase("1, 0", "0, 1", 1e-4, true)]

@@ -55,6 +55,18 @@ namespace MathNet.Spatial.Euclidean
         public double Length => Math.Sqrt((this.X * this.X) + (this.Y * this.Y));
 
         /// <summary>
+        /// Gets a vector orthogonal to this
+        /// </summary>
+        [Pure]
+        public Vector2D Orthogonal
+        {
+            get
+            {
+                return new Vector2D(-this.Y, this.X);
+            }
+        }
+
+        /// <summary>
         /// Returns a value that indicates whether each pair of elements in two specified vectors is equal.
         /// </summary>
         /// <param name="left">The first vector to compare.</param>
