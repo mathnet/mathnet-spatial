@@ -101,7 +101,7 @@ Target "Build" (fun _ ->
         buildSN spatialStrongNameSolution
         if isWindows && hasBuildParam "sign" then sign fingerprint timeserver spatialStrongNameSolution
         collectBinariesSN spatialStrongNameSolution
-        zip spatialStrongNameZipPackage spatialStrongNameSolution.OutputZipDir spatialStrongNameSolution.OutputLibStrongNameDir (fun f -> f.Contains("MathNet.Filtering.") || f.Contains("MathNet.Numerics."))
+        zip spatialStrongNameZipPackage spatialStrongNameSolution.OutputZipDir spatialStrongNameSolution.OutputLibStrongNameDir (fun f -> f.Contains("MathNet.Spatial.") || f.Contains("MathNet.Numerics."))
         if isWindows then
             packSN spatialStrongNameSolution
             collectNuGetPackages spatialStrongNameSolution
@@ -112,7 +112,7 @@ Target "Build" (fun _ ->
     build spatialSolution
     if isWindows && hasBuildParam "sign" then sign fingerprint timeserver spatialSolution
     collectBinaries spatialSolution
-    zip spatialZipPackage spatialSolution.OutputZipDir spatialSolution.OutputLibDir (fun f -> f.Contains("MathNet.Filtering.") || f.Contains("MathNet.Numerics."))
+    zip spatialZipPackage spatialSolution.OutputZipDir spatialSolution.OutputLibDir (fun f -> f.Contains("MathNet.Spatial.") || f.Contains("MathNet.Numerics."))
     if isWindows then
         pack spatialSolution
         collectNuGetPackages spatialSolution
