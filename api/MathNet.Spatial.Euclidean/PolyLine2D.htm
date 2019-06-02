@@ -97,7 +97,7 @@
     <div class="header">
 		<p class="class"><strong>Type</strong> PolyLine2D</p>
 		<p><strong>Namespace</strong> MathNet.Spatial.Euclidean</p>
-		<p><strong>Interfaces</strong> <span title="System.Collections.Generic.IEnumerable<Point2D>">IEnumerable&lt;Point2D&gt;</span>, <span title="System.IEquatable<PolyLine2D>">IEquatable&lt;PolyLine2D&gt;</span></p>
+		<p><strong>Interfaces</strong> <span title="System.IEquatable<PolyLine2D>">IEquatable&lt;PolyLine2D&gt;</span></p>
 	</div>
     <div class="sub-header">
 			<div id="summary">The PolyLine2D class represents a 2D curve in space made up of line segments joined end-to-end, and is
@@ -119,7 +119,6 @@ stored as a sequential list of 2D points.
 				<li><a href="../MathNet.Spatial.Euclidean/PolyLine2D.htm#Equals">Equals</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/PolyLine2D.htm#Equals">Equals</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/PolyLine2D.htm#Equals">Equals</a></li>
-				<li><a href="../MathNet.Spatial.Euclidean/PolyLine2D.htm#GetEnumerator">GetEnumerator</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/PolyLine2D.htm#GetHashCode">GetHashCode</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/PolyLine2D.htm#GetPointAtFractionAlongCurve">GetPointAtFractionAlongCurve</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/PolyLine2D.htm#GetPointAtLengthFromStart">GetPointAtLengthFromStart</a></li>
@@ -130,8 +129,6 @@ stored as a sequential list of 2D points.
 
 			<h3 class="section">Properties</h3>
 			<ul>
-				<li><a href="../MathNet.Spatial.Euclidean/PolyLine2D.htm#Count">Count</a></li>
-				<li><a href="../MathNet.Spatial.Euclidean/PolyLine2D.htm#Item">Item</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/PolyLine2D.htm#Length">Length</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/PolyLine2D.htm#VertexCount">VertexCount</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/PolyLine2D.htm#Vertices">Vertices</a></li>
@@ -248,18 +245,6 @@ single step tolerance if removed.  Iterate until no further changes are made.
       
     </div>
 	</div>
-	<div id="GetEnumerator" class="method">
-		<h4><span title="System.Collections.Generic.IEnumerator<Point2D>">IEnumerator&lt;Point2D&gt;</span> <strong>GetEnumerator</strong>()</h4>
-		<div class="content">
-        <div id="warning">
-          <b>Obsolete:</b> Use Vertices instead, obsolete since 2018-01-12
-        </div>
-
-
-
-      
-    </div>
-	</div>
 	<div id="GetHashCode" class="method">
 		<h4><span title="System.int">int</span> <strong>GetHashCode</strong>()</h4>
 		<div class="content">
@@ -332,24 +317,6 @@ an argument greater than the length of the curve will return the last point.
 	
   <h3 class="section">Public Properties</h3>
 
-  <div id="Count" class="method">
-    <h4><span title="System.int">int</span> <strong>Count</strong> get; </h4>
-    <div class="content">Gets the number of points in the polyline 
-        <div id="warning">
-          <b>Obsolete:</b> Use VertexCount instead, obsolete since 2018-01-12
-        </div>
-      
-    </div>
-  </div>
-  <div id="Item" class="method">
-    <h4><a href="../MathNet.Spatial.Euclidean/Point2D.htm">Point2D</a> <strong>Item</strong> get; </h4>
-    <div class="content">Returns a point in the polyline by index number 
-        <div id="warning">
-          <b>Obsolete:</b> Use Vertices instead, obsolete since 2018-01-12
-        </div>
-      
-    </div>
-  </div>
   <div id="Length" class="method">
     <h4><span title="System.double">double</span> <strong>Length</strong> get; </h4>
     <div class="content">Gets the length of the polyline as the sum of the length of the individual segments 

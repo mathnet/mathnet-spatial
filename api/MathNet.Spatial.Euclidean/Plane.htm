@@ -110,13 +110,11 @@
 				<li><a href="../MathNet.Spatial.Euclidean/Plane.htm#.ctor">Plane</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/Plane.htm#.ctor">Plane</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/Plane.htm#.ctor">Plane</a></li>
-				<li><a href="../MathNet.Spatial.Euclidean/Plane.htm#.ctor">Plane</a></li>
 			</ul>
 
 			<h3 class="section">Static Functions</h3>
 			<ul>
 				<li><a href="../MathNet.Spatial.Euclidean/Plane.htm#FromPoints">FromPoints</a></li>
-				<li><a href="../MathNet.Spatial.Euclidean/Plane.htm#Parse">Parse</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/Plane.htm#PointFromPlanes">PointFromPlanes</a></li>
 			</ul>
 			<h3 class="section">Methods</h3>
@@ -165,36 +163,7 @@
 	<h3 class="section">Public Constructors</h3>
 	
 	<div id=".ctor" class="method">
-		<h4> <strong>Plane</strong>(<a href="../MathNet.Spatial.Euclidean/Point3D.htm">Point3D</a> p1, <a href="../MathNet.Spatial.Euclidean/Point3D.htm">Point3D</a> p2, <a href="../MathNet.Spatial.Euclidean/Point3D.htm">Point3D</a> p3)</h4>
-		<div class="content">Initializes a new instance of the  <a href="../MathNet.Spatial.Euclidean/Plane.htm">Plane</a>  struct.
-Creates a Plane that contains the three given points.
-http://www.had2know.com/academics/equation-plane-through-3-points.html 
-        <div id="warning">
-          <b>Obsolete:</b> This constructor will be removed, use factory method Plane.FromPoints. Made obsolete 2017-12-05.
-        </div>
-
-
-      <div class="parameters">
-        <h5>Parameters</h5>
-
-          <h6><code><a href="../MathNet.Spatial.Euclidean/Point3D.htm">Point3D</a></code> p1</h6>
-          <p class="comments">The first point on the Plane. </p>
-          <h6><code><a href="../MathNet.Spatial.Euclidean/Point3D.htm">Point3D</a></code> p2</h6>
-          <p class="comments">The second point on the Plane. </p>
-          <h6><code><a href="../MathNet.Spatial.Euclidean/Point3D.htm">Point3D</a></code> p3</h6>
-          <p class="comments">The third point on the Plane. </p>
-      </div>
-
-      <div class="return">
-        <h5>Return</h5>
-        <h6><code></code></h6>
-        <p>The Plane containing the three points. </p>
-      </div>
-      
-    </div>
-	</div>
-	<div id=".ctor" class="method">
-		<h4> <strong>Plane</strong>(<a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a> normal, <a href="../MathNet.Spatial.Euclidean/Point3D.htm">Point3D</a> rootPoint)</h4>
+		<h4> <strong>Plane</strong>(<a href="../MathNet.Spatial.Euclidean/Point3D.htm">Point3D</a> rootPoint, <a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a> normal)</h4>
 		<div class="content">Initializes a new instance of the  <a href="../MathNet.Spatial.Euclidean/Plane.htm">Plane</a>  struct.
 Constructs a Plane from the given normal and distance along the normal from the origin. 
 
@@ -202,10 +171,10 @@ Constructs a Plane from the given normal and distance along the normal from the 
       <div class="parameters">
         <h5>Parameters</h5>
 
-          <h6><code><a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a></code> normal</h6>
-          <p class="comments">The Plane's normal vector. </p>
           <h6><code><a href="../MathNet.Spatial.Euclidean/Point3D.htm">Point3D</a></code> rootPoint</h6>
           <p class="comments">A point in the plane. </p>
+          <h6><code><a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a></code> normal</h6>
+          <p class="comments">The Plane's normal vector. </p>
       </div>
 
       
@@ -252,7 +221,7 @@ Constructs a Plane from the X, Y, and Z components of its normal, and its distan
     </div>
 	</div>
 	<div id=".ctor" class="method">
-		<h4> <strong>Plane</strong>(<a href="../MathNet.Spatial.Euclidean/Point3D.htm">Point3D</a> rootPoint, <a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a> normal)</h4>
+		<h4> <strong>Plane</strong>(<a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a> normal, <a href="../MathNet.Spatial.Euclidean/Point3D.htm">Point3D</a> rootPoint)</h4>
 		<div class="content">Initializes a new instance of the  <a href="../MathNet.Spatial.Euclidean/Plane.htm">Plane</a>  struct.
 Constructs a Plane from the given normal and distance along the normal from the origin. 
 
@@ -260,10 +229,10 @@ Constructs a Plane from the given normal and distance along the normal from the 
       <div class="parameters">
         <h5>Parameters</h5>
 
-          <h6><code><a href="../MathNet.Spatial.Euclidean/Point3D.htm">Point3D</a></code> rootPoint</h6>
-          <p class="comments">A point in the plane. </p>
           <h6><code><a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a></code> normal</h6>
           <p class="comments">The Plane's normal vector. </p>
+          <h6><code><a href="../MathNet.Spatial.Euclidean/Point3D.htm">Point3D</a></code> rootPoint</h6>
+          <p class="comments">A point in the plane. </p>
       </div>
 
       
@@ -293,29 +262,6 @@ Creates a plane that contains the three given points.
         <h5>Return</h5>
         <h6><code><a href="../MathNet.Spatial.Euclidean/Plane.htm">Plane</a></code></h6>
         <p>The plane containing the three points. </p>
-      </div>
-      
-    </div>
-	</div>
-	<div id="Parse" class="method">
-		<h4><a href="../MathNet.Spatial.Euclidean/Plane.htm">Plane</a> <strong>Parse</strong>(<span title="System.string">string</span> s)</h4>
-		<div class="content">Creates a Plane from its string representation 
-        <div id="warning">
-          <b>Obsolete:</b> Should not have been made public, removed on 9/12/2017
-        </div>
-
-
-      <div class="parameters">
-        <h5>Parameters</h5>
-
-          <h6><code><span title="System.string">string</span></code> s</h6>
-          <p class="comments">The string representation of the Plane </p>
-      </div>
-
-      <div class="return">
-        <h5>Return</h5>
-        <h6><code><a href="../MathNet.Spatial.Euclidean/Plane.htm">Plane</a></code></h6>
-        <p>a new Plane </p>
       </div>
       
     </div>
@@ -429,9 +375,6 @@ Creates a plane that contains the three given points.
 		<h4><span title="System.Nullable<Point3D>">Nullable&lt;Point3D&gt;</span> <strong>IntersectionWith</strong>(<a href="../MathNet.Spatial.Euclidean/Line3D.htm">Line3D</a> line, <span title="System.double">double</span> tolerance)</h4>
 		<div class="content">Find intersection between Line3D and Plane
 http://geomalgorithms.com/a05-_intersect-1.html 
-        <div id="warning">
-          <b>Obsolete:</b> Use LineSegment3D instead, Obsolete from 2017-12-10
-        </div>
 
 
       <div class="parameters">
@@ -540,6 +483,26 @@ http://geomalgorithms.com/a05-_intersect-1.html
     </div>
 	</div>
 	<div id="Project" class="method">
+		<h4><a href="../MathNet.Spatial.Euclidean/LineSegment3D.htm">LineSegment3D</a> <strong>Project</strong>(<a href="../MathNet.Spatial.Euclidean/LineSegment3D.htm">LineSegment3D</a> line3DToProject)</h4>
+		<div class="content">Projects a line onto the plane 
+
+
+      <div class="parameters">
+        <h5>Parameters</h5>
+
+          <h6><code><a href="../MathNet.Spatial.Euclidean/LineSegment3D.htm">LineSegment3D</a></code> line3DToProject</h6>
+          <p class="comments">The line to project </p>
+      </div>
+
+      <div class="return">
+        <h5>Return</h5>
+        <h6><code><a href="../MathNet.Spatial.Euclidean/LineSegment3D.htm">LineSegment3D</a></code></h6>
+        <p>A projected line </p>
+      </div>
+      
+    </div>
+	</div>
+	<div id="Project" class="method">
 		<h4><a href="../MathNet.Spatial.Euclidean/Point3D.htm">Point3D</a> <strong>Project</strong>(<a href="../MathNet.Spatial.Euclidean/Point3D.htm">Point3D</a> p, <span title="System.Nullable<UnitVector3D>">Nullable&lt;UnitVector3D&gt;</span> projectionDirection)</h4>
 		<div class="content">Projects a point onto the plane 
 
@@ -564,9 +527,6 @@ http://geomalgorithms.com/a05-_intersect-1.html
 	<div id="Project" class="method">
 		<h4><a href="../MathNet.Spatial.Euclidean/Line3D.htm">Line3D</a> <strong>Project</strong>(<a href="../MathNet.Spatial.Euclidean/Line3D.htm">Line3D</a> line3DToProject)</h4>
 		<div class="content">Projects a line onto the plane 
-        <div id="warning">
-          <b>Obsolete:</b> Use LineSegment3D instead, obsolete from 2017-12-10
-        </div>
 
 
       <div class="parameters">
@@ -620,26 +580,6 @@ http://geomalgorithms.com/a05-_intersect-1.html
         <h5>Return</h5>
         <h6><code><a href="../MathNet.Spatial.Euclidean/Ray3D.htm">Ray3D</a></code></h6>
         <p>The projected Vector3D </p>
-      </div>
-      
-    </div>
-	</div>
-	<div id="Project" class="method">
-		<h4><a href="../MathNet.Spatial.Euclidean/LineSegment3D.htm">LineSegment3D</a> <strong>Project</strong>(<a href="../MathNet.Spatial.Euclidean/LineSegment3D.htm">LineSegment3D</a> line3DToProject)</h4>
-		<div class="content">Projects a line onto the plane 
-
-
-      <div class="parameters">
-        <h5>Parameters</h5>
-
-          <h6><code><a href="../MathNet.Spatial.Euclidean/LineSegment3D.htm">LineSegment3D</a></code> line3DToProject</h6>
-          <p class="comments">The line to project </p>
-      </div>
-
-      <div class="return">
-        <h5>Return</h5>
-        <h6><code><a href="../MathNet.Spatial.Euclidean/LineSegment3D.htm">LineSegment3D</a></code></h6>
-        <p>A projected line </p>
       </div>
       
     </div>

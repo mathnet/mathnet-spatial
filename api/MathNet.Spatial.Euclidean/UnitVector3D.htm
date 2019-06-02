@@ -104,12 +104,6 @@
 			<div id="summary">A unit vector, this is used to describe a direction in 3D 
 			</div>
 		
-			<h3 class="section">Constructors</h3>
-			<ul>
-				<li><a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm#.ctor">UnitVector3D</a></li>
-				<li><a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm#.ctor">UnitVector3D</a></li>
-				<li><a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm#.ctor">UnitVector3D</a></li>
-			</ul>
 
 			<h3 class="section">Static Functions</h3>
 			<ul>
@@ -122,7 +116,6 @@
 			</ul>
 			<h3 class="section">Methods</h3>
 			<ul>
-				<li><a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm#Add">Add</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm#AngleTo">AngleTo</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm#AngleTo">AngleTo</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm#CrossProduct">CrossProduct</a></li>
@@ -147,11 +140,9 @@
 				<li><a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm#ProjectOn">ProjectOn</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm#ProjectOn">ProjectOn</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm#Rotate">Rotate</a></li>
-				<li><a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm#Rotate``1">Rotate&lt;T&gt;</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm#ScaleBy">ScaleBy</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm#SignedAngleTo">SignedAngleTo</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm#SignedAngleTo">SignedAngleTo</a></li>
-				<li><a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm#Subtract">Subtract</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm#ToPoint3D">ToPoint3D</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm#ToString">ToString</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm#ToString">ToString</a></li>
@@ -181,67 +172,6 @@
 	</div>
 	
 	
-	<h3 class="section">Public Constructors</h3>
-	
-	<div id=".ctor" class="method">
-		<h4> <strong>UnitVector3D</strong>(<span title="System.Double[]">Double[]</span> data)</h4>
-		<div class="content">Initializes a new instance of the  <a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a>  struct. 
-        <div id="warning">
-          <b>Obsolete:</b> This constructor will be removed. Made obsolete 2017-12-05.
-        </div>
-
-
-      <div class="parameters">
-        <h5>Parameters</h5>
-
-          <h6><code><span title="System.Double[]">Double[]</span></code> data</h6>
-          <p class="comments">A list of 3 points </p>
-      </div>
-
-      
-    </div>
-	</div>
-	<div id=".ctor" class="method">
-		<h4> <strong>UnitVector3D</strong>(<span title="System.double">double</span> x, <span title="System.double">double</span> y, <span title="System.double">double</span> z)</h4>
-		<div class="content">Initializes a new instance of the  <a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a>  struct.
-The provided values are scaled to L2 norm == 1 
-        <div id="warning">
-          <b>Obsolete:</b> This constructor will be made private, prefer the factory method Create. Made obsolete 2017-12-05.
-        </div>
-
-
-      <div class="parameters">
-        <h5>Parameters</h5>
-
-          <h6><code><span title="System.double">double</span></code> x</h6>
-          <p class="comments">The x component. </p>
-          <h6><code><span title="System.double">double</span></code> y</h6>
-          <p class="comments">The y component. </p>
-          <h6><code><span title="System.double">double</span></code> z</h6>
-          <p class="comments">The z component. </p>
-      </div>
-
-      
-    </div>
-	</div>
-	<div id=".ctor" class="method">
-		<h4> <strong>UnitVector3D</strong>(<span title="System.Collections.Generic.IEnumerable<double>">IEnumerable&lt;double&gt;</span> data)</h4>
-		<div class="content">Initializes a new instance of the  <a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a>  struct. 
-        <div id="warning">
-          <b>Obsolete:</b> This constructor will be removed. Made obsolete 2017-12-05.
-        </div>
-
-
-      <div class="parameters">
-        <h5>Parameters</h5>
-
-          <h6><code><span title="System.Collections.Generic.IEnumerable<double>">IEnumerable&lt;double&gt;</span></code> data</h6>
-          <p class="comments">A list of 3 points </p>
-      </div>
-
-      
-    </div>
-	</div>
 	
 	<h3 class="section">Public Static Functions</h3>
 	
@@ -357,29 +287,6 @@ The provided values are scaled to L2 norm == 1
 
 	<h3 class="section">Public Methods</h3>
 	
-	<div id="Add" class="method">
-		<h4><a href="../MathNet.Spatial.Euclidean/Vector3D.htm">Vector3D</a> <strong>Add</strong>(<a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a> v)</h4>
-		<div class="content">Adds a vector to this 
-        <div id="warning">
-          <b>Obsolete:</b> Use + instead
-        </div>
-
-
-      <div class="parameters">
-        <h5>Parameters</h5>
-
-          <h6><code><a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a></code> v</h6>
-          <p class="comments">a vector to add </p>
-      </div>
-
-      <div class="return">
-        <h5>Return</h5>
-        <h6><code><a href="../MathNet.Spatial.Euclidean/Vector3D.htm">Vector3D</a></code></h6>
-        <p>A new vector </p>
-      </div>
-      
-    </div>
-	</div>
 	<div id="AngleTo" class="method">
 		<h4><a href="../MathNet.Spatial.Units/Angle.htm">Angle</a> <strong>AngleTo</strong>(<a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a> v)</h4>
 		<div class="content">Compute the angle between this vector and a unit vector using the arccosine of the dot product. 
@@ -421,26 +328,6 @@ The provided values are scaled to L2 norm == 1
     </div>
 	</div>
 	<div id="CrossProduct" class="method">
-		<h4><a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a> <strong>CrossProduct</strong>(<a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a> other)</h4>
-		<div class="content">Returns the cross product of this vector and a vector 
-
-
-      <div class="parameters">
-        <h5>Parameters</h5>
-
-          <h6><code><a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a></code> other</h6>
-          <p class="comments">A vector </p>
-      </div>
-
-      <div class="return">
-        <h5>Return</h5>
-        <h6><code><a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a></code></h6>
-        <p>A new vector with the cross product result </p>
-      </div>
-      
-    </div>
-	</div>
-	<div id="CrossProduct" class="method">
 		<h4><a href="../MathNet.Spatial.Euclidean/Vector3D.htm">Vector3D</a> <strong>CrossProduct</strong>(<a href="../MathNet.Spatial.Euclidean/Vector3D.htm">Vector3D</a> inVector3D)</h4>
 		<div class="content">Returns the cross product of this vector and a unit vector 
 
@@ -455,6 +342,26 @@ The provided values are scaled to L2 norm == 1
       <div class="return">
         <h5>Return</h5>
         <h6><code><a href="../MathNet.Spatial.Euclidean/Vector3D.htm">Vector3D</a></code></h6>
+        <p>A new vector with the cross product result </p>
+      </div>
+      
+    </div>
+	</div>
+	<div id="CrossProduct" class="method">
+		<h4><a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a> <strong>CrossProduct</strong>(<a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a> other)</h4>
+		<div class="content">Returns the cross product of this vector and a vector 
+
+
+      <div class="parameters">
+        <h5>Parameters</h5>
+
+          <h6><code><a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a></code> other</h6>
+          <p class="comments">A vector </p>
+      </div>
+
+      <div class="return">
+        <h5>Return</h5>
+        <h6><code><a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a></code></h6>
         <p>A new vector with the cross product result </p>
       </div>
       
@@ -501,7 +408,7 @@ The provided values are scaled to L2 norm == 1
     </div>
 	</div>
 	<div id="Equals" class="method">
-		<h4><span title="System.bool">bool</span> <strong>Equals</strong>(<a href="../MathNet.Spatial.Euclidean/Vector3D.htm">Vector3D</a> other)</h4>
+		<h4><span title="System.bool">bool</span> <strong>Equals</strong>(<span title="System.object">object</span> obj)</h4>
 		<div class="content">
 
 
@@ -519,7 +426,7 @@ The provided values are scaled to L2 norm == 1
     </div>
 	</div>
 	<div id="Equals" class="method">
-		<h4><span title="System.bool">bool</span> <strong>Equals</strong>(<span title="System.object">object</span> obj)</h4>
+		<h4><span title="System.bool">bool</span> <strong>Equals</strong>(<a href="../MathNet.Spatial.Euclidean/Vector3D.htm">Vector3D</a> other)</h4>
 		<div class="content">
 
 
@@ -604,52 +511,6 @@ The provided values are scaled to L2 norm == 1
     </div>
 	</div>
 	<div id="IsParallelTo" class="method">
-		<h4><span title="System.bool">bool</span> <strong>IsParallelTo</strong>(<a href="../MathNet.Spatial.Euclidean/Vector3D.htm">Vector3D</a> othervector, <span title="System.double">double</span> tolerance)</h4>
-		<div class="content">Computes whether or not this vector is parallel to another vector using the dot product method and comparing it
-to within a specified tolerance. 
-
-
-      <div class="parameters">
-        <h5>Parameters</h5>
-
-          <h6><code><a href="../MathNet.Spatial.Euclidean/Vector3D.htm">Vector3D</a></code> othervector</h6>
-          <p class="comments">The other  <a href="../MathNet.Spatial.Euclidean/Vector3D.htm">Vector3D</a> </p>
-          <h6><code><span title="System.double">double</span></code> tolerance</h6>
-          <p class="comments">A tolerance value for the dot product method.  Values below 2*Precision.DoublePrecision may cause issues. </p>
-      </div>
-
-      <div class="return">
-        <h5>Return</h5>
-        <h6><code><span title="System.bool">bool</span></code></h6>
-        <p>true if the vector dot product is within the given tolerance of unity, false if it is not </p>
-      </div>
-      
-    </div>
-	</div>
-	<div id="IsParallelTo" class="method">
-		<h4><span title="System.bool">bool</span> <strong>IsParallelTo</strong>(<a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a> othervector, <span title="System.double">double</span> tolerance)</h4>
-		<div class="content">Computes whether or not this vector is parallel to a unit vector using the dot product method and comparing it
-to within a specified tolerance. 
-
-
-      <div class="parameters">
-        <h5>Parameters</h5>
-
-          <h6><code><a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a></code> othervector</h6>
-          <p class="comments">The other  <a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a> </p>
-          <h6><code><span title="System.double">double</span></code> tolerance</h6>
-          <p class="comments">A tolerance value for the dot product method.  Values below 2*Precision.DoublePrecision may cause issues. </p>
-      </div>
-
-      <div class="return">
-        <h5>Return</h5>
-        <h6><code><span title="System.bool">bool</span></code></h6>
-        <p>true if the vector dot product is within the given tolerance of unity, false if not </p>
-      </div>
-      
-    </div>
-	</div>
-	<div id="IsParallelTo" class="method">
 		<h4><span title="System.bool">bool</span> <strong>IsParallelTo</strong>(<a href="../MathNet.Spatial.Euclidean/Vector3D.htm">Vector3D</a> othervector, <a href="../MathNet.Spatial.Units/Angle.htm">Angle</a> angleTolerance)</h4>
 		<div class="content">Determine whether or not this vector is parallel to a unit vector within a given angle tolerance. 
 
@@ -693,10 +554,10 @@ to within a specified tolerance.
       
     </div>
 	</div>
-	<div id="IsPerpendicularTo" class="method">
-		<h4><span title="System.bool">bool</span> <strong>IsPerpendicularTo</strong>(<a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a> othervector, <span title="System.double">double</span> tolerance)</h4>
-		<div class="content">Computes whether or not this vector is perpendicular to another vector using the dot product method and
-comparing it to within a specified tolerance 
+	<div id="IsParallelTo" class="method">
+		<h4><span title="System.bool">bool</span> <strong>IsParallelTo</strong>(<a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a> othervector, <span title="System.double">double</span> tolerance)</h4>
+		<div class="content">Computes whether or not this vector is parallel to a unit vector using the dot product method and comparing it
+to within a specified tolerance. 
 
 
       <div class="parameters">
@@ -711,7 +572,30 @@ comparing it to within a specified tolerance
       <div class="return">
         <h5>Return</h5>
         <h6><code><span title="System.bool">bool</span></code></h6>
-        <p>true if the vector dot product is within the given tolerance of zero, false if not </p>
+        <p>true if the vector dot product is within the given tolerance of unity, false if not </p>
+      </div>
+      
+    </div>
+	</div>
+	<div id="IsParallelTo" class="method">
+		<h4><span title="System.bool">bool</span> <strong>IsParallelTo</strong>(<a href="../MathNet.Spatial.Euclidean/Vector3D.htm">Vector3D</a> othervector, <span title="System.double">double</span> tolerance)</h4>
+		<div class="content">Computes whether or not this vector is parallel to another vector using the dot product method and comparing it
+to within a specified tolerance. 
+
+
+      <div class="parameters">
+        <h5>Parameters</h5>
+
+          <h6><code><a href="../MathNet.Spatial.Euclidean/Vector3D.htm">Vector3D</a></code> othervector</h6>
+          <p class="comments">The other  <a href="../MathNet.Spatial.Euclidean/Vector3D.htm">Vector3D</a> </p>
+          <h6><code><span title="System.double">double</span></code> tolerance</h6>
+          <p class="comments">A tolerance value for the dot product method.  Values below 2*Precision.DoublePrecision may cause issues. </p>
+      </div>
+
+      <div class="return">
+        <h5>Return</h5>
+        <h6><code><span title="System.bool">bool</span></code></h6>
+        <p>true if the vector dot product is within the given tolerance of unity, false if it is not </p>
       </div>
       
     </div>
@@ -739,6 +623,29 @@ comparing it to within a specified tolerance
       
     </div>
 	</div>
+	<div id="IsPerpendicularTo" class="method">
+		<h4><span title="System.bool">bool</span> <strong>IsPerpendicularTo</strong>(<a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a> othervector, <span title="System.double">double</span> tolerance)</h4>
+		<div class="content">Computes whether or not this vector is perpendicular to another vector using the dot product method and
+comparing it to within a specified tolerance 
+
+
+      <div class="parameters">
+        <h5>Parameters</h5>
+
+          <h6><code><a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a></code> othervector</h6>
+          <p class="comments">The other  <a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a> </p>
+          <h6><code><span title="System.double">double</span></code> tolerance</h6>
+          <p class="comments">A tolerance value for the dot product method.  Values below 2*Precision.DoublePrecision may cause issues. </p>
+      </div>
+
+      <div class="return">
+        <h5>Return</h5>
+        <h6><code><span title="System.bool">bool</span></code></h6>
+        <p>true if the vector dot product is within the given tolerance of zero, false if not </p>
+      </div>
+      
+    </div>
+	</div>
 	<div id="Negate" class="method">
 		<h4><a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a> <strong>Negate</strong>()</h4>
 		<div class="content">Inverses the direction of the vector, equivalent to multiplying by -1 
@@ -749,26 +656,6 @@ comparing it to within a specified tolerance
         <h5>Return</h5>
         <h6><code><a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a></code></h6>
         <p>A  <a href="../MathNet.Spatial.Euclidean/Vector3D.htm">Vector3D</a>  pointing in the opposite direction. </p>
-      </div>
-      
-    </div>
-	</div>
-	<div id="ProjectOn" class="method">
-		<h4><a href="../MathNet.Spatial.Euclidean/Vector3D.htm">Vector3D</a> <strong>ProjectOn</strong>(<a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a> uv)</h4>
-		<div class="content">Returns the Dot product of the current vector and a unit vector 
-
-
-      <div class="parameters">
-        <h5>Parameters</h5>
-
-          <h6><code><a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a></code> uv</h6>
-          <p class="comments">A unit vector </p>
-      </div>
-
-      <div class="return">
-        <h5>Return</h5>
-        <h6><code><a href="../MathNet.Spatial.Euclidean/Vector3D.htm">Vector3D</a></code></h6>
-        <p>Returns a new vector </p>
       </div>
       
     </div>
@@ -793,6 +680,26 @@ comparing it to within a specified tolerance
       
     </div>
 	</div>
+	<div id="ProjectOn" class="method">
+		<h4><a href="../MathNet.Spatial.Euclidean/Vector3D.htm">Vector3D</a> <strong>ProjectOn</strong>(<a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a> uv)</h4>
+		<div class="content">Returns the Dot product of the current vector and a unit vector 
+
+
+      <div class="parameters">
+        <h5>Parameters</h5>
+
+          <h6><code><a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a></code> uv</h6>
+          <p class="comments">A unit vector </p>
+      </div>
+
+      <div class="return">
+        <h5>Return</h5>
+        <h6><code><a href="../MathNet.Spatial.Euclidean/Vector3D.htm">Vector3D</a></code></h6>
+        <p>Returns a new vector </p>
+      </div>
+      
+    </div>
+	</div>
 	<div id="Rotate" class="method">
 		<h4><a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a> <strong>Rotate</strong>(<a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a> about, <a href="../MathNet.Spatial.Units/Angle.htm">Angle</a> angle)</h4>
 		<div class="content">Returns a vector that is this vector rotated the signed angle around the about vector 
@@ -805,33 +712,6 @@ comparing it to within a specified tolerance
           <p class="comments">The vector to rotate around. </p>
           <h6><code><a href="../MathNet.Spatial.Units/Angle.htm">Angle</a></code> angle</h6>
           <p class="comments">The angle positive according to right hand rule. </p>
-      </div>
-
-      <div class="return">
-        <h5>Return</h5>
-        <h6><code><a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a></code></h6>
-        <p>A rotated vector. </p>
-      </div>
-      
-    </div>
-	</div>
-	<div id="Rotate``1" class="method">
-		<h4><a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a> <strong>Rotate&lt;T&gt;</strong>(<a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a> about, <span title="System.double">double</span> angle, <span title="MathNet.Spatial.Euclidean.T">T</span> unit)</h4>
-		<div class="content">Returns a vector that is this vector rotated the signed angle around the about vector 
-        <div id="warning">
-          <b>Obsolete:</b> This method will be removed, prefer the overload taking an Angle. Made obsolete 2017-12-05.
-        </div>
-
-
-      <div class="parameters">
-        <h5>Parameters</h5>
-
-          <h6><code><a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a></code> about</h6>
-          <p class="comments">The vector to rotate around. </p>
-          <h6><code><span title="System.double">double</span></code> angle</h6>
-          <p class="comments">The angle positive according to right hand rule. </p>
-          <h6><code><span title="MathNet.Spatial.Euclidean.T">T</span></code> unit</h6>
-          <p class="comments">The  <a href="../MathNet.Spatial.Units/IAngleUnit.htm">IAngleUnit</a> </p>
       </div>
 
       <div class="return">
@@ -906,29 +786,6 @@ comparing it to within a specified tolerance
       
     </div>
 	</div>
-	<div id="Subtract" class="method">
-		<h4><a href="../MathNet.Spatial.Euclidean/Vector3D.htm">Vector3D</a> <strong>Subtract</strong>(<a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a> v)</h4>
-		<div class="content">Subtracts a vector from this 
-        <div id="warning">
-          <b>Obsolete:</b> Use - instead
-        </div>
-
-
-      <div class="parameters">
-        <h5>Parameters</h5>
-
-          <h6><code><a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a></code> v</h6>
-          <p class="comments">a vector to subtract </p>
-      </div>
-
-      <div class="return">
-        <h5>Return</h5>
-        <h6><code><a href="../MathNet.Spatial.Euclidean/Vector3D.htm">Vector3D</a></code></h6>
-        <p>A new vector </p>
-      </div>
-      
-    </div>
-	</div>
 	<div id="ToPoint3D" class="method">
 		<h4><a href="../MathNet.Spatial.Euclidean/Point3D.htm">Point3D</a> <strong>ToPoint3D</strong>()</h4>
 		<div class="content">Returns a point equivalent to the vector 
@@ -940,6 +797,15 @@ comparing it to within a specified tolerance
         <h6><code><a href="../MathNet.Spatial.Euclidean/Point3D.htm">Point3D</a></code></h6>
         <p>A point </p>
       </div>
+      
+    </div>
+	</div>
+	<div id="ToString" class="method">
+		<h4><span title="System.string">string</span> <strong>ToString</strong>()</h4>
+		<div class="content">
+
+
+
       
     </div>
 	</div>
@@ -965,15 +831,6 @@ comparing it to within a specified tolerance
 	</div>
 	<div id="ToString" class="method">
 		<h4><span title="System.string">string</span> <strong>ToString</strong>(<span title="System.string">string</span> format, <span title="System.IFormatProvider">IFormatProvider</span> provider)</h4>
-		<div class="content">
-
-
-
-      
-    </div>
-	</div>
-	<div id="ToString" class="method">
-		<h4><span title="System.string">string</span> <strong>ToString</strong>()</h4>
 		<div class="content">
 
 
@@ -1010,15 +867,15 @@ comparing it to within a specified tolerance
     </div>
 	</div>
 	<div id="TransformBy" class="method">
-		<h4><a href="../MathNet.Spatial.Euclidean/Vector3D.htm">Vector3D</a> <strong>TransformBy</strong>(<span title="MathNet.Numerics.LinearAlgebra.Matrix<double>">Matrix&lt;double&gt;</span> m)</h4>
-		<div class="content">Transforms a vector by multiplying it against a provided matrix 
+		<h4><a href="../MathNet.Spatial.Euclidean/Vector3D.htm">Vector3D</a> <strong>TransformBy</strong>(<a href="../MathNet.Spatial.Euclidean/CoordinateSystem.htm">CoordinateSystem</a> coordinateSystem)</h4>
+		<div class="content">Transforms the vector by a coordinate system and returns the transformed. 
 
 
       <div class="parameters">
         <h5>Parameters</h5>
 
-          <h6><code><span title="MathNet.Numerics.LinearAlgebra.Matrix<double>">Matrix&lt;double&gt;</span></code> m</h6>
-          <p class="comments">The matrix to multiply </p>
+          <h6><code><a href="../MathNet.Spatial.Euclidean/CoordinateSystem.htm">CoordinateSystem</a></code> coordinateSystem</h6>
+          <p class="comments">A coordinate system </p>
       </div>
 
       <div class="return">
@@ -1030,15 +887,15 @@ comparing it to within a specified tolerance
     </div>
 	</div>
 	<div id="TransformBy" class="method">
-		<h4><a href="../MathNet.Spatial.Euclidean/Vector3D.htm">Vector3D</a> <strong>TransformBy</strong>(<a href="../MathNet.Spatial.Euclidean/CoordinateSystem.htm">CoordinateSystem</a> coordinateSystem)</h4>
-		<div class="content">Transforms the vector by a coordinate system and returns the transformed. 
+		<h4><a href="../MathNet.Spatial.Euclidean/Vector3D.htm">Vector3D</a> <strong>TransformBy</strong>(<span title="MathNet.Numerics.LinearAlgebra.Matrix<double>">Matrix&lt;double&gt;</span> m)</h4>
+		<div class="content">Transforms a vector by multiplying it against a provided matrix 
 
 
       <div class="parameters">
         <h5>Parameters</h5>
 
-          <h6><code><a href="../MathNet.Spatial.Euclidean/CoordinateSystem.htm">CoordinateSystem</a></code> coordinateSystem</h6>
-          <p class="comments">A coordinate system </p>
+          <h6><code><span title="MathNet.Numerics.LinearAlgebra.Matrix<double>">Matrix&lt;double&gt;</span></code> m</h6>
+          <p class="comments">The matrix to multiply </p>
       </div>
 
       <div class="return">

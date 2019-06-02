@@ -107,9 +107,6 @@
 			<h3 class="section">Constructors</h3>
 			<ul>
 				<li><a href="../MathNet.Spatial.Euclidean/Vector2D.htm#.ctor">Vector2D</a></li>
-				<li><a href="../MathNet.Spatial.Euclidean/Vector2D.htm#.ctor">Vector2D</a></li>
-				<li><a href="../MathNet.Spatial.Euclidean/Vector2D.htm#.ctor">Vector2D</a></li>
-				<li><a href="../MathNet.Spatial.Euclidean/Vector2D.htm#.ctor">Vector2D</a></li>
 			</ul>
 
 			<h3 class="section">Static Functions</h3>
@@ -140,7 +137,6 @@
 				<li><a href="../MathNet.Spatial.Euclidean/Vector2D.htm#Normalize">Normalize</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/Vector2D.htm#ProjectOn">ProjectOn</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/Vector2D.htm#Rotate">Rotate</a></li>
-				<li><a href="../MathNet.Spatial.Euclidean/Vector2D.htm#Rotate``1">Rotate&lt;T&gt;</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/Vector2D.htm#ScaleBy">ScaleBy</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/Vector2D.htm#SignedAngleTo">SignedAngleTo</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/Vector2D.htm#Subtract">Subtract</a></li>
@@ -155,6 +151,7 @@
 			<h3 class="section">Properties</h3>
 			<ul>
 				<li><a href="../MathNet.Spatial.Euclidean/Vector2D.htm#Length">Length</a></li>
+				<li><a href="../MathNet.Spatial.Euclidean/Vector2D.htm#Orthogonal">Orthogonal</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/Vector2D.htm#XAxis">XAxis</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/Vector2D.htm#YAxis">YAxis</a></li>
 			</ul>
@@ -170,45 +167,6 @@
 	<h3 class="section">Public Constructors</h3>
 	
 	<div id=".ctor" class="method">
-		<h4> <strong>Vector2D</strong>(<span title="System.Double[]">Double[]</span> data)</h4>
-		<div class="content">Initializes a new instance of the  <a href="../MathNet.Spatial.Euclidean/Vector2D.htm">Vector2D</a>  struct. 
-        <div id="warning">
-          <b>Obsolete:</b> This constructor will be removed. Made obsolete 2017-12-03.
-        </div>
-
-
-      <div class="parameters">
-        <h5>Parameters</h5>
-
-          <h6><code><span title="System.Double[]">Double[]</span></code> data</h6>
-          <p class="comments">A list of 2 doubles </p>
-      </div>
-
-      
-    </div>
-	</div>
-	<div id=".ctor" class="method">
-		<h4> <strong>Vector2D</strong>(<span title="System.double">double</span> r, <a href="../MathNet.Spatial.Units/Angle.htm">Angle</a> a)</h4>
-		<div class="content">Initializes a new instance of the  <a href="../MathNet.Spatial.Euclidean/Vector2D.htm">Vector2D</a>  struct.
-Creates a vector with length r rotated a counterclockwise from X-Axis 
-        <div id="warning">
-          <b>Obsolete:</b> This constructor will be removed, use FromPolar. Made obsolete 2017-12-03.
-        </div>
-
-
-      <div class="parameters">
-        <h5>Parameters</h5>
-
-          <h6><code><span title="System.double">double</span></code> r</h6>
-          <p class="comments">The radius </p>
-          <h6><code><a href="../MathNet.Spatial.Units/Angle.htm">Angle</a></code> a</h6>
-          <p class="comments">The angle </p>
-      </div>
-
-      
-    </div>
-	</div>
-	<div id=".ctor" class="method">
 		<h4> <strong>Vector2D</strong>(<span title="System.double">double</span> x, <span title="System.double">double</span> y)</h4>
 		<div class="content">Initializes a new instance of the  <a href="../MathNet.Spatial.Euclidean/Vector2D.htm">Vector2D</a>  struct. 
 
@@ -220,24 +178,6 @@ Creates a vector with length r rotated a counterclockwise from X-Axis
           <p class="comments">The x component. </p>
           <h6><code><span title="System.double">double</span></code> y</h6>
           <p class="comments">The y component. </p>
-      </div>
-
-      
-    </div>
-	</div>
-	<div id=".ctor" class="method">
-		<h4> <strong>Vector2D</strong>(<span title="System.Collections.Generic.IEnumerable<double>">IEnumerable&lt;double&gt;</span> data)</h4>
-		<div class="content">Initializes a new instance of the  <a href="../MathNet.Spatial.Euclidean/Vector2D.htm">Vector2D</a>  struct. 
-        <div id="warning">
-          <b>Obsolete:</b> This constructor will be removed. Made obsolete 2017-12-03.
-        </div>
-
-
-      <div class="parameters">
-        <h5>Parameters</h5>
-
-          <h6><code><span title="System.Collections.Generic.IEnumerable<double>">IEnumerable&lt;double&gt;</span></code> data</h6>
-          <p class="comments">A list of 2 doubles </p>
       </div>
 
       
@@ -653,31 +593,6 @@ Formula: (this.X * other.Y) - (this.Y * other.X)
       
     </div>
 	</div>
-	<div id="Rotate``1" class="method">
-		<h4><a href="../MathNet.Spatial.Euclidean/Vector2D.htm">Vector2D</a> <strong>Rotate&lt;T&gt;</strong>(<span title="System.double">double</span> angle, <span title="MathNet.Spatial.Euclidean.T">T</span> angleUnit)</h4>
-		<div class="content">Rotates a Vector 
-        <div id="warning">
-          <b>Obsolete:</b> This method will be removed, use the overload that takes an Angle. Made obsolete 2017-12-03.
-        </div>
-
-
-      <div class="parameters">
-        <h5>Parameters</h5>
-
-          <h6><code><span title="System.double">double</span></code> angle</h6>
-          <p class="comments">An angle </p>
-          <h6><code><span title="MathNet.Spatial.Euclidean.T">T</span></code> angleUnit</h6>
-          <p class="comments">A type of angle </p>
-      </div>
-
-      <div class="return">
-        <h5>Return</h5>
-        <h6><code><a href="../MathNet.Spatial.Euclidean/Vector2D.htm">Vector2D</a></code></h6>
-        <p>A new vector </p>
-      </div>
-      
-    </div>
-	</div>
 	<div id="ScaleBy" class="method">
 		<h4><a href="../MathNet.Spatial.Euclidean/Vector2D.htm">Vector2D</a> <strong>ScaleBy</strong>(<span title="System.double">double</span> d)</h4>
 		<div class="content">Scales the vector by the provided value 
@@ -820,6 +735,12 @@ Formula: (this.X * other.Y) - (this.Y * other.X)
   <div id="Length" class="method">
     <h4><span title="System.double">double</span> <strong>Length</strong> get; </h4>
     <div class="content">Gets the length of the vector 
+      
+    </div>
+  </div>
+  <div id="Orthogonal" class="method">
+    <h4><a href="../MathNet.Spatial.Euclidean/Vector2D.htm">Vector2D</a> <strong>Orthogonal</strong> get; </h4>
+    <div class="content">Gets a vector orthogonal to this 
       
     </div>
   </div>

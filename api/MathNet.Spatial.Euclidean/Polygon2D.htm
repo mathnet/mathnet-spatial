@@ -97,7 +97,7 @@
     <div class="header">
 		<p class="class"><strong>Type</strong> Polygon2D</p>
 		<p><strong>Namespace</strong> MathNet.Spatial.Euclidean</p>
-		<p><strong>Interfaces</strong> <span title="System.Collections.Generic.IEnumerable<Point2D>">IEnumerable&lt;Point2D&gt;</span>, <span title="System.IEquatable<Polygon2D>">IEquatable&lt;Polygon2D&gt;</span></p>
+		<p><strong>Interfaces</strong> <span title="System.IEquatable<Polygon2D>">IEquatable&lt;Polygon2D&gt;</span></p>
 	</div>
     <div class="sub-header">
 			<div id="summary">Class to represent a closed polygon. 
@@ -113,7 +113,6 @@
 			<ul>
 				<li><a href="../MathNet.Spatial.Euclidean/Polygon2D.htm#ArePolygonVerticesColliding">ArePolygonVerticesColliding</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/Polygon2D.htm#GetConvexHullFromPoints">GetConvexHullFromPoints</a></li>
-				<li><a href="../MathNet.Spatial.Euclidean/Polygon2D.htm#IsPointInPolygon">IsPointInPolygon</a></li>
 			</ul>
 			<h3 class="section">Methods</h3>
 			<ul>
@@ -121,7 +120,6 @@
 				<li><a href="../MathNet.Spatial.Euclidean/Polygon2D.htm#Equals">Equals</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/Polygon2D.htm#Equals">Equals</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/Polygon2D.htm#Equals">Equals</a></li>
-				<li><a href="../MathNet.Spatial.Euclidean/Polygon2D.htm#GetEnumerator">GetEnumerator</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/Polygon2D.htm#GetHashCode">GetHashCode</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/Polygon2D.htm#GetType">GetType</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/Polygon2D.htm#ReduceComplexity">ReduceComplexity</a></li>
@@ -135,9 +133,7 @@
 
 			<h3 class="section">Properties</h3>
 			<ul>
-				<li><a href="../MathNet.Spatial.Euclidean/Polygon2D.htm#Count">Count</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/Polygon2D.htm#Edges">Edges</a></li>
-				<li><a href="../MathNet.Spatial.Euclidean/Polygon2D.htm#Item">Item</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/Polygon2D.htm#VertexCount">VertexCount</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/Polygon2D.htm#Vertices">Vertices</a></li>
 			</ul>
@@ -148,22 +144,6 @@
 	<h3 class="section">Public Constructors</h3>
 	
 	<div id=".ctor" class="method">
-		<h4> <strong>Polygon2D</strong>(<span title="MathNet.Spatial.Euclidean.Point2D[]">Point2D[]</span> vertices)</h4>
-		<div class="content">Initializes a new instance of the  <a href="../MathNet.Spatial.Euclidean/Polygon2D.htm">Polygon2D</a>  class.
-At least three points are needed to construct a polygon.  If less are passed an ArgumentException is thrown. 
-
-
-      <div class="parameters">
-        <h5>Parameters</h5>
-
-          <h6><code><span title="MathNet.Spatial.Euclidean.Point2D[]">Point2D[]</span></code> vertices</h6>
-          <p class="comments">A list of vertices. </p>
-      </div>
-
-      
-    </div>
-	</div>
-	<div id=".ctor" class="method">
 		<h4> <strong>Polygon2D</strong>(<span title="System.Collections.Generic.IEnumerable<Point2D>">IEnumerable&lt;Point2D&gt;</span> vertices)</h4>
 		<div class="content">Initializes a new instance of the  <a href="../MathNet.Spatial.Euclidean/Polygon2D.htm">Polygon2D</a>  class.
 At least three points are needed to construct a polygon.  If less are passed an ArgumentException is thrown. 
@@ -173,6 +153,22 @@ At least three points are needed to construct a polygon.  If less are passed an 
         <h5>Parameters</h5>
 
           <h6><code><span title="System.Collections.Generic.IEnumerable<Point2D>">IEnumerable&lt;Point2D&gt;</span></code> vertices</h6>
+          <p class="comments">A list of vertices. </p>
+      </div>
+
+      
+    </div>
+	</div>
+	<div id=".ctor" class="method">
+		<h4> <strong>Polygon2D</strong>(<span title="MathNet.Spatial.Euclidean.Point2D[]">Point2D[]</span> vertices)</h4>
+		<div class="content">Initializes a new instance of the  <a href="../MathNet.Spatial.Euclidean/Polygon2D.htm">Polygon2D</a>  class.
+At least three points are needed to construct a polygon.  If less are passed an ArgumentException is thrown. 
+
+
+      <div class="parameters">
+        <h5>Parameters</h5>
+
+          <h6><code><span title="MathNet.Spatial.Euclidean.Point2D[]">Point2D[]</span></code> vertices</h6>
           <p class="comments">A list of vertices. </p>
       </div>
 
@@ -227,33 +223,6 @@ If true, clockwise. Otherwise counter clockwise </p>
         <h5>Return</h5>
         <h6><code><a href="../MathNet.Spatial.Euclidean/Polygon2D.htm">Polygon2D</a></code></h6>
         <p>A polygon. </p>
-      </div>
-      
-    </div>
-	</div>
-	<div id="IsPointInPolygon" class="method">
-		<h4><span title="System.bool">bool</span> <strong>IsPointInPolygon</strong>(<a href="../MathNet.Spatial.Euclidean/Point2D.htm">Point2D</a> p, <a href="../MathNet.Spatial.Euclidean/Polygon2D.htm">Polygon2D</a> poly)</h4>
-		<div class="content">Determine whether or not a point is inside a polygon using the intersection counting
-method.  Return true if the point is contained, false if it is not. Points which lie
-on the edge are not counted as inside the polygon. 
-        <div id="warning">
-          <b>Obsolete:</b> Use instance method EnclosesPoint instead, obsolete since 6/12/2017
-        </div>
-
-
-      <div class="parameters">
-        <h5>Parameters</h5>
-
-          <h6><code><a href="../MathNet.Spatial.Euclidean/Point2D.htm">Point2D</a></code> p</h6>
-          <p class="comments">A point </p>
-          <h6><code><a href="../MathNet.Spatial.Euclidean/Polygon2D.htm">Polygon2D</a></code> poly</h6>
-          <p class="comments">A polygon </p>
-      </div>
-
-      <div class="return">
-        <h5>Return</h5>
-        <h6><code><span title="System.bool">bool</span></code></h6>
-        <p>True if the point is inside the polygon; otherwise false. </p>
       </div>
       
     </div>
@@ -319,23 +288,6 @@ counted as contained within the polygon.
 
 
 
-      
-    </div>
-	</div>
-	<div id="GetEnumerator" class="method">
-		<h4><span title="System.Collections.Generic.IEnumerator<Point2D>">IEnumerator&lt;Point2D&gt;</span> <strong>GetEnumerator</strong>()</h4>
-		<div class="content">Returns an enumerator for the vertices 
-        <div id="warning">
-          <b>Obsolete:</b> Use Vertices instead, obsolete since 6/12/2017
-        </div>
-
-
-
-      <div class="return">
-        <h5>Return</h5>
-        <h6><code><span title="System.Collections.Generic.IEnumerator<Point2D>">IEnumerator&lt;Point2D&gt;</span></code></h6>
-        <p>An enumerator for the vertices </p>
-      </div>
       
     </div>
 	</div>
@@ -465,27 +417,9 @@ counted as contained within the polygon.
 	
   <h3 class="section">Public Properties</h3>
 
-  <div id="Count" class="method">
-    <h4><span title="System.int">int</span> <strong>Count</strong> get; </h4>
-    <div class="content">Gets the number of vertices in the polygon. 
-        <div id="warning">
-          <b>Obsolete:</b> Use VertexCount instead, obsolete since 6/12/2017
-        </div>
-      
-    </div>
-  </div>
   <div id="Edges" class="method">
     <h4><span title="System.Collections.Generic.IEnumerable<LineSegment2D>">IEnumerable&lt;LineSegment2D&gt;</span> <strong>Edges</strong> get; </h4>
     <div class="content">Gets a list of Edges 
-      
-    </div>
-  </div>
-  <div id="Item" class="method">
-    <h4><a href="../MathNet.Spatial.Euclidean/Point2D.htm">Point2D</a> <strong>Item</strong> get; </h4>
-    <div class="content">A index into the list of vertices 
-        <div id="warning">
-          <b>Obsolete:</b> Use Vertices instead, obsolete since 6/12/2017
-        </div>
       
     </div>
   </div>

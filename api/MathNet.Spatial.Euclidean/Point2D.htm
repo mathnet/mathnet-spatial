@@ -107,9 +107,6 @@
 			<h3 class="section">Constructors</h3>
 			<ul>
 				<li><a href="../MathNet.Spatial.Euclidean/Point2D.htm#.ctor">Point2D</a></li>
-				<li><a href="../MathNet.Spatial.Euclidean/Point2D.htm#.ctor">Point2D</a></li>
-				<li><a href="../MathNet.Spatial.Euclidean/Point2D.htm#.ctor">Point2D</a></li>
-				<li><a href="../MathNet.Spatial.Euclidean/Point2D.htm#.ctor">Point2D</a></li>
 			</ul>
 
 			<h3 class="section">Static Functions</h3>
@@ -132,13 +129,11 @@
 				<li><a href="../MathNet.Spatial.Euclidean/Point2D.htm#Equals">Equals</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/Point2D.htm#GetHashCode">GetHashCode</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/Point2D.htm#GetType">GetType</a></li>
-				<li><a href="../MathNet.Spatial.Euclidean/Point2D.htm#ToPoint3D">ToPoint3D</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/Point2D.htm#ToString">ToString</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/Point2D.htm#ToString">ToString</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/Point2D.htm#ToString">ToString</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/Point2D.htm#ToVector">ToVector</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/Point2D.htm#ToVector2D">ToVector2D</a></li>
-				<li><a href="../MathNet.Spatial.Euclidean/Point2D.htm#TransformBy">TransformBy</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/Point2D.htm#TransformBy">TransformBy</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/Point2D.htm#VectorTo">VectorTo</a></li>
 			</ul>
@@ -160,46 +155,6 @@
 	<h3 class="section">Public Constructors</h3>
 	
 	<div id=".ctor" class="method">
-		<h4> <strong>Point2D</strong>(<span title="System.Double[]">Double[]</span> data)</h4>
-		<div class="content">Initializes a new instance of the  <a href="../MathNet.Spatial.Euclidean/Point2D.htm">Point2D</a>  struct.
-Creates a point from a list of coordinates (x, y) 
-        <div id="warning">
-          <b>Obsolete:</b> This constructor will be removed. Made obsolete 2017-12-03.
-        </div>
-
-
-      <div class="parameters">
-        <h5>Parameters</h5>
-
-          <h6><code><span title="System.Double[]">Double[]</span></code> data</h6>
-          <p class="comments">a pair of coordinates in the order x, y </p>
-      </div>
-
-      
-    </div>
-	</div>
-	<div id=".ctor" class="method">
-		<h4> <strong>Point2D</strong>(<span title="System.double">double</span> r, <a href="../MathNet.Spatial.Units/Angle.htm">Angle</a> a)</h4>
-		<div class="content">Initializes a new instance of the  <a href="../MathNet.Spatial.Euclidean/Point2D.htm">Point2D</a>  struct.
-Creates a point r from origin rotated a counterclockwise from X-Axis 
-        <div id="warning">
-          <b>Obsolete:</b> This constructor will be removed, use FromPolar. Made obsolete 2017-12-03.
-        </div>
-
-
-      <div class="parameters">
-        <h5>Parameters</h5>
-
-          <h6><code><span title="System.double">double</span></code> r</h6>
-          <p class="comments">distance from origin </p>
-          <h6><code><a href="../MathNet.Spatial.Units/Angle.htm">Angle</a></code> a</h6>
-          <p class="comments">the angle </p>
-      </div>
-
-      
-    </div>
-	</div>
-	<div id=".ctor" class="method">
 		<h4> <strong>Point2D</strong>(<span title="System.double">double</span> x, <span title="System.double">double</span> y)</h4>
 		<div class="content">Initializes a new instance of the  <a href="../MathNet.Spatial.Euclidean/Point2D.htm">Point2D</a>  struct.
 Creates a point for given coordinates (x, y) 
@@ -217,37 +172,18 @@ Creates a point for given coordinates (x, y)
       
     </div>
 	</div>
-	<div id=".ctor" class="method">
-		<h4> <strong>Point2D</strong>(<span title="System.Collections.Generic.IEnumerable<double>">IEnumerable&lt;double&gt;</span> data)</h4>
-		<div class="content">Initializes a new instance of the  <a href="../MathNet.Spatial.Euclidean/Point2D.htm">Point2D</a>  struct.
-Creates a point from a list of coordinates (x, y) 
-        <div id="warning">
-          <b>Obsolete:</b> This constructor will be removed. Made obsolete 2017-12-03.
-        </div>
-
-
-      <div class="parameters">
-        <h5>Parameters</h5>
-
-          <h6><code><span title="System.Collections.Generic.IEnumerable<double>">IEnumerable&lt;double&gt;</span></code> data</h6>
-          <p class="comments">a pair of coordinates in the order x, y </p>
-      </div>
-
-      
-    </div>
-	</div>
 	
 	<h3 class="section">Public Static Functions</h3>
 	
 	<div id="Centroid" class="method">
-		<h4><a href="../MathNet.Spatial.Euclidean/Point2D.htm">Point2D</a> <strong>Centroid</strong>(<span title="System.Collections.Generic.IEnumerable<Point2D>">IEnumerable&lt;Point2D&gt;</span> points)</h4>
+		<h4><a href="../MathNet.Spatial.Euclidean/Point2D.htm">Point2D</a> <strong>Centroid</strong>(<span title="MathNet.Spatial.Euclidean.Point2D[]">Point2D[]</span> points)</h4>
 		<div class="content">Returns the centeroid or center of mass of any set of points 
 
 
       <div class="parameters">
         <h5>Parameters</h5>
 
-          <h6><code><span title="System.Collections.Generic.IEnumerable<Point2D>">IEnumerable&lt;Point2D&gt;</span></code> points</h6>
+          <h6><code><span title="MathNet.Spatial.Euclidean.Point2D[]">Point2D[]</span></code> points</h6>
           <p class="comments">a list of points </p>
       </div>
 
@@ -260,14 +196,14 @@ Creates a point from a list of coordinates (x, y)
     </div>
 	</div>
 	<div id="Centroid" class="method">
-		<h4><a href="../MathNet.Spatial.Euclidean/Point2D.htm">Point2D</a> <strong>Centroid</strong>(<span title="MathNet.Spatial.Euclidean.Point2D[]">Point2D[]</span> points)</h4>
+		<h4><a href="../MathNet.Spatial.Euclidean/Point2D.htm">Point2D</a> <strong>Centroid</strong>(<span title="System.Collections.Generic.IEnumerable<Point2D>">IEnumerable&lt;Point2D&gt;</span> points)</h4>
 		<div class="content">Returns the centeroid or center of mass of any set of points 
 
 
       <div class="parameters">
         <h5>Parameters</h5>
 
-          <h6><code><span title="MathNet.Spatial.Euclidean.Point2D[]">Point2D[]</span></code> points</h6>
+          <h6><code><span title="System.Collections.Generic.IEnumerable<Point2D>">IEnumerable&lt;Point2D&gt;</span></code> points</h6>
           <p class="comments">a list of points </p>
       </div>
 
@@ -387,7 +323,7 @@ Creates a point r from origin rotated a counterclockwise from X-Axis
     </div>
 	</div>
 	<div id="TryParse" class="method">
-		<h4><span title="System.bool">bool</span> <strong>TryParse</strong>(<span title="System.string">string</span> text, <span title="System.IFormatProvider">IFormatProvider</span> formatProvider, <span title="MathNet.Spatial.Euclidean.Point2D&">Point2D&amp;</span> result)</h4>
+		<h4><span title="System.bool">bool</span> <strong>TryParse</strong>(<span title="System.string">string</span> text, <span title="MathNet.Spatial.Euclidean.Point2D&">Point2D&amp;</span> result)</h4>
 		<div class="content">
 
 
@@ -396,7 +332,7 @@ Creates a point r from origin rotated a counterclockwise from X-Axis
     </div>
 	</div>
 	<div id="TryParse" class="method">
-		<h4><span title="System.bool">bool</span> <strong>TryParse</strong>(<span title="System.string">string</span> text, <span title="MathNet.Spatial.Euclidean.Point2D&">Point2D&amp;</span> result)</h4>
+		<h4><span title="System.bool">bool</span> <strong>TryParse</strong>(<span title="System.string">string</span> text, <span title="System.IFormatProvider">IFormatProvider</span> formatProvider, <span title="MathNet.Spatial.Euclidean.Point2D&">Point2D&amp;</span> result)</h4>
 		<div class="content">
 
 
@@ -485,32 +421,6 @@ Creates a point r from origin rotated a counterclockwise from X-Axis
       
     </div>
 	</div>
-	<div id="ToPoint3D" class="method">
-		<h4><a href="../MathNet.Spatial.Euclidean/Point3D.htm">Point3D</a> <strong>ToPoint3D</strong>()</h4>
-		<div class="content">return new Point3D(X, Y, 0); 
-        <div id="warning">
-          <b>Obsolete:</b> Use projections instead, Obsolete on 2017-12-10
-        </div>
-
-
-
-      <div class="return">
-        <h5>Return</h5>
-        <h6><code><a href="../MathNet.Spatial.Euclidean/Point3D.htm">Point3D</a></code></h6>
-        <p>A  <a href="../MathNet.Spatial.Euclidean/Point3D.htm">Point3D</a>  with x and y from this instance and z = 0 </p>
-      </div>
-      
-    </div>
-	</div>
-	<div id="ToString" class="method">
-		<h4><span title="System.string">string</span> <strong>ToString</strong>(<span title="System.string">string</span> format, <span title="System.IFormatProvider">IFormatProvider</span> provider)</h4>
-		<div class="content">
-
-
-
-      
-    </div>
-	</div>
 	<div id="ToString" class="method">
 		<h4><span title="System.string">string</span> <strong>ToString</strong>()</h4>
 		<div class="content">
@@ -540,6 +450,15 @@ Creates a point r from origin rotated a counterclockwise from X-Axis
       
     </div>
 	</div>
+	<div id="ToString" class="method">
+		<h4><span title="System.string">string</span> <strong>ToString</strong>(<span title="System.string">string</span> format, <span title="System.IFormatProvider">IFormatProvider</span> provider)</h4>
+		<div class="content">
+
+
+
+      
+    </div>
+	</div>
 	<div id="ToVector" class="method">
 		<h4><span title="MathNet.Numerics.LinearAlgebra.Vector<double>">Vector&lt;double&gt;</span> <strong>ToVector</strong>()</h4>
 		<div class="content">Convert to a Math.NET Numerics dense vector of length 2. 
@@ -564,29 +483,6 @@ Creates a point r from origin rotated a counterclockwise from X-Axis
         <h5>Return</h5>
         <h6><code><a href="../MathNet.Spatial.Euclidean/Vector2D.htm">Vector2D</a></code></h6>
         <p>A vector equivalent to this point </p>
-      </div>
-      
-    </div>
-	</div>
-	<div id="TransformBy" class="method">
-		<h4><a href="../MathNet.Spatial.Euclidean/Point3D.htm">Point3D</a> <strong>TransformBy</strong>(<a href="../MathNet.Spatial.Euclidean/CoordinateSystem.htm">CoordinateSystem</a> cs)</h4>
-		<div class="content">Applies a transform coordinate system to the point 
-        <div id="warning">
-          <b>Obsolete:</b> Use projections instead, Obsolete on 2017-12-10
-        </div>
-
-
-      <div class="parameters">
-        <h5>Parameters</h5>
-
-          <h6><code><a href="../MathNet.Spatial.Euclidean/CoordinateSystem.htm">CoordinateSystem</a></code> cs</h6>
-          <p class="comments">A coordinate system </p>
-      </div>
-
-      <div class="return">
-        <h5>Return</h5>
-        <h6><code><a href="../MathNet.Spatial.Euclidean/Point3D.htm">Point3D</a></code></h6>
-        <p>A new 3D point </p>
       </div>
       
     </div>

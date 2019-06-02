@@ -97,7 +97,7 @@
     <div class="header">
 		<p class="class"><strong>Type</strong> PolyLine3D</p>
 		<p><strong>Namespace</strong> MathNet.Spatial.Euclidean</p>
-		<p><strong>Interfaces</strong> <span title="System.Collections.Generic.IEnumerable<Point3D>">IEnumerable&lt;Point3D&gt;</span>, <span title="System.IEquatable<PolyLine3D>">IEquatable&lt;PolyLine3D&gt;</span></p>
+		<p><strong>Interfaces</strong> <span title="System.IEquatable<PolyLine3D>">IEquatable&lt;PolyLine3D&gt;</span></p>
 	</div>
     <div class="sub-header">
 			<div id="summary">A PolyLine is an ordered series of line segments in space represented as list of connected Point3Ds. 
@@ -114,7 +114,6 @@
 				<li><a href="../MathNet.Spatial.Euclidean/PolyLine3D.htm#Equals">Equals</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/PolyLine3D.htm#Equals">Equals</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/PolyLine3D.htm#Equals">Equals</a></li>
-				<li><a href="../MathNet.Spatial.Euclidean/PolyLine3D.htm#GetEnumerator">GetEnumerator</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/PolyLine3D.htm#GetHashCode">GetHashCode</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/PolyLine3D.htm#GetPointAtFractionAlongCurve">GetPointAtFractionAlongCurve</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/PolyLine3D.htm#GetPointAtLengthFromStart">GetPointAtLengthFromStart</a></li>
@@ -125,8 +124,6 @@
 
 			<h3 class="section">Properties</h3>
 			<ul>
-				<li><a href="../MathNet.Spatial.Euclidean/PolyLine3D.htm#Count">Count</a></li>
-				<li><a href="../MathNet.Spatial.Euclidean/PolyLine3D.htm#Item">Item</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/PolyLine3D.htm#Length">Length</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/PolyLine3D.htm#VertexCount">VertexCount</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/PolyLine3D.htm#Vertices">Vertices</a></li>
@@ -217,18 +214,6 @@ Creates a PolyLine3D from a pre-existing IEnumerable of Point3Ds
       
     </div>
 	</div>
-	<div id="GetEnumerator" class="method">
-		<h4><span title="System.Collections.Generic.IEnumerator<Point3D>">IEnumerator&lt;Point3D&gt;</span> <strong>GetEnumerator</strong>()</h4>
-		<div class="content">
-        <div id="warning">
-          <b>Obsolete:</b> Use Vertices instead, obsolete since 2018-01-12
-        </div>
-
-
-
-      
-    </div>
-	</div>
 	<div id="GetHashCode" class="method">
 		<h4><span title="System.int">int</span> <strong>GetHashCode</strong>()</h4>
 		<div class="content">
@@ -301,24 +286,6 @@ an argument greater than the length of the curve will return the last point.
 	
   <h3 class="section">Public Properties</h3>
 
-  <div id="Count" class="method">
-    <h4><span title="System.int">int</span> <strong>Count</strong> get; </h4>
-    <div class="content">Gets an integer representing the number of Point3D objects in the polyline 
-        <div id="warning">
-          <b>Obsolete:</b> Use VertexCount instead, obsolete since 2018-01-12
-        </div>
-      
-    </div>
-  </div>
-  <div id="Item" class="method">
-    <h4><a href="../MathNet.Spatial.Euclidean/Point3D.htm">Point3D</a> <strong>Item</strong> get; </h4>
-    <div class="content">Returns a point in the polyline by index number 
-        <div id="warning">
-          <b>Obsolete:</b> Use Vertices instead, obsolete since 2018-01-12
-        </div>
-      
-    </div>
-  </div>
   <div id="Length" class="method">
     <h4><span title="System.double">double</span> <strong>Length</strong> get; </h4>
     <div class="content">Gets the length of the polyline, computed as the sum of the lengths of every segment 
