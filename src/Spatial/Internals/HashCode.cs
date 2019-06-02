@@ -6,7 +6,6 @@ namespace MathNet.Spatial.Internals
 {
     // The contents of this file is taken from https://github.com/dotnet/coreclr/blob/master/src/mscorlib/shared/System/HashCode.cs
     // To be replaced by the framework implementation when released for the appropriate builds
-#pragma warning disable SA1203, SA1101, SA1600, SA1512, SA1515, SA1503, SA1028, SA1308, SA1512, SA1202, SA1311, SA1028, SA1132, SA1309, SA1108, SA1520
 
     // Licensed to the .NET Foundation under one or more agreements.
     // The .NET Foundation licenses this file to you under the MIT license.

@@ -2,7 +2,7 @@
 using System.Globalization;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Spatial.Euclidean;
-using MathNet.Spatial.Internals;
+using HashCode = MathNet.Spatial.Internals.HashCode;
 
 namespace MathNet.Spatial.Projective
 {

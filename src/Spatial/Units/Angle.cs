@@ -4,6 +4,7 @@ using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 using MathNet.Spatial.Internals;
+using HashCode = MathNet.Spatial.Internals.HashCode;
 
 namespace MathNet.Spatial.Units
 {

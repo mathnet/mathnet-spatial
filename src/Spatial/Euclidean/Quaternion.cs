@@ -2,8 +2,8 @@
 using System.Diagnostics.Contracts;
 using MathNet.Numerics;
 using MathNet.Numerics.LinearAlgebra.Double;
-using MathNet.Spatial.Internals;
 using MathNet.Spatial.Units;
+using HashCode = MathNet.Spatial.Internals.HashCode;
 
 namespace MathNet.Spatial.Euclidean
 {

@@ -1,14 +1,13 @@
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Globalization;
-using System.Linq;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Spatial.Internals;
 using MathNet.Spatial.Units;
+using HashCode = MathNet.Spatial.Internals.HashCode;
 
 namespace MathNet.Spatial.Euclidean
 {
@@ -477,7 +476,7 @@ namespace MathNet.Spatial.Euclidean
         /// Compute the angle between this vector and another using the arccosine of the dot product.
         /// </summary>
         /// <param name="v">The other vector</param>
-        /// <returns>The angle between the vectors, with a range between 0° and 180°</returns>
+        /// <returns>The angle between the vectors, with a range between 0Â° and 180Â°</returns>
         [Pure]
         public Angle AngleTo(Vector3D v)
         {
@@ -490,7 +489,7 @@ namespace MathNet.Spatial.Euclidean
         /// Compute the angle between this vector and a unit vector using the arccosine of the dot product.
         /// </summary>
         /// <param name="v">The other vector</param>
-        /// <returns>The angle between the vectors, with a range between 0° and 180°</returns>
+        /// <returns>The angle between the vectors, with a range between 0Â° and 180Â°</returns>
         [Pure]
         public Angle AngleTo(UnitVector3D v)
         {

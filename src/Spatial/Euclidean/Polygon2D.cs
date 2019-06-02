@@ -4,6 +4,7 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using MathNet.Spatial.Internals;
 using MathNet.Spatial.Units;
+using HashCode = MathNet.Spatial.Internals.HashCode;
 
 namespace MathNet.Spatial.Euclidean
 {
