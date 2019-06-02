@@ -58,30 +58,6 @@ namespace MathNet.Spatial.Euclidean
         public static Point3D NaN { get; } = new Point3D(double.NaN, double.NaN, double.NaN);
 
         /// <summary>
-        /// Multiplies a matrix and a vector representation of the point together
-        /// </summary>
-        /// <param name="left">A matrix</param>
-        /// <param name="right">A point</param>
-        /// <returns>A Mathnet.Numerics vector</returns>
-        [Obsolete("Not sure this is nice")]
-        public static Vector<double> operator *(Matrix<double> left, Point3D right)
-        {
-            return left * right.ToVector();
-        }
-
-        /// <summary>
-        /// Multiplies a matrix and a vector representation of the point together
-        /// </summary>
-        /// <param name="left">A point</param>
-        /// <param name="right">A matrix</param>
-        /// <returns>A Mathnet.Numerics vector</returns>
-        [Obsolete("Not sure this is nice")]
-        public static Vector<double> operator *(Point3D left, Matrix<double> right)
-        {
-            return left.ToVector() * right;
-        }
-
-        /// <summary>
         /// Adds a point and a vector together
         /// </summary>
         /// <param name="point">A point</param>
