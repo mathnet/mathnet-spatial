@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
+using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
@@ -48,8 +49,18 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="offset">The Plane's distance from the origin along its normal vector.</param>
         public Plane(UnitVector3D normal, double offset = 0)
         {
+            var distance = -offset;
+
+            var values = new[] { distance, normal.X, normal.Y, normal.Z };
+            var firstNotZero = values.First(value => value != 0);
+            if (firstNotZero < 0)
+            {
+                normal = normal.Negate();
+                distance = -distance;
+            }
+
             this.Normal = normal;
-            this.D = -offset;
+            this.D = distance;
         }
 
         /// <summary>

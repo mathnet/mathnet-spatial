@@ -234,5 +234,18 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             var numbers = inputstring.Split(',').Select(t => double.Parse(t)).ToArray();
             return new Plane(numbers[0], numbers[1], numbers[2], numbers[3]);
         }
+
+        [TestCase(1, 2, 3, 4)]
+        [TestCase(-1, 2, 3, 4)]
+        [TestCase(1, -2, 3, 4)]
+        [TestCase(1, 2, -3, 4)]
+        [TestCase(1, 2, 3, -4)]
+        public void GetHashCodeAndEquals(double x, double y, double z, double d)
+        {
+            var plane1 = new Plane(x, y, z, d);
+            var plane2 = new Plane(-x, -y, -z, -d);
+            AssertGeometry.AreEqual(plane1, plane2);
+            Assert.AreEqual(plane1.GetHashCode(), plane2.GetHashCode());
+        }
     }
 }
