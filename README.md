@@ -33,7 +33,7 @@ If you do not want to use the official binaries, or if you like to modify, debug
 
 * The Visual Studio solutions should build out of the box, without any preparation steps or package restores.
 * Instead of a compatible IDE you can also build the solutions with `msbuild`, or on Mono with `xbuild`.
-* The full build including unit tests, docs, NuGet and Zip packages is using [FAKE](http://fsharp.github.io/FAKE/).
+* The full build including unit tests, docs, NuGet and Zip packages is using [FAKE](https://fsharp.github.io/FAKE/).
 
 ### How to build with MSBuild/XBuild
 

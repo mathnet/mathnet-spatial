@@ -7,7 +7,7 @@ The Math.NET project is a community effort. We accept contributions and pull req
 
 ### Maintainers
 
-- [Christoph Rüegg](http://christoph.ruegg.name/) (@cdrnet) ([keybase.io/cdrnet](https://keybase.io/cdrnet))
+- [Christoph Rüegg](https://christoph.ruegg.name/) (@cdrnet) ([keybase.io/cdrnet](https://keybase.io/cdrnet))
 - Johan Larsson
 
 ### Code Contributors
@@ -17,7 +17,7 @@ Feel free to add a link to your personal site/blog and/or twitter handle.*
 
 - Johan Larsson
 - Adam Jones
-- [Christoph Rüegg](http://christoph.ruegg.name/) (@cdrnet)
+- [Christoph Rüegg](https://christoph.ruegg.name/) (@cdrnet)
 - Matt Jarvis
 - Mostafa Ali
 - MaLiN22223

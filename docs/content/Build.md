@@ -30,7 +30,7 @@ FAKE
 ----
 
 The fully automated build including unit tests, documentation and api
-reference, NuGet and Zip packages is using [FAKE](http://fsharp.github.io/FAKE/).
+reference, NuGet and Zip packages is using [FAKE](https://fsharp.github.io/FAKE/).
 
 FAKE itself is not included in the repository but it will download and bootstrap
 itself automatically when build.cmd is run the first time. Note that this step
@@ -54,7 +54,7 @@ is *not* required when using Visual Studio or `msbuild` directly.
     build.cmd All    # build, test, docs, api reference (.Net 4.0)
 
 If the build or tests fail claiming that FSharp.Core was not be found, see
-[fsharp.org](http://fsharp.org/use/windows/) or install the
+[fsharp.org](https://fsharp.org/use/windows/) or install the
 [Visual F# 3.0 Tools](https://go.microsoft.com/fwlink/?LinkId=261286) directly.
 
 Creating a Release
