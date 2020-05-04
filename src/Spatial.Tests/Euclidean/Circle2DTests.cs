@@ -32,6 +32,10 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         [TestCase("-7,4", "-4,5", "0,3", "-4,0", 5)]
         [TestCase("1,1", "2,4", "5,3", "3,2", 2.2360679775)]
         [TestCase("-1,0", "0,1", "1,0", "0,0", 1)]
+        [TestCase("0,0", "0,1", "1,0", "0.5,0.5", 0.70710678118654752440)] // radius = sqrt(2)
+        [TestCase("0,0", "0,1", "1,1", "0.5,0.5", 0.70710678118654752440)]
+        [TestCase("0,0", "1,0", "0,1", "0.5,0.5", 0.70710678118654752440)]
+        [TestCase("0,0", "1,1", "1,0", "0.5,0.5", 0.70710678118654752440)]
         public void CircleFromThreePoints(string p1s, string p2s, string p3s, string centers, double radius)
         {
             var p1 = Point2D.Parse(p1s);
