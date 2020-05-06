@@ -82,27 +82,48 @@ namespace MathNet.Spatial.Euclidean
         /// <exception cref="ArgumentException">An exception is thrown if no possible circle can be formed from the points</exception>
         public static Circle2D FromPoints(Point2D pointA, Point2D pointB, Point2D pointC)
         {
-            // ReSharper disable InconsistentNaming
-            var midpointAB = Point2D.MidPoint(pointA, pointB);
-            var midpointBC = Point2D.MidPoint(pointB, pointC);
-            var gradientAB = (pointB.Y - pointA.Y) / (pointB.X - pointA.X);
-            var gradientBC = (pointC.Y - pointB.Y) / (pointC.X - pointB.X);
-            var gradientl1 = -1 / gradientAB;
-            var gradientl2 = -1 / gradientBC;
+            // https://mathworld.wolfram.com/Circle.html
+            //
+            // The equation of a circle passing through A={x1, y1}, B={x2,y2}, and C={x3,y3} is
+            //    | x^2+y^2   x  y  1 | = 0
+            //    | x1^2+y1^2 x1 y1 1 |
+            //    | x2^2+y2^2 x2 y2 1 |
+            //    | x3^2+y3^2 x3 y3 1 |
+            //
+            // By using the cofactor expansion,
+            //    (x^2+y^2)*a + x*d + y*e + f = 0
+            //    where a = | x1 y1 1 |, d = -| x1^2+y1^2 y1 1 |, e = | x1^2+y1^2 x1 1 |, and f = -| x1^2+y1^2 x1 y1 |
+            //              | x2 y2 1 |       | x2^2+y2^2 y2 1 |      | x2^2+y2^2 x2 1 |           | x2^2+y2^2 x2 y2 |
+            //              | x3 y3 1 |       | x3^2+y3^2 y3 1 |      | x3^2+y3^2 x3 1 |           | x3^2+y3^2 x3 y3 |
+            //
+            // In the center-radius form,
+            //    (x - x0)^2 + (y - y0^2) = r^2
+            //    where x0 = -d/(2a), y0 = -e/(2a), and r = sqrt((d^2+e^2)/(4a^2) - f/a))
 
-            // ReSharper restore InconsistentNaming
-            var denominator = gradientl2 - gradientl1;
-            var nominator = midpointAB.Y - (gradientl1 * midpointAB.X) + (gradientl2 * midpointBC.X) - midpointBC.Y;
-            var centerX = nominator / denominator;
-            var centerY = (gradientl1 * (centerX - midpointAB.X)) + midpointAB.Y;
-            var center = new Point2D(centerX, centerY);
+            var x1 = pointA.X; var y1 = pointA.Y;
+            var x2 = pointB.X; var y2 = pointB.Y;
+            var x3 = pointC.X; var y3 = pointC.Y;
 
-            if (double.IsNaN(center.X) || double.IsNaN(center.Y) || double.IsInfinity(center.X) || double.IsInfinity(center.Y))
+            var a = x1 * y2 - x1 * y3 - x2 * y1 + x2 * y3 + x3 * y1 - x3 * y2;
+            if (a == 0)
             {
                 throw new ArgumentException("Points cannot form a circle, are they collinear?");
             }
 
-            return new Circle2D(center, center.DistanceTo(pointA));
+            var sq1 = x1 * x1 + y1 * y1;
+            var sq2 = x2 * x2 + y2 * y2;
+            var sq3 = x3 * x3 + y3 * y3;
+
+            var d = -(sq1 * y2 - sq1 * y3 - sq2 * y1 + sq2 * y3 + sq3 * y1 - sq3 * y2);
+            var e = sq1 * x2 - sq1 * x3 - sq2 * x1 + sq2 * x3 + sq3 * x1 - sq3 * x2;
+            var f = -(sq1 * x2 * y3 - sq1 * x3 * y2 - sq2 * x1 * y3 + sq2 * x3 * y1 + sq3 * x1 * y2 - sq3 * x2 * y1);
+
+            var centerX = -d / (2 * a);
+            var centerY = -e / (2 * a);
+            var center = new Point2D(centerX, centerY);
+            var radius = Math.Sqrt((d * d + e * e) / (4 * a * a) - f / a); // or radius = center.DistanceTo(pointA);
+
+            return new Circle2D(center, radius);            
         }
 
         /// <summary>
