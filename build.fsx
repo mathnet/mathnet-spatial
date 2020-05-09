@@ -259,9 +259,9 @@ Target "PublishTag" (fun _ -> publishReleaseTag "Math.NET Spatial" "" spatialRel
 Target "PublishDocs" (fun _ -> publishDocs spatialRelease)
 Target "PublishApi" (fun _ -> publishApi spatialRelease)
 
-Target "PublishArchive" (fun _ -> publishArchives [spatialSolution])
+Target "PublishArchive" (fun _ -> publishArchives [spatialSolution; spatialStrongNameSolution])
 
-Target "PublishNuGet" (fun _ -> publishNuGet [spatialSolution])
+Target "PublishNuGet" (fun _ -> publishNuGet [spatialSolution; spatialStrongNameSolution])
 
 Target "Publish" DoNothing
 Dependencies "Publish" [ "PublishTag"; "PublishDocs"; "PublishApi"; "PublishArchive"; "PublishNuGet" ]
