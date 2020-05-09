@@ -1,21 +1,33 @@
 <Project>
     <PropertyGroup>
-        <RuntimeFrameworkVersion>2.2.4</RuntimeFrameworkVersion>
         <NetStandardImplicitPackageVersion>2.0.3</NetStandardImplicitPackageVersion>
         <Company>Math.NET Project</Company>
         <Product>Math.NET Spatial</Product>
         <Authors>Christoph Ruegg, Johan Larsson</Authors>
         <Copyright>Copyright Math.NET Project</Copyright>
         <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-        <PackageLicenseUrl>https://spatial.mathdotnet.com/License.html</PackageLicenseUrl>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageProjectUrl>https://spatial.mathdotnet.com/</PackageProjectUrl>
-        <PackageIconUrl>https://www.mathdotnet.com/images/MathNet128.png</PackageIconUrl>
+        <PackageIcon>icon.png</PackageIcon>
         <RepositoryUrl>https://github.com/mathnet/mathnet-spatial</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <NeutralLanguage>en</NeutralLanguage>
         <Configuration Condition="'$(Configuration)' == ''">Release</Configuration>
     </PropertyGroup>
+    <PropertyGroup Condition="'$(StrongName)'=='True'">
+        <SignAssembly>true</SignAssembly>
+        <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)MathNet.Spatial.snk</AssemblyOriginatorKeyFile>
+        <DelaySign>false</DelaySign>
+        <CommonConstants>STRONGNAME</CommonConstants>
+        <PackageIdSuffix>.Signed</PackageIdSuffix>
+        <TitleSuffix> - Strong Name Edition</TitleSuffix>
+        <DescriptionSuffix> This package contains strong-named assemblies for legacy use cases (not recommended).</DescriptionSuffix>
+        <DefineConstants>$(CommonConstants)</DefineConstants>
+    </PropertyGroup>
     <PropertyGroup Condition="'$(TargetFramework)'!='netstandard1.3'">
         <DefineConstants>NATIVE;$(CommonConstants)</DefineConstants>
     </PropertyGroup>
+    <ItemGroup>
+        <None Include="$(MSBuildThisFileDirectory)icon.png" Pack="true" Visible="false" PackagePath="\" />
+    </ItemGroup>
 </Project>

@@ -5,6 +5,7 @@
         <NeutralLanguage>en-US</NeutralLanguage>
         <CodeAnalysisRuleSet>Spatial.Analyzers.ruleset</CodeAnalysisRuleSet>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <IsPackable>false</IsPackable>
         <RootNamespace>SpatialAnalyzers</RootNamespace>
         <NoWarn>1701;1702;1705;1591;1573</NoWarn>
     </PropertyGroup>

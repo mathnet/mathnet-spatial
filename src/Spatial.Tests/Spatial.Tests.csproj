@@ -3,14 +3,14 @@
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <GenerateProgramFile>false</GenerateProgramFile>
-        <TargetFrameworks>net461;netcoreapp2.2</TargetFrameworks>
+        <TargetFrameworks>net461;netcoreapp3.1</TargetFrameworks>
         <GenerateAssemblyInfo>True</GenerateAssemblyInfo>
         <AssemblyName>MathNet.Spatial.Tests</AssemblyName>
         <RootNamespace>MathNet.Spatial.Tests</RootNamespace>
         <IsPackable>false</IsPackable>
         <NoWarn>1701;1702;1705;1591;1573</NoWarn>
     </PropertyGroup>
-    <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
+    <ItemGroup Condition="'$(TargetFramework)' == 'net461'">
         <Reference Include="System" />
         <Reference Include="System.Core" />
         <Reference Include="System.Numerics" />

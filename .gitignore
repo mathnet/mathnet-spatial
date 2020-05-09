@@ -12,6 +12,7 @@ out/
 .vs
 .vscode
 .idea
+.ionide
 
 # Test & Analysis Results
 [Tt]est[Rr]esult*/
@@ -20,6 +21,7 @@ out/
 TestResult.xml
 TestResults.xml
 coverage.*
+BenchmarkDotNet.Artifacts
 *.dotCover
 *.psess
 *.vsp

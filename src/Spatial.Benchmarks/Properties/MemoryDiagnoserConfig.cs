@@ -7,7 +7,7 @@ namespace Spatial.Benchmarks.Properties
     {
         public MemoryDiagnoserConfig()
         {
-            this.Add(MemoryDiagnoser.Default);
+            this.AddDiagnoser(MemoryDiagnoser.Default);
         }
     }
 }

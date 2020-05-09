@@ -10,31 +10,31 @@ namespace Spatial.Benchmarks
     {
         public SpatialConfig()
         {
-            this.Add(DefaultConfig.Instance.GetLoggers().ToArray());
-            this.Add(DefaultConfig.Instance.GetValidators().ToArray());
-            this.Add(DefaultConfig.Instance.GetHardwareCounters().ToArray());
-            this.Add(DefaultConfig.Instance.GetDiagnosers().ToArray());
-            this.Add(DefaultConfig.Instance.GetColumnProviders().ToArray());
-            this.Add(MarkdownExporter.GitHub);
+            this.AddLogger(DefaultConfig.Instance.GetLoggers().ToArray());
+            this.AddValidator(DefaultConfig.Instance.GetValidators().ToArray());
+            this.AddHardwareCounters(DefaultConfig.Instance.GetHardwareCounters().ToArray());
+            this.AddDiagnoser(DefaultConfig.Instance.GetDiagnosers().ToArray());
+            this.AddColumnProvider(DefaultConfig.Instance.GetColumnProviders().ToArray());
+            this.AddExporter(MarkdownExporter.GitHub);
 #if NET461
-            this.Add(Job.Default
-                .With(Platform.X86)
-                .With(Jit.LegacyJit)
-                .With(Runtime.Clr));
-            this.Add(Job.Default
-                .With(Platform.X64)
-                .With(Jit.LegacyJit)
-                .With(Runtime.Clr));
-            this.Add(Job.Default
-                .With(Platform.X64)
-                .With(Jit.RyuJit)
-                .With(Runtime.Clr));
+            this.AddJob(Job.Default
+                .WithPlatform(Platform.X86)
+                .WithJit(Jit.LegacyJit)
+                .WithRuntime(ClrRuntime.Net461));
+            this.AddJob(Job.Default
+                .WithPlatform(Platform.X64)
+                .WithJit(Jit.LegacyJit)
+                .WithRuntime(ClrRuntime.Net461));
+            this.AddJob(Job.Default
+                .WithPlatform(Platform.X64)
+                .WithJit(Jit.RyuJit)
+                .WithRuntime(ClrRuntime.Net461));
 #endif
-#if NETCOREAPP2_2
-            this.Add(Job.Default
-                .With(Platform.X64)
-                .With(Jit.RyuJit)
-                .With(Runtime.Core));
+#if NETCOREAPP3_1
+            this.AddJob(Job.Default
+                .WithPlatform(Platform.X64)
+                .WithJit(Jit.RyuJit)
+                .WithRuntime(CoreRuntime.Core31));
 #endif
         }
     }

@@ -41,19 +41,18 @@ traceHeader releases
 // SPATIAL PACKAGES
 
 let spatialZipPackage = zipPackage "MathNet.Spatial" "Math.NET Spatial" spatialRelease
-let spatialNuGetPackage = nugetPackage "MathNet.Spatial" spatialRelease
-let spatialProject = project "MathNet.Spatial" "src/Spatial/Spatial.csproj" [spatialNuGetPackage]
-let spatialSolution = solution "Spatial" "MathNet.Spatial.sln" [spatialProject] [spatialZipPackage]
-
 let spatialStrongNameZipPackage = zipPackage "MathNet.Spatial.Signed" "Math.NET Spatial" spatialRelease
+
+let spatialNuGetPackage = nugetPackage "MathNet.Spatial" spatialRelease
 let spatialStrongNameNuGetPackage = nugetPackage "MathNet.Spatial.Signed" spatialRelease
-let spatialStrongNameProject = project "MathNet.Spatial" "src/Spatial/Spatial.Signed.csproj" [spatialStrongNameNuGetPackage]
-let spatialStrongNameSolution = solution "Spatial.Signed" "MathNet.Spatial.Signed.sln" [spatialStrongNameProject] [spatialStrongNameZipPackage]
+
+let spatialProject = project "MathNet.Spatial" "src/Spatial/Spatial.csproj" [spatialNuGetPackage; spatialStrongNameNuGetPackage]
+let spatialSolution = solution "Spatial" "MathNet.Spatial.sln" [spatialProject] [spatialZipPackage; spatialStrongNameZipPackage]
 
 
 // ALL
 
-let allSolutions = [spatialSolution; spatialStrongNameSolution]
+let allSolutions = [spatialSolution]
 let allProjects = allSolutions |> List.collect (fun s -> s.Projects) |> List.distinct
 
 
@@ -65,15 +64,14 @@ Target "Start" DoNothing
 
 Target "Clean" (fun _ ->
     DeleteDirs (!! "src/**/obj/" ++ "src/**/bin/" )
-    DeleteDirs (!! "src/**/obj/" ++ "src/**/bin/" )
-    allSolutions |> List.iter (fun solution -> CleanDirs [ solution.OutputZipDir; solution.OutputNuGetDir; solution.OutputLibDir; solution.OutputLibStrongNameDir ])
-    allSolutions |> List.iter clean)
+    CleanDirs [ "out/api"; "out/docs" ]
+    allSolutions |> List.iter (fun solution -> CleanDirs [ solution.OutputZipDir; solution.OutputNuGetDir; solution.OutputLibDir; solution.OutputLibStrongNameDir ]))
 
 Target "ApplyVersion" (fun _ ->
     allProjects |> List.iter patchVersionInProjectFile
     patchVersionInAssemblyInfo "src/Spatial.Tests" spatialRelease)
 
-Target "Restore" (fun _ -> allSolutions |> List.iter restore)
+Target "Restore" (fun _ -> allSolutions |> List.iter restoreWeak)
 "Start"
   =?> ("Clean", not (hasBuildParam "incremental"))
   ==> "Restore"
@@ -97,28 +95,28 @@ Target "Build" (fun _ ->
     // Strong Name Build (with strong name, without certificate signature)
     if hasBuildParam "strongname" then
         CleanDirs (!! "src/**/obj/" ++ "src/**/bin/" )
-        restoreSN spatialStrongNameSolution
-        buildSN spatialStrongNameSolution
-        if isWindows && hasBuildParam "sign" then sign fingerprint timeserver spatialStrongNameSolution
-        collectBinariesSN spatialStrongNameSolution
-        zip spatialStrongNameZipPackage spatialStrongNameSolution.OutputZipDir spatialStrongNameSolution.OutputLibStrongNameDir (fun f -> f.Contains("MathNet.Spatial.") || f.Contains("MathNet.Numerics."))
+        restoreStrong spatialSolution
+        buildStrong spatialSolution
+        if isWindows && hasBuildParam "sign" then sign fingerprint timeserver spatialSolution
+        collectBinariesSN spatialSolution
+        zip spatialStrongNameZipPackage spatialSolution.OutputZipDir spatialSolution.OutputLibStrongNameDir (fun f -> f.Contains("MathNet.Spatial.") || f.Contains("MathNet.Numerics."))
         if isWindows then
-            packSN spatialStrongNameSolution
-            collectNuGetPackages spatialStrongNameSolution
+            packStrong spatialSolution
+            collectNuGetPackages spatialSolution
 
     // Normal Build (without strong name, with certificate signature)
     CleanDirs (!! "src/**/obj/" ++ "src/**/bin/" )
-    restore spatialSolution
-    build spatialSolution
+    restoreWeak spatialSolution
+    buildWeak spatialSolution
     if isWindows && hasBuildParam "sign" then sign fingerprint timeserver spatialSolution
     collectBinaries spatialSolution
     zip spatialZipPackage spatialSolution.OutputZipDir spatialSolution.OutputLibDir (fun f -> f.Contains("MathNet.Spatial.") || f.Contains("MathNet.Numerics."))
     if isWindows then
-        pack spatialSolution
+        packWeak spatialSolution
         collectNuGetPackages spatialSolution
 
     // NuGet Sign (all or nothing)
-    if isWindows && hasBuildParam "sign" then signNuGet fingerprint timeserver [spatialSolution; spatialStrongNameSolution]
+    if isWindows && hasBuildParam "sign" then signNuGet fingerprint timeserver [spatialSolution]
 
     )
 "Prepare" ==> "Build"
@@ -127,20 +125,12 @@ Target "Build" (fun _ ->
 // --------------------------------------------------------------------------------------
 // TEST
 // --------------------------------------------------------------------------------------
-
-let testLibrary testsDir testsProj framework =
-    DotNetCli.RunCommand
-        (fun c -> { c with WorkingDir = testsDir})
-        (sprintf "run -p %s --configuration Release --framework %s --no-restore --no-build"
-            testsProj
-            framework)
-
-let testSpatial framework = testLibrary "src/Spatial.Tests" "Spatial.Tests.csproj" framework
+let testSpatial framework = test "src/Spatial.Tests" "Spatial.Tests.csproj" framework
 Target "TestSpatial" DoNothing
-Target "TestSpatialCore2.2" (fun _ -> testSpatial "netcoreapp2.2")
+Target "TestSpatialCore3.1" (fun _ -> testSpatial "netcoreapp3.1")
 Target "TestSpatialNET461" (fun _ -> testSpatial "net461")
 Target "TestSpatialNET47"  (fun _ -> testSpatial "net47")
-"Build" ==> "TestSpatialCore2.2" ==> "TestSpatial"
+"Build" ==> "TestSpatialCore3.1" ==> "TestSpatial"
 "Build" =?> ("TestSpatialNET461", isWindows) ==> "TestSpatial"
 "Build" =?> ("TestSpatialNET47", isWindows)
 Target "Test" DoNothing
@@ -266,9 +256,9 @@ Target "PublishTag" (fun _ -> publishReleaseTag "Math.NET Spatial" "" spatialRel
 Target "PublishDocs" (fun _ -> publishDocs spatialRelease)
 Target "PublishApi" (fun _ -> publishApi spatialRelease)
 
-Target "PublishArchive" (fun _ -> publishArchives [spatialSolution; spatialStrongNameSolution])
+Target "PublishArchive" (fun _ -> publishArchives [spatialSolution])
 
-Target "PublishNuGet" (fun _ -> publishNuGet [spatialSolution; spatialStrongNameSolution])
+Target "PublishNuGet" (fun _ -> publishNuGet [spatialSolution])
 
 Target "Publish" DoNothing
 Dependencies "Publish" [ "PublishTag"; "PublishDocs"; "PublishApi"; "PublishArchive"; "PublishNuGet" ]

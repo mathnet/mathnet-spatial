@@ -31,53 +31,32 @@ trace rootDir
 // .Net SDK
 // --------------------------------------------------------------------------------------
 
-let msbuild targets configuration project =
-    let properties =
-        [
-            yield "Configuration", configuration
-            yield "StrongName", "False"
-        ]
-    MSBuildHelper.build (fun p ->
-        { p with
-            NoLogo = true
-            NodeReuse = false
-            Targets = targets
-            Properties = properties
-            RestorePackagesFlag = false
-            Verbosity = Some MSBuildVerbosity.Minimal
-        }) project
-
-let msbuildSN targets configuration project =
-    let properties =
-        [
-            yield "Configuration", configuration
-            yield "StrongName", "True"
-        ]
-    MSBuildHelper.build (fun p ->
-        { p with
-            NoLogo = true
-            NodeReuse = false
-            Targets = targets
-            Properties = properties
-            RestorePackagesFlag = false
-            Verbosity = Some MSBuildVerbosity.Minimal
-        }) project
 
 let dotnet workingDir command =
     let properties =
         [
         ]
-    let suffix = properties |> List.map (fun (name, value) -> sprintf """ /p:%s="%s" """ name value) |> String.concat ""
+    let suffix = properties |> List.map (fun (name, value) -> sprintf """ /p:%s="%s" /nr:false """ name value) |> String.concat ""
     DotNetCli.RunCommand
         (fun c -> { c with WorkingDir = workingDir})
         (command + suffix)
 
-let dotnetSN workingDir command =
+let dotnetWeak workingDir command =
+    let properties =
+        [
+            yield "StrongName", "False"
+        ]
+    let suffix = properties |> List.map (fun (name, value) -> sprintf """ /p:%s="%s" /nr:false """ name value) |> String.concat ""
+    DotNetCli.RunCommand
+        (fun c -> { c with WorkingDir = workingDir })
+        (command + suffix)
+
+let dotnetStrong workingDir command =
     let properties =
         [
             yield "StrongName", "True"
         ]
-    let suffix = properties |> List.map (fun (name, value) -> sprintf """ /p:%s="%s" """ name value) |> String.concat ""
+    let suffix = properties |> List.map (fun (name, value) -> sprintf """ /p:%s="%s" /nr:false """ name value) |> String.concat ""
     DotNetCli.RunCommand
         (fun c -> { c with WorkingDir = workingDir})
         (command + suffix)
@@ -271,7 +250,7 @@ let patchVersionInProjectFile (project:Project) =
             >> regex_replace """\<FileVersion\>.*\</FileVersion\>""" (sprintf """<FileVersion>%s</FileVersion>""" p.Release.AssemblyVersion)
             >> regex_replace """\<VersionPrefix\>.*\</VersionPrefix\>""" (sprintf """<VersionPrefix>%s</VersionPrefix>""" prefix)
             >> regex_replace """\<VersionSuffix\>.*\</VersionSuffix\>""" (sprintf """<VersionSuffix>%s</VersionSuffix>""" suffix)
-            >> regex_replace_singleline """\<PackageReleaseNotes\>.*\</PackageReleaseNotes\>""" (sprintf """<PackageReleaseNotes>%s</PackageReleaseNotes>""" p.Release.ReleaseNotes))
+            >> regex_replace_singleline """\<PackageReleaseNotes\>.*\</PackageReleaseNotes\>""" (sprintf """<PackageReleaseNotes>%s</PackageReleaseNotes>""" (p.Release.ReleaseNotes.Replace("<","&lt;").Replace(">","&gt;"))))
             p.ProjectFile
     | NativeVisualStudio _ -> ()
     | NativeBashScript _ -> ()
@@ -281,22 +260,22 @@ let patchVersionInProjectFile (project:Project) =
 // BUILD
 // --------------------------------------------------------------------------------------
 
-let clean (solution:Solution) = msbuild [ "Clean" ] "Release" solution.SolutionFile
+let clean (solution:Solution) = dotnet rootDir (sprintf "clean %s --configuration Release --verbosity minimal" solution.SolutionFile)
 
-let restore (solution:Solution) = msbuild [ "Restore" ] "Release" solution.SolutionFile
-let restoreSN (solution:Solution) = msbuildSN [ "Restore" ] "Release" solution.SolutionFile
+let restoreWeak (solution:Solution) = dotnetWeak rootDir (sprintf "restore %s --verbosity minimal" solution.SolutionFile)
+let restoreStrong (solution:Solution) = dotnetStrong rootDir (sprintf "restore %s --verbosity minimal" solution.SolutionFile)
 
-let build (solution:Solution) = msbuild [ (if hasBuildParam "incremental" then "Build" else "Rebuild") ] "Release" solution.SolutionFile
-let buildSN (solution:Solution) = msbuildSN [ (if hasBuildParam "incremental" then "Build" else "Rebuild") ] "Release" solution.SolutionFile
+let buildWeak (solution:Solution) = dotnetWeak rootDir (sprintf "build %s --configuration Release --no-incremental --no-restore --verbosity minimal" solution.SolutionFile)
+let buildStrong (solution:Solution) = dotnetStrong rootDir (sprintf "build %s --configuration Release --no-incremental --no-restore --verbosity minimal" solution.SolutionFile)
 
-let pack (solution:Solution) = dotnet rootDir (sprintf "pack %s --configuration Release --no-restore --no-build" solution.SolutionFile)
-let packSN (solution:Solution) = dotnetSN rootDir (sprintf "pack %s --configuration Release --no-restore --no-build" solution.SolutionFile)
+let packWeak (solution:Solution) = dotnetWeak rootDir (sprintf "pack %s --configuration Release --no-restore --verbosity minimal" solution.SolutionFile)
+let packStrong (solution:Solution) = dotnetStrong rootDir (sprintf "pack %s --configuration Release --no-restore --verbosity minimal" solution.SolutionFile)
 
-let packProject = function
-    | VisualStudio p -> dotnet rootDir (sprintf "pack %s --configuration Release --no-restore --no-build" p.ProjectFile)
+let packProjectWeak = function
+    | VisualStudio p -> dotnetWeak rootDir (sprintf "pack %s --configuration Release --no-restore --no-build" p.ProjectFile)
     | _ -> failwith "Project type not supported"
-let packProjectSN = function
-    | VisualStudio p -> dotnetSN rootDir (sprintf "pack %s --configuration Release --no-restore --no-build" p.ProjectFile)
+let packProjectStrong = function
+    | VisualStudio p -> dotnetStrong rootDir (sprintf "pack %s --configuration Release --no-restore --no-build" p.ProjectFile)
     | _ -> failwith "Project type not supported"
 
 //let buildConfig config subject = MSBuild "" (if hasBuildParam "incremental" then "Build" else "Rebuild") [ "Configuration", config ] subject |> ignore

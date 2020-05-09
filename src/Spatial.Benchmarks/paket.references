@@ -1,6 +1,6 @@
-Microsoft.NET.Test.Sdk
-System.Runtime.InteropServices.RuntimeInformation
 BenchmarkDotNet
 BenchmarkDotNet.Diagnostics.Windows
-NUnit
 MathNet.Numerics
+NUnit
+
+System.Runtime.InteropServices.RuntimeInformation

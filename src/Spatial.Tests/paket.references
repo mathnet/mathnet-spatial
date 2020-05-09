@@ -1,6 +1,7 @@
+Microsoft.NET.Test.Sdk
+NUnit3TestAdapter
 NUnit
 NUnitLite content:none
 Newtonsoft.Json
 Protobuf-net
 MathNet.Numerics
-Microsoft.NET.Test.Sdk

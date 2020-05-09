@@ -6,11 +6,11 @@
         <AssemblyName>MathNet.Spatial</AssemblyName>
         <RootNamespace>MathNet.Spatial</RootNamespace>
         <IsPackable>true</IsPackable>
-        <PackageId>MathNet.Spatial</PackageId>
+        <PackageId>MathNet.Spatial$(PackageIdSuffix)</PackageId>
         <VersionPrefix>0.5.0</VersionPrefix>
         <VersionSuffix></VersionSuffix>
-        <Title>Math.NET Spatial</Title>
-        <Description>Math.NET Spatial, providing methods and algorithms for geometry computations in science, engineering and every day use. Supports .Net Framework 4.6.1 or higher and .Net Standard 2.0 or higher on Windows, Linux and Mac.</Description>
+        <Title>Math.NET Spatial$(TitleSuffix)</Title>
+        <Description>Math.NET Spatial, providing methods and algorithms for geometry computations in science, engineering and every day use. Supports .Net Framework 4.6.1 or higher and .Net Standard 2.0 or higher on Windows, Linux and Mac.$(DescriptionSuffix)</Description>
         <PackageReleaseNotes>Many changes on API and implementation ~Johan Larsson, Adam Jones
 Breaking: Support for .Net Standard 2.0 or newer and .Net Framework 4.6.1 or newer
 Update to Math.NET Numerics v4.7
@@ -29,16 +29,12 @@ Breaking: use nobreaking space, \u00A0, in Angle.ToString().
 Breaking: require length to be 1 - 0.1 when parsing UnitVector3D
 Updated documentation</PackageReleaseNotes>
         <PackageTags>math geometry spatial</PackageTags>
-        <IsTool>false</IsTool>
-        <NeutralLanguage>en</NeutralLanguage>
-        <NoPackageAnalysis>false</NoPackageAnalysis>
-        <IncludeBuildOutput>true</IncludeBuildOutput>
-        <IncludeContentInPack>false</IncludeContentInPack>
         <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
         <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <EnableDefaultCompileItems>true</EnableDefaultCompileItems>
         <NoWarn>1701;1702;1705;1591;1573</NoWarn>
+        <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net461|AnyCPU'">
       <CodeAnalysisRuleSet />
