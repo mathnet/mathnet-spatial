@@ -264,7 +264,7 @@ namespace MathNet.Spatial.Units
         /// <inheritdoc />
         public override string ToString()
         {
-            return this.ToString(null, NumberFormatInfo.CurrentInfo);
+            return this.ToString("G15", NumberFormatInfo.CurrentInfo);
         }
 
         /// <summary>
@@ -284,7 +284,7 @@ namespace MathNet.Spatial.Units
         /// <returns>The string representation of this instance.</returns>
         public string ToString(IFormatProvider provider)
         {
-            return this.ToString(null, NumberFormatInfo.GetInstance(provider));
+            return this.ToString("G15", NumberFormatInfo.GetInstance(provider));
         }
 
         /// <inheritdoc />

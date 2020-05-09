@@ -181,7 +181,7 @@ namespace MathNet.Spatial.Serialization.Xml.UnitTests
             Assert.AreEqual(eulerAngles, result);
         }
 
-        [TestCase("15 °", @"<Angle Value=""0.26179938779914941"" />")]
+        [TestCase("15 °", @"<Angle Value=""0.261799387799149"" />")]
         public void AngleXml(string vs, string xml)
         {
             var angle = Angle.Parse(vs);

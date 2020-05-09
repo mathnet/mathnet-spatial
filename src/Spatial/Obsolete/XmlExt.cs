@@ -183,5 +183,13 @@ namespace MathNet.Spatial
             writer.WriteEndAttribute();
             return writer;
         }
+
+        public static XmlWriter WriteAttribute(this XmlWriter writer, string name, double value)
+        {
+            writer.WriteStartAttribute(name);
+            writer.WriteValue(value.ToString("G15"));
+            writer.WriteEndAttribute();
+            return writer;
+        }
     }
 }

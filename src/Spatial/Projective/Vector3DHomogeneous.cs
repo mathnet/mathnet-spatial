@@ -99,7 +99,7 @@ namespace MathNet.Spatial.Projective
         /// <inheritdoc/>
         public override string ToString()
         {
-            return this.ToString(null, CultureInfo.InvariantCulture);
+            return this.ToString("G15", CultureInfo.InvariantCulture);
         }
 
         /// <summary>
@@ -109,7 +109,7 @@ namespace MathNet.Spatial.Projective
         /// <returns>The string representation of this instance.</returns>
         public string ToString(IFormatProvider provider)
         {
-            return this.ToString(null, provider);
+            return this.ToString("G15", provider);
         }
 
         /// <summary>

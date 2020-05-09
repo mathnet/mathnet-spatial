@@ -172,7 +172,7 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         public void XmlRoundtrip()
         {
             var uv = UnitVector3D.Create(0.2672612419124244, -0.53452248382484879, 0.80178372573727319);
-            var xml = "<UnitVector3D X=\"0.2672612419124244\" Y=\"-0.53452248382484879\" Z=\"0.80178372573727319\" />";
+            var xml = "<UnitVector3D X=\"0.267261241912424\" Y=\"-0.534522483824849\" Z=\"0.801783725737273\" />";
             AssertXml.XmlRoundTrips(uv, xml, (expected, actual) => AssertGeometry.AreEqual(expected, actual));
         }
 
@@ -185,7 +185,7 @@ namespace MathNet.Spatial.UnitTests.Euclidean
                 Value2 = UnitVector3D.Create(1, 0, 0)
             };
             var expected = "<ContainerOfUnitVector3D>\r\n" +
-                           "  <Value1 X=\"0.2672612419124244\" Y=\"-0.53452248382484879\" Z=\"0.80178372573727319\"></Value1>\r\n" +
+                           "  <Value1 X=\"0.267261241912424\" Y=\"-0.534522483824849\" Z=\"0.801783725737273\"></Value1>\r\n" +
                            "  <Value2 X=\"1\" Y=\"0\" Z=\"0\"></Value2>\r\n" +
                            "</ContainerOfUnitVector3D>";
             var roundTrip = AssertXml.XmlSerializerRoundTrip(container, expected);
@@ -198,7 +198,7 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         {
             var v = UnitVector3D.Create(0.2672612419124244, -0.53452248382484879, 0.80178372573727319);
             var serializer = new XmlSerializer(typeof(UnitVector3D));
-            using (var reader = new StringReader("<UnitVector3D><X>0.2672612419124244</X><Y>-0.53452248382484879</Y><Z>0.80178372573727319</Z></UnitVector3D>"))
+            using (var reader = new StringReader("<UnitVector3D><X>0.267261241912424</X><Y>-0.534522483824849</Y><Z>0.801783725737273</Z></UnitVector3D>"))
             {
                 AssertGeometry.AreEqual(v, (UnitVector3D)serializer.Deserialize(reader));
             }

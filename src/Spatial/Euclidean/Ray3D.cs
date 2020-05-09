@@ -158,7 +158,7 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public override string ToString()
         {
-            return this.ToString(null, CultureInfo.InvariantCulture);
+            return this.ToString("G15", CultureInfo.InvariantCulture);
         }
 
         /// <inheritdoc/>
