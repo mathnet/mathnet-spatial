@@ -24,7 +24,7 @@ namespace RoslynSandbox
         {
             var p1 = new Point2D(1, 2);
             var pointlist = new List<Point2D> { new Point2D(0, 0), new Point2D(0.25, 0.5), new Point2D(1, 1), new Point2D(-1, 1), new Point2D(0.5, -0.5) };
-            var poly = new Polygon2D(pointlist); 
+            var poly = new Polygon2D(pointlist);
             var answer = Polygon2D.IsPointInPolygon(p1, poly);
         }
     }
@@ -41,12 +41,12 @@ namespace RoslynSandbox
         {
             var p1 = new Point2D(1, 2);
             var pointlist = new List<Point2D> { new Point2D(0, 0), new Point2D(0.25, 0.5), new Point2D(1, 1), new Point2D(-1, 1), new Point2D(0.5, -0.5) };
-            var poly = new Polygon2D(pointlist); 
+            var poly = new Polygon2D(pointlist);
             var answer = poly.EnclosesPoint(p1);
         }
     }
 }";
-            AnalyzerAssert.CodeFix<UpdateCodeFix>(CS0618, testCode, fixedCode);
+            RoslynAssert.CodeFix(new UpdateCodeFix(), CS0618, testCode, fixedCode);
         }
 
         [Test]
@@ -63,7 +63,7 @@ namespace RoslynSandbox
         public Foo()
         {
             var pointlist = new List<Point2D> { new Point2D(0, 0), new Point2D(0.25, 0.5), new Point2D(1, 1), new Point2D(-1, 1), new Point2D(0.5, -0.5) };
-            var poly = new Polygon2D(pointlist); 
+            var poly = new Polygon2D(pointlist);
             var v1 = new Vector2D(1, 2);
             var answer = poly + v1;
         }
@@ -80,13 +80,13 @@ namespace RoslynSandbox
         public Foo()
         {
             var pointlist = new List<Point2D> { new Point2D(0, 0), new Point2D(0.25, 0.5), new Point2D(1, 1), new Point2D(-1, 1), new Point2D(0.5, -0.5) };
-            var poly = new Polygon2D(pointlist); 
+            var poly = new Polygon2D(pointlist);
             var v1 = new Vector2D(1, 2);
             var answer = poly.TranslateBy(v1);
         }
     }
 }";
-            AnalyzerAssert.CodeFix<UpdateCodeFix>(CS0618, testCode, fixedCode);
+            RoslynAssert.CodeFix(new UpdateCodeFix(), CS0618, testCode, fixedCode);
         }
 
         [Test]
@@ -103,7 +103,7 @@ namespace RoslynSandbox
         public Foo()
         {
             var pointlist = new List<Point2D> { new Point2D(0, 0), new Point2D(0.25, 0.5), new Point2D(1, 1), new Point2D(-1, 1), new Point2D(0.5, -0.5) };
-            var poly = new Polygon2D(pointlist); 
+            var poly = new Polygon2D(pointlist);
             var v1 = new Vector2D(1, 2);
             var answer = v1 + poly;
         }
@@ -120,13 +120,13 @@ namespace RoslynSandbox
         public Foo()
         {
             var pointlist = new List<Point2D> { new Point2D(0, 0), new Point2D(0.25, 0.5), new Point2D(1, 1), new Point2D(-1, 1), new Point2D(0.5, -0.5) };
-            var poly = new Polygon2D(pointlist); 
+            var poly = new Polygon2D(pointlist);
             var v1 = new Vector2D(1, 2);
             var answer = poly.TranslateBy(v1);
         }
     }
 }";
-            AnalyzerAssert.CodeFix<UpdateCodeFix>(CS0618, testCode, fixedCode);
+            RoslynAssert.CodeFix(new UpdateCodeFix(), CS0618, testCode, fixedCode);
         }
 
         [Test]
@@ -143,7 +143,7 @@ namespace RoslynSandbox
         public Foo()
         {
             var pointlist = new List<Point2D> { new Point2D(0, 0), new Point2D(0.25, 0.5), new Point2D(1, 1), new Point2D(-1, 1), new Point2D(0.5, -0.5) };
-            var poly = new Polygon2D(pointlist); 
+            var poly = new Polygon2D(pointlist);
             var answer = poly.Count;
         }
     }
@@ -159,12 +159,12 @@ namespace RoslynSandbox
         public Foo()
         {
             var pointlist = new List<Point2D> { new Point2D(0, 0), new Point2D(0.25, 0.5), new Point2D(1, 1), new Point2D(-1, 1), new Point2D(0.5, -0.5) };
-            var poly = new Polygon2D(pointlist); 
+            var poly = new Polygon2D(pointlist);
             var answer = poly.VertexCount;
         }
     }
 }";
-            AnalyzerAssert.CodeFix<UpdateCodeFix>(CS0618, testCode, fixedCode);
+            RoslynAssert.CodeFix(new UpdateCodeFix(), CS0618, testCode, fixedCode);
         }
 
         [Test]
@@ -181,7 +181,7 @@ namespace RoslynSandbox
         public Foo()
         {
             var pointlist = new List<Point2D> { new Point2D(0, 0), new Point2D(0.25, 0.5), new Point2D(1, 1), new Point2D(-1, 1), new Point2D(0.5, -0.5) };
-            var poly = new Polygon2D(pointlist); 
+            var poly = new Polygon2D(pointlist);
             foreach (var vertex in poly)
             {
                 //do something
@@ -199,7 +199,7 @@ namespace RoslynSandbox
         public Foo()
         {
             var pointlist = new List<Point2D> { new Point2D(0, 0), new Point2D(0.25, 0.5), new Point2D(1, 1), new Point2D(-1, 1), new Point2D(0.5, -0.5) };
-            var poly = new Polygon2D(pointlist); 
+            var poly = new Polygon2D(pointlist);
             foreach (var vertex in poly.Vertices)
             {
                 //do something
@@ -207,7 +207,7 @@ namespace RoslynSandbox
         }
     }
 }";
-            AnalyzerAssert.CodeFix<UpdateCodeFix>(CS0618, testCode, fixedCode);
+            RoslynAssert.CodeFix(new UpdateCodeFix(), CS0618, testCode, fixedCode);
         }
     }
 }

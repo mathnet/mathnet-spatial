@@ -42,7 +42,7 @@ namespace RoslynSandbox
         }
     }
 }";
-            AnalyzerAssert.CodeFix<UpdateCodeFix>(CS0618, testCode, fixedCode);
+            RoslynAssert.CodeFix(new UpdateCodeFix(), CS0618, testCode, fixedCode);
         }
     }
 }

@@ -7,14 +7,16 @@ nuget MathNet.Numerics.Signed ~> 4.7
 nuget Newtonsoft.Json
 nuget Protobuf-net
 
-nuget System.Diagnostics.Contracts copy_local:true, strategy:min
+nuget System.Diagnostics.Contracts copy_local:true, lowest_matching, strategy:min
 
-nuget Microsoft.CodeAnalysis.CSharp.Workspaces strategy:min
-nuget Microsoft.Composition strategy:min
-nuget Gu.Roslyn.Asserts strategy:min
+nuget Microsoft.CodeAnalysis.CSharp.Workspaces lowest_matching, strategy:min
+nuget Microsoft.Composition lowest_matching, strategy:min
+nuget Gu.Roslyn.Asserts lowest_matching, strategy:min
 
-nuget System.Collections.Immutable strategy:min
-nuget System.Reflection.Metadata strategy:min
+nuget System.Collections.Immutable lowest_matching, strategy:min
+nuget System.Reflection.Metadata lowest_matching, strategy:min
+nuget System.Buffers 4.5 lowest_matching, strategy:min
+nuget System.Security.AccessControl 4.7 lowest_matching, strategy:min
 
 // Testing
 nuget NUnit ~> 3.0 framework:net461,netcoreapp3.1
@@ -26,17 +28,17 @@ nuget NUnit3TestAdapter
 nuget BenchmarkDotNet lowest_matching, strategy:min, framework:net461,netcoreapp3.1
 nuget BenchmarkDotNet.Diagnostics.Windows content:none, lowest_matching, strategy:min, framework:net461,netcoreapp3.1
 
-nuget NETStandard.Library 2.0.3 lowest_matching, strategy:min, framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp3.1
-nuget Microsoft.NETCore.Platforms 3.1.0 lowest_matching, strategy:min, framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp3.1
-nuget Microsoft.NETCore.App 2.2.8 lowest_matching, strategy:min, framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp3.1
-nuget Microsoft.NETCore.DotNetHost 3.1.1 lowest_matching, strategy:min, framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp3.1
-nuget Microsoft.NETCore.DotNetAppHost 3.1.1 lowest_matching, strategy:min, framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp3.1
-nuget Microsoft.NETCore.DotNetHostPolicy 3.1.1 lowest_matching, strategy:min, framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp3.1
-nuget Microsoft.NETCore.DotNetHostResolver 3.1.1 lowest_matching, strategy:min, framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp3.1
-nuget Microsoft.NETCore.Jit 2.0.8 lowest_matching, strategy:min, framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp3.1
-nuget Microsoft.NETCore.Targets 2.0 lowest_matching, strategy:min, framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp3.1
-nuget Microsoft.NETCore.Runtime.CoreCLR 2.0.8 lowest_matching, strategy:min, framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp3.1
-nuget Microsoft.DotNet.PlatformAbstractions 3.1.1 lowest_matching, strategy:min, framework:netstandard1.3,netstandard1.6,netstandard2.0,netcoreapp3.1
+nuget NETStandard.Library 2.0.3 lowest_matching, strategy:min, framework:netstandard2.0,netcoreapp3.1
+nuget Microsoft.NETCore.Platforms 3.1.0 lowest_matching, strategy:min, framework:netstandard2.0,netcoreapp3.1
+nuget Microsoft.NETCore.App 2.2.8 lowest_matching, strategy:min, framework:netstandard2.0,netcoreapp3.1
+nuget Microsoft.NETCore.DotNetHost 3.1.1 lowest_matching, strategy:min, framework:netstandard2.0,netcoreapp3.1
+nuget Microsoft.NETCore.DotNetAppHost 3.1.1 lowest_matching, strategy:min, framework:netstandard2.0,netcoreapp3.1
+nuget Microsoft.NETCore.DotNetHostPolicy 3.1.1 lowest_matching, strategy:min, framework:netstandard2.0,netcoreapp3.1
+nuget Microsoft.NETCore.DotNetHostResolver 3.1.1 lowest_matching, strategy:min, framework:netstandard2.0,netcoreapp3.1
+nuget Microsoft.NETCore.Jit 2.0.8 lowest_matching, strategy:min, framework:netstandard2.0,netcoreapp3.1
+nuget Microsoft.NETCore.Targets 2.0 lowest_matching, strategy:min, framework:netstandard2.0,netcoreapp3.1
+nuget Microsoft.NETCore.Runtime.CoreCLR 2.0.8 lowest_matching, strategy:min, framework:netstandard2.0,netcoreapp3.1
+nuget Microsoft.DotNet.PlatformAbstractions 3.1.1 lowest_matching, strategy:min, framework:netstandard2.0,netcoreapp3.1
 
 group Build
     source https://api.nuget.org/v3/index.json
