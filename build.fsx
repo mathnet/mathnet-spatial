@@ -46,13 +46,16 @@ let spatialStrongNameZipPackage = zipPackage "MathNet.Spatial.Signed" "Math.NET 
 let spatialNuGetPackage = nugetPackage "MathNet.Spatial" spatialRelease
 let spatialStrongNameNuGetPackage = nugetPackage "MathNet.Spatial.Signed" spatialRelease
 
-let spatialProject = project "MathNet.Spatial" "src/Spatial/Spatial.csproj" [spatialNuGetPackage; spatialStrongNameNuGetPackage]
-let spatialSolution = solution "Spatial" "MathNet.Spatial.sln" [spatialProject] [spatialZipPackage; spatialStrongNameZipPackage]
+let spatialProject = project "MathNet.Spatial" "src/Spatial/Spatial.csproj" [spatialNuGetPackage]
+let spatialStrongNameProject = project "MathNet.Spatial" "src/Spatial/Spatial.Signed.csproj" [spatialStrongNameNuGetPackage]
+
+let spatialSolution = solution "Spatial" "MathNet.Spatial.sln" [spatialProject] [spatialZipPackage]
+let spatialStrongNameSolution = solution "Spatial" "MathNet.Spatial.Signed.sln" [spatialStrongNameProject] [spatialStrongNameZipPackage]
 
 
 // ALL
 
-let allSolutions = [spatialSolution]
+let allSolutions = [spatialSolution; spatialStrongNameSolution]
 let allProjects = allSolutions |> List.collect (fun s -> s.Projects) |> List.distinct
 
 
@@ -95,14 +98,14 @@ Target "Build" (fun _ ->
     // Strong Name Build (with strong name, without certificate signature)
     if hasBuildParam "strongname" then
         CleanDirs (!! "src/**/obj/" ++ "src/**/bin/" )
-        restoreStrong spatialSolution
-        buildStrong spatialSolution
-        if isWindows && hasBuildParam "sign" then sign fingerprint timeserver spatialSolution
-        collectBinariesSN spatialSolution
-        zip spatialStrongNameZipPackage spatialSolution.OutputZipDir spatialSolution.OutputLibStrongNameDir (fun f -> f.Contains("MathNet.Spatial.") || f.Contains("MathNet.Numerics."))
+        restoreStrong spatialStrongNameSolution
+        buildStrong spatialStrongNameSolution
+        if isWindows && hasBuildParam "sign" then sign fingerprint timeserver spatialStrongNameSolution
+        collectBinariesSN spatialStrongNameSolution
+        zip spatialStrongNameZipPackage spatialStrongNameSolution.OutputZipDir spatialStrongNameSolution.OutputLibStrongNameDir (fun f -> f.Contains("MathNet.Spatial.") || f.Contains("MathNet.Numerics."))
         if isWindows then
-            packStrong spatialSolution
-            collectNuGetPackages spatialSolution
+            packStrong spatialStrongNameSolution
+            collectNuGetPackages spatialStrongNameSolution
 
     // Normal Build (without strong name, with certificate signature)
     CleanDirs (!! "src/**/obj/" ++ "src/**/bin/" )
