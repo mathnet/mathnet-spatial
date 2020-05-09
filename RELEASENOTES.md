@@ -1,3 +1,8 @@
+### 0.6.0 - 2020-05-09
+* BUG: Circle2D.FromPoints giving incorrect results for special points *~Jong Hyun Kim*
+* Number formatting consistent between .NET Core and Framework
+* Update dependencies, built with .NET Core SDK 3.1.1
+
 ### 0.5.0 - 2019-06-02
 * Many changes on API and implementation *~Johan Larsson, Adam Jones*
 * Breaking: Support for .Net Standard 2.0 or newer and .Net Framework 4.6.1 or newer
