@@ -119,7 +119,7 @@ Target "Build" (fun _ ->
         collectNuGetPackages spatialSolution
 
     // NuGet Sign (all or nothing)
-    if isWindows && hasBuildParam "sign" then signNuGet fingerprint timeserver [spatialSolution]
+    if isWindows && hasBuildParam "sign" then signNuGet fingerprint timeserver [spatialSolution; spatialStrongNameSolution]
 
     )
 "Prepare" ==> "Build"
@@ -210,10 +210,10 @@ Target "Docs" (fun _ ->
     provideDocExtraFiles extraDocs releases
     generateDocs true false)
 Target "DocsDev" (fun _ ->
-    provideDocExtraFiles  extraDocs releases
+    provideDocExtraFiles extraDocs releases
     generateDocs true true)
 Target "DocsWatch" (fun _ ->
-    provideDocExtraFiles  extraDocs releases
+    provideDocExtraFiles extraDocs releases
     use watcher = new FileSystemWatcher(DirectoryInfo("docs/content").FullName, "*.*")
     watcher.EnableRaisingEvents <- true
     watcher.Changed.Add(fun e -> generateDocs false true)
