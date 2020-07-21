@@ -187,7 +187,7 @@ namespace MathNet.Spatial
         public static XmlWriter WriteAttribute(this XmlWriter writer, string name, double value)
         {
             writer.WriteStartAttribute(name);
-            writer.WriteValue(value.ToString("G15"));
+            writer.WriteValue(value.ToString("G15", CultureInfo.InvariantCulture));
             writer.WriteEndAttribute();
             return writer;
         }
