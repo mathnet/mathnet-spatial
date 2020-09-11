@@ -12,22 +12,22 @@ namespace MathNet.Spatial.Projective
     internal struct Vector3DHomogeneous : IEquatable<Vector3DHomogeneous>
     {
         /// <summary>
-        /// Using public fields cos: http://blogs.msdn.com/b/ricom/archive/2006/08/31/performance-quiz-11-ten-questions-on-value-based-programming.aspx
+        /// Using public fields for performance. 
         /// </summary>
         public readonly double X;
 
         /// <summary>
-        /// Using public fields cos: http://blogs.msdn.com/b/ricom/archive/2006/08/31/performance-quiz-11-ten-questions-on-value-based-programming.aspx
+        /// Using public fields for performance. 
         /// </summary>
         public readonly double Y;
 
         /// <summary>
-        /// Using public fields cos: http://blogs.msdn.com/b/ricom/archive/2006/08/31/performance-quiz-11-ten-questions-on-value-based-programming.aspx
+        /// Using public fields for performance. 
         /// </summary>
         public readonly double Z;
 
         /// <summary>
-        /// Using public fields cos: http://blogs.msdn.com/b/ricom/archive/2006/08/31/performance-quiz-11-ten-questions-on-value-based-programming.aspx
+        /// Using public fields for performance. 
         /// </summary>
         public readonly double W;
 
@@ -51,12 +51,15 @@ namespace MathNet.Spatial.Projective
         /// </summary>
         /// <param name="vector">A mathnet.numerics vector</param>
         private Vector3DHomogeneous(Vector<double> vector)
-            : this(vector.At(0), vector.At(1), vector.At(2), vector.At(2))
         {
             if (vector.Count != 4)
             {
                 throw new ArgumentException("Size must be 4");
             }
+            this.X = vector.At(0);
+            this.Y = vector.At(1);
+            this.Z = vector.At(2);
+            this.W = vector.At(3);
         }
 
         /// <summary>
@@ -203,7 +206,7 @@ namespace MathNet.Spatial.Projective
             // ReSharper disable once CompareOfFloatsByEqualityOperator
             if (this.W != 0)
             {
-                return new Vector3D(this.X / this.W, this.X / this.W, this.X / this.W);
+                return new Vector3D(this.X / this.W, this.Y / this.W, this.Z / this.W);
             }
 
             return Vector3D.NaN;
