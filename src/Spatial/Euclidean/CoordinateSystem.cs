@@ -258,11 +258,10 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>A rotated coordinate system</returns>
         public static CoordinateSystem Rotation(Angle yaw, Angle pitch, Angle roll)
         {
-            var cs = new CoordinateSystem();
             var yt = Yaw(yaw);
             var pt = Pitch(pitch);
             var rt = Roll(roll);
-            return rt.Transform(pt.Transform(yt.Transform(cs)));
+            return yt.Transform(pt.Transform(rt));
         }
 
         /// <summary>
