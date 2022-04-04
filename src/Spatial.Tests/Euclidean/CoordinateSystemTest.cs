@@ -82,6 +82,12 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         [TestCase("0°", "-90°", "0°", "1, 2, 3", "-3, 2, 1")]
         [TestCase("0°", "0°", "90°", "1, 2, 3", "1, -3, 2")]
         [TestCase("0°", "0°", "-90°", "1, 2, 3", "1, 3, -2")]
+        [TestCase("90°", "90°", "90°", "1, 2, 3", "3, 2, -1")]
+        [TestCase("90°", "0°", "90°", "1, 2, 3", "3, 1, 2")]
+        [TestCase("180°", "0°", "90°", "1, 2, 3", "-1, 3, 2")]
+        [TestCase("180°", "-90°", "0°", "1, 2, 3", "3, -2, 1")]
+        [TestCase("90°", "10°", "0°", "1, 2, 3", "-2, 1.506, 2.781")]
+        [TestCase("90°", "10°", "30°", "1, 2, 3", "-0.232, 1.609, 3.370")]
         public void RotationYawPitchRoll(string yaws, string pitchs, string rolls, string ps, string eps)
         {
             var p = Point3D.Parse(ps);
@@ -96,7 +102,7 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             foreach (var coordinateSystem in coordinateSystems)
             {
                 var rotatedPoint = coordinateSystem.Transform(p);
-                AssertGeometry.AreEqual(expected, rotatedPoint);
+                AssertGeometry.AreEqual(expected, rotatedPoint, 1e-3);
             }
         }
 
