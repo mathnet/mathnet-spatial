@@ -265,6 +265,38 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
+        /// Create a rotated CoordinateSystem in one calculation instead of 3 separate rotations.
+        /// Gives an order of magnitude speed improvement. 
+        /// </summary>
+        /// <param name="yaw"></param>
+        /// <param name="pitch"></param>
+        /// <param name="roll"></param>
+        /// <returns></returns>
+        public static CoordinateSystem RotationFast(Angle yaw, Angle pitch, Angle roll)
+        {
+            var cs = new CoordinateSystem(); 
+            var cosY = Math.Cos(yaw.Radians);
+            var sinY = Math.Sin(yaw.Radians); 
+            var cosP = Math.Cos(pitch.Radians);
+            var sinP = Math.Sin(pitch.Radians);
+            var cosR = Math.Cos(roll.Radians);
+            var sinR = Math.Sin(roll.Radians);
+
+            cs[0, 0] = cosY * cosP;
+            cs[1, 0] = sinY * cosP;
+            cs[2, 0] = -sinP;
+
+            cs[0, 1] = cosY * sinP * sinR - sinY * cosR;
+            cs[1, 1] = sinY * sinP * sinR + cosY * cosR;
+            cs[2, 1] = cosP * sinR;
+
+            cs[0, 2] = cosY * sinP * cosR + sinY * sinR;
+            cs[1, 2] = sinY * sinP * cosR - cosY * sinR;
+            cs[2, 2] = cosP * cosR;
+
+            return cs; 
+        }
+        /// <summary>
         /// Rotates around Z
         /// </summary>
         /// <param name="av">An angle</param>

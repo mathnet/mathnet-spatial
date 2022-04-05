@@ -97,6 +97,7 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             var coordinateSystems = new[]
             {
                 CoordinateSystem.Rotation(yaw, pitch, roll),
+                CoordinateSystem.RotationFast(yaw, pitch, roll),
             };
             var expected = Point3D.Parse(eps);
             foreach (var coordinateSystem in coordinateSystems)
@@ -104,6 +105,33 @@ namespace MathNet.Spatial.UnitTests.Euclidean
                 var rotatedPoint = coordinateSystem.Transform(p);
                 AssertGeometry.AreEqual(expected, rotatedPoint, 1e-3);
             }
+        }
+
+        [Test]
+        public void RotationSpeedTest()
+        {
+            int loops = 100000; 
+            double elapsedSlow, elapsedFast;
+            Angle y = Angle.FromDegrees(10);
+            Angle z = Angle.FromDegrees(20);
+
+            var start = DateTime.Now;
+            for (int i = 0; i < loops; i++)
+            {
+                CoordinateSystem.RotationFast(z, z, z);
+            }
+            elapsedFast = (DateTime.Now - start).TotalMilliseconds;
+
+            start = DateTime.Now;
+            for (int i = 0; i < loops; i++)
+            {
+                CoordinateSystem.Rotation(y, y, y);
+            }
+            elapsedSlow = (DateTime.Now - start).TotalMilliseconds;
+
+            Console.WriteLine($"Slow: {elapsedSlow}, Fast: {elapsedFast}"); 
+
+            Assert.IsTrue(elapsedSlow > elapsedFast);
         }
 
         [TestCase("1, 2, 3", "0, 0, 1", "1, 2, 4")]
