@@ -9,6 +9,7 @@ The Math.NET project is a community effort. We accept contributions and pull req
 
 - [Christoph Rüegg](https://christoph.ruegg.name/) (@cdrnet) ([keybase.io/cdrnet](https://keybase.io/cdrnet))
 - Johan Larsson
+- jkalias
 
 ### Code Contributors
 
