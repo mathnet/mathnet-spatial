@@ -5,7 +5,7 @@ using MathNet.Spatial.Euclidean;
 using MathNet.Spatial.Units;
 using NUnit.Framework;
 
-namespace MathNet.Spatial.UnitTests
+namespace MathNet.Spatial.Tests.Serialization
 {
     public class BinaryFormatterTests
     {

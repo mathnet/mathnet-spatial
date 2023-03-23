@@ -5,7 +5,7 @@ using System.Xml.Schema;
 using System.Xml.Serialization;
 using NUnit.Framework;
 
-namespace MathNet.Spatial.UnitTests
+namespace MathNet.Spatial.Tests
 {
     public class AssertXmlTests
     {

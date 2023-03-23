@@ -7,7 +7,7 @@ using System.Xml.Serialization;
 using MathNet.Spatial.Euclidean;
 using NUnit.Framework;
 
-namespace MathNet.Spatial.UnitTests.Euclidean
+namespace MathNet.Spatial.Tests.Euclidean
 {
     [TestFixture]
     public class Point3DTests

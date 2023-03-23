@@ -1,12 +1,11 @@
-﻿using MathNet.Spatial.Euclidean;
+﻿using System;
+using MathNet.Spatial.Euclidean;
 using MathNet.Spatial.Units;
 using NUnit.Framework;
 
-namespace MathNet.Spatial.UnitTests.Euclidean
+namespace MathNet.Spatial.Tests.Euclidean
 {
     // ReSharper disable InconsistentNaming
-    using System;
-
     [TestFixture]
     public class CoordinateSystemTest
     {
