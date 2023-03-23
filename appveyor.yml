@@ -3,7 +3,7 @@ init:
    - git config --global core.autocrlf true
 install:
    # Download .NET Core SDK 7.0.200 and add to PATH
-   - ps: $urlCurrent = "https://dotnetcli.azureedge.net/dotnet/Sdk/7.0.200/dotnet-sdk-7.0.200-win-x64.zip"
+   - ps: $urlCurrent = "https://dotnetcli.azureedge.net/dotnet/Sdk/5.0.200/dotnet-sdk-5.0.200-win-x64.zip"
    - ps: $env:DOTNET_INSTALL_DIR = "$pwd\.dotnetsdk"
    - ps: mkdir $env:DOTNET_INSTALL_DIR -Force | Out-Null
    - ps: $tempFileCurrent = [System.IO.Path]::GetTempFileName()
