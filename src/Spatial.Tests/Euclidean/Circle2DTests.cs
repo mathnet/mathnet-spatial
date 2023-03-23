@@ -2,7 +2,7 @@
 using MathNet.Spatial.Euclidean;
 using NUnit.Framework;
 
-namespace MathNet.Spatial.UnitTests.Euclidean
+namespace MathNet.Spatial.Tests.Euclidean
 {
     [TestFixture]
     public class Circle2DTests

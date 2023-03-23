@@ -34,8 +34,8 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="y">The y component.</param>
         public Vector2D(double x, double y)
         {
-            this.X = x;
-            this.Y = y;
+            X = x;
+            Y = y;
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace MathNet.Spatial.Euclidean
         /// Gets the length of the vector
         /// </summary>
         [Pure]
-        public double Length => Math.Sqrt((this.X * this.X) + (this.Y * this.Y));
+        public double Length => Math.Sqrt((X * X) + (Y * Y));
 
         /// <summary>
         /// Gets a vector orthogonal to this
@@ -62,7 +62,7 @@ namespace MathNet.Spatial.Euclidean
         {
             get
             {
-                return new Vector2D(-this.Y, this.X);
+                return new Vector2D(-Y, X);
             }
         }
 
@@ -255,7 +255,7 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public bool IsParallelTo(Vector2D other, double tolerance = 1e-10)
         {
-            var dp = Math.Abs(this.Normalize().DotProduct(other.Normalize()));
+            var dp = Math.Abs(Normalize().DotProduct(other.Normalize()));
             return Math.Abs(1 - dp) <= tolerance;
         }
 
@@ -269,7 +269,7 @@ namespace MathNet.Spatial.Euclidean
         public bool IsParallelTo(Vector2D other, Angle tolerance)
         {
             // Compute the angle between these vectors
-            var angle = this.AngleTo(other);
+            var angle = AngleTo(other);
             if (angle < tolerance)
             {
                 return true;
@@ -291,7 +291,7 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public bool IsPerpendicularTo(Vector2D other, double tolerance = 1e-10)
         {
-            return Math.Abs(this.Normalize().DotProduct(other.Normalize())) < tolerance;
+            return Math.Abs(Normalize().DotProduct(other.Normalize())) < tolerance;
         }
 
         /// <summary>
@@ -303,7 +303,7 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public bool IsPerpendicularTo(Vector2D other, Angle tolerance)
         {
-            var angle = this.AngleTo(other);
+            var angle = AngleTo(other);
             const double Perpendicular = Math.PI / 2;
             return Math.Abs(angle.Radians - Perpendicular) < tolerance.Radians;
         }
@@ -319,7 +319,7 @@ namespace MathNet.Spatial.Euclidean
         public Angle SignedAngleTo(Vector2D other, bool clockWise = false, bool returnNegative = false)
         {
             var sign = clockWise ? -1 : 1;
-            var a1 = Math.Atan2(this.Y, this.X);
+            var a1 = Math.Atan2(Y, X);
             if (a1 < 0)
             {
                 a1 += 2 * Math.PI;
@@ -356,8 +356,8 @@ namespace MathNet.Spatial.Euclidean
             return Angle.FromRadians(
                 Math.Abs(
                     Math.Atan2(
-                        (this.X * other.Y) - (other.X * this.Y),
-                        (this.X * other.X) + (this.Y * other.Y))));
+                        (X * other.Y) - (other.X * Y),
+                        (X * other.X) + (Y * other.Y))));
         }
 
         /// <summary>
@@ -370,8 +370,8 @@ namespace MathNet.Spatial.Euclidean
         {
             var cs = Math.Cos(angle.Radians);
             var sn = Math.Sin(angle.Radians);
-            var x = (this.X * cs) - (this.Y * sn);
-            var y = (this.X * sn) + (this.Y * cs);
+            var x = (X * cs) - (Y * sn);
+            var y = (X * sn) + (Y * cs);
             return new Vector2D(x, y);
         }
 
@@ -383,22 +383,22 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public double DotProduct(Vector2D other)
         {
-            return (this.X * other.X) + (this.Y * other.Y);
+            return (X * other.X) + (Y * other.Y);
         }
 
         /// <summary>
         /// Performs the 2D 'cross product' as if the 2D vectors were really 3D vectors in the z=0 plane, returning
         /// the scalar magnitude and direction of the resulting z value.
-        /// Formula: (this.X * other.Y) - (this.Y * other.X)
+        /// Formula: (X * other.Y) - (Y * other.X)
         /// </summary>
         /// <param name="other">The other <see cref="Vector2D"/></param>
-        /// <returns>(this.X * other.Y) - (this.Y * other.X)</returns>
+        /// <returns>(X * other.Y) - (Y * other.X)</returns>
         [Pure]
         public double CrossProduct(Vector2D other)
         {
             // Though the cross product is undefined in 2D space, this is a useful mathematical operation to
             // determine angular direction and to compute the area of 2D shapes
-            return (this.X * other.Y) - (this.Y * other.X);
+            return (X * other.Y) - (Y * other.X);
         }
 
         /// <summary>
@@ -409,7 +409,7 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public Vector2D ProjectOn(Vector2D other)
         {
-            return other * (this.DotProduct(other) / other.DotProduct(other));
+            return other * (DotProduct(other) / other.DotProduct(other));
         }
 
         /// <summary>
@@ -419,8 +419,8 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public Vector2D Normalize()
         {
-            var l = this.Length;
-            return new Vector2D(this.X / l, this.Y / l);
+            var l = Length;
+            return new Vector2D(X / l, Y / l);
         }
 
         /// <summary>
@@ -431,7 +431,7 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public Vector2D ScaleBy(double d)
         {
-            return new Vector2D(d * this.X, d * this.Y);
+            return new Vector2D(d * X, d * Y);
         }
 
         /// <summary>
@@ -441,7 +441,7 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public Vector2D Negate()
         {
-            return new Vector2D(-1 * this.X, -1 * this.Y);
+            return new Vector2D(-1 * X, -1 * Y);
         }
 
         /// <summary>
@@ -452,7 +452,7 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public Vector2D Subtract(Vector2D v)
         {
-            return new Vector2D(this.X - v.X, this.Y - v.Y);
+            return new Vector2D(X - v.X, Y - v.Y);
         }
 
         /// <summary>
@@ -463,7 +463,7 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public Vector2D Add(Vector2D v)
         {
-            return new Vector2D(this.X + v.X, this.Y + v.Y);
+            return new Vector2D(X + v.X, Y + v.Y);
         }
 
         /// <summary>
@@ -474,7 +474,7 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public Vector2D TransformBy(Matrix<double> m)
         {
-            var transformed = m.Multiply(this.ToVector());
+            var transformed = m.Multiply(ToVector());
             return new Vector2D(transformed.At(0), transformed.At(1));
         }
 
@@ -485,7 +485,7 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public Vector<double> ToVector()
         {
-            return Vector<double>.Build.Dense(new[] { this.X, this.Y });
+            return Vector<double>.Build.Dense(new[] { X, Y });
         }
 
         /// <summary>
@@ -502,27 +502,27 @@ namespace MathNet.Spatial.Euclidean
                 throw new ArgumentException("epsilon < 0");
             }
 
-            return Math.Abs(other.X - this.X) < tolerance &&
-                   Math.Abs(other.Y - this.Y) < tolerance;
+            return Math.Abs(other.X - X) < tolerance &&
+                   Math.Abs(other.Y - Y) < tolerance;
         }
 
         /// <inheritdoc />
         [Pure]
-        public bool Equals(Vector2D other) => this.X.Equals(other.X) && this.Y.Equals(other.Y);
+        public bool Equals(Vector2D other) => X.Equals(other.X) && Y.Equals(other.Y);
 
         /// <inheritdoc />
         [Pure]
-        public override bool Equals(object obj) => obj is Vector2D v && this.Equals(v);
+        public override bool Equals(object obj) => obj is Vector2D v && Equals(v);
 
         /// <inheritdoc />
         [Pure]
-        public override int GetHashCode() => HashCode.Combine(this.X, this.Y);
+        public override int GetHashCode() => HashCode.Combine(X, Y);
 
         /// <inheritdoc />
         [Pure]
         public override string ToString()
         {
-            return this.ToString("G15", CultureInfo.InvariantCulture);
+            return ToString("G15", CultureInfo.InvariantCulture);
         }
 
         /// <summary>
@@ -533,7 +533,7 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public string ToString(IFormatProvider provider)
         {
-            return this.ToString("G15", provider);
+            return ToString("G15", provider);
         }
 
         /// <inheritdoc />
@@ -542,7 +542,7 @@ namespace MathNet.Spatial.Euclidean
         {
             var numberFormatInfo = provider != null ? NumberFormatInfo.GetInstance(provider) : CultureInfo.InvariantCulture.NumberFormat;
             var separator = numberFormatInfo.NumberDecimalSeparator == "," ? ";" : ",";
-            return $"({this.X.ToString(format, numberFormatInfo)}{separator}\u00A0{this.Y.ToString(format, numberFormatInfo)})";
+            return $"({X.ToString(format, numberFormatInfo)}{separator}\u00A0{Y.ToString(format, numberFormatInfo)})";
         }
 
         /// <inheritdoc />
@@ -575,8 +575,8 @@ namespace MathNet.Spatial.Euclidean
         /// <inheritdoc />
         void IXmlSerializable.WriteXml(XmlWriter writer)
         {
-            writer.WriteAttribute("X", this.X);
-            writer.WriteAttribute("Y", this.Y);
+            writer.WriteAttribute("X", X);
+            writer.WriteAttribute("Y", Y);
         }
     }
 }

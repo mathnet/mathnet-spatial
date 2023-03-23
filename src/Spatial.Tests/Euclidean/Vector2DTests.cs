@@ -9,7 +9,7 @@ using MathNet.Spatial.Euclidean;
 using MathNet.Spatial.Units;
 using NUnit.Framework;
 
-namespace MathNet.Spatial.UnitTests.Euclidean
+namespace MathNet.Spatial.Tests.Euclidean
 {
     public class Vector2DTests
     {

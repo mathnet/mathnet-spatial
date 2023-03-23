@@ -48,8 +48,8 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="offset">The Plane's distance from the origin along its normal vector.</param>
         public Plane(UnitVector3D normal, double offset = 0)
         {
-            this.Normal = normal;
-            this.D = -offset;
+            Normal = normal;
+            D = -offset;
         }
 
         /// <summary>
@@ -77,22 +77,22 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// Gets the <see cref="Normal"/> x component.
         /// </summary>
-        public double A => this.Normal.X;
+        public double A => Normal.X;
 
         /// <summary>
         /// Gets the <see cref="Normal"/> y component.
         /// </summary>
-        public double B => this.Normal.Y;
+        public double B => Normal.Y;
 
         /// <summary>
         /// Gets the <see cref="Normal"/> y component.
         /// </summary>
-        public double C => this.Normal.Z;
+        public double C => Normal.Z;
 
         /// <summary>
         /// Gets the point on the plane closest to origin.
         /// </summary>
-        public Point3D RootPoint => (-this.D * this.Normal).ToPoint3D();
+        public Point3D RootPoint => (-D * Normal).ToPoint3D();
 
         /// <summary>
         /// Returns a value that indicates whether each pair of elements in two specified geometric planes is equal.
@@ -164,9 +164,9 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public double SignedDistanceTo(Point3D point)
         {
-            var p = this.Project(point);
+            var p = Project(point);
             var v = p.VectorTo(point);
-            return v.DotProduct(this.Normal);
+            return v.DotProduct(Normal);
         }
 
         /// <summary>
@@ -178,12 +178,12 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public double SignedDistanceTo(Plane other)
         {
-            if (!this.Normal.IsParallelTo(other.Normal, tolerance: 1E-15))
+            if (!Normal.IsParallelTo(other.Normal, tolerance: 1E-15))
             {
                 throw new ArgumentException("Planes are not parallel");
             }
 
-            return this.SignedDistanceTo(other.RootPoint);
+            return SignedDistanceTo(other.RootPoint);
         }
 
         /// <summary>
@@ -195,9 +195,9 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public double SignedDistanceTo(Ray3D ray)
         {
-            if (Math.Abs(ray.Direction.DotProduct(this.Normal) - 0) < 1E-15)
+            if (Math.Abs(ray.Direction.DotProduct(Normal) - 0) < 1E-15)
             {
-                return this.SignedDistanceTo(ray.ThroughPoint);
+                return SignedDistanceTo(ray.ThroughPoint);
             }
 
             return 0;
@@ -211,7 +211,7 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public double AbsoluteDistanceTo(Point3D point)
         {
-            return Math.Abs(this.SignedDistanceTo(point));
+            return Math.Abs(SignedDistanceTo(point));
         }
 
         /// <summary>
@@ -223,9 +223,9 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public Point3D Project(Point3D p, UnitVector3D? projectionDirection = null)
         {
-            var dotProduct = this.Normal.DotProduct(p.ToVector3D());
-            var projectiononNormal = projectionDirection == null ? this.Normal : projectionDirection.Value;
-            var projectionVector = (dotProduct + this.D) * projectiononNormal;
+            var dotProduct = Normal.DotProduct(p.ToVector3D());
+            var projectiononNormal = projectionDirection == null ? Normal : projectionDirection.Value;
+            var projectionVector = (dotProduct + D) * projectiononNormal;
             return p - projectionVector;
         }
 
@@ -236,8 +236,8 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>A projected line</returns>
         public Line3D Project(Line3D line3DToProject)
         {
-            var projectedStartPoint = this.Project(line3DToProject.StartPoint);
-            var projectedEndPoint = this.Project(line3DToProject.EndPoint);
+            var projectedStartPoint = Project(line3DToProject.StartPoint);
+            var projectedEndPoint = Project(line3DToProject.EndPoint);
             return new Line3D(projectedStartPoint, projectedEndPoint);
         }
 
@@ -249,8 +249,8 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public LineSegment3D Project(LineSegment3D line3DToProject)
         {
-            var projectedStartPoint = this.Project(line3DToProject.StartPoint);
-            var projectedEndPoint = this.Project(line3DToProject.EndPoint);
+            var projectedStartPoint = Project(line3DToProject.StartPoint);
+            var projectedEndPoint = Project(line3DToProject.EndPoint);
             return new LineSegment3D(projectedStartPoint, projectedEndPoint);
         }
 
@@ -262,8 +262,8 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public Ray3D Project(Ray3D rayToProject)
         {
-            var projectedThroughPoint = this.Project(rayToProject.ThroughPoint);
-            var projectedDirection = this.Project(rayToProject.Direction.ToVector3D());
+            var projectedThroughPoint = Project(rayToProject.ThroughPoint);
+            var projectedDirection = Project(rayToProject.Direction.ToVector3D());
             return new Ray3D(projectedThroughPoint, projectedDirection.Direction);
         }
 
@@ -275,8 +275,8 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public Ray3D Project(Vector3D vector3DToProject)
         {
-            var projectedEndPoint = this.Project(vector3DToProject.ToPoint3D());
-            var projectedZero = this.Project(new Point3D(0, 0, 0));
+            var projectedEndPoint = Project(vector3DToProject.ToPoint3D());
+            var projectedZero = Project(new Point3D(0, 0, 0));
             return new Ray3D(projectedZero, projectedZero.VectorTo(projectedEndPoint).Normalize());
         }
 
@@ -288,7 +288,7 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public Ray3D Project(UnitVector3D vector3DToProject)
         {
-            return this.Project(vector3DToProject.ToVector3D());
+            return Project(vector3DToProject.ToVector3D());
         }
 
         /// <summary>
@@ -302,7 +302,7 @@ namespace MathNet.Spatial.Euclidean
         public Ray3D IntersectionWith(Plane intersectingPlane, double tolerance = float.Epsilon)
         {
             var a = new DenseMatrix(2, 3);
-            a.SetRow(0, this.Normal.ToVector());
+            a.SetRow(0, Normal.ToVector());
             a.SetRow(1, intersectingPlane.Normal.ToVector());
             var svd = a.Svd(true);
             if (svd.S[1] < tolerance)
@@ -312,7 +312,7 @@ namespace MathNet.Spatial.Euclidean
 
             var y = new DenseMatrix(2, 1)
             {
-                [0, 0] = -1 * this.D,
+                [0, 0] = -1 * D,
                 [1, 0] = -1 * intersectingPlane.D
             };
 
@@ -331,10 +331,10 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>Intersection Point or null</returns>
         public Point3D? IntersectionWith(Line3D line, double tolerance = float.Epsilon)
         {
-            if (line.Direction.IsPerpendicularTo(this.Normal, tolerance))
+            if (line.Direction.IsPerpendicularTo(Normal, tolerance))
             {
                 // either parallel or lies in the plane
-                var projectedPoint = this.Project(line.StartPoint, line.Direction);
+                var projectedPoint = Project(line.StartPoint, line.Direction);
                 if (projectedPoint == line.StartPoint)
                 {
                     throw new InvalidOperationException("Line lies in the plane");
@@ -344,9 +344,9 @@ namespace MathNet.Spatial.Euclidean
                 return null;
             }
 
-            var d = this.SignedDistanceTo(line.StartPoint);
+            var d = SignedDistanceTo(line.StartPoint);
             var u = line.StartPoint.VectorTo(line.EndPoint);
-            var t = -1 * d / u.DotProduct(this.Normal);
+            var t = -1 * d / u.DotProduct(Normal);
             if (t > 1 || t < 0)
             {
                 // They are not intersected
@@ -366,10 +366,10 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public Point3D? IntersectionWith(LineSegment3D line, double tolerance = float.Epsilon)
         {
-            if (line.Direction.IsPerpendicularTo(this.Normal, tolerance))
+            if (line.Direction.IsPerpendicularTo(Normal, tolerance))
             {
                 // either parallel or lies in the plane
-                var projectedPoint = this.Project(line.StartPoint, line.Direction);
+                var projectedPoint = Project(line.StartPoint, line.Direction);
                 if (projectedPoint == line.StartPoint)
                 {
                     throw new InvalidOperationException("Line lies in the plane");
@@ -379,9 +379,9 @@ namespace MathNet.Spatial.Euclidean
                 return null;
             }
 
-            var d = this.SignedDistanceTo(line.StartPoint);
+            var d = SignedDistanceTo(line.StartPoint);
             var u = line.StartPoint.VectorTo(line.EndPoint);
-            var t = -1 * d / u.DotProduct(this.Normal);
+            var t = -1 * d / u.DotProduct(Normal);
             if (t > 1 || t < 0)
             {
                 // They are not intersected
@@ -400,13 +400,13 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public Point3D IntersectionWith(Ray3D ray, double tolerance = float.Epsilon)
         {
-            if (this.Normal.IsPerpendicularTo(ray.Direction, tolerance))
+            if (Normal.IsPerpendicularTo(ray.Direction, tolerance))
             {
                 throw new InvalidOperationException("Ray is parallel to the plane.");
             }
 
-            var d = this.SignedDistanceTo(ray.ThroughPoint);
-            var t = -1 * d / ray.Direction.DotProduct(this.Normal);
+            var d = SignedDistanceTo(ray.ThroughPoint);
+            var t = -1 * d / ray.Direction.DotProduct(Normal);
             return ray.ThroughPoint + (t * ray.Direction);
         }
 
@@ -418,9 +418,9 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public Point3D MirrorAbout(Point3D p)
         {
-            var p2 = this.Project(p);
-            var d = this.SignedDistanceTo(p);
-            return p2 - (1 * d * this.Normal);
+            var p2 = Project(p);
+            var d = SignedDistanceTo(p);
+            return p2 - (1 * d * Normal);
         }
 
         /// <summary>
@@ -432,9 +432,9 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public Plane Rotate(UnitVector3D aboutVector, Angle angle)
         {
-            var rootPoint = this.RootPoint;
+            var rootPoint = RootPoint;
             var rotatedPoint = rootPoint.Rotate(aboutVector, angle);
-            var rotatedPlaneVector = this.Normal.Rotate(aboutVector, angle);
+            var rotatedPlaneVector = Normal.Rotate(aboutVector, angle);
             return new Plane(rotatedPlaneVector, rotatedPoint);
         }
 
@@ -452,26 +452,26 @@ namespace MathNet.Spatial.Euclidean
                 throw new ArgumentException("epsilon < 0");
             }
 
-            return Math.Abs(other.D - this.D) < tolerance && this.Normal.Equals(other.Normal, tolerance);
+            return Math.Abs(other.D - D) < tolerance && Normal.Equals(other.Normal, tolerance);
         }
 
         /// <inheritdoc />
         [Pure]
-        public bool Equals(Plane p) => this.D.Equals(p.D) && this.Normal.Equals(p.Normal);
+        public bool Equals(Plane p) => D.Equals(p.D) && Normal.Equals(p.Normal);
 
         /// <inheritdoc />
         [Pure]
-        public override bool Equals(object obj) => obj is Plane p && this.Equals(p);
+        public override bool Equals(object obj) => obj is Plane p && Equals(p);
 
         /// <inheritdoc />
         [Pure]
-        public override int GetHashCode() => HashCode.Combine(this.Normal, this.D);
+        public override int GetHashCode() => HashCode.Combine(Normal, D);
 
         /// <inheritdoc />
         [Pure]
         public override string ToString()
         {
-            return $"A:{Math.Round(this.A, 4)} B:{Math.Round(this.B, 4)} C:{Math.Round(this.C, 4)} D:{Math.Round(this.D, 4)}";
+            return $"A:{Math.Round(A, 4)} B:{Math.Round(B, 4)} C:{Math.Round(C, 4)} D:{Math.Round(D, 4)}";
         }
 
         /// <inheritdoc />
@@ -493,8 +493,8 @@ namespace MathNet.Spatial.Euclidean
         /// <inheritdoc/>
         void IXmlSerializable.WriteXml(XmlWriter writer)
         {
-            writer.WriteElement("RootPoint", this.RootPoint);
-            writer.WriteElement("Normal", this.Normal);
+            writer.WriteElement("RootPoint", RootPoint);
+            writer.WriteElement("Normal", Normal);
         }
     }
 }

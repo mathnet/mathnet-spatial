@@ -2,7 +2,7 @@ using MathNet.Numerics.LinearAlgebra;
 using MathNet.Spatial.Euclidean;
 using NUnit.Framework;
 
-namespace MathNet.Spatial.UnitTests
+namespace MathNet.Spatial.Tests
 {
     public static class AssertGeometry
     {

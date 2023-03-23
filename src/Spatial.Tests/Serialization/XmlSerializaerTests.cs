@@ -1,10 +1,9 @@
 ﻿using System.Linq;
 using MathNet.Spatial.Euclidean;
 using MathNet.Spatial.Units;
-using MathNet.Spatial.UnitTests;
 using NUnit.Framework;
 
-namespace MathNet.Spatial.Serialization.Xml.UnitTests
+namespace MathNet.Spatial.Tests.Serialization
 {
     public class XmlSerializaerTests
     {
