@@ -7,7 +7,7 @@ namespace MathNet.Spatial.Euclidean
     /// <summary>
     /// Describes a standard 2 dimensional circle
     /// </summary>
-    public readonly struct Circle2D : IEquatable<Circle2D>
+    public struct Circle2D : IEquatable<Circle2D>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Circle2D"/> struct.
@@ -17,8 +17,8 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="radius">The radius of the circle</param>
         public Circle2D(Point2D center, double radius)
         {
-            Center = center;
-            Radius = radius;
+            this.Center = center;
+            this.Radius = radius;
         }
 
         /// <summary>
@@ -35,19 +35,19 @@ namespace MathNet.Spatial.Euclidean
         /// Gets the circumference of the circle
         /// </summary>
         [Pure]
-        public double Circumference => 2 * Radius * Math.PI;
+        public double Circumference => 2 * this.Radius * Math.PI;
 
         /// <summary>
         /// Gets the diameter of the circle
         /// </summary>
         [Pure]
-        public double Diameter => 2 * Radius;
+        public double Diameter => 2 * this.Radius;
 
         /// <summary>
         /// Gets the area of the circle
         /// </summary>
         [Pure]
-        public double Area => Radius * Radius * Math.PI;
+        public double Area => this.Radius * this.Radius * Math.PI;
 
         /// <summary>
         /// Returns a value that indicates whether each pair of elements in two specified circles is equal.
@@ -140,19 +140,19 @@ namespace MathNet.Spatial.Euclidean
                 throw new ArgumentException("epsilon < 0");
             }
 
-            return Math.Abs(c.Radius - Radius) < tolerance && Center.Equals(c.Center, tolerance);
+            return Math.Abs(c.Radius - this.Radius) < tolerance && this.Center.Equals(c.Center, tolerance);
         }
 
         /// <inheritdoc />
         [Pure]
-        public bool Equals(Circle2D c) => Radius.Equals(c.Radius) && Center.Equals(c.Center);
+        public bool Equals(Circle2D c) => this.Radius.Equals(c.Radius) && this.Center.Equals(c.Center);
 
         /// <inheritdoc />
         [Pure]
-        public override bool Equals(object obj) => obj is Circle2D c && Equals(c);
+        public override bool Equals(object obj) => obj is Circle2D c && this.Equals(c);
 
         /// <inheritdoc />
         [Pure]
-        public override int GetHashCode() => HashCode.Combine(Center, Radius);
+        public override int GetHashCode() => HashCode.Combine(this.Center, this.Radius);
     }
 }

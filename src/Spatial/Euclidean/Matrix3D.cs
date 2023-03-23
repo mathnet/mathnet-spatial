@@ -6,7 +6,7 @@ using MathNet.Spatial.Units;
 namespace MathNet.Spatial.Euclidean
 {
     /// <summary>
-    /// Helper class for working with 3D matrices
+    /// Helper class for working with 3D matrixes
     /// </summary>
     public static class Matrix3D
     {

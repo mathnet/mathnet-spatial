@@ -14,7 +14,7 @@ namespace MathNet.Spatial.Euclidean
     /// http://web.cs.iastate.edu/~cs577/handouts/quaternion.pdf
     /// http://www.lce.hut.fi/~ssarkka/pub/quat.pdf
     /// </remarks>
-    public readonly struct Quaternion : IEquatable<Quaternion>, IFormattable
+    public struct Quaternion : IEquatable<Quaternion>, IFormattable
     {
         /// <summary>
         /// Neutral element for multiplication
@@ -55,10 +55,10 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="imagZ">The Z-value of the vector component of the Quaternion</param>
         public Quaternion(double real, double imagX, double imagY, double imagZ)
         {
-            x = imagX;
-            y = imagY;
-            z = imagZ;
-            w = real;
+            this.x = imagX;
+            this.y = imagY;
+            this.z = imagZ;
+            this.w = real;
         }
 
         /// <summary>
@@ -74,39 +74,39 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// Gets the real part of the quaternion.
         /// </summary>
-        public double Real => w;
+        public double Real => this.w;
 
         /// <summary>
         /// Gets the imaginary X part (coefficient of complex I) of the quaternion.
         /// </summary>
-        public double ImagX => x;
+        public double ImagX => this.x;
 
         /// <summary>
         /// Gets the imaginary Y part (coefficient of complex J) of the quaternion.
         /// </summary>
-        public double ImagY => y;
+        public double ImagY => this.y;
 
         /// <summary>
         /// Gets the imaginary Z part (coefficient of complex K) of the quaternion.
         /// </summary>
-        public double ImagZ => z;
+        public double ImagZ => this.z;
 
         /// <summary>
         /// Gets the sum of the squares of the four components.
         /// </summary>
-        public double NormSquared => ToNormSquared(Real, ImagX, ImagY, ImagZ);
+        public double NormSquared => ToNormSquared(this.Real, this.ImagX, this.ImagY, this.ImagZ);
 
         /// <summary>
         /// Gets the norm of the quaternion q: square root of the sum of the squares of the four components.
         /// </summary>
-        public double Norm => Math.Sqrt(NormSquared);
+        public double Norm => Math.Sqrt(this.NormSquared);
 
         /// <summary>
         /// Gets the argument phi = arg(q) of the quaternion q, such that q = r*(cos(phi) +
         /// u*sin(phi)) = r*exp(phi*u) where r is the absolute and u the unit vector of
         /// q.
         /// </summary>
-        public double Arg => Math.Acos(Real / Norm);
+        public double Arg => Math.Acos(this.Real / this.Norm);
 
         /// <summary>
         /// Gets a value indicating whether the quaternion q has length |q| = 1.
@@ -115,29 +115,29 @@ namespace MathNet.Spatial.Euclidean
         /// To normalize a quaternion to a length of 1, use the <see cref="Normalized"/> method.
         /// All unit quaternions form a 3-sphere.
         /// </remarks>
-        public bool IsUnitQuaternion => NormSquared.AlmostEqual(1);
+        public bool IsUnitQuaternion => this.NormSquared.AlmostEqual(1);
 
         /// <summary>
         /// Gets a new Quaternion q with the Scalar part only.
         /// If you need a Double, use the Real-Field instead.
         /// </summary>
-        public Quaternion Scalar => new Quaternion(w, 0, 0, 0);
+        public Quaternion Scalar => new Quaternion(this.w, 0, 0, 0);
 
         /// <summary>
         /// Gets a new Quaternion q with the Vector part only.
         /// </summary>
-        public Quaternion Vector => new Quaternion(0, x, y, z);
+        public Quaternion Vector => new Quaternion(0, this.x, this.y, this.z);
 
         /// <summary>
         /// Gets a new normalized Quaternion u with the Vector part only, such that ||u|| = 1.
         /// Q may then be represented as q = r*(cos(phi) + u*sin(phi)) = r*exp(phi*u) where r is the absolute and phi the argument of q.
         /// </summary>
-        public Quaternion NormalizedVector => ToUnitQuaternion(0, x, y, z);
+        public Quaternion NormalizedVector => ToUnitQuaternion(0, this.x, this.y, this.z);
 
         /// <summary>
         /// Gets a new normalized Quaternion q with the direction of this quaternion.
         /// </summary>
-        public Quaternion Normalized => this == Zero ? this : ToUnitQuaternion(w, x, y, z);
+        public Quaternion Normalized => this == Zero ? this : ToUnitQuaternion(this.w, this.x, this.y, this.z);
 
         /// <summary>
         /// Gets an inverted quaternion. Inversing Zero returns Zero
@@ -151,26 +151,26 @@ namespace MathNet.Spatial.Euclidean
                     return this;
                 }
 
-                var normSquared = NormSquared;
-                return new Quaternion(w / normSquared, -x / normSquared, -y / normSquared, -z / normSquared);
+                var normSquared = this.NormSquared;
+                return new Quaternion(this.w / normSquared, -this.x / normSquared, -this.y / normSquared, -this.z / normSquared);
             }
         }
 
         /// <summary>
         /// Gets a value indicating whether the quaternion is not a number
         /// </summary>
-        public bool IsNan => double.IsNaN(Real) ||
-                             double.IsNaN(ImagX) ||
-                             double.IsNaN(ImagY) ||
-                             double.IsNaN(ImagZ);
+        public bool IsNan => double.IsNaN(this.Real) ||
+                             double.IsNaN(this.ImagX) ||
+                             double.IsNaN(this.ImagY) ||
+                             double.IsNaN(this.ImagZ);
 
         /// <summary>
         /// Gets a value indicating whether the quaternion is not a number
         /// </summary>
-        public bool IsInfinity => double.IsInfinity(Real) ||
-                                  double.IsInfinity(ImagX) ||
-                                  double.IsInfinity(ImagY) ||
-                                  double.IsInfinity(ImagZ);
+        public bool IsInfinity => double.IsInfinity(this.Real) ||
+                                  double.IsInfinity(this.ImagX) ||
+                                  double.IsInfinity(this.ImagY) ||
+                                  double.IsInfinity(this.ImagZ);
 
         /////// <summary>
         /////// Returns a new Quaternion q with the Sign of the components.
@@ -499,9 +499,9 @@ namespace MathNet.Spatial.Euclidean
         public EulerAngles ToEulerAngles()
         {
             return new EulerAngles(
-                Angle.FromRadians(Math.Atan2(2 * ((w * x) + (y * z)), (w * w) + (z * z) - (x * x) - (y * y))),
-                Angle.FromRadians(Math.Asin(2 * ((w * y) - (x * z)))),
-                Angle.FromRadians(Math.Atan2(2 * ((w * z) + (x * y)), (w * w) + (x * x) - (y * y) - (z * z))));
+                Angle.FromRadians(Math.Atan2(2 * ((this.w * this.x) + (this.y * this.z)), (this.w * this.w) + (this.z * this.z) - (this.x * this.x) - (this.y * this.y))),
+                Angle.FromRadians(Math.Asin(2 * ((this.w * this.y) - (this.x * this.z)))),
+                Angle.FromRadians(Math.Atan2(2 * ((this.w * this.z) + (this.x * this.y)), (this.w * this.w) + (this.x * this.x) - (this.y * this.y) - (this.z * this.z))));
         }
 
         /// <summary>
@@ -526,7 +526,7 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>A rotated quaternion</returns>
         public Quaternion RotateUnitQuaternion(Quaternion unitQuaternion)
         {
-            if (!IsUnitQuaternion)
+            if (!this.IsUnitQuaternion)
             {
                 throw new InvalidOperationException("You cannot rotate with this quaternion as it is not a Unit Quaternion");
             }
@@ -536,7 +536,7 @@ namespace MathNet.Spatial.Euclidean
                 throw new ArgumentException("The quaternion provided is not a Unit Quaternion", nameof(unitQuaternion));
             }
 
-            return (this * unitQuaternion) * Conjugate();
+            return (this * unitQuaternion) * this.Conjugate();
         }
 
         /// <summary>
@@ -545,7 +545,7 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>A new negated quaternion</returns>
         public Quaternion Negate()
         {
-            return new Quaternion(-w, -x, -y, -z);
+            return new Quaternion(-this.w, -this.x, -this.y, -this.z);
         }
 
         /// <summary>
@@ -554,7 +554,7 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>a new conjugated quaternion</returns>
         public Quaternion Conjugate()
         {
-            return new Quaternion(w, -x, -y, -z);
+            return new Quaternion(this.w, -this.x, -this.y, -this.z);
         }
 
         /// <summary>
@@ -564,7 +564,7 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>A new quaternion</returns>
         public Quaternion Log(double lbase)
         {
-            return Log() / Math.Log(lbase);
+            return this.Log() / Math.Log(lbase);
         }
 
         /// <summary>
@@ -578,8 +578,8 @@ namespace MathNet.Spatial.Euclidean
                 return One;
             }
 
-            var quat = NormalizedVector * Arg;
-            return new Quaternion(Math.Log(Norm), quat.ImagX, quat.ImagY, quat.ImagZ);
+            var quat = this.NormalizedVector * this.Arg;
+            return new Quaternion(Math.Log(this.Norm), quat.ImagX, quat.ImagY, quat.ImagZ);
         }
 
         /// <summary>
@@ -588,7 +588,7 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>A new quaternion</returns>
         public Quaternion Log10()
         {
-            return Log() / Math.Log(10);
+            return this.Log() / Math.Log(10);
         }
 
         /// <summary>
@@ -597,8 +597,8 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>A new quaternion</returns>
         public Quaternion Exp()
         {
-            var real = Math.Pow(Math.E, Real);
-            var vector = Vector;
+            var real = Math.Pow(Math.E, this.Real);
+            var vector = this.Vector;
             var vectorNorm = vector.Norm;
             var cos = Math.Cos(vectorNorm);
             var sgn = vector == Zero ? Zero : vector / vectorNorm;
@@ -626,7 +626,7 @@ namespace MathNet.Spatial.Euclidean
                 return One;
             }
 
-            return (power * Log()).Exp();
+            return (power * this.Log()).Exp();
         }
 
         /// <summary>
@@ -636,7 +636,7 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>A new quaternion</returns>
         public Quaternion Pow(int power)
         {
-            var quat = new Quaternion(Real, ImagX, ImagY, ImagZ);
+            var quat = new Quaternion(this.Real, this.ImagX, this.ImagY, this.ImagZ);
             if (power == 0)
             {
                 return One;
@@ -672,7 +672,7 @@ namespace MathNet.Spatial.Euclidean
                 return One;
             }
 
-            return (power * Log()).Exp();
+            return (power * this.Log()).Exp();
         }
 
         /// <summary>
@@ -681,8 +681,8 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>The square root of the quaternion</returns>
         public Quaternion Sqrt()
         {
-            var arg = Arg * 0.5;
-            return NormalizedVector * (Math.Sin(arg) + (Math.Cos(arg) * Math.Sqrt(w)));
+            var arg = this.Arg * 0.5;
+            return this.NormalizedVector * (Math.Sin(arg) + (Math.Cos(arg) * Math.Sqrt(this.w)));
         }
 
         /// <summary>
@@ -696,13 +696,13 @@ namespace MathNet.Spatial.Euclidean
             return string.Format(
                 formatProvider,
                 "{0}{1}{2}i{3}{4}j{5}{6}k",
-                Real.ToString(format, formatProvider),
-                (ImagX < 0) ? string.Empty : "+",
-                ImagX.ToString(format, formatProvider),
-                (ImagY < 0) ? string.Empty : "+",
-                ImagY.ToString(format, formatProvider),
-                (ImagZ < 0) ? string.Empty : "+",
-                ImagZ.ToString(format, formatProvider));
+                this.Real.ToString(format, formatProvider),
+                (this.ImagX < 0) ? string.Empty : "+",
+                this.ImagX.ToString(format, formatProvider),
+                (this.ImagY < 0) ? string.Empty : "+",
+                this.ImagY.ToString(format, formatProvider),
+                (this.ImagZ < 0) ? string.Empty : "+",
+                this.ImagZ.ToString(format, formatProvider));
         }
 
         /// <summary>
@@ -713,13 +713,13 @@ namespace MathNet.Spatial.Euclidean
         {
             return string.Format(
                 "{0}{1}{2}i{3}{4}j{5}{6}k",
-                Real,
-                (ImagX < 0) ? string.Empty : "+",
-                ImagX,
-                (ImagY < 0) ? string.Empty : "+",
-                ImagY,
-                (ImagZ < 0) ? string.Empty : "+",
-                ImagZ);
+                this.Real,
+                (this.ImagX < 0) ? string.Empty : "+",
+                this.ImagX,
+                (this.ImagY < 0) ? string.Empty : "+",
+                this.ImagY,
+                (this.ImagZ < 0) ? string.Empty : "+",
+                this.ImagZ);
         }
 
         /// <summary>
@@ -731,41 +731,41 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public bool Equals(Quaternion other, double tolerance)
         {
-            if ((other.IsNan && IsNan) ||
-                (other.IsInfinity && IsInfinity))
+            if ((other.IsNan && this.IsNan) ||
+                (other.IsInfinity && this.IsInfinity))
             {
                 return true;
             }
 
-            return Math.Abs(other.w - w) < tolerance
-                   && Math.Abs(other.x - x) < tolerance
-                   && Math.Abs(other.y - y) < tolerance
-                   && Math.Abs(other.z - z) < tolerance;
+            return Math.Abs(other.w - this.w) < tolerance
+                   && Math.Abs(other.x - this.x) < tolerance
+                   && Math.Abs(other.y - this.y) < tolerance
+                   && Math.Abs(other.z - this.z) < tolerance;
         }
 
         /// <inheritdoc />
         [Pure]
         public bool Equals(Quaternion other)
         {
-            if ((other.IsNan && IsNan) ||
-                (other.IsInfinity && IsInfinity))
+            if ((other.IsNan && this.IsNan) ||
+                (other.IsInfinity && this.IsInfinity))
             {
                 return true;
             }
 
-            return w.Equals(other.w)
-                   && x.Equals(other.x)
-                   && y.Equals(other.y)
-                   && z.Equals(other.z);
+            return this.w.Equals(other.w)
+                   && this.x.Equals(other.x)
+                   && this.y.Equals(other.y)
+                   && this.z.Equals(other.z);
         }
 
         /// <inheritdoc />
         [Pure]
-        public override bool Equals(object obj) => obj is Quaternion q && Equals(q);
+        public override bool Equals(object obj) => obj is Quaternion q && this.Equals(q);
 
         /// <inheritdoc />
         [Pure]
-        public override int GetHashCode() => HashCode.Combine(w, x, y, z);
+        public override int GetHashCode() => HashCode.Combine(this.w, this.x, this.y, this.z);
 
         /// <summary>
         /// Calculates norm of quaternion from it's algebraical notation

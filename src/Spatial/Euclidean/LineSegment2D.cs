@@ -9,7 +9,7 @@ namespace MathNet.Spatial.Euclidean
     /// This structure represents a line between two points in 2-space.  It allows for operations such as
     /// computing the length, direction, comparisons, and shifting by a vector.
     /// </summary>
-    public readonly struct LineSegment2D : IEquatable<LineSegment2D>
+    public struct LineSegment2D : IEquatable<LineSegment2D>
     {
         /// <summary>
         /// The starting point of the line segment
@@ -34,21 +34,21 @@ namespace MathNet.Spatial.Euclidean
                 throw new ArgumentException("The segment starting and ending points cannot be identical");
             }
 
-            StartPoint = startPoint;
-            EndPoint = endPoint;
+            this.StartPoint = startPoint;
+            this.EndPoint = endPoint;
         }
 
         /// <summary>
         /// Gets the distance from <see cref="StartPoint"/> to <see cref="EndPoint"/>
         /// </summary>
         [Pure]
-        public double Length => StartPoint.DistanceTo(EndPoint);
+        public double Length => this.StartPoint.DistanceTo(this.EndPoint);
 
         /// <summary>
         /// Gets a normalized vector in the direction from <see cref="StartPoint"/> to <see cref="EndPoint"/>
         /// </summary>
         [Pure]
-        public Vector2D Direction => StartPoint.VectorTo(EndPoint).Normalize();
+        public Vector2D Direction => this.StartPoint.VectorTo(this.EndPoint).Normalize();
 
         /// <summary>
         /// Returns a value that indicates whether each pair of elements in two specified lines is equal.
@@ -91,8 +91,8 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>A new translated line segment</returns>
         public LineSegment2D TranslateBy(Vector2D vector)
         {
-            var startVector = StartPoint.ToVector2D().Add(vector);
-            var endVector = EndPoint.ToVector2D().Add(vector);
+            var startVector = this.StartPoint.ToVector2D().Add(vector);
+            var endVector = this.EndPoint.ToVector2D().Add(vector);
             return new LineSegment2D(new Point2D(startVector.X, startVector.Y), new Point2D(endVector.X, endVector.Y));
         }
 
@@ -104,7 +104,7 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public LineSegment2D LineTo(Point2D p)
         {
-            return new LineSegment2D(ClosestPointTo(p), p);
+            return new LineSegment2D(this.ClosestPointTo(p), p);
         }
 
         /// <summary>
@@ -115,22 +115,22 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public Point2D ClosestPointTo(Point2D p)
         {
-            var v = StartPoint.VectorTo(p);
-            var dotProduct = v.DotProduct(Direction);
+            var v = this.StartPoint.VectorTo(p);
+            var dotProduct = v.DotProduct(this.Direction);
 
             if (dotProduct < 0)
             {
                 dotProduct = 0;
             }
 
-            var l = Length;
+            var l = this.Length;
             if (dotProduct > l)
             {
                 dotProduct = l;
             }
 
-            var alongVector = dotProduct * Direction;
-            return StartPoint + alongVector;
+            var alongVector = dotProduct * this.Direction;
+            return this.StartPoint + alongVector;
         }
 
         /// <summary>
@@ -144,16 +144,16 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public bool TryIntersect(LineSegment2D other, out Point2D intersection, Angle tolerance)
         {
-            if (IsParallelTo(other, tolerance))
+            if (this.IsParallelTo(other, tolerance))
             {
                 intersection = default(Point2D);
                 return false;
             }
 
             // http://stackoverflow.com/questions/563198/how-do-you-detect-where-two-line-segments-intersect
-            var p = StartPoint;
+            var p = this.StartPoint;
             var q = other.StartPoint;
-            var r = StartPoint.VectorTo(EndPoint);
+            var r = this.StartPoint.VectorTo(this.EndPoint);
             var s = other.StartPoint.VectorTo(other.EndPoint);
 
             var t = (q - p).CrossProduct(s) / r.CrossProduct(s);
@@ -172,14 +172,14 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public bool IsParallelTo(LineSegment2D other, Angle tolerance)
         {
-            return Direction.IsParallelTo(other.Direction, tolerance);
+            return this.Direction.IsParallelTo(other.Direction, tolerance);
         }
 
         /// <inheritdoc/>
         [Pure]
         public override string ToString()
         {
-            return $"StartPoint: {StartPoint}, EndPoint: {EndPoint}";
+            return $"StartPoint: {this.StartPoint}, EndPoint: {this.EndPoint}";
         }
 
         /// <summary>
@@ -191,19 +191,19 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public bool Equals(LineSegment2D other, double tolerance)
         {
-            return StartPoint.Equals(other.StartPoint, tolerance) && EndPoint.Equals(other.EndPoint, tolerance);
+            return this.StartPoint.Equals(other.StartPoint, tolerance) && this.EndPoint.Equals(other.EndPoint, tolerance);
         }
 
         /// <inheritdoc/>
         [Pure]
-        public bool Equals(LineSegment2D l) => StartPoint.Equals(l.StartPoint) && EndPoint.Equals(l.EndPoint);
+        public bool Equals(LineSegment2D l) => this.StartPoint.Equals(l.StartPoint) && this.EndPoint.Equals(l.EndPoint);
 
         /// <inheritdoc />
         [Pure]
-        public override bool Equals(object obj) => obj is LineSegment2D l && Equals(l);
+        public override bool Equals(object obj) => obj is LineSegment2D l && this.Equals(l);
 
         /// <inheritdoc />
         [Pure]
-        public override int GetHashCode() => HashCode.Combine(StartPoint, EndPoint);
+        public override int GetHashCode() => HashCode.Combine(this.StartPoint, this.EndPoint);
     }
 }

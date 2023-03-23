@@ -9,7 +9,7 @@ namespace MathNet.Spatial.Euclidean
     /// This structure represents a line between two points in 2-space.  It allows for operations such as
     /// computing the length, direction, projections to, comparisons, and shifting by a vector.
     /// </summary>
-    public readonly struct Line2D : IEquatable<Line2D>
+    public struct Line2D : IEquatable<Line2D>
     {
         /// <summary>
         /// The starting point of the line segment
@@ -34,21 +34,21 @@ namespace MathNet.Spatial.Euclidean
                 throw new ArgumentException("The Line2D starting and ending points cannot be identical");
             }
 
-            StartPoint = startPoint;
-            EndPoint = endPoint;
+            this.StartPoint = startPoint;
+            this.EndPoint = endPoint;
         }
 
         /// <summary>
         /// Gets the distance from <see cref="StartPoint"/> to <see cref="EndPoint"/>
         /// </summary>
         [Pure]
-        public double Length => StartPoint.DistanceTo(EndPoint);
+        public double Length => this.StartPoint.DistanceTo(this.EndPoint);
 
         /// <summary>
         /// Gets a normalized vector in the direction from <see cref="StartPoint"/> to <see cref="EndPoint"/>
         /// </summary>
         [Pure]
-        public Vector2D Direction => StartPoint.VectorTo(EndPoint).Normalize();
+        public Vector2D Direction => this.StartPoint.VectorTo(this.EndPoint).Normalize();
 
         /// <summary>
         /// Returns a value that indicates whether each pair of elements in two specified lines is equal.
@@ -126,7 +126,7 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public Line2D LineTo(Point2D p, bool mustStartBetweenAndEnd)
         {
-            return new Line2D(ClosestPointTo(p, mustStartBetweenAndEnd), p);
+            return new Line2D(this.ClosestPointTo(p, mustStartBetweenAndEnd), p);
         }
 
         /// <summary>
@@ -138,8 +138,8 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public Point2D ClosestPointTo(Point2D p, bool mustBeOnSegment)
         {
-            var v = StartPoint.VectorTo(p);
-            var dotProduct = v.DotProduct(Direction);
+            var v = this.StartPoint.VectorTo(p);
+            var dotProduct = v.DotProduct(this.Direction);
             if (mustBeOnSegment)
             {
                 if (dotProduct < 0)
@@ -147,15 +147,15 @@ namespace MathNet.Spatial.Euclidean
                     dotProduct = 0;
                 }
 
-                var l = Length;
+                var l = this.Length;
                 if (dotProduct > l)
                 {
                     dotProduct = l;
                 }
             }
 
-            var alongVector = dotProduct * Direction;
-            return StartPoint + alongVector;
+            var alongVector = dotProduct * this.Direction;
+            return this.StartPoint + alongVector;
         }
 
         /// <summary>
@@ -167,15 +167,15 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public Point2D? IntersectWith(Line2D other)
         {
-            if (IsParallelTo(other))
+            if (this.IsParallelTo(other))
             {
                 return null;
             }
 
             // http://stackoverflow.com/questions/563198/how-do-you-detect-where-two-line-segments-intersect
-            var p = StartPoint;
+            var p = this.StartPoint;
             var q = other.StartPoint;
-            var r = StartPoint.VectorTo(EndPoint);
+            var r = this.StartPoint.VectorTo(this.EndPoint);
             var s = other.StartPoint.VectorTo(other.EndPoint);
 
             var t = (q - p).CrossProduct(s) / r.CrossProduct(s);
@@ -193,15 +193,15 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public Point2D? IntersectWith(Line2D other, Angle tolerance)
         {
-            if (IsParallelTo(other, tolerance))
+            if (this.IsParallelTo(other, tolerance))
             {
                 return null;
             }
 
             // http://stackoverflow.com/questions/563198/how-do-you-detect-where-two-line-segments-intersect
-            var p = StartPoint;
+            var p = this.StartPoint;
             var q = other.StartPoint;
-            var r = StartPoint.VectorTo(EndPoint);
+            var r = this.StartPoint.VectorTo(this.EndPoint);
             var s = other.StartPoint.VectorTo(other.EndPoint);
 
             var t = (q - p).CrossProduct(s) / r.CrossProduct(s);
@@ -218,7 +218,7 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public bool IsParallelTo(Line2D other)
         {
-            return Direction.IsParallelTo(other.Direction, Precision.DoublePrecision * 2);
+            return this.Direction.IsParallelTo(other.Direction, Precision.DoublePrecision * 2);
         }
 
         /// <summary>
@@ -230,21 +230,21 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public bool IsParallelTo(Line2D other, Angle tolerance)
         {
-            return Direction.IsParallelTo(other.Direction, tolerance);
+            return this.Direction.IsParallelTo(other.Direction, tolerance);
         }
 
         /// <inheritdoc/>
         [Pure]
         public override string ToString()
         {
-            return $"StartPoint: {StartPoint}, EndPoint: {EndPoint}";
+            return $"StartPoint: {this.StartPoint}, EndPoint: {this.EndPoint}";
         }
 
         /// <inheritdoc/>
         [Pure]
         public bool Equals(Line2D other)
         {
-            return StartPoint.Equals(other.StartPoint) && EndPoint.Equals(other.EndPoint);
+            return this.StartPoint.Equals(other.StartPoint) && this.EndPoint.Equals(other.EndPoint);
         }
 
         /// <inheritdoc />
@@ -256,7 +256,7 @@ namespace MathNet.Spatial.Euclidean
                 return false;
             }
 
-            return obj is Line2D d && Equals(d);
+            return obj is Line2D d && this.Equals(d);
         }
 
         /// <inheritdoc />
@@ -265,7 +265,7 @@ namespace MathNet.Spatial.Euclidean
         {
             unchecked
             {
-                return (StartPoint.GetHashCode() * 397) ^ EndPoint.GetHashCode();
+                return (this.StartPoint.GetHashCode() * 397) ^ this.EndPoint.GetHashCode();
             }
         }
     }
