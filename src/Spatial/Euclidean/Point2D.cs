@@ -37,8 +37,8 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="y">The y coordinate</param>
         public Point2D(double x, double y)
         {
-            this.X = x;
-            this.Y = y;
+            X = x;
+            Y = y;
         }
 
         /// <summary>
@@ -231,7 +231,7 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>A new point</returns>
         public Point2D TransformBy(Matrix<double> m)
         {
-            return OfVector(m.Multiply(this.ToVector()));
+            return OfVector(m.Multiply(ToVector()));
         }
 
         /// <summary>
@@ -253,7 +253,7 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public double DistanceTo(Point2D otherPoint)
         {
-            var vector = this.VectorTo(otherPoint);
+            var vector = VectorTo(otherPoint);
             return vector.Length;
         }
 
@@ -264,7 +264,7 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public Vector2D ToVector2D()
         {
-            return new Vector2D(this.X, this.Y);
+            return new Vector2D(X, Y);
         }
 
         /// <summary>
@@ -274,14 +274,14 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public Vector<double> ToVector()
         {
-            return Vector<double>.Build.Dense(new[] { this.X, this.Y });
+            return Vector<double>.Build.Dense(new[] { X, Y });
         }
 
         /// <inheritdoc />
         [Pure]
         public override string ToString()
         {
-            return this.ToString("G15", CultureInfo.InvariantCulture);
+            return ToString("G15", CultureInfo.InvariantCulture);
         }
 
         /// <summary>
@@ -292,7 +292,7 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public string ToString(IFormatProvider provider)
         {
-            return this.ToString("G15", provider);
+            return ToString("G15", provider);
         }
 
         /// <inheritdoc />
@@ -301,7 +301,7 @@ namespace MathNet.Spatial.Euclidean
         {
             var numberFormatInfo = provider != null ? NumberFormatInfo.GetInstance(provider) : CultureInfo.InvariantCulture.NumberFormat;
             var separator = numberFormatInfo.NumberDecimalSeparator == "," ? ";" : ",";
-            return $"({this.X.ToString(format, numberFormatInfo)}{separator}\u00A0{this.Y.ToString(format, numberFormatInfo)})";
+            return $"({X.ToString(format, numberFormatInfo)}{separator}\u00A0{Y.ToString(format, numberFormatInfo)})";
         }
 
         /// <summary>
@@ -318,21 +318,21 @@ namespace MathNet.Spatial.Euclidean
                 throw new ArgumentException("epsilon < 0");
             }
 
-            return Math.Abs(other.X - this.X) < tolerance &&
-                   Math.Abs(other.Y - this.Y) < tolerance;
+            return Math.Abs(other.X - X) < tolerance &&
+                   Math.Abs(other.Y - Y) < tolerance;
         }
 
         /// <inheritdoc />
         [Pure]
-        public bool Equals(Point2D other) => this.X.Equals(other.X) && this.Y.Equals(other.Y);
+        public bool Equals(Point2D other) => X.Equals(other.X) && Y.Equals(other.Y);
 
         /// <inheritdoc />
         [Pure]
-        public override bool Equals(object obj) => obj is Point2D p && this.Equals(p);
+        public override bool Equals(object obj) => obj is Point2D p && Equals(p);
 
         /// <inheritdoc />
         [Pure]
-        public override int GetHashCode() => HashCode.Combine(this.X, this.Y);
+        public override int GetHashCode() => HashCode.Combine(X, Y);
 
         /// <inheritdoc />
         XmlSchema IXmlSerializable.GetSchema() => null;
@@ -361,8 +361,8 @@ namespace MathNet.Spatial.Euclidean
         /// <inheritdoc />
         void IXmlSerializable.WriteXml(XmlWriter writer)
         {
-            writer.WriteAttribute("X", this.X);
-            writer.WriteAttribute("Y", this.Y);
+            writer.WriteAttribute("X", X);
+            writer.WriteAttribute("Y", Y);
         }
     }
 }

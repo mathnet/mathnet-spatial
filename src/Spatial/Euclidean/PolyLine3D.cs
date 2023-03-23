@@ -14,7 +14,7 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// An internal list of points
         /// </summary>
-        private readonly List<Point3D> points;
+        private readonly List<Point3D> _points;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PolyLine3D"/> class.
@@ -23,18 +23,18 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="points">A list of points.</param>
         public PolyLine3D(IEnumerable<Point3D> points)
         {
-            this.points = new List<Point3D>(points);
+            _points = new List<Point3D>(points);
         }
 
         /// <summary>
         /// Gets the number of vertices in the polyline.
         /// </summary>
-        public int VertexCount => this.points.Count;
+        public int VertexCount => _points.Count;
 
         /// <summary>
         /// Gets the length of the polyline, computed as the sum of the lengths of every segment
         /// </summary>
-        public double Length => this.GetPolyLineLength();
+        public double Length => GetPolyLineLength();
 
         /// <summary>
         /// Gets a list of vertices
@@ -43,7 +43,7 @@ namespace MathNet.Spatial.Euclidean
         {
             get
             {
-                foreach (var point in this.points)
+                foreach (var point in _points)
                 {
                     yield return point;
                 }
@@ -85,7 +85,7 @@ namespace MathNet.Spatial.Euclidean
                 throw new ArgumentException("fraction must be between 0 and 1");
             }
 
-            return this.GetPointAtLengthFromStart(fraction * this.Length);
+            return GetPointAtLengthFromStart(fraction * Length);
         }
 
         /// <summary>
@@ -96,27 +96,27 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>A point which is the specified distance along the line</returns>
         public Point3D GetPointAtLengthFromStart(double lengthFromStart)
         {
-            var length = this.Length;
+            var length = Length;
             if (lengthFromStart >= length)
             {
-                return this.points.Last();
+                return _points.Last();
             }
 
             if (lengthFromStart <= 0)
             {
-                return this.points.First();
+                return _points.First();
             }
 
             double cumulativeLength = 0;
             var i = 0;
             while (true)
             {
-                var nextLength = cumulativeLength + this.points[i].DistanceTo(this.points[i + 1]);
+                var nextLength = cumulativeLength + _points[i].DistanceTo(_points[i + 1]);
                 if (cumulativeLength <= lengthFromStart && nextLength > lengthFromStart)
                 {
                     var leftover = lengthFromStart - cumulativeLength;
-                    var direction = this.points[i].VectorTo(this.points[i + 1]).Normalize();
-                    return this.points[i] + (leftover * direction);
+                    var direction = _points[i].VectorTo(_points[i + 1]).Normalize();
+                    return _points[i] + (leftover * direction);
                 }
 
                 cumulativeLength = nextLength;
@@ -134,9 +134,9 @@ namespace MathNet.Spatial.Euclidean
             var minError = double.MaxValue;
             var closest = default(Point3D);
 
-            for (var i = 0; i < this.VertexCount - 1; i++)
+            for (var i = 0; i < VertexCount - 1; i++)
             {
-                var segment = new LineSegment3D(this.points[i], this.points[i + 1]);
+                var segment = new LineSegment3D(_points[i], _points[i + 1]);
                 var projected = segment.ClosestPointTo(p);
                 var error = p.DistanceTo(projected);
                 if (error < minError)
@@ -158,14 +158,14 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public bool Equals(PolyLine3D other, double tolerance)
         {
-            if (this.VertexCount != other?.VertexCount)
+            if (VertexCount != other?.VertexCount)
             {
                 return false;
             }
 
-            for (var i = 0; i < this.points.Count; i++)
+            for (var i = 0; i < _points.Count; i++)
             {
-                if (!this.points[i].Equals(other.points[i], tolerance))
+                if (!_points[i].Equals(other._points[i], tolerance))
                 {
                     return false;
                 }
@@ -178,14 +178,14 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public bool Equals(PolyLine3D other)
         {
-            if (this.VertexCount != other?.VertexCount)
+            if (VertexCount != other?.VertexCount)
             {
                 return false;
             }
 
-            for (var i = 0; i < this.points.Count; i++)
+            for (var i = 0; i < _points.Count; i++)
             {
-                if (!this.points[i].Equals(other.points[i]))
+                if (!_points[i].Equals(other._points[i]))
                 {
                     return false;
                 }
@@ -199,14 +199,14 @@ namespace MathNet.Spatial.Euclidean
         public override bool Equals(object obj)
         {
             return obj is PolyLine3D polyLine3D &&
-                   this.Equals(polyLine3D);
+                   Equals(polyLine3D);
         }
 
         /// <inheritdoc />
         [Pure]
         public override int GetHashCode()
         {
-            return HashCode.CombineMany(this.points);
+            return HashCode.CombineMany(_points);
         }
 
         /// <summary>
@@ -216,9 +216,9 @@ namespace MathNet.Spatial.Euclidean
         private double GetPolyLineLength()
         {
             double length = 0;
-            for (var i = 0; i < this.points.Count - 1; ++i)
+            for (var i = 0; i < _points.Count - 1; ++i)
             {
-                length += this.points[i].DistanceTo(this.points[i + 1]);
+                length += _points[i].DistanceTo(_points[i + 1]);
             }
 
             return length;
