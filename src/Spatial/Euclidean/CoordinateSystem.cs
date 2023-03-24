@@ -151,10 +151,7 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// Gets the offset to origin
         /// </summary>
-        public Vector3D OffsetToBase
-        {
-            get { return Origin.ToVector3D(); }
-        }
+        public Vector3D OffsetToBase => Origin.ToVector3D();
 
         /// <summary>
         /// Gets the base change matrix
@@ -516,10 +513,11 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Transforms a vector and returns the transformed vector
+        /// Given a transform from coordinate system A to coordinate system B, and a vector <see cref="v"/>
+        /// expressed in coordinate system B, it returns the vector expressed in coordinate system A
         /// </summary>
-        /// <param name="v">A vector</param>
-        /// <returns>A transformed vector</returns>
+        /// <param name="v">Vector whose coordinates are expressed in coordinate system B</param>
+        /// <returns>The vector expressed in coordinate system A</returns>
         public Vector3D Transform(Vector3D v)
         {
             var v3 = Vector<double>.Build.Dense(new[] { v.X, v.Y, v.Z });
@@ -528,10 +526,11 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Transforms a vector and returns the transformed vector
+        /// Given a transform from coordinate system A to coordinate system B, and a vector <see cref="v"/>
+        /// expressed in coordinate system B, it returns the vector expressed in coordinate system A
         /// </summary>
-        /// <param name="v">a unit vector</param>
-        /// <returns>A transformed vector</returns>
+        /// <param name="v">Unit vector whose coordinates are expressed in coordinate system B</param>
+        /// <returns>The vector expressed in coordinate system A</returns>
         public Vector3D Transform(UnitVector3D v)
         {
             var v3 = Vector<double>.Build.Dense(new[] { v.X, v.Y, v.Z });
@@ -540,10 +539,11 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Transforms a point and returns the transformed point
+        /// Given a transform from coordinate system A to coordinate system B, and a point <see cref="p"/>
+        /// expressed in coordinate system B, it returns the point expressed in coordinate system A
         /// </summary>
-        /// <param name="p">a point</param>
-        /// <returns>A transformed point</returns>
+        /// <param name="p">Point whose coordinates are expressed in coordinate system B</param>
+        /// <returns>The point expressed in coordinate system A</returns>
         public Point3D Transform(Point3D p)
         {
             var v4 = Vector<double>.Build.Dense(new[] { p.X, p.Y, p.Z, 1 });
