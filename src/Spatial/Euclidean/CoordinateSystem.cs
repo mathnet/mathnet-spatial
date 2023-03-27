@@ -151,10 +151,7 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// Gets the offset to origin
         /// </summary>
-        public Vector3D OffsetToBase
-        {
-            get { return Origin.ToVector3D(); }
-        }
+        public Vector3D OffsetToBase => Origin.ToVector3D();
 
         /// <summary>
         /// Gets the base change matrix
@@ -249,8 +246,9 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Rotation around Z (yaw) then around Y (pitch) and then around X (roll)
-        /// http://en.wikipedia.org/wiki/Aircraft_principal_axes
+        /// Successive intrinsic rotations around Z (yaw) then around Y (pitch) and then around X (roll)
+        /// Gives an order of magnitude speed improvement.
+        /// https://en.wikipedia.org/wiki/Rotation_matrix#General_rotations
         /// </summary>
         /// <param name="yaw">Rotates around Z</param>
         /// <param name="pitch">Rotates around Y</param>
@@ -258,13 +256,28 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>A rotated coordinate system</returns>
         public static CoordinateSystem Rotation(Angle yaw, Angle pitch, Angle roll)
         {
-            var cs = new CoordinateSystem();
-            var yt = Yaw(yaw);
-            var pt = Pitch(pitch);
-            var rt = Roll(roll);
-            return rt.Transform(pt.Transform(yt.Transform(cs)));
-        }
+            var cs = new CoordinateSystem(); 
+            var cosY = Math.Cos(yaw.Radians);
+            var sinY = Math.Sin(yaw.Radians); 
+            var cosP = Math.Cos(pitch.Radians);
+            var sinP = Math.Sin(pitch.Radians);
+            var cosR = Math.Cos(roll.Radians);
+            var sinR = Math.Sin(roll.Radians);
 
+            cs[0, 0] = cosY * cosP;
+            cs[1, 0] = sinY * cosP;
+            cs[2, 0] = -sinP;
+
+            cs[0, 1] = cosY * sinP * sinR - sinY * cosR;
+            cs[1, 1] = sinY * sinP * sinR + cosY * cosR;
+            cs[2, 1] = cosP * sinR;
+
+            cs[0, 2] = cosY * sinP * cosR + sinY * sinR;
+            cs[1, 2] = sinY * sinP * cosR - cosY * sinR;
+            cs[2, 2] = cosP * cosR;
+
+            return cs; 
+        }
         /// <summary>
         /// Rotates around Z
         /// </summary>
@@ -516,10 +529,11 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Transforms a vector and returns the transformed vector
+        /// Given a transform from coordinate system A to coordinate system B, and a vector <see cref="v"/>
+        /// expressed in coordinate system B, it returns the vector expressed in coordinate system A
         /// </summary>
-        /// <param name="v">A vector</param>
-        /// <returns>A transformed vector</returns>
+        /// <param name="v">Vector whose coordinates are expressed in coordinate system B</param>
+        /// <returns>The vector expressed in coordinate system A</returns>
         public Vector3D Transform(Vector3D v)
         {
             var v3 = Vector<double>.Build.Dense(new[] { v.X, v.Y, v.Z });
@@ -528,10 +542,11 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Transforms a vector and returns the transformed vector
+        /// Given a transform from coordinate system A to coordinate system B, and a vector <see cref="v"/>
+        /// expressed in coordinate system B, it returns the vector expressed in coordinate system A
         /// </summary>
-        /// <param name="v">a unit vector</param>
-        /// <returns>A transformed vector</returns>
+        /// <param name="v">Unit vector whose coordinates are expressed in coordinate system B</param>
+        /// <returns>The vector expressed in coordinate system A</returns>
         public Vector3D Transform(UnitVector3D v)
         {
             var v3 = Vector<double>.Build.Dense(new[] { v.X, v.Y, v.Z });
@@ -540,10 +555,11 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Transforms a point and returns the transformed point
+        /// Given a transform from coordinate system A to coordinate system B, and a point <see cref="p"/>
+        /// expressed in coordinate system B, it returns the point expressed in coordinate system A
         /// </summary>
-        /// <param name="p">a point</param>
-        /// <returns>A transformed point</returns>
+        /// <param name="p">Point whose coordinates are expressed in coordinate system B</param>
+        /// <returns>The point expressed in coordinate system A</returns>
         public Point3D Transform(Point3D p)
         {
             var v4 = Vector<double>.Build.Dense(new[] { p.X, p.Y, p.Z, 1 });

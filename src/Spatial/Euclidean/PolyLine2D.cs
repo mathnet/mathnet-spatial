@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using HashCode = MathNet.Spatial.Internals.HashCode;
@@ -15,7 +16,7 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// Internal storage for the points
         /// </summary>
-        private readonly List<Point2D> _points;
+        private readonly ReadOnlyCollection<Point2D> _points;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PolyLine2D"/> class.
@@ -24,7 +25,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="points">A list of points.</param>
         public PolyLine2D(IEnumerable<Point2D> points)
         {
-            _points = new List<Point2D>(points);
+            _points = new List<Point2D>(points).AsReadOnly();
         }
 
         /// <summary>
@@ -40,16 +41,7 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// Gets a list of vertices
         /// </summary>
-        public IEnumerable<Point2D> Vertices
-        {
-            get
-            {
-                foreach (var point in _points)
-                {
-                    yield return point;
-                }
-            }
-        }
+        public IReadOnlyList<Point2D> Vertices => _points;
 
         /// <summary>
         /// Returns a value that indicates whether each pair of elements in two specified lines is equal.

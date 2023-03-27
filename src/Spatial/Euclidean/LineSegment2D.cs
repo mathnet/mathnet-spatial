@@ -134,19 +134,19 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Compute the intersection between two lines if the angle between them is greater than a specified
+        /// Compute the intersection between two line segments if the angle between them is greater than a specified
         /// angle tolerance.
         /// </summary>
-        /// <param name="other">The other line to compute the intersection with</param>
-        /// <param name="intersection">When this method returns, contains the intersection point, if the conversion succeeded, or the default point if the conversion failed.</param>
-        /// <param name="tolerance">The tolerance used when checking if the lines are parallel</param>
+        /// <param name="other">The other line segment to compute the intersection with</param>
+        /// <param name="intersection">The intersection if it exists; otherwise null</param>
+        /// <param name="tolerance">The tolerance used when checking if the line segments are parallel</param>
         /// <returns>True if an intersection exists; otherwise false</returns>
         [Pure]
-        public bool TryIntersect(LineSegment2D other, out Point2D intersection, Angle tolerance)
+        public bool TryIntersect(LineSegment2D other, out Point2D? intersection, Angle tolerance)
         {
+            intersection = null;
             if (IsParallelTo(other, tolerance))
-            {
-                intersection = default(Point2D);
+            {   
                 return false;
             }
 
@@ -159,8 +159,13 @@ namespace MathNet.Spatial.Euclidean
             var t = (q - p).CrossProduct(s) / r.CrossProduct(s);
             var u = (p - q).CrossProduct(r) / s.CrossProduct(r);
 
-            intersection = p + (t * r);
-            return (0.0 <= t && t <= 1.0) && (0.0 <= u && u <= 1.0);
+            var isIntersected = (0.0 <= t && t <= 1.0) && (0.0 <= u && u <= 1.0);
+            if (isIntersected)
+            {
+                intersection = p + t * r;
+            }
+
+            return intersection != null;
         }
 
         /// <summary>
