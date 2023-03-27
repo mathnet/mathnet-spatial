@@ -32,10 +32,10 @@ namespace MathNet.Spatial.Tests.Euclidean
         [TestCase("0,0", "-1,0", 1)]
         [TestCase("0,-1", "0,1", 2)]
         [TestCase("-1,-1", "2,2", 4.24264068711)]
-        public void LineLength(string p1s, string p2s, double expected)
+        public void LineLength(string p1S, string p2S, double expected)
         {
-            var p1 = Point2D.Parse(p1s);
-            var p2 = Point2D.Parse(p2s);
+            var p1 = Point2D.Parse(p1S);
+            var p2 = Point2D.Parse(p2S);
             var line = new LineSegment2D(p1, p2);
             var len = line.Length;
 
@@ -46,10 +46,10 @@ namespace MathNet.Spatial.Tests.Euclidean
         [TestCase("3,0", "0,0", "-1,0")]
         [TestCase("2.7,-2.7", "0,0", "-0.707106781,0.707106781")]
         [TestCase("11,-1", "11,1", "0,1")]
-        public void LineDirection(string p1s, string p2s, string exs)
+        public void LineDirection(string p1S, string p2S, string exs)
         {
-            var p1 = Point2D.Parse(p1s);
-            var p2 = Point2D.Parse(p2s);
+            var p1 = Point2D.Parse(p1S);
+            var p2 = Point2D.Parse(p2S);
             var ex = Vector2D.Parse(exs);
             var line = new LineSegment2D(p1, p2);
 
@@ -58,20 +58,20 @@ namespace MathNet.Spatial.Tests.Euclidean
 
         [TestCase("0,0", "10,10", "0,0", "10,10", true)]
         [TestCase("0,0", "10,10", "0,0", "10,11", false)]
-        public void EqualityOperator(string p1s, string p2s, string p3s, string p4s, bool expected)
+        public void EqualityOperator(string p1S, string p2S, string p3S, string p4S, bool expected)
         {
-            var l1 = LineSegment2D.Parse(p1s, p2s);
-            var l2 = LineSegment2D.Parse(p3s, p4s);
+            var l1 = LineSegment2D.Parse(p1S, p2S);
+            var l2 = LineSegment2D.Parse(p3S, p4S);
 
             Assert.AreEqual(expected, l1 == l2);
         }
 
         [TestCase("0,0", "10,10", "0,0", "10,10", false)]
         [TestCase("0,0", "10,10", "0,0", "10,11", true)]
-        public void InequalityOperator(string p1s, string p2s, string p3s, string p4s, bool expected)
+        public void InequalityOperator(string p1S, string p2S, string p3S, string p4S, bool expected)
         {
-            var l1 = new LineSegment2D(Point2D.Parse(p1s), Point2D.Parse(p2s));
-            var l2 = new LineSegment2D(Point2D.Parse(p3s), Point2D.Parse(p4s));
+            var l1 = new LineSegment2D(Point2D.Parse(p1S), Point2D.Parse(p2S));
+            var l2 = new LineSegment2D(Point2D.Parse(p3S), Point2D.Parse(p4S));
 
             Assert.AreEqual(expected, l1 != l2);
         }
@@ -146,10 +146,9 @@ namespace MathNet.Spatial.Tests.Euclidean
         {
             var line1 = LineSegment2D.Parse(s1, e1);
             var line2 = LineSegment2D.Parse(s2, e2);
-            var e = (Point2D?)null;
             bool success = line1.TryIntersect(line2, out var result, Angle.FromRadians(0.001));
             Assert.IsFalse(success);
-            Assert.AreEqual(e, result);
+            Assert.AreEqual(null, result);
         }
 
         [TestCase("0,0", "0,1", "1,1", "1,2", 0.0001, true)]
