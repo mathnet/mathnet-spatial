@@ -8,7 +8,7 @@ namespace MathNet.Spatial.Euclidean
     /// Describes a 3 dimensional circle
     /// </summary>
     [Serializable]
-    public struct Circle3D : IEquatable<Circle3D>
+    public readonly struct Circle3D : IEquatable<Circle3D>
     {
         /// <summary>
         /// The center of the circle
@@ -34,28 +34,28 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="radius">the radius of the circle</param>
         public Circle3D(Point3D centerPoint, UnitVector3D axis, double radius)
         {
-            this.CenterPoint = centerPoint;
-            this.Axis = axis;
-            this.Radius = radius;
+            CenterPoint = centerPoint;
+            Axis = axis;
+            Radius = radius;
         }
 
         /// <summary>
         /// Gets the diameter of the circle
         /// </summary>
         [Pure]
-        public double Diameter => 2 * this.Radius;
+        public double Diameter => 2 * Radius;
 
         /// <summary>
         /// Gets the circumference of the circle
         /// </summary>
         [Pure]
-        public double Circumference => 2 * Math.PI * this.Radius;
+        public double Circumference => 2 * Math.PI * Radius;
 
         /// <summary>
         /// Gets the area of the circle
         /// </summary>
         [Pure]
-        public double Area => this.Radius * this.Radius * Math.PI;
+        public double Area => Radius * Radius * Math.PI;
 
         /// <summary>
         /// Returns a value that indicates whether each pair of elements in two specified circles is equal.
@@ -142,26 +142,26 @@ namespace MathNet.Spatial.Euclidean
                 throw new ArgumentException("epsilon < 0");
             }
 
-            return Math.Abs(c.Radius - this.Radius) < tolerance
-                   && this.Axis.Equals(c.Axis, tolerance)
-                   && this.CenterPoint.Equals(c.CenterPoint, tolerance);
+            return Math.Abs(c.Radius - Radius) < tolerance
+                   && Axis.Equals(c.Axis, tolerance)
+                   && CenterPoint.Equals(c.CenterPoint, tolerance);
         }
 
         /// <inheritdoc />
         [Pure]
         public bool Equals(Circle3D c)
         {
-            return this.CenterPoint.Equals(c.CenterPoint)
-                   && this.Axis.Equals(c.Axis)
-                   && this.Radius.Equals(c.Radius);
+            return CenterPoint.Equals(c.CenterPoint)
+                   && Axis.Equals(c.Axis)
+                   && Radius.Equals(c.Radius);
         }
 
         /// <inheritdoc />
         [Pure]
-        public override bool Equals(object obj) => obj is Circle3D c && this.Equals(c);
+        public override bool Equals(object obj) => obj is Circle3D c && Equals(c);
 
         /// <inheritdoc />
         [Pure]
-        public override int GetHashCode() => HashCode.Combine(this.CenterPoint, this.Axis, this.Radius);
+        public override int GetHashCode() => HashCode.Combine(CenterPoint, Axis, Radius);
     }
 }
