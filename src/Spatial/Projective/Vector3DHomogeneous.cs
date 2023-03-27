@@ -12,22 +12,22 @@ namespace MathNet.Spatial.Projective
     internal struct Vector3DHomogeneous : IEquatable<Vector3DHomogeneous>
     {
         /// <summary>
-        /// Using public fields for performance. 
+        /// Using public fields for performance.
         /// </summary>
         public readonly double X;
 
         /// <summary>
-        /// Using public fields for performance. 
+        /// Using public fields for performance.
         /// </summary>
         public readonly double Y;
 
         /// <summary>
-        /// Using public fields for performance. 
+        /// Using public fields for performance.
         /// </summary>
         public readonly double Z;
 
         /// <summary>
-        /// Using public fields for performance. 
+        /// Using public fields for performance.
         /// </summary>
         public readonly double W;
 
