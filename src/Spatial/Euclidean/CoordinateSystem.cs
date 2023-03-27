@@ -151,10 +151,7 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// Gets the offset to origin
         /// </summary>
-        public Vector3D OffsetToBase
-        {
-            get { return this.Origin.ToVector3D(); }
-        }
+        public Vector3D OffsetToBase => this.Origin.ToVector3D();
 
         /// <summary>
         /// Gets the base change matrix
@@ -249,30 +246,15 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Rotation around Z (yaw) then around Y (pitch) and then around X (roll)
-        /// http://en.wikipedia.org/wiki/Aircraft_principal_axes
+        /// Successive intrinsic rotations around Z (yaw) then around Y (pitch) and then around X (roll)
+        /// Gives an order of magnitude speed improvement.
+        /// https://en.wikipedia.org/wiki/Rotation_matrix#General_rotations
         /// </summary>
         /// <param name="yaw">Rotates around Z</param>
         /// <param name="pitch">Rotates around Y</param>
         /// <param name="roll">Rotates around X</param>
         /// <returns>A rotated coordinate system</returns>
         public static CoordinateSystem Rotation(Angle yaw, Angle pitch, Angle roll)
-        {
-            var yt = Yaw(yaw);
-            var pt = Pitch(pitch);
-            var rt = Roll(roll);
-            return yt.Transform(pt.Transform(rt));
-        }
-
-        /// <summary>
-        /// Create a rotated CoordinateSystem in one calculation instead of 3 separate rotations.
-        /// Gives an order of magnitude speed improvement. 
-        /// </summary>
-        /// <param name="yaw"></param>
-        /// <param name="pitch"></param>
-        /// <param name="roll"></param>
-        /// <returns></returns>
-        public static CoordinateSystem RotationFast(Angle yaw, Angle pitch, Angle roll)
         {
             var cs = new CoordinateSystem(); 
             var cosY = Math.Cos(yaw.Radians);
