@@ -5,6 +5,7 @@ using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 using MathNet.Numerics.LinearAlgebra;
+using MathNet.Numerics.LinearAlgebra.Double;
 using MathNet.Spatial.Internals;
 using MathNet.Spatial.Units;
 using HashCode = MathNet.Spatial.Internals.HashCode;
@@ -318,20 +319,29 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public Angle SignedAngleTo(Vector2D other, bool clockWise = false, bool returnNegative = false)
         {
+            var normalized = Normalize();
+            var otherNormalized = other.Normalize();
+
+            var matrix = new DenseMatrix(2)
+            {
+                [0, 0] = normalized.X,
+                [0, 1] = normalized.Y,
+
+                [1, 0] = normalized.Y,
+                [1, 1] = -normalized.X,
+            };
+
+            var rhs = new DenseVector(2)
+            {
+                [0] = otherNormalized.X,
+                [1] = otherNormalized.Y
+            };
+
+            var solution = matrix.Solve(rhs);
+
+            var a = -Math.Atan2(solution[1], solution[0]);
             var sign = clockWise ? -1 : 1;
-            var a1 = Math.Atan2(Y, X);
-            if (a1 < 0)
-            {
-                a1 += 2 * Math.PI;
-            }
-
-            var a2 = Math.Atan2(other.Y, other.X);
-            if (a2 < 0)
-            {
-                a2 += 2 * Math.PI;
-            }
-
-            var a = sign * (a2 - a1);
+            a *= sign;
             if (a < 0 && !returnNegative)
             {
                 a += 2 * Math.PI;

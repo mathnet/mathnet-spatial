@@ -474,5 +474,14 @@ namespace MathNet.Spatial.Tests.Euclidean
             AssertGeometry.AreEqual(new Vector2D(1, 2), deserialized.Value1);
             AssertGeometry.AreEqual(new Vector2D(3, 4), deserialized.Value2);
         }
+
+        [Test]
+        public void SignedAngleToWhenAnglesSmallAndOnOppositeSidesOfXAxis()
+        {
+            var inst = new Vector2D(15, -0.014999866485595703);
+            var arg = new Vector2D(14.999354151329246, 0.14000013927224053);
+            var signedAngleTo = inst.SignedAngleTo(arg, false, true);
+            Assert.AreEqual(Angle.FromRadians(0.010333464228966248), signedAngleTo);
+        }
     }
 }
