@@ -33,8 +33,8 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="direction">The direction of the ray.</param>
         public Ray3D(Point3D throughPoint, UnitVector3D direction)
         {
-            this.ThroughPoint = throughPoint;
-            this.Direction = direction;
+            ThroughPoint = throughPoint;
+            Direction = direction;
         }
 
         /// <summary>
@@ -101,9 +101,9 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public LineSegment3D ShortestLineTo(Point3D point3D)
         {
-            var v = this.ThroughPoint.VectorTo(point3D);
-            var alongVector = v.ProjectOn(this.Direction);
-            return new LineSegment3D(this.ThroughPoint + alongVector, point3D);
+            var v = ThroughPoint.VectorTo(point3D);
+            var alongVector = v.ProjectOn(Direction);
+            return new LineSegment3D(ThroughPoint + alongVector, point3D);
         }
 
         /// <summary>
@@ -126,7 +126,7 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public bool IsCollinear(Ray3D otherRay, double tolerance = float.Epsilon)
         {
-            return this.Direction.IsParallelTo(otherRay.Direction, tolerance);
+            return Direction.IsParallelTo(otherRay.Direction, tolerance);
         }
 
         /// <summary>
@@ -138,27 +138,27 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public bool Equals(Ray3D other, double tolerance)
         {
-            return this.Direction.Equals(other.Direction, tolerance) &&
-                   this.ThroughPoint.Equals(other.ThroughPoint, tolerance);
+            return Direction.Equals(other.Direction, tolerance) &&
+                   ThroughPoint.Equals(other.ThroughPoint, tolerance);
         }
 
         /// <inheritdoc/>
         [Pure]
-        public bool Equals(Ray3D r) => this.Direction.Equals(r.Direction) && this.ThroughPoint.Equals(r.ThroughPoint);
+        public bool Equals(Ray3D r) => Direction.Equals(r.Direction) && ThroughPoint.Equals(r.ThroughPoint);
 
         /// <inheritdoc/>
         [Pure]
-        public override bool Equals(object obj) => obj is Ray3D r && this.Equals(r);
+        public override bool Equals(object obj) => obj is Ray3D r && Equals(r);
 
         /// <inheritdoc/>
         [Pure]
-        public override int GetHashCode() => HashCode.Combine(this.ThroughPoint, this.Direction);
+        public override int GetHashCode() => HashCode.Combine(ThroughPoint, Direction);
 
         /// <inheritdoc/>
         [Pure]
         public override string ToString()
         {
-            return this.ToString("G15", CultureInfo.InvariantCulture);
+            return ToString("G15", CultureInfo.InvariantCulture);
         }
 
         /// <inheritdoc/>
@@ -167,8 +167,8 @@ namespace MathNet.Spatial.Euclidean
         {
             return string.Format(
                 "ThroughPoint: {0}, Direction: {1}",
-                this.ThroughPoint.ToString(format, formatProvider),
-                this.Direction.ToString(format, formatProvider));
+                ThroughPoint.ToString(format, formatProvider),
+                Direction.ToString(format, formatProvider));
         }
 
         /// <inheritdoc/>
@@ -190,8 +190,8 @@ namespace MathNet.Spatial.Euclidean
         /// <inheritdoc/>
         void IXmlSerializable.WriteXml(XmlWriter writer)
         {
-            writer.WriteElement("ThroughPoint", this.ThroughPoint);
-            writer.WriteElement("Direction", this.Direction);
+            writer.WriteElement("ThroughPoint", ThroughPoint);
+            writer.WriteElement("Direction", Direction);
         }
     }
 }

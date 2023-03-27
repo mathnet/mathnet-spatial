@@ -6,7 +6,7 @@ using MathNet.Spatial.Euclidean;
 using MathNet.Spatial.Units;
 using NUnit.Framework;
 
-namespace MathNet.Spatial.UnitTests.Euclidean
+namespace MathNet.Spatial.Tests.Euclidean
 {
     /// <summary>
     /// Complex32 tests.

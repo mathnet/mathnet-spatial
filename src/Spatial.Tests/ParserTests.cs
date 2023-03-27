@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Globalization;
 using System.Text.RegularExpressions;
-using MathNet.Spatial.Euclidean;
 using MathNet.Spatial.Units;
+using MathNet.Spatial.Euclidean;
 using NUnit.Framework;
 
-namespace MathNet.Spatial.UnitTests
+namespace MathNet.Spatial.Tests
 {
     public class ParserTests
     {

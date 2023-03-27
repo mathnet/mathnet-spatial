@@ -39,21 +39,21 @@ namespace MathNet.Spatial.Euclidean
                 throw new ArgumentException("StartPoint == EndPoint");
             }
 
-            this.StartPoint = startPoint;
-            this.EndPoint = endPoint;
+            StartPoint = startPoint;
+            EndPoint = endPoint;
         }
 
         /// <summary>
         /// Gets distance from <see cref="StartPoint"/> to <see cref="EndPoint"/>, the length of the line
         /// </summary>
         [Pure]
-        public double Length => this.StartPoint.DistanceTo(this.EndPoint);
+        public double Length => StartPoint.DistanceTo(EndPoint);
 
         /// <summary>
         /// Gets the direction from the <see cref="StartPoint"/> to <see cref="EndPoint"/>
         /// </summary>
         [Pure]
-        public UnitVector3D Direction => this.StartPoint.VectorTo(this.EndPoint).Normalize();
+        public UnitVector3D Direction => StartPoint.VectorTo(EndPoint).Normalize();
 
         /// <summary>
         /// Returns a value that indicates whether each pair of elements in two specified lines is equal.
@@ -98,7 +98,7 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public Line3D LineTo(Point3D p, bool mustStartBetweenStartAndEnd)
         {
-            return new Line3D(this.ClosestPointTo(p, mustStartBetweenStartAndEnd), p);
+            return new Line3D(ClosestPointTo(p, mustStartBetweenStartAndEnd), p);
         }
 
         /// <summary>
@@ -110,8 +110,8 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public Point3D ClosestPointTo(Point3D p, bool mustBeOnSegment)
         {
-            var v = p - this.StartPoint;
-            var dotProduct = v.DotProduct(this.Direction);
+            var v = p - StartPoint;
+            var dotProduct = v.DotProduct(Direction);
             if (mustBeOnSegment)
             {
                 if (dotProduct < 0)
@@ -119,14 +119,14 @@ namespace MathNet.Spatial.Euclidean
                     dotProduct = 0;
                 }
 
-                if (dotProduct > this.Length)
+                if (dotProduct > Length)
                 {
-                    dotProduct = this.Length;
+                    dotProduct = Length;
                 }
             }
 
-            var alongVector = dotProduct * this.Direction;
-            return this.StartPoint + alongVector;
+            var alongVector = dotProduct * Direction;
+            return StartPoint + alongVector;
         }
 
         /// <summary>
@@ -161,7 +161,7 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public bool IsParallelTo(Line3D other)
         {
-            return this.Direction.IsParallelTo(other.Direction, Precision.DoublePrecision * 2);
+            return Direction.IsParallelTo(other.Direction, Precision.DoublePrecision * 2);
         }
 
         /// <summary>
@@ -173,7 +173,7 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public bool IsParallelTo(Line3D other, Angle angleTolerance)
         {
-            return this.Direction.IsParallelTo(other.Direction, angleTolerance);
+            return Direction.IsParallelTo(other.Direction, angleTolerance);
         }
 
         /// <summary>
@@ -186,14 +186,14 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public Tuple<Point3D, Point3D> ClosestPointsBetween(Line3D other)
         {
-            if (this.IsParallelTo(other))
+            if (IsParallelTo(other))
             {
-                return Tuple.Create(this.StartPoint, other.ClosestPointTo(this.StartPoint, false));
+                return Tuple.Create(StartPoint, other.ClosestPointTo(StartPoint, false));
             }
 
             // http://geomalgorithms.com/a07-_distance.html
-            var point0 = this.StartPoint;
-            var u = this.Direction;
+            var point0 = StartPoint;
+            var u = Direction;
             var point1 = other.StartPoint;
             var v = other.Direction;
 
@@ -224,11 +224,11 @@ namespace MathNet.Spatial.Euclidean
             // algorithm where the endpoints are projected onto the opposite segment and the smallest distance is
             // taken.  Otherwise we must first check if the infinite length line solution is valid.
             // If the lines aren't parallel OR it doesn't have to be constrained to the segments
-            if (!this.IsParallelTo(other) || !mustBeOnSegments)
+            if (!IsParallelTo(other) || !mustBeOnSegments)
             {
                 // Compute the unbounded result, and if mustBeOnSegments is false we can directly return the results
                 // since this is the same as calling the other method.
-                var result = this.ClosestPointsBetween(other);
+                var result = ClosestPointsBetween(other);
                 if (!mustBeOnSegments)
                 {
                     return result;
@@ -237,8 +237,8 @@ namespace MathNet.Spatial.Euclidean
                 // A point that is known to be collinear with the line start and end points is on the segment if
                 // its distance to both endpoints is less than the segment length.  If both projected points lie
                 // within their segment, we can directly return the result.
-                if (result.Item1.DistanceTo(this.StartPoint) <= this.Length &&
-                    result.Item1.DistanceTo(this.EndPoint) <= this.Length &&
+                if (result.Item1.DistanceTo(StartPoint) <= Length &&
+                    result.Item1.DistanceTo(EndPoint) <= Length &&
                     result.Item2.DistanceTo(other.StartPoint) <= other.Length &&
                     result.Item2.DistanceTo(other.EndPoint) <= other.Length)
                 {
@@ -251,20 +251,20 @@ namespace MathNet.Spatial.Euclidean
             //// case we project each of the four endpoints onto the opposite segments and select the one with the
             //// smallest projected distance.
 
-            var checkPoint = other.ClosestPointTo(this.StartPoint, true);
-            var distance = checkPoint.DistanceTo(this.StartPoint);
-            var closestPair = Tuple.Create(this.StartPoint, checkPoint);
+            var checkPoint = other.ClosestPointTo(StartPoint, true);
+            var distance = checkPoint.DistanceTo(StartPoint);
+            var closestPair = Tuple.Create(StartPoint, checkPoint);
             var minDistance = distance;
 
-            checkPoint = other.ClosestPointTo(this.EndPoint, true);
-            distance = checkPoint.DistanceTo(this.EndPoint);
+            checkPoint = other.ClosestPointTo(EndPoint, true);
+            distance = checkPoint.DistanceTo(EndPoint);
             if (distance < minDistance)
             {
-                closestPair = Tuple.Create(this.EndPoint, checkPoint);
+                closestPair = Tuple.Create(EndPoint, checkPoint);
                 minDistance = distance;
             }
 
-            checkPoint = this.ClosestPointTo(other.StartPoint, true);
+            checkPoint = ClosestPointTo(other.StartPoint, true);
             distance = checkPoint.DistanceTo(other.StartPoint);
             if (distance < minDistance)
             {
@@ -272,7 +272,7 @@ namespace MathNet.Spatial.Euclidean
                 minDistance = distance;
             }
 
-            checkPoint = this.ClosestPointTo(other.EndPoint, true);
+            checkPoint = ClosestPointTo(other.EndPoint, true);
             distance = checkPoint.DistanceTo(other.EndPoint);
             if (distance < minDistance)
             {
@@ -286,7 +286,7 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public bool Equals(Line3D other)
         {
-            return this.StartPoint.Equals(other.StartPoint) && this.EndPoint.Equals(other.EndPoint);
+            return StartPoint.Equals(other.StartPoint) && EndPoint.Equals(other.EndPoint);
         }
 
         /// <inheritdoc />
@@ -298,7 +298,7 @@ namespace MathNet.Spatial.Euclidean
                 return false;
             }
 
-            return obj is Line3D d && this.Equals(d);
+            return obj is Line3D d && Equals(d);
         }
 
         /// <inheritdoc />
@@ -307,8 +307,8 @@ namespace MathNet.Spatial.Euclidean
         {
             unchecked
             {
-                var hashCode = this.StartPoint.GetHashCode();
-                hashCode = (hashCode * 397) ^ this.EndPoint.GetHashCode();
+                var hashCode = StartPoint.GetHashCode();
+                hashCode = (hashCode * 397) ^ EndPoint.GetHashCode();
                 return hashCode;
             }
         }
@@ -317,7 +317,7 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public override string ToString()
         {
-            return $"StartPoint: {this.StartPoint}, EndPoint: {this.EndPoint}";
+            return $"StartPoint: {StartPoint}, EndPoint: {EndPoint}";
         }
 
         /// <inheritdoc />
@@ -339,8 +339,8 @@ namespace MathNet.Spatial.Euclidean
         /// <inheritdoc />
         void IXmlSerializable.WriteXml(XmlWriter writer)
         {
-            writer.WriteElement("StartPoint", this.StartPoint);
-            writer.WriteElement("EndPoint", this.EndPoint);
+            writer.WriteElement("StartPoint", StartPoint);
+            writer.WriteElement("EndPoint", EndPoint);
         }
     }
 }

@@ -5,10 +5,9 @@ using System.Runtime.Serialization;
 using System.Xml;
 using MathNet.Spatial.Euclidean;
 using MathNet.Spatial.Units;
-using MathNet.Spatial.UnitTests;
 using NUnit.Framework;
 
-namespace MathNet.Spatial.Serialization.Xml.UnitTests
+namespace MathNet.Spatial.Tests.Serialization
 {
     public class DataContractTests
     {
