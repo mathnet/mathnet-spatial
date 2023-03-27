@@ -144,9 +144,9 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public bool TryIntersect(LineSegment2D other, out Point2D? intersection, Angle tolerance)
         {
+            intersection = null;
             if (IsParallelTo(other, tolerance))
-            {
-                intersection = null;
+            {   
                 return false;
             }
 
@@ -162,14 +162,10 @@ namespace MathNet.Spatial.Euclidean
             var isIntersected = (0.0 <= t && t <= 1.0) && (0.0 <= u && u <= 1.0);
             if (isIntersected)
             {
-                intersection = p + (t * r);
-                return true;
+                intersection = p + t * r;
             }
-            else
-            {
-                intersection = null;
-                return false;
-            }
+
+            return intersection != null;
         }
 
         /// <summary>
