@@ -87,6 +87,7 @@ namespace MathNet.Spatial.Tests.Euclidean
         [TestCase("180°", "-90°", "0°", "1, 2, 3", "3, -2, 1")]
         [TestCase("90°", "10°", "0°", "1, 2, 3", "-2, 1.506, 2.781")]
         [TestCase("90°", "10°", "30°", "1, 2, 3", "-0.232, 1.609, 3.370")]
+        [TestCase("15°", "-23°", "48°", "1, 2, 3", "-0.199, -0.976, 3.607")]
         public void RotationYawPitchRoll(string yaws, string pitchs, string rolls, string ps, string eps)
         {
             var p = Point3D.Parse(ps);
