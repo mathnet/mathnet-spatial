@@ -7,7 +7,7 @@ using System.Xml.Serialization;
 using MathNet.Spatial.Units;
 using NUnit.Framework;
 
-namespace MathNet.Spatial.UnitTests.Units
+namespace MathNet.Spatial.Tests.Units
 {
     public class AngleTests
     {

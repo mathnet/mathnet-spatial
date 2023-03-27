@@ -9,7 +9,7 @@ namespace MathNet.Spatial.Euclidean
     /// A means of representing spatial orientation of any reference frame.
     /// More information can be found https://en.wikipedia.org/wiki/Euler_angles
     /// </summary>
-    public struct EulerAngles : IEquatable<EulerAngles>
+    public readonly struct EulerAngles : IEquatable<EulerAngles>
     {
         /// <summary>
         /// Alpha (or phi) is the rotation around the z axis
@@ -35,9 +35,9 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="gamma">The gamma angle is the rotation around the Z axis</param>
         public EulerAngles(Angle alpha, Angle beta, Angle gamma)
         {
-            this.Alpha = alpha;
-            this.Beta = beta;
-            this.Gamma = gamma;
+            Alpha = alpha;
+            Beta = beta;
+            Gamma = gamma;
         }
 
         /// <summary>
@@ -69,7 +69,9 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public bool IsEmpty()
         {
-            return double.IsNaN(this.Alpha.Radians) && double.IsNaN(this.Beta.Radians) && double.IsNaN(this.Gamma.Radians);
+            return double.IsNaN(Alpha.Radians)
+                   && double.IsNaN(Beta.Radians)
+                   && double.IsNaN(Gamma.Radians);
         }
 
         /// <summary>
@@ -86,9 +88,9 @@ namespace MathNet.Spatial.Euclidean
                 throw new ArgumentException("epsilon < 0");
             }
 
-            return this.Alpha.Equals(other.Alpha, tolerance) &&
-                   this.Beta.Equals(other.Beta, tolerance) &&
-                   this.Gamma.Equals(other.Gamma, tolerance);
+            return Alpha.Equals(other.Alpha, tolerance)
+                   && Beta.Equals(other.Beta, tolerance)
+                   && Gamma.Equals(other.Gamma, tolerance);
         }
 
         /// <summary>
@@ -100,24 +102,26 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public bool Equals(EulerAngles other, Angle tolerance)
         {
-            return this.Alpha.Equals(other.Alpha, tolerance) &&
-                   this.Beta.Equals(other.Beta, tolerance) &&
-                   this.Gamma.Equals(other.Gamma, tolerance);
+            return Alpha.Equals(other.Alpha, tolerance)
+                   && Beta.Equals(other.Beta, tolerance)
+                   && Gamma.Equals(other.Gamma, tolerance);
         }
 
         /// <inheritdoc/>
         [Pure]
         public bool Equals(EulerAngles other)
         {
-            return this.Alpha.Equals(other.Alpha) && this.Beta.Equals(other.Beta) && this.Gamma.Equals(other.Gamma);
+            return Alpha.Equals(other.Alpha)
+                   && Beta.Equals(other.Beta)
+                   && Gamma.Equals(other.Gamma);
         }
 
         /// <inheritdoc/>
         [Pure]
-        public override bool Equals(object obj) => obj is EulerAngles angles && this.Equals(angles);
+        public override bool Equals(object obj) => obj is EulerAngles angles && Equals(angles);
 
         /// <inheritdoc/>
         [Pure]
-        public override int GetHashCode() => HashCode.Combine(this.Alpha, this.Beta, this.Gamma);
+        public override int GetHashCode() => HashCode.Combine(Alpha, Beta, Gamma);
     }
 }

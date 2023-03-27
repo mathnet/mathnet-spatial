@@ -71,10 +71,10 @@ namespace MathNet.Spatial.Euclidean
         public CoordinateSystem(Point3D origin, Vector3D xAxis, Vector3D yAxis, Vector3D zAxis)
             : base(4)
         {
-            this.SetColumn(0, new[] { xAxis.X, xAxis.Y, xAxis.Z, 0 });
-            this.SetColumn(1, new[] { yAxis.X, yAxis.Y, yAxis.Z, 0 });
-            this.SetColumn(2, new[] { zAxis.X, zAxis.Y, zAxis.Z, 0 });
-            this.SetColumn(3, new[] { origin.X, origin.Y, origin.Z, 1 });
+            SetColumn(0, new[] { xAxis.X, xAxis.Y, xAxis.Z, 0 });
+            SetColumn(1, new[] { yAxis.X, yAxis.Y, yAxis.Z, 0 });
+            SetColumn(2, new[] { zAxis.X, zAxis.Y, zAxis.Z, 0 });
+            SetColumn(3, new[] { origin.X, origin.Y, origin.Z, 1 });
         }
 
         ////public CoordinateSystem(Vector3D x, Vector3D y, Vector3D z, Vector3D offsetToBase)
@@ -107,7 +107,7 @@ namespace MathNet.Spatial.Euclidean
         {
             get
             {
-                var row = this.SubMatrix(0, 3, 0, 1).ToRowMajorArray();
+                var row = SubMatrix(0, 3, 0, 1).ToRowMajorArray();
                 return new Vector3D(row[0], row[1], row[2]);
             }
         }
@@ -119,7 +119,7 @@ namespace MathNet.Spatial.Euclidean
         {
             get
             {
-                var row = this.SubMatrix(0, 3, 1, 1).ToRowMajorArray();
+                var row = SubMatrix(0, 3, 1, 1).ToRowMajorArray();
                 return new Vector3D(row[0], row[1], row[2]);
             }
         }
@@ -131,7 +131,7 @@ namespace MathNet.Spatial.Euclidean
         {
             get
             {
-                var row = this.SubMatrix(0, 3, 2, 1).ToRowMajorArray();
+                var row = SubMatrix(0, 3, 2, 1).ToRowMajorArray();
                 return new Vector3D(row[0], row[1], row[2]);
             }
         }
@@ -143,7 +143,7 @@ namespace MathNet.Spatial.Euclidean
         {
             get
             {
-                var row = this.SubMatrix(0, 3, 3, 1).ToRowMajorArray();
+                var row = SubMatrix(0, 3, 3, 1).ToRowMajorArray();
                 return new Point3D(row[0], row[1], row[2]);
             }
         }
@@ -151,10 +151,7 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// Gets the offset to origin
         /// </summary>
-        public Vector3D OffsetToBase
-        {
-            get { return this.Origin.ToVector3D(); }
-        }
+        public Vector3D OffsetToBase => Origin.ToVector3D();
 
         /// <summary>
         /// Gets the base change matrix
@@ -163,7 +160,7 @@ namespace MathNet.Spatial.Euclidean
         {
             get
             {
-                var matrix = Build.DenseOfColumnVectors(this.XAxis.ToVector(), this.YAxis.ToVector(), this.ZAxis.ToVector());
+                var matrix = Build.DenseOfColumnVectors(XAxis.ToVector(), YAxis.ToVector(), ZAxis.ToVector());
                 var cs = new CoordinateSystem(this);
                 cs.SetRotationSubMatrix(matrix.Transpose());
                 return cs;
@@ -249,8 +246,9 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Rotation around Z (yaw) then around Y (pitch) and then around X (roll)
-        /// http://en.wikipedia.org/wiki/Aircraft_principal_axes
+        /// Successive intrinsic rotations around Z (yaw) then around Y (pitch) and then around X (roll)
+        /// Gives an order of magnitude speed improvement.
+        /// https://en.wikipedia.org/wiki/Rotation_matrix#General_rotations
         /// </summary>
         /// <param name="yaw">Rotates around Z</param>
         /// <param name="pitch">Rotates around Y</param>
@@ -258,13 +256,28 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>A rotated coordinate system</returns>
         public static CoordinateSystem Rotation(Angle yaw, Angle pitch, Angle roll)
         {
-            var cs = new CoordinateSystem();
-            var yt = Yaw(yaw);
-            var pt = Pitch(pitch);
-            var rt = Roll(roll);
-            return rt.Transform(pt.Transform(yt.Transform(cs)));
-        }
+            var cs = new CoordinateSystem(); 
+            var cosY = Math.Cos(yaw.Radians);
+            var sinY = Math.Sin(yaw.Radians); 
+            var cosP = Math.Cos(pitch.Radians);
+            var sinP = Math.Sin(pitch.Radians);
+            var cosR = Math.Cos(roll.Radians);
+            var sinR = Math.Sin(roll.Radians);
 
+            cs[0, 0] = cosY * cosP;
+            cs[1, 0] = sinY * cosP;
+            cs[2, 0] = -sinP;
+
+            cs[0, 1] = cosY * sinP * sinR - sinY * cosR;
+            cs[1, 1] = sinY * sinP * sinR + cosY * cosR;
+            cs[2, 1] = cosP * sinR;
+
+            cs[0, 2] = cosY * sinP * cosR + sinY * sinR;
+            cs[1, 2] = sinY * sinP * cosR - cosY * sinR;
+            cs[2, 2] = cosP * cosR;
+
+            return cs; 
+        }
         /// <summary>
         /// Rotates around Z
         /// </summary>
@@ -379,10 +392,10 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>A coordinate system with reset rotation</returns>
         public CoordinateSystem ResetRotations()
         {
-            var x = this.XAxis.Length * UnitVector3D.XAxis;
-            var y = this.YAxis.Length * UnitVector3D.YAxis;
-            var z = this.ZAxis.Length * UnitVector3D.ZAxis;
-            return new CoordinateSystem(x, y, z, this.Origin);
+            var x = XAxis.Length * UnitVector3D.XAxis;
+            var y = YAxis.Length * UnitVector3D.YAxis;
+            var z = ZAxis.Length * UnitVector3D.ZAxis;
+            return new CoordinateSystem(x, y, z, Origin);
         }
 
         /// <summary>
@@ -417,7 +430,7 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>A translated coordinate system</returns>
         public CoordinateSystem OffsetBy(Vector3D v)
         {
-            return new CoordinateSystem(this.Origin + v, this.XAxis, this.YAxis, this.ZAxis);
+            return new CoordinateSystem(Origin + v, XAxis, YAxis, ZAxis);
         }
 
         /// <summary>
@@ -427,7 +440,7 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>A translated coordinate system</returns>
         public CoordinateSystem OffsetBy(UnitVector3D v)
         {
-            return new CoordinateSystem(this.Origin + v, this.XAxis, this.YAxis, this.ZAxis);
+            return new CoordinateSystem(Origin + v, XAxis, YAxis, ZAxis);
         }
 
         /// <summary>
@@ -441,8 +454,8 @@ namespace MathNet.Spatial.Euclidean
             var uv = r.Direction;
 
             // The position and the vector are transformed
-            var baseChangeMatrix = this.BaseChangeMatrix;
-            var point = baseChangeMatrix.Transform(p) + this.OffsetToBase;
+            var baseChangeMatrix = BaseChangeMatrix;
+            var point = baseChangeMatrix.Transform(p) + OffsetToBase;
             var direction = uv.TransformBy(baseChangeMatrix);
             return new Ray3D(point, direction);
         }
@@ -454,8 +467,8 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>a transformed point</returns>
         public Point3D TransformToCoordSys(Point3D p)
         {
-            var baseChangeMatrix = this.BaseChangeMatrix;
-            var point = baseChangeMatrix.Transform(p) + this.OffsetToBase;
+            var baseChangeMatrix = BaseChangeMatrix;
+            var point = baseChangeMatrix.Transform(p) + OffsetToBase;
             return point;
         }
 
@@ -470,8 +483,8 @@ namespace MathNet.Spatial.Euclidean
             var uv = r.Direction;
 
             // The position and the vector are transformed
-            var point = this.BaseChangeMatrix.Invert().Transform(p) + this.OffsetToBase;
-            var direction = this.BaseChangeMatrix.Invert().Transform(uv);
+            var point = BaseChangeMatrix.Invert().Transform(p) + OffsetToBase;
+            var direction = BaseChangeMatrix.Invert().Transform(uv);
             return new Ray3D(point, direction);
         }
 
@@ -482,7 +495,7 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>a transformed point</returns>
         public Point3D TransformFromCoordSys(Point3D p)
         {
-            var point = this.BaseChangeMatrix.Invert().Transform(p) + this.OffsetToBase;
+            var point = BaseChangeMatrix.Invert().Transform(p) + OffsetToBase;
             return point;
         }
 
@@ -503,7 +516,7 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>a coordinate system</returns>
         public CoordinateSystem SetTranslation(Vector3D v)
         {
-            return new CoordinateSystem(v.ToPoint3D(), this.XAxis, this.YAxis, this.ZAxis);
+            return new CoordinateSystem(v.ToPoint3D(), XAxis, YAxis, ZAxis);
         }
 
         /// <summary>
@@ -516,38 +529,41 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Transforms a vector and returns the transformed vector
+        /// Given a transform from coordinate system A to coordinate system B, and a vector <see cref="v"/>
+        /// expressed in coordinate system B, it returns the vector expressed in coordinate system A
         /// </summary>
-        /// <param name="v">A vector</param>
-        /// <returns>A transformed vector</returns>
+        /// <param name="v">Vector whose coordinates are expressed in coordinate system B</param>
+        /// <returns>The vector expressed in coordinate system A</returns>
         public Vector3D Transform(Vector3D v)
         {
             var v3 = Vector<double>.Build.Dense(new[] { v.X, v.Y, v.Z });
-            this.GetRotationSubMatrix().Multiply(v3, v3);
+            GetRotationSubMatrix().Multiply(v3, v3);
             return new Vector3D(v3[0], v3[1], v3[2]);
         }
 
         /// <summary>
-        /// Transforms a vector and returns the transformed vector
+        /// Given a transform from coordinate system A to coordinate system B, and a vector <see cref="v"/>
+        /// expressed in coordinate system B, it returns the vector expressed in coordinate system A
         /// </summary>
-        /// <param name="v">a unit vector</param>
-        /// <returns>A transformed vector</returns>
+        /// <param name="v">Unit vector whose coordinates are expressed in coordinate system B</param>
+        /// <returns>The vector expressed in coordinate system A</returns>
         public Vector3D Transform(UnitVector3D v)
         {
             var v3 = Vector<double>.Build.Dense(new[] { v.X, v.Y, v.Z });
-            this.GetRotationSubMatrix().Multiply(v3, v3);
+            GetRotationSubMatrix().Multiply(v3, v3);
             return new Vector3D(v3[0], v3[1], v3[2]);
         }
 
         /// <summary>
-        /// Transforms a point and returns the transformed point
+        /// Given a transform from coordinate system A to coordinate system B, and a point <see cref="p"/>
+        /// expressed in coordinate system B, it returns the point expressed in coordinate system A
         /// </summary>
-        /// <param name="p">a point</param>
-        /// <returns>A transformed point</returns>
+        /// <param name="p">Point whose coordinates are expressed in coordinate system B</param>
+        /// <returns>The point expressed in coordinate system A</returns>
         public Point3D Transform(Point3D p)
         {
             var v4 = Vector<double>.Build.Dense(new[] { p.X, p.Y, p.Z, 1 });
-            this.Multiply(v4, v4);
+            Multiply(v4, v4);
             return new Point3D(v4[0], v4[1], v4[2]);
         }
 
@@ -558,7 +574,7 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>A transformed coordinate system</returns>
         public CoordinateSystem Transform(CoordinateSystem cs)
         {
-            return new CoordinateSystem(this.Multiply(cs));
+            return new CoordinateSystem(Multiply(cs));
         }
 
         /// <summary>
@@ -568,7 +584,7 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>The transformed line segment</returns>
         public LineSegment3D Transform(LineSegment3D l)
         {
-            return new LineSegment3D(this.Transform(l.StartPoint), this.Transform(l.EndPoint));
+            return new LineSegment3D(Transform(l.StartPoint), Transform(l.EndPoint));
         }
 
         /// <summary>
@@ -578,7 +594,7 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>A transformed ray</returns>
         public Ray3D Transform(Ray3D ray)
         {
-            return new Ray3D(this.Transform(ray.ThroughPoint), this.Transform(ray.Direction));
+            return new Ray3D(Transform(ray.ThroughPoint), Transform(ray.Direction));
         }
 
         /// <summary>
@@ -607,7 +623,7 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>An inverted coordinate system</returns>
         public CoordinateSystem Invert()
         {
-            return new CoordinateSystem(this.Inverse());
+            return new CoordinateSystem(Inverse());
         }
 
         /// <summary>
@@ -619,14 +635,14 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public bool Equals(CoordinateSystem other, double tolerance)
         {
-            if (this.Values.Length != other?.Values.Length)
+            if (Values.Length != other?.Values.Length)
             {
                 return false;
             }
 
-            for (var i = 0; i < this.Values.Length; i++)
+            for (var i = 0; i < Values.Length; i++)
             {
-                if (Math.Abs(this.Values[i] - other.Values[i]) > tolerance)
+                if (Math.Abs(Values[i] - other.Values[i]) > tolerance)
                 {
                     return false;
                 }
@@ -639,15 +655,15 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public bool Equals(CoordinateSystem other)
         {
-            if (this.Values.Length != other?.Values.Length)
+            if (Values.Length != other?.Values.Length)
             {
                 return false;
             }
 
-            for (var i = 0; i < this.Values.Length; i++)
+            for (var i = 0; i < Values.Length; i++)
             {
                 // ReSharper disable once CompareOfFloatsByEqualityOperator
-                if (this.Values[i] != other.Values[i])
+                if (Values[i] != other.Values[i])
                 {
                     return false;
                 }
@@ -665,12 +681,12 @@ namespace MathNet.Spatial.Euclidean
                 return false;
             }
 
-            return obj is CoordinateSystem cs && this.Equals(cs);
+            return obj is CoordinateSystem cs && Equals(cs);
         }
 
         /// <inheritdoc />
         [Pure]
-        public override int GetHashCode() => HashCode.CombineMany(this.Values);
+        public override int GetHashCode() => HashCode.CombineMany(Values);
 
         /// <summary>
         /// Returns a string representation of the coordinate system
@@ -678,7 +694,7 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>a string</returns>
         public new string ToString()
         {
-            return $"Origin: {this.Origin}, XAxis: {this.XAxis}, YAxis: {this.YAxis}, ZAxis: {this.ZAxis}";
+            return $"Origin: {Origin}, XAxis: {XAxis}, YAxis: {YAxis}, ZAxis: {ZAxis}";
         }
 
         /// <inheritdoc />
@@ -693,25 +709,25 @@ namespace MathNet.Spatial.Euclidean
             var e = (XElement)XNode.ReadFrom(reader);
 
             var xAxis = Vector3D.ReadFrom(e.SingleElementReader("XAxis"));
-            this.SetColumn(0, new[] { xAxis.X, xAxis.Y, xAxis.Z, 0 });
+            SetColumn(0, new[] { xAxis.X, xAxis.Y, xAxis.Z, 0 });
 
             var yAxis = Vector3D.ReadFrom(e.SingleElementReader("YAxis"));
-            this.SetColumn(1, new[] { yAxis.X, yAxis.Y, yAxis.Z, 0 });
+            SetColumn(1, new[] { yAxis.X, yAxis.Y, yAxis.Z, 0 });
 
             var zAxis = Vector3D.ReadFrom(e.SingleElementReader("ZAxis"));
-            this.SetColumn(2, new[] { zAxis.X, zAxis.Y, zAxis.Z, 0 });
+            SetColumn(2, new[] { zAxis.X, zAxis.Y, zAxis.Z, 0 });
 
             var origin = Point3D.ReadFrom(e.SingleElementReader("Origin"));
-            this.SetColumn(3, new[] { origin.X, origin.Y, origin.Z, 1 });
+            SetColumn(3, new[] { origin.X, origin.Y, origin.Z, 1 });
         }
 
         /// <inheritdoc />
         void IXmlSerializable.WriteXml(XmlWriter writer)
         {
-            writer.WriteElement("Origin", this.Origin);
-            writer.WriteElement("XAxis", this.XAxis);
-            writer.WriteElement("YAxis", this.YAxis);
-            writer.WriteElement("ZAxis", this.ZAxis);
+            writer.WriteElement("Origin", Origin);
+            writer.WriteElement("XAxis", XAxis);
+            writer.WriteElement("YAxis", YAxis);
+            writer.WriteElement("ZAxis", ZAxis);
         }
     }
 }
