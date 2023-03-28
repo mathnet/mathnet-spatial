@@ -1,3 +1,12 @@
+### 0.6.1 - 2023-03-28
+* Built with .Net 5.0.200
+* Build: fix archive publishing of strong name packages *~cdrnet* 
+* Bug fix: Vector2D.SignedAngleTo *~jkalias*
+* Bug fix: Fix order of YPR (yaw-pitch-roll) transformation *~jakehedlund*
+* Increase PolyLine performance when indexing Vertices *~bradtglass*
+* Bug fix: Fix Line2D.TryIntersect to pass nullable Point2D *~f-frhs*
+* Bug fix: Vector3DHomogeneous.ToVector3D() and Point3DHomogeneous.ToVector3D() *~osbordh*
+
 ### 0.6.0 - 2020-05-09
 * BUG: Circle2D.FromPoints giving incorrect results for special points *~Jong Hyun Kim*
 * Number formatting consistent between .NET Core and Framework
