@@ -20,17 +20,21 @@ Feel free to add a link to your personal site/blog and/or twitter handle.*
 - Adam Jones
 - [Christoph Rüegg](https://christoph.ruegg.name/) (@cdrnet)
 - Matt Jarvis
-- Mostafa Ali
 - jkalias
+- Mostafa Ali
 - MaLiN2223
 - Per Kuijpers
 - David Watts
 - csjune
+- Brad Glass
+- Jake Hedlund
 - Jong Hyun Kim
 - Mehran Maghoumi
 - Ralle
 - Roger
+- f-frhs
 - imlex
 - ippei
 - jnyrup
 - luisllamasbinaburo
+- osbordh
