@@ -11,7 +11,6 @@ namespace MathNet.Spatial.Euclidean
     /// <summary>
     /// Class to represent a closed polygon.
     /// </summary>
-    [Serializable]
     public class Polygon2D : IEquatable<Polygon2D>
     {
         /// <summary>
