@@ -9,6 +9,7 @@ namespace MathNet.Spatial.Euclidean
     /// A means of representing spatial orientation of any reference frame.
     /// More information can be found https://en.wikipedia.org/wiki/Euler_angles
     /// </summary>
+    [Serializable]
     public readonly struct EulerAngles : IEquatable<EulerAngles>
     {
         /// <summary>

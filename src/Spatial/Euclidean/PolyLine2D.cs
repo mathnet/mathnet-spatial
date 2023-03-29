@@ -11,6 +11,7 @@ namespace MathNet.Spatial.Euclidean
     /// The PolyLine2D class represents a 2D curve in space made up of line segments joined end-to-end, and is
     /// stored as a sequential list of 2D points.
     /// </summary>
+    [Serializable]
     public class PolyLine2D : IEquatable<PolyLine2D>
     {
         /// <summary>

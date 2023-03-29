@@ -10,6 +10,7 @@ namespace MathNet.Spatial.Euclidean
     /// <summary>
     /// A PolyLine is an ordered series of line segments in space represented as list of connected Point3Ds.
     /// </summary>
+    [Serializable]
     public class PolyLine3D : IEquatable<PolyLine3D>
     {
         /// <summary>
