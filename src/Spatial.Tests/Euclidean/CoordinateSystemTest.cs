@@ -1,12 +1,11 @@
-﻿using MathNet.Spatial.Euclidean;
+﻿using System;
+using MathNet.Spatial.Euclidean;
 using MathNet.Spatial.Units;
 using NUnit.Framework;
 
-namespace MathNet.Spatial.UnitTests.Euclidean
+namespace MathNet.Spatial.Tests.Euclidean
 {
     // ReSharper disable InconsistentNaming
-    using System;
-
     [TestFixture]
     public class CoordinateSystemTest
     {
@@ -82,22 +81,23 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         [TestCase("0°", "-90°", "0°", "1, 2, 3", "-3, 2, 1")]
         [TestCase("0°", "0°", "90°", "1, 2, 3", "1, -3, 2")]
         [TestCase("0°", "0°", "-90°", "1, 2, 3", "1, 3, -2")]
+        [TestCase("90°", "90°", "90°", "1, 2, 3", "3, 2, -1")]
+        [TestCase("90°", "0°", "90°", "1, 2, 3", "3, 1, 2")]
+        [TestCase("180°", "0°", "90°", "1, 2, 3", "-1, 3, 2")]
+        [TestCase("180°", "-90°", "0°", "1, 2, 3", "3, -2, 1")]
+        [TestCase("90°", "10°", "0°", "1, 2, 3", "-2, 1.506, 2.781")]
+        [TestCase("90°", "10°", "30°", "1, 2, 3", "-0.232, 1.609, 3.370")]
+        [TestCase("15°", "-23°", "48°", "1, 2, 3", "-0.199, -0.976, 3.607")]
         public void RotationYawPitchRoll(string yaws, string pitchs, string rolls, string ps, string eps)
         {
             var p = Point3D.Parse(ps);
             var yaw = Angle.Parse(yaws);
             var pitch = Angle.Parse(pitchs);
             var roll = Angle.Parse(rolls);
-            var coordinateSystems = new[]
-            {
-                CoordinateSystem.Rotation(yaw, pitch, roll),
-            };
+            var coordinateSystem = CoordinateSystem.Rotation(yaw, pitch, roll);
             var expected = Point3D.Parse(eps);
-            foreach (var coordinateSystem in coordinateSystems)
-            {
-                var rotatedPoint = coordinateSystem.Transform(p);
-                AssertGeometry.AreEqual(expected, rotatedPoint);
-            }
+            var rotatedPoint = coordinateSystem.Transform(p);
+            AssertGeometry.AreEqual(expected, rotatedPoint, 1e-3);
         }
 
         [TestCase("1, 2, 3", "0, 0, 1", "1, 2, 4")]

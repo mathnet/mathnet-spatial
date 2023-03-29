@@ -9,7 +9,8 @@ namespace MathNet.Spatial.Euclidean
     /// This structure represents a line between two points in 3D-space.  It allows for operations such as
     /// computing the length, direction, comparisons, and shifting by a vector.
     /// </summary>
-    public struct LineSegment3D : IEquatable<LineSegment3D>
+    [Serializable]
+    public readonly struct LineSegment3D : IEquatable<LineSegment3D>
     {
         /// <summary>
         /// The starting point of the line segment
@@ -34,21 +35,21 @@ namespace MathNet.Spatial.Euclidean
                 throw new ArgumentException("The segment starting and ending points cannot be identical");
             }
 
-            this.StartPoint = startPoint;
-            this.EndPoint = endPoint;
+            StartPoint = startPoint;
+            EndPoint = endPoint;
         }
 
         /// <summary>
         /// Gets the distance from <see cref="StartPoint"/> to <see cref="EndPoint"/>
         /// </summary>
         [Pure]
-        public double Length => this.StartPoint.DistanceTo(this.EndPoint);
+        public double Length => StartPoint.DistanceTo(EndPoint);
 
         /// <summary>
         /// Gets a normalized vector in the direction from <see cref="StartPoint"/> to <see cref="EndPoint"/>
         /// </summary>
         [Pure]
-        public UnitVector3D Direction => this.StartPoint.VectorTo(this.EndPoint).Normalize();
+        public UnitVector3D Direction => StartPoint.VectorTo(EndPoint).Normalize();
 
         /// <summary>
         /// Returns a value that indicates whether each pair of elements in two specified lines is equal.
@@ -91,7 +92,7 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>A new translated line segment</returns>
         public LineSegment3D TranslateBy(Vector3D vector)
         {
-            return new LineSegment3D(this.StartPoint + vector, this.EndPoint + vector);
+            return new LineSegment3D(StartPoint + vector, EndPoint + vector);
         }
 
         /// <summary>
@@ -102,21 +103,21 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public Point3D ClosestPointTo(Point3D p)
         {
-            var v = this.StartPoint.VectorTo(p);
-            var dotProduct = v.DotProduct(this.Direction);
+            var v = StartPoint.VectorTo(p);
+            var dotProduct = v.DotProduct(Direction);
 
             if (dotProduct < 0)
             {
                 dotProduct = 0;
             }
 
-            if (dotProduct > this.Length)
+            if (dotProduct > Length)
             {
-                dotProduct = this.Length;
+                dotProduct = Length;
             }
 
-            var alongVector = dotProduct * this.Direction;
-            return this.StartPoint + alongVector;
+            var alongVector = dotProduct * Direction;
+            return StartPoint + alongVector;
         }
 
         /// <summary>
@@ -127,14 +128,13 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public LineSegment3D LineTo(Point3D p)
         {
-            return new LineSegment3D(this.ClosestPointTo(p), p);
+            return new LineSegment3D(ClosestPointTo(p), p);
         }
 
         /// <summary>
-        /// Computes the pair of points which represents the closest distance between this Line3D and another Line3D, with the option
-        /// of treating the lines as segments bounded by their start and end points.
+        /// Computes the pair of points which represent the closest distance between this LineSegment3D and another LineSegment3D
         /// </summary>
-        /// <param name="other">line to compute the closest points with</param>
+        /// <param name="other">Line segment to compute the closest points with</param>
         /// <param name="tolerance">A tolerance (epsilon) to adjust for floating point error</param>
         /// <param name="closestLine">A line representing the endpoints of the shortest distance between the two segments</param>
         /// <returns>True if a line could be found, false if the lines intersect</returns>
@@ -145,19 +145,25 @@ namespace MathNet.Spatial.Euclidean
             // algorithm where the endpoints are projected onto the opposite segment and the smallest distance is
             // taken.  Otherwise we must first check if the infinite length line solution is valid.
             // If the lines aren't parallel
-            if (!this.IsParallelTo(other, tolerance))
+            if (!IsParallelTo(other, tolerance))
             {
                 // Compute the unbounded result
-                var result = this.ClosestPointsBetweenLines(other, tolerance);
+                var result = ClosestPointsBetweenLines(other, tolerance);
 
                 // A point that is known to be collinear with the line start and end points is on the segment if
                 // its distance to both endpoints is less than the segment length.  If both projected points lie
                 // within their segment, we can directly return the result.
-                if (result.Item1.DistanceTo(this.StartPoint) <= this.Length &&
-                    result.Item1.DistanceTo(this.EndPoint) <= this.Length &&
+                if (result.Item1.DistanceTo(StartPoint) <= Length &&
+                    result.Item1.DistanceTo(EndPoint) <= Length &&
                     result.Item2.DistanceTo(other.StartPoint) <= other.Length &&
                     result.Item2.DistanceTo(other.EndPoint) <= other.Length)
                 {
+                    if (result.Item1 == result.Item2)
+                    {
+                        closestLine = default(LineSegment3D);
+                        return false;
+                    }
+
                     closestLine = new LineSegment3D(result.Item1, result.Item2);
                     return true;
                 }
@@ -168,20 +174,20 @@ namespace MathNet.Spatial.Euclidean
             //// case we project each of the four endpoints onto the opposite segments and select the one with the
             //// smallest projected distance.
 
-            var checkPoint = other.ClosestPointTo(this.StartPoint);
-            var distance = checkPoint.DistanceTo(this.StartPoint);
-            var closestPair = Tuple.Create(this.StartPoint, checkPoint);
+            var checkPoint = other.ClosestPointTo(StartPoint);
+            var distance = checkPoint.DistanceTo(StartPoint);
+            var closestPair = Tuple.Create(StartPoint, checkPoint);
             var minDistance = distance;
 
-            checkPoint = other.ClosestPointTo(this.EndPoint);
-            distance = checkPoint.DistanceTo(this.EndPoint);
+            checkPoint = other.ClosestPointTo(EndPoint);
+            distance = checkPoint.DistanceTo(EndPoint);
             if (distance < minDistance)
             {
-                closestPair = Tuple.Create(this.EndPoint, checkPoint);
+                closestPair = Tuple.Create(EndPoint, checkPoint);
                 minDistance = distance;
             }
 
-            checkPoint = this.ClosestPointTo(other.StartPoint);
+            checkPoint = ClosestPointTo(other.StartPoint);
             distance = checkPoint.DistanceTo(other.StartPoint);
             if (distance < minDistance)
             {
@@ -189,7 +195,7 @@ namespace MathNet.Spatial.Euclidean
                 minDistance = distance;
             }
 
-            checkPoint = this.ClosestPointTo(other.EndPoint);
+            checkPoint = ClosestPointTo(other.EndPoint);
             distance = checkPoint.DistanceTo(other.EndPoint);
             if (distance < minDistance)
             {
@@ -215,14 +221,14 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public bool IsParallelTo(LineSegment3D other, Angle tolerance)
         {
-            return this.Direction.IsParallelTo(other.Direction, tolerance);
+            return Direction.IsParallelTo(other.Direction, tolerance);
         }
 
         /// <inheritdoc/>
         [Pure]
         public override string ToString()
         {
-            return $"StartPoint: {this.StartPoint}, EndPoint: {this.EndPoint}";
+            return $"StartPoint: {StartPoint}, EndPoint: {EndPoint}";
         }
 
         /// <summary>
@@ -234,20 +240,20 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public bool Equals(LineSegment3D other, double tolerance)
         {
-            return this.StartPoint.Equals(other.StartPoint, tolerance) && this.EndPoint.Equals(other.EndPoint, tolerance);
+            return StartPoint.Equals(other.StartPoint, tolerance) && EndPoint.Equals(other.EndPoint, tolerance);
         }
 
         /// <inheritdoc/>
         [Pure]
-        public bool Equals(LineSegment3D l) => this.StartPoint.Equals(l.StartPoint) && this.EndPoint.Equals(l.EndPoint);
+        public bool Equals(LineSegment3D l) => StartPoint.Equals(l.StartPoint) && EndPoint.Equals(l.EndPoint);
 
         /// <inheritdoc />
         [Pure]
-        public override bool Equals(object obj) => obj is LineSegment3D l && this.Equals(l);
+        public override bool Equals(object obj) => obj is LineSegment3D l && Equals(l);
 
         /// <inheritdoc />
         [Pure]
-        public override int GetHashCode() => HashCode.Combine(this.StartPoint, this.EndPoint);
+        public override int GetHashCode() => HashCode.Combine(StartPoint, EndPoint);
 
         /// <summary>
         /// Extends the segment to a infinite line and finds the closest point on that line to the provided point.
@@ -257,8 +263,8 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         private Point3D ClosestLinePointTo(Point3D p)
         {
-            var alongVector = this.StartPoint.VectorTo(p).DotProduct(this.Direction) * this.Direction;
-            return this.StartPoint + alongVector;
+            var alongVector = StartPoint.VectorTo(p).DotProduct(Direction) * Direction;
+            return StartPoint + alongVector;
         }
 
         /// <summary>
@@ -272,14 +278,14 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         private Tuple<Point3D, Point3D> ClosestPointsBetweenLines(LineSegment3D other, Angle tolerance)
         {
-            if (this.IsParallelTo(other, tolerance))
+            if (IsParallelTo(other, tolerance))
             {
-                return Tuple.Create(this.StartPoint, other.ClosestLinePointTo(this.StartPoint));
+                return Tuple.Create(StartPoint, other.ClosestLinePointTo(StartPoint));
             }
 
             // http://geomalgorithms.com/a07-_distance.html
-            var point0 = this.StartPoint;
-            var u = this.Direction;
+            var point0 = StartPoint;
+            var u = Direction;
             var point1 = other.StartPoint;
             var v = other.Direction;
 

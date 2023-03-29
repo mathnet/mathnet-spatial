@@ -3,7 +3,7 @@ using MathNet.Spatial.Euclidean;
 using MathNet.Spatial.Units;
 using NUnit.Framework;
 
-namespace MathNet.Spatial.UnitTests.Euclidean
+namespace MathNet.Spatial.Tests.Euclidean
 {
     /// <summary>
     /// Tests for LineSegment3D
@@ -102,6 +102,7 @@ namespace MathNet.Spatial.UnitTests.Euclidean
             Assert.AreEqual(expected, line1.IsParallelTo(line2, Angle.FromDegrees(degreesTol)));
         }
 
+        [TestCase("0,0,0", "10,0,0", "5,-5,0", "5,5,0", "0,0,0", "0,0,0", false)] // Segments intersect
         [TestCase("0,0,0", "1,0,0", "0.5,1,0", "1.5,1,0", "1,0,0", "1,1,0")] // Parallel case
         [TestCase("0,0,0", "1,0,0", "3,1,0", "3,2,0", "1,0,0", "3,1,0")] // Endpoint Case
         [TestCase("1,0,0", "0,0,0", "3,1,0", "3,2,0", "1,0,0", "3,1,0")] // Endpoint Case
@@ -130,12 +131,12 @@ namespace MathNet.Spatial.UnitTests.Euclidean
         [TestCase("6.1786725,3.6854264,9.2902405", "2.6667579,9.5505050,9.5018463", "2.0599944,1.6033445,0.6954832", "3.1884883,6.4163288,9.0715930", "4.1912356,7.0045487,9.4099909", "3.1884883,6.4163288,9.0715930")] // projection from endpoint, generated in GOM Inspect Professional V8
         [TestCase("8.8292667,0.7124560,8.2423649", "0.3649094,7.1453826,3.0669636", "2.5889872,1.1761708,7.2524548", "5.4661666,6.7986776,4.9964301", "4.3314255,4.1308233,5.4922289", "4.2263025,4.3757686,5.9686197")] // projection between segments, generated in GOM Inspect Professional V8
         [TestCase("6.0241017,5.1715162,5.7250655", "5.6868388,6.0031583,1.2902594", "3.4800129,9.7922534,2.4761596", "0.0589551,3.4081038,0.9383102", "5.6945715,5.9840905,1.3919397", "2.3316866,7.6493234,1.9599588")] // projection between segments, generated in GOM Inspect Professional V8
-        public void ClosestPointsBetweenOnSegment(string s1, string e1, string s2, string e2, string cp1, string cp2)
+        public void ClosestPointsBetweenOnSegment(string s1, string e1, string s2, string e2, string cp1, string cp2, bool valid = true)
         {
             var l1 = LineSegment3D.Parse(s1, e1);
             var l2 = LineSegment3D.Parse(s2, e2);
 
-            Assert.AreEqual(true, l1.TryShortestLineTo(l2, Angle.FromRadians(0.00001), out var result));
+            Assert.AreEqual(valid, l1.TryShortestLineTo(l2, Angle.FromRadians(0.00001), out var result));
             AssertGeometry.AreEqual(Point3D.Parse(cp1), result.StartPoint);
             AssertGeometry.AreEqual(Point3D.Parse(cp2), result.EndPoint);
         }

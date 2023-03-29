@@ -12,22 +12,22 @@ namespace MathNet.Spatial.Projective
     internal struct Point3DHomogeneous : IEquatable<Point3DHomogeneous>
     {
         /// <summary>
-        /// Using public fields cos: http://blogs.msdn.com/b/ricom/archive/2006/08/31/performance-quiz-11-ten-questions-on-value-based-programming.aspx
+        /// Using public fields for performance.
         /// </summary>
         public readonly double X;
 
         /// <summary>
-        /// Using public fields cos: http://blogs.msdn.com/b/ricom/archive/2006/08/31/performance-quiz-11-ten-questions-on-value-based-programming.aspx
+        /// Using public fields for performance.
         /// </summary>
         public readonly double Y;
 
         /// <summary>
-        /// Using public fields cos: http://blogs.msdn.com/b/ricom/archive/2006/08/31/performance-quiz-11-ten-questions-on-value-based-programming.aspx
+        /// Using public fields for performance.
         /// </summary>
         public readonly double Z;
 
         /// <summary>
-        /// Using public fields cos: http://blogs.msdn.com/b/ricom/archive/2006/08/31/performance-quiz-11-ten-questions-on-value-based-programming.aspx
+        /// Using public fields for performance.
         /// </summary>
         public readonly double W;
 
@@ -40,10 +40,10 @@ namespace MathNet.Spatial.Projective
         /// <param name="w">The w value</param>
         public Point3DHomogeneous(double x, double y, double z, double w)
         {
-            this.X = x;
-            this.Y = y;
-            this.Z = z;
-            this.W = w;
+            X = x;
+            Y = y;
+            Z = z;
+            W = w;
         }
 
         /// <summary>
@@ -51,12 +51,15 @@ namespace MathNet.Spatial.Projective
         /// </summary>
         /// <param name="vector">A mathnet.numerics vector</param>
         private Point3DHomogeneous(Vector<double> vector)
-            : this(vector.At(0), vector.At(1), vector.At(2), vector.At(3))
         {
             if (vector.Count != 4)
             {
                 throw new ArgumentException("Size must be 4");
             }
+            X = vector[0];
+            Y = vector[1];
+            Z = vector[2];
+            W = vector[3];
         }
 
         /// <summary>
@@ -99,7 +102,7 @@ namespace MathNet.Spatial.Projective
         /// <inheritdoc />
         public override string ToString()
         {
-            return this.ToString("G15", CultureInfo.InvariantCulture);
+            return ToString("G15", CultureInfo.InvariantCulture);
         }
 
         /// <summary>
@@ -109,7 +112,7 @@ namespace MathNet.Spatial.Projective
         /// <returns>The string representation of this instance.</returns>
         public string ToString(IFormatProvider provider)
         {
-            return this.ToString("G15", provider);
+            return ToString("G15", provider);
         }
 
         /// <summary>
@@ -122,7 +125,7 @@ namespace MathNet.Spatial.Projective
         {
             var numberFormatInfo = provider != null ? NumberFormatInfo.GetInstance(provider) : CultureInfo.InvariantCulture.NumberFormat;
             var separator = numberFormatInfo.NumberDecimalSeparator == "," ? ";" : ",";
-            return string.Format("({0}{1} {2}{1} {3}{1} {4})", this.X.ToString(format, numberFormatInfo), separator, this.Y.ToString(format, numberFormatInfo), this.Z.ToString(format, numberFormatInfo), this.W.ToString(format, numberFormatInfo));
+            return string.Format("({0}{1} {2}{1} {3}{1} {4})", X.ToString(format, numberFormatInfo), separator, Y.ToString(format, numberFormatInfo), Z.ToString(format, numberFormatInfo), W.ToString(format, numberFormatInfo));
         }
 
         /// <summary>
@@ -138,23 +141,23 @@ namespace MathNet.Spatial.Projective
                 throw new ArgumentException("epsilon < 0");
             }
 
-            return Math.Abs(other.X - this.X) < tolerance &&
-                   Math.Abs(other.Y - this.Y) < tolerance &&
-                   Math.Abs(other.Z - this.Z) < tolerance &&
-                   Math.Abs(other.W - this.W) < tolerance;
+            return Math.Abs(other.X - X) < tolerance &&
+                   Math.Abs(other.Y - Y) < tolerance &&
+                   Math.Abs(other.Z - Z) < tolerance &&
+                   Math.Abs(other.W - W) < tolerance;
         }
 
         /// <inheritdoc/>
         public bool Equals(Point3DHomogeneous other)
         {
-            return this.X.Equals(other.X) && this.Y.Equals(other.Y) && this.Z.Equals(other.Z) && this.W.Equals(other.W);
+            return X.Equals(other.X) && Y.Equals(other.Y) && Z.Equals(other.Z) && W.Equals(other.W);
         }
 
         /// <inheritdoc/>
-        public override bool Equals(object obj) => obj is Point3DHomogeneous p && this.Equals(p);
+        public override bool Equals(object obj) => obj is Point3DHomogeneous p && Equals(p);
 
         /// <inheritdoc/>
-        public override int GetHashCode() => HashCode.Combine(this.X, this.Y, this.Z, this.W);
+        public override int GetHashCode() => HashCode.Combine(X, Y, Z, W);
 
         /// <summary>
         /// Gets a vector3D
@@ -163,9 +166,9 @@ namespace MathNet.Spatial.Projective
         public Vector3D ToVector3D()
         {
             // ReSharper disable once CompareOfFloatsByEqualityOperator
-            if (this.W != 0)
+            if (W != 0)
             {
-                return new Vector3D(this.X / this.W, this.X / this.W, this.X / this.W);
+                return new Vector3D(X / W, Y / W, Z / W);
             }
 
             return Vector3D.NaN;
@@ -177,16 +180,16 @@ namespace MathNet.Spatial.Projective
         /// <returns> A <see cref="Vector{Double}"/> with the x, y, z and w values from this instance.</returns>
         public Vector<double> ToVector()
         {
-            return Vector<double>.Build.Dense(new[] { this.X, this.Y, this.Z, this.W });
+            return Vector<double>.Build.Dense(new[] { X, Y, Z, W });
         }
 
         /// <summary>
-        /// return new Vector3DHomogeneous(this.X, this.Y, this.Z, this.W);
+        /// return new Vector3DHomogeneous(X, Y, Z, W);
         /// </summary>
         /// <returns> A <see cref="Vector3DHomogeneous"/> with the same x, y, z and w as this instance.</returns>
         public Vector3DHomogeneous ToVector3DHomogeneous()
         {
-            return new Vector3DHomogeneous(this.X, this.Y, this.Z, this.W);
+            return new Vector3DHomogeneous(X, Y, Z, W);
         }
 
         /// <summary>
@@ -196,7 +199,7 @@ namespace MathNet.Spatial.Projective
         /// <returns>A transformed Point3DHomogeneous</returns>
         public Point3DHomogeneous TransformBy(Matrix<double> m)
         {
-            return new Point3DHomogeneous(m.Multiply(Vector<double>.Build.Dense(new[] { this.X, this.Y, this.Z, this.W })));
+            return new Point3DHomogeneous(m.Multiply(Vector<double>.Build.Dense(new[] { X, Y, Z, W })));
         }
     }
 }

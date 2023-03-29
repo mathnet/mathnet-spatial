@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using HashCode = MathNet.Spatial.Internals.HashCode;
@@ -10,12 +11,13 @@ namespace MathNet.Spatial.Euclidean
     /// The PolyLine2D class represents a 2D curve in space made up of line segments joined end-to-end, and is
     /// stored as a sequential list of 2D points.
     /// </summary>
+    [Serializable]
     public class PolyLine2D : IEquatable<PolyLine2D>
     {
         /// <summary>
         /// Internal storage for the points
         /// </summary>
-        private readonly List<Point2D> points;
+        private readonly ReadOnlyCollection<Point2D> _points;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PolyLine2D"/> class.
@@ -24,32 +26,23 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="points">A list of points.</param>
         public PolyLine2D(IEnumerable<Point2D> points)
         {
-            this.points = new List<Point2D>(points);
+            _points = new List<Point2D>(points).AsReadOnly();
         }
 
         /// <summary>
         /// Gets the number of vertices in the polyline.
         /// </summary>
-        public int VertexCount => this.points.Count;
+        public int VertexCount => _points.Count;
 
         /// <summary>
         /// Gets the length of the polyline as the sum of the length of the individual segments
         /// </summary>
-        public double Length => this.GetPolyLineLength();
+        public double Length => GetPolyLineLength();
 
         /// <summary>
         /// Gets a list of vertices
         /// </summary>
-        public IEnumerable<Point2D> Vertices
-        {
-            get
-            {
-                foreach (var point in this.points)
-                {
-                    yield return point;
-                }
-            }
-        }
+        public IReadOnlyList<Point2D> Vertices => _points;
 
         /// <summary>
         /// Returns a value that indicates whether each pair of elements in two specified lines is equal.
@@ -112,7 +105,7 @@ namespace MathNet.Spatial.Euclidean
                 throw new ArgumentException("fraction must be between 0 and 1");
             }
 
-            return this.GetPointAtLengthFromStart(fraction * this.Length);
+            return GetPointAtLengthFromStart(fraction * Length);
         }
 
         /// <summary>
@@ -123,27 +116,27 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>A point which is the specified distance along the line</returns>
         public Point2D GetPointAtLengthFromStart(double lengthFromStart)
         {
-            var length = this.Length;
+            var length = Length;
             if (lengthFromStart >= length)
             {
-                return this.points.Last();
+                return _points.Last();
             }
 
             if (lengthFromStart <= 0)
             {
-                return this.points.First();
+                return _points.First();
             }
 
             double cumulativeLength = 0;
             var i = 0;
             while (true)
             {
-                var nextLength = cumulativeLength + this.points[i].DistanceTo(this.points[i + 1]);
+                var nextLength = cumulativeLength + _points[i].DistanceTo(_points[i + 1]);
                 if (cumulativeLength <= lengthFromStart && nextLength > lengthFromStart)
                 {
                     var leftover = lengthFromStart - cumulativeLength;
-                    var direction = this.points[i].VectorTo(this.points[i + 1]).Normalize();
-                    return this.points[i] + (direction * leftover);
+                    var direction = _points[i].VectorTo(_points[i + 1]).Normalize();
+                    return _points[i] + (direction * leftover);
                 }
                 else
                 {
@@ -163,9 +156,9 @@ namespace MathNet.Spatial.Euclidean
             var minError = double.MaxValue;
             var closest = default(Point2D);
 
-            for (var i = 0; i < this.VertexCount - 1; i++)
+            for (var i = 0; i < VertexCount - 1; i++)
             {
-                var segment = new LineSegment2D(this.points[i], this.points[i + 1]);
+                var segment = new LineSegment2D(_points[i], _points[i + 1]);
                 var projected = segment.ClosestPointTo(p);
                 var error = p.DistanceTo(projected);
                 if (error < minError)
@@ -187,14 +180,14 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public bool Equals(PolyLine2D other, double tolerance)
         {
-            if (this.VertexCount != other?.VertexCount)
+            if (VertexCount != other?.VertexCount)
             {
                 return false;
             }
 
-            for (var i = 0; i < this.points.Count; i++)
+            for (var i = 0; i < _points.Count; i++)
             {
-                if (!this.points[i].Equals(other.points[i], tolerance))
+                if (!_points[i].Equals(other._points[i], tolerance))
                 {
                     return false;
                 }
@@ -207,14 +200,14 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public bool Equals(PolyLine2D other)
         {
-            if (this.VertexCount != other?.VertexCount)
+            if (VertexCount != other?.VertexCount)
             {
                 return false;
             }
 
-            for (var i = 0; i < this.points.Count; i++)
+            for (var i = 0; i < _points.Count; i++)
             {
-                if (!this.points[i].Equals(other.points[i]))
+                if (!_points[i].Equals(other._points[i]))
                 {
                     return false;
                 }
@@ -228,14 +221,14 @@ namespace MathNet.Spatial.Euclidean
         public override bool Equals(object obj)
         {
             return obj is PolyLine2D polyLine2D &&
-                   this.Equals(polyLine2D);
+                   Equals(polyLine2D);
         }
 
         /// <inheritdoc />
         [Pure]
         public override int GetHashCode()
         {
-            return HashCode.CombineMany(this.points);
+            return HashCode.CombineMany(_points);
         }
 
         /// <summary>
@@ -302,9 +295,9 @@ namespace MathNet.Spatial.Euclidean
         private double GetPolyLineLength()
         {
             double length = 0;
-            for (var i = 0; i < this.points.Count - 1; ++i)
+            for (var i = 0; i < _points.Count - 1; ++i)
             {
-                length += this.points[i].DistanceTo(this.points[i + 1]);
+                length += _points[i].DistanceTo(_points[i + 1]);
             }
 
             return length;

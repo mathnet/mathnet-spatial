@@ -42,9 +42,9 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="z">The z component.</param>
         public Point3D(double x, double y, double z)
         {
-            this.X = x;
-            this.Y = y;
-            this.Z = z;
+            X = x;
+            Y = y;
+            Z = z;
         }
 
         /// <summary>
@@ -294,7 +294,7 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public Point3D Rotate(Vector3D aboutVector, Angle angle)
         {
-            return this.Rotate(aboutVector.Normalize(), angle);
+            return Rotate(aboutVector.Normalize(), angle);
         }
 
         /// <summary>
@@ -329,7 +329,7 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public double DistanceTo(Point3D p)
         {
-            var vector = this.VectorTo(p);
+            var vector = VectorTo(p);
             return vector.Length;
         }
 
@@ -340,7 +340,7 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public Vector3D ToVector3D()
         {
-            return new Vector3D(this.X, this.Y, this.Z);
+            return new Vector3D(X, Y, Z);
         }
 
         /// <summary>
@@ -362,7 +362,7 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public Point3D TransformBy(Matrix<double> m)
         {
-            return OfVector(m.Multiply(this.ToVector()));
+            return OfVector(m.Multiply(ToVector()));
         }
 
         /// <summary>
@@ -372,14 +372,14 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public Vector<double> ToVector()
         {
-            return Vector<double>.Build.Dense(new[] { this.X, this.Y, this.Z });
+            return Vector<double>.Build.Dense(new[] { X, Y, Z });
         }
 
         /// <inheritdoc />
         [Pure]
         public override string ToString()
         {
-            return this.ToString("G15", CultureInfo.InvariantCulture);
+            return ToString("G15", CultureInfo.InvariantCulture);
         }
 
         /// <summary>
@@ -390,7 +390,7 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public string ToString(IFormatProvider provider)
         {
-            return this.ToString("G15", provider);
+            return ToString("G15", provider);
         }
 
         /// <inheritdoc />
@@ -399,7 +399,7 @@ namespace MathNet.Spatial.Euclidean
         {
             var numberFormatInfo = provider != null ? NumberFormatInfo.GetInstance(provider) : CultureInfo.InvariantCulture.NumberFormat;
             var separator = numberFormatInfo.NumberDecimalSeparator == "," ? ";" : ",";
-            return string.Format("({0}{1} {2}{1} {3})", this.X.ToString(format, numberFormatInfo), separator, this.Y.ToString(format, numberFormatInfo), this.Z.ToString(format, numberFormatInfo));
+            return string.Format("({0}{1} {2}{1} {3})", X.ToString(format, numberFormatInfo), separator, Y.ToString(format, numberFormatInfo), Z.ToString(format, numberFormatInfo));
         }
 
         /// <summary>
@@ -416,25 +416,25 @@ namespace MathNet.Spatial.Euclidean
                 throw new ArgumentException("epsilon < 0");
             }
 
-            return Math.Abs(other.X - this.X) < tolerance &&
-                   Math.Abs(other.Y - this.Y) < tolerance &&
-                   Math.Abs(other.Z - this.Z) < tolerance;
+            return Math.Abs(other.X - X) < tolerance &&
+                   Math.Abs(other.Y - Y) < tolerance &&
+                   Math.Abs(other.Z - Z) < tolerance;
         }
 
         /// <inheritdoc />
         [Pure]
         public bool Equals(Point3D other)
         {
-            return this.X.Equals(other.X) && this.Y.Equals(other.Y) && this.Z.Equals(other.Z);
+            return X.Equals(other.X) && Y.Equals(other.Y) && Z.Equals(other.Z);
         }
 
         /// <inheritdoc />
         [Pure]
-        public override bool Equals(object obj) => obj is Point3D p && this.Equals(p);
+        public override bool Equals(object obj) => obj is Point3D p && Equals(p);
 
         /// <inheritdoc />
         [Pure]
-        public override int GetHashCode() => HashCode.Combine(this.X, this.Y, this.Z);
+        public override int GetHashCode() => HashCode.Combine(X, Y, Z);
 
         /// <inheritdoc />
         XmlSchema IXmlSerializable.GetSchema() => null;
@@ -458,15 +458,15 @@ namespace MathNet.Spatial.Euclidean
                 return;
             }
 
-            throw new XmlException($"Could not read a {this.GetType()}");
+            throw new XmlException($"Could not read a {GetType()}");
         }
 
         /// <inheritdoc />
         void IXmlSerializable.WriteXml(XmlWriter writer)
         {
-            writer.WriteElement("X", this.X, "G15");
-            writer.WriteElement("Y", this.Y, "G15");
-            writer.WriteElement("Z", this.Z, "G15");
+            writer.WriteElement("X", X, "G15");
+            writer.WriteElement("Y", Y, "G15");
+            writer.WriteElement("Z", Z, "G15");
         }
     }
 }
