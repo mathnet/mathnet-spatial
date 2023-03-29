@@ -181,14 +181,16 @@ namespace MathNet.Spatial.Tests.Serialization
 
         private static T BinaryFormaterRoundTrip<T>(T test)
         {
-            using var ms = new MemoryStream();
-            var formatter = new BinaryFormatter();
+            using (var ms = new MemoryStream())
+            {
+                var formatter = new BinaryFormatter();
 
-            // formatter.SurrogateSelector = SerializerFactory.CreateSurrogateSelector();
-            formatter.Serialize(ms, test);
-            ms.Flush();
-            ms.Position = 0;
-            return (T)formatter.Deserialize(ms);
+                // formatter.SurrogateSelector = SerializerFactory.CreateSurrogateSelector();
+                formatter.Serialize(ms, test);
+                ms.Flush();
+                ms.Position = 0;
+                return (T)formatter.Deserialize(ms);
+            }
         }
     }
 }
