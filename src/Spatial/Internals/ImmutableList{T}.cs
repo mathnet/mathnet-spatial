@@ -9,6 +9,7 @@ namespace MathNet.Spatial.Internals
     /// An internal implementation of ImmutableList
     /// </summary>
     /// <typeparam name="T">A type for the list</typeparam>
+    [Serializable]
     internal sealed class ImmutableList<T> : IEnumerable<T>
     {
         /// <summary>

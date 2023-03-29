@@ -14,6 +14,7 @@ namespace MathNet.Spatial.Euclidean
     /// http://web.cs.iastate.edu/~cs577/handouts/quaternion.pdf
     /// http://www.lce.hut.fi/~ssarkka/pub/quat.pdf
     /// </remarks>
+    [Serializable]
     public readonly struct Quaternion : IEquatable<Quaternion>, IFormattable
     {
         /// <summary>
