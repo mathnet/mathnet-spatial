@@ -131,10 +131,9 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Computes the pair of points which represents the closest distance between this Line3D and another Line3D, with the option
-        /// of treating the lines as segments bounded by their start and end points.
+        /// Computes the pair of points which represent the closest distance between this LineSegment3D and another LineSegment3D
         /// </summary>
-        /// <param name="other">line to compute the closest points with</param>
+        /// <param name="other">Line segment to compute the closest points with</param>
         /// <param name="tolerance">A tolerance (epsilon) to adjust for floating point error</param>
         /// <param name="closestLine">A line representing the endpoints of the shortest distance between the two segments</param>
         /// <returns>True if a line could be found, false if the lines intersect</returns>
@@ -158,6 +157,12 @@ namespace MathNet.Spatial.Euclidean
                     result.Item2.DistanceTo(other.StartPoint) <= other.Length &&
                     result.Item2.DistanceTo(other.EndPoint) <= other.Length)
                 {
+                    if (result.Item1 == result.Item2)
+                    {
+                        closestLine = default(LineSegment3D);
+                        return false;
+                    }
+
                     closestLine = new LineSegment3D(result.Item1, result.Item2);
                     return true;
                 }
