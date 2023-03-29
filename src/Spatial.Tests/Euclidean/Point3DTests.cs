@@ -249,7 +249,7 @@ namespace MathNet.Spatial.Tests.Euclidean
         public void XmlRoundtrip()
         {
             var p = new Point3D(1, -2, 3);
-            var xml = @"<Point3D X=""1"" Y=""-2"" Z=""3"" />";
+            var xml = "<Point3D><X>1</X><Y>-2</Y><Z>3</Z></Point3D>";
             AssertXml.XmlRoundTrips(p, xml, (expected, actual) => AssertGeometry.AreEqual(expected, actual));
         }
 
@@ -261,10 +261,7 @@ namespace MathNet.Spatial.Tests.Euclidean
                 Value1 = new Point3D(1, 2, 3),
                 Value2 = new Point3D(4, 5, 6)
             };
-            var expected = "<ContainerOfPoint3D>\r\n" +
-                           "  <Value1 X=\"1\" Y=\"2\" Z=\"3\"></Value1>\r\n" +
-                           "  <Value2 X=\"4\" Y=\"5\" Z=\"6\"></Value2>\r\n" +
-                           "</ContainerOfPoint3D>";
+            var expected = "<ContainerOfPoint3D><Value1><X>1</X><Y>2</Y><Z>3</Z></Value1><Value2><X>4</X><Y>5</Y><Z>6</Z></Value2></ContainerOfPoint3D>";
             var roundTrip = AssertXml.XmlSerializerRoundTrip(container, expected);
             AssertGeometry.AreEqual(container.Value1, roundTrip.Value1);
             AssertGeometry.AreEqual(container.Value2, roundTrip.Value2);

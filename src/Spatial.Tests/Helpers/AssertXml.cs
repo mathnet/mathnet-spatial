@@ -17,10 +17,9 @@ namespace MathNet.Spatial.Tests
             {
                 var settings = new XmlWriterSettings
                 {
-                    Indent = true,
+                    Indent = false,
                     NewLineHandling = NewLineHandling.Entitize,
                     OmitXmlDeclaration = true,
-                    ////NamespaceHandling = NamespaceHandling.Default
                 };
                 return settings;
             }

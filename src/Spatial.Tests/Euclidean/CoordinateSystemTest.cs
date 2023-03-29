@@ -299,13 +299,7 @@ namespace MathNet.Spatial.Tests.Euclidean
         public void XmlRoundTrips()
         {
             var cs = new CoordinateSystem(new Point3D(1, -2, 3), new Vector3D(0, 1, 0), new Vector3D(0, 0, 1), new Vector3D(1, 0, 0));
-            string expected = @"
-<CoordinateSystem>
-    <Origin X=""1"" Y=""-2"" Z=""3"" />
-    <XAxis X=""0"" Y=""1"" Z=""0"" />
-    <YAxis X=""0"" Y=""0"" Z=""1"" />
-    <ZAxis X=""1"" Y=""0"" Z=""0"" />
-</CoordinateSystem>";
+            string expected = "<CoordinateSystem><Origin><X>1</X><Y>-2</Y><Z>3</Z></Origin><XAxis><X>0</X><Y>1</Y><Z>0</Z></XAxis><YAxis><X>0</X><Y>0</Y><Z>1</Z></YAxis><ZAxis><X>1</X><Y>0</Y><Z>0</Z></ZAxis></CoordinateSystem>";
             AssertXml.XmlRoundTrips(cs, expected, (e, a) => AssertGeometry.AreEqual(e, a));
         }
     }
