@@ -7,6 +7,7 @@ namespace MathNet.Spatial.Euclidean
     /// <summary>
     /// Describes a standard 2 dimensional circle
     /// </summary>
+    [Serializable]
     public readonly struct Circle2D : IEquatable<Circle2D>
     {
         /// <summary>
