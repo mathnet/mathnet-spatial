@@ -688,9 +688,9 @@ namespace MathNet.Spatial.Euclidean
         /// <inheritdoc />
         void IXmlSerializable.WriteXml(XmlWriter writer)
         {
-            writer.WriteElement("X", this.X, "G15");
-            writer.WriteElement("Y", this.Y, "G15");
-            writer.WriteElement("Z", this.Z, "G15");
+            writer.WriteElement("X", this.X, "R15");
+            writer.WriteElement("Y", this.Y, "R15");
+            writer.WriteElement("Z", this.Z, "R15");
         }
     }
 }

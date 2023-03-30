@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
+using System.Xml;
+using System.Xml.Schema;
+using System.Xml.Serialization;
 using MathNet.Numerics;
 using MathNet.Numerics.LinearAlgebra.Double;
+using MathNet.Spatial.Internals;
 using MathNet.Spatial.Units;
 using HashCode = MathNet.Spatial.Internals.HashCode;
 
@@ -15,7 +19,7 @@ namespace MathNet.Spatial.Euclidean
     /// http://www.lce.hut.fi/~ssarkka/pub/quat.pdf
     /// </remarks>
     [Serializable]
-    public readonly struct Quaternion : IEquatable<Quaternion>, IFormattable
+    public struct Quaternion : IEquatable<Quaternion>, IFormattable, IXmlSerializable
     {
         /// <summary>
         /// Neutral element for multiplication
@@ -30,7 +34,7 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// Specifies the rotation component of the Quaternion.
         /// </summary>
-        private readonly double w; // real part
+        private readonly double w;
 
         /// <summary>
         /// Specifies the X-value of the vector component of the Quaternion
@@ -45,7 +49,7 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// Specifies the Z-value of the vector component of the Quaternion
         /// </summary>
-        private readonly double z; // imaginary part
+        private readonly double z;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Quaternion"/> struct.
@@ -793,6 +797,41 @@ namespace MathNet.Spatial.Euclidean
         {
             var norm = Math.Sqrt(ToNormSquared(real, imagX, imagY, imagZ));
             return new Quaternion(real / norm, imagX / norm, imagY / norm, imagZ / norm);
+        }
+
+        /// <inheritdoc />
+        XmlSchema IXmlSerializable.GetSchema() => null;
+
+        /// <inheritdoc />
+        void IXmlSerializable.ReadXml(XmlReader reader)
+        {
+            if (reader.TryReadAttributeAsDouble("X", out var x) &&
+                reader.TryReadAttributeAsDouble("Y", out var y) &&
+                reader.TryReadAttributeAsDouble("Z", out var z) &&
+                reader.TryReadAttributeAsDouble("W", out var w))
+            {
+                reader.Skip();
+                this = new Quaternion(w, x, y, z);
+                return;
+            }
+
+            if (reader.TryReadChildElementsAsDoubles("X", "Y", "Z", "W", out x, out y, out z, out w))
+            {
+                reader.Skip();
+                this = new Quaternion(w, x, y, z);
+                return;
+            }
+
+            throw new XmlException($"Could not read a {GetType()}");
+        }
+
+        /// <inheritdoc />
+        void IXmlSerializable.WriteXml(XmlWriter writer)
+        {
+            writer.WriteElement("W", w, "R15");
+            writer.WriteElement("X", x, "R15");
+            writer.WriteElement("Y", y, "R15");
+            writer.WriteElement("Z", z, "R15");
         }
     }
 }

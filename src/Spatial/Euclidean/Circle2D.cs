@@ -1,6 +1,9 @@
-﻿using System;
+﻿using MathNet.Spatial.Internals;
+using System;
 using System.Diagnostics.Contracts;
-using System.Runtime.Serialization;
+using System.Xml;
+using System.Xml.Schema;
+using System.Xml.Serialization;
 using HashCode = MathNet.Spatial.Internals.HashCode;
 
 namespace MathNet.Spatial.Euclidean
@@ -8,8 +11,7 @@ namespace MathNet.Spatial.Euclidean
     /// <summary>
     /// Describes a standard 2 dimensional circle
     /// </summary>
-    [Serializable, DataContract]
-    public readonly struct Circle2D : IEquatable<Circle2D>
+    public struct Circle2D : IEquatable<Circle2D>, IXmlSerializable
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Circle2D"/> struct.
@@ -26,14 +28,12 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// Gets the center point of the circle
         /// </summary>
-        [DataMember]
-        public Point2D Center { get; }
+        public Point2D Center { get; private set; }
 
         /// <summary>
         /// Gets the radius of the circle
         /// </summary>
-        [DataMember]
-        public double Radius { get; }
+        public double Radius { get; private set; }
 
         /// <summary>
         /// Gets the circumference of the circle
@@ -158,5 +158,33 @@ namespace MathNet.Spatial.Euclidean
         /// <inheritdoc />
         [Pure]
         public override int GetHashCode() => HashCode.Combine(Center, Radius);
+
+        public XmlSchema GetSchema() => null;
+
+        public void ReadXml(XmlReader reader)
+        {
+            try
+            {
+                reader.ReadToFirstDescendant();
+                Center = reader.ReadElementAs<Point2D>();
+                if (reader.TryReadElementContentAsDouble("Radius", out var radius))
+                {
+                    Radius = radius;
+                    reader.Skip();
+                    return;
+                }
+            }
+            catch
+            {
+                throw new XmlException($"Could not read a {GetType()}");
+            }
+            throw new XmlException($"Could not read a {GetType()}");
+        }
+
+        public void WriteXml(XmlWriter writer)
+        {
+            writer.WriteElement("Center", Center);
+            writer.WriteElement("Radius", Radius, "R15");
+        }
     }
 }

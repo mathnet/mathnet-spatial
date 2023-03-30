@@ -22,7 +22,7 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// A list of edges.  This list is lazy loaded on demand.
         /// </summary>
-        private ImmutableList<LineSegment2D> edges;
+        private ImmutableList<LineSegment2D> _edges;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Polygon2D"/> class.
@@ -48,11 +48,11 @@ namespace MathNet.Spatial.Euclidean
 
             if (vertices[0].Equals(vertices[vertices.Length - 1]))
             {
-                this._points = ImmutableList.Create(vertices.Skip(1).ToArray());
+                _points = ImmutableList.Create(vertices.Skip(1).ToArray());
             }
             else
             {
-                this._points = ImmutableList.Create(vertices);
+                _points = ImmutableList.Create(vertices);
             }
         }
 
@@ -63,7 +63,7 @@ namespace MathNet.Spatial.Euclidean
         {
             get
             {
-                foreach (var point in this._points)
+                foreach (var point in _points)
                 {
                     yield return point;
                 }
@@ -77,12 +77,12 @@ namespace MathNet.Spatial.Euclidean
         {
             get
             {
-                if (edges == null)
+                if (_edges == null)
                 {
                     PopulateEdgeList();
                 }
 
-                foreach (var edge in edges)
+                foreach (var edge in _edges)
                 {
                     yield return edge;
                 }
@@ -92,7 +92,7 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// Gets the number of vertices in the polygon.
         /// </summary>
-        public int VertexCount => this._points.Count;
+        public int VertexCount => _points.Count;
 
         /// <summary>
         /// Returns a value that indicates whether each point in two specified polygons is equal.
@@ -178,10 +178,10 @@ namespace MathNet.Spatial.Euclidean
         public bool EnclosesPoint(Point2D p)
         {
             var c = false;
-            for (int i = 0, j = this._points.Count - 1; i < this._points.Count; j = i++)
+            for (int i = 0, j = _points.Count - 1; i < _points.Count; j = i++)
             {
-                if (((this._points[i].Y > p.Y) != (this._points[j].Y > p.Y)) &&
-                    (p.X < ((this._points[j].X - this._points[i].X) * (p.Y - this._points[i].Y) / (this._points[j].Y - this._points[i].Y)) + this._points[i].X))
+                if (((_points[i].Y > p.Y) != (_points[j].Y > p.Y)) &&
+                    (p.X < ((_points[j].X - _points[i].X) * (p.Y - _points[i].Y) / (_points[j].Y - _points[i].Y)) + _points[i].X))
                 {
                     c = !c;
                 }
@@ -207,7 +207,7 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>A new polygon that has been rotated.</returns>
         public Polygon2D Rotate(Angle angle)
         {
-            var rotated = this._points.Select(t => Point2D.Origin + t.ToVector2D().Rotate(angle)).ToArray();
+            var rotated = _points.Select(t => Point2D.Origin + t.ToVector2D().Rotate(angle)).ToArray();
             return new Polygon2D(rotated);
         }
 
@@ -218,7 +218,7 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>A new polygon that has been translated.</returns>
         public Polygon2D TranslateBy(Vector2D vector)
         {
-            var newPoints = from p in this._points select p + vector;
+            var newPoints = from p in _points select p + vector;
             return new Polygon2D(newPoints);
         }
 
@@ -266,9 +266,9 @@ namespace MathNet.Spatial.Euclidean
                 return false;
             }
 
-            for (var i = 0; i < this._points.Count; i++)
+            for (var i = 0; i < _points.Count; i++)
             {
-                if (!this._points[i].Equals(other._points[i], tolerance))
+                if (!_points[i].Equals(other._points[i], tolerance))
                 {
                     return false;
                 }
@@ -286,9 +286,9 @@ namespace MathNet.Spatial.Euclidean
                 return false;
             }
 
-            for (var i = 0; i < this._points.Count; i++)
+            for (var i = 0; i < _points.Count; i++)
             {
-                if (!this._points[i].Equals(other._points[i]))
+                if (!_points[i].Equals(other._points[i]))
                 {
                     return false;
                 }
@@ -313,7 +313,7 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public override int GetHashCode()
         {
-            return HashCode.CombineMany(this._points);
+            return HashCode.CombineMany(_points);
         }
 
         /// <summary>
@@ -321,15 +321,15 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         private void PopulateEdgeList()
         {
-            var localedges = new List<LineSegment2D>(this._points.Count);
-            for (var i = 0; i < this._points.Count - 1; i++)
+            var localedges = new List<LineSegment2D>(_points.Count);
+            for (var i = 0; i < _points.Count - 1; i++)
             {
-                var edge = new LineSegment2D(this._points[i], this._points[i + 1]);
+                var edge = new LineSegment2D(_points[i], _points[i + 1]);
                 localedges.Add(edge);
             }
 
-            localedges.Add(new LineSegment2D(this._points[this._points.Count - 1], this._points[0])); // complete loop
-            edges = ImmutableList.Create(localedges);
+            localedges.Add(new LineSegment2D(_points[_points.Count - 1], _points[0])); // complete loop
+            _edges = ImmutableList.Create(localedges);
         }
     }
 }
