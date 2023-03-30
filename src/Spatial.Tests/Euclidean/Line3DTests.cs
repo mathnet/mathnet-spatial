@@ -15,29 +15,29 @@ namespace MathNet.Spatial.Tests.Euclidean
         }
 
         [TestCase("0, 0, 0", "1, -1, 1", "1, -1, 1")]
-        public void DirectionsTest(string p1s, string p2s, string evs)
+        public void DirectionsTest(string p1S, string p2S, string evs)
         {
-            var l = Line3D.Parse(p1s, p2s);
-            var excpected = UnitVector3D.Parse(evs, tolerance: 1);
-            AssertGeometry.AreEqual(excpected, l.Direction);
+            var l = Line3D.Parse(p1S, p2S);
+            var expected = UnitVector3D.Parse(evs, tolerance: 1);
+            AssertGeometry.AreEqual(expected, l.Direction);
         }
 
         [TestCase("0, 0, 0", "1, -1, 1", "0, 0, 0", "1, 0, 0", "0, 0, 0", "0, -1, 1")]
-        public void ProjectOn(string p1s, string p2s, string rootPoint, string unitVector, string ep1s, string ep2s)
+        public void ProjectOn(string p1S, string p2S, string rootPoint, string unitVector, string ep1S, string ep2S)
         {
-            var p1 = Point3D.Parse(p1s);
-            var p2 = Point3D.Parse(p2s);
+            var p1 = Point3D.Parse(p1S);
+            var p2 = Point3D.Parse(p2S);
             var line = new Line3D(p1, p2);
             var plane = new Plane(Point3D.Parse(rootPoint), UnitVector3D.Parse(unitVector));
-            var expected = new Line3D(Point3D.Parse(ep1s), Point3D.Parse(ep2s));
+            var expected = new Line3D(Point3D.Parse(ep1S), Point3D.Parse(ep2S));
             AssertGeometry.AreEqual(expected, line.ProjectOn(plane));
         }
 
         [TestCase("0, 0, 0", "1, -2, 3", 3.741657)]
-        public void Length(string p1s, string p2s, double expected)
+        public void Length(string p1S, string p2S, double expected)
         {
-            var p1 = Point3D.Parse(p1s);
-            var p2 = Point3D.Parse(p2s);
+            var p1 = Point3D.Parse(p1S);
+            var p2 = Point3D.Parse(p2S);
             var l = new Line3D(p1, p2);
             Assert.AreEqual(expected, l.Length, 1e-6);
         }
@@ -45,10 +45,10 @@ namespace MathNet.Spatial.Tests.Euclidean
         [TestCase("0, 0, 0", "1, -1, 1", "0, 0, 0", "1, -1, 1", true)]
         [TestCase("0, 0, 2", "1, -1, 1", "0, 0, 0", "1, -1, 1", false)]
         [TestCase("0, 0, 0", "1, -1, 1", "0, 0, 0", "2, -1, 1", false)]
-        public void Equals(string p1s, string p2s, string p3s, string p4s, bool expected)
+        public void Equals(string p1S, string p2S, string p3S, string p4S, bool expected)
         {
-            var line1 = new Line3D(Point3D.Parse(p1s), Point3D.Parse(p2s));
-            var line2 = new Line3D(Point3D.Parse(p3s), Point3D.Parse(p4s));
+            var line1 = new Line3D(Point3D.Parse(p1S), Point3D.Parse(p2S));
+            var line2 = new Line3D(Point3D.Parse(p3S), Point3D.Parse(p4S));
             Assert.AreEqual(expected, line1.Equals(line2));
             Assert.AreEqual(expected, line1 == line2);
             Assert.AreEqual(!expected, line1 != line2);
@@ -60,22 +60,22 @@ namespace MathNet.Spatial.Tests.Euclidean
         [TestCase("0, 0, 0", "1, 0, 0", "2, 1, 0", false, "2, 0, 0")]
         [TestCase("0, 0, 0", "1, 0, 0", "-2, 1, 0", true, "0, 0, 0")]
         [TestCase("0, 0, 0", "1, 0, 0", "-2, 1, 0", false, "-2, 0, 0")]
-        public void LineToTest(string p1s, string p2s, string ps, bool mustStartFromLine, string sps)
+        public void LineToTest(string p1S, string p2S, string ps, bool mustStartFromLine, string sps)
         {
-            var p1 = Point3D.Parse(p1s);
-            var p2 = Point3D.Parse(p2s);
+            var p1 = Point3D.Parse(p1S);
+            var p2 = Point3D.Parse(p2S);
             var l = new Line3D(p1, p2);
             var p = Point3D.Parse(ps);
             var actual = l.LineTo(p, mustStartFromLine);
-            AssertGeometry.AreEqual(Point3D.Parse(sps), actual.StartPoint, 1e-6);
-            AssertGeometry.AreEqual(p, actual.EndPoint, 1e-6);
+            AssertGeometry.AreEqual(Point3D.Parse(sps), actual.StartPoint);
+            AssertGeometry.AreEqual(p, actual.EndPoint);
         }
 
-        [TestCase("1, 2, 3", "4, 5, 6", @"<Line3D><StartPoint X=""1"" Y=""2"" Z=""3"" /><EndPoint X=""4"" Y=""5"" Z=""6"" /></Line3D>")]
-        public void XmlTests(string p1s, string p2s, string xml)
+        [TestCase("1, 2, 3", "4, 5, 6", "<Line3D><StartPoint><X>1</X><Y>2</Y><Z>3</Z></StartPoint><EndPoint><X>4</X><Y>5</Y><Z>6</Z></EndPoint></Line3D>")]
+        public void XmlTests(string p1S, string p2S, string xml)
         {
-            var p1 = Point3D.Parse(p1s);
-            var p2 = Point3D.Parse(p2s);
+            var p1 = Point3D.Parse(p1S);
+            var p2 = Point3D.Parse(p2S);
             var l = new Line3D(p1, p2);
             AssertXml.XmlRoundTrips(l, xml, (e, a) => AssertGeometry.AreEqual(e, a));
         }

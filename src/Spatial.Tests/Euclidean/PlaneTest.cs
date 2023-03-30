@@ -222,16 +222,16 @@ namespace MathNet.Spatial.Tests.Euclidean
             }
         }
 
-        [TestCase("0, 0, 0", "0, 0, 1", @"<Plane><RootPoint X=""0"" Y=""0"" Z=""0"" /><Normal X=""0"" Y=""0"" Z=""1"" /></Plane>")]
+        [TestCase("0, 0, 0", "0, 0, 1", "<Plane><RootPoint><X>0</X><Y>0</Y><Z>0</Z></RootPoint><Normal><X>0</X><Y>0</Y><Z>1</Z></Normal></Plane>")]
         public void XmlRoundTrips(string rootPoint, string unitVector, string xml)
         {
             var plane = new Plane(Point3D.Parse(rootPoint), UnitVector3D.Parse(unitVector));
             AssertXml.XmlRoundTrips(plane, xml, (e, a) => AssertGeometry.AreEqual(e, a));
         }
 
-        private Plane GetPlaneFrom4Doubles(string inputstring)
+        private Plane GetPlaneFrom4Doubles(string inputString)
         {
-            var numbers = inputstring.Split(',').Select(t => double.Parse(t)).ToArray();
+            var numbers = inputString.Split(',').Select(double.Parse).ToArray();
             return new Plane(numbers[0], numbers[1], numbers[2], numbers[3]);
         }
     }

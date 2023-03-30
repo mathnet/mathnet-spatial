@@ -22,12 +22,12 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// The x coordinate
         /// </summary>
-        public readonly double X;
+        public double X { get; }
 
         /// <summary>
         /// The y coordinate
         /// </summary>
-        public readonly double Y;
+        public double Y { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Point2D"/> struct.

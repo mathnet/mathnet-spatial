@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
+using System.Runtime.Serialization;
 using HashCode = MathNet.Spatial.Internals.HashCode;
 
 namespace MathNet.Spatial.Euclidean
@@ -7,7 +8,7 @@ namespace MathNet.Spatial.Euclidean
     /// <summary>
     /// Describes a standard 2 dimensional circle
     /// </summary>
-    [Serializable]
+    [Serializable, DataContract]
     public readonly struct Circle2D : IEquatable<Circle2D>
     {
         /// <summary>
@@ -25,11 +26,13 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// Gets the center point of the circle
         /// </summary>
+        [DataMember]
         public Point2D Center { get; }
 
         /// <summary>
         /// Gets the radius of the circle
         /// </summary>
+        [DataMember]
         public double Radius { get; }
 
         /// <summary>

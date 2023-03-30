@@ -159,7 +159,7 @@ namespace MathNet.Spatial.Tests.Units
         [Test]
         public void FailParseDirect()
         {
-            Assert.Throws<FormatException>(() => Angle.Parse("Test"), "Expected FormatException", null);
+            Assert.Throws<FormatException>(() => Angle.Parse("Test"), "Expected FormatException");
         }
 
         [TestCase(".1 rad", 0.1)]
@@ -235,7 +235,8 @@ namespace MathNet.Spatial.Tests.Units
             Assert.IsTrue(angle.Equals(Angle.Parse(toString), Tolerance));
         }
 
-        [TestCase("15°", @"<Angle Value=""0.261799387799149"" />")]
+        [TestCase("15°", "<Angle><Value>0.261799387799149</Value></Angle>")]
+        [TestCase("5 rad", "<Angle><Value>5</Value></Angle>")]
         public void XmlRoundTrips(string vs, string xml)
         {
             var angle = Angle.Parse(vs);
@@ -250,10 +251,7 @@ namespace MathNet.Spatial.Tests.Units
                 Value1 = Angle.FromRadians(1),
                 Value2 = Angle.FromRadians(2),
             };
-            var expected = "<ContainerOfAngle>\r\n" +
-                           "  <Value1 Value=\"1\"></Value1>\r\n" +
-                           "  <Value2 Value=\"2\"></Value2>\r\n" +
-                           "</ContainerOfAngle>";
+            var expected = "<ContainerOfAngle><Value1><Value>1</Value></Value1><Value2><Value>2</Value></Value2></ContainerOfAngle>";
             var roundTrip = AssertXml.XmlSerializerRoundTrip(container, expected);
             Assert.AreEqual(container.Value1, roundTrip.Value1);
             Assert.AreEqual(container.Value2, roundTrip.Value2);
