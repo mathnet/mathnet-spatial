@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using System.Xml.Linq;
+using System.Xml.Schema;
+using System.Xml;
+using System.Xml.Serialization;
 using MathNet.Spatial.Internals;
 using MathNet.Spatial.Units;
 using HashCode = MathNet.Spatial.Internals.HashCode;
@@ -12,12 +16,12 @@ namespace MathNet.Spatial.Euclidean
     /// Class to represent a closed polygon.
     /// </summary>
     [Serializable]
-    public class Polygon2D : IEquatable<Polygon2D>
+    public class Polygon2D : IEquatable<Polygon2D>, IXmlSerializable
     {
         /// <summary>
         /// A list of vertices.
         /// </summary>
-        private readonly ImmutableList<Point2D> _points;
+        private ImmutableList<Point2D> _points;
 
         /// <summary>
         /// A list of edges.  This list is lazy loaded on demand.
@@ -32,6 +36,14 @@ namespace MathNet.Spatial.Euclidean
         public Polygon2D(IEnumerable<Point2D> vertices)
             : this(vertices.ToArray())
         {
+        }
+
+        /// <summary>
+        /// Used only internally for XML deserialization
+        /// </summary>
+        internal Polygon2D()
+        {
+            _points = ImmutableList<Point2D>.Empty;
         }
 
         /// <summary>
@@ -321,15 +333,50 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         private void PopulateEdgeList()
         {
-            var localedges = new List<LineSegment2D>(_points.Count);
+            var localEdges = new List<LineSegment2D>(_points.Count);
             for (var i = 0; i < _points.Count - 1; i++)
             {
                 var edge = new LineSegment2D(_points[i], _points[i + 1]);
-                localedges.Add(edge);
+                localEdges.Add(edge);
             }
 
-            localedges.Add(new LineSegment2D(_points[_points.Count - 1], _points[0])); // complete loop
-            _edges = ImmutableList.Create(localedges);
+            localEdges.Add(new LineSegment2D(_points[_points.Count - 1], _points[0])); // complete loop
+            _edges = ImmutableList.Create(localEdges);
+        }
+
+        /// <inheritdoc />
+        XmlSchema IXmlSerializable.GetSchema() => null;
+
+        /// <inheritdoc/>
+        void IXmlSerializable.ReadXml(XmlReader reader)
+        {
+            reader.ReadToFirstDescendant();
+            try
+            {
+                var e = (XElement)XNode.ReadFrom(reader);
+                var xElements = e.ElementsNamed("Point");
+                var points = xElements.Select(x => Point2D.ReadFrom(x.CreateReader())).ToList();
+                _points = ImmutableList.Create(points);
+                reader.Skip();
+                return;
+            }
+            catch
+            {
+                // ignore
+            }
+
+            throw new XmlException($"Could not read a {GetType()}");
+        }
+
+        /// <inheritdoc />
+        void IXmlSerializable.WriteXml(XmlWriter writer)
+        {
+            writer.WriteStartElement("Points");
+            foreach (var point in _points)
+            {
+                writer.WriteElement("Point", point);
+            }
+            writer.WriteEndElement();
         }
     }
 }

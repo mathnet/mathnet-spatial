@@ -235,7 +235,7 @@ namespace MathNet.Spatial.Tests.Units
             Assert.IsTrue(angle.Equals(Angle.Parse(toString), Tolerance));
         }
 
-        [TestCase("15°", "<Angle><Value>0.261799387799149</Value></Angle>")]
+        [TestCase("15°", "<Angle><Value>0.26179938779914941</Value></Angle>")]
         [TestCase("5 rad", "<Angle><Value>5</Value></Angle>")]
         public void XmlRoundTrips(string vs, string xml)
         {

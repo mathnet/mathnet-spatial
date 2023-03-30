@@ -56,9 +56,6 @@ namespace MathNet.Spatial.Tests
             {
                 serializer.Serialize(writer, item);
                 xml = sw.ToString();
-                Debug.WriteLine("XmlSerializer");
-                Debug.Write(xml);
-                Debug.WriteLine(string.Empty);
                 AreEqual(expected, xml);
             }
 

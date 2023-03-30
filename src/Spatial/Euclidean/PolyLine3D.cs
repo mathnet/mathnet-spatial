@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using System.Xml.Linq;
+using System.Xml.Schema;
+using System.Xml;
+using System.Xml.Serialization;
+using MathNet.Spatial.Internals;
 using HashCode = MathNet.Spatial.Internals.HashCode;
 
 namespace MathNet.Spatial.Euclidean
@@ -11,12 +16,12 @@ namespace MathNet.Spatial.Euclidean
     /// A PolyLine is an ordered series of line segments in space represented as list of connected Point3Ds.
     /// </summary>
     [Serializable]
-    public class PolyLine3D : IEquatable<PolyLine3D>
+    public class PolyLine3D : IEquatable<PolyLine3D>, IXmlSerializable
     {
         /// <summary>
         /// An internal list of points
         /// </summary>
-        private readonly ReadOnlyCollection<Point3D> _points;
+        private ReadOnlyCollection<Point3D> _points;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PolyLine3D"/> class.
@@ -26,6 +31,14 @@ namespace MathNet.Spatial.Euclidean
         public PolyLine3D(IEnumerable<Point3D> points)
         {
             _points = new List<Point3D>(points).AsReadOnly();
+        }
+
+        /// <summary>
+        /// Used only internally for XML deserialization
+        /// </summary>
+        internal PolyLine3D()
+        {
+            _points = new List<Point3D>().AsReadOnly();
         }
 
         /// <summary>
@@ -215,6 +228,41 @@ namespace MathNet.Spatial.Euclidean
             }
 
             return length;
+        }
+
+        /// <inheritdoc />
+        XmlSchema IXmlSerializable.GetSchema() => null;
+
+        /// <inheritdoc/>
+        void IXmlSerializable.ReadXml(XmlReader reader)
+        {
+            reader.ReadToFirstDescendant();
+            try
+            {
+                var e = (XElement)XNode.ReadFrom(reader);
+                var xElements = e.ElementsNamed("Point");
+                var points = xElements.Select(x => Point3D.ReadFrom(x.CreateReader())).ToList();
+                _points = new List<Point3D>(points).AsReadOnly();
+                reader.Skip();
+                return;
+            }
+            catch
+            {
+                // ignore
+            }
+
+            throw new XmlException($"Could not read a {GetType()}");
+        }
+
+        /// <inheritdoc />
+        void IXmlSerializable.WriteXml(XmlWriter writer)
+        {
+            writer.WriteStartElement("Points");
+            foreach (var point in _points)
+            {
+                writer.WriteElement("Point", point);
+            }
+            writer.WriteEndElement();
         }
     }
 }

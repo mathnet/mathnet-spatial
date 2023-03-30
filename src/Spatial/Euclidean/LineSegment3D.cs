@@ -1,5 +1,10 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
+using System.Xml.Linq;
+using System.Xml.Schema;
+using System.Xml.Serialization;
+using System.Xml;
+using MathNet.Spatial.Internals;
 using MathNet.Spatial.Units;
 using HashCode = MathNet.Spatial.Internals.HashCode;
 
@@ -10,17 +15,17 @@ namespace MathNet.Spatial.Euclidean
     /// computing the length, direction, comparisons, and shifting by a vector.
     /// </summary>
     [Serializable]
-    public readonly struct LineSegment3D : IEquatable<LineSegment3D>
+    public struct LineSegment3D : IEquatable<LineSegment3D>, IXmlSerializable
     {
         /// <summary>
         /// The starting point of the line segment
         /// </summary>
-        public readonly Point3D StartPoint;
+        public Point3D StartPoint { get; private set; }
 
         /// <summary>
         /// The end point of the line segment
         /// </summary>
-        public readonly Point3D EndPoint;
+        public Point3D EndPoint { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LineSegment3D"/> struct.
@@ -300,6 +305,29 @@ namespace MathNet.Spatial.Euclidean
             var tc = ((a * e) - (b * d)) / ((a * c) - (b * b));
 
             return Tuple.Create(point0 + (sc * u), point1 + (tc * v));
+        }
+
+        /// <inheritdoc />
+        XmlSchema IXmlSerializable.GetSchema()
+        {
+            return null;
+        }
+
+        /// <inheritdoc/>
+        void IXmlSerializable.ReadXml(XmlReader reader)
+        {
+            reader.MoveToContent();
+            var e = (XElement)XNode.ReadFrom(reader);
+            this = new LineSegment3D(
+                Point3D.ReadFrom(e.SingleElement("StartPoint").CreateReader()),
+                Point3D.ReadFrom(e.SingleElement("EndPoint").CreateReader()));
+        }
+
+        /// <inheritdoc />
+        void IXmlSerializable.WriteXml(XmlWriter writer)
+        {
+            writer.WriteElement("StartPoint", StartPoint);
+            writer.WriteElement("EndPoint", EndPoint);
         }
     }
 }

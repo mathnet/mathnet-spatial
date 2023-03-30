@@ -1,8 +1,13 @@
-﻿using System;
+﻿using MathNet.Spatial.Internals;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using System.Xml.Linq;
+using System.Xml.Schema;
+using System.Xml;
+using System.Xml.Serialization;
 using HashCode = MathNet.Spatial.Internals.HashCode;
 
 namespace MathNet.Spatial.Euclidean
@@ -12,12 +17,12 @@ namespace MathNet.Spatial.Euclidean
     /// stored as a sequential list of 2D points.
     /// </summary>
     [Serializable]
-    public class PolyLine2D : IEquatable<PolyLine2D>
+    public class PolyLine2D : IEquatable<PolyLine2D>, IXmlSerializable
     {
         /// <summary>
         /// Internal storage for the points
         /// </summary>
-        private readonly ReadOnlyCollection<Point2D> _points;
+        private ReadOnlyCollection<Point2D> _points;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PolyLine2D"/> class.
@@ -27,6 +32,14 @@ namespace MathNet.Spatial.Euclidean
         public PolyLine2D(IEnumerable<Point2D> points)
         {
             _points = new List<Point2D>(points).AsReadOnly();
+        }
+
+        /// <summary>
+        /// Used only internally for XML deserialization
+        /// </summary>
+        internal PolyLine2D()
+        {
+            _points = new List<Point2D>().AsReadOnly();
         }
 
         /// <summary>
@@ -301,6 +314,41 @@ namespace MathNet.Spatial.Euclidean
             }
 
             return length;
+        }
+
+        /// <inheritdoc />
+        XmlSchema IXmlSerializable.GetSchema() => null;
+
+        /// <inheritdoc/>
+        void IXmlSerializable.ReadXml(XmlReader reader)
+        {
+            reader.ReadToFirstDescendant();
+            try
+            {
+                var e = (XElement)XNode.ReadFrom(reader);
+                var xElements = e.ElementsNamed("Point");
+                var points = xElements.Select(x => Point2D.ReadFrom(x.CreateReader())).ToList();
+                _points = new List<Point2D>(points).AsReadOnly();
+                reader.Skip();
+                return;
+            }
+            catch
+            {
+                // ignore
+            }
+
+            throw new XmlException($"Could not read a {GetType()}");
+        }
+
+        /// <inheritdoc />
+        void IXmlSerializable.WriteXml(XmlWriter writer)
+        {
+            writer.WriteStartElement("Points");
+            foreach (var point in _points)
+            {
+                writer.WriteElement("Point", point);
+            }
+            writer.WriteEndElement();
         }
     }
 }
