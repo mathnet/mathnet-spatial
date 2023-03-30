@@ -417,7 +417,7 @@ namespace MathNet.Spatial.Units
         /// <inheritdoc />
         void IXmlSerializable.WriteXml(XmlWriter writer)
         {
-            writer.WriteElement("Value", this.Radians, "R15");
+            writer.WriteElement("Value", Radians, "G17");
         }
     }
 }

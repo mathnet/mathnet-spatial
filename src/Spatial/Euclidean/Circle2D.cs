@@ -11,6 +11,7 @@ namespace MathNet.Spatial.Euclidean
     /// <summary>
     /// Describes a standard 2 dimensional circle
     /// </summary>
+    [Serializable]
     public struct Circle2D : IEquatable<Circle2D>, IXmlSerializable
     {
         /// <summary>
@@ -159,16 +160,19 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public override int GetHashCode() => HashCode.Combine(Center, Radius);
 
-        public XmlSchema GetSchema() => null;
+        /// <inheritdoc />
+        XmlSchema IXmlSerializable.GetSchema() => null;
 
-        public void ReadXml(XmlReader reader)
+        /// <inheritdoc/>
+        void IXmlSerializable.ReadXml(XmlReader reader)
         {
             try
             {
                 reader.ReadToFirstDescendant();
-                Center = reader.ReadElementAs<Point2D>();
+                var center = reader.ReadElementAs<Point2D>();
                 if (reader.TryReadElementContentAsDouble("Radius", out var radius))
                 {
+                    Center = center;
                     Radius = radius;
                     reader.Skip();
                     return;
@@ -176,15 +180,17 @@ namespace MathNet.Spatial.Euclidean
             }
             catch
             {
-                throw new XmlException($"Could not read a {GetType()}");
+                // ignored
             }
+
             throw new XmlException($"Could not read a {GetType()}");
         }
 
-        public void WriteXml(XmlWriter writer)
+        /// <inheritdoc />
+        void IXmlSerializable.WriteXml(XmlWriter writer)
         {
             writer.WriteElement("Center", Center);
-            writer.WriteElement("Radius", Radius, "R15");
+            writer.WriteElement("Radius", Radius, "G17");
         }
     }
 }

@@ -85,11 +85,12 @@ namespace MathNet.Spatial.Tests.Serialization
             Assert.AreEqual(c, result);
         }
 
-        [TestCase("0, 0, 0", 2.5, @"<Circle3D><CenterPoint X=""0"" Y=""0"" Z=""0"" /><Axis X=""0"" Y=""0"" Z=""1"" /><Radius>2.5</Radius></Circle3D>")]
-        public void Circle3DXml(string point, double radius, string xml)
+        [TestCase("1, 2, 3", "-0.267261241912424, 0.534522483824849, 0.801783725737273", 2.5, "<Circle3D><Center><X>1</X><Y>2</Y><Z>3</Z></Center><Axis><X>-0.26726124191242406</X><Y>0.5345224838248491</Y><Z>0.8017837257372731</Z></Axis><Radius>2.5</Radius></Circle3D>")]
+        public void Circle3DXml(string point, string axisString, double radius, string xml)
         {
             var center = Point3D.Parse(point);
-            var c = new Circle3D(center, UnitVector3D.ZAxis, radius);
+            var axis = UnitVector3D.Parse(axisString);
+            var c = new Circle3D(center, axis, radius);
             var result = AssertXml.XmlSerializerRoundTrip(c, xml);
             Assert.AreEqual(c, result);
         }
@@ -162,14 +163,14 @@ namespace MathNet.Spatial.Tests.Serialization
         [Test]
         public void EulerAnglesXml()
         {
-            var q = new Quaternion(0, 0, 0, 0);
+            var q = new Quaternion(1.0, 1.0, 0.5, 0.5);
             var eulerAngles = q.ToEulerAngles();
-            const string xml = @"<EulerAngles><Alpha Value=""0""></Alpha><Beta Value=""0""></Beta><Gamma Value=""0""></Gamma></EulerAngles>";
+            const string xml = "<EulerAngles><Alpha><Value>1.5707963267948966</Value></Alpha><Beta><Value>0</Value></Beta><Gamma><Value>0.9272952180016122</Value></Gamma></EulerAngles>";
             var result = AssertXml.XmlSerializerRoundTrip(eulerAngles, xml);
             Assert.AreEqual(eulerAngles, result);
         }
 
-        [TestCase("15 °", "<Angle><Value>0.26179938779914941</Value></Angle>")]
+        [TestCase("15 °", "<Angle><Value>0.2617993877991494</Value></Angle>")]
         public void AngleXml(string vs, string xml)
         {
             var angle = Angle.Parse(vs);
@@ -181,13 +182,7 @@ namespace MathNet.Spatial.Tests.Serialization
         public void CoordinateSystemXml()
         {
             var cs = new CoordinateSystem(new Point3D(1, -2, 3), new Vector3D(0, 1, 0), new Vector3D(0, 0, 1), new Vector3D(1, 0, 0));
-            string xml = @"
-<CoordinateSystem>
-    <Origin X=""1"" Y=""-2"" Z=""3"" />
-    <XAxis X=""0"" Y=""1"" Z=""0"" />
-    <YAxis X=""0"" Y=""0"" Z=""1"" />
-    <ZAxis X=""1"" Y=""0"" Z=""0"" />
-</CoordinateSystem>";
+            var xml = "<CoordinateSystem><Origin><X>1</X><Y>-2</Y><Z>3</Z></Origin><XAxis><X>0</X><Y>1</Y><Z>0</Z></XAxis><YAxis><X>0</X><Y>0</Y><Z>1</Z></YAxis><ZAxis><X>1</X><Y>0</Y><Z>0</Z></ZAxis></CoordinateSystem>";
             var result = AssertXml.XmlSerializerRoundTrip(cs, xml);
             AssertGeometry.AreEqual(cs, result);
         }

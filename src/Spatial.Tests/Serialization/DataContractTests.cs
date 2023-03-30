@@ -13,7 +13,7 @@ namespace MathNet.Spatial.Tests.Serialization
     {
         private const double Tolerance = 1e-6;
 
-        [TestCase("15 °", @"<Angle><Value>0.261799387799149</Value></Angle>")]
+        [TestCase("15 °", @"<Angle><Value>0.26179938779914941</Value></Angle>")]
         public void AngleDataContract(string vs, string xml)
         {
             var angle = Angle.Parse(vs);
@@ -58,7 +58,7 @@ namespace MathNet.Spatial.Tests.Serialization
             Assert.AreEqual(eulerAngles, result);
         }
 
-        [TestCase("0, 0, 0", "0, 0, 1", @"<Plane><Normal><X>0</X><Y>0</Y><Z>1</Z></Normal><RootPoint><X>0</X><Y>0</Y><Z>0</Z></RootPoint></Plane>")]
+        [TestCase("0, 0, 0", "0, 0, 1", @"<Plane><RootPoint><X>0</X><Y>0</Y><Z>0</Z></RootPoint><Normal><X>0</X><Y>0</Y><Z>1</Z></Normal></Plane>")]
         public void PlaneDataContract(string rootPoint, string unitVector, string xml)
         {
             var plane = new Plane(Point3D.Parse(rootPoint), UnitVector3D.Parse(unitVector));
@@ -66,7 +66,7 @@ namespace MathNet.Spatial.Tests.Serialization
             Assert.AreEqual(plane, result);
         }
 
-        [TestCase("1, 2, 3", "-1, 2, 3", false, @"<Ray3D><Direction><X>-0.2672612419124244</X><Y>0.53452248382484879</Y><Z>0.80178372573727319</Z></Direction><ThroughPoint><X>1</X><Y>2</Y><Z>3</Z></ThroughPoint></Ray3D>")]
+        [TestCase("1, 2, 3", "-0.2672612419124244, 0.53452248382484879, 0.80178372573727319", false, @"<Ray3D><ThroughPoint><X>1</X><Y>2</Y><Z>3</Z></ThroughPoint><Direction><X>-0.2672612419124244</X><Y>0.53452248382484879</Y><Z>0.80178372573727319</Z></Direction></Ray3D>")]
         public void Ray3DDataContract(string ps, string vs, bool asElements, string xml)
         {
             var ray = new Ray3D(Point3D.Parse(ps), UnitVector3D.Parse(vs));
@@ -75,7 +75,7 @@ namespace MathNet.Spatial.Tests.Serialization
             AssertGeometry.AreEqual(ray, result);
         }
 
-        [TestCase("1, 2, 3", "4, 5, 6", @"<Line3D><EndPoint><X>4</X><Y>5</Y><Z>6</Z></EndPoint><StartPoint><X>1</X><Y>2</Y><Z>3</Z></StartPoint></Line3D>")]
+        [TestCase("1, 2, 3", "4, 5, 6", @"<Line3D><StartPoint><X>1</X><Y>2</Y><Z>3</Z></StartPoint><EndPoint><X>4</X><Y>5</Y><Z>6</Z></EndPoint></Line3D>")]
         public void Line3DDataContract(string p1S, string p2S, string xml)
         {
             Point3D p1 = Point3D.Parse(p1S);
@@ -95,7 +95,7 @@ namespace MathNet.Spatial.Tests.Serialization
             Assert.AreEqual(l, result);
         }
 
-        [TestCase("1, 2", "4, 5", @"<Line2D><EndPoint><X>4</X><Y>5</Y></EndPoint><StartPoint><X>1</X><Y>2</Y></StartPoint></Line2D>")]
+        [TestCase("1, 2", "4, 5", @"<Line2D><StartPoint><X>1</X><Y>2</Y></StartPoint><EndPoint><X>4</X><Y>5</Y></EndPoint></Line2D>")]
         public void Line2DDataContract(string p1S, string p2S, string xml)
         {
             Point2D p1 = Point2D.Parse(p1S);
@@ -138,7 +138,7 @@ namespace MathNet.Spatial.Tests.Serialization
         {
             var center = Point2D.Parse(point);
             var c = new Circle2D(center, radius);
-            const string elementXml = @"<Circle2D><CenterPoint><X>0</X><Y>0</Y></CenterPoint><Radius>3</Radius></Circle2D>";
+            const string elementXml = @"<Circle2D><Center><X>0</X><Y>0</Y></Center><Radius>3</Radius></Circle2D>";
             var result = DataContractRoundTrip(c, elementXml);
             Assert.AreEqual(c, result);
         }
@@ -148,7 +148,7 @@ namespace MathNet.Spatial.Tests.Serialization
         {
             var center = Point3D.Parse(point);
             var c = new Circle3D(center, UnitVector3D.ZAxis, radius);
-            const string elementXml = @"<Circle3D><Axis><X>0</X><Y>0</Y><Z>1</Z></Axis><CenterPoint><X>0</X><Y>0</Y><Z>0</Z></CenterPoint><Radius>2.5</Radius></Circle3D>";
+            const string elementXml = @"<Circle3D><CenterPoint><X>0</X><Y>0</Y><Z>0</Z></CenterPoint><Axis><X>0</X><Y>0</Y><Z>1</Z></Axis><Radius>2.5</Radius></Circle3D>";
             var result = DataContractRoundTrip(c, elementXml);
             Assert.AreEqual(c, result);
         }
@@ -187,13 +187,7 @@ namespace MathNet.Spatial.Tests.Serialization
         public void CoordinateSystemDataContract()
         {
             var cs = new CoordinateSystem(new Point3D(1, -2, 3), new Vector3D(0, 1, 0), new Vector3D(0, 0, 1), new Vector3D(1, 0, 0));
-            const string xml = @"
-<CoordinateSystem>
-    <Origin><X>1</X><Y>-2</Y><Z>3</Z><Origin>
-    <XAxis><X>0</X><Y>1</Y><Z>0</Z></XAxis>
-    <YAxis><X>0</X><Y>0</Y><Z>1</Z></YAxis>
-    <ZAxis><X>1</X><Y>0</Y><Z>0</Z><ZAxis>
-</CoordinateSystem>";
+            const string xml = "<CoordinateSystem><Origin><X>1</X><Y>-2</Y><Z>3</Z></Origin><XAxis><X>0</X><Y>1</Y><Z>0</Z></XAxis><YAxis><X>0</X><Y>0</Y><Z>1</Z></YAxis><ZAxis><X>1</X><Y>0</Y><Z>0</Z></ZAxis></CoordinateSystem>";
             var result = DataContractRoundTrip(cs, xml);
             AssertGeometry.AreEqual(cs, result);
         }

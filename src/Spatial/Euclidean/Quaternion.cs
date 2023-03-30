@@ -828,10 +828,10 @@ namespace MathNet.Spatial.Euclidean
         /// <inheritdoc />
         void IXmlSerializable.WriteXml(XmlWriter writer)
         {
-            writer.WriteElement("W", w, "R15");
-            writer.WriteElement("X", x, "R15");
-            writer.WriteElement("Y", y, "R15");
-            writer.WriteElement("Z", z, "R15");
+            writer.WriteElement("W", w, "G17");
+            writer.WriteElement("X", x, "G17");
+            writer.WriteElement("Y", y, "G17");
+            writer.WriteElement("Z", z, "G17");
         }
     }
 }

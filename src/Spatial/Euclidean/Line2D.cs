@@ -1,7 +1,12 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
+using System.Xml.Schema;
+using System.Xml;
+using System.Xml.Serialization;
 using MathNet.Numerics;
+using MathNet.Spatial.Internals;
 using MathNet.Spatial.Units;
+using System.Xml.Linq;
 
 namespace MathNet.Spatial.Euclidean
 {
@@ -10,17 +15,17 @@ namespace MathNet.Spatial.Euclidean
     /// computing the length, direction, projections to, comparisons, and shifting by a vector.
     /// </summary>
     [Serializable]
-    public readonly struct Line2D : IEquatable<Line2D>
+    public struct Line2D : IEquatable<Line2D>, IXmlSerializable
     {
         /// <summary>
         /// The starting point of the line segment
         /// </summary>
-        public readonly Point2D StartPoint;
+        public Point2D StartPoint { get; private set; }
 
         /// <summary>
         /// The end point of the line segment
         /// </summary>
-        public readonly Point2D EndPoint;
+        public Point2D EndPoint { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Line2D"/> struct.
@@ -268,6 +273,26 @@ namespace MathNet.Spatial.Euclidean
             {
                 return (StartPoint.GetHashCode() * 397) ^ EndPoint.GetHashCode();
             }
+        }
+
+        /// <inheritdoc />
+        XmlSchema IXmlSerializable.GetSchema() => null;
+
+        /// <inheritdoc/>
+        void IXmlSerializable.ReadXml(XmlReader reader)
+        {
+            reader.MoveToContent();
+            var e = (XElement)XNode.ReadFrom(reader);
+            this = new Line2D(
+                Point2D.ReadFrom(e.SingleElement("StartPoint").CreateReader()),
+                Point2D.ReadFrom(e.SingleElement("EndPoint").CreateReader()));
+        }
+
+        /// <inheritdoc />
+        void IXmlSerializable.WriteXml(XmlWriter writer)
+        {
+            writer.WriteElement("StartPoint", StartPoint);
+            writer.WriteElement("EndPoint", EndPoint);
         }
     }
 }

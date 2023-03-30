@@ -1,5 +1,9 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
+using System.Xml.Schema;
+using System.Xml;
+using System.Xml.Serialization;
+using MathNet.Spatial.Internals;
 using HashCode = MathNet.Spatial.Internals.HashCode;
 
 namespace MathNet.Spatial.Euclidean
@@ -8,22 +12,22 @@ namespace MathNet.Spatial.Euclidean
     /// Describes a 3 dimensional circle
     /// </summary>
     [Serializable]
-    public readonly struct Circle3D : IEquatable<Circle3D>
+    public struct Circle3D : IEquatable<Circle3D>, IXmlSerializable
     {
         /// <summary>
         /// The center of the circle
         /// </summary>
-        public readonly Point3D CenterPoint;
+        public Point3D CenterPoint { get; private set; }
 
         /// <summary>
         /// the axis of the circle
         /// </summary>
-        public readonly UnitVector3D Axis;
+        public UnitVector3D Axis { get; private set; }
 
         /// <summary>
         /// the radius of the circle
         /// </summary>
-        public readonly double Radius;
+        public double Radius { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Circle3D"/> struct.
@@ -163,5 +167,37 @@ namespace MathNet.Spatial.Euclidean
         /// <inheritdoc />
         [Pure]
         public override int GetHashCode() => HashCode.Combine(CenterPoint, Axis, Radius);
+
+        public XmlSchema GetSchema() => null;
+
+        public void ReadXml(XmlReader reader)
+        {
+            try
+            {
+                reader.ReadToFirstDescendant();
+                var centerPoint = reader.ReadElementAs<Point3D>();
+                var axis = reader.ReadElementAs<UnitVector3D>();
+                if (reader.TryReadElementContentAsDouble("Radius", out var radius))
+                {
+                    CenterPoint = centerPoint;
+                    Axis = axis;
+                    Radius = radius;
+                    reader.Skip();
+                    return;
+                }
+            }
+            catch
+            {
+                // ignored
+            }
+            throw new XmlException($"Could not read a {GetType()}");
+        }
+
+        public void WriteXml(XmlWriter writer)
+        {
+            writer.WriteElement("CenterPoint", CenterPoint);
+            writer.WriteElement("Axis", Axis);
+            writer.WriteElement("Radius", Radius, "G17");
+        }
     }
 }
