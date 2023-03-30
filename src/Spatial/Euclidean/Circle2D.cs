@@ -1,5 +1,9 @@
-﻿using System;
+﻿using MathNet.Spatial.Internals;
+using System;
 using System.Diagnostics.Contracts;
+using System.Xml;
+using System.Xml.Schema;
+using System.Xml.Serialization;
 using HashCode = MathNet.Spatial.Internals.HashCode;
 
 namespace MathNet.Spatial.Euclidean
@@ -8,7 +12,7 @@ namespace MathNet.Spatial.Euclidean
     /// Describes a standard 2 dimensional circle
     /// </summary>
     [Serializable]
-    public readonly struct Circle2D : IEquatable<Circle2D>
+    public struct Circle2D : IEquatable<Circle2D>, IXmlSerializable
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Circle2D"/> struct.
@@ -25,12 +29,12 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// Gets the center point of the circle
         /// </summary>
-        public Point2D Center { get; }
+        public Point2D Center { get; private set; }
 
         /// <summary>
         /// Gets the radius of the circle
         /// </summary>
-        public double Radius { get; }
+        public double Radius { get; private set; }
 
         /// <summary>
         /// Gets the circumference of the circle
@@ -155,5 +159,38 @@ namespace MathNet.Spatial.Euclidean
         /// <inheritdoc />
         [Pure]
         public override int GetHashCode() => HashCode.Combine(Center, Radius);
+
+        /// <inheritdoc />
+        XmlSchema IXmlSerializable.GetSchema() => null;
+
+        /// <inheritdoc/>
+        void IXmlSerializable.ReadXml(XmlReader reader)
+        {
+            try
+            {
+                reader.ReadToFirstDescendant();
+                var center = reader.ReadElementAs<Point2D>();
+                if (reader.TryReadElementContentAsDouble("Radius", out var radius))
+                {
+                    Center = center;
+                    Radius = radius;
+                    reader.Skip();
+                    return;
+                }
+            }
+            catch
+            {
+                // ignored
+            }
+
+            throw new XmlException($"Could not read a {GetType()}");
+        }
+
+        /// <inheritdoc />
+        void IXmlSerializable.WriteXml(XmlWriter writer)
+        {
+            writer.WriteElement("Center", Center);
+            writer.WriteElement("Radius", Radius, "G17");
+        }
     }
 }

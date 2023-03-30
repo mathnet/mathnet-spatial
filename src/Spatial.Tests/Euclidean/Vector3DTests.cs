@@ -33,7 +33,7 @@ namespace MathNet.Spatial.Tests.Euclidean
         public void OperatorMultiply(string vectorAsString, double multiplier, string expected)
         {
             var vector = Vector3D.Parse(vectorAsString);
-            AssertGeometry.AreEqual(Vector3D.Parse(expected), multiplier * vector, 1e-6);
+            AssertGeometry.AreEqual(Vector3D.Parse(expected), multiplier * vector);
         }
 
         [TestCase("-1,1,-1", -1, 1, -1)]
@@ -106,10 +106,10 @@ namespace MathNet.Spatial.Tests.Euclidean
             Assert.AreEqual(2, vector[1]);
             Assert.AreEqual(3, vector[2]);
 
-            var roundtripped = Vector3D.OfVector(vector);
-            Assert.AreEqual(1, roundtripped.X);
-            Assert.AreEqual(2, roundtripped.Y);
-            Assert.AreEqual(3, roundtripped.Z);
+            var roundTripped = Vector3D.OfVector(vector);
+            Assert.AreEqual(1, roundTripped.X);
+            Assert.AreEqual(2, roundTripped.Y);
+            Assert.AreEqual(3, roundTripped.Z);
         }
 
         [TestCase("1; 0 ; 0")]
@@ -144,7 +144,7 @@ namespace MathNet.Spatial.Tests.Euclidean
             var vector2 = Vector3D.Parse(v2s);
             var expected = Vector3D.Parse(ves);
             var crossProduct = vector1.CrossProduct(vector2);
-            AssertGeometry.AreEqual(expected, crossProduct, 1E-6);
+            AssertGeometry.AreEqual(expected, crossProduct);
         }
 
         [TestCase(X, Y, Z, 90)]
@@ -200,10 +200,10 @@ namespace MathNet.Spatial.Tests.Euclidean
             var about = Vector3D.Parse(avs);
             var expected = Vector3D.Parse(evs);
             var rotated = v.Rotate(about, Angle.FromDegrees(deg));
-            AssertGeometry.AreEqual(expected, rotated, 1E-6);
+            AssertGeometry.AreEqual(expected, rotated);
 
             rotated = v.Rotate(about.Normalize(), Angle.FromDegrees(deg));
-            AssertGeometry.AreEqual(expected, rotated, 1E-6);
+            AssertGeometry.AreEqual(expected, rotated);
         }
 
         [TestCase("X", X)]
@@ -268,7 +268,7 @@ namespace MathNet.Spatial.Tests.Euclidean
             var vector = Vector3D.Parse(vs);
             var uv = vector.Normalize();
             var expected = UnitVector3D.Parse(evs);
-            AssertGeometry.AreEqual(expected, uv, 1E-6);
+            AssertGeometry.AreEqual(expected, uv);
         }
 
         [TestCase("0; 0; 0", "0; 0 ; 0")]
@@ -284,7 +284,7 @@ namespace MathNet.Spatial.Tests.Euclidean
         {
             var v = Vector3D.Parse(vs);
             var actual = v.ScaleBy(s);
-            AssertGeometry.AreEqual(Vector3D.Parse(evs), actual, 1e-6);
+            AssertGeometry.AreEqual(Vector3D.Parse(evs), actual);
         }
 
         [TestCase("5;0;0", 5)]
@@ -448,7 +448,7 @@ namespace MathNet.Spatial.Tests.Euclidean
         public void XmlRoundtrip()
         {
             var p = new Vector3D(1, -2, 3);
-            var xml = @"<Vector3D X=""1"" Y=""-2"" Z=""3"" />";
+            var xml = "<Vector3D><X>1</X><Y>-2</Y><Z>3</Z></Vector3D>";
             AssertXml.XmlRoundTrips(p, xml, (expected, actual) => AssertGeometry.AreEqual(expected, actual));
         }
 
@@ -460,10 +460,7 @@ namespace MathNet.Spatial.Tests.Euclidean
                 Value1 = new Vector3D(1, 2, 3),
                 Value2 = new Vector3D(4, 5, 6)
             };
-            var expected = "<ContainerOfVector3D>\r\n" +
-                           "  <Value1 X=\"1\" Y=\"2\" Z=\"3\"></Value1>\r\n" +
-                           "  <Value2 X=\"4\" Y=\"5\" Z=\"6\"></Value2>\r\n" +
-                           "</ContainerOfVector3D>";
+            var expected = "<ContainerOfVector3D><Value1><X>1</X><Y>2</Y><Z>3</Z></Value1><Value2><X>4</X><Y>5</Y><Z>6</Z></Value2></ContainerOfVector3D>";
             var roundTrip = AssertXml.XmlSerializerRoundTrip(container, expected);
             AssertGeometry.AreEqual(container.Value1, roundTrip.Value1);
             AssertGeometry.AreEqual(container.Value2, roundTrip.Value2);

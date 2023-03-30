@@ -22,17 +22,17 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// The x component.
         /// </summary>
-        public readonly double X;
+        public double X { get; }
 
         /// <summary>
         /// The y component.
         /// </summary>
-        public readonly double Y;
+        public double Y { get; }
 
         /// <summary>
         /// The z component.
         /// </summary>
-        public readonly double Z;
+        public double Z { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Point3D"/> struct.
@@ -464,9 +464,9 @@ namespace MathNet.Spatial.Euclidean
         /// <inheritdoc />
         void IXmlSerializable.WriteXml(XmlWriter writer)
         {
-            writer.WriteAttribute("X", X);
-            writer.WriteAttribute("Y", Y);
-            writer.WriteAttribute("Z", Z);
+            writer.WriteElement("X", X, "G17");
+            writer.WriteElement("Y", Y, "G17");
+            writer.WriteElement("Z", Z, "G17");
         }
     }
 }

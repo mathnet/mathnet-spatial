@@ -196,6 +196,88 @@ namespace MathNet.Spatial.Internals
         }
 
         /// <summary>
+        /// Reads the values of the elements named <paramref name="xName"/> and <paramref name="xName"/> if they exist on the current element.
+        /// This is not a proper try method as it checks if <paramref name="reader"/> is null and throws.
+        /// </summary>
+        /// <remarks>
+        /// Calling this method has side effects as it changes the position of the reader.
+        /// </remarks>
+        /// <param name="reader">A <see cref="XmlReader"/></param>
+        /// <param name="xName">The local name of the x element.</param>
+        /// <param name="yName">The local name of the y element.</param>
+        /// <param name="zName">The local name of the z element.</param>
+        /// <param name="x">The x value read from <paramref name="reader"/></param>
+        /// <param name="y">The y value read from <paramref name="reader"/></param>
+        /// <param name="z">The z value read from <paramref name="reader"/></param>
+        /// <returns>True if both elements were found.</returns>
+        internal static bool TryReadChildElementsAsDoubles(this XmlReader reader, string xName, string yName, string zName, string wName, out double x, out double y, out double z, out double w)
+        {
+            if (reader == null)
+            {
+                throw new ArgumentNullException(nameof(reader));
+            }
+
+            x = 0;
+            y = 0;
+            z = 0;
+            w = 0;
+            if (reader.MoveToContent() == XmlNodeType.Element &&
+                !reader.IsEmptyElement &&
+                !reader.HasValue)
+            {
+                var subtree = reader.ReadSubtree();
+                if (subtree.ReadToFirstDescendant())
+                {
+                    if (subtree.TryReadElementContentAsDouble(xName, out x))
+                    {
+                        if (subtree.TryReadSiblingElementsAsDoubles(yName, zName, wName, out y, out z, out w))
+                        {
+                            subtree.Skip();
+                            return true;
+                        }
+
+                        return false;
+                    }
+
+                    if (subtree.TryReadElementContentAsDouble(yName, out y))
+                    {
+                        if (subtree.TryReadSiblingElementsAsDoubles(xName, zName, wName, out x, out z, out w))
+                        {
+                            subtree.Skip();
+                            return true;
+                        }
+
+                        return false;
+                    }
+
+                    if (subtree.TryReadElementContentAsDouble(zName, out z))
+                    {
+                        if (subtree.TryReadSiblingElementsAsDoubles(xName, yName, wName, out x, out y, out w))
+                        {
+                            subtree.Skip();
+                            return true;
+                        }
+
+                        return false;
+                    }
+
+                    if (subtree.TryReadElementContentAsDouble(wName, out w))
+                    {
+                        if (subtree.TryReadSiblingElementsAsDoubles(xName, yName, zName, out x, out y, out z))
+                        {
+                            subtree.Skip();
+                            return true;
+                        }
+
+                        return false;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
         /// Reads until first descendant
         /// </summary>
         /// <param name="reader">An xml reader</param>
@@ -222,21 +304,79 @@ namespace MathNet.Spatial.Internals
         /// Attempts to read sibling elements as a pair of doubles
         /// </summary>
         /// <param name="subtree">an xml reader</param>
-        /// <param name="xName">The name of the x element</param>
-        /// <param name="yName">The name of the y element</param>
-        /// <param name="x">The x value</param>
-        /// <param name="y">The y value</param>
+        /// <param name="name1">The name of the first element</param>
+        /// <param name="name2">The name of the second element</param>
+        /// <param name="var1">The first element value</param>
+        /// <param name="var2">The second element value</param>
         /// <returns>True if successful; otherwise false</returns>
-        private static bool TryReadSiblingElementsAsDoubles(this XmlReader subtree, string xName, string yName, out double x, out double y)
+        private static bool TryReadSiblingElementsAsDoubles(this XmlReader subtree, string name1, string name2, out double var1, out double var2)
         {
-            if (subtree.TryReadElementContentAsDouble(xName, out x) &&
-                subtree.TryReadElementContentAsDouble(yName, out y))
+            if (subtree.TryReadElementContentAsDouble(name1, out var1) &&
+                subtree.TryReadElementContentAsDouble(name2, out var2))
             {
                 return true;
             }
 
-            if (subtree.TryReadElementContentAsDouble(yName, out y) &&
-                subtree.TryReadElementContentAsDouble(xName, out x))
+            if (subtree.TryReadElementContentAsDouble(name2, out var2) &&
+                subtree.TryReadElementContentAsDouble(name1, out var1))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Attempts to read sibling elements as a pair of doubles
+        /// </summary>
+        /// <param name="subtree">an xml reader</param>
+        /// <param name="name1">The name of the first element</param>
+        /// <param name="name2">The name of the second element</param>
+        /// <param name="name3">The name of the third element</param>
+        /// <param name="var1">The first element value</param>
+        /// <param name="var2">The second element value</param>
+        /// <param name="var3">The third element value</param>
+        /// <returns>True if successful; otherwise false</returns>
+        private static bool TryReadSiblingElementsAsDoubles(this XmlReader subtree, string name1, string name2, string name3, out double var1, out double var2, out double var3)
+        {
+            if (subtree.TryReadElementContentAsDouble(name1, out var1) &&
+                subtree.TryReadElementContentAsDouble(name2, out var2) &&
+                subtree.TryReadElementContentAsDouble(name3, out var3))
+            {
+                return true;
+            }
+
+            if (subtree.TryReadElementContentAsDouble(name1, out var1) &&
+                subtree.TryReadElementContentAsDouble(name3, out var3) &&
+                subtree.TryReadElementContentAsDouble(name2, out var2))
+            {
+                return true;
+            }
+
+            if (subtree.TryReadElementContentAsDouble(name2, out var2) &&
+                subtree.TryReadElementContentAsDouble(name1, out var1) &&
+                subtree.TryReadElementContentAsDouble(name3, out var3))
+            {
+                return true;
+            }
+
+            if (subtree.TryReadElementContentAsDouble(name2, out var2) &&
+                subtree.TryReadElementContentAsDouble(name3, out var3) &&
+                subtree.TryReadElementContentAsDouble(name1, out var1))
+            {
+                return true;
+            }
+
+            if (subtree.TryReadElementContentAsDouble(name3, out var3) &&
+                subtree.TryReadElementContentAsDouble(name1, out var1) &&
+                subtree.TryReadElementContentAsDouble(name2, out var2))
+            {
+                return true;
+            }
+
+            if (subtree.TryReadElementContentAsDouble(name3, out var3) &&
+                subtree.TryReadElementContentAsDouble(name2, out var2) &&
+                subtree.TryReadElementContentAsDouble(name1, out var1))
             {
                 return true;
             }

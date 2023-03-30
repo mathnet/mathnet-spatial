@@ -1,7 +1,12 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
+using System.Xml.Schema;
+using System.Xml;
+using System.Xml.Serialization;
+using MathNet.Spatial.Internals;
 using MathNet.Spatial.Units;
 using HashCode = MathNet.Spatial.Internals.HashCode;
+using System.Xml.Linq;
 
 namespace MathNet.Spatial.Euclidean
 {
@@ -10,22 +15,22 @@ namespace MathNet.Spatial.Euclidean
     /// More information can be found https://en.wikipedia.org/wiki/Euler_angles
     /// </summary>
     [Serializable]
-    public readonly struct EulerAngles : IEquatable<EulerAngles>
+    public struct EulerAngles : IEquatable<EulerAngles>, IXmlSerializable
     {
         /// <summary>
         /// Alpha (or phi) is the rotation around the z axis
         /// </summary>
-        public readonly Angle Alpha; // phi
+        public Angle Alpha { get; private set; } // phi
 
         /// <summary>
         /// Beta (or theta) is the rotation around the N axis
         /// </summary>
-        public readonly Angle Beta; // theta
+        public Angle Beta { get; private set; } // theta
 
         /// <summary>
         /// Gamma (or psi) is the rotation around the Z axis
         /// </summary>
-        public readonly Angle Gamma; // psi
+        public Angle Gamma { get; private set; } // psi
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EulerAngles"/> struct.
@@ -124,5 +129,27 @@ namespace MathNet.Spatial.Euclidean
         /// <inheritdoc/>
         [Pure]
         public override int GetHashCode() => HashCode.Combine(Alpha, Beta, Gamma);
+
+        /// <inheritdoc />
+        XmlSchema IXmlSerializable.GetSchema() => null;
+
+        /// <inheritdoc/>
+        void IXmlSerializable.ReadXml(XmlReader reader)
+        {
+            reader.MoveToContent();
+            var e = (XElement)XNode.ReadFrom(reader);
+            this = new EulerAngles(
+                Angle.ReadFrom(e.SingleElement("Alpha").CreateReader()),
+                Angle.ReadFrom(e.SingleElement("Beta").CreateReader()),
+                Angle.ReadFrom(e.SingleElement("Gamma").CreateReader()));
+        }
+
+        /// <inheritdoc />
+        void IXmlSerializable.WriteXml(XmlWriter writer)
+        {
+            writer.WriteElement("Alpha", Alpha);
+            writer.WriteElement("Beta", Beta);
+            writer.WriteElement("Gamma", Gamma);
+        }
     }
 }

@@ -17,10 +17,9 @@ namespace MathNet.Spatial.Tests
             {
                 var settings = new XmlWriterSettings
                 {
-                    Indent = true,
+                    Indent = false,
                     NewLineHandling = NewLineHandling.Entitize,
                     OmitXmlDeclaration = true,
-                    ////NamespaceHandling = NamespaceHandling.Default
                 };
                 return settings;
             }
@@ -44,14 +43,7 @@ namespace MathNet.Spatial.Tests
         /// <param name="assert"></param>
         public static void XmlRoundTrips<T>(T item, string expectedXml, Action<T, T> assert)
         {
-            var roundtrips = new[]
-            {
-                XmlSerializerRoundTrip(item, expectedXml)
-            };
-            foreach (var roundtrip in roundtrips)
-            {
-                assert(item, roundtrip);
-            }
+            assert(item, XmlSerializerRoundTrip(item, expectedXml));
         }
 
         public static T XmlSerializerRoundTrip<T>(T item, string expected)
@@ -64,9 +56,6 @@ namespace MathNet.Spatial.Tests
             {
                 serializer.Serialize(writer, item);
                 xml = sw.ToString();
-                Debug.WriteLine("XmlSerializer");
-                Debug.Write(xml);
-                Debug.WriteLine(string.Empty);
                 AreEqual(expected, xml);
             }
 
