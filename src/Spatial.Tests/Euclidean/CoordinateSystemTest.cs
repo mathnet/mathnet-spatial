@@ -112,7 +112,6 @@ namespace MathNet.Spatial.Tests.Euclidean
             var p = Point3D.Parse(ps);
             var cs = CoordinateSystem.Translation(Vector3D.Parse(vs));
             var tp = cs.Transform(p);
-            Console.WriteLine(cs.ToString());
             AssertGeometry.AreEqual(Point3D.Parse(eps), tp);
         }
 
@@ -140,7 +139,6 @@ namespace MathNet.Spatial.Tests.Euclidean
             var v1 = Vector3D.Parse(v1s).Normalize();
             var v2 = Vector3D.Parse(v2s).Normalize();
             var actual = CoordinateSystem.RotateTo(v1, v2, axis);
-            Console.WriteLine(actual);
             var rv = actual.Transform(v1);
             AssertGeometry.AreEqual(v2, rv);
             actual = CoordinateSystem.RotateTo(v2, v1, axis);
