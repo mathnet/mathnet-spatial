@@ -554,11 +554,6 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public UnitVector3D CrossProduct(UnitVector3D other)
         {
-            if (IsParallelTo(other))
-            {
-                return default(UnitVector3D);
-            }
-
             var x = (Y * other.Z) - (Z * other.Y);
             var y = (Z * other.X) - (X * other.Z);
             var z = (X * other.Y) - (Y * other.X);
@@ -576,7 +571,7 @@ namespace MathNet.Spatial.Euclidean
         {
             if (IsParallelTo(other))
             {
-                return default(Vector3D);
+                throw new InvalidOperationException($"Vector {other} is parallel to {this}");
             }
 
             var x = (Y * other.Z) - (Z * other.Y);
