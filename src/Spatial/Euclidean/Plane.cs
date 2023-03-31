@@ -145,7 +145,8 @@ namespace MathNet.Spatial.Euclidean
             var distanceFromOrigin = normal.DotProduct(p1);
             if (distanceFromOrigin < 0)
             {
-                
+                // make sure the plane is defined in its Hesse normal form
+                // https://en.wikipedia.org/wiki/Hesse_normal_form
                 normal = normal.Negate();
             }
 
