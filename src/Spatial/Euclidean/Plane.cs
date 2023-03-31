@@ -141,7 +141,15 @@ namespace MathNet.Spatial.Euclidean
                 throw new ArgumentException("The 3 points should not be on the same line");
             }
 
-            return new Plane(cross.Normalize(), p1);
+            var normal = cross.Normalize();
+            var distanceFromOrigin = normal.DotProduct(p1);
+            if (distanceFromOrigin < 0)
+            {
+                
+                normal = normal.Negate();
+            }
+
+            return new Plane(normal, p1);
         }
 
         /// <summary>

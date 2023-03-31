@@ -27,6 +27,25 @@ namespace MathNet.Spatial.Tests.Euclidean
             AssertGeometry.AreEqual(plane1, plane4);
         }
 
+        [Test]
+        public void RobustFromPointsIndependentOfPointOrder()
+        {
+            var p1 = new Point3D(1, 0, 0);
+            var p2 = new Point3D(0, 1, 0);
+            var p3 = new Point3D(0, 0, 1);
+            var plane1 = Plane.FromPoints(p1, p2, p3);
+            var plane2 = Plane.FromPoints(p1, p3, p2);
+            var plane3 = Plane.FromPoints(p2, p1, p3);
+            var plane4 = Plane.FromPoints(p2, p3, p1);
+            var plane5 = Plane.FromPoints(p3, p1, p2);
+            var plane6 = Plane.FromPoints(p3, p2, p1);
+            AssertGeometry.AreEqual(plane1, plane2);
+            AssertGeometry.AreEqual(plane1, plane3);
+            AssertGeometry.AreEqual(plane1, plane4);
+            AssertGeometry.AreEqual(plane1, plane5);
+            AssertGeometry.AreEqual(plane1, plane6);
+        }
+
         [TestCase("0, 0, 0", "1, 0, 0", "0, 0, 0", "1, 0, 0")]
         public void Parse(string rootPoint, string unitVector, string pds, string vds)
         {
