@@ -439,34 +439,6 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Computes whether or not this vector is anti-parallel to another vector using the dot product method and comparing it
-        /// to within a specified tolerance.
-        /// </summary>
-        /// <param name="otherVector">The other <see cref="Vector3D"/></param>
-        /// <param name="tolerance">A tolerance value for the dot product method.  Values below 2*Precision.DoublePrecision may cause issues.</param>
-        /// <returns>true if the vector dot product is within the given tolerance of unity, false if it is not</returns>
-        [Pure]
-        public bool IsAntiParallelTo(Vector3D otherVector, double tolerance = 1e-10)
-        {
-            var other = otherVector.Normalize();
-            return IsAntiParallelTo(other, tolerance);
-        }
-
-        /// <summary>
-        /// Computes whether or not this vector is colinear (parallel or anti-parallel) to another vector using the dot product method and comparing it
-        /// to within a specified tolerance.
-        /// </summary>
-        /// <param name="otherVector">The other <see cref="Vector3D"/></param>
-        /// <param name="tolerance">A tolerance value for the dot product method.  Values below 2*Precision.DoublePrecision may cause issues.</param>
-        /// <returns>true if the vector dot product is within the given tolerance of unity, false if it is not</returns>
-        [Pure]
-        public bool IsColinearTo(Vector3D otherVector, double tolerance = 1e-10)
-        {
-            var other = otherVector.Normalize();
-            return IsColinearTo(other, tolerance);
-        }
-
-        /// <summary>
         /// Computes whether or not this vector is parallel to a unit vector using the dot product method and comparing it
         /// to within a specified tolerance.
         /// </summary>
@@ -480,35 +452,6 @@ namespace MathNet.Spatial.Euclidean
             // ends up here sooner or later.
             var dp = Math.Abs(DotProduct(otherVector));
             return Math.Abs(1 - dp) <= tolerance;
-        }
-
-        /// <summary>
-        /// Computes whether or not this vector is anti-parallel to a unit vector using the dot product method and comparing it
-        /// to within a specified tolerance.
-        /// </summary>
-        /// <param name="otherVector">The other <see cref="UnitVector3D"/></param>
-        /// <param name="tolerance">A tolerance value for the dot product method.  Values below 2*Precision.DoublePrecision may cause issues.</param>
-        /// <returns>true if the vector dot product is within the given tolerance of unity, false if not</returns>
-        [Pure]
-        public bool IsAntiParallelTo(UnitVector3D otherVector, double tolerance = 1e-10)
-        {
-            // This is the master method for all Vector3D and UnitVector3D IsParallelTo comparisons.  Everything else
-            // ends up here sooner or later.
-            var dp = Math.Abs(DotProduct(otherVector));
-            return Math.Abs(1 + dp) <= tolerance;
-        }
-
-        /// <summary>
-        /// Computes whether or not this vector is colinear (parallel or anti-parallel) to a unit vector using the dot product method and comparing it
-        /// to within a specified tolerance.
-        /// </summary>
-        /// <param name="otherVector">The other <see cref="UnitVector3D"/></param>
-        /// <param name="tolerance">A tolerance value for the dot product method.  Values below 2*Precision.DoublePrecision may cause issues.</param>
-        /// <returns>true if the vector dot product is within the given tolerance of unity, false if not</returns>
-        [Pure]
-        public bool IsColinearTo(UnitVector3D otherVector, double tolerance = 1e-10)
-        {
-            return IsParallelTo(otherVector, tolerance) || IsAntiParallelTo(otherVector, tolerance);
         }
 
         /// <summary>
@@ -611,7 +554,7 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public UnitVector3D CrossProduct(UnitVector3D other)
         {
-            if (IsColinearTo(other))
+            if (IsParallelTo(other))
             {
                 return default(UnitVector3D);
             }
@@ -631,7 +574,7 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public Vector3D CrossProduct(Vector3D other)
         {
-            if (IsColinearTo(other))
+            if (IsParallelTo(other))
             {
                 return default(Vector3D);
             }
