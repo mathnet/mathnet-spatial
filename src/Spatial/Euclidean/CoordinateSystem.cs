@@ -529,7 +529,7 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Given a transform from coordinate system A to coordinate system B, and a vector <see cref="v"/>
+        /// Given a transform from coordinate system A to coordinate system B, and a vector <paramref name="v"/>
         /// expressed in coordinate system B, it returns the vector expressed in coordinate system A
         /// </summary>
         /// <param name="v">Vector whose coordinates are expressed in coordinate system B</param>
@@ -542,7 +542,7 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Given a transform from coordinate system A to coordinate system B, and a vector <see cref="v"/>
+        /// Given a transform from coordinate system A to coordinate system B, and a vector <paramref name="v"/>
         /// expressed in coordinate system B, it returns the vector expressed in coordinate system A
         /// </summary>
         /// <param name="v">Unit vector whose coordinates are expressed in coordinate system B</param>
@@ -555,7 +555,7 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Given a transform from coordinate system A to coordinate system B, and a point <see cref="p"/>
+        /// Given a transform from coordinate system A to coordinate system B, and a point <paramref name="p"/>
         /// expressed in coordinate system B, it returns the point expressed in coordinate system A
         /// </summary>
         /// <param name="p">Point whose coordinates are expressed in coordinate system B</param>
