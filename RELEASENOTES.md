@@ -1,11 +1,16 @@
-### 0.6.1 - 2023-03-28
-* Built with .Net 5.0.200
+### 0.7.0 - 2023-03-31
+* Use .NET SDK 5.0.200
 * Build: fix archive publishing of strong name packages *~cdrnet* 
-* Bug fix: Vector2D.SignedAngleTo *~jkalias*
-* Bug fix: Fix order of YPR (yaw-pitch-roll) transformation *~jakehedlund*
+* BUG: Vector2D.SignedAngleTo *~jkalias*
+* BUG: Fix order of YPR (yaw-pitch-roll) transformation *~jakehedlund*
 * Increase PolyLine performance when indexing Vertices *~bradtglass*
-* Bug fix: Fix Line2D.TryIntersect to pass nullable Point2D *~f-frhs*
-* Bug fix: Vector3DHomogeneous.ToVector3D() and Point3DHomogeneous.ToVector3D() *~osbordh*
+* BUG: Fix Line2D.TryIntersect to pass nullable Point2D *~f-frhs*
+* BUG: Vector3DHomogeneous.ToVector3D() and Point3DHomogeneous.ToVector3D() *~osbordh*
+* BUG: LineSegment3D.TryShortestLineTo when segments intersect *~jkalias*
+* Returning consistently Matrix<double> from all Matrix3D.Rotation methods *~jkalias*
+* Consistent cross product checks for UnitVector3D.CrossProduct *~jkalias*
+* BUG: Plane.FromPoints independent of the point order *~jkalias*
+* BUG: Project point on plane along direction not equal to normal *~vanzomerenc*
 
 ### 0.6.0 - 2020-05-09
 * BUG: Circle2D.FromPoints giving incorrect results for special points *~Jong Hyun Kim*
