@@ -31,6 +31,7 @@ Feel free to add a link to your personal site/blog and/or twitter handle.*
 - Jong Hyun Kim
 - Mehran Maghoumi
 - Ralle
+- Rico Sinnig
 - Roger
 - f-frhs
 - imlex

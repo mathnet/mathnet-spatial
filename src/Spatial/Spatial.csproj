@@ -7,13 +7,22 @@
         <RootNamespace>MathNet.Spatial</RootNamespace>
         <IsPackable>true</IsPackable>
         <PackageId>MathNet.Spatial$(PackageIdSuffix)</PackageId>
-        <VersionPrefix>0.6.0</VersionPrefix>
+        <VersionPrefix>0.7.0</VersionPrefix>
         <VersionSuffix></VersionSuffix>
         <Title>Math.NET Spatial$(TitleSuffix)</Title>
         <Description>Math.NET Spatial, providing methods and algorithms for geometry computations in science, engineering and every day use. Supports .Net Framework 4.6.1 or higher and .Net Standard 2.0 or higher on Windows, Linux and Mac.$(DescriptionSuffix)</Description>
-        <PackageReleaseNotes>BUG: Circle2D.FromPoints giving incorrect results for special points ~Jong Hyun Kim
-Number formatting consistent between .NET Core and Framework
-Update dependencies, built with .NET Core SDK 3.1.1</PackageReleaseNotes>
+        <PackageReleaseNotes>Use .NET SDK 5.0.200
+Build: fix archive publishing of strong name packages ~cdrnet
+BUG: Vector2D.SignedAngleTo ~jkalias
+BUG: Fix order of YPR (yaw-pitch-roll) transformation ~jakehedlund
+Increase PolyLine performance when indexing Vertices ~bradtglass
+BUG: Fix Line2D.TryIntersect to pass nullable Point2D ~f-frhs
+BUG: Vector3DHomogeneous.ToVector3D() and Point3DHomogeneous.ToVector3D() ~osbordh
+BUG: LineSegment3D.TryShortestLineTo when segments intersect ~jkalias
+Returning consistently Matrix&lt;double&gt; from all Matrix3D.Rotation methods ~jkalias
+Consistent cross product checks for UnitVector3D.CrossProduct ~jkalias
+BUG: Plane.FromPoints independent of the point order ~jkalias
+BUG: Project point on plane along direction not equal to normal ~vanzomerenc</PackageReleaseNotes>
         <PackageTags>math geometry spatial</PackageTags>
         <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
         <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
