@@ -5,6 +5,7 @@ using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
 using MathNet.Spatial.Euclidean;
+using MathNet.Spatial.Units;
 using NUnit.Framework;
 
 namespace MathNet.Spatial.Tests.Euclidean
@@ -134,6 +135,20 @@ namespace MathNet.Spatial.Tests.Euclidean
             Assert.AreEqual(dp, expected, 1e-9);
             Assert.IsTrue(dp <= 1);
             Assert.IsTrue(dp >= -1);
+        }
+
+        [Test]
+        public void CrossProductWithColinearUnitVector3DNoException()
+        {
+            AssertGeometry.AreEqual(default(UnitVector3D), UnitVector3D.ZAxis.CrossProduct(UnitVector3D.ZAxis));
+            AssertGeometry.AreEqual(default(UnitVector3D), UnitVector3D.ZAxis.CrossProduct(UnitVector3D.ZAxis.Negate()));
+        }
+
+        [Test]
+        public void CrossProductWithColinearVector3DNoException()
+        {
+            AssertGeometry.AreEqual(default(UnitVector3D), UnitVector3D.ZAxis.CrossProduct(1 * UnitVector3D.ZAxis));
+            AssertGeometry.AreEqual(default(UnitVector3D), UnitVector3D.ZAxis.CrossProduct(-1 * UnitVector3D.ZAxis));
         }
 
         [TestCase("-1, 0, 0", null, "(-1, 0, 0)", 1e-4)]

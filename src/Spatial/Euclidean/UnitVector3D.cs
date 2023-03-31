@@ -428,43 +428,100 @@ namespace MathNet.Spatial.Euclidean
         /// Computes whether or not this vector is parallel to another vector using the dot product method and comparing it
         /// to within a specified tolerance.
         /// </summary>
-        /// <param name="othervector">The other <see cref="Vector3D"/></param>
+        /// <param name="otherVector">The other <see cref="Vector3D"/></param>
         /// <param name="tolerance">A tolerance value for the dot product method.  Values below 2*Precision.DoublePrecision may cause issues.</param>
         /// <returns>true if the vector dot product is within the given tolerance of unity, false if it is not</returns>
         [Pure]
-        public bool IsParallelTo(Vector3D othervector, double tolerance = 1e-10)
+        public bool IsParallelTo(Vector3D otherVector, double tolerance = 1e-10)
         {
-            var other = othervector.Normalize();
+            var other = otherVector.Normalize();
             return IsParallelTo(other, tolerance);
+        }
+
+        /// <summary>
+        /// Computes whether or not this vector is anti-parallel to another vector using the dot product method and comparing it
+        /// to within a specified tolerance.
+        /// </summary>
+        /// <param name="otherVector">The other <see cref="Vector3D"/></param>
+        /// <param name="tolerance">A tolerance value for the dot product method.  Values below 2*Precision.DoublePrecision may cause issues.</param>
+        /// <returns>true if the vector dot product is within the given tolerance of unity, false if it is not</returns>
+        [Pure]
+        public bool IsAntiParallelTo(Vector3D otherVector, double tolerance = 1e-10)
+        {
+            var other = otherVector.Normalize();
+            return IsAntiParallelTo(other, tolerance);
+        }
+
+        /// <summary>
+        /// Computes whether or not this vector is colinear (parallel or anti-parallel) to another vector using the dot product method and comparing it
+        /// to within a specified tolerance.
+        /// </summary>
+        /// <param name="otherVector">The other <see cref="Vector3D"/></param>
+        /// <param name="tolerance">A tolerance value for the dot product method.  Values below 2*Precision.DoublePrecision may cause issues.</param>
+        /// <returns>true if the vector dot product is within the given tolerance of unity, false if it is not</returns>
+        [Pure]
+        public bool IsColinearTo(Vector3D otherVector, double tolerance = 1e-10)
+        {
+            var other = otherVector.Normalize();
+            return IsColinearTo(other, tolerance);
         }
 
         /// <summary>
         /// Computes whether or not this vector is parallel to a unit vector using the dot product method and comparing it
         /// to within a specified tolerance.
         /// </summary>
-        /// <param name="othervector">The other <see cref="UnitVector3D"/></param>
+        /// <param name="otherVector">The other <see cref="UnitVector3D"/></param>
         /// <param name="tolerance">A tolerance value for the dot product method.  Values below 2*Precision.DoublePrecision may cause issues.</param>
         /// <returns>true if the vector dot product is within the given tolerance of unity, false if not</returns>
         [Pure]
-        public bool IsParallelTo(UnitVector3D othervector, double tolerance = 1e-10)
+        public bool IsParallelTo(UnitVector3D otherVector, double tolerance = 1e-10)
         {
             // This is the master method for all Vector3D and UnitVector3D IsParallelTo comparisons.  Everything else
             // ends up here sooner or later.
-            var dp = Math.Abs(DotProduct(othervector));
+            var dp = Math.Abs(DotProduct(otherVector));
             return Math.Abs(1 - dp) <= tolerance;
+        }
+
+        /// <summary>
+        /// Computes whether or not this vector is anti-parallel to a unit vector using the dot product method and comparing it
+        /// to within a specified tolerance.
+        /// </summary>
+        /// <param name="otherVector">The other <see cref="UnitVector3D"/></param>
+        /// <param name="tolerance">A tolerance value for the dot product method.  Values below 2*Precision.DoublePrecision may cause issues.</param>
+        /// <returns>true if the vector dot product is within the given tolerance of unity, false if not</returns>
+        [Pure]
+        public bool IsAntiParallelTo(UnitVector3D otherVector, double tolerance = 1e-10)
+        {
+            // This is the master method for all Vector3D and UnitVector3D IsParallelTo comparisons.  Everything else
+            // ends up here sooner or later.
+            var dp = Math.Abs(DotProduct(otherVector));
+            return Math.Abs(1 + dp) <= tolerance;
+        }
+
+        /// <summary>
+        /// Computes whether or not this vector is colinear (parallel or anti-parallel) to a unit vector using the dot product method and comparing it
+        /// to within a specified tolerance.
+        /// </summary>
+        /// <param name="otherVector">The other <see cref="UnitVector3D"/></param>
+        /// <param name="tolerance">A tolerance value for the dot product method.  Values below 2*Precision.DoublePrecision may cause issues.</param>
+        /// <returns>true if the vector dot product is within the given tolerance of unity, false if not</returns>
+        [Pure]
+        public bool IsColinearTo(UnitVector3D otherVector, double tolerance = 1e-10)
+        {
+            return IsParallelTo(otherVector, tolerance) || IsAntiParallelTo(otherVector, tolerance);
         }
 
         /// <summary>
         /// Determine whether or not this vector is parallel to another vector within a given angle tolerance.
         /// </summary>
-        /// <param name="othervector">The other <see cref="Vector3D"/></param>
+        /// <param name="otherVector">The other <see cref="Vector3D"/></param>
         /// <param name="angleTolerance">The tolerance for when the vectors are considered parallel.</param>
         /// <returns>true if the vectors are parallel within the angle tolerance, false if they are not</returns>
         [Pure]
-        public bool IsParallelTo(UnitVector3D othervector, Angle angleTolerance)
+        public bool IsParallelTo(UnitVector3D otherVector, Angle angleTolerance)
         {
             // Compute the angle between these vectors
-            var angle = AngleTo(othervector);
+            var angle = AngleTo(otherVector);
 
             // Compute the 180° opposite of the angle
             var opposite = Angle.FromDegrees(180) - angle;
@@ -476,13 +533,13 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// Determine whether or not this vector is parallel to a unit vector within a given angle tolerance.
         /// </summary>
-        /// <param name="othervector">The other <see cref="UnitVector3D"/></param>
+        /// <param name="otherVector">The other <see cref="UnitVector3D"/></param>
         /// <param name="angleTolerance">The tolerance for when the vectors are considered parallel.</param>
         /// <returns>true if the vectors are parallel within the angle tolerance, false if they are not</returns>
         [Pure]
-        public bool IsParallelTo(Vector3D othervector, Angle angleTolerance)
+        public bool IsParallelTo(Vector3D otherVector, Angle angleTolerance)
         {
-            var other = othervector.Normalize();
+            var other = otherVector.Normalize();
             return IsParallelTo(other, angleTolerance);
         }
 
@@ -554,6 +611,11 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public UnitVector3D CrossProduct(UnitVector3D other)
         {
+            if (IsColinearTo(other))
+            {
+                return default(UnitVector3D);
+            }
+
             var x = (Y * other.Z) - (Z * other.Y);
             var y = (Z * other.X) - (X * other.Z);
             var z = (X * other.Y) - (Y * other.X);
@@ -564,14 +626,19 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// Returns the cross product of this vector and a unit vector
         /// </summary>
-        /// <param name="inVector3D">A vector</param>
+        /// <param name="other">A vector</param>
         /// <returns>A new vector with the cross product result</returns>
         [Pure]
-        public Vector3D CrossProduct(Vector3D inVector3D)
+        public Vector3D CrossProduct(Vector3D other)
         {
-            var x = (Y * inVector3D.Z) - (Z * inVector3D.Y);
-            var y = (Z * inVector3D.X) - (X * inVector3D.Z);
-            var z = (X * inVector3D.Y) - (Y * inVector3D.X);
+            if (IsColinearTo(other))
+            {
+                return default(Vector3D);
+            }
+
+            var x = (Y * other.Z) - (Z * other.Y);
+            var y = (Z * other.X) - (X * other.Z);
+            var z = (X * other.Y) - (Y * other.X);
             var v = new Vector3D(x, y, z);
             return v;
         }
