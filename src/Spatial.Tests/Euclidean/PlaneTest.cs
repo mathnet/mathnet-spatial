@@ -66,12 +66,18 @@ namespace MathNet.Spatial.Tests.Euclidean
         [TestCase(ZeroPoint, "0, 0, -1", "0, 0, 1", "0; 0;-1")]
         [TestCase(ZeroPoint, "0, 0, 1", "0, 0, -1", "0; 0; 1")]
         [TestCase("1; 2; 3", "0, 0, 0", "0, 0, 1", "1; 2; 0")]
-        public void ProjectPointOn(string ps, string rootPoint, string unitVector, string eps)
+        [TestCase("8; 0; 0", ZeroPoint, "0.6, 0, 0.8", "8; 0; -6", Z, 1e-15f)]
+        public void ProjectPointOn(string ps, string rootPoint, string unitVector, string expectedPoint, string projectionAxis = "", float eps = float.Epsilon)
         {
             var plane = new Plane(Point3D.Parse(rootPoint), UnitVector3D.Parse(unitVector));
-            var projectedPoint = plane.Project(Point3D.Parse(ps));
-            var expected = Point3D.Parse(eps);
-            AssertGeometry.AreEqual(expected, projectedPoint, float.Epsilon);
+            UnitVector3D? projectionDirection = null;
+            if (projectionAxis != "")
+            {
+                projectionDirection = UnitVector3D.Parse(projectionAxis);
+            }
+            var projectedPoint = plane.Project(Point3D.Parse(ps), projectionDirection);
+            var expected = Point3D.Parse(expectedPoint);
+            AssertGeometry.AreEqual(expected, projectedPoint, eps);
         }
 
         [TestCase(ZeroPoint, Z, ZeroPoint, 0)]

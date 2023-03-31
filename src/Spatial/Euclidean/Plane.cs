@@ -232,10 +232,9 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public Point3D Project(Point3D p, UnitVector3D? projectionDirection = null)
         {
-            var dotProduct = Normal.DotProduct(p.ToVector3D());
-            var projectiononNormal = projectionDirection == null ? Normal : projectionDirection.Value;
-            var projectionVector = (dotProduct + D) * projectiononNormal;
-            return p - projectionVector;
+            var direction = projectionDirection ?? Normal;
+            var distance = (RootPoint - p).DotProduct(Normal) / direction.DotProduct(Normal);
+            return p + distance * direction;
         }
 
         /// <summary>
@@ -313,7 +312,7 @@ namespace MathNet.Spatial.Euclidean
             var a = new DenseMatrix(2, 3);
             a.SetRow(0, Normal.ToVector());
             a.SetRow(1, intersectingPlane.Normal.ToVector());
-            var svd = a.Svd(true);
+            var svd = a.Svd();
             if (svd.S[1] < tolerance)
             {
                 throw new ArgumentException("Planes are parallel");
