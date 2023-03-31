@@ -80,6 +80,17 @@ namespace MathNet.Spatial.Tests.Euclidean
             Assert.AreEqual(0.80178372573727319, roundtripped.Z);
         }
 
+        [TestCase("1, 2, 3", "1, 2, 3", true)]
+        [TestCase("1, -2, 3", "1, -2, 3", true)]
+        [TestCase("1, 2, 3", "-1, -2, -3", true)]
+        [TestCase("1, 2, 3", "4, 5, 6", false)]
+        public void IsParallel(string p1s, string p2s, bool expected)
+        {
+            var v1 = Vector3D.Parse(p1s).Normalize();
+            var v2 = Vector3D.Parse(p2s).Normalize();
+            Assert.AreEqual(expected, v1.IsParallelTo(v2));
+        }
+
         [TestCase("1, 0, 0", "1, 0, 0", 1e-4, true)]
         [TestCase("0, 1, 0", "0, 1, 0", 1e-4, true)]
         [TestCase("0, 0, 1", "0, 0, 1", 1e-4, true)]
@@ -134,6 +145,15 @@ namespace MathNet.Spatial.Tests.Euclidean
             Assert.AreEqual(dp, expected, 1e-9);
             Assert.IsTrue(dp <= 1);
             Assert.IsTrue(dp >= -1);
+        }
+
+        [Test]
+        public void CrossProductWithColinearVectorsThrowsConsistentExceptions()
+        {
+            Assert.Throws<InvalidOperationException>(() => UnitVector3D.ZAxis.CrossProduct(UnitVector3D.ZAxis));
+            Assert.Throws<InvalidOperationException>(() => UnitVector3D.ZAxis.CrossProduct(UnitVector3D.ZAxis.Negate()));
+            Assert.Throws<InvalidOperationException>(() => UnitVector3D.ZAxis.CrossProduct(1 * UnitVector3D.ZAxis));
+            Assert.Throws<InvalidOperationException>(() => UnitVector3D.ZAxis.CrossProduct(-1 * UnitVector3D.ZAxis));
         }
 
         [TestCase("-1, 0, 0", null, "(-1, 0, 0)", 1e-4)]
