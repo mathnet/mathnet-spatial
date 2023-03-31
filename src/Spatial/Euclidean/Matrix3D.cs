@@ -15,14 +15,16 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         /// <param name="angle">The angle to rotate</param>
         /// <returns>A rotation matrix</returns>
-        public static DenseMatrix RotationAroundXAxis(Angle angle)
+        public static Matrix<double> RotationAroundXAxis(Angle angle)
         {
-            var rotationMatrix = new DenseMatrix(3, 3);
-            rotationMatrix[0, 0] = 1;
-            rotationMatrix[1, 1] = Math.Cos(angle.Radians);
-            rotationMatrix[1, 2] = -Math.Sin(angle.Radians);
-            rotationMatrix[2, 1] = Math.Sin(angle.Radians);
-            rotationMatrix[2, 2] = Math.Cos(angle.Radians);
+            var rotationMatrix = new DenseMatrix(3, 3)
+            {
+                [0, 0] = 1,
+                [1, 1] = Math.Cos(angle.Radians),
+                [1, 2] = -Math.Sin(angle.Radians),
+                [2, 1] = Math.Sin(angle.Radians),
+                [2, 2] = Math.Cos(angle.Radians)
+            };
             return rotationMatrix;
         }
 
@@ -31,14 +33,16 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         /// <param name="angle">The angle to rotate</param>
         /// <returns>A rotation matrix</returns>
-        public static DenseMatrix RotationAroundYAxis(Angle angle)
+        public static Matrix<double> RotationAroundYAxis(Angle angle)
         {
-            var rotationMatrix = new DenseMatrix(3, 3);
-            rotationMatrix[0, 0] = Math.Cos(angle.Radians);
-            rotationMatrix[0, 2] = Math.Sin(angle.Radians);
-            rotationMatrix[1, 1] = 1;
-            rotationMatrix[2, 0] = -Math.Sin(angle.Radians);
-            rotationMatrix[2, 2] = Math.Cos(angle.Radians);
+            var rotationMatrix = new DenseMatrix(3, 3)
+            {
+                [0, 0] = Math.Cos(angle.Radians),
+                [0, 2] = Math.Sin(angle.Radians),
+                [1, 1] = 1,
+                [2, 0] = -Math.Sin(angle.Radians),
+                [2, 2] = Math.Cos(angle.Radians)
+            };
             return rotationMatrix;
         }
 
@@ -49,12 +53,14 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>A rotation matrix</returns>
         public static Matrix<double> RotationAroundZAxis(Angle angle)
         {
-            var rotationMatrix = new DenseMatrix(3, 3);
-            rotationMatrix[0, 0] = Math.Cos(angle.Radians);
-            rotationMatrix[0, 1] = -Math.Sin(angle.Radians);
-            rotationMatrix[1, 0] = Math.Sin(angle.Radians);
-            rotationMatrix[1, 1] = Math.Cos(angle.Radians);
-            rotationMatrix[2, 2] = 1;
+            var rotationMatrix = new DenseMatrix(3, 3)
+            {
+                [0, 0] = Math.Cos(angle.Radians),
+                [0, 1] = -Math.Sin(angle.Radians),
+                [1, 0] = Math.Sin(angle.Radians),
+                [1, 1] = Math.Cos(angle.Radians),
+                [2, 2] = 1
+            };
             return rotationMatrix;
         }
 
@@ -115,10 +121,10 @@ namespace MathNet.Spatial.Euclidean
         {
             // http://en.wikipedia.org/wiki/Rotation_matrix
             var unitTensorProduct = aboutVector.GetUnitTensorProduct();
-            var crossproductMatrix = aboutVector.CrossProductMatrix; // aboutVector.Clone().CrossProduct(aboutVector.Clone());
+            var crossProductMatrix = aboutVector.CrossProductMatrix;
 
             var r1 = DenseMatrix.CreateIdentity(3).Multiply(Math.Cos(angle.Radians));
-            var r2 = crossproductMatrix.Multiply(Math.Sin(angle.Radians));
+            var r2 = crossProductMatrix.Multiply(Math.Sin(angle.Radians));
             var r3 = unitTensorProduct.Multiply(1 - Math.Cos(angle.Radians));
             var totalR = r1.Add(r2).Add(r3);
             return totalR;
