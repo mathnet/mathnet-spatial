@@ -7,7 +7,7 @@
 * BUG: Fix Line2D.TryIntersect to pass nullable Point2D *~f-frhs*
 * BUG: Vector3DHomogeneous.ToVector3D() and Point3DHomogeneous.ToVector3D() *~osbordh*
 * BUG: LineSegment3D.TryShortestLineTo when segments intersect *~jkalias*
-* Returning consistently Matrix<double> from all Matrix3D.Rotation methods *~jkalias*
+* Returning consistently Matrix < double > from all Matrix3D.Rotation methods *~jkalias*
 * Consistent cross product checks for UnitVector3D.CrossProduct *~jkalias*
 * BUG: Plane.FromPoints independent of the point order *~jkalias*
 * BUG: Project point on plane along direction not equal to normal *~vanzomerenc*
