@@ -1,12 +1,15 @@
-﻿using System;
+﻿using MathNet.Numerics.LinearAlgebra;
+using MathNet.Numerics.LinearAlgebra.Double;
+using MathNet.Spatial.Internals;
+using MathNet.Spatial.Units;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
 using System.Xml.Serialization;
-using MathNet.Numerics.LinearAlgebra.Double;
-using MathNet.Spatial.Internals;
-using MathNet.Spatial.Units;
 using HashCode = MathNet.Spatial.Internals.HashCode;
 
 namespace MathNet.Spatial.Euclidean
@@ -72,6 +75,30 @@ namespace MathNet.Spatial.Euclidean
         public Plane(Point3D rootPoint, UnitVector3D normal)
             : this(normal, normal.DotProduct(rootPoint))
         {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Plane"/> struct.
+        /// Constructs a Plane from the given points.
+        /// </summary>
+        /// <param name="points">The points</param>
+        /// <returns>Fitted <see cref="Plane"/></returns>
+        /// <remarks>this method uses SVD to fit the plane.</remarks>
+        public static Plane CreateFittedPlaneFrom(IEnumerable<Point3D> points)
+        {
+            var c = Point3D.Centroid(points);
+
+            var A = CreateMatrix.DenseOfRowVectors(
+                points.Select(p => p - c)
+                    .Select(p => CreateVector.DenseOfArray(new double[] { p.X, p.Y, p.Z })));
+
+            var svd = A.Svd(true);
+            var matV = svd.VT.Transpose();
+            var theIndex = svd.S.Count-1; // in this case, theIndex = 2.
+            var normal = UnitVector3D.OfVector(matV.Column(theIndex));
+
+            var result = new Plane(normal, c);
+            return result;
         }
 
         /// <summary>
