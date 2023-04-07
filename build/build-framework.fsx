@@ -310,7 +310,7 @@ let collectNuGetPackages (solution:Solution) =
 // --------------------------------------------------------------------------------------
 
 let test testsDir testsProj framework =
-    dotnet testsDir (sprintf "run -p %s --configuration Release --framework %s --no-restore --no-build" testsProj framework)
+    dotnet testsDir (sprintf "run --project %s --configuration Release --framework %s --no-restore --no-build" testsProj framework)
 
 
 // --------------------------------------------------------------------------------------
