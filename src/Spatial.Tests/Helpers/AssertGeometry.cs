@@ -132,9 +132,9 @@ namespace MathNet.Spatial.Tests
 
         public static void AreEqual(Plane expected, Plane actual, double tolerance = 1e-6, string message = "")
         {
-            AreEqual(expected.Normal, actual.Normal, tolerance, message);
-            AreEqual(expected.RootPoint, actual.RootPoint, tolerance, message);
             Assert.AreEqual(expected.D, actual.D, tolerance, message);
+            AreEqual(expected.Normal, actual.Normal, tolerance, message);
+            Assert.AreEqual(0, expected.SignedDistanceTo(actual.RootPoint), tolerance, message);
         }
 
         public static void AreEqual(Matrix<double> expected, Matrix<double> actual, double tolerance = 1e-6)

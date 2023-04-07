@@ -27,7 +27,7 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// The distance to the Plane along its normal from the origin.
         /// </summary>
-        public readonly double D;
+        public double D => Normal.DotProduct(RootPoint);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Plane"/> struct.
@@ -49,25 +49,10 @@ namespace MathNet.Spatial.Euclidean
         /// The resulting plane is in its Hesse normal form.
         /// </summary>
         /// <param name="normal">The Plane's normal vector.</param>
-        /// <param name="offset">The Plane's distance from the origin along its normal vector.</param>
-        public Plane(UnitVector3D normal, double offset = 0)
+        /// <param name="distance">The Plane's distance from the origin along its normal vector.</param>
+        public Plane(UnitVector3D normal, double distance = 0)
+            : this((distance * normal).ToPoint3D(), normal)
         {
-            // make sure the plane is defined in its Hesse normal form
-            // https://en.wikipedia.org/wiki/Hesse_normal_form
-
-            if (offset < 0)
-            {
-                normal = normal.Negate();
-                offset = Math.Abs(offset);
-            }
-
-            Normal = normal;
-            D = offset;
-
-            if (Normal.DotProduct(RootPoint) < 0)
-            {
-                Normal = Normal.Negate();
-            }
         }
 
         /// <summary>
@@ -78,7 +63,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="normal">The Plane's normal vector.</param>
         /// <param name="rootPoint">A point in the plane.</param>
         public Plane(UnitVector3D normal, Point3D rootPoint)
-            : this(normal, normal.DotProduct(rootPoint))
+            : this(rootPoint, normal)
         {
         }
 
@@ -90,8 +75,16 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="normal">The Plane's normal vector.</param>
         /// <param name="rootPoint">A point in the plane.</param>
         public Plane(Point3D rootPoint, UnitVector3D normal)
-            : this(normal, normal.DotProduct(rootPoint))
         {
+            // make sure the plane is defined in its Hesse normal form
+            // https://en.wikipedia.org/wiki/Hesse_normal_form
+
+            RootPoint = rootPoint;
+            Normal = normal;
+            if (Normal.DotProduct(RootPoint) < 0)
+            {
+                Normal = Normal.Negate();
+            }
         }
 
         /// <summary>
@@ -149,7 +142,7 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// Gets the point on the plane closest to origin.
         /// </summary>
-        public Point3D RootPoint => (D * Normal).ToPoint3D();
+        public readonly Point3D RootPoint;
 
         /// <summary>
         /// Returns a value that indicates whether each pair of elements in two specified geometric planes is equal.
