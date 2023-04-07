@@ -1,6 +1,4 @@
-﻿using MathNet.Numerics.LinearAlgebra;
-using MathNet.Numerics.LinearAlgebra.Double;
-using MathNet.Spatial.Internals;
+﻿using MathNet.Spatial.Internals;
 using MathNet.Spatial.Units;
 using System;
 using System.Collections.Generic;
@@ -10,6 +8,7 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
 using System.Xml.Serialization;
+using DenseMatrix = MathNet.Numerics.LinearAlgebra.Double.DenseMatrix;
 using HashCode = MathNet.Spatial.Internals.HashCode;
 
 namespace MathNet.Spatial.Euclidean
@@ -86,15 +85,21 @@ namespace MathNet.Spatial.Euclidean
         /// <remarks>this method uses SVD to fit the plane.</remarks>
         public static Plane BestFit(IEnumerable<Point3D> points)
         {
-            var throughPoint = Point3D.Centroid(points);
+            var ps = points.ToArray();
+            var throughPoint = Point3D.Centroid(ps);
 
-            var relativePointMatrix = CreateMatrix.DenseOfRowVectors(
-                points.Select(p => p - throughPoint)
-                    .Select(p => CreateVector.DenseOfArray(new double[] { p.X, p.Y, p.Z })));
+            //allocate
+            var relativePointMatrix = new DenseMatrix(ps.Length, 3);
+
+            //populate
+            for (var i = 0; i < ps.Length; ++i)
+            {
+                relativePointMatrix.SetRow(i, (ps[i] - throughPoint).ToVector());
+            }
 
             var svd = relativePointMatrix.Svd(true);
             var matV = svd.VT.Transpose();
-            var smallestEigenvalueColumnIndex = svd.S.Count-1; // in this case, theIndex = 2.
+            var smallestEigenvalueColumnIndex = svd.S.Count - 1; // in this case, theIndex = 2.
             var normal = UnitVector3D.OfVector(matV.Column(smallestEigenvalueColumnIndex));
 
             var bestFit = new Plane(normal, throughPoint);
