@@ -85,6 +85,31 @@ namespace MathNet.Spatial.Tests.Euclidean
             AssertGeometry.AreEqual(expected, projectedPoint, eps);
         }
 
+        [Test, Sequential]
+        public void BestFit_From3RandomPoints(
+            [Random(0d, 10d, 3)] double p0x,
+            [Random(0d, 10d, 3)] double p0y,
+            [Random(0d, 10d, 3)] double p0z,
+            [Random(0d, 10d, 3)] double p1x,
+            [Random(0d, 10d, 3)] double p1y,
+            [Random(0d, 10d, 3)] double p1z,
+            [Random(0d, 10d, 3)] double p2x,
+            [Random(0d, 10d, 3)] double p2y,
+            [Random(0d, 10d, 3)] double p2z
+        )
+        {
+            var ps = new[]
+            {
+                new Point3D(p0x, p0y, p0z),
+                new Point3D(p1x, p1y, p1z),
+                new Point3D(p2x, p2y, p2z),
+            };
+            var actual = Plane.CreateFittedPlaneFrom(ps);
+
+            var expected = Plane.FromPoints(ps[0], ps[1], ps[2]);
+            AssertGeometry.AreEqual(expected, actual);
+        }
+
         [TestCase(ZeroPoint, X, Y)] //all 3 points are on the plane z=0. normal vector is +ez.
         [TestCase(ZeroPoint, Y, Z)] //all 3 points are on the plane x=0. normal vector is +ex.
         [TestCase(ZeroPoint, Z, X)] //all 3 points are on the plane y=0. normal vector is +ey.
