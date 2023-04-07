@@ -27,53 +27,64 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// The distance to the Plane along its normal from the origin.
         /// </summary>
-        public readonly double D;
+        public double D => Normal.DotProduct(RootPoint);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Plane"/> struct.
         /// Constructs a Plane from the X, Y, and Z components of its normal, and its distance from the origin on that normal.
+        /// The resulting plane is in its Hesse normal form.
         /// </summary>
         /// <param name="x">The X-component of the normal.</param>
         /// <param name="y">The Y-component of the normal.</param>
         /// <param name="z">The Z-component of the normal.</param>
         /// <param name="d">The distance of the Plane along its normal from the origin.</param>
         public Plane(double x, double y, double z, double d)
-            : this(UnitVector3D.Create(x, y, z), -d)
+            : this(UnitVector3D.Create(x, y, z), d)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Plane"/> struct.
         /// Constructs a Plane from the given normal and distance along the normal from the origin.
+        /// The resulting plane is in its Hesse normal form.
         /// </summary>
         /// <param name="normal">The Plane's normal vector.</param>
-        /// <param name="offset">The Plane's distance from the origin along its normal vector.</param>
-        public Plane(UnitVector3D normal, double offset = 0)
+        /// <param name="distance">The Plane's distance from the origin along its normal vector.</param>
+        public Plane(UnitVector3D normal, double distance = 0)
+            : this((distance * normal).ToPoint3D(), normal)
         {
-            Normal = normal;
-            D = -offset;
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Plane"/> struct.
         /// Constructs a Plane from the given normal and distance along the normal from the origin.
+        /// The resulting plane is in its Hesse normal form.
         /// </summary>
         /// <param name="normal">The Plane's normal vector.</param>
         /// <param name="rootPoint">A point in the plane.</param>
         public Plane(UnitVector3D normal, Point3D rootPoint)
-            : this(normal, normal.DotProduct(rootPoint))
+            : this(rootPoint, normal)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Plane"/> struct.
         /// Constructs a Plane from the given normal and distance along the normal from the origin.
+        /// The resulting plane is in its Hesse normal form.
         /// </summary>
         /// <param name="normal">The Plane's normal vector.</param>
         /// <param name="rootPoint">A point in the plane.</param>
         public Plane(Point3D rootPoint, UnitVector3D normal)
-            : this(normal, normal.DotProduct(rootPoint))
         {
+            // make sure the plane is defined in its Hesse normal form
+            // https://en.wikipedia.org/wiki/Hesse_normal_form
+
+            RootPoint = rootPoint;
+            Normal = normal;
+            if (Normal.DotProduct(RootPoint) < 0)
+            {
+                Normal = Normal.Negate();
+            }
         }
 
         /// <summary>
@@ -81,7 +92,7 @@ namespace MathNet.Spatial.Euclidean
         /// Constructs the plane which best fits a given point cloud, by minimizing the sum of Euclidean distances of the points from the plane.
         /// </summary>
         /// <param name="points">The point cloud</param>
-        /// <returns>Fitted <see cref="Plane", found by SVD decomposition/></returns>
+        /// <returns>Fitted <see cref="Plane"/>, found by SVD decomposition</returns>
         public static Plane BestFit(IEnumerable<Point3D> points)
         {
             var ps = points.ToList();
@@ -104,9 +115,9 @@ namespace MathNet.Spatial.Euclidean
                 relativePointMatrix[i, 2] = relativePoint.Z;
             }
 
-            var svd = relativePointMatrix.Svd(true);
+            var svd = relativePointMatrix.Svd();
             var matV = svd.VT.Transpose();
-            var smallestEigenvalueColumnIndex = svd.S.Count - 1; // in this case, theIndex = 2.
+            var smallestEigenvalueColumnIndex = svd.S.Count - 1;
             var normal = UnitVector3D.OfVector(matV.Column(smallestEigenvalueColumnIndex));
 
             var bestFit = new Plane(normal, throughPoint);
@@ -131,7 +142,7 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// Gets the point on the plane closest to origin.
         /// </summary>
-        public Point3D RootPoint => (-D * Normal).ToPoint3D();
+        public readonly Point3D RootPoint;
 
         /// <summary>
         /// Returns a value that indicates whether each pair of elements in two specified geometric planes is equal.
@@ -180,16 +191,7 @@ namespace MathNet.Spatial.Euclidean
                 throw new ArgumentException("The 3 points should not be on the same line");
             }
 
-            var normal = cross.Normalize();
-            var distanceFromOrigin = normal.DotProduct(p1);
-            if (distanceFromOrigin < 0)
-            {
-                // make sure the plane is defined in its Hesse normal form
-                // https://en.wikipedia.org/wiki/Hesse_normal_form
-                normal = normal.Negate();
-            }
-
-            return new Plane(normal, p1);
+            return new Plane(cross.Normalize(), p1);
         }
 
         /// <summary>
@@ -359,8 +361,8 @@ namespace MathNet.Spatial.Euclidean
 
             var y = new DenseMatrix(2, 1)
             {
-                [0, 0] = -1 * D,
-                [1, 0] = -1 * intersectingPlane.D
+                [0, 0] = D,
+                [1, 0] = intersectingPlane.D
             };
 
             var pointOnIntersectionLine = svd.Solve(y);
@@ -518,7 +520,7 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public override string ToString()
         {
-            return $"A:{Math.Round(A, 4)} B:{Math.Round(B, 4)} C:{Math.Round(C, 4)} D:{Math.Round(D, 4)}";
+            return $"RootPoint: {RootPoint}, Normal: {Normal} [A:{Math.Round(A, 4)} B:{Math.Round(B, 4)} C:{Math.Round(C, 4)} D:{Math.Round(D, 4)}]";
         }
 
         /// <inheritdoc />
