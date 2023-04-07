@@ -4,7 +4,6 @@ using MathNet.Spatial.Euclidean;
 using NUnit.Framework;
 using System;
 using System.Linq;
-using MathNet.Numerics.LinearAlgebra;
 
 namespace MathNet.Spatial.Tests.Euclidean
 {
@@ -108,6 +107,22 @@ namespace MathNet.Spatial.Tests.Euclidean
 
             var expected = Plane.FromPoints(ps[0], ps[1], ps[2]);
             AssertGeometry.AreEqual(expected, actual);
+        }
+
+        [Test]
+        public void BestFit_FromZeroPoints_ShouldThrowException()
+        {
+            var points = new Point3D[] { };
+            Assert.Throws<InvalidOperationException>(() => Plane.BestFit(points));
+        }
+
+        [TestCase(1)]
+        [TestCase(2)]
+        public void BestFit_FromInsufficientPoints_ShouldNotThrowException(int pointCount)
+        {
+            var p = new Point3D(1, 0, 0);
+            var insufficientPoints = Enumerable.Repeat(p, pointCount);
+            Assert.DoesNotThrow(() => Plane.BestFit(insufficientPoints));
         }
 
         [TestCase(ZeroPoint, X, Y)] //all 3 points are on the plane z=0. normal vector is +ez.
