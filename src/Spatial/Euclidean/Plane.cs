@@ -88,11 +88,11 @@ namespace MathNet.Spatial.Euclidean
         {
             var throughPoint = Point3D.Centroid(points);
 
-            var A = CreateMatrix.DenseOfRowVectors(
+            var relativePointMatrix = CreateMatrix.DenseOfRowVectors(
                 points.Select(p => p - throughPoint)
                     .Select(p => CreateVector.DenseOfArray(new double[] { p.X, p.Y, p.Z })));
 
-            var svd = A.Svd(true);
+            var svd = relativePointMatrix.Svd(true);
             var matV = svd.VT.Transpose();
             var theIndex = svd.S.Count-1; // in this case, theIndex = 2.
             var normal = UnitVector3D.OfVector(matV.Column(theIndex));
