@@ -97,8 +97,8 @@ namespace MathNet.Spatial.Euclidean
             var smallestEigenvalueColumnIndex = svd.S.Count-1; // in this case, theIndex = 2.
             var normal = UnitVector3D.OfVector(matV.Column(smallestEigenvalueColumnIndex));
 
-            var result = new Plane(normal, throughPoint);
-            return result;
+            var bestFit = new Plane(normal, throughPoint);
+            return bestFit;
         }
 
         /// <summary>
