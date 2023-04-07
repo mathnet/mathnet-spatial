@@ -114,6 +114,7 @@
 
 			<h3 class="section">Static Functions</h3>
 			<ul>
+				<li><a href="../MathNet.Spatial.Euclidean/Plane.htm#BestFit">BestFit</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/Plane.htm#FromPoints">FromPoints</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/Plane.htm#PointFromPlanes">PointFromPlanes</a></li>
 			</ul>
@@ -149,13 +150,13 @@
 				<li><a href="../MathNet.Spatial.Euclidean/Plane.htm#A">A</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/Plane.htm#B">B</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/Plane.htm#C">C</a></li>
-				<li><a href="../MathNet.Spatial.Euclidean/Plane.htm#RootPoint">RootPoint</a></li>
+				<li><a href="../MathNet.Spatial.Euclidean/Plane.htm#D">D</a></li>
 			</ul>
 		
 			<h3 class="section">Fields</h3>
 			<ul>
 				<li><a href="../MathNet.Spatial.Euclidean/Plane.htm#Normal">Normal</a></li>
-				<li><a href="../MathNet.Spatial.Euclidean/Plane.htm#D">D</a></li>
+				<li><a href="../MathNet.Spatial.Euclidean/Plane.htm#RootPoint">RootPoint</a></li>
 			</ul>
 	</div>
 	
@@ -165,7 +166,8 @@
 	<div id=".ctor" class="method">
 		<h4> <strong>Plane</strong>(<a href="../MathNet.Spatial.Euclidean/Point3D.htm">Point3D</a> rootPoint, <a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a> normal)</h4>
 		<div class="content">Initializes a new instance of the  <a href="../MathNet.Spatial.Euclidean/Plane.htm">Plane</a>  struct.
-Constructs a Plane from the given normal and distance along the normal from the origin. 
+Constructs a Plane from the given normal and distance along the normal from the origin.
+The resulting plane is in its Hesse normal form. 
 
 
       <div class="parameters">
@@ -181,9 +183,10 @@ Constructs a Plane from the given normal and distance along the normal from the 
     </div>
 	</div>
 	<div id=".ctor" class="method">
-		<h4> <strong>Plane</strong>(<a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a> normal, <span title="System.double">double</span> offset)</h4>
+		<h4> <strong>Plane</strong>(<a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a> normal, <span title="System.double">double</span> distance)</h4>
 		<div class="content">Initializes a new instance of the  <a href="../MathNet.Spatial.Euclidean/Plane.htm">Plane</a>  struct.
-Constructs a Plane from the given normal and distance along the normal from the origin. 
+Constructs a Plane from the given normal and distance along the normal from the origin.
+The resulting plane is in its Hesse normal form. 
 
 
       <div class="parameters">
@@ -191,7 +194,7 @@ Constructs a Plane from the given normal and distance along the normal from the 
 
           <h6><code><a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a></code> normal</h6>
           <p class="comments">The Plane's normal vector. </p>
-          <h6><code><span title="System.double">double</span></code> offset</h6>
+          <h6><code><span title="System.double">double</span></code> distance</h6>
           <p class="comments">The Plane's distance from the origin along its normal vector. </p>
       </div>
 
@@ -201,7 +204,8 @@ Constructs a Plane from the given normal and distance along the normal from the 
 	<div id=".ctor" class="method">
 		<h4> <strong>Plane</strong>(<span title="System.double">double</span> x, <span title="System.double">double</span> y, <span title="System.double">double</span> z, <span title="System.double">double</span> d)</h4>
 		<div class="content">Initializes a new instance of the  <a href="../MathNet.Spatial.Euclidean/Plane.htm">Plane</a>  struct.
-Constructs a Plane from the X, Y, and Z components of its normal, and its distance from the origin on that normal. 
+Constructs a Plane from the X, Y, and Z components of its normal, and its distance from the origin on that normal.
+The resulting plane is in its Hesse normal form. 
 
 
       <div class="parameters">
@@ -223,7 +227,8 @@ Constructs a Plane from the X, Y, and Z components of its normal, and its distan
 	<div id=".ctor" class="method">
 		<h4> <strong>Plane</strong>(<a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a> normal, <a href="../MathNet.Spatial.Euclidean/Point3D.htm">Point3D</a> rootPoint)</h4>
 		<div class="content">Initializes a new instance of the  <a href="../MathNet.Spatial.Euclidean/Plane.htm">Plane</a>  struct.
-Constructs a Plane from the given normal and distance along the normal from the origin. 
+Constructs a Plane from the given normal and distance along the normal from the origin.
+The resulting plane is in its Hesse normal form. 
 
 
       <div class="parameters">
@@ -241,6 +246,27 @@ Constructs a Plane from the given normal and distance along the normal from the 
 	
 	<h3 class="section">Public Static Functions</h3>
 	
+	<div id="BestFit" class="method">
+		<h4><a href="../MathNet.Spatial.Euclidean/Plane.htm">Plane</a> <strong>BestFit</strong>(<span title="System.Collections.Generic.IEnumerable<Point3D>">IEnumerable&lt;Point3D&gt;</span> points)</h4>
+		<div class="content">Initializes a new instance of the  <a href="../MathNet.Spatial.Euclidean/Plane.htm">Plane</a>  struct.
+Constructs the plane which best fits a given point cloud, by minimizing the sum of Euclidean distances of the points from the plane. 
+
+
+      <div class="parameters">
+        <h5>Parameters</h5>
+
+          <h6><code><span title="System.Collections.Generic.IEnumerable<Point3D>">IEnumerable&lt;Point3D&gt;</span></code> points</h6>
+          <p class="comments">The point cloud </p>
+      </div>
+
+      <div class="return">
+        <h5>Return</h5>
+        <h6><code><a href="../MathNet.Spatial.Euclidean/Plane.htm">Plane</a></code></h6>
+        <p>Fitted  <a href="../MathNet.Spatial.Euclidean/Plane.htm">Plane</a> , found by SVD decomposition </p>
+      </div>
+      
+    </div>
+	</div>
 	<div id="FromPoints" class="method">
 		<h4><a href="../MathNet.Spatial.Euclidean/Plane.htm">Plane</a> <strong>FromPoints</strong>(<a href="../MathNet.Spatial.Euclidean/Point3D.htm">Point3D</a> p1, <a href="../MathNet.Spatial.Euclidean/Point3D.htm">Point3D</a> p2, <a href="../MathNet.Spatial.Euclidean/Point3D.htm">Point3D</a> p3)</h4>
 		<div class="content">Initializes a new instance of the  <a href="../MathNet.Spatial.Euclidean/Plane.htm">Plane</a>  struct.
@@ -418,6 +444,28 @@ http://mathworld.wolfram.com/Plane-PlaneIntersection.html
     </div>
 	</div>
 	<div id="IntersectionWith" class="method">
+		<h4><a href="../MathNet.Spatial.Euclidean/Point3D.htm">Point3D</a> <strong>IntersectionWith</strong>(<a href="../MathNet.Spatial.Euclidean/Ray3D.htm">Ray3D</a> ray, <span title="System.double">double</span> tolerance)</h4>
+		<div class="content">http://www.cs.princeton.edu/courses/archive/fall00/cs426/lectures/raycast/sld017.htm 
+
+
+      <div class="parameters">
+        <h5>Parameters</h5>
+
+          <h6><code><a href="../MathNet.Spatial.Euclidean/Ray3D.htm">Ray3D</a></code> ray</h6>
+          <p class="comments">A ray </p>
+          <h6><code><span title="System.double">double</span></code> tolerance</h6>
+          <p class="comments">A tolerance (epsilon) to account for floating point error. </p>
+      </div>
+
+      <div class="return">
+        <h5>Return</h5>
+        <h6><code><a href="../MathNet.Spatial.Euclidean/Point3D.htm">Point3D</a></code></h6>
+        <p>The point of intersection. </p>
+      </div>
+      
+    </div>
+	</div>
+	<div id="IntersectionWith" class="method">
 		<h4><span title="System.Nullable<Point3D>">Nullable&lt;Point3D&gt;</span> <strong>IntersectionWith</strong>(<a href="../MathNet.Spatial.Euclidean/LineSegment3D.htm">LineSegment3D</a> line, <span title="System.double">double</span> tolerance)</h4>
 		<div class="content">Find intersection between LineSegment3D and Plane
 http://geomalgorithms.com/a05-_intersect-1.html 
@@ -440,28 +488,6 @@ http://geomalgorithms.com/a05-_intersect-1.html
       
     </div>
 	</div>
-	<div id="IntersectionWith" class="method">
-		<h4><a href="../MathNet.Spatial.Euclidean/Point3D.htm">Point3D</a> <strong>IntersectionWith</strong>(<a href="../MathNet.Spatial.Euclidean/Ray3D.htm">Ray3D</a> ray, <span title="System.double">double</span> tolerance)</h4>
-		<div class="content">http://www.cs.princeton.edu/courses/archive/fall00/cs426/lectures/raycast/sld017.htm 
-
-
-      <div class="parameters">
-        <h5>Parameters</h5>
-
-          <h6><code><a href="../MathNet.Spatial.Euclidean/Ray3D.htm">Ray3D</a></code> ray</h6>
-          <p class="comments">A ray </p>
-          <h6><code><span title="System.double">double</span></code> tolerance</h6>
-          <p class="comments">A tolerance (epsilon) to account for floating point error. </p>
-      </div>
-
-      <div class="return">
-        <h5>Return</h5>
-        <h6><code><a href="../MathNet.Spatial.Euclidean/Point3D.htm">Point3D</a></code></h6>
-        <p>The point of intersection. </p>
-      </div>
-      
-    </div>
-	</div>
 	<div id="MirrorAbout" class="method">
 		<h4><a href="../MathNet.Spatial.Euclidean/Point3D.htm">Point3D</a> <strong>MirrorAbout</strong>(<a href="../MathNet.Spatial.Euclidean/Point3D.htm">Point3D</a> p)</h4>
 		<div class="content">Returns  <var>p</var>  mirrored about the plane. 
@@ -478,68 +504,6 @@ http://geomalgorithms.com/a05-_intersect-1.html
         <h5>Return</h5>
         <h6><code><a href="../MathNet.Spatial.Euclidean/Point3D.htm">Point3D</a></code></h6>
         <p>The mirrored point. </p>
-      </div>
-      
-    </div>
-	</div>
-	<div id="Project" class="method">
-		<h4><a href="../MathNet.Spatial.Euclidean/LineSegment3D.htm">LineSegment3D</a> <strong>Project</strong>(<a href="../MathNet.Spatial.Euclidean/LineSegment3D.htm">LineSegment3D</a> line3DToProject)</h4>
-		<div class="content">Projects a line onto the plane 
-
-
-      <div class="parameters">
-        <h5>Parameters</h5>
-
-          <h6><code><a href="../MathNet.Spatial.Euclidean/LineSegment3D.htm">LineSegment3D</a></code> line3DToProject</h6>
-          <p class="comments">The line to project </p>
-      </div>
-
-      <div class="return">
-        <h5>Return</h5>
-        <h6><code><a href="../MathNet.Spatial.Euclidean/LineSegment3D.htm">LineSegment3D</a></code></h6>
-        <p>A projected line </p>
-      </div>
-      
-    </div>
-	</div>
-	<div id="Project" class="method">
-		<h4><a href="../MathNet.Spatial.Euclidean/Point3D.htm">Point3D</a> <strong>Project</strong>(<a href="../MathNet.Spatial.Euclidean/Point3D.htm">Point3D</a> p, <span title="System.Nullable<UnitVector3D>">Nullable&lt;UnitVector3D&gt;</span> projectionDirection)</h4>
-		<div class="content">Projects a point onto the plane 
-
-
-      <div class="parameters">
-        <h5>Parameters</h5>
-
-          <h6><code><a href="../MathNet.Spatial.Euclidean/Point3D.htm">Point3D</a></code> p</h6>
-          <p class="comments">A point </p>
-          <h6><code><span title="System.Nullable<UnitVector3D>">Nullable&lt;UnitVector3D&gt;</span></code> projectionDirection</h6>
-          <p class="comments">The direction of projection </p>
-      </div>
-
-      <div class="return">
-        <h5>Return</h5>
-        <h6><code><a href="../MathNet.Spatial.Euclidean/Point3D.htm">Point3D</a></code></h6>
-        <p>a projected point </p>
-      </div>
-      
-    </div>
-	</div>
-	<div id="Project" class="method">
-		<h4><a href="../MathNet.Spatial.Euclidean/Line3D.htm">Line3D</a> <strong>Project</strong>(<a href="../MathNet.Spatial.Euclidean/Line3D.htm">Line3D</a> line3DToProject)</h4>
-		<div class="content">Projects a line onto the plane 
-
-
-      <div class="parameters">
-        <h5>Parameters</h5>
-
-          <h6><code><a href="../MathNet.Spatial.Euclidean/Line3D.htm">Line3D</a></code> line3DToProject</h6>
-          <p class="comments">The line to project </p>
-      </div>
-
-      <div class="return">
-        <h5>Return</h5>
-        <h6><code><a href="../MathNet.Spatial.Euclidean/Line3D.htm">Line3D</a></code></h6>
-        <p>A projected line </p>
       </div>
       
     </div>
@@ -604,6 +568,68 @@ http://geomalgorithms.com/a05-_intersect-1.html
       
     </div>
 	</div>
+	<div id="Project" class="method">
+		<h4><a href="../MathNet.Spatial.Euclidean/LineSegment3D.htm">LineSegment3D</a> <strong>Project</strong>(<a href="../MathNet.Spatial.Euclidean/LineSegment3D.htm">LineSegment3D</a> line3DToProject)</h4>
+		<div class="content">Projects a line onto the plane 
+
+
+      <div class="parameters">
+        <h5>Parameters</h5>
+
+          <h6><code><a href="../MathNet.Spatial.Euclidean/LineSegment3D.htm">LineSegment3D</a></code> line3DToProject</h6>
+          <p class="comments">The line to project </p>
+      </div>
+
+      <div class="return">
+        <h5>Return</h5>
+        <h6><code><a href="../MathNet.Spatial.Euclidean/LineSegment3D.htm">LineSegment3D</a></code></h6>
+        <p>A projected line </p>
+      </div>
+      
+    </div>
+	</div>
+	<div id="Project" class="method">
+		<h4><a href="../MathNet.Spatial.Euclidean/Line3D.htm">Line3D</a> <strong>Project</strong>(<a href="../MathNet.Spatial.Euclidean/Line3D.htm">Line3D</a> line3DToProject)</h4>
+		<div class="content">Projects a line onto the plane 
+
+
+      <div class="parameters">
+        <h5>Parameters</h5>
+
+          <h6><code><a href="../MathNet.Spatial.Euclidean/Line3D.htm">Line3D</a></code> line3DToProject</h6>
+          <p class="comments">The line to project </p>
+      </div>
+
+      <div class="return">
+        <h5>Return</h5>
+        <h6><code><a href="../MathNet.Spatial.Euclidean/Line3D.htm">Line3D</a></code></h6>
+        <p>A projected line </p>
+      </div>
+      
+    </div>
+	</div>
+	<div id="Project" class="method">
+		<h4><a href="../MathNet.Spatial.Euclidean/Point3D.htm">Point3D</a> <strong>Project</strong>(<a href="../MathNet.Spatial.Euclidean/Point3D.htm">Point3D</a> p, <span title="System.Nullable<UnitVector3D>">Nullable&lt;UnitVector3D&gt;</span> projectionDirection)</h4>
+		<div class="content">Projects a point onto the plane 
+
+
+      <div class="parameters">
+        <h5>Parameters</h5>
+
+          <h6><code><a href="../MathNet.Spatial.Euclidean/Point3D.htm">Point3D</a></code> p</h6>
+          <p class="comments">A point </p>
+          <h6><code><span title="System.Nullable<UnitVector3D>">Nullable&lt;UnitVector3D&gt;</span></code> projectionDirection</h6>
+          <p class="comments">The direction of projection </p>
+      </div>
+
+      <div class="return">
+        <h5>Return</h5>
+        <h6><code><a href="../MathNet.Spatial.Euclidean/Point3D.htm">Point3D</a></code></h6>
+        <p>a projected point </p>
+      </div>
+      
+    </div>
+	</div>
 	<div id="Rotate" class="method">
 		<h4><a href="../MathNet.Spatial.Euclidean/Plane.htm">Plane</a> <strong>Rotate</strong>(<a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a> aboutVector, <a href="../MathNet.Spatial.Units/Angle.htm">Angle</a> angle)</h4>
 		<div class="content">Rotates a plane 
@@ -647,14 +673,14 @@ http://geomalgorithms.com/a05-_intersect-1.html
     </div>
 	</div>
 	<div id="SignedDistanceTo" class="method">
-		<h4><span title="System.double">double</span> <strong>SignedDistanceTo</strong>(<a href="../MathNet.Spatial.Euclidean/Plane.htm">Plane</a> other)</h4>
-		<div class="content">Get the distance to the plane along the  <a href="../MathNet.Spatial.Euclidean/Plane.htm#Normal">Normal</a> This assumes the planes are parallel 
+		<h4><span title="System.double">double</span> <strong>SignedDistanceTo</strong>(<a href="../MathNet.Spatial.Euclidean/Point3D.htm">Point3D</a> point)</h4>
+		<div class="content">Get the distance to the point along the  <a href="../MathNet.Spatial.Euclidean/Plane.htm#Normal">Normal</a> 
 
 
       <div class="parameters">
         <h5>Parameters</h5>
 
-          <h6><code><a href="../MathNet.Spatial.Euclidean/Plane.htm">Plane</a></code> other</h6>
+          <h6><code><a href="../MathNet.Spatial.Euclidean/Point3D.htm">Point3D</a></code> point</h6>
           <p class="comments">The  <a href="../MathNet.Spatial.Euclidean/Point3D.htm">Point3D</a> </p>
       </div>
 
@@ -667,14 +693,14 @@ http://geomalgorithms.com/a05-_intersect-1.html
     </div>
 	</div>
 	<div id="SignedDistanceTo" class="method">
-		<h4><span title="System.double">double</span> <strong>SignedDistanceTo</strong>(<a href="../MathNet.Spatial.Euclidean/Point3D.htm">Point3D</a> point)</h4>
-		<div class="content">Get the distance to the point along the  <a href="../MathNet.Spatial.Euclidean/Plane.htm#Normal">Normal</a> 
+		<h4><span title="System.double">double</span> <strong>SignedDistanceTo</strong>(<a href="../MathNet.Spatial.Euclidean/Plane.htm">Plane</a> other)</h4>
+		<div class="content">Get the distance to the plane along the  <a href="../MathNet.Spatial.Euclidean/Plane.htm#Normal">Normal</a> This assumes the planes are parallel 
 
 
       <div class="parameters">
         <h5>Parameters</h5>
 
-          <h6><code><a href="../MathNet.Spatial.Euclidean/Point3D.htm">Point3D</a></code> point</h6>
+          <h6><code><a href="../MathNet.Spatial.Euclidean/Plane.htm">Plane</a></code> other</h6>
           <p class="comments">The  <a href="../MathNet.Spatial.Euclidean/Point3D.htm">Point3D</a> </p>
       </div>
 
@@ -716,9 +742,9 @@ http://geomalgorithms.com/a05-_intersect-1.html
       
     </div>
   </div>
-  <div id="RootPoint" class="method">
-    <h4><a href="../MathNet.Spatial.Euclidean/Point3D.htm">Point3D</a> <strong>RootPoint</strong> get; </h4>
-    <div class="content">Gets the point on the plane closest to origin. 
+  <div id="D" class="method">
+    <h4><span title="System.double">double</span> <strong>D</strong> get; </h4>
+    <div class="content">The distance to the Plane along its normal from the origin. 
       
     </div>
   </div>
@@ -736,20 +762,20 @@ http://geomalgorithms.com/a05-_intersect-1.html
       </table>
     </div>
   </div>
-  <div id="D" class="method">
-    <h4>double <strong>D</strong></h4>
-    <div class="content">The distance to the Plane along its normal from the origin. 
+  <div id="RootPoint" class="method">
+    <h4>Point3D <strong>RootPoint</strong></h4>
+    <div class="content">Gets the point on the plane closest to origin. 
       <table>
         <tr>
           <td>
-            <code>return <span title="System.double">double</span></code>
+            <code>return <a href="../MathNet.Spatial.Euclidean/Point3D.htm">Point3D</a></code>
           </td>
         </tr>
       </table>
     </div>
   </div>
 	<div id="footer">
-  <p>Based on v0.6.0.0 of MathNet.Spatial (Math.NET Spatial)</p>
+  <p>Based on v0.7.0.0 of MathNet.Spatial (Math.NET Spatial)</p>
   <p>Generated by <a href="http://docu.jagregory.com">docu</a></p>
 </div>
   </body>
