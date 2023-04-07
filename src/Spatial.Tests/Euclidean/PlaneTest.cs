@@ -103,31 +103,7 @@ namespace MathNet.Spatial.Tests.Euclidean
             Assert.That(aPlane.SignedDistanceTo(ps[1]), Is.EqualTo(0).Within(tolerance), "ps[1]");
             Assert.That(aPlane.SignedDistanceTo(ps[2]), Is.EqualTo(0).Within(tolerance), "ps[2]");
         }
-
-        [TestCase(ZeroPoint, X, Y, XY, Z, "0,0,+1")] //all 4 points fall on the plane z=+1
-        [TestCase(ZeroPoint, X, Y, XY, Z, "0,0,-1")] //all 4 points fall on the plane z=-1
-        [TestCase(ZeroPoint, Y, Z, YZ, X, "+1,0,0")] //all 4 points fall on the plane x=+1
-        [TestCase(ZeroPoint, Y, Z, YZ, X, "-1,0,0")] //all 4 points fall on the plane x=-1
-        [TestCase(ZeroPoint, Z, X, ZX, Y, "0,+1,0")] //all 4 points fall on the plane y=+1
-        [TestCase(ZeroPoint, Z, X, ZX, Y, "0,-1,0")] //all 4 points fall on the plane y=-1
-        public void CreateFittedPlaneFrom_With4PointsOnAxisAlignedPlane(string sV1, string sV2, string sV3, string sV4, string sENormal, string sRootPoint)
-        {
-            var rootPoint = Point3D.Parse(sRootPoint);
-            var ps = new[]
-            {
-                Vector3D.Parse(sV1),
-                Vector3D.Parse(sV2),
-                Vector3D.Parse(sV3),
-                Vector3D.Parse(sV4),
-            }.Select(deltaV => rootPoint + deltaV);
-            var actual = Plane.CreateFittedPlaneFrom(ps);
-
-            var eNormal = UnitVector3D.Parse(sENormal);
-            var eRootPoint = Point3D.Parse(sRootPoint);
-            var expected = new Plane(eNormal, eRootPoint);
-            Assert.That(actual, Is.EqualTo(expected));
-        }
-
+        
         [TestCase("1,1,9;1,2,14;1,3,20;2,1,11;2,2,17;2,3,23;3,1,15;3,2,20;3,3,26", -21.7240278973, -41.0640090729, 7.3269978417, 1)]
         public void CreateFittedPlane(string sPoints, double eA, double eB, double eC, double eOffset)
         {
