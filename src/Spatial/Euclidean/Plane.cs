@@ -78,23 +78,30 @@ namespace MathNet.Spatial.Euclidean
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Plane"/> struct.
-        /// Constructs a Plane from the given points.
+        /// Constructs the plane which best fits a given point cloud, by minimizing the sum of Euclidean distances of the points from the plane.
         /// </summary>
-        /// <param name="points">The points</param>
-        /// <returns>Fitted <see cref="Plane"/></returns>
-        /// <remarks>this method uses SVD to fit the plane.</remarks>
+        /// <param name="points">The point cloud</param>
+        /// <returns>Fitted <see cref="Plane", found by SVD decomposition/></returns>
         public static Plane BestFit(IEnumerable<Point3D> points)
         {
-            var ps = points.ToArray();
+            var ps = points.ToList();
+            if (ps.Count < 3)
+            {
+                throw new ArgumentException("A plane needs at least 3 points to be defined.", nameof(points));
+            }
+
             var throughPoint = Point3D.Centroid(ps);
 
             //allocate
-            var relativePointMatrix = new DenseMatrix(ps.Length, 3);
+            var relativePointMatrix = new DenseMatrix(ps.Count, 3);
 
             //populate
-            for (var i = 0; i < ps.Length; ++i)
+            for (var i = 0; i < ps.Count; ++i)
             {
-                relativePointMatrix.SetRow(i, (ps[i] - throughPoint).ToVector());
+                var relativePoint = ps[i] - throughPoint;
+                relativePointMatrix[i, 0] = relativePoint.X;
+                relativePointMatrix[i, 1] = relativePoint.Y;
+                relativePointMatrix[i, 2] = relativePoint.Z;
             }
 
             var svd = relativePointMatrix.Svd(true);

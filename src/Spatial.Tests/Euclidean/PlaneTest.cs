@@ -85,7 +85,7 @@ namespace MathNet.Spatial.Tests.Euclidean
         }
 
         [Test, Sequential]
-        public void BestFit_From3RandomPoints(
+        public void BestFitFrom3RandomPoints(
             [Random(0d, 10d, 3)] double p0x,
             [Random(0d, 10d, 3)] double p0y,
             [Random(0d, 10d, 3)] double p0z,
@@ -110,25 +110,25 @@ namespace MathNet.Spatial.Tests.Euclidean
         }
 
         [Test]
-        public void BestFit_FromZeroPoints_ShouldThrowException()
+        public void BestFitFromZeroPointsShouldThrowException()
         {
             var points = new Point3D[] { };
-            Assert.Throws<InvalidOperationException>(() => Plane.BestFit(points));
+            Assert.Throws<ArgumentException>(() => Plane.BestFit(points));
         }
 
         [TestCase(1)]
         [TestCase(2)]
-        public void BestFit_FromInsufficientPoints_ShouldNotThrowException(int pointCount)
+        public void BestFitFromInsufficientPointsShouldThrowException(int pointCount)
         {
             var p = new Point3D(1, 0, 0);
             var insufficientPoints = Enumerable.Repeat(p, pointCount);
-            Assert.DoesNotThrow(() => Plane.BestFit(insufficientPoints));
+            Assert.Throws<ArgumentException>(() => Plane.BestFit(insufficientPoints));
         }
 
         [TestCase(ZeroPoint, X, Y)] //all 3 points are on the plane z=0. normal vector is +ez.
         [TestCase(ZeroPoint, Y, Z)] //all 3 points are on the plane x=0. normal vector is +ex.
         [TestCase(ZeroPoint, Z, X)] //all 3 points are on the plane y=0. normal vector is +ey.
-        public void CreateFittedPlaneFrom_PointsShouldBeOnTheFittedPlane(string sP1, string sP2, string sP3)
+        public void CreateFittedPlaneFromPointsShouldBeOnTheFittedPlane(string sP1, string sP2, string sP3)
         {
             var ps = new[]
             {
