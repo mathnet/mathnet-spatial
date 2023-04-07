@@ -132,14 +132,9 @@ namespace MathNet.Spatial.Tests
 
         public static void AreEqual(Plane expected, Plane actual, double tolerance = 1e-6, string message = "")
         {
-            var isParallel = expected.Normal.IsParallelTo(actual.Normal);
-            var plusMinusOne = isParallel
-                ? expected.Normal.DotProduct(actual.Normal) //+1 or -1
-                : 1d;
-
-            AreEqual(plusMinusOne * expected.Normal, actual.Normal, tolerance, "Normal: " + message);
-            AreEqual(expected.RootPoint, actual.RootPoint, tolerance, "RootPoint: "+ message);
-            Assert.AreEqual(plusMinusOne* expected.D, actual.D, tolerance, "D:"+message);
+            AreEqual(expected.Normal, actual.Normal, tolerance, message);
+            AreEqual(expected.RootPoint, actual.RootPoint, tolerance, message);
+            Assert.AreEqual(expected.D, actual.D, tolerance, message);
         }
 
         public static void AreEqual(Matrix<double> expected, Matrix<double> actual, double tolerance = 1e-6)

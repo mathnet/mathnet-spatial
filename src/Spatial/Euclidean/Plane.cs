@@ -38,7 +38,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="z">The Z-component of the normal.</param>
         /// <param name="d">The distance of the Plane along its normal from the origin.</param>
         public Plane(double x, double y, double z, double d)
-            : this(UnitVector3D.Create(x, y, z), -d)
+            : this(UnitVector3D.Create(x, y, z), d)
         {
         }
 
@@ -50,8 +50,23 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="offset">The Plane's distance from the origin along its normal vector.</param>
         public Plane(UnitVector3D normal, double offset = 0)
         {
+            // make sure the plane is defined in its Hesse normal form
+            // https://en.wikipedia.org/wiki/Hesse_normal_form
+
+            if (offset < 0)
+            {
+                normal = normal.Negate();
+                offset = Math.Abs(offset);
+            }
+
             Normal = normal;
-            D = -offset;
+            D = offset;
+
+            if (Normal.DotProduct(RootPoint) < 0)
+            {
+                Normal = Normal.Negate();
+                D = Math.Abs(D);
+            }
         }
 
         /// <summary>
@@ -131,7 +146,7 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// Gets the point on the plane closest to origin.
         /// </summary>
-        public Point3D RootPoint => (-D * Normal).ToPoint3D();
+        public Point3D RootPoint => (D * Normal).ToPoint3D();
 
         /// <summary>
         /// Returns a value that indicates whether each pair of elements in two specified geometric planes is equal.
@@ -180,16 +195,7 @@ namespace MathNet.Spatial.Euclidean
                 throw new ArgumentException("The 3 points should not be on the same line");
             }
 
-            var normal = cross.Normalize();
-            var distanceFromOrigin = normal.DotProduct(p1);
-            if (distanceFromOrigin < 0)
-            {
-                // make sure the plane is defined in its Hesse normal form
-                // https://en.wikipedia.org/wiki/Hesse_normal_form
-                normal = normal.Negate();
-            }
-
-            return new Plane(normal, p1);
+            return new Plane(cross.Normalize(), p1);
         }
 
         /// <summary>

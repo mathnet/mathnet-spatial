@@ -23,7 +23,7 @@ namespace MathNet.Spatial.Tests.Euclidean
         public void Ctor()
         {
             var plane1 = new Plane(new Point3D(0, 0, 3), UnitVector3D.ZAxis);
-            var plane2 = new Plane(0, 0, 3, -3);
+            var plane2 = new Plane(0, 0, 3, 3);
             var plane3 = new Plane(UnitVector3D.ZAxis, 3);
             var plane4 = Plane.FromPoints(new Point3D(0, 0, 3), new Point3D(5, 3, 3), new Point3D(-2, 1, 3));
             AssertGeometry.AreEqual(plane1, plane2);
