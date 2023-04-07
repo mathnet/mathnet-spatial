@@ -104,7 +104,7 @@ namespace MathNet.Spatial.Tests.Euclidean
                 new Point3D(p1x, p1y, p1z),
                 new Point3D(p2x, p2y, p2z),
             };
-            var actual = Plane.CreateFittedPlaneFrom(ps);
+            var actual = Plane.BestFit(ps);
 
             var expected = Plane.FromPoints(ps[0], ps[1], ps[2]);
             AssertGeometry.AreEqual(expected, actual);
@@ -121,7 +121,7 @@ namespace MathNet.Spatial.Tests.Euclidean
                 Point3D.Parse(sP2),
                 Point3D.Parse(sP3),
             }.ToArray();
-            var aPlane = Plane.CreateFittedPlaneFrom(ps);
+            var aPlane = Plane.BestFit(ps);
 
             var tolerance = 1e-16;
             Assert.That(aPlane.SignedDistanceTo(ps[0]), Is.EqualTo(0).Within(tolerance), "ps[0]");
@@ -137,7 +137,7 @@ namespace MathNet.Spatial.Tests.Euclidean
             //https://math.stackexchange.com/questions/99299/best-fitting-plane-given-a-set-of-points/1652383#1652383
 
             var points = sPoints.Split(';').Select(s => Point3D.Parse(s));
-            var actual = Plane.CreateFittedPlaneFrom(points);
+            var actual = Plane.BestFit(points);
 
             //normalize (eA, eB, eC and eD).
             //both 2 following equations mean the same plane.

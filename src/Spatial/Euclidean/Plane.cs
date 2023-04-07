@@ -84,7 +84,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="points">The points</param>
         /// <returns>Fitted <see cref="Plane"/></returns>
         /// <remarks>this method uses SVD to fit the plane.</remarks>
-        public static Plane CreateFittedPlaneFrom(IEnumerable<Point3D> points)
+        public static Plane BestFit(IEnumerable<Point3D> points)
         {
             var throughPoint = Point3D.Centroid(points);
 
