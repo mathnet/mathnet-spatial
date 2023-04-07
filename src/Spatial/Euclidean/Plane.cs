@@ -86,10 +86,10 @@ namespace MathNet.Spatial.Euclidean
         /// <remarks>this method uses SVD to fit the plane.</remarks>
         public static Plane CreateFittedPlaneFrom(IEnumerable<Point3D> points)
         {
-            var c = Point3D.Centroid(points);
+            var throughPoint = Point3D.Centroid(points);
 
             var A = CreateMatrix.DenseOfRowVectors(
-                points.Select(p => p - c)
+                points.Select(p => p - throughPoint)
                     .Select(p => CreateVector.DenseOfArray(new double[] { p.X, p.Y, p.Z })));
 
             var svd = A.Svd(true);
@@ -97,7 +97,7 @@ namespace MathNet.Spatial.Euclidean
             var theIndex = svd.S.Count-1; // in this case, theIndex = 2.
             var normal = UnitVector3D.OfVector(matV.Column(theIndex));
 
-            var result = new Plane(normal, c);
+            var result = new Plane(normal, throughPoint);
             return result;
         }
 
