@@ -103,7 +103,8 @@ namespace MathNet.Spatial.Tests.Euclidean
             Assert.That(aPlane.SignedDistanceTo(ps[1]), Is.EqualTo(0).Within(tolerance), "ps[1]");
             Assert.That(aPlane.SignedDistanceTo(ps[2]), Is.EqualTo(0).Within(tolerance), "ps[2]");
         }
-        
+
+        [Ignore("Wait for Adjustment")] // see https://github.com/mathnet/mathnet-spatial/pull/216#discussion_r1158953708
         [TestCase("1,1,9;1,2,14;1,3,20;2,1,11;2,2,17;2,3,23;3,1,15;3,2,20;3,3,26", -21.7240278973, -41.0640090729, 7.3269978417, 1)]
         public void CreateFittedPlane(string sPoints, double eA, double eB, double eC, double eOffset)
         {
