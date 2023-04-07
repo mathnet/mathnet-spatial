@@ -32,6 +32,7 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// Initializes a new instance of the <see cref="Plane"/> struct.
         /// Constructs a Plane from the X, Y, and Z components of its normal, and its distance from the origin on that normal.
+        /// The resulting plane is in its Hesse normal form.
         /// </summary>
         /// <param name="x">The X-component of the normal.</param>
         /// <param name="y">The Y-component of the normal.</param>
@@ -45,6 +46,7 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// Initializes a new instance of the <see cref="Plane"/> struct.
         /// Constructs a Plane from the given normal and distance along the normal from the origin.
+        /// The resulting plane is in its Hesse normal form.
         /// </summary>
         /// <param name="normal">The Plane's normal vector.</param>
         /// <param name="offset">The Plane's distance from the origin along its normal vector.</param>
@@ -65,13 +67,13 @@ namespace MathNet.Spatial.Euclidean
             if (Normal.DotProduct(RootPoint) < 0)
             {
                 Normal = Normal.Negate();
-                D = Math.Abs(D);
             }
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Plane"/> struct.
         /// Constructs a Plane from the given normal and distance along the normal from the origin.
+        /// The resulting plane is in its Hesse normal form.
         /// </summary>
         /// <param name="normal">The Plane's normal vector.</param>
         /// <param name="rootPoint">A point in the plane.</param>
@@ -83,6 +85,7 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// Initializes a new instance of the <see cref="Plane"/> struct.
         /// Constructs a Plane from the given normal and distance along the normal from the origin.
+        /// The resulting plane is in its Hesse normal form.
         /// </summary>
         /// <param name="normal">The Plane's normal vector.</param>
         /// <param name="rootPoint">A point in the plane.</param>
@@ -96,7 +99,7 @@ namespace MathNet.Spatial.Euclidean
         /// Constructs the plane which best fits a given point cloud, by minimizing the sum of Euclidean distances of the points from the plane.
         /// </summary>
         /// <param name="points">The point cloud</param>
-        /// <returns>Fitted <see cref="Plane", found by SVD decomposition/></returns>
+        /// <returns>Fitted <see cref="Plane"/>, found by SVD decomposition</returns>
         public static Plane BestFit(IEnumerable<Point3D> points)
         {
             var ps = points.ToList();
@@ -119,9 +122,9 @@ namespace MathNet.Spatial.Euclidean
                 relativePointMatrix[i, 2] = relativePoint.Z;
             }
 
-            var svd = relativePointMatrix.Svd(true);
+            var svd = relativePointMatrix.Svd();
             var matV = svd.VT.Transpose();
-            var smallestEigenvalueColumnIndex = svd.S.Count - 1; // in this case, theIndex = 2.
+            var smallestEigenvalueColumnIndex = svd.S.Count - 1;
             var normal = UnitVector3D.OfVector(matV.Column(smallestEigenvalueColumnIndex));
 
             var bestFit = new Plane(normal, throughPoint);
@@ -365,8 +368,8 @@ namespace MathNet.Spatial.Euclidean
 
             var y = new DenseMatrix(2, 1)
             {
-                [0, 0] = -1 * D,
-                [1, 0] = -1 * intersectingPlane.D
+                [0, 0] = D,
+                [1, 0] = intersectingPlane.D
             };
 
             var pointOnIntersectionLine = svd.Solve(y);
@@ -524,7 +527,7 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public override string ToString()
         {
-            return $"A:{Math.Round(A, 4)} B:{Math.Round(B, 4)} C:{Math.Round(C, 4)} D:{Math.Round(D, 4)}";
+            return $"RootPoint: {RootPoint}, Normal: {Normal} [A:{Math.Round(A, 4)} B:{Math.Round(B, 4)} C:{Math.Round(C, 4)} D:{Math.Round(D, 4)}]";
         }
 
         /// <inheritdoc />

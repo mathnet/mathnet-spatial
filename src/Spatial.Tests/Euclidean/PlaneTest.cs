@@ -13,9 +13,6 @@ namespace MathNet.Spatial.Tests.Euclidean
         private const string X = "1; 0 ; 0";
         private const string Y = "0; 1; 0";
         private const string Z = "0; 0; 1";
-        private const string XY = "1; 1; 0";
-        private const string YZ = "0; 1; 1";
-        private const string ZX = "1; 0; 1";
         private const string NegativeZ = "0; 0; -1";
         private const string ZeroPoint = "0; 0; 0";
 
@@ -61,7 +58,7 @@ namespace MathNet.Spatial.Tests.Euclidean
         [TestCase("1, 0, 0, 0", "0, 0, 0", "1, 0, 0")]
         public void Parse2(string s, string pds, string vds)
         {
-            var plane = this.GetPlaneFrom4Doubles(s);
+            var plane = GetPlaneFrom4Doubles(s);
             AssertGeometry.AreEqual(Point3D.Parse(pds), plane.RootPoint);
             AssertGeometry.AreEqual(Vector3D.Parse(vds), plane.Normal);
         }
@@ -144,13 +141,11 @@ namespace MathNet.Spatial.Tests.Euclidean
             Assert.That(aPlane.SignedDistanceTo(ps[2]), Is.EqualTo(0).Within(tolerance), "ps[2]");
         }
 
-        [Ignore("Wait for Adjustment")] // see https://github.com/mathnet/mathnet-spatial/pull/216#discussion_r1158953708
-        [TestCase("1,1,9;1,2,14;1,3,20;2,1,11;2,2,17;2,3,23;3,1,15;3,2,20;3,3,26", -21.7240278973, -41.0640090729, 7.3269978417, 1)]
+        //https://math.stackexchange.com/questions/99299/best-fitting-plane-given-a-set-of-points/1652383#1652383
+        // the values in the link example are not correct (for example, it reports xm = 1.8, whereas it clearly is xm=2.0)
+        [TestCase("1,1,9;1,2,14;1,3,20;2,1,11;2,2,17;2,3,23;3,1,15;3,2,20;3,3,26", -17.493526463019482, -33.043327763481223, 5.8107314585613725, 1)]
         public void CreateFittedPlane(string sPoints, double eA, double eB, double eC, double eOffset)
         {
-            //You can see this example at
-            //https://math.stackexchange.com/questions/99299/best-fitting-plane-given-a-set-of-points/1652383#1652383
-
             var points = sPoints.Split(';').Select(s => Point3D.Parse(s));
             var actual = Plane.BestFit(points);
 
@@ -159,10 +154,8 @@ namespace MathNet.Spatial.Tests.Euclidean
             // eq1: Ax + By + Cz + D = 0
             // eq2:-Ax - By - Cz - D = 0
             var normal = new Vector3D(eA, eB, eC);
-            var eNormalizedOffset = eOffset / normal.Length;
-            var expected = new Plane(normal.Negate().Normalize(), eNormalizedOffset);
-
-            var tolerance = 6e-3; // for this example
+            var eNormalizedOffset = -eOffset / normal.Length;
+            var expected = new Plane(normal.Normalize(), eNormalizedOffset);
             AssertGeometry.AreEqual(expected, actual);
         }
 
@@ -175,7 +168,7 @@ namespace MathNet.Spatial.Tests.Euclidean
         [TestCase(ZeroPoint, NegativeZ, "1; 2; 1", -1)]
         [TestCase(ZeroPoint, NegativeZ, "1; 2; -1", 1)]
         [TestCase("0; 0; -1", NegativeZ, ZeroPoint, -1)]
-        [TestCase("0; 0; 1", NegativeZ, ZeroPoint, 1)]
+        [TestCase("0; 0; 1", NegativeZ, ZeroPoint, -1)]
         [TestCase(ZeroPoint, X, "1; 0; 0", 1)]
         [TestCase("188,6578; 147,0620; 66,0170", Z, "118,6578; 147,0620; 126,1170", 60.1)]
         public void SignedDistanceToPoint(string prps, string pns, string ps, double expected)
@@ -270,8 +263,11 @@ namespace MathNet.Spatial.Tests.Euclidean
         [Test]
         public void SignOfD()
         {
-            var plane1 = new Plane(UnitVector3D.ZAxis, new Point3D(0, 0, 100));
-            Assert.AreEqual(-100, plane1.D);
+            var plane = new Plane(UnitVector3D.ZAxis, new Point3D(0, 0, 100));
+            Assert.AreEqual(100, plane.D);
+
+            plane = new Plane(UnitVector3D.ZAxis, new Point3D(0, 0, -100));
+            Assert.AreEqual(100, plane.D);
         }
 
         [Test]
@@ -311,12 +307,12 @@ namespace MathNet.Spatial.Tests.Euclidean
             }
         }
 
-        [TestCase("1, 1, 0, -12", "-1, 1, 0, -12", "0, 0, 1, -5", "0, 16.970563, 5")]
+        [TestCase("1, 1, 0, 12", "1, -1, 0, -12", "0, 0, 1, 5", "0, 16.970563, 5")]
         public void PointFromPlanes2(string planeString1, string planeString2, string planeString3, string eps)
         {
-            var plane1 = this.GetPlaneFrom4Doubles(planeString1);
-            var plane2 = this.GetPlaneFrom4Doubles(planeString2);
-            var plane3 = this.GetPlaneFrom4Doubles(planeString3);
+            var plane1 = GetPlaneFrom4Doubles(planeString1);
+            var plane2 = GetPlaneFrom4Doubles(planeString2);
+            var plane3 = GetPlaneFrom4Doubles(planeString3);
             var points = new[]
             {
                 Plane.PointFromPlanes(plane1, plane2, plane3),
