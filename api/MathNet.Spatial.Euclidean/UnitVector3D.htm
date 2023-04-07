@@ -328,14 +328,14 @@ The provided values are scaled to L2 norm == 1
     </div>
 	</div>
 	<div id="CrossProduct" class="method">
-		<h4><a href="../MathNet.Spatial.Euclidean/Vector3D.htm">Vector3D</a> <strong>CrossProduct</strong>(<a href="../MathNet.Spatial.Euclidean/Vector3D.htm">Vector3D</a> inVector3D)</h4>
+		<h4><a href="../MathNet.Spatial.Euclidean/Vector3D.htm">Vector3D</a> <strong>CrossProduct</strong>(<a href="../MathNet.Spatial.Euclidean/Vector3D.htm">Vector3D</a> other)</h4>
 		<div class="content">Returns the cross product of this vector and a unit vector 
 
 
       <div class="parameters">
         <h5>Parameters</h5>
 
-          <h6><code><a href="../MathNet.Spatial.Euclidean/Vector3D.htm">Vector3D</a></code> inVector3D</h6>
+          <h6><code><a href="../MathNet.Spatial.Euclidean/Vector3D.htm">Vector3D</a></code> other</h6>
           <p class="comments">A vector </p>
       </div>
 
@@ -511,14 +511,14 @@ The provided values are scaled to L2 norm == 1
     </div>
 	</div>
 	<div id="IsParallelTo" class="method">
-		<h4><span title="System.bool">bool</span> <strong>IsParallelTo</strong>(<a href="../MathNet.Spatial.Euclidean/Vector3D.htm">Vector3D</a> othervector, <a href="../MathNet.Spatial.Units/Angle.htm">Angle</a> angleTolerance)</h4>
+		<h4><span title="System.bool">bool</span> <strong>IsParallelTo</strong>(<a href="../MathNet.Spatial.Euclidean/Vector3D.htm">Vector3D</a> otherVector, <a href="../MathNet.Spatial.Units/Angle.htm">Angle</a> angleTolerance)</h4>
 		<div class="content">Determine whether or not this vector is parallel to a unit vector within a given angle tolerance. 
 
 
       <div class="parameters">
         <h5>Parameters</h5>
 
-          <h6><code><a href="../MathNet.Spatial.Euclidean/Vector3D.htm">Vector3D</a></code> othervector</h6>
+          <h6><code><a href="../MathNet.Spatial.Euclidean/Vector3D.htm">Vector3D</a></code> otherVector</h6>
           <p class="comments">The other  <a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a> </p>
           <h6><code><a href="../MathNet.Spatial.Units/Angle.htm">Angle</a></code> angleTolerance</h6>
           <p class="comments">The tolerance for when the vectors are considered parallel. </p>
@@ -533,14 +533,14 @@ The provided values are scaled to L2 norm == 1
     </div>
 	</div>
 	<div id="IsParallelTo" class="method">
-		<h4><span title="System.bool">bool</span> <strong>IsParallelTo</strong>(<a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a> othervector, <a href="../MathNet.Spatial.Units/Angle.htm">Angle</a> angleTolerance)</h4>
+		<h4><span title="System.bool">bool</span> <strong>IsParallelTo</strong>(<a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a> otherVector, <a href="../MathNet.Spatial.Units/Angle.htm">Angle</a> angleTolerance)</h4>
 		<div class="content">Determine whether or not this vector is parallel to another vector within a given angle tolerance. 
 
 
       <div class="parameters">
         <h5>Parameters</h5>
 
-          <h6><code><a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a></code> othervector</h6>
+          <h6><code><a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a></code> otherVector</h6>
           <p class="comments">The other  <a href="../MathNet.Spatial.Euclidean/Vector3D.htm">Vector3D</a> </p>
           <h6><code><a href="../MathNet.Spatial.Units/Angle.htm">Angle</a></code> angleTolerance</h6>
           <p class="comments">The tolerance for when the vectors are considered parallel. </p>
@@ -555,7 +555,7 @@ The provided values are scaled to L2 norm == 1
     </div>
 	</div>
 	<div id="IsParallelTo" class="method">
-		<h4><span title="System.bool">bool</span> <strong>IsParallelTo</strong>(<a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a> othervector, <span title="System.double">double</span> tolerance)</h4>
+		<h4><span title="System.bool">bool</span> <strong>IsParallelTo</strong>(<a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a> otherVector, <span title="System.double">double</span> tolerance)</h4>
 		<div class="content">Computes whether or not this vector is parallel to a unit vector using the dot product method and comparing it
 to within a specified tolerance. 
 
@@ -563,7 +563,7 @@ to within a specified tolerance.
       <div class="parameters">
         <h5>Parameters</h5>
 
-          <h6><code><a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a></code> othervector</h6>
+          <h6><code><a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a></code> otherVector</h6>
           <p class="comments">The other  <a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a> </p>
           <h6><code><span title="System.double">double</span></code> tolerance</h6>
           <p class="comments">A tolerance value for the dot product method.  Values below 2*Precision.DoublePrecision may cause issues. </p>
@@ -578,7 +578,7 @@ to within a specified tolerance.
     </div>
 	</div>
 	<div id="IsParallelTo" class="method">
-		<h4><span title="System.bool">bool</span> <strong>IsParallelTo</strong>(<a href="../MathNet.Spatial.Euclidean/Vector3D.htm">Vector3D</a> othervector, <span title="System.double">double</span> tolerance)</h4>
+		<h4><span title="System.bool">bool</span> <strong>IsParallelTo</strong>(<a href="../MathNet.Spatial.Euclidean/Vector3D.htm">Vector3D</a> otherVector, <span title="System.double">double</span> tolerance)</h4>
 		<div class="content">Computes whether or not this vector is parallel to another vector using the dot product method and comparing it
 to within a specified tolerance. 
 
@@ -586,7 +586,7 @@ to within a specified tolerance.
       <div class="parameters">
         <h5>Parameters</h5>
 
-          <h6><code><a href="../MathNet.Spatial.Euclidean/Vector3D.htm">Vector3D</a></code> othervector</h6>
+          <h6><code><a href="../MathNet.Spatial.Euclidean/Vector3D.htm">Vector3D</a></code> otherVector</h6>
           <p class="comments">The other  <a href="../MathNet.Spatial.Euclidean/Vector3D.htm">Vector3D</a> </p>
           <h6><code><span title="System.double">double</span></code> tolerance</h6>
           <p class="comments">A tolerance value for the dot product method.  Values below 2*Precision.DoublePrecision may cause issues. </p>
@@ -978,7 +978,7 @@ comparing it to within a specified tolerance
     </div>
   </div>
 	<div id="footer">
-  <p>Based on v0.6.0.0 of MathNet.Spatial (Math.NET Spatial)</p>
+  <p>Based on v0.7.0.0 of MathNet.Spatial (Math.NET Spatial)</p>
   <p>Generated by <a href="http://docu.jagregory.com">docu</a></p>
 </div>
   </body>

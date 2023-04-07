@@ -98,7 +98,7 @@
 		<p class="class"><strong>Type</strong> Circle3D</p>
 		<p><strong>Namespace</strong> MathNet.Spatial.Euclidean</p>
 		<p><strong>Parent</strong> <span title="System.ValueType">ValueType</span></p>
-		<p><strong>Interfaces</strong> <span title="System.IEquatable<Circle3D>">IEquatable&lt;Circle3D&gt;</span></p>
+		<p><strong>Interfaces</strong> <span title="System.IEquatable<Circle3D>">IEquatable&lt;Circle3D&gt;</span>, <span title="System.Xml.Serialization.IXmlSerializable">IXmlSerializable</span></p>
 	</div>
     <div class="sub-header">
 			<div id="summary">Describes a 3 dimensional circle 
@@ -120,24 +120,24 @@
 				<li><a href="../MathNet.Spatial.Euclidean/Circle3D.htm#Equals">Equals</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/Circle3D.htm#Equals">Equals</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/Circle3D.htm#GetHashCode">GetHashCode</a></li>
+				<li><a href="../MathNet.Spatial.Euclidean/Circle3D.htm#GetSchema">GetSchema</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/Circle3D.htm#GetType">GetType</a></li>
+				<li><a href="../MathNet.Spatial.Euclidean/Circle3D.htm#ReadXml">ReadXml</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/Circle3D.htm#ToString">ToString</a></li>
+				<li><a href="../MathNet.Spatial.Euclidean/Circle3D.htm#WriteXml">WriteXml</a></li>
 			</ul>
 		
 
 			<h3 class="section">Properties</h3>
 			<ul>
 				<li><a href="../MathNet.Spatial.Euclidean/Circle3D.htm#Area">Area</a></li>
+				<li><a href="../MathNet.Spatial.Euclidean/Circle3D.htm#Axis">Axis</a></li>
+				<li><a href="../MathNet.Spatial.Euclidean/Circle3D.htm#CenterPoint">CenterPoint</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/Circle3D.htm#Circumference">Circumference</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/Circle3D.htm#Diameter">Diameter</a></li>
-			</ul>
-		
-			<h3 class="section">Fields</h3>
-			<ul>
-				<li><a href="../MathNet.Spatial.Euclidean/Circle3D.htm#CenterPoint">CenterPoint</a></li>
-				<li><a href="../MathNet.Spatial.Euclidean/Circle3D.htm#Axis">Axis</a></li>
 				<li><a href="../MathNet.Spatial.Euclidean/Circle3D.htm#Radius">Radius</a></li>
 			</ul>
+		
 	</div>
 	
 	
@@ -268,8 +268,26 @@ Create a circle from the midpoint between two points, in a direction along a spe
       
     </div>
 	</div>
+	<div id="GetSchema" class="method">
+		<h4><span title="System.Xml.Schema.XmlSchema">XmlSchema</span> <strong>GetSchema</strong>()</h4>
+		<div class="content">
+
+
+
+      
+    </div>
+	</div>
 	<div id="GetType" class="method">
 		<h4><span title="System.Type">Type</span> <strong>GetType</strong>()</h4>
+		<div class="content">
+
+
+
+      
+    </div>
+	</div>
+	<div id="ReadXml" class="method">
+		<h4><span title="System.void">void</span> <strong>ReadXml</strong>(<span title="System.Xml.XmlReader">XmlReader</span> reader)</h4>
 		<div class="content">
 
 
@@ -286,12 +304,33 @@ Create a circle from the midpoint between two points, in a direction along a spe
       
     </div>
 	</div>
+	<div id="WriteXml" class="method">
+		<h4><span title="System.void">void</span> <strong>WriteXml</strong>(<span title="System.Xml.XmlWriter">XmlWriter</span> writer)</h4>
+		<div class="content">
+
+
+
+      
+    </div>
+	</div>
 	
   <h3 class="section">Public Properties</h3>
 
   <div id="Area" class="method">
     <h4><span title="System.double">double</span> <strong>Area</strong> get; </h4>
     <div class="content">Gets the area of the circle 
+      
+    </div>
+  </div>
+  <div id="Axis" class="method">
+    <h4><a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a> <strong>Axis</strong> get; set;</h4>
+    <div class="content">the axis of the circle 
+      
+    </div>
+  </div>
+  <div id="CenterPoint" class="method">
+    <h4><a href="../MathNet.Spatial.Euclidean/Point3D.htm">Point3D</a> <strong>CenterPoint</strong> get; set;</h4>
+    <div class="content">The center of the circle 
       
     </div>
   </div>
@@ -307,46 +346,14 @@ Create a circle from the midpoint between two points, in a direction along a spe
       
     </div>
   </div>
-  <h3 class="section">Public fields</h3>
-
-  <div id="CenterPoint" class="method">
-    <h4>Point3D <strong>CenterPoint</strong></h4>
-    <div class="content">The center of the circle 
-      <table>
-        <tr>
-          <td>
-            <code>return <a href="../MathNet.Spatial.Euclidean/Point3D.htm">Point3D</a></code>
-          </td>
-        </tr>
-      </table>
-    </div>
-  </div>
-  <div id="Axis" class="method">
-    <h4>UnitVector3D <strong>Axis</strong></h4>
-    <div class="content">the axis of the circle 
-      <table>
-        <tr>
-          <td>
-            <code>return <a href="../MathNet.Spatial.Euclidean/UnitVector3D.htm">UnitVector3D</a></code>
-          </td>
-        </tr>
-      </table>
-    </div>
-  </div>
   <div id="Radius" class="method">
-    <h4>double <strong>Radius</strong></h4>
+    <h4><span title="System.double">double</span> <strong>Radius</strong> get; set;</h4>
     <div class="content">the radius of the circle 
-      <table>
-        <tr>
-          <td>
-            <code>return <span title="System.double">double</span></code>
-          </td>
-        </tr>
-      </table>
+      
     </div>
   </div>
 	<div id="footer">
-  <p>Based on v0.6.0.0 of MathNet.Spatial (Math.NET Spatial)</p>
+  <p>Based on v0.7.0.0 of MathNet.Spatial (Math.NET Spatial)</p>
   <p>Generated by <a href="http://docu.jagregory.com">docu</a></p>
 </div>
   </body>
