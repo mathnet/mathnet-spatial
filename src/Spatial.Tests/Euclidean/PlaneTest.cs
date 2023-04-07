@@ -55,6 +55,28 @@ namespace MathNet.Spatial.Tests.Euclidean
             AssertGeometry.AreEqual(Vector3D.Parse(vds), plane.Normal);
         }
 
+        [TestCase(ZeroPoint, X, ZeroPoint, X)]
+        [TestCase(ZeroPoint, X, "0, 2, 6", X)]
+        [TestCase(X, "1, 1, 1", Z, "1, 1, 1")]
+        public void Equals(string rootPoint1, string unitVector1, string rootPoint2, string unitVector2)
+        {
+            var plane1 = new Plane(Point3D.Parse(rootPoint1), Vector3D.Parse(unitVector1).Normalize());
+            var plane2 = new Plane(Point3D.Parse(rootPoint2), Vector3D.Parse(unitVector2).Normalize());
+            Assert.IsTrue(plane1 == plane2);
+            Assert.IsFalse(plane1 != plane2);
+        }
+
+        [TestCase(ZeroPoint, Y, ZeroPoint, X)]
+        [TestCase(ZeroPoint, X, "0, 2, 6", Z)]
+        [TestCase(X, "1, 1, 1", Z, "1, 0, 1")]
+        public void NotEquals(string rootPoint1, string unitVector1, string rootPoint2, string unitVector2)
+        {
+            var plane1 = new Plane(Point3D.Parse(rootPoint1), Vector3D.Parse(unitVector1).Normalize());
+            var plane2 = new Plane(Point3D.Parse(rootPoint2), Vector3D.Parse(unitVector2).Normalize());
+            Assert.IsTrue(plane1 != plane2);
+            Assert.IsFalse(plane1 == plane2);
+        }
+
         [TestCase("1, 0, 0, 0", "0, 0, 0", "1, 0, 0")]
         public void Parse2(string s, string pds, string vds)
         {
