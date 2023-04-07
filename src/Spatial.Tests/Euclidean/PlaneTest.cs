@@ -122,10 +122,6 @@ namespace MathNet.Spatial.Tests.Euclidean
             var eNormalizedOffset = eOffset / normal.Length;
             var expected = new Plane(normal.Negate().Normalize(), eNormalizedOffset);
 
-            //for debugging purpose
-            TestContext.WriteLine($"{nameof(actual)}={actual}");
-            TestContext.WriteLine($"{nameof(expected)}={expected}");
-
             var tolerance = 6e-3; // for this example
             AssertGeometry.AreEqual(expected, actual);
         }
