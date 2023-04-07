@@ -94,8 +94,8 @@ namespace MathNet.Spatial.Euclidean
 
             var svd = relativePointMatrix.Svd(true);
             var matV = svd.VT.Transpose();
-            var theIndex = svd.S.Count-1; // in this case, theIndex = 2.
-            var normal = UnitVector3D.OfVector(matV.Column(theIndex));
+            var smallestEigenvalueColumnIndex = svd.S.Count-1; // in this case, theIndex = 2.
+            var normal = UnitVector3D.OfVector(matV.Column(smallestEigenvalueColumnIndex));
 
             var result = new Plane(normal, throughPoint);
             return result;
