@@ -1,9 +1,9 @@
-﻿// ReSharper disable InconsistentNaming
+// ReSharper disable InconsistentNaming
 
-using System;
-using System.Linq;
 using MathNet.Spatial.Euclidean;
 using NUnit.Framework;
+using System;
+using System.Linq;
 
 namespace MathNet.Spatial.Tests.Euclidean
 {
@@ -11,7 +11,11 @@ namespace MathNet.Spatial.Tests.Euclidean
     public class PlaneTest
     {
         private const string X = "1; 0 ; 0";
+        private const string Y = "0; 1; 0";
         private const string Z = "0; 0; 1";
+        private const string XY = "1; 1; 0";
+        private const string YZ = "0; 1; 1";
+        private const string ZX = "1; 0; 1";
         private const string NegativeZ = "0; 0; -1";
         private const string ZeroPoint = "0; 0; 0";
 
@@ -78,6 +82,88 @@ namespace MathNet.Spatial.Tests.Euclidean
             var projectedPoint = plane.Project(Point3D.Parse(ps), projectionDirection);
             var expected = Point3D.Parse(expectedPoint);
             AssertGeometry.AreEqual(expected, projectedPoint, eps);
+        }
+
+        [Test, Sequential]
+        public void BestFitFrom3RandomPoints(
+            [Random(0d, 10d, 3)] double p0x,
+            [Random(0d, 10d, 3)] double p0y,
+            [Random(0d, 10d, 3)] double p0z,
+            [Random(0d, 10d, 3)] double p1x,
+            [Random(0d, 10d, 3)] double p1y,
+            [Random(0d, 10d, 3)] double p1z,
+            [Random(0d, 10d, 3)] double p2x,
+            [Random(0d, 10d, 3)] double p2y,
+            [Random(0d, 10d, 3)] double p2z
+        )
+        {
+            var ps = new[]
+            {
+                new Point3D(p0x, p0y, p0z),
+                new Point3D(p1x, p1y, p1z),
+                new Point3D(p2x, p2y, p2z),
+            };
+            var actual = Plane.BestFit(ps);
+
+            var expected = Plane.FromPoints(ps[0], ps[1], ps[2]);
+            AssertGeometry.AreEqual(expected, actual);
+        }
+
+        [Test]
+        public void BestFitFromZeroPointsShouldThrowException()
+        {
+            var points = new Point3D[] { };
+            Assert.Throws<ArgumentException>(() => Plane.BestFit(points));
+        }
+
+        [TestCase(1)]
+        [TestCase(2)]
+        public void BestFitFromInsufficientPointsShouldThrowException(int pointCount)
+        {
+            var p = new Point3D(1, 0, 0);
+            var insufficientPoints = Enumerable.Repeat(p, pointCount);
+            Assert.Throws<ArgumentException>(() => Plane.BestFit(insufficientPoints));
+        }
+
+        [TestCase(ZeroPoint, X, Y)] //all 3 points are on the plane z=0. normal vector is +ez.
+        [TestCase(ZeroPoint, Y, Z)] //all 3 points are on the plane x=0. normal vector is +ex.
+        [TestCase(ZeroPoint, Z, X)] //all 3 points are on the plane y=0. normal vector is +ey.
+        public void CreateFittedPlaneFromPointsShouldBeOnTheFittedPlane(string sP1, string sP2, string sP3)
+        {
+            var ps = new[]
+            {
+                Point3D.Parse(sP1),
+                Point3D.Parse(sP2),
+                Point3D.Parse(sP3),
+            }.ToArray();
+            var aPlane = Plane.BestFit(ps);
+
+            var tolerance = 1e-16;
+            Assert.That(aPlane.SignedDistanceTo(ps[0]), Is.EqualTo(0).Within(tolerance), "ps[0]");
+            Assert.That(aPlane.SignedDistanceTo(ps[1]), Is.EqualTo(0).Within(tolerance), "ps[1]");
+            Assert.That(aPlane.SignedDistanceTo(ps[2]), Is.EqualTo(0).Within(tolerance), "ps[2]");
+        }
+
+        [Ignore("Wait for Adjustment")] // see https://github.com/mathnet/mathnet-spatial/pull/216#discussion_r1158953708
+        [TestCase("1,1,9;1,2,14;1,3,20;2,1,11;2,2,17;2,3,23;3,1,15;3,2,20;3,3,26", -21.7240278973, -41.0640090729, 7.3269978417, 1)]
+        public void CreateFittedPlane(string sPoints, double eA, double eB, double eC, double eOffset)
+        {
+            //You can see this example at
+            //https://math.stackexchange.com/questions/99299/best-fitting-plane-given-a-set-of-points/1652383#1652383
+
+            var points = sPoints.Split(';').Select(s => Point3D.Parse(s));
+            var actual = Plane.BestFit(points);
+
+            //normalize (eA, eB, eC and eD).
+            //both 2 following equations mean the same plane.
+            // eq1: Ax + By + Cz + D = 0
+            // eq2:-Ax - By - Cz - D = 0
+            var normal = new Vector3D(eA, eB, eC);
+            var eNormalizedOffset = eOffset / normal.Length;
+            var expected = new Plane(normal.Negate().Normalize(), eNormalizedOffset);
+
+            var tolerance = 6e-3; // for this example
+            AssertGeometry.AreEqual(expected, actual);
         }
 
         [TestCase(ZeroPoint, Z, ZeroPoint, 0)]

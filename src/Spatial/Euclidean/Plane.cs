@@ -1,12 +1,14 @@
-﻿using System;
+﻿using MathNet.Spatial.Internals;
+using MathNet.Spatial.Units;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
 using System.Xml.Serialization;
-using MathNet.Numerics.LinearAlgebra.Double;
-using MathNet.Spatial.Internals;
-using MathNet.Spatial.Units;
+using DenseMatrix = MathNet.Numerics.LinearAlgebra.Double.DenseMatrix;
 using HashCode = MathNet.Spatial.Internals.HashCode;
 
 namespace MathNet.Spatial.Euclidean
@@ -72,6 +74,43 @@ namespace MathNet.Spatial.Euclidean
         public Plane(Point3D rootPoint, UnitVector3D normal)
             : this(normal, normal.DotProduct(rootPoint))
         {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Plane"/> struct.
+        /// Constructs the plane which best fits a given point cloud, by minimizing the sum of Euclidean distances of the points from the plane.
+        /// </summary>
+        /// <param name="points">The point cloud</param>
+        /// <returns>Fitted <see cref="Plane", found by SVD decomposition/></returns>
+        public static Plane BestFit(IEnumerable<Point3D> points)
+        {
+            var ps = points.ToList();
+            if (ps.Count < 3)
+            {
+                throw new ArgumentException("A plane needs at least 3 points to be defined.", nameof(points));
+            }
+
+            var throughPoint = Point3D.Centroid(ps);
+
+            //allocate
+            var relativePointMatrix = new DenseMatrix(ps.Count, 3);
+
+            //populate
+            for (var i = 0; i < ps.Count; ++i)
+            {
+                var relativePoint = ps[i] - throughPoint;
+                relativePointMatrix[i, 0] = relativePoint.X;
+                relativePointMatrix[i, 1] = relativePoint.Y;
+                relativePointMatrix[i, 2] = relativePoint.Z;
+            }
+
+            var svd = relativePointMatrix.Svd(true);
+            var matV = svd.VT.Transpose();
+            var smallestEigenvalueColumnIndex = svd.S.Count - 1; // in this case, theIndex = 2.
+            var normal = UnitVector3D.OfVector(matV.Column(smallestEigenvalueColumnIndex));
+
+            var bestFit = new Plane(normal, throughPoint);
+            return bestFit;
         }
 
         /// <summary>
