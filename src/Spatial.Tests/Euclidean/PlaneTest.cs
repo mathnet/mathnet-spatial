@@ -150,10 +150,7 @@ namespace MathNet.Spatial.Tests.Euclidean
             TestContext.WriteLine($"{nameof(expected)}={expected}");
 
             var tolerance = 6e-3; // for this example
-            Assert.That(actual.A, Is.EqualTo(expected.A).Within(tolerance), "A");
-            Assert.That(actual.B, Is.EqualTo(expected.B).Within(tolerance), "B");
-            Assert.That(actual.C, Is.EqualTo(expected.C).Within(tolerance), "C");
-            Assert.That(actual.D, Is.EqualTo(expected.D).Within(tolerance), "D");
+            AssertGeometry.AreEqual(expected, actual);
         }
 
         [TestCase(ZeroPoint, Z, ZeroPoint, 0)]
