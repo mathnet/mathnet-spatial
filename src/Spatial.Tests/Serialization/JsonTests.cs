@@ -75,17 +75,6 @@ namespace MathNet.Spatial.Tests.Serialization
         }
 
         [Explicit("fix later")]
-        [TestCase("1, 2, 3", "4, 5, 6")]
-        public void Line3DJson(string p1s, string p2s)
-        {
-            Point3D p1 = Point3D.Parse(p1s);
-            Point3D p2 = Point3D.Parse(p2s);
-            var l = new Line3D(p1, p2);
-            var result = this.JsonRoundTrip(l);
-            Assert.AreEqual(l, result);
-        }
-
-        [Explicit("fix later")]
         [TestCase("1, 2", "4, 5")]
         public void Line2DJson(string p1s, string p2s)
         {

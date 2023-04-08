@@ -38,7 +38,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="x">The x component.</param>
         /// <param name="y">The y component.</param>
         /// <param name="z">The z component.</param>
-        public Vector3D(double x, double y, double z)
+        public Vector3D(double x, double y, double z = 0)
         {
             this.X = x;
             this.Y = y;

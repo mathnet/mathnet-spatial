@@ -283,18 +283,6 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         /// <param name="line3DToProject">The line to project</param>
         /// <returns>A projected line</returns>
-        public Line3D Project(Line3D line3DToProject)
-        {
-            var projectedStartPoint = Project(line3DToProject.StartPoint);
-            var projectedEndPoint = Project(line3DToProject.EndPoint);
-            return new Line3D(projectedStartPoint, projectedEndPoint);
-        }
-
-        /// <summary>
-        /// Projects a line onto the plane
-        /// </summary>
-        /// <param name="line3DToProject">The line to project</param>
-        /// <returns>A projected line</returns>
         [Pure]
         public LineSegment3D Project(LineSegment3D line3DToProject)
         {
@@ -325,7 +313,7 @@ namespace MathNet.Spatial.Euclidean
         public Ray3D Project(Vector3D vector3DToProject)
         {
             var projectedEndPoint = Project(vector3DToProject.ToPoint3D());
-            var projectedZero = Project(new Point3D(0, 0, 0));
+            var projectedZero = Project(Point3D.Origin);
             return new Ray3D(projectedZero, projectedZero.VectorTo(projectedEndPoint).Normalize());
         }
 
@@ -369,40 +357,6 @@ namespace MathNet.Spatial.Euclidean
             var throughPoint = Point3D.OfVector(pointOnIntersectionLine.Column(0));
             var direction = UnitVector3D.OfVector(svd.VT.Row(2));
             return new Ray3D(throughPoint, direction);
-        }
-
-        /// <summary>
-        /// Find intersection between Line3D and Plane
-        /// http://geomalgorithms.com/a05-_intersect-1.html
-        /// </summary>
-        /// <param name="line">A line segment</param>
-        /// <param name="tolerance">A tolerance (epsilon) to account for floating point error.</param>
-        /// <returns>Intersection Point or null</returns>
-        public Point3D? IntersectionWith(Line3D line, double tolerance = float.Epsilon)
-        {
-            if (line.Direction.IsPerpendicularTo(Normal, tolerance))
-            {
-                // either parallel or lies in the plane
-                var projectedPoint = Project(line.StartPoint, line.Direction);
-                if (projectedPoint == line.StartPoint)
-                {
-                    throw new InvalidOperationException("Line lies in the plane");
-                }
-
-                // Line and plane are parallel
-                return null;
-            }
-
-            var d = SignedDistanceTo(line.StartPoint);
-            var u = line.StartPoint.VectorTo(line.EndPoint);
-            var t = -1 * d / u.DotProduct(Normal);
-            if (t > 1 || t < 0)
-            {
-                // They are not intersected
-                return null;
-            }
-
-            return line.StartPoint + (t * u);
         }
 
         /// <summary>

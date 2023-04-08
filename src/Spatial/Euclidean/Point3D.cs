@@ -40,7 +40,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="x">The x component.</param>
         /// <param name="y">The y component.</param>
         /// <param name="z">The z component.</param>
-        public Point3D(double x, double y, double z)
+        public Point3D(double x, double y, double z = 0)
         {
             X = x;
             Y = y;

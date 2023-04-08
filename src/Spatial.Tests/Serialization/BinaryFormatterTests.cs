@@ -71,16 +71,6 @@ namespace MathNet.Spatial.Tests.Serialization
         }
 
         [TestCase("1, 2, 3", "4, 5, 6")]
-        public void Line3DBinaryFormatter(string p1S, string p2S)
-        {
-            Point3D p1 = Point3D.Parse(p1S);
-            Point3D p2 = Point3D.Parse(p2S);
-            var l = new Line3D(p1, p2);
-            var result = BinaryFormaterRoundTrip(l);
-            Assert.AreEqual(l, result);
-        }
-
-        [TestCase("1, 2, 3", "4, 5, 6")]
         public void LineSegment3DBinaryFormatter(string p1S, string p2S)
         {
             Point3D p1 = Point3D.Parse(p1S);
