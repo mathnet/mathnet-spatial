@@ -75,16 +75,6 @@ namespace MathNet.Spatial.Tests.Serialization
             AssertGeometry.AreEqual(ray, result);
         }
 
-        [TestCase("1, 2, 3", "4, 5, 6", @"<Line3D><StartPoint><X>1</X><Y>2</Y><Z>3</Z></StartPoint><EndPoint><X>4</X><Y>5</Y><Z>6</Z></EndPoint></Line3D>")]
-        public void Line3DDataContract(string p1S, string p2S, string xml)
-        {
-            Point3D p1 = Point3D.Parse(p1S);
-            Point3D p2 = Point3D.Parse(p2S);
-            var l = new Line3D(p1, p2);
-            var result = DataContractRoundTrip(l, xml);
-            Assert.AreEqual(l, result);
-        }
-
         [TestCase("1, 2, 3", "4, 5, 6", @"<LineSegment3D><StartPoint><X>1</X><Y>2</Y><Z>3</Z></StartPoint><EndPoint><X>4</X><Y>5</Y><Z>6</Z></EndPoint></LineSegment3D>")]
         public void LineSegment3DDataContract(string p1S, string p2S, string xml)
         {

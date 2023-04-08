@@ -18,18 +18,29 @@ namespace MathNet.Spatial.Tests.Euclidean
         }
 
         [TestCase("0, 0, 0", "1, -1, 1", "1, -1, 1")]
-        public void DirectionsTest(string p1s, string p2s, string evs)
+        public void DirectionsTest(string p1S, string p2S, string evs)
         {
-            var l = LineSegment3D.Parse(p1s, p2s);
-            var excpected = UnitVector3D.Parse(evs, tolerance: 1);
-            AssertGeometry.AreEqual(excpected, l.Direction);
+            var l = LineSegment3D.Parse(p1S, p2S);
+            var expected = UnitVector3D.Parse(evs, tolerance: 1);
+            AssertGeometry.AreEqual(expected, l.Direction);
+        }
+
+        [TestCase("0, 0, 0", "1, -1, 1", "0, 0, 0", "1, 0, 0", "0, 0, 0", "0, -1, 1")]
+        public void ProjectOn(string p1S, string p2S, string rootPoint, string unitVector, string ep1S, string ep2S)
+        {
+            var p1 = Point3D.Parse(p1S);
+            var p2 = Point3D.Parse(p2S);
+            var line = new LineSegment3D(p1, p2);
+            var plane = new Plane(Point3D.Parse(rootPoint), UnitVector3D.Parse(unitVector));
+            var expected = new LineSegment3D(Point3D.Parse(ep1S), Point3D.Parse(ep2S));
+            AssertGeometry.AreEqual(expected, line.ProjectOn(plane));
         }
 
         [TestCase("0, 0, 0", "1, -2, 3", 3.741657)]
-        public void Length(string p1s, string p2s, double expected)
+        public void Length(string p1S, string p2S, double expected)
         {
-            var p1 = Point3D.Parse(p1s);
-            var p2 = Point3D.Parse(p2s);
+            var p1 = Point3D.Parse(p1S);
+            var p2 = Point3D.Parse(p2S);
             var l = new LineSegment3D(p1, p2);
             Assert.AreEqual(expected, l.Length, 1e-6);
         }
@@ -37,10 +48,10 @@ namespace MathNet.Spatial.Tests.Euclidean
         [TestCase("0, 0, 0", "1, -1, 1", "0, 0, 0", "1, -1, 1", true)]
         [TestCase("0, 0, 2", "1, -1, 1", "0, 0, 0", "1, -1, 1", false)]
         [TestCase("0, 0, 0", "1, -1, 1", "0, 0, 0", "2, -1, 1", false)]
-        public void Equals(string p1s, string p2s, string p3s, string p4s, bool expected)
+        public void Equals(string p1S, string p2S, string p3S, string p4S, bool expected)
         {
-            var line1 = new LineSegment3D(Point3D.Parse(p1s), Point3D.Parse(p2s));
-            var line2 = new LineSegment3D(Point3D.Parse(p3s), Point3D.Parse(p4s));
+            var line1 = new LineSegment3D(Point3D.Parse(p1S), Point3D.Parse(p2S));
+            var line2 = new LineSegment3D(Point3D.Parse(p3S), Point3D.Parse(p4S));
             Assert.AreEqual(expected, line1.Equals(line2));
             Assert.AreEqual(expected, line1 == line2);
             Assert.AreEqual(!expected, line1 != line2);
@@ -58,17 +69,29 @@ namespace MathNet.Spatial.Tests.Euclidean
         }
 
         [TestCase("0, 0, 0", "1, 0, 0", "0.5, 1, 0", "0.5, 0, 0")]
+        [TestCase("0, 0, 0", "1, 0, 0", "0.5, 1, 0", "0.5, 0, 0")]
+        [TestCase("0, 0, 0", "1, 0, 0", "2, 1, 0", "1, 0, 0")]
         [TestCase("0, 0, 0", "1, 0, 0", "2, 1, 0", "1, 0, 0")]
         [TestCase("0, 0, 0", "1, 0, 0", "-2, 1, 0", "0, 0, 0")]
-        public void LineToTest(string p1s, string p2s, string ps, string sps)
+        [TestCase("0, 0, 0", "1, 0, 0", "-2, 1, 0", "0, 0, 0")]
+        public void LineToTest(string p1S, string p2S, string ps, string sps)
         {
-            var p1 = Point3D.Parse(p1s);
-            var p2 = Point3D.Parse(p2s);
+            var p1 = Point3D.Parse(p1S);
+            var p2 = Point3D.Parse(p2S);
             var l = new LineSegment3D(p1, p2);
             var p = Point3D.Parse(ps);
             var actual = l.LineTo(p);
-            AssertGeometry.AreEqual(Point3D.Parse(sps), actual.StartPoint, 1e-6);
-            AssertGeometry.AreEqual(p, actual.EndPoint, 1e-6);
+            AssertGeometry.AreEqual(Point3D.Parse(sps), actual.StartPoint);
+            AssertGeometry.AreEqual(p, actual.EndPoint);
+        }
+
+        [TestCase("1, 2, 3", "4, 5, 6", "<LineSegment3D><StartPoint><X>1</X><Y>2</Y><Z>3</Z></StartPoint><EndPoint><X>4</X><Y>5</Y><Z>6</Z></EndPoint></LineSegment3D>")]
+        public void XmlTests(string p1S, string p2S, string xml)
+        {
+            var p1 = Point3D.Parse(p1S);
+            var p2 = Point3D.Parse(p2S);
+            var l = new LineSegment3D(p1, p2);
+            AssertXml.XmlRoundTrips(l, xml, (e, a) => AssertGeometry.AreEqual(e, a));
         }
 
         [TestCase("0,0,0", "0,0,1", "0,0,0", "0,0,0", Description = "Start point")]
@@ -76,13 +99,39 @@ namespace MathNet.Spatial.Tests.Euclidean
         [TestCase("0,0,0", "0,0,1", "1,0,.25", "0,0,.25")]
         [TestCase("0,0,0", "0,0,1", "0,0,-1", "0,0,0")]
         [TestCase("0,0,0", "0,0,1", "0,0,3", "0,0,1")]
-        public void ClosestPointTo(string start, string end, string point, string expected)
+        public void ClosestPointToWithinSegment(string start, string end, string point, string expected)
         {
             var line = LineSegment3D.Parse(start, end);
             var p = Point3D.Parse(point);
             var e = Point3D.Parse(expected);
 
             Assert.AreEqual(e, line.ClosestPointTo(p));
+        }
+
+        [TestCase("0,0,0", "0,0,1", "0,0,0", "0,0,0", Description = "Start point")]
+        [TestCase("0,0,0", "0,0,1", "0,0,1", "0,0,1", Description = "End point")]
+        [TestCase("0,0,0", "0,0,1", "1,0,.25", "0,0,.25")]
+        [TestCase("0,0,0", "0,0,1", "0,0,-1", "0,0,-1")]
+        [TestCase("0,0,0", "0,0,1", "0,0,3", "0,0,3")]
+        public void ClosestPointToOutsideSegment(string start, string end, string point, string expected)
+        {
+            var line = LineSegment3D.Parse(start, end);
+            var p = Point3D.Parse(point);
+            var e = Point3D.Parse(expected);
+
+            Assert.AreEqual(e, line.ClosestPointTo(p, false));
+        }
+
+        [TestCase("0,0,0", "0,0,1", "0,1,1", "0,1,2", true)]
+        [TestCase("0,0,0", "0,0,-1", "0,1,1", "0,1,2", true)]
+        [TestCase("0,0,0", "0,0.5,-1", "0,1,1", "0,1,2", false)]
+        [TestCase("0,0,0", "0,0.00001,-1.0000", "0,1,1", "0,1,2", false)]
+        public void IsParallelToWithinDoubleTol(string s1, string e1, string s2, string e2, bool expected)
+        {
+            var line1 = LineSegment3D.Parse(s1, e1);
+            var line2 = LineSegment3D.Parse(s2, e2);
+
+            Assert.AreEqual(expected, line1.IsParallelTo(line2));
         }
 
         [TestCase("0,0,0", "0,0,1", "0,1,1", "0,1,2", 0.00001, true)]

@@ -7,11 +7,12 @@ using System.Xml;
 using MathNet.Spatial.Internals;
 using MathNet.Spatial.Units;
 using HashCode = MathNet.Spatial.Internals.HashCode;
+using MathNet.Numerics;
 
 namespace MathNet.Spatial.Euclidean
 {
     /// <summary>
-    /// This structure represents a line between two points in 3D-space.  It allows for operations such as
+    /// This structure represents a line segment between two points in 3D-space.  It allows for operations such as
     /// computing the length, direction, comparisons, and shifting by a vector.
     /// </summary>
     [Serializable]
@@ -103,26 +104,41 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// Returns the closest point on the line segment to the given point.
         /// </summary>
-        /// <param name="p">The point that the returned point is the closest point on the line to</param>
-        /// <returns>The closest point on the line to the provided point</returns>
+        /// <param name="p">The point that the returned point is the closest point on the line segment to</param>
+        /// <param name="mustBeOnSegment">If true the returned point is contained by the segment ends, otherwise it can be anywhere on the projected line</param>
+        /// <returns>The closest point on the line segment to the provided point</returns>
         [Pure]
-        public Point3D ClosestPointTo(Point3D p)
+        public Point3D ClosestPointTo(Point3D p, bool mustBeOnSegment = true)
         {
             var v = StartPoint.VectorTo(p);
             var dotProduct = v.DotProduct(Direction);
 
-            if (dotProduct < 0)
+            if (mustBeOnSegment)
             {
-                dotProduct = 0;
-            }
+                if (dotProduct < 0)
+                {
+                    dotProduct = 0;
+                }
 
-            if (dotProduct > Length)
-            {
-                dotProduct = Length;
+                if (dotProduct > Length)
+                {
+                    dotProduct = Length;
+                }
             }
 
             var alongVector = dotProduct * Direction;
             return StartPoint + alongVector;
+        }
+
+        /// <summary>
+        /// The line segment projected on a plane
+        /// </summary>
+        /// <param name="plane">The plane.</param>
+        /// <returns>A projected line.</returns>
+        [Pure]
+        public LineSegment3D ProjectOn(Plane plane)
+        {
+            return plane.Project(this);
         }
 
         /// <summary>
@@ -218,6 +234,18 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
+        /// Checks to determine whether or not two line segments are parallel to each other, using the dot product within
+        /// the double precision specified in the MathNet.Numerics package.
+        /// </summary>
+        /// <param name="other">The other line segment to check this one against</param>
+        /// <returns>True if the line segments are parallel, false if they are not</returns>
+        [Pure]
+        public bool IsParallelTo(LineSegment3D other)
+        {
+            return Direction.IsParallelTo(other.Direction, Precision.DoublePrecision * 2);
+        }
+
+        /// <summary>
         /// Checks to determine whether or not two line segments are parallel to each other within a specified angle tolerance
         /// </summary>
         /// <param name="other">The other line to check this one against</param>
@@ -273,13 +301,13 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Computes the pair of points which represent the closest distance between this Line3D and another Line3D, with the first
-        /// point being the point on this Line3D, and the second point being the corresponding point on the other Line3D.  If the lines
+        /// Computes the pair of points which represent the closest distance between this LineSegment3D and another LineSegment3D, with the first
+        /// point being the point on this LineSegment3D, and the second point being the corresponding point on the other LineSegment3D.  If the lines
         /// intersect the points will be identical, if the lines are parallel the first point will be the start point of this line.
         /// </summary>
-        /// <param name="other">line to compute the closest points with</param>
+        /// <param name="other">Segment to compute the closest points with</param>
         /// <param name="tolerance">A tolerance (epsilon) to adjust for floating point error</param>
-        /// <returns>A tuple of two points representing the endpoints of the shortest distance between the two lines</returns>
+        /// <returns>A tuple of two points representing the endpoints of the shortest distance between the two line segments</returns>
         [Pure]
         private Tuple<Point3D, Point3D> ClosestPointsBetweenLines(LineSegment3D other, Angle tolerance)
         {
