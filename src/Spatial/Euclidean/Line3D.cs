@@ -34,6 +34,14 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="endPoint">The ending point of the line segment.</param>
         public Line3D(Point3D startPoint, Point3D endPoint)
         {
+            if (startPoint == default(Point3D))
+            {
+                throw new ArgumentException("StartPoint == default(Point3D)");
+            }
+            if (endPoint == default(Point3D))
+            {
+                throw new ArgumentException("EndPoint == default(Point3D)");
+            }
             if (startPoint == endPoint)
             {
                 throw new ArgumentException("StartPoint == EndPoint");
@@ -152,6 +160,13 @@ namespace MathNet.Spatial.Euclidean
             return plane.IntersectionWith(this, tolerance);
         }
 
+        /// <summary> Get the midpoint of the line </summary>
+        /// <returns>The midpoint of the line</returns>
+        public Point3D GetMidPoint()
+        {
+            return this.StartPoint + (this.EndPoint - this.StartPoint) / 2;
+        }
+
         /// <summary>
         /// Checks to determine whether or not two lines are parallel to each other, using the dot product within
         /// the double precision specified in the MathNet.Numerics package.
@@ -174,6 +189,81 @@ namespace MathNet.Spatial.Euclidean
         public bool IsParallelTo(Line3D other, Angle angleTolerance)
         {
             return this.Direction.IsParallelTo(other.Direction, angleTolerance);
+        }
+
+        /// <summary>Checks to determine whether or not two lines are perpendicular to each other within a specified angle tolerante</summary>
+        /// <param name="other">The other line to check this one against</param>
+        /// <param name="angleTolerance">If the angle between line directions is less than this value, the method returns true</param>
+        [Pure]
+        public bool IsPerpendicularTo(Line3D other, Angle angleTolerance)
+        {
+            return this.Direction.IsPerpendicularTo(other.Direction, angleTolerance);
+        }
+
+        /// <summary>Check to determine whether or not two lines are perpendicular to each other</summary>
+        /// <param name="other">The other line to check this one against</param>
+        [Pure]
+        public bool IsPerpendicularTo(Line3D other)
+        {
+            return this.IsPerpendicularTo(other.Direction, Precision.DoublePrecision * 2);
+        }
+
+        /// <summary> Check to determine if a point is on the line in a given tolerance</summary>
+        /// <param name="point">Point to check</param>
+        /// <param name="tolerance">Tolerance to check</param>
+        /// <returns>True if point is on the line</returns>
+        [Pure]
+        public bool IsOnLine(Point3D other, double tolerance)
+        {
+            // Calculate the vector from this line's start point to the point to test
+            var v = other - this.StartPoint;
+            
+            // Calculate the dot product of the above vector and this line's direction vector
+            var dotProduct = v.DotProduct(this.Direction);
+            
+            // If the dot product is not close to zero, the point is not on the line
+            if (Math.Abs(dotProduct) > tolerance)
+            {
+                return false;
+            }
+
+            // Calculate the vector along this line from the start point to the point on the line
+            // that is closest to the point to test
+            var alongVector = dotProduct * this.Direction;
+            
+            // Calculate the distance between the point to test and the closest point on the line
+            var distance = (v - alongVector).Length;
+            
+            // If the distance is less than the tolerance, the point is on the line
+            return distance < tolerance;
+        }
+
+        /// <summary> Check to determine if a point is on the line</summary>
+        /// <param name="point">Point to check</param>
+        [Pure]
+        public bool IsOnLine(Point3D other)
+        {
+            return this.IsOnLine(other, Precision.DoublePrecision * 2);
+        }
+
+        /// <summary> Check to determine if a line is collinear with this line</summary>
+        /// <param name="other">Line to check</param>
+        /// <param name="tolerance">Tolerance to check</param>
+        /// <param name="angleTolerance">Angle tolerance to check</param>
+        [Pure]
+        public bool IsCollinearTo(
+            Line3D other,
+            double tolerance = Precision.DoublePrecision * 2,
+            Angle angleTolerance = Precision.DoublePrecision * 2)
+        {
+            // Check to see if the lines are parallel
+            var isParallel = this.IsParallelTo(other, angleTolerance);
+
+            // Check to see if the start point of the other line is on this line
+            var isOnLine = this.IsOnLine(other.StartPoint, tolerance);
+
+            // Return true if both conditions are true
+            return isParallel && isOnLine;
         }
 
         /// <summary>

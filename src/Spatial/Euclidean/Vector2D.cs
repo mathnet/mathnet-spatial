@@ -38,6 +38,24 @@ namespace MathNet.Spatial.Euclidean
             this.Y = y;
         }
 
+        /// <summary>Initializes a new instance of the <see cref="Vector2D"/> struct.</summary>
+        /// <param name="values">The values as <see cref="double[]"/></param>
+        public Vector2D(double[] values)
+        {
+            if (values == null)
+            {
+                throw new ArgumentNullException("values");
+            }
+
+            if (values.Length != 2)
+            {
+                throw new ArgumentException("The values array must contain exactly 2 elements.");
+            }
+
+            this.X = values[0];
+            this.Y = values[1];
+        }
+
         /// <summary>
         /// Gets a vector representing the X Axis
         /// </summary>
@@ -241,6 +259,18 @@ namespace MathNet.Spatial.Euclidean
             }
 
             return new Vector2D(vector.At(0), vector.At(1));
+        }
+
+        /// <summary>Create a new <see cref="Vector2D"/> from an array of length 2.</summary>
+        /// <param name="array">An array with length 2 to populate the created instance with.</param>
+        public static Vector2D OfArray(double[] array)
+        {
+            if (array.Length != 2)
+            {
+                throw new ArgumentException("The array length must be 2 in order to convert it to a Vector2D");
+            }
+
+            return new Vector2D(array[0], array[1]);
         }
 
         /// <summary>

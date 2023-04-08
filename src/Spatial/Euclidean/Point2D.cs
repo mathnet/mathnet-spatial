@@ -42,6 +42,33 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="Point2D"/> struct.
+        /// </summary>
+        /// <param name="values">The values.</param>
+        /// <exception cref="System.ArgumentNullException">values</exception>
+        /// <exception cref="System.ArgumentOutOfRangeException">values;The array must contain exactly two values.</exception>
+        public Point2D(double[] values)
+        {
+            if (values == null)
+            {
+                // Check that the array is not null
+                throw new ArgumentNullException("values");
+            }
+
+            if (values.Length != 2)
+            {
+                // Check that the array contains exactly two values
+                throw new ArgumentOutOfRangeException(
+                    "values",
+                    "The array must contain exactly two values.");
+            }
+
+            // Assign the values to the X and Y properties
+            this.X = values[0];
+            this.Y = values[1];
+        }
+
+        /// <summary>
         /// Gets a point at the origin (0,0)
         /// </summary>
         public static Point2D Origin => new Point2D(0, 0);
@@ -222,6 +249,18 @@ namespace MathNet.Spatial.Euclidean
             }
 
             return new Point2D(vector.At(0), vector.At(1));
+        }
+
+        /// <summary>Create a new Point2D from an array of length 2.</summary>
+        /// <param name="values">An array with length 2 to populate the created instance with.</param>
+        public static Point2D OfArray(double[] values)
+        {
+            if (values.Length != 2)
+            {
+                throw new ArgumentException("The array length must be 2 in order to convert it to a Point2D");
+            }
+
+            return new Point2D(values[0], values[1]);
         }
 
         /// <summary>

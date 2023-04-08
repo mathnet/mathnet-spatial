@@ -233,6 +233,61 @@ namespace MathNet.Spatial.Euclidean
             return this.Direction.IsParallelTo(other.Direction, tolerance);
         }
 
+        /// <summary> Checks to determine whether or not two lines are perpendicular to each other, using angle tolerance
+        /// <param name="other">The other line to check this one against</param>
+        /// <param name="angleTolerance">If the angle between line directions is less than this value, the method returns true</param>
+        /// <returns>True if the lines are perpendicular, false if they are not</returns>
+        [Pure]
+        public bool IsPerpendicularTo(Line2D other, Angle angleTolerance = Precision.DoublePrecision * 2)
+        {
+            return this.Direction.IsPerpendicularTo(other.Direction, angleTolerance);
+        }
+
+        /// <summary> Checks to determine whether or not a point is on the line, using tolerance for floating point precision </summary>
+        /// <param name="other">The point to check</param>
+        /// <param name="tolerance">The tolerance used when checking if the point is on the line</param>
+        /// <returns>True if the point is on the line, false if it is not</returns>
+        [Pure]
+        public bool IsOnLine(Point2D other, double tolerance = Precision.DoublePrecision * 2)
+        {
+            // Calculate the vector from this line's start point to the point to test
+            var v = other - this.StartPoint;
+
+            // Calculate the dot product of the above vector and this line's direction vector
+            var dotProduct = v.DotProduct(this.Direction);
+
+            // If the dot product is not close to zero, the point is not on the line
+            if (Math.Abs(dotProduct) > tolerance)
+            {
+                return false;
+            }
+
+            // Calculate the vector along this line from the start point to the point on the line
+            // that is closest to the point to test
+            var alongVector = dotProduct * this.Direction;
+
+            // Calculate the distance between the point to test and the closest point on the line
+            var distance = (v - alongVector).Length;
+
+            // If the distance is less than the tolerance, the point is on the line
+            return distance < tolerance;
+        }
+
+        /// <summary> Checks to determine whether or not two lines are collinear, using tolerance for floating point precision </summary>
+        /// <param name="other">The other line to check this one against</param>
+        /// <param name="tolerance">The tolerance used when checking if the lines are collinear</param>
+        /// <param name="angleTolerance">The tolerance used when checking if the lines are parallel</param>
+        /// <returns>True if the lines are collinear, false if they are not</returns>
+        [Pure]
+        public bool IsCollinearTo(
+            Line2D other,
+            double tolerance = Precision.DoublePrecision * 2,
+            Angle angleTolerance = Precision.DoublePrecision * 2)
+        {
+            return this.IsParallelTo(other, angleTolerance) && this.IsOnLine(other.StartPoint, tolerance);
+        }
+
+
         /// <inheritdoc/>
         [Pure]
         public override string ToString()

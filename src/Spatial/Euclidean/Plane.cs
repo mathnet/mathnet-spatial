@@ -410,6 +410,66 @@ namespace MathNet.Spatial.Euclidean
             return ray.ThroughPoint + (t * ray.Direction);
         }
 
+        /// <summary> Checks if the plane is parallel to another plane. </summary>
+        /// <param name="other">The other plane.</param>
+        /// <param name="angleTolerance">The angle tolerance.</param>
+        /// <param name="distance">The distance between the two planes.</param>
+        /// <returns>True if the planes are parallel.</returns>
+        [Pure]
+        public bool IsParallelTo(
+            Plane other,
+            Angle angleTolerance = Precision.DoublePrecision * 2,
+            out double distance,
+            out bool sameDirection)
+        {
+            // We are parallel to ourselves
+            distance = double.NaN;
+
+            if (this == other)
+            {
+                distance = 0;
+                sameDirection = true;
+                return true;
+            }
+
+            // If we are not parallel, the normal should be parallel to the other plane's normal
+            if (this.Normal.IsParallelTo(other.Normal, angleTolerance))
+            {
+                // If we are parallel, then the distance between the root point of each plane should be the same
+                distance = this.SignedDistanceTo(other.RootPoint);
+                sameDirection = this.Normal.DotProduct(other.Normal) > 0;
+                return true;
+            }
+
+            sameDirection = false;
+            return false;
+        }
+
+        /// <summary> Checks if the plane is perpendicular to another plane. </summary>
+        /// <param name="other">The other plane.</param>
+        /// <param name="angleTolerance">The angle tolerance.</param>
+        /// <returns>True if the planes are perpendicular.</returns>
+        [Pure]
+        public bool IsPerpendicularTo(Plane other, Angle angleTolerance = Precision.DoublePrecision * 2)
+        {
+            bool result = this.Normal.IsPerpendicularTo(other.Normal, angleTolerance);
+            return result;
+        }
+
+        /// <summary>
+        /// Checks if the plane is coplanar to another plane.
+        /// </summary>
+        /// <param name="other">The plane to test against.</param>
+        /// <param name="angleTolerance">The angle tolerance to use for comparison.</param>
+        /// <param name="tolerance">The tolerance to use for comparison.</param>
+        /// <returns>True if the planes are coplanar, false otherwise.</returns>
+        [Pure]
+        public bool IsCoplanarTo(Plane other, Angle angleTolerance = Precision.DoublePrecision * 2, double tolerance = double.Epsilon)
+        {
+            double distance;
+            return this.IsParallelTo(other, angleTolerance, out distance) && Math.Abs(distance) < tolerance;
+        }
+
         /// <summary>
         /// Returns <paramref name="p"/> mirrored about the plane.
         /// </summary>

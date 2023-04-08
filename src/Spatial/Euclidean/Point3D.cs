@@ -48,6 +48,14 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="Point3D"/> struct.
+        /// </summary>
+        /// <param name="pointArray">The array of doubles</param>
+        public Point3D(double[] pointArray) : this(pointArray[0], pointArray[1], pointArray[2])
+        {
+        }
+
+        /// <summary>
         /// Gets a point at the origin
         /// </summary>
         public static Point3D Origin { get; } = new Point3D(0, 0, 0);
@@ -193,6 +201,24 @@ namespace MathNet.Spatial.Euclidean
             }
 
             return new Point3D(vector.At(0), vector.At(1), vector.At(2));
+        }
+
+        /// <summary>
+        /// Create a new <see cref="Point3D"/> from an Array of length 3.
+        /// </summary>
+        /// <param name="array"> An array with length 3 to populate the created instance with.</param>
+        /// <returns> A <see cref="Point3D"/></returns>
+        public static Point3D OfArray(double[] array)
+        {
+            if (array.Length != 3)
+            {
+                throw new ArgumentException("The array must be 3 in order to convert it to a Point3D");
+            }
+
+            // implement array to create a point3d object
+            var point = new Point3D(array[0], array[1], array[2]);
+
+            return point;
         }
 
         /// <summary>

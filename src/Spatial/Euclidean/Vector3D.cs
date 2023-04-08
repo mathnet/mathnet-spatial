@@ -45,10 +45,46 @@ namespace MathNet.Spatial.Euclidean
             this.Z = z;
         }
 
+        /// <summary>Initializes a new instance of the <see cref="Vector3D"/> struct. </summary>
+        /// <param name="values">The values as <see cref="double[]"/></param>
+        public Vector3D(double[] values)
+        {
+            if (values == null)
+            {
+                throw new ArgumentNullException(nameof(values));
+            }
+            if (values.Length != 3)
+            {
+                throw new ArgumentException("values");
+            }
+
+            this.X = values[0];
+            this.Y = values[1];
+            this.Z = values[2];
+        }
+
         /// <summary>
         /// Gets an invalid vector with no values
         /// </summary>
         public static Vector3D NaN => new Vector3D(double.NaN, double.NaN, double.NaN);
+
+        // This is a constant that represents the zero vector.
+        public static Vector3D Zero => new Vector3D(0, 0, 0);
+
+        /// <summary>
+        /// Returns the XAxis vector, which is (1, 0, 0)
+        /// </summary>
+        public static Vector3D XVector => new Vector3D(1, 0, 0);
+
+        /// <summary>
+        /// Returns the YAxis vector, which is (0, 1, 0)
+        /// </summary>
+        public static Vector3D YVector => new Vector3D(0, 1, 0);
+
+        /// <summary>
+        /// Returns the ZAxis vector, which is (0, 0, 1)
+        /// </summary>
+        public static Vector3D ZVector => new Vector3D(0, 0, 1);
 
         /// <summary>
         /// Gets the Euclidean Norm.
@@ -215,7 +251,7 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// Create a new <see cref="Vector3D"/> from a Math.NET Numerics vector of length 3.
         /// </summary>
-        /// <param name="vector"> A vector with length 2 to populate the created instance with.</param>
+        /// <param name="vector"> A vector with length 3 to populate the created instance with.</param>
         /// <returns> A <see cref="Vector3D"/></returns>
         public static Vector3D OfVector(Vector<double> vector)
         {
@@ -225,6 +261,21 @@ namespace MathNet.Spatial.Euclidean
             }
 
             return new Vector3D(vector.At(0), vector.At(1), vector.At(2));
+        }
+
+        /// <summary>
+        /// Create a new <see cref="Vector3D"/> from an array of length 3.
+        /// </summary>
+        /// <param name="array">An array with length 3 to populate the <see cref="Vector3D"/></param>
+        /// <returns>Return a <see cref=Vector3D"> from <param name="array"></returns>
+        /// <exception cref="ArgumentException">The array length must be 3 in order to convert it to a Vector3D</exception>
+        public static Vector3D OfArray(double[] array)
+        {
+            if (array.Length != 3)
+            {
+                throw new ArgumentException("The array length must be 3 in order to convert it to a Vector3D");
+            }
+            return new Vector3D(array[0], array[1], array[2]);
         }
 
         /// <summary>
