@@ -167,10 +167,10 @@ namespace MathNet.Spatial.Tests.Euclidean
         }
 
         [TestCase("1,0,0", 3, "3,0,0")]
-        public void MultiplyTest(string unitVectorAsString, double multiplier, string expected)
+        public void MultiplyTest(string directionString, double multiplier, string expected)
         {
-            var unitVector3D = Direction.Parse(unitVectorAsString);
-            Assert.AreEqual(Vector3D.Parse(expected), multiplier * unitVector3D);
+            var direction = Direction.Parse(directionString);
+            Assert.AreEqual(Vector3D.Parse(expected), multiplier * direction);
         }
 
         [TestCase("<Direction X=\"0.2672612419124244\" Y=\"-0.53452248382484879\" Z=\"0.80178372573727319\" />")]

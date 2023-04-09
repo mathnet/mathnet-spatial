@@ -108,7 +108,7 @@ namespace Spatial.Benchmarks
         }
 
         [Benchmark]
-        public Ray3D ProjectUnitVector3D()
+        public Ray3D ProjectDirection()
         {
             return Plane1.Project(Direction);
         }

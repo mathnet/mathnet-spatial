@@ -27,25 +27,25 @@ namespace Spatial.Benchmarks
         }
 
         [Benchmark]
-        public bool OperatorEqualityUnitVector3DUnitVector3D()
+        public bool OperatorEqualityDirectionDirection()
         {
             return Direction1 == Direction2;
         }
 
         [Benchmark]
-        public bool OperatorEqualityUnitVector3DVector3D()
+        public bool OperatorEqualityDirectionVector3D()
         {
             return Direction1 == Vector3D;
         }
 
         [Benchmark]
-        public Vector3D OperatorAdditionUnitVector3DUnitVector3D()
+        public Vector3D OperatorAdditionDirectionDirection()
         {
             return Direction1 + Direction2;
         }
 
         [Benchmark]
-        public Vector3D OperatorAdditionUnitVector3DVector3D()
+        public Vector3D OperatorAdditionDirectionVector3D()
         {
             return Direction1 + Vector3D;
         }
@@ -57,13 +57,13 @@ namespace Spatial.Benchmarks
         }
 
         [Benchmark]
-        public Vector3D OperatorSubtractionUnitVector3DUnitVector3D()
+        public Vector3D OperatorSubtractionDirectionDirection()
         {
             return Direction1 - Direction2;
         }
 
         [Benchmark]
-        public Vector3D OperatorSubtractionUnitVector3DVector3D()
+        public Vector3D OperatorSubtractionDirectionVector3D()
         {
             return Direction1 - Vector3D;
         }
@@ -87,7 +87,7 @@ namespace Spatial.Benchmarks
         }
 
         [Benchmark]
-        public double OperatorMultiplyUnitVector3DUnitVector3D()
+        public double OperatorMultiplyDirectionDirection()
         {
             return Direction1 * Direction2;
         }
@@ -117,13 +117,13 @@ namespace Spatial.Benchmarks
         }
 
         [Benchmark]
-        public bool EqualsUnitVector3D()
+        public bool EqualsDirection()
         {
             return Direction1.Equals(Direction2);
         }
 
         [Benchmark]
-        public bool EqualsUnitVector3DDoubleTolerance()
+        public bool EqualsDirectionDoubleTolerance()
         {
             return Direction1.Equals(Direction2, 2);
         }
@@ -147,7 +147,7 @@ namespace Spatial.Benchmarks
         }
 
         [Benchmark]
-        public Vector3D ProjectOnUnitVector3D()
+        public Vector3D ProjectOnDirection()
         {
             return Direction1.ProjectOn(Direction2);
         }
@@ -159,13 +159,13 @@ namespace Spatial.Benchmarks
         }
 
         [Benchmark]
-        public bool IsParallelToUnitVector3DDoubleTolerance()
+        public bool IsParallelToDirectionDoubleTolerance()
         {
             return Direction1.IsParallelTo(Direction2, 2);
         }
 
         [Benchmark]
-        public bool IsParallelToUnitVector3DAngleTolerance()
+        public bool IsParallelToDirectionAngleTolerance()
         {
             return Direction1.IsParallelTo(Direction2, Angle.FromRadians(1));
         }
@@ -201,7 +201,7 @@ namespace Spatial.Benchmarks
         }
 
         [Benchmark]
-        public double DotProductUnitVector3D()
+        public double DotProductDirection()
         {
             return Direction1.DotProduct(Direction2);
         }
@@ -237,7 +237,7 @@ namespace Spatial.Benchmarks
         }
 
         [Benchmark]
-        public Angle AngleToUnitVector3D()
+        public Angle AngleToDirection()
         {
             return Direction1.AngleTo(Direction2);
         }

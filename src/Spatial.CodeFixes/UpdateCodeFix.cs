@@ -36,7 +36,7 @@ namespace SpatialAnalyzers
                 if (node is ObjectCreationExpressionSyntax objectCreation &&
                     objectCreation.Type is SimpleNameSyntax simpleName)
                 {
-                    if (simpleName.Identifier.ValueText == "UnitVector3D")
+                    if (simpleName.Identifier.ValueText == "Direction")
                     {
                         context.RegisterCodeFix(
                             CodeAction.Create(
@@ -45,7 +45,7 @@ namespace SpatialAnalyzers
                                     syntaxRoot.ReplaceNode(
                                         objectCreation,
                                         SyntaxFactory.InvocationExpression(
-                                            SyntaxFactory.ParseExpression("UnitVector3D.Create"),
+                                            SyntaxFactory.ParseExpression("Direction.Create"),
                                             objectCreation.ArgumentList))))),
                             diagnostic);
                     }
@@ -68,7 +68,7 @@ namespace SpatialAnalyzers
                                                     objectCreation.ArgumentList))))),
                                     diagnostic);
                             }
-                            else if (model.GetTypeInfo(arg3.ChildNodes().First()).Type.Name == "UnitVector3D")
+                            else if (model.GetTypeInfo(arg3.ChildNodes().First()).Type.Name == "Direction")
                             {
                                 context.RegisterCodeFix(
                                     CodeAction.Create(

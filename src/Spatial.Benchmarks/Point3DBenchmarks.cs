@@ -24,7 +24,7 @@ namespace Spatial.Benchmarks
         }
 
         [Benchmark]
-        public Point3D OperatorAdditionUnitVector3D()
+        public Point3D OperatorAdditionDirection()
         {
             return P1 + Direction;
         }
@@ -36,7 +36,7 @@ namespace Spatial.Benchmarks
         }
 
         [Benchmark]
-        public Point3D OperatorSubtractionUnitVector3D()
+        public Point3D OperatorSubtractionDirection()
         {
             return P1 - Direction;
         }

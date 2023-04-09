@@ -4,7 +4,7 @@ using SpatialAnalyzers;
 
 namespace Spatial.Roslyn.Tests
 {
-    public class UnitVector3DTests
+    public class DirectionTests
     {
         // ReSharper disable once InconsistentNaming
         private static readonly ExpectedDiagnostic CS0618 = ExpectedDiagnostic.Create("CS0618");
