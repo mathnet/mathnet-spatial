@@ -100,12 +100,6 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Gets the length of the vector not the count of elements
-        /// </summary>
-        [Pure]
-        public double Length => 1;
-
-        /// <summary>
         /// Gets the cross product matrix
         /// </summary>
         [Pure]
@@ -626,7 +620,7 @@ namespace MathNet.Spatial.Euclidean
                 throw new ArgumentException("FromVector parallel to aboutVector");
             }
 
-            var rp = new Plane(new Point3D(0, 0, 0), about);
+            var rp = new Plane(Point3D.Origin, about);
             var pfv = ProjectOn(rp).Direction;
             var ptv = v.ProjectOn(rp).Direction;
             var dp = pfv.DotProduct(ptv);

@@ -21,12 +21,6 @@ namespace Spatial.Benchmarks
         }
 
         [Benchmark]
-        public double Length()
-        {
-            return Direction1.Length;
-        }
-
-        [Benchmark]
         public bool OperatorEqualityDirectionDirection()
         {
             return Direction1 == Direction2;
