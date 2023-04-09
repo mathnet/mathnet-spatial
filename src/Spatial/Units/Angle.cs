@@ -30,6 +30,26 @@ namespace MathNet.Spatial.Units
         private static readonly double DegToRad = Math.PI / 180.0;
 
         /// <summary>
+        /// The zero angle.
+        /// </summary>
+        public static readonly Angle Zero = new Angle(0);
+
+        /// <summary>
+        /// The 90° angle.
+        /// </summary>
+        public static readonly Angle HalfPi = new Angle(Math.PI / 2);
+
+        /// <summary>
+        /// The 180° angle.
+        /// </summary>
+        public static readonly Angle Pi = new Angle(Math.PI);
+
+        /// <summary>
+        /// The 360° angle.
+        /// </summary>
+        public static readonly Angle TwoPi = new Angle(2 * Math.PI);
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="Angle"/> struct.
         /// </summary>
         /// <param name="radians">The value in Radians</param>
