@@ -63,7 +63,7 @@ namespace MathNet.Spatial.Tests.Euclidean
             var angle = Angle.Parse(@as);
             var coordinateSystems = new[]
             {
-                CoordinateSystem.Rotation(angle, UnitVector3D.Parse(vs)),
+                CoordinateSystem.Rotation(angle, Direction.Parse(vs)),
                 CoordinateSystem.Rotation(angle, Vector3D.Parse(vs)),
             };
             var expected = Point3D.Parse(eps);
@@ -135,7 +135,7 @@ namespace MathNet.Spatial.Tests.Euclidean
         [TestCase("1, 2, 3", "-1, 0, -1", null)]
         public void RotateToTest(string v1s, string v2s, string @as)
         {
-            var axis = string.IsNullOrEmpty(@as) ? (UnitVector3D?)null : Vector3D.Parse(@as).Normalize();
+            var axis = string.IsNullOrEmpty(@as) ? (Direction?)null : Vector3D.Parse(@as).Normalize();
             var v1 = Vector3D.Parse(v1s).Normalize();
             var v2 = Vector3D.Parse(v2s).Normalize();
             var actual = CoordinateSystem.RotateTo(v1, v2, axis);
@@ -219,10 +219,10 @@ namespace MathNet.Spatial.Tests.Euclidean
         [Test]
         public void TransformUnitVector()
         {
-            var cs = CoordinateSystem.Rotation(Angle.FromDegrees(90), UnitVector3D.ZAxis);
-            var uv = UnitVector3D.XAxis;
+            var cs = CoordinateSystem.Rotation(Angle.FromDegrees(90), Direction.ZAxis);
+            var uv = Direction.XAxis;
             var actual = cs.Transform(uv);
-            AssertGeometry.AreEqual(UnitVector3D.YAxis, actual);
+            AssertGeometry.AreEqual(Direction.YAxis, actual);
         }
 
         [TestCase("o:{0, 0, 0} x:{1, 0, 0} y:{0, 1, 0} z:{0, 0, 1}", "o:{0, 0, 0} x:{1, 0, 0} y:{0, 1, 0} z:{0, 0, 1}")]
@@ -262,12 +262,12 @@ namespace MathNet.Spatial.Tests.Euclidean
         [TestCase(X, Z, Y)]
         public void SetToRotateToTest(string vs, string vts, string axisString)
         {
-            var v = UnitVector3D.Parse(vs, tolerance: 1);
-            var vt = UnitVector3D.Parse(vts, tolerance: 1);
-            UnitVector3D? axis = null;
+            var v = Direction.Parse(vs, tolerance: 1);
+            var vt = Direction.Parse(vts, tolerance: 1);
+            Direction? axis = null;
             if (axisString != null)
             {
-                axis = UnitVector3D.Parse(axisString);
+                axis = Direction.Parse(axisString);
             }
 
             var cs = CoordinateSystem.RotateTo(v, vt, axis);

@@ -15,7 +15,7 @@ namespace MathNet.Spatial.Euclidean
     /// A struct representing a vector in 3D space
     /// </summary>
     [Serializable]
-    public struct Vector3D : IXmlSerializable, IEquatable<Vector3D>, IEquatable<UnitVector3D>, IFormattable
+    public struct Vector3D : IXmlSerializable, IEquatable<Vector3D>, IEquatable<Direction>, IFormattable
     {
         /// <summary>
         /// The x component.
@@ -60,16 +60,16 @@ namespace MathNet.Spatial.Euclidean
         /// Gets a unit vector orthogonal to this
         /// </summary>
         [Pure]
-        public UnitVector3D Orthogonal
+        public Direction Orthogonal
         {
             get
             {
                 if (-this.X - this.Y > 0.1)
                 {
-                    return UnitVector3D.Create(this.Z, this.Z, -this.X - this.Y);
+                    return Direction.Create(this.Z, this.Z, -this.X - this.Y);
                 }
 
-                return UnitVector3D.Create(-this.Y - this.Z, this.X, this.X);
+                return Direction.Create(-this.Y - this.Z, this.X, this.X);
             }
         }
 
@@ -252,9 +252,9 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         /// <returns>a normalized unit vector</returns>
         [Pure]
-        public UnitVector3D Normalize()
+        public Direction Normalize()
         {
-            return UnitVector3D.Create(this.X, this.Y, this.Z);
+            return Direction.Create(this.X, this.Y, this.Z);
         }
 
         /// <summary>
@@ -285,7 +285,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="uv">A unit vector</param>
         /// <returns>Returns a new vector</returns>
         [Pure]
-        public Vector3D ProjectOn(UnitVector3D uv)
+        public Vector3D ProjectOn(Direction uv)
         {
             var pd = this.DotProduct(uv);
             return pd * uv;
@@ -309,11 +309,11 @@ namespace MathNet.Spatial.Euclidean
         /// Computes whether or not this vector is parallel to a unit vector using the dot product method and comparing it
         /// to within a specified tolerance.
         /// </summary>
-        /// <param name="other">The other <see cref="UnitVector3D"/></param>
+        /// <param name="other">The other <see cref="Direction"/></param>
         /// <param name="tolerance">A tolerance value for the dot product method.  Values below 2*Precision.DoublePrecision may cause issues.</param>
         /// <returns>true if the vector dot product is within the given tolerance of unity, false if not</returns>
         [Pure]
-        public bool IsParallelTo(UnitVector3D other, double tolerance = 1e-10)
+        public bool IsParallelTo(Direction other, double tolerance = 1e-10)
         {
             return this.Normalize().IsParallelTo(other, tolerance);
         }
@@ -333,11 +333,11 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// Determine whether or not this vector is parallel to a unit vector within a given angle tolerance.
         /// </summary>
-        /// <param name="other">The other <see cref="UnitVector3D"/></param>
+        /// <param name="other">The other <see cref="Direction"/></param>
         /// <param name="tolerance">The tolerance for when the vectors are considered parallel.</param>
         /// <returns>true if the vectors are parallel within the angle tolerance, false if they are not</returns>
         [Pure]
-        public bool IsParallelTo(UnitVector3D other, Angle tolerance)
+        public bool IsParallelTo(Direction other, Angle tolerance)
         {
             var @this = this.Normalize();
             return @this.IsParallelTo(other, tolerance);
@@ -360,11 +360,11 @@ namespace MathNet.Spatial.Euclidean
         /// Computes whether or not this vector is perpendicular to another vector using the dot product method and
         /// comparing it to within a specified tolerance
         /// </summary>
-        /// <param name="other">The other <see cref="UnitVector3D"/></param>
+        /// <param name="other">The other <see cref="Direction"/></param>
         /// <param name="tolerance">A tolerance value for the dot product method.  Values below 2*Precision.DoublePrecision may cause issues.</param>
         /// <returns>true if the vector dot product is within the given tolerance of zero, false if not</returns>
         [Pure]
-        public bool IsPerpendicularTo(UnitVector3D other, double tolerance = 1e-6)
+        public bool IsPerpendicularTo(Direction other, double tolerance = 1e-6)
         {
             return Math.Abs(this.Normalize().DotProduct(other)) < tolerance;
         }
@@ -396,7 +396,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="v">The second vector.</param>
         /// <returns>The dot product.</returns>
         [Pure]
-        public double DotProduct(UnitVector3D v)
+        public double DotProduct(Direction v)
         {
             return (this.X * v.X) + (this.Y * v.Y) + (this.Z * v.Z);
         }
@@ -422,7 +422,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="other">A vector</param>
         /// <returns>A new vector with the cross product result</returns>
         [Pure]
-        public Vector3D CrossProduct(UnitVector3D other)
+        public Vector3D CrossProduct(Direction other)
         {
             var x = (this.Y * other.Z) - (this.Z * other.Y);
             var y = (this.Z * other.X) - (this.X * other.Z);
@@ -455,7 +455,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="about">The vector around which to rotate to get the correct sign</param>
         /// <returns>A signed Angle</returns>
         [Pure]
-        public Angle SignedAngleTo(Vector3D v, UnitVector3D about)
+        public Angle SignedAngleTo(Vector3D v, Direction about)
         {
             return this.Normalize().SignedAngleTo(v.Normalize(), about);
         }
@@ -467,7 +467,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="about">The vector around which to rotate to get the correct sign</param>
         /// <returns>A signed angle</returns>
         [Pure]
-        public Angle SignedAngleTo(UnitVector3D v, UnitVector3D about)
+        public Angle SignedAngleTo(Direction v, Direction about)
         {
             return this.Normalize().SignedAngleTo(v, about);
         }
@@ -491,7 +491,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="v">The other vector</param>
         /// <returns>The angle between the vectors, with a range between 0° and 180°</returns>
         [Pure]
-        public Angle AngleTo(UnitVector3D v)
+        public Angle AngleTo(Direction v)
         {
             var uv = this.Normalize();
             return uv.AngleTo(v);
@@ -516,7 +516,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="angle">A signed angle</param>
         /// <returns>A rotated vector.</returns>
         [Pure]
-        public Vector3D Rotate(UnitVector3D about, Angle angle)
+        public Vector3D Rotate(Direction about, Angle angle)
         {
             var cs = CoordinateSystem.Rotation(angle, about);
             return cs.Transform(this);
@@ -620,7 +620,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="tolerance">A tolerance (epsilon) to adjust for floating point error</param>
         /// <returns>true if the vectors are equal; otherwise false</returns>
         [Pure]
-        public bool Equals(UnitVector3D other, double tolerance)
+        public bool Equals(Direction other, double tolerance)
         {
             if (tolerance < 0)
             {
@@ -641,7 +641,7 @@ namespace MathNet.Spatial.Euclidean
 
         /// <inheritdoc />
         [Pure]
-        public bool Equals(UnitVector3D other)
+        public bool Equals(Direction other)
         {
             return this.X.Equals(other.X) && this.Y.Equals(other.Y) && this.Z.Equals(other.Z);
         }
@@ -650,7 +650,7 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public override bool Equals(object obj)
         {
-            return (obj is UnitVector3D u && this.Equals(u)) || (obj is Vector3D v && this.Equals(v));
+            return (obj is Direction u && this.Equals(u)) || (obj is Vector3D v && this.Equals(v));
         }
 
         /// <inheritdoc />

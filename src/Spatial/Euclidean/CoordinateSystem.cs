@@ -33,7 +33,7 @@ namespace MathNet.Spatial.Euclidean
         /// Initializes a new instance of the <see cref="CoordinateSystem"/> class.
         /// </summary>
         public CoordinateSystem()
-            : this(new Point3D(0, 0, 0), UnitVector3D.XAxis.ToVector3D(), UnitVector3D.YAxis.ToVector3D(), UnitVector3D.ZAxis.ToVector3D())
+            : this(new Point3D(0, 0, 0), Direction.XAxis.ToVector3D(), Direction.YAxis.ToVector3D(), Direction.ZAxis.ToVector3D())
         {
         }
 
@@ -56,7 +56,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="xAxis">The x axis</param>
         /// <param name="yAxis">The y axis</param>
         /// <param name="zAxis">The z axis</param>
-        public CoordinateSystem(Point3D origin, UnitVector3D xAxis, UnitVector3D yAxis, UnitVector3D zAxis)
+        public CoordinateSystem(Point3D origin, Direction xAxis, Direction yAxis, Direction zAxis)
             : this(origin, xAxis.ToVector3D(), yAxis.ToVector3D(), zAxis.ToVector3D())
         {
         }
@@ -212,7 +212,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="toVector3D">Input Vector object to align to.</param>
         /// <param name="axis">Input Vector object. </param>
         /// <returns>A rotated coordinate system </returns>
-        public static CoordinateSystem RotateTo(UnitVector3D fromVector3D, UnitVector3D toVector3D, UnitVector3D? axis = null)
+        public static CoordinateSystem RotateTo(Direction fromVector3D, Direction toVector3D, Direction? axis = null)
         {
             var r = Matrix3D.RotationTo(fromVector3D, toVector3D, axis);
             var coordinateSystem = new CoordinateSystem();
@@ -226,7 +226,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="angle">Angle to rotate</param>
         /// <param name="v">Vector to rotate about</param>
         /// <returns>A rotating coordinate system</returns>
-        public static CoordinateSystem Rotation(Angle angle, UnitVector3D v)
+        public static CoordinateSystem Rotation(Angle angle, Direction v)
         {
             var m = Build.Dense(4, 4);
             m.SetSubMatrix(0, 3, 0, 3, Matrix3D.RotationAroundArbitraryVector(v, angle));
@@ -285,7 +285,7 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>A rotated coordinate system</returns>
         public static CoordinateSystem Yaw(Angle av)
         {
-            return Rotation(av, UnitVector3D.ZAxis);
+            return Rotation(av, Direction.ZAxis);
         }
 
         /// <summary>
@@ -295,7 +295,7 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>A rotated coordinate system</returns>
         public static CoordinateSystem Pitch(Angle av)
         {
-            return Rotation(av, UnitVector3D.YAxis);
+            return Rotation(av, Direction.YAxis);
         }
 
         /// <summary>
@@ -305,7 +305,7 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>A rotated coordinate system</returns>
         public static CoordinateSystem Roll(Angle av)
         {
-            return Rotation(av, UnitVector3D.XAxis);
+            return Rotation(av, Direction.XAxis);
         }
 
         /// <summary>
@@ -348,7 +348,7 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>A translated coordinate system</returns>
         public static CoordinateSystem Translation(Vector3D translation)
         {
-            return new CoordinateSystem(translation.ToPoint3D(), UnitVector3D.XAxis, UnitVector3D.YAxis, UnitVector3D.ZAxis);
+            return new CoordinateSystem(translation.ToPoint3D(), Direction.XAxis, Direction.YAxis, Direction.ZAxis);
         }
 
         /// <summary>
@@ -392,9 +392,9 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>A coordinate system with reset rotation</returns>
         public CoordinateSystem ResetRotations()
         {
-            var x = XAxis.Length * UnitVector3D.XAxis;
-            var y = YAxis.Length * UnitVector3D.YAxis;
-            var z = ZAxis.Length * UnitVector3D.ZAxis;
+            var x = XAxis.Length * Direction.XAxis;
+            var y = YAxis.Length * Direction.YAxis;
+            var z = ZAxis.Length * Direction.ZAxis;
             return new CoordinateSystem(x, y, z, Origin);
         }
 
@@ -404,7 +404,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="about">The vector</param>
         /// <param name="angle">An angle</param>
         /// <returns>A rotated coordinate system</returns>
-        public CoordinateSystem RotateCoordSysAroundVector(UnitVector3D about, Angle angle)
+        public CoordinateSystem RotateCoordSysAroundVector(Direction about, Angle angle)
         {
             var rcs = Rotation(angle, about);
             return rcs.Transform(this);
@@ -438,7 +438,7 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         /// <param name="v">a translation vector</param>
         /// <returns>A translated coordinate system</returns>
-        public CoordinateSystem OffsetBy(UnitVector3D v)
+        public CoordinateSystem OffsetBy(Direction v)
         {
             return new CoordinateSystem(Origin + v, XAxis, YAxis, ZAxis);
         }
@@ -547,7 +547,7 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         /// <param name="v">Unit vector whose coordinates are expressed in coordinate system B</param>
         /// <returns>The vector expressed in coordinate system A</returns>
-        public Vector3D Transform(UnitVector3D v)
+        public Vector3D Transform(Direction v)
         {
             var v3 = Vector<double>.Build.Dense(new[] { v.X, v.Y, v.Z });
             GetRotationSubMatrix().Multiply(v3, v3);

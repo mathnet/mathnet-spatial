@@ -22,7 +22,7 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// the axis of the circle
         /// </summary>
-        public UnitVector3D Axis { get; private set; }
+        public Direction Axis { get; private set; }
 
         /// <summary>
         /// the radius of the circle
@@ -36,7 +36,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="centerPoint">The center of the circle</param>
         /// <param name="axis">the axis of the circle</param>
         /// <param name="radius">the radius of the circle</param>
-        public Circle3D(Point3D centerPoint, UnitVector3D axis, double radius)
+        public Circle3D(Point3D centerPoint, Direction axis, double radius)
         {
             CenterPoint = centerPoint;
             Axis = axis;
@@ -126,7 +126,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="p2">Second point on the circumference of the circle</param>
         /// <param name="axis">Direction of the plane in which the circle lies</param>
         /// <returns>A <see cref="Circle3D"/></returns>
-        public static Circle3D FromPointsAndAxis(Point3D p1, Point3D p2, UnitVector3D axis)
+        public static Circle3D FromPointsAndAxis(Point3D p1, Point3D p2, Direction axis)
         {
             var cp = Point3D.MidPoint(p1, p2);
             return new Circle3D(cp, axis, cp.DistanceTo(p1));
@@ -176,7 +176,7 @@ namespace MathNet.Spatial.Euclidean
             {
                 reader.ReadToFirstDescendant();
                 var centerPoint = reader.ReadElementAs<Point3D>();
-                var axis = reader.ReadElementAs<UnitVector3D>();
+                var axis = reader.ReadElementAs<Direction>();
                 if (reader.TryReadElementContentAsDouble("Radius", out var radius))
                 {
                     CenterPoint = centerPoint;

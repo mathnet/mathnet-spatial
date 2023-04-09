@@ -131,9 +131,9 @@ namespace MathNet.Spatial.Tests.Euclidean
         [TestCase("0, 0, 5", "0, 0, 1", "0, 4, 0", "0, 1, 0", "3, 0, 0", "1, 0, 0", "3, 4, 5")]
         public void FromPlanes(string rootPoint1, string unitVector1, string rootPoint2, string unitVector2, string rootPoint3, string unitVector3, string eps)
         {
-            var plane1 = new Plane(Point3D.Parse(rootPoint1), UnitVector3D.Parse(unitVector1));
-            var plane2 = new Plane(Point3D.Parse(rootPoint2), UnitVector3D.Parse(unitVector2));
-            var plane3 = new Plane(Point3D.Parse(rootPoint3), UnitVector3D.Parse(unitVector3));
+            var plane1 = new Plane(Point3D.Parse(rootPoint1), Direction.Parse(unitVector1));
+            var plane2 = new Plane(Point3D.Parse(rootPoint2), Direction.Parse(unitVector2));
+            var plane3 = new Plane(Point3D.Parse(rootPoint3), Direction.Parse(unitVector3));
             var p1 = Point3D.IntersectionOf(plane1, plane2, plane3);
             var p2 = Point3D.IntersectionOf(plane2, plane1, plane3);
             var p3 = Point3D.IntersectionOf(plane2, plane3, plane1);
@@ -151,7 +151,7 @@ namespace MathNet.Spatial.Tests.Euclidean
         public void MirrorAbout(string ps, string rootPoint, string unitVector, string eps)
         {
             var p = Point3D.Parse(ps);
-            var p2 = new Plane(Point3D.Parse(rootPoint), UnitVector3D.Parse(unitVector));
+            var p2 = new Plane(Point3D.Parse(rootPoint), Direction.Parse(unitVector));
             var actual = p.MirrorAbout(p2);
 
             var ep = Point3D.Parse(eps);
@@ -164,7 +164,7 @@ namespace MathNet.Spatial.Tests.Euclidean
         public void ProjectOnTests(string ps, string rootPoint, string unitVector, string eps)
         {
             var p = Point3D.Parse(ps);
-            var p2 = new Plane(Point3D.Parse(rootPoint), UnitVector3D.Parse(unitVector));
+            var p2 = new Plane(Point3D.Parse(rootPoint), Direction.Parse(unitVector));
             var actual = p.ProjectOn(p2);
 
             var ep = Point3D.Parse(eps);
@@ -180,7 +180,7 @@ namespace MathNet.Spatial.Tests.Euclidean
             var actuals = new[]
             {
                 p + Vector3D.Parse(vs),
-                p + UnitVector3D.Parse(vs)
+                p + Direction.Parse(vs)
             };
             var expected = Point3D.Parse(eps);
             foreach (var actual in actuals)
@@ -198,7 +198,7 @@ namespace MathNet.Spatial.Tests.Euclidean
             var actuals = new[]
             {
                 p - Vector3D.Parse(vs),
-                p - UnitVector3D.Parse(vs)
+                p - Direction.Parse(vs)
             };
             var expected = Point3D.Parse(eps);
             foreach (var actual in actuals)

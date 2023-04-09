@@ -55,7 +55,7 @@ namespace MathNet.Spatial.Euclidean
         /// Gets a normalized vector in the direction from <see cref="StartPoint"/> to <see cref="EndPoint"/>
         /// </summary>
         [Pure]
-        public UnitVector3D Direction => StartPoint.VectorTo(EndPoint).Normalize();
+        public Direction Direction => StartPoint.VectorTo(EndPoint).Normalize();
 
         /// <summary>
         /// Returns a value that indicates whether each pair of elements in two specified lines is equal.

@@ -38,7 +38,7 @@ namespace MathNet.Spatial
             if (match.Success)
             {
                 var p = Point3D.Parse(match.Groups["p"].Value);
-                var uv = UnitVector3D.Parse(match.Groups["v"].Value);
+                var uv = Direction.Parse(match.Groups["v"].Value);
                 return new Plane(p, uv);
             }
 
@@ -56,7 +56,7 @@ namespace MathNet.Spatial
         {
             var match = Regex.Match(s, PlanePointVectorPattern);
             var p = Point3D.Parse(match.Groups["p"].Value);
-            var uv = UnitVector3D.Parse(match.Groups["v"].Value);
+            var uv = Direction.Parse(match.Groups["v"].Value);
             return new Ray3D(p, uv);
         }
     }

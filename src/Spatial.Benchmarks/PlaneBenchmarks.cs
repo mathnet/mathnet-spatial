@@ -6,15 +6,15 @@ namespace Spatial.Benchmarks
 {
     public class PlaneBenchmarks
     {
-        private static readonly Plane Plane1 = new Plane(new Point3D(1, 2, 3), UnitVector3D.Create(1, 0, 0));
-        private static readonly Plane Plane2 = new Plane(new Point3D(3, 4, 5), UnitVector3D.Create(0, 1, 0));
+        private static readonly Plane Plane1 = new Plane(new Point3D(1, 2, 3), Direction.Create(1, 0, 0));
+        private static readonly Plane Plane2 = new Plane(new Point3D(3, 4, 5), Direction.Create(0, 1, 0));
         private static readonly Point3D Point3D = new Point3D(1, 2, 3);
         private static readonly Point3D Point3D1 = new Point3D(0, 0, 0);
         private static readonly Point3D Point3D2 = new Point3D(1, 0, 0);
         private static readonly Point3D Point3D3 = new Point3D(0, 1, 0);
-        private static readonly Ray3D Ray3D = new Ray3D(Point3D.Origin, UnitVector3D.ZAxis);
+        private static readonly Ray3D Ray3D = new Ray3D(Point3D.Origin, Direction.ZAxis);
         private static readonly Vector3D Vector3D = new Vector3D(5, 6, 7);
-        private static readonly UnitVector3D UnitVector3D = UnitVector3D.Create(0.2, 0.4, 0.7, 1);
+        private static readonly Direction Direction = Direction.Create(0.2, 0.4, 0.7, 1);
         private static readonly LineSegment3D LineSegment3D = new LineSegment3D(new Point3D(2, 3, 4), new Point3D(5, 6, 7));
 
         [Benchmark]
@@ -110,7 +110,7 @@ namespace Spatial.Benchmarks
         [Benchmark]
         public Ray3D ProjectUnitVector3D()
         {
-            return Plane1.Project(UnitVector3D);
+            return Plane1.Project(Direction);
         }
 
         [Benchmark]
@@ -140,7 +140,7 @@ namespace Spatial.Benchmarks
         [Benchmark]
         public Plane Rotate()
         {
-            return Plane1.Rotate(UnitVector3D, Angle.FromRadians(1));
+            return Plane1.Rotate(Direction, Angle.FromRadians(1));
         }
 
         [Benchmark]

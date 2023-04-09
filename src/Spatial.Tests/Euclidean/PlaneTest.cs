@@ -19,9 +19,9 @@ namespace MathNet.Spatial.Tests.Euclidean
         [Test]
         public void Ctor()
         {
-            var plane1 = new Plane(new Point3D(0, 0, 3), UnitVector3D.ZAxis);
+            var plane1 = new Plane(new Point3D(0, 0, 3), Direction.ZAxis);
             var plane2 = new Plane(0, 0, 3, 3);
-            var plane3 = new Plane(UnitVector3D.ZAxis, 3);
+            var plane3 = new Plane(Direction.ZAxis, 3);
             var plane4 = Plane.FromPoints(new Point3D(0, 0, 3), new Point3D(5, 3, 3), new Point3D(-2, 1, 3));
             AssertGeometry.AreEqual(plane1, plane2);
             AssertGeometry.AreEqual(plane1, plane3);
@@ -50,7 +50,7 @@ namespace MathNet.Spatial.Tests.Euclidean
         [TestCase("0, 0, 0", "1, 0, 0", "0, 0, 0", "1, 0, 0")]
         public void Parse(string rootPoint, string unitVector, string pds, string vds)
         {
-            var plane = new Plane(Point3D.Parse(rootPoint), UnitVector3D.Parse(unitVector));
+            var plane = new Plane(Point3D.Parse(rootPoint), Direction.Parse(unitVector));
             AssertGeometry.AreEqual(Point3D.Parse(pds), plane.RootPoint);
             AssertGeometry.AreEqual(Vector3D.Parse(vds), plane.Normal);
         }
@@ -92,11 +92,11 @@ namespace MathNet.Spatial.Tests.Euclidean
         [TestCase("8; 0; 0", ZeroPoint, "0.6, 0, 0.8", "8; 0; -6", Z, 1e-15f)]
         public void ProjectPointOn(string ps, string rootPoint, string unitVector, string expectedPoint, string projectionAxis = "", float eps = float.Epsilon)
         {
-            var plane = new Plane(Point3D.Parse(rootPoint), UnitVector3D.Parse(unitVector));
-            UnitVector3D? projectionDirection = null;
+            var plane = new Plane(Point3D.Parse(rootPoint), Direction.Parse(unitVector));
+            Direction? projectionDirection = null;
             if (projectionAxis != "")
             {
-                projectionDirection = UnitVector3D.Parse(projectionAxis);
+                projectionDirection = Direction.Parse(projectionAxis);
             }
             var projectedPoint = plane.Project(Point3D.Parse(ps), projectionDirection);
             var expected = Point3D.Parse(expectedPoint);
@@ -195,7 +195,7 @@ namespace MathNet.Spatial.Tests.Euclidean
         [TestCase("188,6578; 147,0620; 66,0170", Z, "118,6578; 147,0620; 126,1170", 60.1)]
         public void SignedDistanceToPoint(string prps, string pns, string ps, double expected)
         {
-            var plane = new Plane(UnitVector3D.Parse(pns), Point3D.Parse(prps));
+            var plane = new Plane(Direction.Parse(pns), Point3D.Parse(prps));
             var p = Point3D.Parse(ps);
             Assert.AreEqual(expected, plane.SignedDistanceTo(p), 1E-6);
         }
@@ -206,8 +206,8 @@ namespace MathNet.Spatial.Tests.Euclidean
         [TestCase(ZeroPoint, NegativeZ, "0;0;-1", Z, 1)]
         public void SignedDistanceToOtherPlane(string prps, string pns, string otherPlaneRootPointString, string otherPlaneNormalString, double expectedValue)
         {
-            var plane = new Plane(UnitVector3D.Parse(pns), Point3D.Parse(prps));
-            var otherPlane = new Plane(UnitVector3D.Parse(otherPlaneNormalString), Point3D.Parse(otherPlaneRootPointString));
+            var plane = new Plane(Direction.Parse(pns), Point3D.Parse(prps));
+            var otherPlane = new Plane(Direction.Parse(otherPlaneNormalString), Point3D.Parse(otherPlaneRootPointString));
             Assert.AreEqual(expectedValue, plane.SignedDistanceTo(otherPlane), 1E-6);
         }
 
@@ -216,15 +216,15 @@ namespace MathNet.Spatial.Tests.Euclidean
         [TestCase(ZeroPoint, Z, "0;0;1", X, 1)]
         public void SignedDistanceToRay(string prps, string pns, string rayThroughPointString, string rayDirectionString, double expectedValue)
         {
-            var plane = new Plane(UnitVector3D.Parse(pns), Point3D.Parse(prps));
-            var otherPlane = new Ray3D(Point3D.Parse(rayThroughPointString), UnitVector3D.Parse(rayDirectionString));
+            var plane = new Plane(Direction.Parse(pns), Point3D.Parse(prps));
+            var otherPlane = new Ray3D(Point3D.Parse(rayThroughPointString), Direction.Parse(rayDirectionString));
             Assert.AreEqual(expectedValue, plane.SignedDistanceTo(otherPlane), 1E-6);
         }
 
         [Test]
         public void ProjectLineOn()
         {
-            var unitVector = UnitVector3D.ZAxis;
+            var unitVector = Direction.ZAxis;
             var rootPoint = new Point3D(0, 0, 1);
             var plane = new Plane(unitVector, rootPoint);
 
@@ -236,7 +236,7 @@ namespace MathNet.Spatial.Tests.Euclidean
         [Test]
         public void ProjectVectorOn()
         {
-            var unitVector = UnitVector3D.ZAxis;
+            var unitVector = Direction.ZAxis;
             var rootPoint = new Point3D(0, 0, 1);
             var plane = new Plane(unitVector, rootPoint);
             var vector = new Vector3D(1, 0, 0);
@@ -249,8 +249,8 @@ namespace MathNet.Spatial.Tests.Euclidean
         [TestCase("0, 0, 2", "0, 0, 1", "0, 0, 0", "0, 1, 0", "0, 0, 2", "-1, 0, 0")]
         public void InterSectionWithPlane(string rootPoint1, string unitVector1, string rootPoint2, string unitVector2, string eps, string evs)
         {
-            var plane1 = new Plane(Point3D.Parse(rootPoint1), UnitVector3D.Parse(unitVector1));
-            var plane2 = new Plane(Point3D.Parse(rootPoint2), UnitVector3D.Parse(unitVector2));
+            var plane1 = new Plane(Point3D.Parse(rootPoint1), Direction.Parse(unitVector1));
+            var plane2 = new Plane(Point3D.Parse(rootPoint2), Direction.Parse(unitVector2));
             var intersections = new[]
             {
                 plane1.IntersectionWith(plane2),
@@ -259,15 +259,15 @@ namespace MathNet.Spatial.Tests.Euclidean
             foreach (var intersection in intersections)
             {
                 AssertGeometry.AreEqual(Point3D.Parse(eps), intersection.ThroughPoint);
-                AssertGeometry.AreEqual(UnitVector3D.Parse(evs), intersection.Direction);
+                AssertGeometry.AreEqual(Direction.Parse(evs), intersection.Direction);
             }
         }
 
         [TestCase("0, 0, 0", "0, 0, 1", "0, 0, 0", "0, 0, 1", "0, 0, 0", "0, 0, 0")]
         public void InterSectionWithPlaneTest_BadArgument(string rootPoint1, string unitVector1, string rootPoint2, string unitVector2, string eps, string evs)
         {
-            var plane1 = new Plane(Point3D.Parse(rootPoint1), UnitVector3D.Parse(unitVector1));
-            var plane2 = new Plane(Point3D.Parse(rootPoint2), UnitVector3D.Parse(unitVector2));
+            var plane1 = new Plane(Point3D.Parse(rootPoint1), Direction.Parse(unitVector1));
+            var plane2 = new Plane(Point3D.Parse(rootPoint2), Direction.Parse(unitVector2));
 
             Assert.Throws<ArgumentException>(() => plane1.IntersectionWith(plane2));
             Assert.Throws<ArgumentException>(() => plane2.IntersectionWith(plane1));
@@ -276,7 +276,7 @@ namespace MathNet.Spatial.Tests.Euclidean
         [Test]
         public void MirrorPoint()
         {
-            var plane = new Plane(UnitVector3D.ZAxis, new Point3D(0, 0, 0));
+            var plane = new Plane(Direction.ZAxis, new Point3D(0, 0, 0));
             var point3D = new Point3D(1, 2, 3);
             var mirrorAbout = plane.MirrorAbout(point3D);
             AssertGeometry.AreEqual(new Point3D(1, 2, -3), mirrorAbout, float.Epsilon);
@@ -285,19 +285,19 @@ namespace MathNet.Spatial.Tests.Euclidean
         [Test]
         public void SignOfD()
         {
-            var plane = new Plane(UnitVector3D.ZAxis, new Point3D(0, 0, 100));
+            var plane = new Plane(Direction.ZAxis, new Point3D(0, 0, 100));
             Assert.AreEqual(100, plane.D);
 
-            plane = new Plane(UnitVector3D.ZAxis, new Point3D(0, 0, -100));
+            plane = new Plane(Direction.ZAxis, new Point3D(0, 0, -100));
             Assert.AreEqual(100, plane.D);
         }
 
         [Test]
         public void InterSectionPointDifferentOrder()
         {
-            var plane1 = new Plane(UnitVector3D.Create(0.8, 0.3, 0.01), new Point3D(20, 0, 0));
-            var plane2 = new Plane(UnitVector3D.Create(0.002, 1, 0.1), new Point3D(0, 0, 0));
-            var plane3 = new Plane(UnitVector3D.Create(0.5, 0.5, 1), new Point3D(0, 0, -30));
+            var plane1 = new Plane(Direction.Create(0.8, 0.3, 0.01), new Point3D(20, 0, 0));
+            var plane2 = new Plane(Direction.Create(0.002, 1, 0.1), new Point3D(0, 0, 0));
+            var plane3 = new Plane(Direction.Create(0.5, 0.5, 1), new Point3D(0, 0, -30));
             var pointFromPlanes1 = Plane.PointFromPlanes(plane1, plane2, plane3);
             var pointFromPlanes2 = Plane.PointFromPlanes(plane2, plane1, plane3);
             var pointFromPlanes3 = Plane.PointFromPlanes(plane3, plane1, plane2);
@@ -310,9 +310,9 @@ namespace MathNet.Spatial.Tests.Euclidean
         [TestCase("20, 0, 0", "1, 0, 0", "0, 0, 0", "0, 1, 0", "0, 0, -30", "0, 0, 1", "20, 0, -30")]
         public void PointFromPlanes(string rootPoint1, string unitVector1, string rootPoint2, string unitVector2, string rootPoint3, string unitVector3, string eps)
         {
-            var plane1 = new Plane(Point3D.Parse(rootPoint1), UnitVector3D.Parse(unitVector1));
-            var plane2 = new Plane(Point3D.Parse(rootPoint2), UnitVector3D.Parse(unitVector2));
-            var plane3 = new Plane(Point3D.Parse(rootPoint3), UnitVector3D.Parse(unitVector3));
+            var plane1 = new Plane(Point3D.Parse(rootPoint1), Direction.Parse(unitVector1));
+            var plane2 = new Plane(Point3D.Parse(rootPoint2), Direction.Parse(unitVector2));
+            var plane3 = new Plane(Point3D.Parse(rootPoint3), Direction.Parse(unitVector3));
             var points = new[]
             {
                 Plane.PointFromPlanes(plane1, plane2, plane3),
@@ -354,7 +354,7 @@ namespace MathNet.Spatial.Tests.Euclidean
         [TestCase("0, 0, 0", "0, 0, 1", "<Plane><RootPoint><X>0</X><Y>0</Y><Z>0</Z></RootPoint><Normal><X>0</X><Y>0</Y><Z>1</Z></Normal></Plane>")]
         public void XmlRoundTrips(string rootPoint, string unitVector, string xml)
         {
-            var plane = new Plane(Point3D.Parse(rootPoint), UnitVector3D.Parse(unitVector));
+            var plane = new Plane(Point3D.Parse(rootPoint), Direction.Parse(unitVector));
             AssertXml.XmlRoundTrips(plane, xml, (e, a) => AssertGeometry.AreEqual(e, a));
         }
 

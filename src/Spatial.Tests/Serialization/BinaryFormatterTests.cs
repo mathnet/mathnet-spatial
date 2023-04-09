@@ -56,7 +56,7 @@ namespace MathNet.Spatial.Tests.Serialization
         [TestCase("0, 0, 0", "0, 0, 1")]
         public void PlaneBinaryFormatter(string rootPoint, string unitVector)
         {
-            var plane = new Plane(Point3D.Parse(rootPoint), UnitVector3D.Parse(unitVector));
+            var plane = new Plane(Point3D.Parse(rootPoint), Direction.Parse(unitVector));
             var result = BinaryFormaterRoundTrip(plane);
             Assert.AreEqual(plane, result);
         }
@@ -64,7 +64,7 @@ namespace MathNet.Spatial.Tests.Serialization
         [TestCase("1, 2, 3", "-0.267261241912424, 0.534522483824849, 0.801783725737273", false)]
         public void Ray3DBinaryFormatter(string ps, string vs, bool asElements)
         {
-            var ray = new Ray3D(Point3D.Parse(ps), UnitVector3D.Parse(vs));
+            var ray = new Ray3D(Point3D.Parse(ps), Direction.Parse(vs));
             var result = BinaryFormaterRoundTrip(ray);
             Assert.AreEqual(ray, result);
             AssertGeometry.AreEqual(ray, result);
@@ -129,7 +129,7 @@ namespace MathNet.Spatial.Tests.Serialization
         public void Circle3DBinaryFormatter(string point, double radius)
         {
             var center = Point3D.Parse(point);
-            var c = new Circle3D(center, UnitVector3D.ZAxis, radius);
+            var c = new Circle3D(center, Direction.ZAxis, radius);
             var result = BinaryFormaterRoundTrip(c);
             Assert.AreEqual(c, result);
         }

@@ -74,7 +74,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="point">A point</param>
         /// <param name="vector">A vector</param>
         /// <returns>A new point at the summed location</returns>
-        public static Point3D operator +(Point3D point, UnitVector3D vector)
+        public static Point3D operator +(Point3D point, Direction vector)
         {
             return new Point3D(point.X + vector.X, point.Y + vector.Y, point.Z + vector.Z);
         }
@@ -96,7 +96,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="point">A point</param>
         /// <param name="vector">A vector</param>
         /// <returns>A new point at the difference</returns>
-        public static Point3D operator -(Point3D point, UnitVector3D vector)
+        public static Point3D operator -(Point3D point, Direction vector)
         {
             return new Point3D(point.X - vector.X, point.Y - vector.Y, point.Z - vector.Z);
         }
@@ -304,7 +304,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="angle">The angle to rotate</param>
         /// <returns>The rotated point</returns>
         [Pure]
-        public Point3D Rotate(UnitVector3D aboutVector, Angle angle)
+        public Point3D Rotate(Direction aboutVector, Angle angle)
         {
             var cs = CoordinateSystem.Rotation(angle, aboutVector);
             return cs.Transform(this);

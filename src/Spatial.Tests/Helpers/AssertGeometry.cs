@@ -19,7 +19,7 @@ namespace MathNet.Spatial.Tests
             AreEqual(new double[] { origin.X, origin.Y, origin.Z, 1 }, coordinateSystem.Column(3).ToArray(), tolerance);
         }
 
-        public static void AreEqual(UnitVector3D expected, UnitVector3D actual, double tolerance = 1e-6, string message = "")
+        public static void AreEqual(Direction expected, Direction actual, double tolerance = 1e-6, string message = "")
         {
             if (string.IsNullOrEmpty(message))
             {
@@ -43,12 +43,12 @@ namespace MathNet.Spatial.Tests
             Assert.AreEqual(expected.Z, actual.Z, tolerance, message);
         }
 
-        public static void AreEqual(UnitVector3D expected, Vector3D actual, double tolerance = 1e-6, string message = "")
+        public static void AreEqual(Direction expected, Vector3D actual, double tolerance = 1e-6, string message = "")
         {
             AreEqual(expected.ToVector3D(), actual, tolerance, message);
         }
 
-        public static void AreEqual(Vector3D expected, UnitVector3D actual, double tolerance = 1e-6, string message = "")
+        public static void AreEqual(Vector3D expected, Direction actual, double tolerance = 1e-6, string message = "")
         {
             AreEqual(expected, actual.ToVector3D(), tolerance, message);
         }

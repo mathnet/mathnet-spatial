@@ -24,14 +24,14 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// The direction of the ray
         /// </summary>
-        public readonly UnitVector3D Direction;
+        public readonly Direction Direction;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Ray3D"/> struct.
         /// </summary>
         /// <param name="throughPoint">The start point of the ray.</param>
         /// <param name="direction">The direction of the ray.</param>
-        public Ray3D(Point3D throughPoint, UnitVector3D direction)
+        public Ray3D(Point3D throughPoint, Direction direction)
         {
             ThroughPoint = throughPoint;
             Direction = direction;
@@ -82,7 +82,7 @@ namespace MathNet.Spatial.Euclidean
 
         /// <summary>
         /// Parses string representation of throughpoint and direction
-        /// See <see cref="Point3D.Parse(string, IFormatProvider)" /> and  <see cref="UnitVector3D.Parse(string, IFormatProvider, double)" /> for details on acceptable formats.
+        /// See <see cref="Point3D.Parse(string, IFormatProvider)" /> and  <see cref="Euclidean.Direction.Parse(string, IFormatProvider, double)" /> for details on acceptable formats.
         /// This is mainly meant for tests
         /// </summary>
         /// <param name="point">a string representing a start point for the ray.</param>
@@ -90,7 +90,7 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>A ray.</returns>
         public static Ray3D Parse(string point, string direction)
         {
-            return new Ray3D(Point3D.Parse(point), UnitVector3D.Parse(direction));
+            return new Ray3D(Point3D.Parse(point), Direction.Parse(direction));
         }
 
         /// <summary>
@@ -184,7 +184,7 @@ namespace MathNet.Spatial.Euclidean
             var e = (XElement)XNode.ReadFrom(reader);
             this = new Ray3D(
                 Point3D.ReadFrom(e.SingleElement("ThroughPoint").CreateReader()),
-                UnitVector3D.ReadFrom(e.SingleElement("Direction").CreateReader()));
+                Direction.ReadFrom(e.SingleElement("Direction").CreateReader()));
         }
 
         /// <inheritdoc/>

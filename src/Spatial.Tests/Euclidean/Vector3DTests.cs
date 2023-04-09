@@ -267,7 +267,7 @@ namespace MathNet.Spatial.Tests.Euclidean
         {
             var vector = Vector3D.Parse(vs);
             var uv = vector.Normalize();
-            var expected = UnitVector3D.Parse(evs);
+            var expected = Direction.Parse(evs);
             AssertGeometry.AreEqual(expected, uv);
         }
 
