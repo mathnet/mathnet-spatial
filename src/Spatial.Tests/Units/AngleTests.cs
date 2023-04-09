@@ -109,11 +109,68 @@ namespace MathNet.Spatial.Tests.Units
             Assert.AreEqual(false, one.Equals(two, Angle.FromRadians(0.1)));
         }
 
+        [TestCase(0, 1)]
+        [TestCase(30, 0.86602540378443871)]
+        [TestCase(-30, 0.86602540378443871)]
+        [TestCase(45, 0.70710678118654757)]
+        [TestCase(-45, 0.70710678118654757)]
+        [TestCase(60, 0.5)]
+        [TestCase(-60, 0.5)]
+        [TestCase(90, 0)]
+        [TestCase(-90, 0)]
+        [TestCase(120, -0.5)]
+        [TestCase(-120, -0.5)]
+        [TestCase(180, -1)]
+        [TestCase(-180, -1)]
+        [TestCase(270, 0)]
+        public void Cosine(double degrees, double cosine)
+        {
+            var angle = Angle.FromDegrees(degrees);
+            Assert.AreEqual(cosine, angle.Cos, 1e-15);
+        }
+
+        [TestCase(0, 0)]
+        [TestCase(30, 0.5)]
+        [TestCase(-30, -0.5)]
+        [TestCase(45, 0.70710678118654757)]
+        [TestCase(-45, -0.70710678118654757)]
+        [TestCase(60, 0.86602540378443871)]
+        [TestCase(-60, -0.86602540378443871)]
+        [TestCase(90, 1)]
+        [TestCase(-90, -1)]
+        [TestCase(120, 0.86602540378443871)]
+        [TestCase(-120, -0.86602540378443871)]
+        [TestCase(180, 0)]
+        [TestCase(-180, 0)]
+        [TestCase(270, -1)]
+        public void Sine(double degrees, double sine)
+        {
+            var angle = Angle.FromDegrees(degrees);
+            Assert.AreEqual(sine, angle.Sin, 1e-15);
+        }
+
+        [TestCase(0, 0)]
+        [TestCase(30, 0.57735026918962573)]
+        [TestCase(-30, -0.57735026918962573)]
+        [TestCase(45, 1)]
+        [TestCase(-45, -1)]
+        [TestCase(60, 1.7320508075688767)]
+        [TestCase(-60, -1.7320508075688767)]
+        [TestCase(120, -1.7320508075688783)]
+        [TestCase(-120, 1.7320508075688783)]
+        [TestCase(180, 0)]
+        [TestCase(-180, 0)]
+        public void Tangent(double degrees, double tangent)
+        {
+            var angle = Angle.FromDegrees(degrees);
+            Assert.AreEqual(tangent, angle.Tan, 1e-15);
+        }
+
         [TestCase(90, 1.5707963267948966)]
         public void FromDegrees(double degrees, double expected)
         {
             Assert.AreEqual(expected, Angle.FromDegrees(degrees).Radians);
-            Assert.AreEqual(degrees, Angle.FromDegrees(degrees).Degrees, 1E-6);
+            Assert.AreEqual(degrees, Angle.FromDegrees(degrees).Degrees);
         }
 
         [TestCase(1, 1)]
@@ -125,7 +182,7 @@ namespace MathNet.Spatial.Tests.Units
         [TestCase(20, 33, 49, 0.35890271998857842)]
         public void FromSexagesimal(int degrees, int minutes, double seconds, double expected)
         {
-            Assert.AreEqual(expected, Angle.FromSexagesimal(degrees, minutes, seconds).Radians, 1E-6);
+            Assert.AreEqual(expected, Angle.FromSexagesimal(degrees, minutes, seconds).Radians);
         }
 
         [TestCase("5 °", 5 * DegToRad)]

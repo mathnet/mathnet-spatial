@@ -22,12 +22,12 @@ namespace MathNet.Spatial.Units
         /// <summary>
         /// Conversion factor for converting Radians to Degrees
         /// </summary>
-        private const double RadToDeg = 180.0 / Math.PI;
+        private static readonly double RadToDeg = 180.0 / Math.PI;
 
         /// <summary>
         /// Conversion factor for converting Degrees to Radians
         /// </summary>
-        private const double DegToRad = Math.PI / 180.0;
+        private static readonly double DegToRad = Math.PI / 180.0;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Angle"/> struct.
@@ -35,13 +35,28 @@ namespace MathNet.Spatial.Units
         /// <param name="radians">The value in Radians</param>
         private Angle(double radians)
         {
-            this.Radians = radians;
+            Radians = radians;
         }
 
         /// <summary>
         /// Gets the value in degrees
         /// </summary>
-        public double Degrees => this.Radians * RadToDeg;
+        public double Degrees => Radians * RadToDeg;
+
+        /// <summary>
+        /// Gets the cosine of this instance
+        /// </summary>
+        public double Cos => Math.Cos(Radians);
+
+        /// <summary>
+        /// Gets the sine of this instance
+        /// </summary>
+        public double Sin => Math.Sin(Radians);
+
+        /// <summary>
+        /// Gets the tangent of this instance
+        /// </summary>
+        public double Tan => Math.Tan(Radians);
 
         /// <summary>
         /// Returns a value that indicates whether two specified Angles are equal.
@@ -264,7 +279,7 @@ namespace MathNet.Spatial.Units
         /// <inheritdoc />
         public override string ToString()
         {
-            return this.ToString("G15", NumberFormatInfo.CurrentInfo);
+            return ToString("G15", NumberFormatInfo.CurrentInfo);
         }
 
         /// <summary>
@@ -274,7 +289,7 @@ namespace MathNet.Spatial.Units
         /// <returns>The string representation of this instance.</returns>
         public string ToString(string format)
         {
-            return this.ToString(format, NumberFormatInfo.CurrentInfo);
+            return ToString(format, NumberFormatInfo.CurrentInfo);
         }
 
         /// <summary>
@@ -284,13 +299,13 @@ namespace MathNet.Spatial.Units
         /// <returns>The string representation of this instance.</returns>
         public string ToString(IFormatProvider provider)
         {
-            return this.ToString("G15", NumberFormatInfo.GetInstance(provider));
+            return ToString("G15", NumberFormatInfo.GetInstance(provider));
         }
 
         /// <inheritdoc />
         public string ToString(string format, IFormatProvider provider)
         {
-            return this.ToString(format, provider, AngleUnit.Radians);
+            return ToString(format, provider, AngleUnit.Radians);
         }
 
         /// <summary>
@@ -307,12 +322,12 @@ namespace MathNet.Spatial.Units
             if (unit == null ||
                 unit is Radians)
             {
-                return $"{this.Radians.ToString(format, provider)}\u00A0{unit?.ShortName ?? AngleUnit.Radians.ShortName}";
+                return $"{Radians.ToString(format, provider)}\u00A0{unit?.ShortName ?? AngleUnit.Radians.ShortName}";
             }
 
             if (unit is Degrees)
             {
-                return $"{this.Degrees.ToString(format, provider)}{unit.ShortName}";
+                return $"{Degrees.ToString(format, provider)}{unit.ShortName}";
             }
 
             throw new ArgumentOutOfRangeException(nameof(unit), unit, "Unknown unit");
@@ -321,7 +336,7 @@ namespace MathNet.Spatial.Units
         /// <inheritdoc />
         public int CompareTo(Angle value)
         {
-            return this.Radians.CompareTo(value.Radians);
+            return Radians.CompareTo(value.Radians);
         }
 
         /// <summary>
@@ -334,7 +349,7 @@ namespace MathNet.Spatial.Units
         /// <param name="tolerance">The maximum difference for being considered equal</param>
         public bool Equals(Angle other, double tolerance)
         {
-            return Math.Abs(this.Radians - other.Radians) < tolerance;
+            return Math.Abs(Radians - other.Radians) < tolerance;
         }
 
         /// <summary>
@@ -347,17 +362,17 @@ namespace MathNet.Spatial.Units
         /// <param name="tolerance">The maximum difference for being considered equal</param>
         public bool Equals(Angle other, Angle tolerance)
         {
-            return Math.Abs(this.Radians - other.Radians) < tolerance.Radians;
+            return Math.Abs(Radians - other.Radians) < tolerance.Radians;
         }
 
         /// <inheritdoc />
-        public bool Equals(Angle other) => this.Radians.Equals(other.Radians);
+        public bool Equals(Angle other) => Radians.Equals(other.Radians);
 
         /// <inheritdoc />
-        public override bool Equals(object obj) => obj is Angle a && this.Equals(a);
+        public override bool Equals(object obj) => obj is Angle a && Equals(a);
 
         /// <inheritdoc />
-        public override int GetHashCode() => HashCode.Combine(this.Radians);
+        public override int GetHashCode() => HashCode.Combine(Radians);
 
         /// <inheritdoc />
         XmlSchema IXmlSerializable.GetSchema()
