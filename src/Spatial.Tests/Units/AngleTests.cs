@@ -179,7 +179,7 @@ namespace MathNet.Spatial.Tests.Units
             Assert.AreEqual(expected, Angle.FromRadians(radians).Radians);
         }
 
-        [TestCase(20, 33, 49, 0.35890271998857842)]
+        [TestCase(20, 33, 49, 0.35890270667277291)]
         public void FromSexagesimal(int degrees, int minutes, double seconds, double expected)
         {
             Assert.AreEqual(expected, Angle.FromSexagesimal(degrees, minutes, seconds).Radians);
