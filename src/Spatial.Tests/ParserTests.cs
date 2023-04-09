@@ -143,17 +143,17 @@ namespace MathNet.Spatial.Tests
         public void ParseSwedishUnitVector(string text, double expectedX, double expectedY, double expectedZ)
         {
             var culture = CultureInfo.GetCultureInfo("sv");
-            Assert.AreEqual(true, UnitVector3D.TryParse(text, culture, out var p));
+            Assert.AreEqual(true, Direction.TryParse(text, culture, out var p));
             Assert.AreEqual(expectedX, p.X);
             Assert.AreEqual(expectedY, p.Y);
             Assert.AreEqual(expectedZ, p.Z);
 
-            p = UnitVector3D.Parse(text, culture);
+            p = Direction.Parse(text, culture);
             Assert.AreEqual(expectedX, p.X);
             Assert.AreEqual(expectedY, p.Y);
             Assert.AreEqual(expectedZ, p.Z);
 
-            p = UnitVector3D.Parse(p.ToString(culture));
+            p = Direction.Parse(p.ToString(culture));
             Assert.AreEqual(expectedX, p.X);
             Assert.AreEqual(expectedY, p.Y);
             Assert.AreEqual(expectedZ, p.Z);

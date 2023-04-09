@@ -23,7 +23,7 @@ namespace RoslynSandbox
         public Foo()
         {
             var v = new Vector3D(1, 0, 0);
-            var about = UnitVector3D.Create(0, 1, 0);
+            var about = Direction.Create(0, 1, 0);
             var rotated = v.Rotate(about, 1.2, AngleUnit.Degrees);
         }
     }
@@ -39,7 +39,7 @@ namespace RoslynSandbox
         public Foo()
         {
             var v = new Vector3D(1, 0, 0);
-            var about = UnitVector3D.Create(0, 1, 0);
+            var about = Direction.Create(0, 1, 0);
             var rotated = v.Rotate(about, Angle.FromDegrees(1.2));
         }
     }
@@ -61,7 +61,7 @@ namespace RoslynSandbox
         public Foo()
         {
             var v = new Vector3D(1, 0, 0);
-            var about = UnitVector3D.Create(0, 1, 0);
+            var about = Direction.Create(0, 1, 0);
             var rotated = v.Rotate(about, 1.2, AngleUnit.Radians);
         }
     }
@@ -77,7 +77,7 @@ namespace RoslynSandbox
         public Foo()
         {
             var v = new Vector3D(1, 0, 0);
-            var about = UnitVector3D.Create(0, 1, 0);
+            var about = Direction.Create(0, 1, 0);
             var rotated = v.Rotate(about, Angle.FromRadians(1.2));
         }
     }

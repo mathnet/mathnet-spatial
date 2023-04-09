@@ -22,7 +22,7 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// The normal vector of the Plane.
         /// </summary>
-        public readonly UnitVector3D Normal;
+        public readonly Direction Normal;
 
         /// <summary>
         /// The distance to the Plane along its normal from the origin.
@@ -39,7 +39,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="z">The Z-component of the normal.</param>
         /// <param name="d">The distance of the Plane along its normal from the origin.</param>
         public Plane(double x, double y, double z, double d)
-            : this(UnitVector3D.Create(x, y, z), d)
+            : this(Direction.Create(x, y, z), d)
         {
         }
 
@@ -50,7 +50,7 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         /// <param name="normal">The Plane's normal vector.</param>
         /// <param name="distance">The Plane's distance from the origin along its normal vector.</param>
-        public Plane(UnitVector3D normal, double distance = 0)
+        public Plane(Direction normal, double distance = 0)
             : this((distance * normal).ToPoint3D(), normal)
         {
         }
@@ -62,7 +62,7 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         /// <param name="normal">The Plane's normal vector.</param>
         /// <param name="rootPoint">A point in the plane.</param>
-        public Plane(UnitVector3D normal, Point3D rootPoint)
+        public Plane(Direction normal, Point3D rootPoint)
             : this(rootPoint, normal)
         {
         }
@@ -74,7 +74,7 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         /// <param name="normal">The Plane's normal vector.</param>
         /// <param name="rootPoint">A point in the plane.</param>
-        public Plane(Point3D rootPoint, UnitVector3D normal)
+        public Plane(Point3D rootPoint, Direction normal)
         {
             // make sure the plane is defined in its Hesse normal form
             // https://en.wikipedia.org/wiki/Hesse_normal_form
@@ -118,7 +118,7 @@ namespace MathNet.Spatial.Euclidean
             var svd = relativePointMatrix.Svd();
             var matV = svd.VT.Transpose();
             var smallestEigenvalueColumnIndex = svd.S.Count - 1;
-            var normal = UnitVector3D.OfVector(matV.Column(smallestEigenvalueColumnIndex));
+            var normal = Direction.OfVector(matV.Column(smallestEigenvalueColumnIndex));
 
             var bestFit = new Plane(normal, throughPoint);
             return bestFit;
@@ -271,7 +271,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="projectionDirection">The direction of projection</param>
         /// <returns>a projected point</returns>
         [Pure]
-        public Point3D Project(Point3D p, UnitVector3D? projectionDirection = null)
+        public Point3D Project(Point3D p, Direction? projectionDirection = null)
         {
             var direction = projectionDirection ?? Normal;
             var distance = (RootPoint - p).DotProduct(Normal) / direction.DotProduct(Normal);
@@ -323,7 +323,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="vector3DToProject">The Vector3D to project</param>
         /// <returns>The projected Vector3D</returns>
         [Pure]
-        public Ray3D Project(UnitVector3D vector3DToProject)
+        public Ray3D Project(Direction vector3DToProject)
         {
             return Project(vector3DToProject.ToVector3D());
         }
@@ -355,7 +355,7 @@ namespace MathNet.Spatial.Euclidean
 
             var pointOnIntersectionLine = svd.Solve(y);
             var throughPoint = Point3D.OfVector(pointOnIntersectionLine.Column(0));
-            var direction = UnitVector3D.OfVector(svd.VT.Row(2));
+            var direction = Direction.OfVector(svd.VT.Row(2));
             return new Ray3D(throughPoint, direction);
         }
 
@@ -433,7 +433,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="angle">An angle to rotate</param>
         /// <returns>A rotated plane</returns>
         [Pure]
-        public Plane Rotate(UnitVector3D aboutVector, Angle angle)
+        public Plane Rotate(Direction aboutVector, Angle angle)
         {
             var rootPoint = RootPoint;
             var rotatedPoint = rootPoint.Rotate(aboutVector, angle);
@@ -489,7 +489,7 @@ namespace MathNet.Spatial.Euclidean
             reader.MoveToContent();
             var e = (XElement)XNode.ReadFrom(reader);
             this = new Plane(
-                UnitVector3D.ReadFrom(e.SingleElement("Normal").CreateReader()),
+                Direction.ReadFrom(e.SingleElement("Normal").CreateReader()),
                 Point3D.ReadFrom(e.SingleElement("RootPoint").CreateReader()));
         }
 

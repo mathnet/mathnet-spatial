@@ -24,7 +24,7 @@ namespace Spatial.Benchmarks
         }
 
         [Benchmark]
-        public UnitVector3D Normalize()
+        public Direction Normalize()
         {
             return V1.Normalize();
         }
@@ -74,7 +74,7 @@ namespace Spatial.Benchmarks
         [Benchmark]
         public Vector3D Rotate()
         {
-            return V1.Rotate(UnitVector3D.XAxis, Angle.FromRadians(1));
+            return V1.Rotate(Direction.XAxis, Angle.FromRadians(1));
         }
 
         [Benchmark]
@@ -86,7 +86,7 @@ namespace Spatial.Benchmarks
         [Benchmark]
         public Angle SignedAngleTo()
         {
-            return V1.SignedAngleTo(V2, UnitVector3D.XAxis);
+            return V1.SignedAngleTo(V2, Direction.XAxis);
         }
 
         [Benchmark]

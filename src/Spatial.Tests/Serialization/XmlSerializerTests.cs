@@ -12,7 +12,7 @@ namespace MathNet.Spatial.Tests.Serialization
         [TestCase("1, 2, 3", "-0.267261241912424, 0.534522483824849, 0.801783725737273", "<Ray3D><ThroughPoint><X>1</X><Y>2</Y><Z>3</Z></ThroughPoint><Direction><X>-0.26726124191242406</X><Y>0.53452248382484913</Y><Z>0.80178372573727308</Z></Direction></Ray3D>")]
         public void Ray3DXml(string ps, string vs, string xml)
         {
-            var ray = new Ray3D(Point3D.Parse(ps), UnitVector3D.Parse(vs));
+            var ray = new Ray3D(Point3D.Parse(ps), Direction.Parse(vs));
             var result = AssertXml.XmlSerializerRoundTrip(ray, xml);
             Assert.AreEqual(ray, result);
             AssertGeometry.AreEqual(ray, result);
@@ -79,7 +79,7 @@ namespace MathNet.Spatial.Tests.Serialization
         public void Circle3DXml(string point, string axisString, double radius, string xml)
         {
             var center = Point3D.Parse(point);
-            var axis = UnitVector3D.Parse(axisString);
+            var axis = Direction.Parse(axisString);
             var c = new Circle3D(center, axis, radius);
             var result = AssertXml.XmlSerializerRoundTrip(c, xml);
             Assert.AreEqual(c, result);
@@ -118,7 +118,7 @@ namespace MathNet.Spatial.Tests.Serialization
         [TestCase("0, 0, 0", "0, 0, 1", "<Plane><RootPoint><X>0</X><Y>0</Y><Z>0</Z></RootPoint><Normal><X>0</X><Y>0</Y><Z>1</Z></Normal></Plane>")]
         public void PlaneXml(string rootPoint, string unitVector, string xml)
         {
-            var plane = new Plane(Point3D.Parse(rootPoint), UnitVector3D.Parse(unitVector));
+            var plane = new Plane(Point3D.Parse(rootPoint), Direction.Parse(unitVector));
             var result = AssertXml.XmlSerializerRoundTrip(plane, xml);
             Assert.AreEqual(plane, result);
         }

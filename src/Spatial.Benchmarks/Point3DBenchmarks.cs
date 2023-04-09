@@ -11,11 +11,11 @@ namespace Spatial.Benchmarks
         private static readonly Point3D P1 = new Point3D(1, 2, 3);
         private static readonly Point3D P2 = new Point3D(1, 2, 3);
         private static readonly Vector3D Vector3D = new Vector3D(1, 2, 3);
-        private static readonly UnitVector3D UnitVector3D = UnitVector3D.Create(1, 0, 0);
+        private static readonly Direction Direction = Direction.Create(1, 0, 0);
         private static readonly Point3D[] Points = { P1, P2 };
         private static readonly Vector<double> Vector = P1.ToVector();
-        private static readonly Ray3D Ray3D = new Ray3D(Point3D.Origin, UnitVector3D.ZAxis);
-        private static readonly Plane Plane = new Plane(UnitVector3D.Create(0, 0, 1), Point3D.Origin);
+        private static readonly Ray3D Ray3D = new Ray3D(Point3D.Origin, Direction.ZAxis);
+        private static readonly Plane Plane = new Plane(Direction.Create(0, 0, 1), Point3D.Origin);
 
         [Benchmark]
         public Point3D OperatorAdditionVector3D()
@@ -24,9 +24,9 @@ namespace Spatial.Benchmarks
         }
 
         [Benchmark]
-        public Point3D OperatorAdditionUnitVector3D()
+        public Point3D OperatorAdditionDirection()
         {
-            return P1 + UnitVector3D;
+            return P1 + Direction;
         }
 
         [Benchmark]
@@ -36,9 +36,9 @@ namespace Spatial.Benchmarks
         }
 
         [Benchmark]
-        public Point3D OperatorSubtractionUnitVector3D()
+        public Point3D OperatorSubtractionDirection()
         {
-            return P1 - UnitVector3D;
+            return P1 - Direction;
         }
 
         [Benchmark]
@@ -110,7 +110,7 @@ namespace Spatial.Benchmarks
         [Benchmark]
         public Point3D RotateAroundUnitVector()
         {
-            return P1.Rotate(UnitVector3D, Angle.FromRadians(1));
+            return P1.Rotate(Direction, Angle.FromRadians(1));
         }
 
         [Benchmark]

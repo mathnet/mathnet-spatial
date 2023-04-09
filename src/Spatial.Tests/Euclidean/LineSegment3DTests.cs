@@ -21,7 +21,7 @@ namespace MathNet.Spatial.Tests.Euclidean
         public void DirectionsTest(string p1S, string p2S, string evs)
         {
             var l = LineSegment3D.Parse(p1S, p2S);
-            var expected = UnitVector3D.Parse(evs, tolerance: 1);
+            var expected = Direction.Parse(evs, tolerance: 1);
             AssertGeometry.AreEqual(expected, l.Direction);
         }
 
@@ -31,7 +31,7 @@ namespace MathNet.Spatial.Tests.Euclidean
             var p1 = Point3D.Parse(p1S);
             var p2 = Point3D.Parse(p2S);
             var line = new LineSegment3D(p1, p2);
-            var plane = new Plane(Point3D.Parse(rootPoint), UnitVector3D.Parse(unitVector));
+            var plane = new Plane(Point3D.Parse(rootPoint), Direction.Parse(unitVector));
             var expected = new LineSegment3D(Point3D.Parse(ep1S), Point3D.Parse(ep2S));
             AssertGeometry.AreEqual(expected, line.ProjectOn(plane));
         }

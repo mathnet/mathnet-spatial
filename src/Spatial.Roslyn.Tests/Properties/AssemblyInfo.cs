@@ -28,7 +28,7 @@ using NUnit.Framework;
 [assembly: MetadataReference(typeof(object), new[] { "global", "mscorlib" })]
 [assembly: MetadataReference(typeof(Debug), new[] { "global", "System" })]
 [assembly: MetadataReferences(
-    typeof(UnitVector3D),
+    typeof(Direction),
     typeof(Enumerable),
     typeof(WebClient),
     typeof(Bitmap),

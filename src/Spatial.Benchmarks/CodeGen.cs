@@ -16,7 +16,7 @@ namespace Spatial.Benchmarks
         [TestCase(typeof(Vector2D))]
         [TestCase(typeof(Point3D))]
         [TestCase(typeof(Vector3D))]
-        [TestCase(typeof(UnitVector3D))]
+        [TestCase(typeof(Direction))]
         [TestCase(typeof(Ray3D))]
         [TestCase(typeof(Plane))]
         public void DumpBenchmark(Type type)

@@ -61,7 +61,7 @@ namespace MathNet.Spatial.Tests.Serialization
         [TestCase("0, 0, 0", "0, 0, 1", @"<Plane><RootPoint><X>0</X><Y>0</Y><Z>0</Z></RootPoint><Normal><X>0</X><Y>0</Y><Z>1</Z></Normal></Plane>")]
         public void PlaneDataContract(string rootPoint, string unitVector, string xml)
         {
-            var plane = new Plane(Point3D.Parse(rootPoint), UnitVector3D.Parse(unitVector));
+            var plane = new Plane(Point3D.Parse(rootPoint), Direction.Parse(unitVector));
             var result = DataContractRoundTrip(plane, xml);
             Assert.AreEqual(plane, result);
         }
@@ -69,7 +69,7 @@ namespace MathNet.Spatial.Tests.Serialization
         [TestCase("1, 2, 3", "-0.2672612419124244, 0.53452248382484879, 0.80178372573727319", false, @"<Ray3D><ThroughPoint><X>1</X><Y>2</Y><Z>3</Z></ThroughPoint><Direction><X>-0.2672612419124244</X><Y>0.53452248382484879</Y><Z>0.80178372573727319</Z></Direction></Ray3D>")]
         public void Ray3DDataContract(string ps, string vs, bool asElements, string xml)
         {
-            var ray = new Ray3D(Point3D.Parse(ps), UnitVector3D.Parse(vs));
+            var ray = new Ray3D(Point3D.Parse(ps), Direction.Parse(vs));
             var result = DataContractRoundTrip(ray, xml);
             Assert.AreEqual(ray, result);
             AssertGeometry.AreEqual(ray, result);
@@ -137,7 +137,7 @@ namespace MathNet.Spatial.Tests.Serialization
         public void Circle3DDataContract(string point, double radius)
         {
             var center = Point3D.Parse(point);
-            var c = new Circle3D(center, UnitVector3D.ZAxis, radius);
+            var c = new Circle3D(center, Direction.ZAxis, radius);
             const string elementXml = @"<Circle3D><CenterPoint><X>0</X><Y>0</Y><Z>0</Z></CenterPoint><Axis><X>0</X><Y>0</Y><Z>1</Z></Axis><Radius>2.5</Radius></Circle3D>";
             var result = DataContractRoundTrip(c, elementXml);
             Assert.AreEqual(c, result);

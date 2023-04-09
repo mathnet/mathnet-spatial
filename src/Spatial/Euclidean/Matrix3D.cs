@@ -75,7 +75,7 @@ namespace MathNet.Spatial.Euclidean
         public static Matrix<double> RotationTo(
             Vector3D fromVector,
             Vector3D toVector,
-            UnitVector3D? axis = null)
+            Direction? axis = null)
         {
             return RotationTo(fromVector.Normalize(), toVector.Normalize(), axis);
         }
@@ -88,7 +88,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="toVector">Input Vector object to align to.</param>
         /// <param name="axis">Input Vector object. </param>
         /// <returns>A transform matrix</returns>
-        public static Matrix<double> RotationTo(UnitVector3D fromVector, UnitVector3D toVector, UnitVector3D? axis = null)
+        public static Matrix<double> RotationTo(Direction fromVector, Direction toVector, Direction? axis = null)
         {
             if (fromVector == toVector)
             {
@@ -117,7 +117,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="aboutVector">The vector</param>
         /// <param name="angle">Angle in degrees</param>
         /// <returns>A transform matrix</returns>
-        public static Matrix<double> RotationAroundArbitraryVector(UnitVector3D aboutVector, Angle angle)
+        public static Matrix<double> RotationAroundArbitraryVector(Direction aboutVector, Angle angle)
         {
             // http://en.wikipedia.org/wiki/Rotation_matrix
             var unitTensorProduct = aboutVector.GetUnitTensorProduct();
