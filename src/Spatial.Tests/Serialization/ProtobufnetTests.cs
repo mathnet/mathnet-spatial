@@ -23,7 +23,7 @@ namespace MathNet.Spatial.Tests.Serialization
         public void AngleProtoBuf(string vs)
         {
             var angle = Angle.Parse(vs);
-            var roundTrip = this.ProtobufRoundTrip(angle);
+            var roundTrip = ProtobufRoundTrip(angle);
             Assert.AreEqual(angle.Radians, roundTrip.Radians, Tolerance);
         }
 
@@ -31,7 +31,7 @@ namespace MathNet.Spatial.Tests.Serialization
         public void Point2DProtoBuf()
         {
             var p = new Point2D(1, 2);
-            var result = this.ProtobufRoundTrip(p);
+            var result = ProtobufRoundTrip(p);
             Assert.AreEqual(p, result);
         }
 
@@ -39,7 +39,7 @@ namespace MathNet.Spatial.Tests.Serialization
         public void Point3DProtoBuf()
         {
             var p = new Point3D(1, -2, 3);
-            var result = this.ProtobufRoundTrip(p);
+            var result = ProtobufRoundTrip(p);
             Assert.AreEqual(p, result);
         }
 
@@ -48,7 +48,7 @@ namespace MathNet.Spatial.Tests.Serialization
         public void QuaternionProtoBuf()
         {
             var q = new Quaternion(1, 2, 3, 4);
-            var result = this.ProtobufRoundTrip(q);
+            var result = ProtobufRoundTrip(q);
             Assert.AreEqual(q, result);
         }
 
@@ -58,7 +58,7 @@ namespace MathNet.Spatial.Tests.Serialization
         {
             var q = new Quaternion(0, 0, 0, 0);
             var eulerAngles = q.ToEulerAngles();
-            var result = this.ProtobufRoundTrip(eulerAngles);
+            var result = ProtobufRoundTrip(eulerAngles);
             Assert.AreEqual(eulerAngles, result);
         }
 
@@ -67,18 +67,18 @@ namespace MathNet.Spatial.Tests.Serialization
         public void PlaneProtoBuf(string rootPoint, string unitVector)
         {
             var plane = new Plane(Point3D.Parse(rootPoint), Direction.Parse(unitVector));
-            var result = this.ProtobufRoundTrip(plane);
+            var result = ProtobufRoundTrip(plane);
             Assert.AreEqual(plane, result);
         }
 
         [Explicit("fix later")]
         [TestCase("1, 2, 3", "-1, 2, 3", false)]
-        public void Ray3DProtoBuf(string ps, string vs, bool asElements)
+        public void LineProtoBuf(string ps, string vs, bool asElements)
         {
-            var ray = new Line(Point3D.Parse(ps), Direction.Parse(vs));
-            var result = this.ProtobufRoundTrip(ray);
-            Assert.AreEqual(ray, result);
-            AssertGeometry.AreEqual(ray, result, 1e-6);
+            var line = new Line(Point3D.Parse(ps), Direction.Parse(vs));
+            var result = ProtobufRoundTrip(line);
+            Assert.AreEqual(line, result);
+            AssertGeometry.AreEqual(line, result);
         }
 
         [Explicit("fix later")]
@@ -88,7 +88,7 @@ namespace MathNet.Spatial.Tests.Serialization
             Point2D p1 = Point2D.Parse(p1s);
             Point2D p2 = Point2D.Parse(p2s);
             var l = new Line2D(p1, p2);
-            var result = this.ProtobufRoundTrip(l);
+            var result = ProtobufRoundTrip(l);
             Assert.AreEqual(l, result);
         }
 
@@ -99,7 +99,7 @@ namespace MathNet.Spatial.Tests.Serialization
             Point3D p1 = Point3D.Parse(p1s);
             Point3D p2 = Point3D.Parse(p2s);
             var l = new LineSegment3D(p1, p2);
-            var result = this.ProtobufRoundTrip(l);
+            var result = ProtobufRoundTrip(l);
             Assert.AreEqual(l, result);
         }
 
@@ -110,7 +110,7 @@ namespace MathNet.Spatial.Tests.Serialization
             Point2D p1 = Point2D.Parse(p1s);
             Point2D p2 = Point2D.Parse(p2s);
             var l = new LineSegment2D(p1, p2);
-            var result = this.ProtobufRoundTrip(l);
+            var result = ProtobufRoundTrip(l);
             Assert.AreEqual(l, result);
         }
 
@@ -119,7 +119,7 @@ namespace MathNet.Spatial.Tests.Serialization
         public void Vector2DProtoBuf()
         {
             var v = new Vector2D(1, 2);
-            var result = this.ProtobufRoundTrip(v);
+            var result = ProtobufRoundTrip(v);
             Assert.AreEqual(v, result);
         }
 
@@ -128,7 +128,7 @@ namespace MathNet.Spatial.Tests.Serialization
         public void Vector3DProtoBuf()
         {
             var v = new Vector3D(1, -2, 3);
-            var result = this.ProtobufRoundTrip(v);
+            var result = ProtobufRoundTrip(v);
             Assert.AreEqual(v, result);
         }
 
@@ -138,7 +138,7 @@ namespace MathNet.Spatial.Tests.Serialization
         {
             var center = Point2D.Parse(point);
             var c = new Circle2D(center, radius);
-            var result = this.ProtobufRoundTrip(c);
+            var result = ProtobufRoundTrip(c);
             Assert.AreEqual(c, result);
         }
 
@@ -148,7 +148,7 @@ namespace MathNet.Spatial.Tests.Serialization
         {
             var center = Point3D.Parse(point);
             var c = new Circle3D(center, Direction.ZAxis, radius);
-            var result = this.ProtobufRoundTrip(c);
+            var result = ProtobufRoundTrip(c);
             Assert.AreEqual(c, result);
         }
 
@@ -158,7 +158,7 @@ namespace MathNet.Spatial.Tests.Serialization
         {
             var points = from x in new string[] { "0.25,0", "0.5,1", "1,-1" } select Point2D.Parse(x);
             var p = new Polygon2D(points);
-            var result = this.ProtobufRoundTrip(p);
+            var result = ProtobufRoundTrip(p);
             Assert.AreEqual(p, result);
         }
 
@@ -168,7 +168,7 @@ namespace MathNet.Spatial.Tests.Serialization
         {
             var points = from x in new string[] { "0.25,0", "0.5,1", "1,-1" } select Point2D.Parse(x);
             var p = new PolyLine2D(points);
-            var result = this.ProtobufRoundTrip(p);
+            var result = ProtobufRoundTrip(p);
             Assert.AreEqual(p, result);
         }
 
@@ -178,7 +178,7 @@ namespace MathNet.Spatial.Tests.Serialization
         {
             var points = "0, -1.5, 0; 0,1,0; 1,1,0";
             var p = new PolyLine3D(from x in points.Split(';') select Point3D.Parse(x));
-            var result = this.ProtobufRoundTrip(p);
+            var result = ProtobufRoundTrip(p);
             Assert.AreEqual(p, result);
         }
 
@@ -186,12 +186,12 @@ namespace MathNet.Spatial.Tests.Serialization
         [Test]
         public void CoordinateSystemProtoBuf()
         {
-            var cs = new CoordinateSystem(new Point3D(1, -2, 3), new Vector3D(0, 1, 0), new Vector3D(0, 0, 1), new Vector3D(1, 0, 0));
-            var result = this.ProtobufRoundTrip(cs);
+            var cs = new CoordinateSystem(new Point3D(1, -2, 3), new Vector3D(0, 1), new Vector3D(0, 0, 1), new Vector3D(1, 0));
+            var result = ProtobufRoundTrip(cs);
             AssertGeometry.AreEqual(cs, result);
         }
 
-        private T ProtobufRoundTrip<T>(T test)
+        private static T ProtobufRoundTrip<T>(T test)
         {
             using (var ms = new MemoryStream())
             {

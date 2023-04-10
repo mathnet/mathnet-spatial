@@ -11,9 +11,9 @@ namespace MathNet.Spatial.Tests.Euclidean
         [TestCase("1, 2, 3", "0, 0, 1", "1, 2, 3", "0, 0, 1")]
         public void Parse(string rootPoint, string unitVector, string eps, string evs)
         {
-            var ray = new Line(Point3D.Parse(rootPoint), Direction.Parse(unitVector));
-            AssertGeometry.AreEqual(Point3D.Parse(eps), ray.ThroughPoint);
-            AssertGeometry.AreEqual(Vector3D.Parse(evs), ray.Direction);
+            var line = new Line(Point3D.Parse(rootPoint), Direction.Parse(unitVector));
+            AssertGeometry.AreEqual(Point3D.Parse(eps), line.ThroughPoint);
+            AssertGeometry.AreEqual(Vector3D.Parse(evs), line.Direction);
         }
 
         [TestCase("0, 0, 0", "0, 0, 1", "0, 0, 0", "0, 1, 0", "0, 0, 0", "-1, 0, 0")]
@@ -30,10 +30,10 @@ namespace MathNet.Spatial.Tests.Euclidean
         [Test]
         public void LineToTest()
         {
-            var ray = new Line(new Point3D(0, 0, 0), Direction.ZAxis);
-            var point3D = new Point3D(1, 0, 0);
-            var line3DTo = ray.ShortestLineSegmentTo(point3D);
-            AssertGeometry.AreEqual(new Point3D(0, 0, 0), line3DTo.StartPoint);
+            var line = new Line(new Point3D(0, 0), Direction.ZAxis);
+            var point3D = new Point3D(1, 0);
+            var line3DTo = line.ShortestLineSegmentTo(point3D);
+            AssertGeometry.AreEqual(new Point3D(0, 0), line3DTo.StartPoint);
             AssertGeometry.AreEqual(point3D, line3DTo.EndPoint, float.Epsilon);
         }
 
@@ -42,18 +42,18 @@ namespace MathNet.Spatial.Tests.Euclidean
         [TestCase("0, 0, 0", "1, -1, 1", "0, 0, 0", "2, -1, 1", false)]
         public void Equals(string p1s, string v1s, string p2s, string v2s, bool expected)
         {
-            var ray1 = new Line(Point3D.Parse(p1s), Direction.Parse(v1s, tolerance: 2));
-            var ray2 = new Line(Point3D.Parse(p2s), Direction.Parse(v2s, tolerance: 2));
-            Assert.AreEqual(expected, ray1.Equals(ray2));
-            Assert.AreEqual(expected, ray1 == ray2);
-            Assert.AreEqual(!expected, ray1 != ray2);
+            var line1 = new Line(Point3D.Parse(p1s), Direction.Parse(v1s, tolerance: 2));
+            var line2 = new Line(Point3D.Parse(p2s), Direction.Parse(v2s, tolerance: 2));
+            Assert.AreEqual(expected, line1.Equals(line2));
+            Assert.AreEqual(expected, line1 == line2);
+            Assert.AreEqual(!expected, line1 != line2);
         }
 
         [TestCase("1, 2, 3", "-0.26726124191242445, 0.53452248382484879, 0.80178372573727319", false, "<Line><ThroughPoint><X>1</X><Y>2</Y><Z>3</Z></ThroughPoint><Direction><X>-0.26726124191242445</X><Y>0.53452248382484879</Y><Z>0.80178372573727319</Z></Direction></Line>")]
         public void XmlTests(string ps, string vs, bool asElements, string xml)
         {
-            var ray = new Line(Point3D.Parse(ps), Direction.Parse(vs));
-            AssertXml.XmlRoundTrips(ray, xml, (e, a) => AssertGeometry.AreEqual(e, a, 1e-6));
+            var line = new Line(Point3D.Parse(ps), Direction.Parse(vs));
+            AssertXml.XmlRoundTrips(line, xml, (e, a) => AssertGeometry.AreEqual(e, a));
         }
     }
 }

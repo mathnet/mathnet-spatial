@@ -62,12 +62,12 @@ namespace MathNet.Spatial.Tests.Serialization
         }
 
         [TestCase("1, 2, 3", "-0.267261241912424, 0.534522483824849, 0.801783725737273", false)]
-        public void Ray3DBinaryFormatter(string ps, string vs, bool asElements)
+        public void LineBinaryFormatter(string ps, string vs, bool asElements)
         {
-            var ray = new Line(Point3D.Parse(ps), Direction.Parse(vs));
-            var result = BinaryFormaterRoundTrip(ray);
-            Assert.AreEqual(ray, result);
-            AssertGeometry.AreEqual(ray, result);
+            var line = new Line(Point3D.Parse(ps), Direction.Parse(vs));
+            var result = BinaryFormaterRoundTrip(line);
+            Assert.AreEqual(line, result);
+            AssertGeometry.AreEqual(line, result);
         }
 
         [TestCase("1, 2, 3", "4, 5, 6")]
@@ -164,7 +164,7 @@ namespace MathNet.Spatial.Tests.Serialization
         [Test]
         public void CoordinateSystemBinaryFormatter()
         {
-            var cs = new CoordinateSystem(new Point3D(1, -2, 3), new Vector3D(0, 1, 0), new Vector3D(0, 0, 1), new Vector3D(1, 0, 0));
+            var cs = new CoordinateSystem(new Point3D(1, -2, 3), new Vector3D(0, 1), new Vector3D(0, 0, 1), new Vector3D(1, 0));
             var result = BinaryFormaterRoundTrip(cs);
             AssertGeometry.AreEqual(cs, result);
         }

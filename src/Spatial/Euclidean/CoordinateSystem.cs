@@ -33,7 +33,7 @@ namespace MathNet.Spatial.Euclidean
         /// Initializes a new instance of the <see cref="CoordinateSystem"/> class.
         /// </summary>
         public CoordinateSystem()
-            : this(new Point3D(0, 0, 0), Direction.XAxis.ToVector3D(), Direction.YAxis.ToVector3D(), Direction.ZAxis.ToVector3D())
+            : this(new Point3D(0, 0), Direction.XAxis.ToVector3D(), Direction.YAxis.ToVector3D(), Direction.ZAxis.ToVector3D())
         {
         }
 
@@ -444,10 +444,10 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Transforms a ray according to this change matrix
+        /// Transforms a line according to this change matrix
         /// </summary>
-        /// <param name="r">a ray</param>
-        /// <returns>a transformed ray</returns>
+        /// <param name="r">a line</param>
+        /// <returns>a transformed line</returns>
         public Line TransformToCoordSys(Line r)
         {
             var p = r.ThroughPoint;
@@ -473,10 +473,10 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Transforms a ray according to the inverse of this change matrix
+        /// Transforms a line according to the inverse of this change matrix
         /// </summary>
-        /// <param name="r">a ray</param>
-        /// <returns>a transformed ray</returns>
+        /// <param name="r">a line</param>
+        /// <returns>a transformed line</returns>
         public Line TransformFromCoordSys(Line r)
         {
             var p = r.ThroughPoint;
@@ -588,13 +588,13 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Transforms a ray and returns the transformed.
+        /// Transforms a line and returns the transformed.
         /// </summary>
-        /// <param name="ray">A ray</param>
-        /// <returns>A transformed ray</returns>
-        public Line Transform(Line ray)
+        /// <param name="line">A line</param>
+        /// <returns>A transformed line</returns>
+        public Line Transform(Line line)
         {
-            return new Line(Transform(ray.ThroughPoint), Transform(ray.Direction));
+            return new Line(Transform(line.ThroughPoint), Transform(line.Direction));
         }
 
         /// <summary>

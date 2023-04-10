@@ -237,17 +237,17 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Get the distance to the ThroughPoint of <paramref name="ray"/>  along the <see cref="Normal"/>
-        /// This assumes the ray is parallel to the plane.
+        /// Get the distance to the ThroughPoint of <paramref name="line"/>  along the <see cref="Normal"/>
+        /// This assumes the line is parallel to the plane.
         /// </summary>
-        /// <param name="ray">The <see cref="Point3D"/></param>
+        /// <param name="line">The <see cref="Point3D"/></param>
         /// <returns>The distance.</returns>
         [Pure]
-        public double SignedDistanceTo(Line ray)
+        public double SignedDistanceTo(Line line)
         {
-            if (Math.Abs(ray.Direction.DotProduct(Normal) - 0) < 1E-15)
+            if (Math.Abs(line.Direction.DotProduct(Normal) - 0) < 1E-15)
             {
-                return SignedDistanceTo(ray.ThroughPoint);
+                return SignedDistanceTo(line.ThroughPoint);
             }
 
             return 0;
@@ -292,15 +292,15 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Projects a ray onto the plane
+        /// Projects a line onto the plane
         /// </summary>
-        /// <param name="rayToProject">The ray to project</param>
-        /// <returns>A projected ray</returns>
+        /// <param name="lineToProject">The line to project</param>
+        /// <returns>A projected line</returns>
         [Pure]
-        public Line Project(Line rayToProject)
+        public Line Project(Line lineToProject)
         {
-            var projectedThroughPoint = Project(rayToProject.ThroughPoint);
-            var projectedDirection = Project(rayToProject.Direction.ToVector3D());
+            var projectedThroughPoint = Project(lineToProject.ThroughPoint);
+            var projectedDirection = Project(lineToProject.Direction.ToVector3D());
             return new Line(projectedThroughPoint, projectedDirection.Direction);
         }
 
@@ -334,7 +334,7 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         /// <param name="intersectingPlane">a plane which intersects</param>
         /// <param name="tolerance">A tolerance (epsilon) to account for floating point error.</param>
-        /// <returns>A ray at the intersection.</returns>
+        /// <returns>A line at the intersection.</returns>
         [Pure]
         public Line IntersectionWith(Plane intersectingPlane, double tolerance = float.Epsilon)
         {
@@ -397,20 +397,20 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// http://www.cs.princeton.edu/courses/archive/fall00/cs426/lectures/raycast/sld017.htm
         /// </summary>
-        /// <param name="ray">A ray</param>
+        /// <param name="line">A line</param>
         /// <param name="tolerance">A tolerance (epsilon) to account for floating point error.</param>
         /// <returns>The point of intersection.</returns>
         [Pure]
-        public Point3D IntersectionWith(Line ray, double tolerance = float.Epsilon)
+        public Point3D IntersectionWith(Line line, double tolerance = float.Epsilon)
         {
-            if (Normal.IsPerpendicularTo(ray.Direction, tolerance))
+            if (Normal.IsPerpendicularTo(line.Direction, tolerance))
             {
-                throw new InvalidOperationException("Ray is parallel to the plane.");
+                throw new InvalidOperationException("Line is parallel to the plane.");
             }
 
-            var d = SignedDistanceTo(ray.ThroughPoint);
-            var t = -1 * d / ray.Direction.DotProduct(Normal);
-            return ray.ThroughPoint + (t * ray.Direction);
+            var d = SignedDistanceTo(line.ThroughPoint);
+            var t = -1 * d / line.Direction.DotProduct(Normal);
+            return line.ThroughPoint + (t * line.Direction);
         }
 
         /// <summary>

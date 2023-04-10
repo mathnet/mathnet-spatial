@@ -9,9 +9,9 @@ namespace Spatial.Benchmarks
         private static readonly Plane Plane1 = new Plane(new Point3D(1, 2, 3), Direction.Create(1, 0, 0));
         private static readonly Plane Plane2 = new Plane(new Point3D(3, 4, 5), Direction.Create(0, 1, 0));
         private static readonly Point3D Point3D = new Point3D(1, 2, 3);
-        private static readonly Point3D Point3D1 = new Point3D(0, 0, 0);
-        private static readonly Point3D Point3D2 = new Point3D(1, 0, 0);
-        private static readonly Point3D Point3D3 = new Point3D(0, 1, 0);
+        private static readonly Point3D Point3D1 = new Point3D(0, 0);
+        private static readonly Point3D Point3D2 = new Point3D(1, 0);
+        private static readonly Point3D Point3D3 = new Point3D(0, 1);
         private static readonly Line Line = new Line(Point3D.Origin, Direction.ZAxis);
         private static readonly Vector3D Vector3D = new Vector3D(5, 6, 7);
         private static readonly Direction Direction = Direction.Create(0.2, 0.4, 0.7, 1);
@@ -72,7 +72,7 @@ namespace Spatial.Benchmarks
         }
 
         [Benchmark]
-        public double SignedDistanceToRay3D()
+        public double SignedDistanceToLine()
         {
             return Plane1.SignedDistanceTo(Line);
         }
@@ -96,7 +96,7 @@ namespace Spatial.Benchmarks
         }
 
         [Benchmark]
-        public Line ProjectRay3D()
+        public Line ProjectLine()
         {
             return Plane1.Project(Line);
         }

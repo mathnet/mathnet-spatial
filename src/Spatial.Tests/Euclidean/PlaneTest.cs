@@ -31,8 +31,8 @@ namespace MathNet.Spatial.Tests.Euclidean
         [Test]
         public void RobustFromPointsIndependentOfPointOrder()
         {
-            var p1 = new Point3D(1, 0, 0);
-            var p2 = new Point3D(0, 1, 0);
+            var p1 = new Point3D(1, 0);
+            var p2 = new Point3D(0, 1);
             var p3 = new Point3D(0, 0, 1);
             var plane1 = Plane.FromPoints(p1, p2, p3);
             var plane2 = Plane.FromPoints(p1, p3, p2);
@@ -139,7 +139,7 @@ namespace MathNet.Spatial.Tests.Euclidean
         [TestCase(2)]
         public void BestFitFromInsufficientPointsShouldThrowException(int pointCount)
         {
-            var p = new Point3D(1, 0, 0);
+            var p = new Point3D(1, 0);
             var insufficientPoints = Enumerable.Repeat(p, pointCount);
             Assert.Throws<ArgumentException>(() => Plane.BestFit(insufficientPoints));
         }
@@ -214,10 +214,10 @@ namespace MathNet.Spatial.Tests.Euclidean
         [TestCase(ZeroPoint, Z, ZeroPoint, Z, 0)]
         [TestCase(ZeroPoint, Z, ZeroPoint, X, 0)]
         [TestCase(ZeroPoint, Z, "0;0;1", X, 1)]
-        public void SignedDistanceToRay(string prps, string pns, string rayThroughPointString, string rayDirectionString, double expectedValue)
+        public void SignedDistanceToLine(string prps, string pns, string lineThroughPointString, string rayDirectionString, double expectedValue)
         {
             var plane = new Plane(Direction.Parse(pns), Point3D.Parse(prps));
-            var otherPlane = new Line(Point3D.Parse(rayThroughPointString), Direction.Parse(rayDirectionString));
+            var otherPlane = new Line(Point3D.Parse(lineThroughPointString), Direction.Parse(rayDirectionString));
             Assert.AreEqual(expectedValue, plane.SignedDistanceTo(otherPlane), 1E-6);
         }
 
@@ -228,7 +228,7 @@ namespace MathNet.Spatial.Tests.Euclidean
             var rootPoint = new Point3D(0, 0, 1);
             var plane = new Plane(unitVector, rootPoint);
 
-            var line = new LineSegment3D(new Point3D(0, 0, 0), new Point3D(1, 0, 0));
+            var line = new LineSegment3D(new Point3D(0, 0), new Point3D(1, 0));
             var projectOn = plane.Project(line);
             AssertGeometry.AreEqual(new LineSegment3D(new Point3D(0, 0, 1), new Point3D(1, 0, 1)), projectOn, float.Epsilon);
         }
@@ -239,9 +239,9 @@ namespace MathNet.Spatial.Tests.Euclidean
             var unitVector = Direction.ZAxis;
             var rootPoint = new Point3D(0, 0, 1);
             var plane = new Plane(unitVector, rootPoint);
-            var vector = new Vector3D(1, 0, 0);
+            var vector = new Vector3D(1, 0);
             var projectOn = plane.Project(vector);
-            AssertGeometry.AreEqual(new Vector3D(1, 0, 0), projectOn.Direction, float.Epsilon);
+            AssertGeometry.AreEqual(new Vector3D(1, 0), projectOn.Direction, float.Epsilon);
             AssertGeometry.AreEqual(new Point3D(0, 0, 1), projectOn.ThroughPoint, float.Epsilon);
         }
 
@@ -276,7 +276,7 @@ namespace MathNet.Spatial.Tests.Euclidean
         [Test]
         public void MirrorPoint()
         {
-            var plane = new Plane(Direction.ZAxis, new Point3D(0, 0, 0));
+            var plane = new Plane(Direction.ZAxis, new Point3D(0, 0));
             var point3D = new Point3D(1, 2, 3);
             var mirrorAbout = plane.MirrorAbout(point3D);
             AssertGeometry.AreEqual(new Point3D(1, 2, -3), mirrorAbout, float.Epsilon);
@@ -295,8 +295,8 @@ namespace MathNet.Spatial.Tests.Euclidean
         [Test]
         public void InterSectionPointDifferentOrder()
         {
-            var plane1 = new Plane(Direction.Create(0.8, 0.3, 0.01), new Point3D(20, 0, 0));
-            var plane2 = new Plane(Direction.Create(0.002, 1, 0.1), new Point3D(0, 0, 0));
+            var plane1 = new Plane(Direction.Create(0.8, 0.3, 0.01), new Point3D(20, 0));
+            var plane2 = new Plane(Direction.Create(0.002, 1, 0.1), new Point3D(0, 0));
             var plane3 = new Plane(Direction.Create(0.5, 0.5, 1), new Point3D(0, 0, -30));
             var pointFromPlanes1 = Plane.PointFromPlanes(plane1, plane2, plane3);
             var pointFromPlanes2 = Plane.PointFromPlanes(plane2, plane1, plane3);

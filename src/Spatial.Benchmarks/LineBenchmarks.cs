@@ -13,7 +13,7 @@ namespace Spatial.Benchmarks
         private static readonly Plane PlaneXz = new Plane(Point3D.Origin, Direction.YAxis);
 
         [Benchmark]
-        public bool OperatorEqualityRay3DRay3D()
+        public bool OperatorEqualityLineLine()
         {
             return Line1 == Line2;
         }

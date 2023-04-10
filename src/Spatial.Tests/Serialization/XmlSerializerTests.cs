@@ -10,12 +10,12 @@ namespace MathNet.Spatial.Tests.Serialization
         private const double Tolerance = 1e-6;
 
         [TestCase("1, 2, 3", "-0.267261241912424, 0.534522483824849, 0.801783725737273", "<Line><ThroughPoint><X>1</X><Y>2</Y><Z>3</Z></ThroughPoint><Direction><X>-0.26726124191242406</X><Y>0.53452248382484913</Y><Z>0.80178372573727308</Z></Direction></Line>")]
-        public void Ray3DXml(string ps, string vs, string xml)
+        public void LineXml(string ps, string vs, string xml)
         {
-            var ray = new Line(Point3D.Parse(ps), Direction.Parse(vs));
-            var result = AssertXml.XmlSerializerRoundTrip(ray, xml);
-            Assert.AreEqual(ray, result);
-            AssertGeometry.AreEqual(ray, result);
+            var line = new Line(Point3D.Parse(ps), Direction.Parse(vs));
+            var result = AssertXml.XmlSerializerRoundTrip(line, xml);
+            Assert.AreEqual(line, result);
+            AssertGeometry.AreEqual(line, result);
         }
 
         [TestCase("1, 2", "4, 5", "<Line2D><StartPoint><X>1</X><Y>2</Y></StartPoint><EndPoint><X>4</X><Y>5</Y></EndPoint></Line2D>")]
@@ -171,7 +171,7 @@ namespace MathNet.Spatial.Tests.Serialization
         [Test]
         public void CoordinateSystemXml()
         {
-            var cs = new CoordinateSystem(new Point3D(1, -2, 3), new Vector3D(0, 1, 0), new Vector3D(0, 0, 1), new Vector3D(1, 0, 0));
+            var cs = new CoordinateSystem(new Point3D(1, -2, 3), new Vector3D(0, 1), new Vector3D(0, 0, 1), new Vector3D(1, 0));
             var xml = "<CoordinateSystem><Origin><X>1</X><Y>-2</Y><Z>3</Z></Origin><XAxis><X>0</X><Y>1</Y><Z>0</Z></XAxis><YAxis><X>0</X><Y>0</Y><Z>1</Z></YAxis><ZAxis><X>1</X><Y>0</Y><Z>0</Z></ZAxis></CoordinateSystem>";
             var result = AssertXml.XmlSerializerRoundTrip(cs, xml);
             AssertGeometry.AreEqual(cs, result);

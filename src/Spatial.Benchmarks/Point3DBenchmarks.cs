@@ -84,7 +84,7 @@ namespace Spatial.Benchmarks
         }
 
         [Benchmark]
-        public Point3D IntersectionOfPlaneAndRay()
+        public Point3D IntersectionOfPlaneAndLine()
         {
             return Point3D.IntersectionOf(Plane, Line);
         }
