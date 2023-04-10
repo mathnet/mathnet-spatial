@@ -1,4 +1,3 @@
-using System;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
 using MathNet.Spatial.Units;
@@ -20,10 +19,10 @@ namespace MathNet.Spatial.Euclidean
             var rotationMatrix = new DenseMatrix(3, 3)
             {
                 [0, 0] = 1,
-                [1, 1] = Math.Cos(angle.Radians),
-                [1, 2] = -Math.Sin(angle.Radians),
-                [2, 1] = Math.Sin(angle.Radians),
-                [2, 2] = Math.Cos(angle.Radians)
+                [1, 1] = angle.Cos,
+                [1, 2] = -angle.Sin,
+                [2, 1] = angle.Sin,
+                [2, 2] = angle.Cos
             };
             return rotationMatrix;
         }
@@ -37,11 +36,11 @@ namespace MathNet.Spatial.Euclidean
         {
             var rotationMatrix = new DenseMatrix(3, 3)
             {
-                [0, 0] = Math.Cos(angle.Radians),
-                [0, 2] = Math.Sin(angle.Radians),
+                [0, 0] = angle.Cos,
+                [0, 2] = angle.Sin,
                 [1, 1] = 1,
-                [2, 0] = -Math.Sin(angle.Radians),
-                [2, 2] = Math.Cos(angle.Radians)
+                [2, 0] = -angle.Sin,
+                [2, 2] = angle.Cos
             };
             return rotationMatrix;
         }
@@ -55,10 +54,10 @@ namespace MathNet.Spatial.Euclidean
         {
             var rotationMatrix = new DenseMatrix(3, 3)
             {
-                [0, 0] = Math.Cos(angle.Radians),
-                [0, 1] = -Math.Sin(angle.Radians),
-                [1, 0] = Math.Sin(angle.Radians),
-                [1, 1] = Math.Cos(angle.Radians),
+                [0, 0] = angle.Cos,
+                [0, 1] = -angle.Sin,
+                [1, 0] = angle.Sin,
+                [1, 1] = angle.Cos,
                 [2, 2] = 1
             };
             return rotationMatrix;
@@ -123,9 +122,9 @@ namespace MathNet.Spatial.Euclidean
             var unitTensorProduct = aboutVector.GetUnitTensorProduct();
             var crossProductMatrix = aboutVector.CrossProductMatrix;
 
-            var r1 = DenseMatrix.CreateIdentity(3).Multiply(Math.Cos(angle.Radians));
-            var r2 = crossProductMatrix.Multiply(Math.Sin(angle.Radians));
-            var r3 = unitTensorProduct.Multiply(1 - Math.Cos(angle.Radians));
+            var r1 = DenseMatrix.CreateIdentity(3).Multiply(angle.Cos);
+            var r2 = crossProductMatrix.Multiply(angle.Sin);
+            var r3 = unitTensorProduct.Multiply(1 - angle.Cos);
             var totalR = r1.Add(r2).Add(r3);
             return totalR;
         }

@@ -16,8 +16,8 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>A transform matrix</returns>
         public static DenseMatrix Rotation(Angle rotation)
         {
-            double c = Math.Cos(rotation.Radians);
-            double s = Math.Sin(rotation.Radians);
+            var c = rotation.Cos;
+            var s = rotation.Sin;
             return Create(c, -s, s, c);
         }
 

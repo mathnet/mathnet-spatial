@@ -257,12 +257,12 @@ namespace MathNet.Spatial.Euclidean
         public static CoordinateSystem Rotation(Angle yaw, Angle pitch, Angle roll)
         {
             var cs = new CoordinateSystem(); 
-            var cosY = Math.Cos(yaw.Radians);
-            var sinY = Math.Sin(yaw.Radians); 
-            var cosP = Math.Cos(pitch.Radians);
-            var sinP = Math.Sin(pitch.Radians);
-            var cosR = Math.Cos(roll.Radians);
-            var sinR = Math.Sin(roll.Radians);
+            var cosY = yaw.Cos;
+            var sinY = yaw.Sin;
+            var cosP = pitch.Cos;
+            var sinP = pitch.Sin;
+            var cosR = roll.Cos;
+            var sinR = roll.Sin;
 
             cs[0, 0] = cosY * cosP;
             cs[1, 0] = sinY * cosP;
