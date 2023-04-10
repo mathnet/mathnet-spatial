@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Globalization;
 using System.Xml;
 using System.Xml.Schema;
@@ -35,17 +35,17 @@ namespace MathNet.Spatial.Units
         public static readonly Angle Zero = new Angle(0);
 
         /// <summary>
-        /// The 90� angle.
+        /// The 90° angle.
         /// </summary>
         public static readonly Angle HalfPi = new Angle(Math.PI / 2);
 
         /// <summary>
-        /// The 180� angle.
+        /// The 180° angle.
         /// </summary>
         public static readonly Angle Pi = new Angle(Math.PI);
 
         /// <summary>
-        /// The 360� angle.
+        /// The 360° angle.
         /// </summary>
         public static readonly Angle TwoPi = new Angle(2 * Math.PI);
 
@@ -68,15 +68,58 @@ namespace MathNet.Spatial.Units
         /// </summary>
         public double Cos => Math.Cos(Radians);
 
+        /// <summary>Returns the angle whose cosine is the specified number.</summary>
+        /// <param name="d">A number representing a cosine, where <paramref name="d" /> must be greater than or equal to -1, but less than or equal to 1.</param>
+        /// <returns>An angle, θ such that 0 ≤ θ ≤ π</returns>
+        public static Angle Acos(double d)
+        {
+            if (Math.Abs(d) > 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(d), "The cosine cannot be greater than 1 in magnitude");
+            }
+
+            return new Angle(Math.Acos(d));
+        }
+
         /// <summary>
         /// Gets the sine of this instance
         /// </summary>
         public double Sin => Math.Sin(Radians);
 
+        /// <summary>Returns the angle whose sine is the specified number.</summary>
+        /// <param name="d">A number representing a sine, where <paramref name="d" /> must be greater than or equal to -1, but less than or equal to 1.</param>
+        /// <returns>An angle, θ such that -π/2 ≤ θ ≤ π/2</returns>
+        public static Angle Asin(double d)
+        {
+            if (Math.Abs(d) > 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(d), "The sine cannot be greater than 1 in magnitude");
+            }
+
+            return new Angle(Math.Asin(d));
+        }
+
         /// <summary>
         /// Gets the tangent of this instance
         /// </summary>
         public double Tan => Math.Tan(Radians);
+
+        /// <summary>Returns the angle whose tangent is the specified number.</summary>
+        /// <param name="d">A number representing a tangent.</param>
+        /// <returns>An angle, θ such that -π/2 ≤ θ ≤ π/2.</returns>
+        public static Angle Atan(double d)
+        {
+            return new Angle(Math.Atan(d));
+        }
+
+        /// <summary>Returns the angle whose tangent is the quotient of two specified numbers.</summary>
+        /// <param name="y">The y coordinate of a point.</param>
+        /// <param name="x">The x coordinate of a point.</param>
+        /// <returns>An angle, θ such that -π ≤ θ ≤ π, and tan(θ) = <paramref name="y" /> / <paramref name="x" />, where (<paramref name="x" />, <paramref name="y" />) is a point in the Cartesian plane</returns>
+        public static Angle Atan2(double y, double x)
+        {
+            return new Angle(Math.Atan2(y, x));
+        }
 
         /// <summary>
         /// Returns a value that indicates whether two specified Angles are equal.

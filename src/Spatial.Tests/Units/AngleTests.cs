@@ -123,10 +123,22 @@ namespace MathNet.Spatial.Tests.Units
         [TestCase(180, -1)]
         [TestCase(-180, -1)]
         [TestCase(270, 0)]
-        public void Cosine(double degrees, double cosine)
+        public void CosineRoundTrip(double degrees, double cosine)
         {
             var angle = Angle.FromDegrees(degrees);
             Assert.AreEqual(cosine, angle.Cos, 1e-15);
+
+            if (degrees >= 0 && degrees <= 180)
+            {
+                var recovered = Angle.Acos(cosine);
+                Assert.AreEqual(angle.Degrees, recovered.Degrees, 1e-6);
+            }
+        }
+
+        [Test]
+        public void AcosException()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => Angle.Acos(5));
         }
 
         [TestCase(0, 0)]
@@ -143,10 +155,22 @@ namespace MathNet.Spatial.Tests.Units
         [TestCase(180, 0)]
         [TestCase(-180, 0)]
         [TestCase(270, -1)]
-        public void Sine(double degrees, double sine)
+        public void SineWithRoundTrip(double degrees, double sine)
         {
             var angle = Angle.FromDegrees(degrees);
             Assert.AreEqual(sine, angle.Sin, 1e-15);
+
+            if (degrees >= -90 && degrees <= 90)
+            {
+                var recovered = Angle.Asin(sine);
+                Assert.AreEqual(angle.Degrees, recovered.Degrees, 1e-6);
+            }
+        }
+
+        [Test]
+        public void AsinException()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => Angle.Asin(5));
         }
 
         [TestCase(0, 0)]
@@ -160,10 +184,37 @@ namespace MathNet.Spatial.Tests.Units
         [TestCase(-120, 1.7320508075688783)]
         [TestCase(180, 0)]
         [TestCase(-180, 0)]
-        public void Tangent(double degrees, double tangent)
+        public void TangentWithRoundTrip(double degrees, double tangent)
         {
             var angle = Angle.FromDegrees(degrees);
             Assert.AreEqual(tangent, angle.Tan, 1e-15);
+
+            if (degrees >= -90 && degrees <= 90)
+            {
+                var recovered = Angle.Atan(tangent);
+                Assert.AreEqual(angle.Degrees, recovered.Degrees, 1e-6);
+            }
+        }
+
+        [TestCase(0, 1, 0)]
+        [TestCase(30, 1.7320508075688772935274463415059, 1)]
+        [TestCase(-30, 1.7320508075688772935274463415059, -1)]
+        [TestCase(45, 1, 1)]
+        [TestCase(-45, 1, -1)]
+        [TestCase(60, 1, 1.7320508075688772935274463415059)]
+        [TestCase(-60, 1, -1.7320508075688772935274463415059)]
+        [TestCase(90, 0, 1)]
+        [TestCase(-90, 0, -1)]
+        [TestCase(120, -1, 1.7320508075688772935274463415059)]
+        [TestCase(-120, -1, -1.7320508075688772935274463415059)]
+        [TestCase(150, -1.7320508075688772935274463415059, 1)]
+        [TestCase(-150, -1.7320508075688772935274463415059, -1)]
+        [TestCase(180, -1, 0)]
+        public void Atan2(double degrees, double x, double y)
+        {
+            var expected = Angle.FromDegrees(degrees);
+            var actual = Angle.Atan2(y, x);
+            Assert.AreEqual(expected.Degrees, actual.Degrees, 1e-10);
         }
 
         [TestCase(90, 1.5707963267948966)]
