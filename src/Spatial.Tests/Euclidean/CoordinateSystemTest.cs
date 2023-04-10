@@ -1,5 +1,4 @@
-﻿using System;
-using MathNet.Spatial.Euclidean;
+﻿using MathNet.Spatial.Euclidean;
 using MathNet.Spatial.Units;
 using NUnit.Framework;
 
