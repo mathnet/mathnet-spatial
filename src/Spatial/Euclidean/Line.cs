@@ -112,7 +112,7 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public LineSegment3D ShortestLineSegmentTo(Point3D point3D)
         {
-            return new LineSegment3D(this.PerpendicularFootTo(point3D), point3D);
+            return new LineSegment3D(PerpendicularFootTo(point3D), point3D);
         }
 
         /// <summary>
