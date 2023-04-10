@@ -36,7 +36,7 @@ namespace MathNet.Spatial.Tests.Euclidean
         {
             var line = new Line(Point3D.Parse(rootPointString), Vector3D.Parse(directionString));
             var point = Point3D.Parse(pointString);
-            Assert.AreEqual(expected, line.DistanceFrom(point), 1e-12);
+            Assert.AreEqual(expected, line.DistanceTo(point), 1e-12);
         }
 
         [Test]
