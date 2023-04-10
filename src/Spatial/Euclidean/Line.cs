@@ -94,6 +94,18 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
+        /// Calculates the distance of a <param name="point"/> from this line
+        /// </summary>
+        /// <param name="point">A point in space, whose distance from this line is requested</param>
+        /// <returns>The (normal) distance of the point to this line</returns>
+        [Pure]
+        public double DistanceFrom(Point3D point)
+        {
+            var closestPointOnLine = ThroughPoint + (point - ThroughPoint).DotProduct(Direction) * Direction;
+            return (point - closestPointOnLine).Length;
+        }
+
+        /// <summary>
         /// Returns the shortest line segment from a point to the line
         /// </summary>
         /// <param name="point3D">A point.</param>

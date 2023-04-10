@@ -52,7 +52,7 @@ namespace MathNet.Spatial
             }
         }
 
-        public static Line ParseRay3D(string s)
+        public static Line ParseLine(string s)
         {
             var match = Regex.Match(s, PlanePointVectorPattern);
             var p = Point3D.Parse(match.Groups["p"].Value);

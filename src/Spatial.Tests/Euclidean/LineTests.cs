@@ -1,5 +1,6 @@
 ﻿// ReSharper disable InconsistentNaming
 
+using System.Runtime.InteropServices;
 using MathNet.Spatial.Euclidean;
 using NUnit.Framework;
 
@@ -27,14 +28,25 @@ namespace MathNet.Spatial.Tests.Euclidean
             AssertGeometry.AreEqual(expected, actual);
         }
 
+        [TestCase("0, 0, 0", "1, 0, 0", "5, 2, 0", 2)]
+        [TestCase("0, 0, 0", "1, 0, 0", "-1, 3, 4", 5)]
+        [TestCase("1, 0, 0", "0, 1, 0", "5, 2, 0", 4)]
+        [TestCase("1, -2, 3", "-4, 5, -6", "10, 11, -20", 20.415807473749229)]
+        public void DistanceTest(string rootPointString, string directionString, string pointString, double expected)
+        {
+            var line = new Line(Point3D.Parse(rootPointString), Vector3D.Parse(directionString));
+            var point = Point3D.Parse(pointString);
+            Assert.AreEqual(expected, line.DistanceFrom(point), 1e-12);
+        }
+
         [Test]
         public void LineToTest()
         {
             var line = new Line(new Point3D(0, 0), Direction.ZAxis);
             var point3D = new Point3D(1, 0);
-            var line3DTo = line.ShortestLineSegmentTo(point3D);
-            AssertGeometry.AreEqual(new Point3D(0, 0), line3DTo.StartPoint);
-            AssertGeometry.AreEqual(point3D, line3DTo.EndPoint, float.Epsilon);
+            var segment = line.ShortestLineSegmentTo(point3D);
+            AssertGeometry.AreEqual(new Point3D(0, 0), segment.StartPoint);
+            AssertGeometry.AreEqual(point3D, segment.EndPoint, float.Epsilon);
         }
 
         [TestCase("0, 0, 0", "1, -1, 1", "0, 0, 0", "1, -1, 1", true)]
