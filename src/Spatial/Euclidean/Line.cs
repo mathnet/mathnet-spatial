@@ -87,7 +87,7 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         /// <param name="point">a string representing a through point for the line.</param>
         /// <param name="direction">a string representing a direction for the line.</param>
-        /// <returns>A ray.</returns>
+        /// <returns>A line.</returns>
         public static Line Parse(string point, string direction)
         {
             return new Line(Point3D.Parse(point), Direction.Parse(direction));
