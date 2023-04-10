@@ -32,20 +32,31 @@ namespace MathNet.Spatial.Tests.Euclidean
         [TestCase("0, 0, 0", "1, 0, 0", "-1, 3, 4", 5)]
         [TestCase("1, 0, 0", "0, 1, 0", "5, 2, 0", 4)]
         [TestCase("1, -2, 3", "-4, 5, -6", "10, 11, -20", 20.415807473749229)]
-        public void DistanceTest(string rootPointString, string directionString, string pointString, double expected)
+        public void Distance(string rootPointString, string directionString, string pointString, double expected)
         {
             var line = new Line(Point3D.Parse(rootPointString), Vector3D.Parse(directionString));
             var point = Point3D.Parse(pointString);
             Assert.AreEqual(expected, line.DistanceTo(point), 1e-12);
         }
 
-        [Test]
-        public void LineToTest()
+        [TestCase("0, 0, 0", "1, 0, 0", "5, 2, 0", "5, 0, 0")]
+        [TestCase("-2, 0, 0", "0, -1, 0", "-10, 3, 8", "-2, 3, 0")]
+        [TestCase("0, 0, 5", "0, 0, 1", "1, -9, 20", "0, 0, 20")]
+        public void PerpendicularFoot(string rootPointString, string directionString, string pointString, string footString)
         {
-            var line = new Line(new Point3D(0, 0), Direction.ZAxis);
+            var line = new Line(Point3D.Parse(rootPointString), Vector3D.Parse(directionString));
+            var point = Point3D.Parse(pointString);
+            var expected = Point3D.Parse(footString);
+            AssertGeometry.AreEqual(expected, line.PerpendicularFootTo(point), 1e-10);
+        }
+
+        [Test]
+        public void LineSegmentTest()
+        {
+            var line = new Line(Point3D.Origin, Direction.ZAxis);
             var point3D = new Point3D(1, 0);
             var segment = line.ShortestLineSegmentTo(point3D);
-            AssertGeometry.AreEqual(new Point3D(0, 0), segment.StartPoint);
+            AssertGeometry.AreEqual(Point3D.Origin, segment.StartPoint);
             AssertGeometry.AreEqual(point3D, segment.EndPoint, float.Epsilon);
         }
 

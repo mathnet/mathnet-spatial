@@ -94,7 +94,7 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Calculates the distance of a <param name="point"/> from this line
+        /// Returns the distance of a <param name="point"/> from this line
         /// </summary>
         /// <param name="point">A point in space, whose distance from this line is requested</param>
         /// <returns>The (normal) distance of the point to this line</returns>
@@ -112,9 +112,21 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public LineSegment3D ShortestLineSegmentTo(Point3D point3D)
         {
-            var v = ThroughPoint.VectorTo(point3D);
+            return new LineSegment3D(this.PerpendicularFootTo(point3D), point3D);
+        }
+
+        /// <summary>
+        /// Returns the perpendicular foot on this line from a given <param name="point"></param>
+        /// https://mathworld.wolfram.com/PerpendicularFoot.html
+        /// </summary>
+        /// <param name="point">The point from which the perpendicular on this line passes through</param>
+        /// <returns>The perpendicular foot on this line</returns>
+        [Pure]
+        public Point3D PerpendicularFootTo(Point3D point)
+        {
+            var v = ThroughPoint.VectorTo(point);
             var alongVector = v.ProjectOn(Direction);
-            return new LineSegment3D(ThroughPoint + alongVector, point3D);
+            return ThroughPoint + alongVector;
         }
 
         /// <summary>
