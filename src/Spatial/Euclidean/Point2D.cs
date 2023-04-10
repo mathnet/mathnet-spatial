@@ -116,8 +116,8 @@ namespace MathNet.Spatial.Euclidean
             }
 
             return new Point2D(
-                radius * Math.Cos(angle.Radians),
-                radius * Math.Sin(angle.Radians));
+                radius * angle.Cos,
+                radius * angle.Sin);
         }
 
         /// <summary>

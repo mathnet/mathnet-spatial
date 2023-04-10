@@ -162,8 +162,8 @@ namespace MathNet.Spatial.Projective
         public static Matrix3DHomogeneous RotationAroundXAxis(Angle angle)
         {
             var result = new Matrix3DHomogeneous();
-            var sinAngle = Math.Sin(angle.Radians);
-            var cosAngle = Math.Cos(angle.Radians);
+            var sinAngle = angle.Sin;
+            var cosAngle = angle.Cos;
             result.matrix[1, 1] = cosAngle;
             result.matrix[1, 2] = -sinAngle;
             result.matrix[2, 1] = sinAngle;
@@ -179,8 +179,8 @@ namespace MathNet.Spatial.Projective
         public static Matrix3DHomogeneous RotationAroundYAxis(Angle angle)
         {
             var result = new Matrix3DHomogeneous();
-            var sinAngle = Math.Sin(angle.Radians);
-            var cosAngle = Math.Cos(angle.Radians);
+            var sinAngle = angle.Sin;
+            var cosAngle = angle.Cos;
             result.matrix[0, 0] = cosAngle;
             result.matrix[0, 2] = sinAngle;
             result.matrix[2, 0] = -sinAngle;
@@ -196,8 +196,8 @@ namespace MathNet.Spatial.Projective
         public static Matrix3DHomogeneous RotationAroundZAxis(Angle angle)
         {
             var result = new Matrix3DHomogeneous();
-            var sinAngle = Math.Sin(angle.Radians);
-            var cosAngle = Math.Cos(angle.Radians);
+            var sinAngle = angle.Sin;
+            var cosAngle = angle.Cos;
             result.matrix[0, 0] = cosAngle;
             result.matrix[0, 1] = -sinAngle;
             result.matrix[1, 0] = sinAngle;
@@ -281,10 +281,10 @@ namespace MathNet.Spatial.Projective
         public static Matrix3DHomogeneous Axonometric(Angle alpha, Angle beta)
         {
             var result = new Matrix3DHomogeneous();
-            var sna = Math.Sin(alpha.Radians);
-            var cosAlpha = Math.Cos(alpha.Radians);
-            var sinBeta = Math.Sin(beta.Radians);
-            var cosBeta = Math.Cos(beta.Radians);
+            var sna = alpha.Sin;
+            var cosAlpha = alpha.Cos;
+            var sinBeta = beta.Sin;
+            var cosBeta = beta.Cos;
             result.matrix[0, 0] = cosBeta;
             result.matrix[0, 2] = sinBeta;
             result.matrix[1, 0] = sna * sinBeta;
@@ -303,9 +303,9 @@ namespace MathNet.Spatial.Projective
         public static Matrix3DHomogeneous Oblique(Angle alpha, Angle theta)
         {
             var result = new Matrix3DHomogeneous();
-            var tanAlpha = Math.Tan(alpha.Radians);
-            var sinTheta = Math.Sin(theta.Radians);
-            var cosTheta = Math.Cos(theta.Radians);
+            var tanAlpha = alpha.Tan;
+            var sinTheta = theta.Sin;
+            var cosTheta = theta.Cos;
             result.matrix[0, 2] = -cosTheta / tanAlpha;
             result.matrix[1, 2] = -sinTheta / tanAlpha;
             result.matrix[2, 2] = 0;
@@ -323,12 +323,12 @@ namespace MathNet.Spatial.Projective
         {
             var result = new Matrix3DHomogeneous();
 
-            var sinAlpha = Math.Sin(alpha.Radians);
-            var cosAlpha = Math.Cos(alpha.Radians);
-            var sinBeta = Math.Sin(beta.Radians);
-            var cosBeta = Math.Cos(beta.Radians);
-            var sinGamma = Math.Sin(gamma.Radians);
-            var cosGamma = Math.Cos(gamma.Radians);
+            var sinAlpha = alpha.Sin;
+            var cosAlpha = alpha.Cos;
+            var sinBeta = beta.Sin;
+            var cosBeta = beta.Cos;
+            var sinGamma = gamma.Sin;
+            var cosGamma = gamma.Cos;
 
             result.matrix[0, 0] = (cosAlpha * cosGamma) - (sinAlpha * sinBeta * sinGamma);
             result.matrix[0, 1] = -sinBeta * sinGamma;
