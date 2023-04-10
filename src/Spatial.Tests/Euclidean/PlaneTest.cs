@@ -217,7 +217,7 @@ namespace MathNet.Spatial.Tests.Euclidean
         public void SignedDistanceToRay(string prps, string pns, string rayThroughPointString, string rayDirectionString, double expectedValue)
         {
             var plane = new Plane(Direction.Parse(pns), Point3D.Parse(prps));
-            var otherPlane = new Ray3D(Point3D.Parse(rayThroughPointString), Direction.Parse(rayDirectionString));
+            var otherPlane = new Line(Point3D.Parse(rayThroughPointString), Direction.Parse(rayDirectionString));
             Assert.AreEqual(expectedValue, plane.SignedDistanceTo(otherPlane), 1E-6);
         }
 

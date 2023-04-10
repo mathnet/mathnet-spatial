@@ -106,7 +106,7 @@ namespace MathNet.Spatial.Euclidean
             var directionA = p1p2.CrossProduct(axis);
             var directionB = p2p3.CrossProduct(axis);
 
-            var bisectorA = new Ray3D(midPointA, directionA);
+            var bisectorA = new Line(midPointA, directionA);
             var bisectorB = Plane.FromPoints(midPointB, midPointB + directionB.Normalize(), midPointB + axis);
 
             var center = bisectorA.IntersectionWith(bisectorB);

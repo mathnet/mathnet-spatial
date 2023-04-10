@@ -4,7 +4,7 @@ using SpatialAnalyzers;
 
 namespace Spatial.Roslyn.Tests
 {
-    public class FixRay3DTests
+    public class FixLineTests
     {
         // ReSharper disable once InconsistentNaming
         private static readonly ExpectedDiagnostic CS0618 = ExpectedDiagnostic.Create("CS0618");
@@ -24,7 +24,7 @@ namespace RoslynSandbox
             var p1 = new Point3D(1, 2, 0);
             var p2 = new Point3D(3, 4, 5);
             var u = new Direction(0, 1, 0);
-            var ray = new Ray3D(p1, u);
+            var ray = new Line(p1, u);
             var answer = ray.LineTo(p2);
         }
     }
@@ -41,8 +41,8 @@ namespace RoslynSandbox
             var p1 = new Point3D(1, 2, 0);
             var p2 = new Point3D(3, 4, 5);
             var u = new Direction(0, 1, 0);
-            var ray = new Ray3D(p1, u);
-            var answer = ray.ShortestLineTo(p2);
+            var ray = new Line(p1, u);
+            var answer = ray.ShortestLineSegmentTo(p2);
         }
     }
 }";

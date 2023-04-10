@@ -243,7 +243,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="ray">The <see cref="Point3D"/></param>
         /// <returns>The distance.</returns>
         [Pure]
-        public double SignedDistanceTo(Ray3D ray)
+        public double SignedDistanceTo(Line ray)
         {
             if (Math.Abs(ray.Direction.DotProduct(Normal) - 0) < 1E-15)
             {
@@ -297,11 +297,11 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="rayToProject">The ray to project</param>
         /// <returns>A projected ray</returns>
         [Pure]
-        public Ray3D Project(Ray3D rayToProject)
+        public Line Project(Line rayToProject)
         {
             var projectedThroughPoint = Project(rayToProject.ThroughPoint);
             var projectedDirection = Project(rayToProject.Direction.ToVector3D());
-            return new Ray3D(projectedThroughPoint, projectedDirection.Direction);
+            return new Line(projectedThroughPoint, projectedDirection.Direction);
         }
 
         /// <summary>
@@ -310,11 +310,11 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="vector3DToProject">The Vector3D to project</param>
         /// <returns>The projected Vector3D</returns>
         [Pure]
-        public Ray3D Project(Vector3D vector3DToProject)
+        public Line Project(Vector3D vector3DToProject)
         {
             var projectedEndPoint = Project(vector3DToProject.ToPoint3D());
             var projectedZero = Project(Point3D.Origin);
-            return new Ray3D(projectedZero, projectedZero.VectorTo(projectedEndPoint).Normalize());
+            return new Line(projectedZero, projectedZero.VectorTo(projectedEndPoint).Normalize());
         }
 
         /// <summary>
@@ -323,7 +323,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="vector3DToProject">The Vector3D to project</param>
         /// <returns>The projected Vector3D</returns>
         [Pure]
-        public Ray3D Project(Direction vector3DToProject)
+        public Line Project(Direction vector3DToProject)
         {
             return Project(vector3DToProject.ToVector3D());
         }
@@ -336,7 +336,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="tolerance">A tolerance (epsilon) to account for floating point error.</param>
         /// <returns>A ray at the intersection.</returns>
         [Pure]
-        public Ray3D IntersectionWith(Plane intersectingPlane, double tolerance = float.Epsilon)
+        public Line IntersectionWith(Plane intersectingPlane, double tolerance = float.Epsilon)
         {
             var a = new DenseMatrix(2, 3);
             a.SetRow(0, Normal.ToVector());
@@ -356,7 +356,7 @@ namespace MathNet.Spatial.Euclidean
             var pointOnIntersectionLine = svd.Solve(y);
             var throughPoint = Point3D.OfVector(pointOnIntersectionLine.Column(0));
             var direction = Direction.OfVector(svd.VT.Row(2));
-            return new Ray3D(throughPoint, direction);
+            return new Line(throughPoint, direction);
         }
 
         /// <summary>
@@ -401,7 +401,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="tolerance">A tolerance (epsilon) to account for floating point error.</param>
         /// <returns>The point of intersection.</returns>
         [Pure]
-        public Point3D IntersectionWith(Ray3D ray, double tolerance = float.Epsilon)
+        public Point3D IntersectionWith(Line ray, double tolerance = float.Epsilon)
         {
             if (Normal.IsPerpendicularTo(ray.Direction, tolerance))
             {

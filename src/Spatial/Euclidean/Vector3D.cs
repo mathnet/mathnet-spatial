@@ -274,7 +274,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="planeToProjectOn">A geometric plane</param>
         /// <returns>A ray</returns>
         [Pure]
-        public Ray3D ProjectOn(Plane planeToProjectOn)
+        public Line ProjectOn(Plane planeToProjectOn)
         {
             return planeToProjectOn.Project(this);
         }

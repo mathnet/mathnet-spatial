@@ -448,7 +448,7 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         /// <param name="r">a ray</param>
         /// <returns>a transformed ray</returns>
-        public Ray3D TransformToCoordSys(Ray3D r)
+        public Line TransformToCoordSys(Line r)
         {
             var p = r.ThroughPoint;
             var uv = r.Direction;
@@ -457,7 +457,7 @@ namespace MathNet.Spatial.Euclidean
             var baseChangeMatrix = BaseChangeMatrix;
             var point = baseChangeMatrix.Transform(p) + OffsetToBase;
             var direction = uv.TransformBy(baseChangeMatrix);
-            return new Ray3D(point, direction);
+            return new Line(point, direction);
         }
 
         /// <summary>
@@ -477,7 +477,7 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         /// <param name="r">a ray</param>
         /// <returns>a transformed ray</returns>
-        public Ray3D TransformFromCoordSys(Ray3D r)
+        public Line TransformFromCoordSys(Line r)
         {
             var p = r.ThroughPoint;
             var uv = r.Direction;
@@ -485,7 +485,7 @@ namespace MathNet.Spatial.Euclidean
             // The position and the vector are transformed
             var point = BaseChangeMatrix.Invert().Transform(p) + OffsetToBase;
             var direction = BaseChangeMatrix.Invert().Transform(uv);
-            return new Ray3D(point, direction);
+            return new Line(point, direction);
         }
 
         /// <summary>
@@ -592,9 +592,9 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         /// <param name="ray">A ray</param>
         /// <returns>A transformed ray</returns>
-        public Ray3D Transform(Ray3D ray)
+        public Line Transform(Line ray)
         {
-            return new Ray3D(Transform(ray.ThroughPoint), Transform(ray.Direction));
+            return new Line(Transform(ray.ThroughPoint), Transform(ray.Direction));
         }
 
         /// <summary>

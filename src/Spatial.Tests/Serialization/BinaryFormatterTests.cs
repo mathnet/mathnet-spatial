@@ -64,7 +64,7 @@ namespace MathNet.Spatial.Tests.Serialization
         [TestCase("1, 2, 3", "-0.267261241912424, 0.534522483824849, 0.801783725737273", false)]
         public void Ray3DBinaryFormatter(string ps, string vs, bool asElements)
         {
-            var ray = new Ray3D(Point3D.Parse(ps), Direction.Parse(vs));
+            var ray = new Line(Point3D.Parse(ps), Direction.Parse(vs));
             var result = BinaryFormaterRoundTrip(ray);
             Assert.AreEqual(ray, result);
             AssertGeometry.AreEqual(ray, result);

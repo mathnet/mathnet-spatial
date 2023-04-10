@@ -14,7 +14,7 @@ namespace Spatial.Benchmarks
         private static readonly Direction Direction = Direction.Create(1, 0, 0);
         private static readonly Point3D[] Points = { P1, P2 };
         private static readonly Vector<double> Vector = P1.ToVector();
-        private static readonly Ray3D Ray3D = new Ray3D(Point3D.Origin, Direction.ZAxis);
+        private static readonly Line Line = new Line(Point3D.Origin, Direction.ZAxis);
         private static readonly Plane Plane = new Plane(Direction.Create(0, 0, 1), Point3D.Origin);
 
         [Benchmark]
@@ -86,7 +86,7 @@ namespace Spatial.Benchmarks
         [Benchmark]
         public Point3D IntersectionOfPlaneAndRay()
         {
-            return Point3D.IntersectionOf(Plane, Ray3D);
+            return Point3D.IntersectionOf(Plane, Line);
         }
 
         [Benchmark]

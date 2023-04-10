@@ -68,7 +68,7 @@ namespace MathNet.Spatial.Tests.Serialization
         [TestCase("1, 2, 3", "-1, 2, 3", false)]
         public void Ray3DJson(string ps, string vs, bool asElements)
         {
-            var ray = new Ray3D(Point3D.Parse(ps), Direction.Parse(vs));
+            var ray = new Line(Point3D.Parse(ps), Direction.Parse(vs));
             var result = this.JsonRoundTrip(ray);
             Assert.AreEqual(ray, result);
             AssertGeometry.AreEqual(ray, result, 1e-6);

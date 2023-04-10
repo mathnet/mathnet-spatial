@@ -9,10 +9,10 @@ namespace MathNet.Spatial.Tests.Serialization
     {
         private const double Tolerance = 1e-6;
 
-        [TestCase("1, 2, 3", "-0.267261241912424, 0.534522483824849, 0.801783725737273", "<Ray3D><ThroughPoint><X>1</X><Y>2</Y><Z>3</Z></ThroughPoint><Direction><X>-0.26726124191242406</X><Y>0.53452248382484913</Y><Z>0.80178372573727308</Z></Direction></Ray3D>")]
+        [TestCase("1, 2, 3", "-0.267261241912424, 0.534522483824849, 0.801783725737273", "<Line><ThroughPoint><X>1</X><Y>2</Y><Z>3</Z></ThroughPoint><Direction><X>-0.26726124191242406</X><Y>0.53452248382484913</Y><Z>0.80178372573727308</Z></Direction></Line>")]
         public void Ray3DXml(string ps, string vs, string xml)
         {
-            var ray = new Ray3D(Point3D.Parse(ps), Direction.Parse(vs));
+            var ray = new Line(Point3D.Parse(ps), Direction.Parse(vs));
             var result = AssertXml.XmlSerializerRoundTrip(ray, xml);
             Assert.AreEqual(ray, result);
             AssertGeometry.AreEqual(ray, result);

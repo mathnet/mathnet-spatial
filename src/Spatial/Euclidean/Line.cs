@@ -11,60 +11,60 @@ using HashCode = MathNet.Spatial.Internals.HashCode;
 namespace MathNet.Spatial.Euclidean
 {
     /// <summary>
-    /// A ray in 3D space
+    /// A infinite line in 3D space.
     /// </summary>
     [Serializable]
-    public struct Ray3D : IEquatable<Ray3D>, IXmlSerializable, IFormattable
+    public struct Line : IEquatable<Line>, IXmlSerializable, IFormattable
     {
         /// <summary>
-        /// The start point of the ray
+        /// A given through point of the line
         /// </summary>
         public readonly Point3D ThroughPoint;
 
         /// <summary>
-        /// The direction of the ray
+        /// The direction of the line
         /// </summary>
         public readonly Direction Direction;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Ray3D"/> struct.
+        /// Initializes a new instance of the <see cref="Line"/> struct.
         /// </summary>
-        /// <param name="throughPoint">The start point of the ray.</param>
-        /// <param name="direction">The direction of the ray.</param>
-        public Ray3D(Point3D throughPoint, Direction direction)
+        /// <param name="throughPoint">A through point of the line.</param>
+        /// <param name="direction">The direction of the line.</param>
+        public Line(Point3D throughPoint, Direction direction)
         {
             ThroughPoint = throughPoint;
             Direction = direction;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Ray3D"/> struct.
+        /// Initializes a new instance of the <see cref="Line"/> struct.
         /// </summary>
-        /// <param name="throughPoint">The start point of the ray.</param>
-        /// <param name="direction">A vector indicating the direction of the ray.</param>
-        public Ray3D(Point3D throughPoint, Vector3D direction)
+        /// <param name="throughPoint">A through point of the line.</param>
+        /// <param name="direction">A vector indicating the direction of the line.</param>
+        public Line(Point3D throughPoint, Vector3D direction)
             : this(throughPoint, direction.Normalize())
         {
         }
 
         /// <summary>
-        /// Returns a value that indicates whether each pair of elements in two specified rays is equal.
+        /// Returns a value that indicates whether the two lines are equal.
         /// </summary>
-        /// <param name="left">The first ray to compare</param>
-        /// <param name="right">The second ray to compare</param>
-        /// <returns>True if the rays are the same; otherwise false.</returns>
-        public static bool operator ==(Ray3D left, Ray3D right)
+        /// <param name="left">The first line to compare</param>
+        /// <param name="right">The second line to compare</param>
+        /// <returns>True if the lines are the same; otherwise false.</returns>
+        public static bool operator ==(Line left, Line right)
         {
             return left.Equals(right);
         }
 
         /// <summary>
-        /// Returns a value that indicates whether any pair of elements in two specified rays is not equal.
+        /// Returns a value that indicates whether the two lines are not equal.
         /// </summary>
-        /// <param name="left">The first ray to compare</param>
-        /// <param name="right">The second ray to compare</param>
-        /// <returns>True if the rays are different; otherwise false.</returns>
-        public static bool operator !=(Ray3D left, Ray3D right)
+        /// <param name="left">The first line to compare</param>
+        /// <param name="right">The second line to compare</param>
+        /// <returns>True if the lines are different; otherwise false.</returns>
+        public static bool operator !=(Line left, Line right)
         {
             return !left.Equals(right);
         }
@@ -74,32 +74,32 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         /// <param name="plane1">The first plane</param>
         /// <param name="plane2">The second plane</param>
-        /// <returns>A ray at the intersection of two planes</returns>
-        public static Ray3D IntersectionOf(Plane plane1, Plane plane2)
+        /// <returns>A line at the common intersection of two the planes</returns>
+        public static Line IntersectionOf(Plane plane1, Plane plane2)
         {
             return plane1.IntersectionWith(plane2);
         }
 
         /// <summary>
-        /// Parses string representation of throughpoint and direction
+        /// Parses string representation of through point and direction
         /// See <see cref="Point3D.Parse(string, IFormatProvider)" /> and  <see cref="Euclidean.Direction.Parse(string, IFormatProvider, double)" /> for details on acceptable formats.
         /// This is mainly meant for tests
         /// </summary>
-        /// <param name="point">a string representing a start point for the ray.</param>
-        /// <param name="direction">a string representing a direction for the ray.</param>
+        /// <param name="point">a string representing a through point for the line.</param>
+        /// <param name="direction">a string representing a direction for the line.</param>
         /// <returns>A ray.</returns>
-        public static Ray3D Parse(string point, string direction)
+        public static Line Parse(string point, string direction)
         {
-            return new Ray3D(Point3D.Parse(point), Direction.Parse(direction));
+            return new Line(Point3D.Parse(point), Direction.Parse(direction));
         }
 
         /// <summary>
-        /// Returns the shortest line from a point to the ray
+        /// Returns the shortest line segment from a point to the line
         /// </summary>
         /// <param name="point3D">A point.</param>
-        /// <returns>A line segment from the point to the closest point on the ray</returns>
+        /// <returns>A line segment from the point to the closest point on the line</returns>
         [Pure]
-        public LineSegment3D ShortestLineTo(Point3D point3D)
+        public LineSegment3D ShortestLineSegmentTo(Point3D point3D)
         {
             var v = ThroughPoint.VectorTo(point3D);
             var alongVector = v.ProjectOn(Direction);
@@ -107,7 +107,7 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Returns the point at which this ray intersects with the plane
+        /// Returns the point at which this line intersects with the plane
         /// </summary>
         /// <param name="plane">A geometric plane.</param>
         /// <returns>A point of intersection if such an intersection exists; otherwise null.</returns>
@@ -118,37 +118,38 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Returns a value to indicate if a pair of rays are collinear
+        /// Returns a value to indicate if a pair of lines are collinear
         /// </summary>
-        /// <param name="otherRay">The ray to compare against.</param>
+        /// <param name="other">The line to compare against.</param>
         /// <param name="tolerance">A tolerance (epsilon) to adjust for floating point error</param>
-        /// <returns>True if the rays are collinear; otherwise false.</returns>
+        /// <returns>True if the lines are collinear; otherwise false.</returns>
         [Pure]
-        public bool IsCollinear(Ray3D otherRay, double tolerance = float.Epsilon)
+        public bool IsCollinear(Line other, double tolerance = float.Epsilon)
         {
-            return Direction.IsParallelTo(otherRay.Direction, tolerance);
+            return Direction.IsParallelTo(other.Direction, tolerance);
         }
 
         /// <summary>
-        /// Returns a value to indicate if a pair of rays are equal
+        /// Returns a value to indicate if a pair of lines are equal
         /// </summary>
-        /// <param name="other">The ray to compare against.</param>
+        /// <param name="other">The line to compare against.</param>
         /// <param name="tolerance">A tolerance (epsilon) to adjust for floating point error</param>
-        /// <returns>True if the rays are equal; otherwise false</returns>
+        /// <returns>True if the lines are equal; otherwise false</returns>
         [Pure]
-        public bool Equals(Ray3D other, double tolerance)
+        public bool Equals(Line other, double tolerance)
         {
-            return Direction.Equals(other.Direction, tolerance) &&
-                   ThroughPoint.Equals(other.ThroughPoint, tolerance);
+            return Direction.IsParallelTo(other.Direction, tolerance)
+                   && ThroughPoint.Equals(other.ThroughPoint, tolerance);
         }
 
         /// <inheritdoc/>
         [Pure]
-        public bool Equals(Ray3D r) => Direction.Equals(r.Direction) && ThroughPoint.Equals(r.ThroughPoint);
+        public bool Equals(Line r) => Direction.IsParallelTo(r.Direction)
+                                      && ThroughPoint.Equals(r.ThroughPoint);
 
         /// <inheritdoc/>
         [Pure]
-        public override bool Equals(object obj) => obj is Ray3D r && Equals(r);
+        public override bool Equals(object obj) => obj is Line r && Equals(r);
 
         /// <inheritdoc/>
         [Pure]
@@ -182,7 +183,7 @@ namespace MathNet.Spatial.Euclidean
         {
             reader.MoveToContent();
             var e = (XElement)XNode.ReadFrom(reader);
-            this = new Ray3D(
+            this = new Line(
                 Point3D.ReadFrom(e.SingleElement("ThroughPoint").CreateReader()),
                 Direction.ReadFrom(e.SingleElement("Direction").CreateReader()));
         }

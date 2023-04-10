@@ -135,7 +135,7 @@ namespace Spatial.Benchmarks
         }
 
         [Benchmark]
-        public Ray3D ProjectOnPlane()
+        public Line ProjectOnPlane()
         {
             return Direction1.ProjectOn(Plane);
         }

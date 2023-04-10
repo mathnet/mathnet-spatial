@@ -65,10 +65,10 @@ namespace MathNet.Spatial.Tests.Serialization
             Assert.AreEqual(plane, result);
         }
 
-        [TestCase("1, 2, 3", "-0.2672612419124244, 0.53452248382484879, 0.80178372573727319", false, @"<Ray3D><ThroughPoint><X>1</X><Y>2</Y><Z>3</Z></ThroughPoint><Direction><X>-0.2672612419124244</X><Y>0.53452248382484879</Y><Z>0.80178372573727319</Z></Direction></Ray3D>")]
+        [TestCase("1, 2, 3", "-0.2672612419124244, 0.53452248382484879, 0.80178372573727319", false, @"<Line><ThroughPoint><X>1</X><Y>2</Y><Z>3</Z></ThroughPoint><Direction><X>-0.2672612419124244</X><Y>0.53452248382484879</Y><Z>0.80178372573727319</Z></Direction></Line>")]
         public void Ray3DDataContract(string ps, string vs, bool asElements, string xml)
         {
-            var ray = new Ray3D(Point3D.Parse(ps), Direction.Parse(vs));
+            var ray = new Line(Point3D.Parse(ps), Direction.Parse(vs));
             var result = DataContractRoundTrip(ray, xml);
             Assert.AreEqual(ray, result);
             AssertGeometry.AreEqual(ray, result);

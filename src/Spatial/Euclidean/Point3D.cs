@@ -258,7 +258,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="plane">A geometric plane</param>
         /// <param name="ray">a ray</param>
         /// <returns>The point of intersection</returns>
-        public static Point3D IntersectionOf(Plane plane, Ray3D ray)
+        public static Point3D IntersectionOf(Plane plane, Line ray)
         {
             return plane.IntersectionWith(ray);
         }
