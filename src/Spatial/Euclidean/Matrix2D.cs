@@ -1,5 +1,4 @@
-﻿using System;
-using MathNet.Numerics.LinearAlgebra.Double;
+﻿using MathNet.Numerics.LinearAlgebra.Double;
 using MathNet.Spatial.Units;
 
 namespace MathNet.Spatial.Euclidean
