@@ -53,7 +53,7 @@ namespace MathNet.Spatial.Euclidean
         /// Gets the length of the vector
         /// </summary>
         [Pure]
-        public double Length => Math.Sqrt((X * X) + (Y * Y));
+        public double Length => Math.Sqrt(X * X + Y * Y);
 
         /// <summary>
         /// Gets a vector orthogonal to this
@@ -168,8 +168,8 @@ namespace MathNet.Spatial.Euclidean
             }
 
             return new Vector2D(
-                radius * Math.Cos(angle.Radians),
-                radius * Math.Sin(angle.Radians));
+                radius * angle.Cos,
+                radius * angle.Sin);
         }
 
         /// <summary>
@@ -305,8 +305,7 @@ namespace MathNet.Spatial.Euclidean
         public bool IsPerpendicularTo(Vector2D other, Angle tolerance)
         {
             var angle = AngleTo(other);
-            const double Perpendicular = Math.PI / 2;
-            return Math.Abs(angle.Radians - Perpendicular) < tolerance.Radians;
+            return (angle - Angle.HalfPi).Abs() < tolerance;
         }
 
         /// <summary>
@@ -366,8 +365,8 @@ namespace MathNet.Spatial.Euclidean
             return Angle.FromRadians(
                 Math.Abs(
                     Math.Atan2(
-                        (X * other.Y) - (other.X * Y),
-                        (X * other.X) + (Y * other.Y))));
+                        X * other.Y - other.X * Y,
+                        X * other.X + Y * other.Y)));
         }
 
         /// <summary>
@@ -378,10 +377,10 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public Vector2D Rotate(Angle angle)
         {
-            var cs = Math.Cos(angle.Radians);
-            var sn = Math.Sin(angle.Radians);
-            var x = (X * cs) - (Y * sn);
-            var y = (X * sn) + (Y * cs);
+            var cs = angle.Cos;
+            var sn = angle.Sin;
+            var x = X * cs - Y * sn;
+            var y = X * sn + Y * cs;
             return new Vector2D(x, y);
         }
 
@@ -393,7 +392,7 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public double DotProduct(Vector2D other)
         {
-            return (X * other.X) + (Y * other.Y);
+            return X * other.X + Y * other.Y;
         }
 
         /// <summary>
@@ -408,7 +407,7 @@ namespace MathNet.Spatial.Euclidean
         {
             // Though the cross product is undefined in 2D space, this is a useful mathematical operation to
             // determine angular direction and to compute the area of 2D shapes
-            return (X * other.Y) - (Y * other.X);
+            return X * other.Y - Y * other.X;
         }
 
         /// <summary>

@@ -59,6 +59,15 @@ namespace MathNet.Spatial.Units
         }
 
         /// <summary>
+        /// Returns the absolute of this angle.
+        /// </summary>
+        /// <returns></returns>
+        public Angle Abs()
+        {
+            return new Angle(Math.Abs(Radians));
+        }
+
+        /// <summary>
         /// Gets the value in degrees
         /// </summary>
         public double Degrees => Radians * RadToDeg;
