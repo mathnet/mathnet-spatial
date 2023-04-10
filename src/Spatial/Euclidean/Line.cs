@@ -101,7 +101,7 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public double DistanceTo(Point3D point)
         {
-            return ShortestLineSegmentTo(point).Length;
+            return (PerpendicularFootTo(point) - point).Length;
         }
 
         /// <summary>
@@ -162,13 +162,13 @@ namespace MathNet.Spatial.Euclidean
         public bool Equals(Line other, double tolerance)
         {
             return Direction.IsParallelTo(other.Direction, tolerance)
-                   && ThroughPoint.Equals(other.ThroughPoint, tolerance);
+                   && DistanceTo(other.ThroughPoint) < tolerance;
         }
 
         /// <inheritdoc/>
         [Pure]
         public bool Equals(Line r) => Direction.IsParallelTo(r.Direction)
-                                      && ThroughPoint.Equals(r.ThroughPoint);
+                                      && DistanceTo(r.ThroughPoint) == 0;
 
         /// <inheritdoc/>
         [Pure]

@@ -63,6 +63,10 @@ namespace MathNet.Spatial.Tests.Euclidean
         [TestCase("0, 0, 0", "1, -1, 1", "0, 0, 0", "1, -1, 1", true)]
         [TestCase("0, 0, 2", "1, -1, 1", "0, 0, 0", "1, -1, 1", false)]
         [TestCase("0, 0, 0", "1, -1, 1", "0, 0, 0", "2, -1, 1", false)]
+        [TestCase("0, 0, 0", "1, 0, 0", "5, 0, 0", "1, 0, 0", true)]
+        [TestCase("0, 1, 0", "0, 1, 0", "0, -1, 0", "0, -1, 0", true)]
+        [TestCase("0, 0, 5", "0, 0, 1", "0, 0, -10", "0, 0, 1", true)]
+        [TestCase("1, 2, 3", "0.6, 0, 0.8", "2.2, 2, 4.6", "-0.6, 0, -0.8", true)]
         public void Equals(string p1s, string v1s, string p2s, string v2s, bool expected)
         {
             var line1 = new Line(Point3D.Parse(p1s), Direction.Parse(v1s, tolerance: 2));
