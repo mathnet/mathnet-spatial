@@ -81,16 +81,6 @@ namespace MathNet.Spatial.Tests.Serialization
         }
 
         [TestCase("1, 2", "4, 5")]
-        public void Line2DBinaryFormatter(string p1S, string p2S)
-        {
-            Point2D p1 = Point2D.Parse(p1S);
-            Point2D p2 = Point2D.Parse(p2S);
-            var l = new Line2D(p1, p2);
-            var result = BinaryFormaterRoundTrip(l);
-            Assert.AreEqual(l, result);
-        }
-
-        [TestCase("1, 2", "4, 5")]
         public void LineSegment2DBinaryFormatter(string p1S, string p2S)
         {
             Point2D p1 = Point2D.Parse(p1S);
