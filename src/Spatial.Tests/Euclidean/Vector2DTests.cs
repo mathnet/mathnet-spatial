@@ -306,7 +306,7 @@ namespace MathNet.Spatial.Tests.Euclidean
             var cwNeg = v1.SignedAngleTo(v2, true, true);
             Assert.AreEqual(Angle.Parse(expectedNegative).Degrees, cwNeg.Degrees, 1e-3);
 
-            var ccw = v1.SignedAngleTo(v2, false);
+            var ccw = v1.SignedAngleTo(v2);
             Assert.AreEqual(360 - expected.Degrees, ccw.Degrees, 1e-3);
         }
 

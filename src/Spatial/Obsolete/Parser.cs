@@ -52,12 +52,12 @@ namespace MathNet.Spatial
             }
         }
 
-        public static Ray3D ParseRay3D(string s)
+        public static Line ParseLine(string s)
         {
             var match = Regex.Match(s, PlanePointVectorPattern);
             var p = Point3D.Parse(match.Groups["p"].Value);
             var uv = Direction.Parse(match.Groups["v"].Value);
-            return new Ray3D(p, uv);
+            return new Line(p, uv);
         }
     }
 }

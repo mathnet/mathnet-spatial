@@ -66,12 +66,12 @@ namespace MathNet.Spatial.Tests.Serialization
 
         [Explicit("fix later")]
         [TestCase("1, 2, 3", "-1, 2, 3", false)]
-        public void Ray3DJson(string ps, string vs, bool asElements)
+        public void LineJson(string ps, string vs, bool asElements)
         {
-            var ray = new Ray3D(Point3D.Parse(ps), Direction.Parse(vs));
-            var result = this.JsonRoundTrip(ray);
-            Assert.AreEqual(ray, result);
-            AssertGeometry.AreEqual(ray, result, 1e-6);
+            var line = new Line(Point3D.Parse(ps), Direction.Parse(vs));
+            var result = this.JsonRoundTrip(line);
+            Assert.AreEqual(line, result);
+            AssertGeometry.AreEqual(line, result);
         }
 
         [Explicit("fix later")]
@@ -178,7 +178,7 @@ namespace MathNet.Spatial.Tests.Serialization
         [Test]
         public void CoordinateSystemJson()
         {
-            var cs = new CoordinateSystem(new Point3D(1, -2, 3), new Vector3D(0, 1, 0), new Vector3D(0, 0, 1), new Vector3D(1, 0, 0));
+            var cs = new CoordinateSystem(new Point3D(1, -2, 3), new Vector3D(0, 1), new Vector3D(0, 0, 1), new Vector3D(1, 0));
             var result = this.JsonRoundTrip(cs);
             AssertGeometry.AreEqual(cs, result);
         }

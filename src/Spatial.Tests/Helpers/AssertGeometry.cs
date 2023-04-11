@@ -118,7 +118,7 @@ namespace MathNet.Spatial.Tests
             AreEqual(expected.EndPoint, actual.EndPoint, tolerance);
         }
 
-        public static void AreEqual(Ray3D expected, Ray3D actual, double tolerance = 1e-6, string message = "")
+        public static void AreEqual(Line expected, Line actual, double tolerance = 1e-6, string message = "")
         {
             AreEqual(expected.ThroughPoint, actual.ThroughPoint, tolerance, message);
             AreEqual(expected.Direction, actual.Direction, tolerance, message);

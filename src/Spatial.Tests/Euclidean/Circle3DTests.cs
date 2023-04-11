@@ -59,9 +59,9 @@ namespace MathNet.Spatial.Tests.Euclidean
         [Test]
         public void CircleFromThreePointsArgumentException()
         {
-            var p1 = new Point3D(0, 0, 0);
-            var p2 = new Point3D(-1, 0, 0);
-            var p3 = new Point3D(1, 0, 0);
+            var p1 = new Point3D(0, 0);
+            var p2 = new Point3D(-1, 0);
+            var p3 = new Point3D(1, 0);
 
             Assert.Throws<InvalidOperationException>(() => Circle3D.FromPoints(p1, p2, p3));
         }

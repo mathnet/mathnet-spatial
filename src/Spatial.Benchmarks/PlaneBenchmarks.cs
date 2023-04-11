@@ -9,10 +9,10 @@ namespace Spatial.Benchmarks
         private static readonly Plane Plane1 = new Plane(new Point3D(1, 2, 3), Direction.Create(1, 0, 0));
         private static readonly Plane Plane2 = new Plane(new Point3D(3, 4, 5), Direction.Create(0, 1, 0));
         private static readonly Point3D Point3D = new Point3D(1, 2, 3);
-        private static readonly Point3D Point3D1 = new Point3D(0, 0, 0);
-        private static readonly Point3D Point3D2 = new Point3D(1, 0, 0);
-        private static readonly Point3D Point3D3 = new Point3D(0, 1, 0);
-        private static readonly Ray3D Ray3D = new Ray3D(Point3D.Origin, Direction.ZAxis);
+        private static readonly Point3D Point3D1 = new Point3D(0, 0);
+        private static readonly Point3D Point3D2 = new Point3D(1, 0);
+        private static readonly Point3D Point3D3 = new Point3D(0, 1);
+        private static readonly Line Line = new Line(Point3D.Origin, Direction.ZAxis);
         private static readonly Vector3D Vector3D = new Vector3D(5, 6, 7);
         private static readonly Direction Direction = Direction.Create(0.2, 0.4, 0.7, 1);
         private static readonly LineSegment3D LineSegment3D = new LineSegment3D(new Point3D(2, 3, 4), new Point3D(5, 6, 7));
@@ -72,9 +72,9 @@ namespace Spatial.Benchmarks
         }
 
         [Benchmark]
-        public double SignedDistanceToRay3D()
+        public double SignedDistanceToLine()
         {
-            return Plane1.SignedDistanceTo(Ray3D);
+            return Plane1.SignedDistanceTo(Line);
         }
 
         [Benchmark]
@@ -96,25 +96,25 @@ namespace Spatial.Benchmarks
         }
 
         [Benchmark]
-        public Ray3D ProjectRay3D()
+        public Line ProjectLine()
         {
-            return Plane1.Project(Ray3D);
+            return Plane1.Project(Line);
         }
 
         [Benchmark]
-        public Ray3D ProjectVector3D()
+        public Line ProjectVector3D()
         {
             return Plane1.Project(Vector3D);
         }
 
         [Benchmark]
-        public Ray3D ProjectDirection()
+        public Line ProjectDirection()
         {
             return Plane1.Project(Direction);
         }
 
         [Benchmark]
-        public Ray3D IntersectionWithPlane()
+        public Line IntersectionWithPlane()
         {
             return Plane1.IntersectionWith(Plane2, 2);
         }
@@ -128,7 +128,7 @@ namespace Spatial.Benchmarks
         [Benchmark]
         public Point3D IntersectionWith()
         {
-            return Plane1.IntersectionWith(Ray3D, 2);
+            return Plane1.IntersectionWith(Line, 2);
         }
 
         [Benchmark]

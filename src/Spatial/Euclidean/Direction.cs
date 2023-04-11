@@ -388,7 +388,7 @@ namespace MathNet.Spatial.Euclidean
         /// Scale this instance by <paramref name="factor"/>
         /// </summary>
         /// <param name="factor">The plane to project on.</param>
-        /// <returns>The projected <see cref="Ray3D"/></returns>
+        /// <returns>The projected <see cref="Line"/></returns>
         [Pure]
         public Vector3D ScaleBy(double factor)
         {
@@ -399,9 +399,9 @@ namespace MathNet.Spatial.Euclidean
         /// Project this instance onto the plane
         /// </summary>
         /// <param name="plane">The plane to project on.</param>
-        /// <returns>The projected <see cref="Ray3D"/></returns>
+        /// <returns>The projected <see cref="Line"/></returns>
         [Pure]
-        public Ray3D ProjectOn(Plane plane)
+        public Line ProjectOn(Plane plane)
         {
             return plane.Project(ToVector3D());
         }

@@ -50,7 +50,7 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// Gets a point at the origin
         /// </summary>
-        public static Point3D Origin { get; } = new Point3D(0, 0, 0);
+        public static Point3D Origin { get; } = new Point3D(0, 0);
 
         /// <summary>
         /// Gets a point where all values are NAN
@@ -248,19 +248,19 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>The point of intersection</returns>
         public static Point3D IntersectionOf(Plane plane1, Plane plane2, Plane plane3)
         {
-            var ray = plane1.IntersectionWith(plane2);
-            return plane3.IntersectionWith(ray);
+            var line = plane1.IntersectionWith(plane2);
+            return plane3.IntersectionWith(line);
         }
 
         /// <summary>
-        /// Returns the point of intersection between a plane and a ray
+        /// Returns the point of intersection between a plane and a line
         /// </summary>
         /// <param name="plane">A geometric plane</param>
-        /// <param name="ray">a ray</param>
+        /// <param name="line">a line</param>
         /// <returns>The point of intersection</returns>
-        public static Point3D IntersectionOf(Plane plane, Ray3D ray)
+        public static Point3D IntersectionOf(Plane plane, Line line)
         {
-            return plane.IntersectionWith(ray);
+            return plane.IntersectionWith(line);
         }
 
         /// <summary>

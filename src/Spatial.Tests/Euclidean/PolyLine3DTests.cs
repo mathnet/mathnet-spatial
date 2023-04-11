@@ -66,7 +66,7 @@ namespace MathNet.Spatial.Tests.Euclidean
             var test = Point3D.Parse(testPoint);
             var expected = Point3D.Parse(expectedPoint);
 
-            AssertGeometry.AreEqual(expected, testCurve.ClosestPointTo(test), 1e-06);
+            AssertGeometry.AreEqual(expected, testCurve.ClosestPointTo(test));
         }
     }
 }

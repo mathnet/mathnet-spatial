@@ -65,13 +65,13 @@ namespace MathNet.Spatial.Tests.Serialization
             Assert.AreEqual(plane, result);
         }
 
-        [TestCase("1, 2, 3", "-0.2672612419124244, 0.53452248382484879, 0.80178372573727319", false, @"<Ray3D><ThroughPoint><X>1</X><Y>2</Y><Z>3</Z></ThroughPoint><Direction><X>-0.2672612419124244</X><Y>0.53452248382484879</Y><Z>0.80178372573727319</Z></Direction></Ray3D>")]
-        public void Ray3DDataContract(string ps, string vs, bool asElements, string xml)
+        [TestCase("1, 2, 3", "-0.2672612419124244, 0.53452248382484879, 0.80178372573727319", false, @"<Line><ThroughPoint><X>1</X><Y>2</Y><Z>3</Z></ThroughPoint><Direction><X>-0.2672612419124244</X><Y>0.53452248382484879</Y><Z>0.80178372573727319</Z></Direction></Line>")]
+        public void LineDataContract(string ps, string vs, bool asElements, string xml)
         {
-            var ray = new Ray3D(Point3D.Parse(ps), Direction.Parse(vs));
-            var result = DataContractRoundTrip(ray, xml);
-            Assert.AreEqual(ray, result);
-            AssertGeometry.AreEqual(ray, result);
+            var line = new Line(Point3D.Parse(ps), Direction.Parse(vs));
+            var result = DataContractRoundTrip(line, xml);
+            Assert.AreEqual(line, result);
+            AssertGeometry.AreEqual(line, result);
         }
 
         [TestCase("1, 2, 3", "4, 5, 6", @"<LineSegment3D><StartPoint><X>1</X><Y>2</Y><Z>3</Z></StartPoint><EndPoint><X>4</X><Y>5</Y><Z>6</Z></EndPoint></LineSegment3D>")]
@@ -175,7 +175,7 @@ namespace MathNet.Spatial.Tests.Serialization
         [Test]
         public void CoordinateSystemDataContract()
         {
-            var cs = new CoordinateSystem(new Point3D(1, -2, 3), new Vector3D(0, 1, 0), new Vector3D(0, 0, 1), new Vector3D(1, 0, 0));
+            var cs = new CoordinateSystem(new Point3D(1, -2, 3), new Vector3D(0, 1), new Vector3D(0, 0, 1), new Vector3D(1, 0));
             const string xml = "<CoordinateSystem><Origin><X>1</X><Y>-2</Y><Z>3</Z></Origin><XAxis><X>0</X><Y>1</Y><Z>0</Z></XAxis><YAxis><X>0</X><Y>0</Y><Z>1</Z></YAxis><ZAxis><X>1</X><Y>0</Y><Z>0</Z></ZAxis></CoordinateSystem>";
             var result = DataContractRoundTrip(cs, xml);
             AssertGeometry.AreEqual(cs, result);

@@ -107,7 +107,7 @@ namespace MathNet.Spatial.Tests.Euclidean
             var testPoints = (from x in points.Split(';') select Point2D.Parse(x)).ToList();
             var expectedPoints = (from x in expected.Split(';') select Point2D.Parse(x)).ToList();
 
-            var hullClockwise = Polygon2D.GetConvexHullFromPoints(testPoints, true);
+            var hullClockwise = Polygon2D.GetConvexHullFromPoints(testPoints);
 
             var clockwiseVertices = hullClockwise.Vertices;
             CollectionAssert.AreEqual(expectedPoints, clockwiseVertices);

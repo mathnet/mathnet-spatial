@@ -272,9 +272,9 @@ namespace MathNet.Spatial.Euclidean
         /// Projects the vector onto a plane
         /// </summary>
         /// <param name="planeToProjectOn">A geometric plane</param>
-        /// <returns>A ray</returns>
+        /// <returns>A line</returns>
         [Pure]
-        public Ray3D ProjectOn(Plane planeToProjectOn)
+        public Line ProjectOn(Plane planeToProjectOn)
         {
             return planeToProjectOn.Project(this);
         }
