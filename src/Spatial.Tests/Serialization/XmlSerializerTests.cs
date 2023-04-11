@@ -18,16 +18,6 @@ namespace MathNet.Spatial.Tests.Serialization
             AssertGeometry.AreEqual(line, result);
         }
 
-        [TestCase("1, 2", "4, 5", "<Line2D><StartPoint><X>1</X><Y>2</Y></StartPoint><EndPoint><X>4</X><Y>5</Y></EndPoint></Line2D>")]
-        public void Line2DXml(string p1S, string p2S, string xml)
-        {
-            Point2D p1 = Point2D.Parse(p1S);
-            Point2D p2 = Point2D.Parse(p2S);
-            var l = new Line2D(p1, p2);
-            var result = AssertXml.XmlSerializerRoundTrip(l, xml);
-            Assert.AreEqual(l, result);
-        }
-
         [TestCase("1, 2, 3", "4, 5, 6", "<LineSegment3D><StartPoint><X>1</X><Y>2</Y><Z>3</Z></StartPoint><EndPoint><X>4</X><Y>5</Y><Z>6</Z></EndPoint></LineSegment3D>")]
         public void LineSegment3DXml(string p1S, string p2S, string xml)
         {

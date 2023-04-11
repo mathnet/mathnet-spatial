@@ -82,17 +82,6 @@ namespace MathNet.Spatial.Tests.Serialization
         }
 
         [Explicit("fix later")]
-        [TestCase("1, 2", "4, 5")]
-        public void Line2DProtoBuf(string p1s, string p2s)
-        {
-            Point2D p1 = Point2D.Parse(p1s);
-            Point2D p2 = Point2D.Parse(p2s);
-            var l = new Line2D(p1, p2);
-            var result = ProtobufRoundTrip(l);
-            Assert.AreEqual(l, result);
-        }
-
-        [Explicit("fix later")]
         [TestCase("1, 2, 3", "4, 5, 6")]
         public void LineSegment3DProtoBuf(string p1s, string p2s)
         {

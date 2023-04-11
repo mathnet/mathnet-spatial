@@ -79,7 +79,7 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Returns a new <see cref="Line2D"/> from a pair of strings which represent points.
+        /// Returns a new <see cref="LineSegment2D"/> from a pair of strings which represent points.
         /// See <see cref="Point2D.Parse(string, IFormatProvider)" /> for details on acceptable formats.
         /// </summary>
         /// <param name="startPointString">The string representation of the first point.</param>

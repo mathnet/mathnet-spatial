@@ -15,7 +15,7 @@ namespace MathNet.Spatial.Tests.Serialization
         public void AngleJson(string vs)
         {
             var angle = Angle.Parse(vs);
-            var roundTrip = this.JsonRoundTrip(angle);
+            var roundTrip = JsonRoundTrip(angle);
             Assert.AreEqual(angle.Radians, roundTrip.Radians, Tolerance);
         }
 
@@ -24,7 +24,7 @@ namespace MathNet.Spatial.Tests.Serialization
         public void Point2DJson()
         {
             var p = new Point2D(1, 2);
-            var result = this.JsonRoundTrip(p);
+            var result = JsonRoundTrip(p);
             Assert.AreEqual(p, result);
         }
 
@@ -33,7 +33,7 @@ namespace MathNet.Spatial.Tests.Serialization
         public void Point3DJson()
         {
             var p = new Point3D(1, -2, 3);
-            var result = this.JsonRoundTrip(p);
+            var result = JsonRoundTrip(p);
             Assert.AreEqual(p, result);
         }
 
@@ -42,7 +42,7 @@ namespace MathNet.Spatial.Tests.Serialization
         public void QuaternionJson()
         {
             var q = new Quaternion(1, 2, 3, 4);
-            var result = this.JsonRoundTrip(q);
+            var result = JsonRoundTrip(q);
             Assert.AreEqual(q, result);
         }
 
@@ -51,7 +51,7 @@ namespace MathNet.Spatial.Tests.Serialization
         {
             var q = new Quaternion(0, 0, 0, 0);
             var eulerAngles = q.ToEulerAngles();
-            var result = this.JsonRoundTrip(eulerAngles);
+            var result = JsonRoundTrip(eulerAngles);
             Assert.AreEqual(eulerAngles, result);
         }
 
@@ -60,7 +60,7 @@ namespace MathNet.Spatial.Tests.Serialization
         public void PlaneJson(string rootPoint, string unitVector)
         {
             var plane = new Plane(Point3D.Parse(rootPoint), Direction.Parse(unitVector));
-            var result = this.JsonRoundTrip(plane);
+            var result = JsonRoundTrip(plane);
             Assert.AreEqual(plane, result);
         }
 
@@ -69,41 +69,30 @@ namespace MathNet.Spatial.Tests.Serialization
         public void LineJson(string ps, string vs, bool asElements)
         {
             var line = new Line(Point3D.Parse(ps), Direction.Parse(vs));
-            var result = this.JsonRoundTrip(line);
+            var result = JsonRoundTrip(line);
             Assert.AreEqual(line, result);
             AssertGeometry.AreEqual(line, result);
         }
 
         [Explicit("fix later")]
-        [TestCase("1, 2", "4, 5")]
-        public void Line2DJson(string p1s, string p2s)
-        {
-            Point2D p1 = Point2D.Parse(p1s);
-            Point2D p2 = Point2D.Parse(p2s);
-            var l = new Line2D(p1, p2);
-            var result = this.JsonRoundTrip(l);
-            Assert.AreEqual(l, result);
-        }
-
-        [Explicit("fix later")]
         [TestCase("1, 2, 3", "4, 5, 6")]
-        public void LineSegment3DJson(string p1s, string p2s)
+        public void LineSegment3DJson(string p1S, string p2S)
         {
-            Point3D p1 = Point3D.Parse(p1s);
-            Point3D p2 = Point3D.Parse(p2s);
+            Point3D p1 = Point3D.Parse(p1S);
+            Point3D p2 = Point3D.Parse(p2S);
             var l = new LineSegment3D(p1, p2);
-            var result = this.JsonRoundTrip(l);
+            var result = JsonRoundTrip(l);
             Assert.AreEqual(l, result);
         }
 
         [Explicit("fix later")]
         [TestCase("1, 2", "4, 5")]
-        public void LineSegment2DJson(string p1s, string p2s)
+        public void LineSegment2DJson(string p1S, string p2S)
         {
-            Point2D p1 = Point2D.Parse(p1s);
-            Point2D p2 = Point2D.Parse(p2s);
+            Point2D p1 = Point2D.Parse(p1S);
+            Point2D p2 = Point2D.Parse(p2S);
             var l = new LineSegment2D(p1, p2);
-            var result = this.JsonRoundTrip(l);
+            var result = JsonRoundTrip(l);
             Assert.AreEqual(l, result);
         }
 
@@ -112,7 +101,7 @@ namespace MathNet.Spatial.Tests.Serialization
         public void Vector2DJson()
         {
             var v = new Vector2D(1, 2);
-            var result = this.JsonRoundTrip(v);
+            var result = JsonRoundTrip(v);
             Assert.AreEqual(v, result);
         }
 
@@ -121,7 +110,7 @@ namespace MathNet.Spatial.Tests.Serialization
         public void Vector3DJson()
         {
             var v = new Vector3D(1, -2, 3);
-            var result = this.JsonRoundTrip(v);
+            var result = JsonRoundTrip(v);
             Assert.AreEqual(v, result);
         }
 
@@ -130,7 +119,7 @@ namespace MathNet.Spatial.Tests.Serialization
         {
             var center = Point2D.Parse(point);
             var c = new Circle2D(center, radius);
-            var result = this.JsonRoundTrip(c);
+            var result = JsonRoundTrip(c);
             Assert.AreEqual(c, result);
         }
 
@@ -140,7 +129,7 @@ namespace MathNet.Spatial.Tests.Serialization
         {
             var center = Point3D.Parse(point);
             var c = new Circle3D(center, Direction.ZAxis, radius);
-            var result = this.JsonRoundTrip(c);
+            var result = JsonRoundTrip(c);
             Assert.AreEqual(c, result);
         }
 
@@ -148,9 +137,9 @@ namespace MathNet.Spatial.Tests.Serialization
         [Test]
         public void Polygon2DJson()
         {
-            var points = from x in new string[] { "0.25,0", "0.5,1", "1,-1" } select Point2D.Parse(x);
+            var points = from x in new[] { "0.25,0", "0.5,1", "1,-1" } select Point2D.Parse(x);
             var p = new Polygon2D(points);
-            var result = this.JsonRoundTrip(p);
+            var result = JsonRoundTrip(p);
             Assert.AreEqual(p, result);
         }
 
@@ -158,9 +147,9 @@ namespace MathNet.Spatial.Tests.Serialization
         [Test]
         public void PolyLine2DJson()
         {
-            var points = from x in new string[] { "0.25,0", "0.5,1", "1,-1" } select Point2D.Parse(x);
+            var points = from x in new[] { "0.25,0", "0.5,1", "1,-1" } select Point2D.Parse(x);
             var p = new PolyLine2D(points);
-            var result = this.JsonRoundTrip(p);
+            var result = JsonRoundTrip(p);
             Assert.AreEqual(p, result);
         }
 
@@ -170,7 +159,7 @@ namespace MathNet.Spatial.Tests.Serialization
         {
             var points = "0, -1.5, 0; 0,1,0; 1,1,0";
             var p = new PolyLine3D(from x in points.Split(';') select Point3D.Parse(x));
-            var result = this.JsonRoundTrip(p);
+            var result = JsonRoundTrip(p);
             Assert.AreEqual(p, result);
         }
 
@@ -179,11 +168,11 @@ namespace MathNet.Spatial.Tests.Serialization
         public void CoordinateSystemJson()
         {
             var cs = new CoordinateSystem(new Point3D(1, -2, 3), new Vector3D(0, 1), new Vector3D(0, 0, 1), new Vector3D(1, 0));
-            var result = this.JsonRoundTrip(cs);
+            var result = JsonRoundTrip(cs);
             AssertGeometry.AreEqual(cs, result);
         }
 
-        private T JsonRoundTrip<T>(T test)
+        private static T JsonRoundTrip<T>(T test)
         {
             string output = JsonConvert.SerializeObject(test);
             return JsonConvert.DeserializeObject<T>(output);
