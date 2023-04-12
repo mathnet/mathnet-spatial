@@ -86,9 +86,25 @@ namespace MathNet.Spatial.Internals
                 match.Groups[2].Captures.Count == 1 &&
                 match.Groups[3].Captures.Count == 1)
             {
-                return TryParseDouble(match.Groups["x"].Value, provider, out x) &&
-                       TryParseDouble(match.Groups["y"].Value, provider, out y) &&
-                       TryParseDouble(match.Groups["z"].Value, provider, out z);
+                var success = TryParseDouble(match.Groups["x"].Value, provider, out x) &&
+                              TryParseDouble(match.Groups["y"].Value, provider, out y) &&
+                              TryParseDouble(match.Groups["z"].Value, provider, out z);
+
+                if (success)
+                {
+                    return true;
+                }
+
+                if (Regex2D.TryMatch(text, provider, out match) &&
+                    match.Groups.Count == 3 &&
+                    match.Groups[0].Captures.Count == 1 &&
+                    match.Groups[1].Captures.Count == 1 &&
+                    match.Groups[2].Captures.Count == 1)
+                {
+                    success = TryParseDouble(match.Groups["x"].Value, provider, out x) &&
+                              TryParseDouble(match.Groups["y"].Value, provider, out y);
+                    return success;
+                }
             }
 
             return false;

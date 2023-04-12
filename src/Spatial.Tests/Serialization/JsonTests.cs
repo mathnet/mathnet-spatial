@@ -117,8 +117,8 @@ namespace MathNet.Spatial.Tests.Serialization
         [TestCase("0, 0", 3)]
         public void Circle2DJson(string point, double radius)
         {
-            var center = Point2D.Parse(point);
-            var c = new Circle2D(center, radius);
+            var center = Point3D.Parse(point);
+            var c = new Circle(center, radius);
             var result = JsonRoundTrip(c);
             Assert.AreEqual(c, result);
         }
@@ -128,7 +128,7 @@ namespace MathNet.Spatial.Tests.Serialization
         public void Circle3DJson(string point, double radius)
         {
             var center = Point3D.Parse(point);
-            var c = new Circle3D(center, Direction.ZAxis, radius);
+            var c = new Circle(center, Direction.ZAxis, radius);
             var result = JsonRoundTrip(c);
             Assert.AreEqual(c, result);
         }

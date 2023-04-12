@@ -14,7 +14,7 @@ namespace MathNet.Spatial.Tests.Euclidean
         public void CircleCenterRadius(string p1s, double radius)
         {
             var center = Point3D.Parse(p1s);
-            var circle = new Circle3D(center, Direction.ZAxis, radius);
+            var circle = new Circle(center, Direction.ZAxis, radius);
             Assert.AreEqual(2 * radius, circle.Diameter, double.Epsilon);
             Assert.AreEqual(2 * Math.PI * radius, circle.Circumference, double.Epsilon);
             Assert.AreEqual(Math.PI * radius * radius, circle.Area, double.Epsilon);
@@ -26,8 +26,8 @@ namespace MathNet.Spatial.Tests.Euclidean
         {
             var p1 = Point3D.Parse(p1s);
             var p2 = Point3D.Parse(p2s);
-            var circle3D = Circle3D.FromPointsAndAxis(p1, p2, Direction.ZAxis);
-            AssertGeometry.AreEqual(circle3D.CenterPoint, Point3D.Parse(centers));
+            var circle3D = Circle.FromPointsAndAxis(p1, p2, Direction.ZAxis);
+            AssertGeometry.AreEqual(circle3D.Center, Point3D.Parse(centers));
             Assert.AreEqual(circle3D.Radius, radius, 1e-6);
         }
 
@@ -50,9 +50,9 @@ namespace MathNet.Spatial.Tests.Euclidean
             var p3 = Point3D.Parse(p3s);
             var center = Point3D.Parse(centers);
 
-            var circle = Circle3D.FromPoints(p1, p2, p3);
+            var circle = Circle.FromPoints(p1, p2, p3);
 
-            AssertGeometry.AreEqual(center, circle.CenterPoint);
+            AssertGeometry.AreEqual(center, circle.Center);
             Assert.AreEqual(radius, circle.Radius, 1e-6);
         }
 
@@ -63,7 +63,7 @@ namespace MathNet.Spatial.Tests.Euclidean
             var p2 = new Point3D(-1, 0);
             var p3 = new Point3D(1, 0);
 
-            Assert.Throws<InvalidOperationException>(() => Circle3D.FromPoints(p1, p2, p3));
+            Assert.Throws<ArgumentException>(() => Circle.FromPoints(p1, p2, p3));
         }
     }
 }
