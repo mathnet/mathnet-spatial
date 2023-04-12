@@ -1,4 +1,3 @@
-using System.Drawing.Imaging;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Spatial.Euclidean;
 using NUnit.Framework;
