@@ -1,4 +1,5 @@
-﻿using MathNet.Numerics.LinearAlgebra;
+﻿using System.Runtime.InteropServices;
+using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
 using MathNet.Spatial.Euclidean;
 using MathNet.Spatial.Units;
@@ -222,12 +223,34 @@ namespace MathNet.Spatial.Tests.Euclidean
         }
 
         [Test]
-        public void TransformUnitVector()
+        public void TransformDirection()
         {
             var cs = CoordinateSystem.Rotation(Angle.FromDegrees(90), Direction.ZAxis);
             var uv = Direction.XAxis;
             var actual = cs.Transform(uv);
             AssertGeometry.AreEqual(Direction.YAxis, actual);
+        }
+
+        [Test]
+        public void TransformLine()
+        {
+            var cs = CoordinateSystem.Rotation(Angle.FromDegrees(30), Direction.Create(1, -2, 5));
+            var line = new Line(new Point3D(5, 6, 7), Direction.Create(-4, 1, 5));
+            var actual = cs.Transform(line);
+            var expected = new Line(new Point3D(0.43853788701883367, 6.5892341822864173, 8.1479860955108), Direction.Create(-0.73271831913658747, -0.24470244192145066, 0.63501541691468655));
+            AssertGeometry.AreEqual(expected, actual);
+        }
+
+        [Test]
+        public void TransformPlane()
+        {
+            var cs = CoordinateSystem
+                .Rotation(Angle.FromDegrees(30), Direction.Create(1, -2, 5))
+                .OffsetBy(new Vector3D(3, -1, 2));
+            var plane = new Plane(new Point3D(5, 6, 7), Direction.Create(-4, 1, 5));
+            var actual = cs.Transform(plane);
+            var expected = new Plane(new Point3D(3.4385378870188337, 5.5892341822864173, 10.1479860955108), Direction.Create(-0.73271831913658747, -0.24470244192145066, 0.63501541691468655));
+            AssertGeometry.AreEqual(expected, actual);
         }
 
         [TestCase("o:{0, 0, 0} x:{1, 0, 0} y:{0, 1, 0} z:{0, 0, 1}", "o:{0, 0, 0} x:{1, 0, 0} y:{0, 1, 0} z:{0, 0, 1}")]
