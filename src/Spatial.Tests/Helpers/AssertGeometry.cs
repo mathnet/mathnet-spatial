@@ -12,11 +12,6 @@ namespace MathNet.Spatial.Tests
             AreEqual(yAxis, coordinateSystem.YAxis, tolerance);
             AreEqual(zAxis, coordinateSystem.ZAxis, tolerance);
             AreEqual(origin, coordinateSystem.Origin, tolerance);
-
-            AreEqual(new double[] { xAxis.X, xAxis.Y, xAxis.Z, 0 }, coordinateSystem.Column(0).ToArray(), tolerance);
-            AreEqual(new double[] { yAxis.X, yAxis.Y, yAxis.Z, 0 }, coordinateSystem.Column(1).ToArray(), tolerance);
-            AreEqual(new double[] { zAxis.X, zAxis.Y, zAxis.Z, 0 }, coordinateSystem.Column(2).ToArray(), tolerance);
-            AreEqual(new double[] { origin.X, origin.Y, origin.Z, 1 }, coordinateSystem.Column(3).ToArray(), tolerance);
         }
 
         public static void AreEqual(Direction expected, Direction actual, double tolerance = 1e-6, string message = "")
@@ -83,15 +78,8 @@ namespace MathNet.Spatial.Tests
                 message = string.Format("Expected {0} but was {1}", expected, actual);
             }
 
-            if (expected.Values.Length != actual.Values.Length)
-            {
-                Assert.Fail();
-            }
-
-            for (var i = 0; i < expected.Values.Length; i++)
-            {
-                Assert.AreEqual(expected.Values[i], actual.Values[i], tolerance);
-            }
+            AreEqual(expected.Origin, actual.Origin, tolerance);
+            Assert.AreEqual(expected.OrientationMatrix, actual.OrientationMatrix);
         }
 
         public static void AreEqual(double[] expected, double[] actual, double tolerance = 1e-6, string message = "")

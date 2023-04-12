@@ -1,6 +1,5 @@
 ﻿// ReSharper disable InconsistentNaming
 
-using System.Runtime.InteropServices;
 using MathNet.Spatial.Euclidean;
 using NUnit.Framework;
 

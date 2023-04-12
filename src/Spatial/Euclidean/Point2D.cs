@@ -229,9 +229,10 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         /// <param name="m">A transform matrix</param>
         /// <returns>A new point</returns>
-        public Point2D TransformBy(Matrix<double> m)
+        public Point2D TransformBy(RotationMatrix m)
         {
-            return OfVector(m.Multiply(ToVector()));
+            var p = m * new Point3D(X, Y);
+            return new Point2D(p.X, p.Y);
         }
 
         /// <summary>

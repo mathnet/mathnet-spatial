@@ -175,7 +175,7 @@ namespace MathNet.Spatial.Tests.Euclidean
             var p = Point2D.Parse(ps);
             var av = Angle.Parse(avs);
             var expected = Point2D.Parse(eps);
-            var rm = Matrix2D.Rotation(av);
+            var rm = RotationMatrix.AroundZ(av);
             var actual = p.TransformBy(rm);
             AssertGeometry.AreEqual(expected, actual, 1e-2);
         }

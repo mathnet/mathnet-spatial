@@ -675,7 +675,7 @@ namespace MathNet.Spatial.Euclidean
         public Direction Rotate(Direction about, Angle angle)
         {
             var cs = CoordinateSystem.Rotation(angle, about);
-            return cs.Transform(this).Normalize();
+            return cs.Transform(this);
         }
 
         /// <summary>
