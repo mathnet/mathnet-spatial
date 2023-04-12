@@ -214,10 +214,10 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>A rotated coordinate system </returns>
         public static CoordinateSystem RotateTo(Direction fromVector3D, Direction toVector3D, Direction? axis = null)
         {
-            var r = Matrix3D.RotationTo(fromVector3D, toVector3D, axis);
+            var r = RotationMatrix.RotationTo(fromVector3D, toVector3D, axis);
             var coordinateSystem = new CoordinateSystem();
-            var cs = SetRotationSubMatrix(r, coordinateSystem);
-            return cs;
+            //var cs = SetRotationSubMatrix(r, coordinateSystem);
+            return coordinateSystem;
         }
 
         /// <summary>
@@ -229,7 +229,7 @@ namespace MathNet.Spatial.Euclidean
         public static CoordinateSystem Rotation(Angle angle, Direction v)
         {
             var m = Build.Dense(4, 4);
-            m.SetSubMatrix(0, 3, 0, 3, Matrix3D.RotationAroundArbitraryVector(v, angle));
+            //m.SetSubMatrix(0, 3, 0, 3, RotationMatrix.AroundAxis(v, angle));
             m[3, 3] = 1;
             return new CoordinateSystem(m);
         }

@@ -188,7 +188,7 @@ namespace MathNet.Spatial.Tests.Euclidean
         {
             var vector = Vector3D.Parse(vectorDoubles);
             var angle = Angle.FromDegrees(rotationInDegrees);
-            var rotated = Vector3D.OfVector(Matrix3D.RotationAroundZAxis(angle).Multiply(vector.ToVector()));
+            var rotated = RotationMatrix.AroundZ(angle) * vector;
             var actual = vector.SignedAngleTo(rotated, Vector3D.Parse(Z).Normalize());
             Assert.AreEqual(rotationInDegrees, actual.Degrees, 1E-6);
         }
