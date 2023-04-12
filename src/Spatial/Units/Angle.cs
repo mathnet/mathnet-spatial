@@ -62,7 +62,7 @@ namespace MathNet.Spatial.Units
         /// The absolute of this angle.
         /// </summary>
         /// <returns></returns>
-        public Angle Abs => new Angle(Math.Abs(Radians));
+        public Angle Abs() => new Angle(Math.Abs(Radians));
 
         /// <summary>
         /// Gets the value in degrees
@@ -418,7 +418,7 @@ namespace MathNet.Spatial.Units
         /// <param name="tolerance">The maximum difference for being considered equal</param>
         public bool Equals(Angle other, double tolerance)
         {
-            return Math.Abs(Radians - other.Radians) < tolerance;
+            return (this - other).Abs().Radians < tolerance;
         }
 
         /// <summary>
@@ -431,7 +431,7 @@ namespace MathNet.Spatial.Units
         /// <param name="tolerance">The maximum difference for being considered equal</param>
         public bool Equals(Angle other, Angle tolerance)
         {
-            return Math.Abs(Radians - other.Radians) < tolerance.Radians;
+            return (this - other).Abs().Radians < tolerance.Radians;
         }
 
         /// <inheritdoc />

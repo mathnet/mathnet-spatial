@@ -154,7 +154,7 @@ namespace MathNet.Spatial.Tests.Serialization
         [Test]
         public void CoordinateSystemBinaryFormatter()
         {
-            var cs = new CoordinateSystem(new Point3D(1, -2, 3), new Vector3D(0, 1), new Vector3D(0, 0, 1), new Vector3D(1, 0));
+            var cs = new CoordinateSystem(new Point3D(1, -2, 3), new Vector3D(0, 1), new Vector3D(0, 0, 1));
             var result = BinaryFormaterRoundTrip(cs);
             AssertGeometry.AreEqual(cs, result);
         }

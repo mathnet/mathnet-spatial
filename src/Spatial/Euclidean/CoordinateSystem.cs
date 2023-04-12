@@ -5,8 +5,6 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
 using System.Xml.Serialization;
-using MathNet.Numerics.LinearAlgebra;
-using MathNet.Numerics.LinearAlgebra.Double;
 using MathNet.Spatial.Internals;
 using MathNet.Spatial.Units;
 using HashCode = MathNet.Spatial.Internals.HashCode;
@@ -17,7 +15,7 @@ namespace MathNet.Spatial.Euclidean
     /// A coordinate system
     /// </summary>
     [Serializable]
-    public class CoordinateSystem : DenseMatrix, IEquatable<CoordinateSystem>, IXmlSerializable
+    public class CoordinateSystem : IEquatable<CoordinateSystem>, IXmlSerializable
     {
         /// <summary>
         /// A local regex pattern for 3D items
@@ -32,20 +30,19 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// Initializes a new instance of the <see cref="CoordinateSystem"/> class.
         /// </summary>
+        /// <param name="origin">The origin</param>
+        /// <param name="matrix">The orientation matrix</param>
+        private CoordinateSystem(Point3D origin, RotationMatrix matrix)
+        {
+            OrientationMatrix = matrix;
+            Origin = origin;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CoordinateSystem"/> class.
+        /// </summary>
         public CoordinateSystem()
-            : this(new Point3D(0, 0), Direction.XAxis.ToVector3D(), Direction.YAxis.ToVector3D(), Direction.ZAxis.ToVector3D())
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CoordinateSystem"/> class.
-        /// </summary>
-        /// <param name="xAxis">The x axis</param>
-        /// <param name="yAxis">The y axis</param>
-        /// <param name="zAxis">The z axis</param>
-        /// <param name="origin">The origin</param>
-        public CoordinateSystem(Vector3D xAxis, Vector3D yAxis, Vector3D zAxis, Point3D origin)
-            : this(origin, xAxis, yAxis, zAxis)
+            : this(Point3D.Origin, RotationMatrix.Identity)
         {
         }
 
@@ -55,9 +52,19 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="origin">The origin</param>
         /// <param name="xAxis">The x axis</param>
         /// <param name="yAxis">The y axis</param>
-        /// <param name="zAxis">The z axis</param>
-        public CoordinateSystem(Point3D origin, Direction xAxis, Direction yAxis, Direction zAxis)
-            : this(origin, xAxis.ToVector3D(), yAxis.ToVector3D(), zAxis.ToVector3D())
+        public CoordinateSystem(Point3D origin, Direction xAxis, Direction yAxis)
+            : this(origin, new RotationMatrix(xAxis, yAxis))
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CoordinateSystem"/> class.
+        /// </summary>
+        /// <param name="xAxis">The x axis</param>
+        /// <param name="yAxis">The y axis</param>
+        /// <param name="origin">The origin</param>
+        public CoordinateSystem(Vector3D xAxis, Vector3D yAxis, Point3D origin)
+            : this(origin, xAxis, yAxis)
         {
         }
 
@@ -67,86 +74,35 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="origin">The origin</param>
         /// <param name="xAxis">The x axis</param>
         /// <param name="yAxis">The y axis</param>
-        /// <param name="zAxis">The z axis</param>
-        public CoordinateSystem(Point3D origin, Vector3D xAxis, Vector3D yAxis, Vector3D zAxis)
-            : base(4)
+        public CoordinateSystem(Point3D origin, Vector3D xAxis, Vector3D yAxis)
+            : this(origin, xAxis.Normalize(), yAxis.Normalize())
         {
-            SetColumn(0, new[] { xAxis.X, xAxis.Y, xAxis.Z, 0 });
-            SetColumn(1, new[] { yAxis.X, yAxis.Y, yAxis.Z, 0 });
-            SetColumn(2, new[] { zAxis.X, zAxis.Y, zAxis.Z, 0 });
-            SetColumn(3, new[] { origin.X, origin.Y, origin.Z, 1 });
-        }
-
-        ////public CoordinateSystem(Vector3D x, Vector3D y, Vector3D z, Vector3D offsetToBase)
-        ////    : this(x, y, z, offsetToBase.ToPoint3D())
-        ////{
-        ////}
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CoordinateSystem"/> class.
-        /// </summary>
-        /// <param name="matrix">A matrix</param>
-        public CoordinateSystem(Matrix<double> matrix)
-            : base(4, 4, matrix.ToColumnMajorArray())
-        {
-            if (matrix.RowCount != 4)
-            {
-                throw new ArgumentException("RowCount must be 4");
-            }
-
-            if (matrix.ColumnCount != 4)
-            {
-                throw new ArgumentException("ColumnCount must be 4");
-            }
         }
 
         /// <summary>
-        /// Gets the X Axis
+        /// The rotation matrix which expresses the orientation of this coordinate system
         /// </summary>
-        public Vector3D XAxis
-        {
-            get
-            {
-                var row = SubMatrix(0, 3, 0, 1).ToRowMajorArray();
-                return new Vector3D(row[0], row[1], row[2]);
-            }
-        }
-
-        /// <summary>
-        /// Gets the Y Axis
-        /// </summary>
-        public Vector3D YAxis
-        {
-            get
-            {
-                var row = SubMatrix(0, 3, 1, 1).ToRowMajorArray();
-                return new Vector3D(row[0], row[1], row[2]);
-            }
-        }
-
-        /// <summary>
-        /// Gets the z Axis
-        /// </summary>
-        public Vector3D ZAxis
-        {
-            get
-            {
-                var row = SubMatrix(0, 3, 2, 1).ToRowMajorArray();
-                return new Vector3D(row[0], row[1], row[2]);
-            }
-        }
+        public RotationMatrix OrientationMatrix { get; private set; }
 
         /// <summary>
         /// Gets the point of origin
         /// </summary>
-        public Point3D Origin
-        {
-            get
-            {
-                var row = SubMatrix(0, 3, 3, 1).ToRowMajorArray();
-                return new Point3D(row[0], row[1], row[2]);
-            }
-        }
+        public Point3D Origin { get; private set; }
+
+        /// <summary>
+        /// The column vector corresponding to the x axis coordinate
+        /// </summary>
+        public Direction XAxis => OrientationMatrix.XAxis;
+
+        /// <summary>
+        /// The column vector corresponding to the y axis coordinate
+        /// </summary>
+        public Direction YAxis => OrientationMatrix.YAxis;
+
+        /// <summary>
+        /// The column vector corresponding to the z axis coordinate
+        /// </summary>
+        public Direction ZAxis => OrientationMatrix.ZAxis;
 
         /// <summary>
         /// Gets the offset to origin
@@ -154,25 +110,11 @@ namespace MathNet.Spatial.Euclidean
         public Vector3D OffsetToBase => Origin.ToVector3D();
 
         /// <summary>
-        /// Gets the base change matrix
-        /// </summary>
-        public CoordinateSystem BaseChangeMatrix
-        {
-            get
-            {
-                var matrix = Build.DenseOfColumnVectors(XAxis.ToVector(), YAxis.ToVector(), ZAxis.ToVector());
-                var cs = new CoordinateSystem(this);
-                cs.SetRotationSubMatrix(matrix.Transpose());
-                return cs;
-            }
-        }
-
-        /// <summary>
         /// Returns a value that indicates whether each pair of elements in two specified coordinate system is equal.
         /// </summary>
         /// <param name="left">The first coordinate system to compare</param>
         /// <param name="right">The second coordinate system to compare</param>
-        /// <returns>True if the coordinate system are the same; otherwise false.</returns>
+        /// <returns>True if the coordinate systems are the same; otherwise false.</returns>
         public static bool operator ==(CoordinateSystem left, CoordinateSystem right)
         {
             return Equals(left, right);
@@ -200,23 +142,21 @@ namespace MathNet.Spatial.Euclidean
             var o = Point3D.Parse(match.Groups["op"].Value);
             var x = Vector3D.Parse(match.Groups["xv"].Value);
             var y = Vector3D.Parse(match.Groups["yv"].Value);
-            var z = Vector3D.Parse(match.Groups["zv"].Value);
-            return new CoordinateSystem(o, x, y, z);
+            return new CoordinateSystem(o, x, y);
         }
 
         /// <summary>
         /// Sets to the matrix of rotation that aligns the 'from' vector with the 'to' vector.
-        /// The optional Axis argument may be used when the two vectors are perpendicular and in opposite directions to specify a specific solution, but is otherwise ignored.
+        /// The optional axis argument may be used when the two vectors are perpendicular and in opposite directions to specify a specific solution, but is otherwise ignored.
         /// </summary>
-        /// <param name="fromVector3D">Input Vector object to align from.</param>
-        /// <param name="toVector3D">Input Vector object to align to.</param>
-        /// <param name="axis">Input Vector object. </param>
+        /// <param name="fromVector3D">Input vector to align from.</param>
+        /// <param name="toVector3D">Input vector to align to.</param>
+        /// <param name="axis">Input direction. </param>
         /// <returns>A rotated coordinate system </returns>
         public static CoordinateSystem RotateTo(Direction fromVector3D, Direction toVector3D, Direction? axis = null)
         {
-            var r = RotationMatrix.RotationTo(fromVector3D, toVector3D, axis);
-            var coordinateSystem = new CoordinateSystem();
-            //var cs = SetRotationSubMatrix(r, coordinateSystem);
+            var orientation = RotationMatrix.RotationTo(fromVector3D, toVector3D, axis);
+            var coordinateSystem = new CoordinateSystem(Point3D.Origin, orientation);
             return coordinateSystem;
         }
 
@@ -228,10 +168,9 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>A rotating coordinate system</returns>
         public static CoordinateSystem Rotation(Angle angle, Direction v)
         {
-            var m = Build.Dense(4, 4);
-            //m.SetSubMatrix(0, 3, 0, 3, RotationMatrix.AroundAxis(v, angle));
-            m[3, 3] = 1;
-            return new CoordinateSystem(m);
+            var orientation = RotationMatrix.AroundAxis(v, angle);
+            var coordinateSystem = new CoordinateSystem(Point3D.Origin, orientation);
+            return coordinateSystem;
         }
 
         /// <summary>
@@ -256,28 +195,11 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>A rotated coordinate system</returns>
         public static CoordinateSystem Rotation(Angle yaw, Angle pitch, Angle roll)
         {
-            var cs = new CoordinateSystem(); 
-            var cosY = yaw.Cos;
-            var sinY = yaw.Sin;
-            var cosP = pitch.Cos;
-            var sinP = pitch.Sin;
-            var cosR = roll.Cos;
-            var sinR = roll.Sin;
-
-            cs[0, 0] = cosY * cosP;
-            cs[1, 0] = sinY * cosP;
-            cs[2, 0] = -sinP;
-
-            cs[0, 1] = cosY * sinP * sinR - sinY * cosR;
-            cs[1, 1] = sinY * sinP * sinR + cosY * cosR;
-            cs[2, 1] = cosP * sinR;
-
-            cs[0, 2] = cosY * sinP * cosR + sinY * sinR;
-            cs[1, 2] = sinY * sinP * cosR - cosY * sinR;
-            cs[2, 2] = cosP * cosR;
-
-            return cs; 
+            var rotation = RotationMatrix.Rotation(yaw, pitch, roll);
+            var cs = new CoordinateSystem(Point3D.Origin, rotation);
+            return cs;
         }
+
         /// <summary>
         /// Rotates around Z
         /// </summary>
@@ -316,27 +238,32 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>A mapping coordinate system</returns>
         public static CoordinateSystem CreateMappingCoordinateSystem(CoordinateSystem fromCs, CoordinateSystem toCs)
         {
-            var m = toCs.Multiply(fromCs.Inverse());
-            m[3, 3] = 1;
-            return new CoordinateSystem(m);
+            var toTranspose = toCs.OrientationMatrix.Transpose();
+            var orientationMatrix = toTranspose * fromCs.OrientationMatrix;
+            var origin = toTranspose * (fromCs.Origin - toCs.Origin).ToPoint3D();
+            return new CoordinateSystem(origin, orientationMatrix);
         }
 
         /// <summary>
         /// Sets this matrix to be the matrix that maps from the 'from' coordinate system to the 'to' coordinate system.
         /// </summary>
         /// <param name="fromOrigin">Input Point3D that defines the origin to map the coordinate system from.</param>
-        /// <param name="fromXAxis">Input Vector3D object that defines the X-axis to map the coordinate system from.</param>
-        /// <param name="fromYAxis">Input Vector3D object that defines the Y-axis to map the coordinate system from.</param>
-        /// <param name="fromZAxis">Input Vector3D object that defines the Z-axis to map the coordinate system from.</param>
-        /// <param name="toOrigin">Input Point3D object that defines the origin to map the coordinate system to.</param>
-        /// <param name="toXAxis">Input Vector3D object that defines the X-axis to map the coordinate system to.</param>
-        /// <param name="toYAxis">Input Vector3D object that defines the Y-axis to map the coordinate system to.</param>
-        /// <param name="toZAxis">Input Vector3D object that defines the Z-axis to map the coordinate system to.</param>
+        /// <param name="fromXAxis">Input Direction that defines the X-axis to map the coordinate system from.</param>
+        /// <param name="fromYAxis">Input Direction that defines the Y-axis to map the coordinate system from.</param>
+        /// <param name="toOrigin">Input Point3D that defines the origin to map the coordinate system to.</param>
+        /// <param name="toXAxis">Input Direction that defines the X-axis to map the coordinate system to.</param>
+        /// <param name="toYAxis">Input Direction that defines the Y-axis to map the coordinate system to.</param>
         /// <returns>A mapping coordinate system</returns>
-        public static CoordinateSystem SetToAlignCoordinateSystems(Point3D fromOrigin, Vector3D fromXAxis, Vector3D fromYAxis, Vector3D fromZAxis, Point3D toOrigin, Vector3D toXAxis, Vector3D toYAxis, Vector3D toZAxis)
+        public static CoordinateSystem SetToAlignCoordinateSystems(
+            Point3D fromOrigin,
+            Direction fromXAxis,
+            Direction fromYAxis,
+            Point3D toOrigin,
+            Direction toXAxis,
+            Direction toYAxis)
         {
-            var cs1 = new CoordinateSystem(fromOrigin, fromXAxis, fromYAxis, fromZAxis);
-            var cs2 = new CoordinateSystem(toOrigin, toXAxis, toYAxis, toZAxis);
+            var cs1 = new CoordinateSystem(fromOrigin, fromXAxis, fromYAxis);
+            var cs2 = new CoordinateSystem(toOrigin, toXAxis, toYAxis);
             var mcs = CreateMappingCoordinateSystem(cs1, cs2);
             return mcs;
         }
@@ -348,54 +275,17 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>A translated coordinate system</returns>
         public static CoordinateSystem Translation(Vector3D translation)
         {
-            return new CoordinateSystem(translation.ToPoint3D(), Direction.XAxis, Direction.YAxis, Direction.ZAxis);
+            return new CoordinateSystem(translation.ToPoint3D(), RotationMatrix.Identity);
         }
 
         /// <summary>
-        /// Creates a rotating coordinate system
+        /// Creates a translation
         /// </summary>
-        /// <param name="r">A 3×3 matrix with the rotation portion</param>
-        /// <param name="coordinateSystem">A rotated coordinate system</param>
-        /// <returns>A rotating coordinate system</returns>
-        public static CoordinateSystem SetRotationSubMatrix(Matrix<double> r, CoordinateSystem coordinateSystem)
+        /// <param name="origin">The origin of the translated coordinate system</param>
+        /// <returns>A translated coordinate system</returns>
+        public static CoordinateSystem Translation(Point3D origin)
         {
-            if (r.RowCount != 3 || r.ColumnCount != 3)
-            {
-                throw new ArgumentOutOfRangeException();
-            }
-
-            var cs = new CoordinateSystem(coordinateSystem.Origin, coordinateSystem.XAxis, coordinateSystem.YAxis, coordinateSystem.ZAxis);
-            cs.SetSubMatrix(0, r.RowCount, 0, r.ColumnCount, r);
-            return cs;
-        }
-
-        /// <summary>
-        /// Gets a rotation submatrix from a coordinate system
-        /// </summary>
-        /// <param name="coordinateSystem">a coordinate system</param>
-        /// <returns>A rotation matrix</returns>
-        public static Matrix<double> GetRotationSubMatrix(CoordinateSystem coordinateSystem)
-        {
-            return coordinateSystem.SubMatrix(0, 3, 0, 3);
-        }
-
-        ////public CoordinateSystem SetCoordinateSystem(Matrix<double> matrix)
-        ////{
-        ////    if (matrix.ColumnCount != 4 || matrix.RowCount != 4)
-        ////        throw new ArgumentException("Not a 4x4 matrix!");
-        ////    return new CoordinateSystem(matrix);
-        ////}
-
-        /// <summary>
-        /// Resets rotations preserves scales
-        /// </summary>
-        /// <returns>A coordinate system with reset rotation</returns>
-        public CoordinateSystem ResetRotations()
-        {
-            var x = XAxis.Length * Direction.XAxis;
-            var y = YAxis.Length * Direction.YAxis;
-            var z = ZAxis.Length * Direction.ZAxis;
-            return new CoordinateSystem(x, y, z, Origin);
+            return new CoordinateSystem(origin, RotationMatrix.Identity);
         }
 
         /// <summary>
@@ -404,20 +294,20 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="about">The vector</param>
         /// <param name="angle">An angle</param>
         /// <returns>A rotated coordinate system</returns>
-        public CoordinateSystem RotateCoordSysAroundVector(Direction about, Angle angle)
+        public CoordinateSystem Rotate(Direction about, Angle angle)
         {
             var rcs = Rotation(angle, about);
             return rcs.Transform(this);
         }
 
         /// <summary>
-        /// Rotate without Reset
+        /// Rotate with successive intrinsic rotations around Z (yaw) then around Y (pitch) and then around X (roll)
         /// </summary>
         /// <param name="yaw">The yaw</param>
         /// <param name="pitch">The pitch</param>
         /// <param name="roll">The roll</param>
         /// <returns>A rotated coordinate system</returns>
-        public CoordinateSystem RotateNoReset(Angle yaw, Angle pitch, Angle roll)
+        public CoordinateSystem Rotate(Angle yaw, Angle pitch, Angle roll)
         {
             var rcs = Rotation(yaw, pitch, roll);
             return rcs.Transform(this);
@@ -430,7 +320,7 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>A translated coordinate system</returns>
         public CoordinateSystem OffsetBy(Vector3D v)
         {
-            return new CoordinateSystem(Origin + v, XAxis, YAxis, ZAxis);
+            return new CoordinateSystem(Origin + v, OrientationMatrix);
         }
 
         /// <summary>
@@ -440,92 +330,43 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>A translated coordinate system</returns>
         public CoordinateSystem OffsetBy(Direction v)
         {
-            return new CoordinateSystem(Origin + v, XAxis, YAxis, ZAxis);
+            return new CoordinateSystem(Origin + v, OrientationMatrix);
         }
 
         /// <summary>
         /// Transforms a line according to this change matrix
         /// </summary>
         /// <param name="r">a line</param>
-        /// <returns>a transformed line</returns>
-        public Line TransformToCoordSys(Line r)
+        /// <returns>A transformed line</returns>
+        public Line Transform(Line r)
         {
             var p = r.ThroughPoint;
             var uv = r.Direction;
-
-            // The position and the vector are transformed
-            var baseChangeMatrix = BaseChangeMatrix;
-            var point = baseChangeMatrix.Transform(p) + OffsetToBase;
-            var direction = uv.TransformBy(baseChangeMatrix);
+            var point = OrientationMatrix * p + OffsetToBase;
+            var direction = OrientationMatrix * uv;
             return new Line(point, direction);
+        }
+
+        /// <summary>
+        /// Transforms a plane according to this change matrix
+        /// </summary>
+        /// <param name="p">a plane</param>
+        /// <returns>A transformed plane</returns>
+        public Plane Transform(Plane p)
+        {
+            var rootPoint = OrientationMatrix * p.RootPoint + OffsetToBase;
+            var normal = OrientationMatrix * p.Normal;
+            return new Plane(rootPoint, normal);
         }
 
         /// <summary>
         /// Transforms a point according to this change matrix
         /// </summary>
         /// <param name="p">a point</param>
-        /// <returns>a transformed point</returns>
-        public Point3D TransformToCoordSys(Point3D p)
+        /// <returns>A transformed point</returns>
+        public Point3D Transform(Point3D p)
         {
-            var baseChangeMatrix = BaseChangeMatrix;
-            var point = baseChangeMatrix.Transform(p) + OffsetToBase;
-            return point;
-        }
-
-        /// <summary>
-        /// Transforms a line according to the inverse of this change matrix
-        /// </summary>
-        /// <param name="r">a line</param>
-        /// <returns>a transformed line</returns>
-        public Line TransformFromCoordSys(Line r)
-        {
-            var p = r.ThroughPoint;
-            var uv = r.Direction;
-
-            // The position and the vector are transformed
-            var point = BaseChangeMatrix.Invert().Transform(p) + OffsetToBase;
-            var direction = BaseChangeMatrix.Invert().Transform(uv);
-            return new Line(point, direction);
-        }
-
-        /// <summary>
-        /// Transforms a point according to the inverse of this change matrix
-        /// </summary>
-        /// <param name="p">a point</param>
-        /// <returns>a transformed point</returns>
-        public Point3D TransformFromCoordSys(Point3D p)
-        {
-            var point = BaseChangeMatrix.Invert().Transform(p) + OffsetToBase;
-            return point;
-        }
-
-        /// <summary>
-        /// Creates a rotation submatrix
-        /// </summary>
-        /// <param name="r">a matrix</param>
-        /// <returns>a coordinate system</returns>
-        public CoordinateSystem SetRotationSubMatrix(Matrix<double> r)
-        {
-            return SetRotationSubMatrix(r, this);
-        }
-
-        /// <summary>
-        /// Returns a translation coordinate system
-        /// </summary>
-        /// <param name="v">a vector</param>
-        /// <returns>a coordinate system</returns>
-        public CoordinateSystem SetTranslation(Vector3D v)
-        {
-            return new CoordinateSystem(v.ToPoint3D(), XAxis, YAxis, ZAxis);
-        }
-
-        /// <summary>
-        /// Returns a rotation sub matrix
-        /// </summary>
-        /// <returns>a rotation sub matrix</returns>
-        public Matrix<double> GetRotationSubMatrix()
-        {
-            return GetRotationSubMatrix(this);
+            return OrientationMatrix * p + OffsetToBase;
         }
 
         /// <summary>
@@ -536,9 +377,7 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>The vector expressed in coordinate system A</returns>
         public Vector3D Transform(Vector3D v)
         {
-            var v3 = Vector<double>.Build.Dense(new[] { v.X, v.Y, v.Z });
-            GetRotationSubMatrix().Multiply(v3, v3);
-            return new Vector3D(v3[0], v3[1], v3[2]);
+            return OrientationMatrix * v;
         }
 
         /// <summary>
@@ -546,35 +385,10 @@ namespace MathNet.Spatial.Euclidean
         /// expressed in coordinate system B, it returns the vector expressed in coordinate system A
         /// </summary>
         /// <param name="v">Unit vector whose coordinates are expressed in coordinate system B</param>
-        /// <returns>The vector expressed in coordinate system A</returns>
-        public Vector3D Transform(Direction v)
+        /// <returns>The direction expressed in coordinate system A</returns>
+        public Direction Transform(Direction v)
         {
-            var v3 = Vector<double>.Build.Dense(new[] { v.X, v.Y, v.Z });
-            GetRotationSubMatrix().Multiply(v3, v3);
-            return new Vector3D(v3[0], v3[1], v3[2]);
-        }
-
-        /// <summary>
-        /// Given a transform from coordinate system A to coordinate system B, and a point <paramref name="p"/>
-        /// expressed in coordinate system B, it returns the point expressed in coordinate system A
-        /// </summary>
-        /// <param name="p">Point whose coordinates are expressed in coordinate system B</param>
-        /// <returns>The point expressed in coordinate system A</returns>
-        public Point3D Transform(Point3D p)
-        {
-            var v4 = Vector<double>.Build.Dense(new[] { p.X, p.Y, p.Z, 1 });
-            Multiply(v4, v4);
-            return new Point3D(v4[0], v4[1], v4[2]);
-        }
-
-        /// <summary>
-        /// Transforms a coordinate system and returns the transformed
-        /// </summary>
-        /// <param name="cs">a coordinate system</param>
-        /// <returns>A transformed coordinate system</returns>
-        public CoordinateSystem Transform(CoordinateSystem cs)
-        {
-            return new CoordinateSystem(Multiply(cs));
+            return OrientationMatrix * v;
         }
 
         /// <summary>
@@ -588,33 +402,15 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Transforms a line and returns the transformed.
-        /// </summary>
-        /// <param name="line">A line</param>
-        /// <returns>A transformed line</returns>
-        public Line Transform(Line line)
-        {
-            return new Line(Transform(line.ThroughPoint), Transform(line.Direction));
-        }
-
-        /// <summary>
-        /// Transforms a coordinate system
-        /// </summary>
-        /// <param name="matrix">a matrix</param>
-        /// <returns>A transformed coordinate system</returns>
-        public CoordinateSystem TransformBy(Matrix<double> matrix)
-        {
-            return new CoordinateSystem(matrix.Multiply(this));
-        }
-
-        /// <summary>
-        /// Transforms this by the coordinate system and returns the transformed.
+        /// Transforms a coordinate system and returns the transformed
         /// </summary>
         /// <param name="cs">a coordinate system</param>
-        /// <returns>a transformed coordinate system</returns>
-        public CoordinateSystem TransformBy(CoordinateSystem cs)
+        /// <returns>A transformed coordinate system</returns>
+        public CoordinateSystem Transform(CoordinateSystem cs)
         {
-            return cs.Transform(this);
+            var orientation = cs.OrientationMatrix * OrientationMatrix.Transpose();
+            var origin = cs.Origin + orientation * Origin.ToVector3D().Negate();
+            return new CoordinateSystem(origin, orientation);
         }
 
         /// <summary>
@@ -623,7 +419,9 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>An inverted coordinate system</returns>
         public CoordinateSystem Invert()
         {
-            return new CoordinateSystem(Inverse());
+            var orientation = OrientationMatrix.Inverse();
+            var origin = (orientation * Origin).ToVector3D().Negate().ToPoint3D();
+            return new CoordinateSystem(origin, orientation);
         }
 
         /// <summary>
@@ -635,41 +433,21 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public bool Equals(CoordinateSystem other, double tolerance)
         {
-            if (Values.Length != other?.Values.Length)
-            {
-                return false;
-            }
-
-            for (var i = 0; i < Values.Length; i++)
-            {
-                if (Math.Abs(Values[i] - other.Values[i]) > tolerance)
-                {
-                    return false;
-                }
-            }
-
-            return true;
+            return OrientationMatrix == other.OrientationMatrix
+                   && Origin.Equals(other.Origin, tolerance);
         }
 
         /// <inheritdoc />
         [Pure]
         public bool Equals(CoordinateSystem other)
         {
-            if (Values.Length != other?.Values.Length)
+            if (other == null)
             {
                 return false;
             }
 
-            for (var i = 0; i < Values.Length; i++)
-            {
-                // ReSharper disable once CompareOfFloatsByEqualityOperator
-                if (Values[i] != other.Values[i])
-                {
-                    return false;
-                }
-            }
-
-            return true;
+            return OrientationMatrix == other.OrientationMatrix
+                   && Origin.Equals(other.Origin);
         }
 
         /// <inheritdoc />
@@ -686,7 +464,7 @@ namespace MathNet.Spatial.Euclidean
 
         /// <inheritdoc />
         [Pure]
-        public override int GetHashCode() => HashCode.CombineMany(Values);
+        public override int GetHashCode() => HashCode.Combine(OrientationMatrix, Origin);
 
         /// <summary>
         /// Returns a string representation of the coordinate system
@@ -694,7 +472,7 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>a string</returns>
         public new string ToString()
         {
-            return $"Origin: {Origin}, XAxis: {XAxis}, YAxis: {YAxis}, ZAxis: {ZAxis}";
+            return $"Origin: {Origin}, OrientationMatrix: {OrientationMatrix.ToString()}";
         }
 
         /// <inheritdoc />
@@ -708,26 +486,19 @@ namespace MathNet.Spatial.Euclidean
         {
             var e = (XElement)XNode.ReadFrom(reader);
 
-            var xAxis = Vector3D.ReadFrom(e.SingleElementReader("XAxis"));
-            SetColumn(0, new[] { xAxis.X, xAxis.Y, xAxis.Z, 0 });
+            var xAxis = Vector3D.ReadFrom(e.SingleElementReader("XAxis")).Normalize();
+            var yAxis = Vector3D.ReadFrom(e.SingleElementReader("YAxis")).Normalize();
 
-            var yAxis = Vector3D.ReadFrom(e.SingleElementReader("YAxis"));
-            SetColumn(1, new[] { yAxis.X, yAxis.Y, yAxis.Z, 0 });
-
-            var zAxis = Vector3D.ReadFrom(e.SingleElementReader("ZAxis"));
-            SetColumn(2, new[] { zAxis.X, zAxis.Y, zAxis.Z, 0 });
-
-            var origin = Point3D.ReadFrom(e.SingleElementReader("Origin"));
-            SetColumn(3, new[] { origin.X, origin.Y, origin.Z, 1 });
+            Origin = Point3D.ReadFrom(e.SingleElementReader("Origin"));
+            OrientationMatrix = new RotationMatrix(xAxis, yAxis);
         }
 
         /// <inheritdoc />
         void IXmlSerializable.WriteXml(XmlWriter writer)
         {
             writer.WriteElement("Origin", Origin);
-            writer.WriteElement("XAxis", XAxis);
-            writer.WriteElement("YAxis", YAxis);
-            writer.WriteElement("ZAxis", ZAxis);
+            writer.WriteElement("XAxis", OrientationMatrix.XAxis);
+            writer.WriteElement("YAxis", OrientationMatrix.YAxis);
         }
     }
 }

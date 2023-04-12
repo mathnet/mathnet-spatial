@@ -167,14 +167,14 @@ namespace MathNet.Spatial.Tests.Serialization
         [Test]
         public void CoordinateSystemJson()
         {
-            var cs = new CoordinateSystem(new Point3D(1, -2, 3), new Vector3D(0, 1), new Vector3D(0, 0, 1), new Vector3D(1, 0));
+            var cs = new CoordinateSystem(new Point3D(1, -2, 3), new Vector3D(0, 1), new Vector3D(0, 0, 1));
             var result = JsonRoundTrip(cs);
             AssertGeometry.AreEqual(cs, result);
         }
 
         private static T JsonRoundTrip<T>(T test)
         {
-            string output = JsonConvert.SerializeObject(test);
+            var output = JsonConvert.SerializeObject(test);
             return JsonConvert.DeserializeObject<T>(output);
         }
     }

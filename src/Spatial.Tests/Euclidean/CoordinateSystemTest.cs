@@ -1,4 +1,7 @@
-﻿using MathNet.Spatial.Euclidean;
+﻿using System.Runtime.InteropServices;
+using MathNet.Numerics.LinearAlgebra;
+using MathNet.Numerics.LinearAlgebra.Double;
+using MathNet.Spatial.Euclidean;
 using MathNet.Spatial.Units;
 using NUnit.Framework;
 
@@ -14,36 +17,36 @@ namespace MathNet.Spatial.Tests.Euclidean
         private const string NegativeX = "-1; 0; 0";
         private const string NegativeY = "0; -1; 0";
         private const string NegativeZ = "0; 0; -1";
+        private const string TestX = "4, 5, 6";
+        private const string TestY = "0.732992355020098, 0.19546462800535944, -0.65154876001786488";
 
-        [TestCase("1, 2, 3", "4, 5, 6", "7, 8, 9", "-1, -2, -3")]
-        public void ConstructorTest(string ps, string xs, string ys, string zs)
+        [TestCase("1, 2, 3", TestX, TestY)]
+        public void ConstructorTest(string ps, string xs, string ys)
         {
             var origin = Point3D.Parse(ps);
             var xAxis = Vector3D.Parse(xs);
             var yAxis = Vector3D.Parse(ys);
-            var zAxis = Vector3D.Parse(zs);
             var css = new[]
             {
-                new CoordinateSystem(origin, xAxis, yAxis, zAxis),
-                new CoordinateSystem(xAxis, yAxis, zAxis, origin)
+                new CoordinateSystem(origin, xAxis, yAxis),
+                new CoordinateSystem(xAxis, yAxis, origin)
             };
             foreach (var cs in css)
             {
                 AssertGeometry.AreEqual(origin, cs.Origin);
-                AssertGeometry.AreEqual(xAxis, cs.XAxis);
-                AssertGeometry.AreEqual(yAxis, cs.YAxis);
-                AssertGeometry.AreEqual(zAxis, cs.ZAxis);
+                AssertGeometry.AreEqual(xAxis.Normalize(), cs.XAxis);
+                AssertGeometry.AreEqual(yAxis.Normalize(), cs.YAxis);
             }
         }
 
-        [TestCase("o:{1, 2e-6, -3} x:{1, 2, 3} y:{3, 3, 3} z:{4, 4, 4}", "1, 2e-6, -3", "1, 2, 3", "3, 3, 3", "4, 4, 4")]
+        [TestCase("o:{1, 2e-6, -3} x:{4, 5, 6} y:{0.732992355020098, 0.19546462800535944, -0.65154876001786488} z:{4, 4, 4}", "1, 2e-6, -3", TestX, TestY, "-0.5049059315257477, 0.79819687704438047, -0.32856010985315204")]
         public void ParseTests(string s, string ops, string xs, string ys, string zs)
         {
             var cs = CoordinateSystem.Parse(s);
             AssertGeometry.AreEqual(Point3D.Parse(ops), cs.Origin);
-            AssertGeometry.AreEqual(Vector3D.Parse(xs), cs.XAxis);
-            AssertGeometry.AreEqual(Vector3D.Parse(ys), cs.YAxis);
-            AssertGeometry.AreEqual(Vector3D.Parse(zs), cs.ZAxis);
+            AssertGeometry.AreEqual(Vector3D.Parse(xs).Normalize(), cs.XAxis);
+            AssertGeometry.AreEqual(Vector3D.Parse(ys).Normalize(), cs.YAxis);
+            AssertGeometry.AreEqual(Vector3D.Parse(zs).Normalize(), cs.ZAxis);
         }
 
         [TestCase("1, 2, 3", "90°", "0, 0, 1", "-2, 1, 3")]
@@ -148,13 +151,17 @@ namespace MathNet.Spatial.Tests.Euclidean
         [Test]
         public void InvertTest()
         {
-            Assert.Inconclusive("Test this?");
+            var cs = new CoordinateSystem(new Point3D(1, 2), Direction.Create(3, 1, 0), Direction.Create(-1, 3, 0));
+            var pointLocal = new Point3D(1, 2, 3);
+            var pointGlobal = cs.Transform(pointLocal);
+            var actualPointLocal = cs.Invert().Transform(pointGlobal);
+            AssertGeometry.AreEqual(pointLocal, actualPointLocal);
         }
 
         [Test]
         public void EqualityNullOperator()
         {
-            string test = "o:{1, 2e-6, -3} x:{1, 2, 3} y:{3, 3, 3} z:{4, 4, 4}";
+            var test = "o:{1, 2e-6, -3} x:{" + TestX + "} y:{" + TestY + "} z:{4, 4, 4}";
             var cs = CoordinateSystem.Parse(test);
 
             Assert.IsFalse(cs == null);
@@ -171,7 +178,7 @@ namespace MathNet.Spatial.Tests.Euclidean
         [Test]
         public void EqualityNotNullOperator()
         {
-            string test = "o:{1, 2e-6, -3} x:{1, 2, 3} y:{3, 3, 3} z:{4, 4, 4}";
+            var test = "o:{1, 2e-6, -3} x:{" + TestX + "} y:{" + TestY +"} z:{4, 4, 4}";
             var cs = CoordinateSystem.Parse(test);
 
             Assert.IsTrue(cs != null);
@@ -188,7 +195,7 @@ namespace MathNet.Spatial.Tests.Euclidean
         [Test]
         public void EqualityNull()
         {
-            string test = "o:{1, 2e-6, -3} x:{1, 2, 3} y:{3, 3, 3} z:{4, 4, 4}";
+            var test = "o:{1, 2e-6, -3} x:{" + TestX + "} y:{" + TestY + "} z:{4, 4, 4}";
             var cs = CoordinateSystem.Parse(test);
 
             Assert.IsFalse(cs.Equals(null));
@@ -228,7 +235,7 @@ namespace MathNet.Spatial.Tests.Euclidean
         [TestCase("o:{0, 0, 0} x:{10, 0, 0} y:{0, 1, 0} z:{0, 0, 1}", "o:{1, 0, 0} x:{0.1, 0, 0} y:{0, 1, 0} z:{0, 0, 1}")]
         [TestCase("o:{0, 0, 0} x:{10, 0, 0} y:{0, 1, 0} z:{0, 0, 1}", "o:{1, 0, 0} x:{1, 0, 0} y:{0, 1, 0} z:{0, 0, 1}")]
         [TestCase("o:{1, 2, -7} x:{10, 0, 0} y:{0, 1, 0} z:{0, 0, 1}", "o:{0, 0, 0} x:{1, 0, 0} y:{0, 1, 0} z:{0, 0, 1}")]
-        [TestCase("o:{1, 2, -7} x:{10, 0.1, 0} y:{0, 1.2, 0.1} z:{0.1, 0, 1}", "o:{2, 5, 1} x:{0.1, 2, 0} y:{0.2, -1, 0} z:{0, 0.4, 1}")]
+        [TestCase("o:{1, 2, -7} x:{10, 0.1, 0} y:{-0.1, 10, 0} z:{0.1, 0, 1}", "o:{2, 5, 1} x:{0.1, 2, 0} y:{1.6035674514745464, -0.080178372573727327, -0.48107023544236394} z:{0, 0.4, 1}")]
         public void SetToAlignCoordinateSystemsTest(string fcss, string tcss)
         {
             var fcs = CoordinateSystem.Parse(fcss);
@@ -236,18 +243,15 @@ namespace MathNet.Spatial.Tests.Euclidean
 
             var css = new[]
             {
-                CoordinateSystem.SetToAlignCoordinateSystems(fcs.Origin, fcs.XAxis, fcs.YAxis, fcs.ZAxis, tcs.Origin, tcs.XAxis, tcs.YAxis, tcs.ZAxis),
+                CoordinateSystem.SetToAlignCoordinateSystems(fcs.Origin, fcs.XAxis, fcs.YAxis, tcs.Origin, tcs.XAxis, tcs.YAxis),
                 CoordinateSystem.CreateMappingCoordinateSystem(fcs, tcs)
             };
             foreach (var cs in css)
             {
                 var aligned = cs.Transform(fcs);
                 AssertGeometry.AreEqual(tcs.Origin, aligned.Origin);
-
                 AssertGeometry.AreEqual(tcs.XAxis, aligned.XAxis);
-
                 AssertGeometry.AreEqual(tcs.YAxis, aligned.YAxis);
-
                 AssertGeometry.AreEqual(tcs.ZAxis, aligned.ZAxis);
             }
         }
@@ -288,16 +292,46 @@ namespace MathNet.Spatial.Tests.Euclidean
             var cs1 = CoordinateSystem.Parse(cs1s);
             var cs2 = CoordinateSystem.Parse(cs2s);
             var actual = cs1.Transform(cs2);
-            var expected = new CoordinateSystem(cs1.Multiply(cs2));
+            var matrix = ToMatrix(cs1).Inverse().Multiply(ToMatrix(cs2));
+            var x = Direction.Create(matrix[0, 0], matrix[1, 0], matrix[2, 0]);
+            var y = Direction.Create(matrix[0, 1], matrix[1, 1], matrix[2, 1]);
+            var origin = new Point3D(matrix[0, 3], matrix[1, 3], matrix[2, 3]);
+            var expected = new CoordinateSystem(origin, x, y);
             AssertGeometry.AreEqual(expected, actual);
         }
 
         [Test]
         public void XmlRoundTrips()
         {
-            var cs = new CoordinateSystem(new Point3D(1, -2, 3), new Vector3D(0, 1), new Vector3D(0, 0, 1), new Vector3D(1, 0));
-            string expected = "<CoordinateSystem><Origin><X>1</X><Y>-2</Y><Z>3</Z></Origin><XAxis><X>0</X><Y>1</Y><Z>0</Z></XAxis><YAxis><X>0</X><Y>0</Y><Z>1</Z></YAxis><ZAxis><X>1</X><Y>0</Y><Z>0</Z></ZAxis></CoordinateSystem>";
+            var cs = new CoordinateSystem(new Point3D(1, -2, 3), new Vector3D(0, 1), new Vector3D(0, 0, 1));
+            const string expected = "<CoordinateSystem><Origin><X>1</X><Y>-2</Y><Z>3</Z></Origin><XAxis><X>0</X><Y>1</Y><Z>0</Z></XAxis><YAxis><X>0</X><Y>0</Y><Z>1</Z></YAxis></CoordinateSystem>";
             AssertXml.XmlRoundTrips(cs, expected, (e, a) => AssertGeometry.AreEqual(e, a));
+        }
+
+        private static Matrix<double> ToMatrix(CoordinateSystem cs)
+        {
+            var m = new DenseMatrix(4)
+            {
+                [0, 0] = cs.OrientationMatrix.XAxis.X,
+                [1, 0] = cs.OrientationMatrix.XAxis.Y,
+                [2, 0] = cs.OrientationMatrix.XAxis.Z,
+
+                [0, 1] = cs.OrientationMatrix.YAxis.X,
+                [1, 1] = cs.OrientationMatrix.YAxis.Y,
+                [2, 1] = cs.OrientationMatrix.YAxis.Z,
+
+                [0, 2] = cs.OrientationMatrix.ZAxis.X,
+                [1, 2] = cs.OrientationMatrix.ZAxis.Y,
+                [2, 2] = cs.OrientationMatrix.ZAxis.Z,
+
+                [0, 3] = cs.Origin.X,
+                [1, 3] = cs.Origin.Y,
+                [2, 3] = cs.Origin.Z,
+
+                [3, 3] = 1.0
+            };
+
+            return m;
         }
     }
 }

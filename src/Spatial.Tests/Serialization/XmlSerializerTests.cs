@@ -161,8 +161,8 @@ namespace MathNet.Spatial.Tests.Serialization
         [Test]
         public void CoordinateSystemXml()
         {
-            var cs = new CoordinateSystem(new Point3D(1, -2, 3), new Vector3D(0, 1), new Vector3D(0, 0, 1), new Vector3D(1, 0));
-            var xml = "<CoordinateSystem><Origin><X>1</X><Y>-2</Y><Z>3</Z></Origin><XAxis><X>0</X><Y>1</Y><Z>0</Z></XAxis><YAxis><X>0</X><Y>0</Y><Z>1</Z></YAxis><ZAxis><X>1</X><Y>0</Y><Z>0</Z></ZAxis></CoordinateSystem>";
+            var cs = new CoordinateSystem(new Point3D(1, -2, 3), new Vector3D(0, 1), new Vector3D(0, 0, 1));
+            var xml = "<CoordinateSystem><Origin><X>1</X><Y>-2</Y><Z>3</Z></Origin><XAxis><X>0</X><Y>1</Y><Z>0</Z></XAxis><YAxis><X>0</X><Y>0</Y><Z>1</Z></YAxis></CoordinateSystem>";
             var result = AssertXml.XmlSerializerRoundTrip(cs, xml);
             AssertGeometry.AreEqual(cs, result);
         }

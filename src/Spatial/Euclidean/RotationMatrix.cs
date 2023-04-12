@@ -8,6 +8,7 @@ namespace MathNet.Spatial.Euclidean
     /// By rotating a coordinate system A so that coordinate system B is created,
     /// this matrix represents the transformation "from B back to A"
     /// </summary>
+    [Serializable]
     public readonly struct RotationMatrix : IEquatable<RotationMatrix>
     {
         /// <summary>
@@ -24,6 +25,21 @@ namespace MathNet.Spatial.Euclidean
         /// The row which is multiplied with all z coordinates (third row in the matrix)
         /// </summary>
         private readonly Direction _zRow;
+
+        /// <summary>
+        /// The column vector corresponding to the x axis coordinate
+        /// </summary>
+        public Direction XAxis => Direction.Create(_xRow.X, _yRow.X, _zRow.X);
+
+        /// <summary>
+        /// The column vector corresponding to the y axis coordinate
+        /// </summary>
+        public Direction YAxis => Direction.Create(_xRow.Y, _yRow.Y, _zRow.Y);
+
+        /// <summary>
+        /// The column vector corresponding to the z axis coordinate
+        /// </summary>
+        public Direction ZAxis => Direction.Create(_xRow.Z, _yRow.Z, _zRow.Z);
 
         /// <summary>
         /// The identity rotation matrix (no rotation)
@@ -63,6 +79,19 @@ namespace MathNet.Spatial.Euclidean
             _xRow = xRow;
             _yRow = yRow;
             _zRow = zRow;
+        }
+
+        internal RotationMatrix(Direction xAxis, Direction yAxis)
+        {
+            if (!xAxis.IsPerpendicularTo(yAxis))
+            {
+                throw new ArgumentException($"The axes {xAxis} and {yAxis} are not perpendicular to each other");
+            }
+
+            var zAxis = xAxis.CrossProduct(yAxis);
+            _xRow = Direction.Create(xAxis.X, yAxis.X, zAxis.X);
+            _yRow = Direction.Create(xAxis.Y, yAxis.Y, zAxis.Y);
+            _zRow = Direction.Create(xAxis.Z, yAxis.Z, zAxis.Z);
         }
 
         /// <summary>
@@ -253,6 +282,43 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
+        /// Successive intrinsic rotations around Z (yaw) then around Y (pitch) and then around X (roll)
+        /// Gives an order of magnitude speed improvement.
+        /// https://en.wikipedia.org/wiki/Rotation_matrix#General_rotations
+        /// </summary>
+        /// <param name="yaw">Rotates around Z</param>
+        /// <param name="pitch">Rotates around Y</param>
+        /// <param name="roll">Rotates around X</param>
+        /// <returns>A rotated coordinate system</returns>
+        public static RotationMatrix Rotation(Angle yaw, Angle pitch, Angle roll)
+        {
+            var cosY = yaw.Cos;
+            var sinY = yaw.Sin;
+            var cosP = pitch.Cos;
+            var sinP = pitch.Sin;
+            var cosR = roll.Cos;
+            var sinR = roll.Sin;
+
+            var xt = Direction.Create(
+                cosY * cosP,
+                sinY * cosP,
+                -sinP);
+
+            var yt = Direction.Create(
+                cosY * sinP * sinR - sinY * cosR,
+                sinY * sinP * sinR + cosY * cosR,
+                cosP * sinR);
+
+            var zt = Direction.Create(
+                cosY * sinP * cosR + sinY * sinR,
+                sinY * sinP * cosR - cosY * sinR,
+                cosP * cosR);
+
+            var m = new RotationMatrix(xt, yt, zt);
+            return m.Transpose();
+        }
+
+        /// <summary>
         /// Performs the multiplication of this matrix with a direction
         /// </summary>
         private static Double3 Multiply(RotationMatrix matrix, Direction dir)
@@ -317,6 +383,15 @@ namespace MathNet.Spatial.Euclidean
                 hashCode = (hashCode * 397) ^ _zRow.GetHashCode();
                 return hashCode;
             }
+        }
+
+        /// <summary>
+        /// Returns a string representation of the coordinate system
+        /// </summary>
+        /// <returns>a string</returns>
+        public new string ToString()
+        {
+            return $"x row: ({_xRow.X:F4}, {_xRow.Y:F4}, {_xRow.Z:F4}), y row: ({_yRow.X:F4}, {_yRow.Y:F4}, {_yRow.Z:F4}), z row: ({_zRow.X:F4}, {_zRow.Y:F4}, {_zRow.Z:F4})";
         }
 
         /// <summary>
