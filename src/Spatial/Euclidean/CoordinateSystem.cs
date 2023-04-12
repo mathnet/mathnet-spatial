@@ -146,16 +146,16 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Sets to the matrix of rotation that aligns the 'from' vector with the 'to' vector.
-        /// The optional axis argument may be used when the two vectors are perpendicular and in opposite directions to specify a specific solution, but is otherwise ignored.
+        /// Sets to the matrix of rotation that aligns the 'from' direction with the 'to' direction.
+        /// The optional axis argument may be used when the two directions are perpendicular and in opposite directions to specify a specific solution, but is otherwise ignored.
         /// </summary>
-        /// <param name="fromVector3D">Input vector to align from.</param>
-        /// <param name="toVector3D">Input vector to align to.</param>
+        /// <param name="from">Input direction to align from.</param>
+        /// <param name="to">Input direction to align to.</param>
         /// <param name="axis">Input direction. </param>
         /// <returns>A rotated coordinate system </returns>
-        public static CoordinateSystem RotateTo(Direction fromVector3D, Direction toVector3D, Direction? axis = null)
+        public static CoordinateSystem RotateTo(Direction from, Direction to, Direction? axis = null)
         {
-            var orientation = RotationMatrix.RotationTo(fromVector3D, toVector3D, axis);
+            var orientation = RotationMatrix.RotationTo(from, to, axis);
             var coordinateSystem = new CoordinateSystem(Point3D.Origin, orientation);
             return coordinateSystem;
         }
