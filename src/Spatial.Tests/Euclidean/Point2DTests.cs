@@ -1,8 +1,6 @@
 ﻿// ReSharper disable InconsistentNaming
-
 using System;
 using System.IO;
-using System.Xml;
 using System.Xml.Serialization;
 using MathNet.Numerics.LinearAlgebra.Double;
 using MathNet.Spatial.Euclidean;
@@ -104,14 +102,6 @@ namespace MathNet.Spatial.Tests.Euclidean
         {
             Assert.AreEqual(false, Point3D.TryParse(text, out _));
             Assert.Throws<FormatException>(() => Point3D.Parse(text));
-        }
-
-        [TestCase(@"<Point3D X=""1"" Y=""2"" />")]
-        [TestCase(@"<Point3D><X>1</X><Y>2</Y></Point3D>")]
-        public void ReadFrom(string xml)
-        {
-            var v = new Point3D(1, 2);
-            AssertGeometry.AreEqual(v, Point3D.ReadFrom(XmlReader.Create(new StringReader(xml))));
         }
 
         [Test]

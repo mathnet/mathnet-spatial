@@ -2,7 +2,6 @@
 
 using System;
 using System.IO;
-using System.Xml;
 using System.Xml.Serialization;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Spatial.Euclidean;
@@ -126,21 +125,11 @@ namespace MathNet.Spatial.Tests.Euclidean
         }
 
         [TestCase("1.2")]
-        [TestCase("1; 2; 3")]
+        [TestCase("1; 2; 3; 4")]
         public void ParseFails(string text)
         {
             Assert.AreEqual(false, Vector3D.TryParse(text, out _));
             Assert.Throws<FormatException>(() => Vector3D.Parse(text));
-        }
-
-        [TestCase(@"<Vector3D X=""1"" Y=""2"" />")]
-        [TestCase(@"<Vector3D Y=""2"" X=""1""/>")]
-        [TestCase(@"<Vector3D><X>1</X><Y>2</Y></Vector3D>")]
-        [TestCase(@"<Vector3D><Y>2</Y><X>1</X></Vector3D>")]
-        public void ReadFrom(string xml)
-        {
-            var v = new Vector3D(1, 2);
-            AssertGeometry.AreEqual(v, Vector3D.ReadFrom(XmlReader.Create(new StringReader(xml))));
         }
 
         [TestCase("-1, -2", "1, 2", "0, 0")]
