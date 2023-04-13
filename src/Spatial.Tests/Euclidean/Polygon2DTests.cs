@@ -29,6 +29,20 @@ namespace MathNet.Spatial.Tests.Euclidean
             Assert.AreEqual(expected, result);
         }
 
+        [TestCase("0,0;2,2;3,1;2,0", "1,1,3")]
+        public void TranslatePolygonException(string points, string vectorString)
+        {
+            var testElement = new Polygon2D(from x in points.Split(';') select Point3D.Parse(x));
+            var vector = Vector3D.Parse(vectorString);
+            Assert.Throws<ArgumentException>(() => testElement.TranslateBy(vector));
+        }
+
+        [TestCase("0,0,1;2,2,2;3,1,-1;2,0,-5")]
+        public void ExceptionWhenPointsHaveZCoordinate(string points)
+        {
+            Assert.Throws<ArgumentException>(() => new Polygon2D(from x in points.Split(';') select Point3D.Parse(x)));
+        }
+
         [TestCase("0,0;1,2;-1,2", Math.PI, "0,0;-1,-2;1,-2")]
         public void RotatePolygon(string points, double angle, string expectedPolygon)
         {
@@ -134,6 +148,13 @@ namespace MathNet.Spatial.Tests.Euclidean
                     convexHullWithPointRemoved.EnclosesPoint(pointToRemove);
                 Assert.That(pointIsInsideConvexHull, Is.Not.True);
             }
+        }
+
+        [TestCase("0.27,0.41,4;0.87,0.67,3;0.7,0.33,1")]
+        public void ConvexHullExceptionWhenZCoordinate(string points)
+        {
+            var testPoints = (from x in points.Split(';') select Point3D.Parse(x)).ToList();
+            Assert.Throws<ArgumentException>(() => Polygon2D.GetConvexHullFromPoints(testPoints));
         }
 
         [TestCase("0,0;0.4,0;0.5,0;0.6,0;1,0;1,.25;1,.75;1,1;0,1;0,0.5", "1,0;1,1;0,1;0,0")]

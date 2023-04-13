@@ -9,6 +9,7 @@ using System.Xml.Serialization;
 using MathNet.Spatial.Internals;
 using MathNet.Spatial.Units;
 using HashCode = MathNet.Spatial.Internals.HashCode;
+using System.Drawing;
 
 namespace MathNet.Spatial.Euclidean
 {
@@ -30,7 +31,8 @@ namespace MathNet.Spatial.Euclidean
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Polygon2D"/> class.
-        /// At least three points are needed to construct a polygon.  If less are passed an ArgumentException is thrown.
+        /// At least three points are needed to construct a polygon, otherwise an ArgumentException is thrown.
+        /// Throws an ArgumentException if the <paramref name="vertices"/> have non-negative Z coordinates/>.
         /// </summary>
         /// <param name="vertices">A list of vertices.</param>
         public Polygon2D(IEnumerable<Point3D> vertices)
@@ -48,7 +50,8 @@ namespace MathNet.Spatial.Euclidean
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Polygon2D"/> class.
-        /// At least three points are needed to construct a polygon.  If less are passed an ArgumentException is thrown.
+        /// At least three points are needed to construct a polygon, otherwise an ArgumentException is thrown.
+        /// Throws an ArgumentException if the <paramref name="vertices"/> have non-negative Z coordinates/>.
         /// </summary>
         /// <param name="vertices">A list of vertices.</param>
         public Polygon2D(params Point3D[] vertices)
@@ -152,13 +155,13 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Using algorithm from Ouellet - https://www.codeproject.com/Articles/1210225/Fast-and-improved-D-Convex-Hull-algorithm-and-its, take an IEnumerable of Point3Ds and computes the
-        /// two dimensional convex hull, returning it as a Polygon2D object.
+        /// Using algorithm from Ouellet - https://www.codeproject.com/Articles/1210225/Fast-and-improved-D-Convex-Hull-algorithm-and-its, take an IEnumerable of Point3Ds and computes the two dimensional convex hull, returning it as a Polygon2D object.
         /// </summary>
         /// <param name="pointList">A list of points</param>
         /// <param name="clockWise">
         /// In which direction to return the points on the convex hull.
         /// If true, clockwise. Otherwise counter clockwise
+        /// Throws an ArgumentException if the <paramref name="pointList"/> have non-negative Z coordinates/>.
         /// </param>
         /// <returns>A polygon.</returns>
         public static Polygon2D GetConvexHullFromPoints(IEnumerable<Point3D> pointList, bool clockWise = true)
@@ -177,9 +180,9 @@ namespace MathNet.Spatial.Euclidean
                 return new Polygon2D(pointList);
             }
 
-            var chull = new ConvexHull(pointList, false);
-            chull.CalcConvexHull();
-            var hullPoints = chull.GetResultsAsArrayOfPoint();
+            var convexHull = new ConvexHull(pointList, false);
+            convexHull.CalcConvexHull();
+            var hullPoints = convexHull.GetResultsAsArrayOfPoint();
 
             // Order the hull points by angle to the centroid
             var centroid = Point3D.Centroid(hullPoints);
@@ -193,11 +196,17 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// Test whether a point is enclosed within a polygon. Points on the polygon edges are not
         /// counted as contained within the polygon.
+        /// Throws an ArgumentException if <paramref name="p"/> has non-negative Z coordinate/>.
         /// </summary>
         /// <param name="p">A point.</param>
         /// <returns>True if the point is inside the polygon; otherwise false.</returns>
         public bool EnclosesPoint(Point3D p)
         {
+            if (p.Z != 0)
+            {
+                throw new ArgumentException($"Point {p} does not lie on the XY plane");
+            }
+
             var c = false;
             for (int i = 0, j = _points.Count - 1; i < _points.Count; j = i++)
             {
@@ -234,6 +243,7 @@ namespace MathNet.Spatial.Euclidean
 
         /// <summary>
         /// Returns a new polygon which is translated (moved) by a vector
+        /// Throws an ArgumentException if <paramref name="vector"/> has non-negative Z coordinate/>.
         /// </summary>
         /// <param name="vector">A vector.</param>
         /// <returns>A new polygon that has been translated.</returns>
