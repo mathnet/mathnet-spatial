@@ -169,7 +169,7 @@ namespace MathNet.Spatial.Euclidean
             if (!IsParallelTo(other, tolerance))
             {
                 // Compute the unbounded result
-                var result = ClosestPointsBetweenLines(other, tolerance);
+                var result = ClosestPointsTo(other, tolerance);
 
                 // A point that is known to be collinear with the line start and end points is on the segment if
                 // its distance to both endpoints is less than the segment length.  If both projected points lie
@@ -336,7 +336,7 @@ namespace MathNet.Spatial.Euclidean
             var t = (q - p).CrossProduct(s).Z / r.CrossProduct(s).Z;
             var u = (p - q).CrossProduct(r).Z / s.CrossProduct(r).Z;
 
-            var isIntersected = (0.0 <= t && t <= 1.0) && (0.0 <= u && u <= 1.0);
+            var isIntersected = 0.0 <= t && t <= 1.0 && 0.0 <= u && u <= 1.0;
             if (isIntersected)
             {
                 intersection = p + t * r;
@@ -354,7 +354,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="tolerance">A tolerance (epsilon) to adjust for floating point error</param>
         /// <returns>A tuple of two points representing the endpoints of the shortest distance between the two line segments</returns>
         [Pure]
-        private Tuple<Point3D, Point3D> ClosestPointsBetweenLines(LineSegment other, Angle tolerance)
+        private Tuple<Point3D, Point3D> ClosestPointsTo(LineSegment other, Angle tolerance)
         {
             if (IsParallelTo(other, tolerance))
             {
@@ -374,10 +374,10 @@ namespace MathNet.Spatial.Euclidean
             var d = u.DotProduct(w0);
             var e = v.DotProduct(w0);
 
-            var sc = ((b * e) - (c * d)) / ((a * c) - (b * b));
-            var tc = ((a * e) - (b * d)) / ((a * c) - (b * b));
+            var sc = (b * e - c * d) / (a * c - b * b);
+            var tc = (a * e - b * d) / (a * c - b * b);
 
-            return Tuple.Create(point0 + (sc * u), point1 + (tc * v));
+            return Tuple.Create(point0 + sc * u, point1 + tc * v);
         }
 
         /// <inheritdoc />

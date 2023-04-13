@@ -6,7 +6,7 @@ using NUnit.Framework;
 namespace MathNet.Spatial.Tests.Euclidean
 {
     [TestFixture]
-    public class LineSegmentTests
+    public class LineSegment2DTests
     {
         [Test]
         public void Constructor()
