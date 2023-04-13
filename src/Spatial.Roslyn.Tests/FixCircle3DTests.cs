@@ -24,7 +24,7 @@ namespace RoslynSandbox
             var p1 = new Point3D(1, 2, 0);
             var p2 = new Point3D(3, 4, 0);
             var u1 = Direction.Create(0, 1, 0);
-            var c = new Circle3D(p1, p2, u1);
+            var c = new Circle(p1, p2, u1);
         }
     }
 }";
@@ -40,7 +40,7 @@ namespace RoslynSandbox
             var p1 = new Point3D(1, 2, 0);
             var p2 = new Point3D(3, 4, 0);
             var u1 = Direction.Create(0, 1, 0);
-            var c = Circle3D.FromPointsAndAxis(p1, p2, u1);
+            var c = Circle.FromPointsAndAxis(p1, p2, u1);
         }
     }
 }";
@@ -62,7 +62,7 @@ namespace RoslynSandbox
             var p1 = new Point3D(1, 2, 0);
             var p2 = new Point3D(3, 5, 0);
             var p3 = new Point3D(-1, 0, 0);
-            var c = new Circle3D(p1, p2, p3);
+            var c = new Circle(p1, p2, p3);
         }
     }
 }";
@@ -78,7 +78,7 @@ namespace RoslynSandbox
             var p1 = new Point3D(1, 2, 0);
             var p2 = new Point3D(3, 5, 0);
             var p3 = new Point3D(-1, 0, 0);
-            var c = Circle3D.FromPoints(p1, p2, p3);
+            var c = Circle.FromPoints(p1, p2, p3);
         }
     }
 }";

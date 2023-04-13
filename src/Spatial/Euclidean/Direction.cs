@@ -7,6 +7,7 @@ using System.Xml.Serialization;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Spatial.Internals;
 using MathNet.Spatial.Units;
+using Newtonsoft.Json;
 using HashCode = MathNet.Spatial.Internals.HashCode;
 
 namespace MathNet.Spatial.Euclidean
@@ -39,6 +40,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="x">The x component.</param>
         /// <param name="y">The y component.</param>
         /// <param name="z">The z component.</param>
+        [JsonConstructor]
         private Direction(double x, double y, double z)
         {
             if (double.IsNaN(x) || double.IsInfinity(x))
@@ -86,6 +88,7 @@ namespace MathNet.Spatial.Euclidean
         /// Gets a vector orthogonal to this
         /// </summary>
         [Pure]
+        [JsonIgnore]
         public Direction Orthogonal
         {
             get
@@ -98,12 +101,6 @@ namespace MathNet.Spatial.Euclidean
                 return Create(-Y - Z, X, X);
             }
         }
-
-        /// <summary>
-        /// Gets the cross product matrix
-        /// </summary>
-        [Pure]
-        internal Matrix<double> CrossProductMatrix => Matrix<double>.Build.Dense(3, 3, new[] { 0d, Z, -Y, -Z, 0d, X, Y, -X, 0d });
 
         /// <summary>
         /// Returns a value that indicates whether each pair of elements in two specified vectors is equal.
@@ -484,13 +481,13 @@ namespace MathNet.Spatial.Euclidean
         /// Computes whether or not this vector is perpendicular to another vector using the dot product method and
         /// comparing it to within a specified tolerance
         /// </summary>
-        /// <param name="othervector">The other <see cref="Vector3D"/></param>
+        /// <param name="otherVector">The other <see cref="Vector3D"/></param>
         /// <param name="tolerance">A tolerance value for the dot product method.  Values below 2*Precision.DoublePrecision may cause issues.</param>
         /// <returns>true if the vector dot product is within the given tolerance of zero, false if not</returns>
         [Pure]
-        public bool IsPerpendicularTo(Vector3D othervector, double tolerance = 1e-10)
+        public bool IsPerpendicularTo(Vector3D otherVector, double tolerance = 1e-10)
         {
-            var other = othervector.Normalize();
+            var other = otherVector.Normalize();
             return Math.Abs(DotProduct(other)) < tolerance;
         }
 
@@ -498,13 +495,13 @@ namespace MathNet.Spatial.Euclidean
         /// Computes whether or not this vector is perpendicular to another vector using the dot product method and
         /// comparing it to within a specified tolerance
         /// </summary>
-        /// <param name="othervector">The other <see cref="Direction"/></param>
+        /// <param name="otherVector">The other <see cref="Direction"/></param>
         /// <param name="tolerance">A tolerance value for the dot product method.  Values below 2*Precision.DoublePrecision may cause issues.</param>
         /// <returns>true if the vector dot product is within the given tolerance of zero, false if not</returns>
         [Pure]
-        public bool IsPerpendicularTo(Direction othervector, double tolerance = 1e-10)
+        public bool IsPerpendicularTo(Direction otherVector, double tolerance = 1e-10)
         {
-            return Math.Abs(DotProduct(othervector)) < tolerance;
+            return Math.Abs(DotProduct(otherVector)) < tolerance;
         }
 
         /// <summary>
@@ -710,17 +707,6 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Transforms a vector by multiplying it against a provided matrix
-        /// </summary>
-        /// <param name="m">The matrix to multiply</param>
-        /// <returns>A new transformed vector</returns>
-        [Pure]
-        public Vector3D TransformBy(Matrix<double> m)
-        {
-            return Vector3D.OfVector(m.Multiply(ToVector()));
-        }
-
-        /// <summary>
         /// Convert to a Math.NET Numerics dense vector of length 3.
         /// </summary>
         /// <returns>A dense vector</returns>
@@ -829,19 +815,6 @@ namespace MathNet.Spatial.Euclidean
         /// <inheritdoc />
         void IXmlSerializable.ReadXml(XmlReader reader)
         {
-            bool TryGetUnitVector(double xv, double yv, double zv, out Direction result)
-            {
-                var temp = new Vector3D(xv, yv, zv);
-                if (Math.Abs(temp.Length - 1) < 1E-3)
-                {
-                    result = temp.Normalize();
-                    return true;
-                }
-
-                result = default(Direction);
-                return false;
-            }
-
             if (reader.TryReadAttributeAsDouble("X", out var x) &&
                 reader.TryReadAttributeAsDouble("Y", out var y) &&
                 reader.TryReadAttributeAsDouble("Z", out var z) &&
@@ -861,6 +834,19 @@ namespace MathNet.Spatial.Euclidean
             }
 
             throw new XmlException($"Could not read a {GetType()}");
+        }
+
+        private bool TryGetUnitVector(double xv, double yv, double zv, out Direction result)
+        {
+            var temp = new Vector3D(xv, yv, zv);
+            if (Math.Abs(temp.Length - 1) < 1E-3)
+            {
+                result = temp.Normalize();
+                return true;
+            }
+
+            result = default(Direction);
+            return false;
         }
 
         /// <inheritdoc />

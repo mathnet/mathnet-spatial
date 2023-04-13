@@ -115,9 +115,9 @@ namespace MathNet.Spatial.Tests.Serialization
         [TestCase("0, 0", 3)]
         public void Circle2DDataContract(string point, double radius)
         {
-            var center = Point2D.Parse(point);
-            var c = new Circle2D(center, radius);
-            const string elementXml = @"<Circle2D><Center><X>0</X><Y>0</Y></Center><Radius>3</Radius></Circle2D>";
+            var center = Point3D.Parse(point);
+            var c = new Circle(center, radius);
+            const string elementXml = @"<Circle><Center><X>0</X><Y>0</Y><Z>0</Z></Center><Axis><X>0</X><Y>0</Y><Z>1</Z></Axis><Radius>3</Radius></Circle>";
             var result = DataContractRoundTrip(c, elementXml);
             Assert.AreEqual(c, result);
         }
@@ -126,8 +126,8 @@ namespace MathNet.Spatial.Tests.Serialization
         public void Circle3DDataContract(string point, double radius)
         {
             var center = Point3D.Parse(point);
-            var c = new Circle3D(center, Direction.ZAxis, radius);
-            const string elementXml = @"<Circle3D><CenterPoint><X>0</X><Y>0</Y><Z>0</Z></CenterPoint><Axis><X>0</X><Y>0</Y><Z>1</Z></Axis><Radius>2.5</Radius></Circle3D>";
+            var c = new Circle(center, Direction.ZAxis, radius);
+            const string elementXml = @"<Circle><Center><X>0</X><Y>0</Y><Z>0</Z></Center><Axis><X>0</X><Y>0</Y><Z>1</Z></Axis><Radius>2.5</Radius></Circle>";
             var result = DataContractRoundTrip(c, elementXml);
             Assert.AreEqual(c, result);
         }

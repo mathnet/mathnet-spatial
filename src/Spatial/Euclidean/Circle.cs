@@ -4,6 +4,7 @@ using System.Xml.Schema;
 using System.Xml;
 using System.Xml.Serialization;
 using MathNet.Spatial.Internals;
+using Newtonsoft.Json;
 using HashCode = MathNet.Spatial.Internals.HashCode;
 
 namespace MathNet.Spatial.Euclidean
@@ -12,53 +13,68 @@ namespace MathNet.Spatial.Euclidean
     /// Describes a 3 dimensional circle
     /// </summary>
     [Serializable]
-    public struct Circle3D : IEquatable<Circle3D>, IXmlSerializable
+    public struct Circle : IEquatable<Circle>, IXmlSerializable
     {
         /// <summary>
         /// The center of the circle
         /// </summary>
-        public Point3D CenterPoint { get; private set; }
+        public Point3D Center { get; private set; }
 
         /// <summary>
-        /// the axis of the circle
+        /// The axis of the circle
         /// </summary>
         public Direction Axis { get; private set; }
 
         /// <summary>
-        /// the radius of the circle
+        /// The radius of the circle
         /// </summary>
         public double Radius { get; private set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Circle3D"/> struct.
-        /// Constructs a Circle3D with a given <paramref name="radius"/> at a <paramref name="centerPoint"/> orientated to the <paramref name="axis"/>
+        /// Initializes a new instance of the <see cref="Circle"/> struct.
+        /// Constructs a Circle with a given <paramref name="radius"/> at a <paramref name="center"/> oriented to the <paramref name="axis"/>
         /// </summary>
-        /// <param name="centerPoint">The center of the circle</param>
-        /// <param name="axis">the axis of the circle</param>
-        /// <param name="radius">the radius of the circle</param>
-        public Circle3D(Point3D centerPoint, Direction axis, double radius)
+        /// <param name="center">The center of the circle</param>
+        /// <param name="axis">The axis of the circle</param>
+        /// <param name="radius">The radius of the circle</param>
+        [JsonConstructor]
+        public Circle(Point3D center, Direction axis, double radius)
         {
-            CenterPoint = centerPoint;
+            Center = center;
             Axis = axis;
             Radius = radius;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Circle"/> struct.
+        /// Constructs a Circle with a given <paramref name="radius"/> at a <paramref name="center"/> orientated on the x-y plane/>
+        /// </summary>
+        /// <param name="center">The center of the circle</param>
+        /// <param name="radius">The radius of the circle</param>
+        public Circle(Point3D center, double radius)
+            : this(center, Direction.ZAxis, radius)
+        {
         }
 
         /// <summary>
         /// Gets the diameter of the circle
         /// </summary>
         [Pure]
+        [JsonIgnore]
         public double Diameter => 2 * Radius;
 
         /// <summary>
         /// Gets the circumference of the circle
         /// </summary>
         [Pure]
+        [JsonIgnore]
         public double Circumference => 2 * Math.PI * Radius;
 
         /// <summary>
         /// Gets the area of the circle
         /// </summary>
         [Pure]
+        [JsonIgnore]
         public double Area => Radius * Radius * Math.PI;
 
         /// <summary>
@@ -67,7 +83,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="left">The first circle to compare</param>
         /// <param name="right">The second circle to compare</param>
         /// <returns>True if the circles are the same; otherwise false.</returns>
-        public static bool operator ==(Circle3D left, Circle3D right)
+        public static bool operator ==(Circle left, Circle right)
         {
             return left.Equals(right);
         }
@@ -78,20 +94,20 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="left">The first circle to compare</param>
         /// <param name="right">The second circle to compare</param>
         /// <returns>True if the circles are different; otherwise false.</returns>
-        public static bool operator !=(Circle3D left, Circle3D right)
+        public static bool operator !=(Circle left, Circle right)
         {
             return !left.Equals(right);
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Circle3D"/> struct.
+        /// Initializes a new instance of the <see cref="Circle"/> struct.
         /// Create a circle from three points which lie along its circumference.
         /// </summary>
         /// <param name="p1">The first point on the circle</param>
         /// <param name="p2">The second point on the circle</param>
         /// <param name="p3">The third point on the circle</param>
-        /// <returns>A <see cref="Circle3D"/></returns>
-        public static Circle3D FromPoints(Point3D p1, Point3D p2, Point3D p3)
+        /// <returns>A <see cref="Circle"/></returns>
+        public static Circle FromPoints(Point3D p1, Point3D p2, Point3D p3)
         {
             // https://www.physicsforums.com/threads/equation-of-a-circle-through-3-points-in-3d-space.173847/
             //// ReSharper disable InconsistentNaming
@@ -99,9 +115,14 @@ namespace MathNet.Spatial.Euclidean
             var p2p3 = p3 - p2;
             //// ReSharper restore InconsistentNaming
 
+            if (p1p2.IsParallelTo(p2p3))
+            {
+                throw new ArgumentException("A circle cannot be created from these points, are they collinear?");
+            }
+
             var axis = p1p2.CrossProduct(p2p3).Normalize();
-            var midPointA = p1 + (0.5 * p1p2);
-            var midPointB = p2 + (0.5 * p2p3);
+            var midPointA = p1 + 0.5 * p1p2;
+            var midPointB = p2 + 0.5 * p2p3;
 
             var directionA = p1p2.CrossProduct(axis);
             var directionB = p2p3.CrossProduct(axis);
@@ -115,21 +136,21 @@ namespace MathNet.Spatial.Euclidean
                 throw new ArgumentException("A circle cannot be created from these points, are they collinear?");
             }
 
-            return new Circle3D(center.Value, axis, center.Value.DistanceTo(p1));
+            return new Circle(center.Value, axis, center.Value.DistanceTo(p1));
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Circle3D"/> struct.
+        /// Initializes a new instance of the <see cref="Circle"/> struct.
         /// Create a circle from the midpoint between two points, in a direction along a specified axis
         /// </summary>
         /// <param name="p1">First point on the circumference of the circle</param>
         /// <param name="p2">Second point on the circumference of the circle</param>
         /// <param name="axis">Direction of the plane in which the circle lies</param>
-        /// <returns>A <see cref="Circle3D"/></returns>
-        public static Circle3D FromPointsAndAxis(Point3D p1, Point3D p2, Direction axis)
+        /// <returns>A <see cref="Circle"/></returns>
+        public static Circle FromPointsAndAxis(Point3D p1, Point3D p2, Direction axis)
         {
             var cp = Point3D.MidPoint(p1, p2);
-            return new Circle3D(cp, axis, cp.DistanceTo(p1));
+            return new Circle(cp, axis, cp.DistanceTo(p1));
         }
 
         /// <summary>
@@ -139,7 +160,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="tolerance">A tolerance (epsilon) to adjust for floating point error</param>
         /// <returns>true if the points are equal; otherwise false</returns>
         [Pure]
-        public bool Equals(Circle3D c, double tolerance)
+        public bool Equals(Circle c, double tolerance)
         {
             if (tolerance < 0)
             {
@@ -147,26 +168,26 @@ namespace MathNet.Spatial.Euclidean
             }
 
             return Math.Abs(c.Radius - Radius) < tolerance
-                   && Axis.Equals(c.Axis, tolerance)
-                   && CenterPoint.Equals(c.CenterPoint, tolerance);
+                   && Axis.IsParallelTo(c.Axis, tolerance)
+                   && Center.Equals(c.Center, tolerance);
         }
 
         /// <inheritdoc />
         [Pure]
-        public bool Equals(Circle3D c)
+        public bool Equals(Circle c)
         {
-            return CenterPoint.Equals(c.CenterPoint)
-                   && Axis.Equals(c.Axis)
+            return Center.Equals(c.Center)
+                   && Axis.IsParallelTo(c.Axis)
                    && Radius.Equals(c.Radius);
         }
 
         /// <inheritdoc />
         [Pure]
-        public override bool Equals(object obj) => obj is Circle3D c && Equals(c);
+        public override bool Equals(object obj) => obj is Circle c && Equals(c);
 
         /// <inheritdoc />
         [Pure]
-        public override int GetHashCode() => HashCode.Combine(CenterPoint, Axis, Radius);
+        public override int GetHashCode() => HashCode.Combine(Center, Axis, Radius);
 
         public XmlSchema GetSchema() => null;
 
@@ -179,7 +200,7 @@ namespace MathNet.Spatial.Euclidean
                 var axis = reader.ReadElementAs<Direction>();
                 if (reader.TryReadElementContentAsDouble("Radius", out var radius))
                 {
-                    CenterPoint = centerPoint;
+                    Center = centerPoint;
                     Axis = axis;
                     Radius = radius;
                     reader.Skip();
@@ -195,7 +216,7 @@ namespace MathNet.Spatial.Euclidean
 
         public void WriteXml(XmlWriter writer)
         {
-            writer.WriteElement("CenterPoint", CenterPoint);
+            writer.WriteElement("Center", Center);
             writer.WriteElement("Axis", Axis);
             writer.WriteElement("Radius", Radius, "G17");
         }

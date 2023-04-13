@@ -56,21 +56,21 @@ namespace MathNet.Spatial.Tests.Serialization
             Assert.AreEqual(v, result);
         }
 
-        [TestCase("1, 1", 3, "<Circle2D><Center><X>1</X><Y>1</Y></Center><Radius>3</Radius></Circle2D>")]
+        [TestCase("1, 1", 3, "<Circle><Center><X>1</X><Y>1</Y><Z>0</Z></Center><Axis><X>0</X><Y>0</Y><Z>1</Z></Axis><Radius>3</Radius></Circle>")]
         public void Circle2DXml(string point, double radius, string xml)
         {
-            var center = Point2D.Parse(point);
-            var c = new Circle2D(center, radius);
+            var center = Point3D.Parse(point);
+            var c = new Circle(center, radius);
             var result = AssertXml.XmlSerializerRoundTrip(c, xml);
             Assert.AreEqual(c, result);
         }
 
-        [TestCase("1, 2, 3", "-0.267261241912424, 0.534522483824849, 0.801783725737273", 2.5, "<Circle3D><CenterPoint><X>1</X><Y>2</Y><Z>3</Z></CenterPoint><Axis><X>-0.26726124191242406</X><Y>0.53452248382484913</Y><Z>0.80178372573727308</Z></Axis><Radius>2.5</Radius></Circle3D>")]
+        [TestCase("1, 2, 3", "-0.267261241912424, 0.534522483824849, 0.801783725737273", 2.5, "<Circle><Center><X>1</X><Y>2</Y><Z>3</Z></Center><Axis><X>-0.26726124191242406</X><Y>0.53452248382484913</Y><Z>0.80178372573727308</Z></Axis><Radius>2.5</Radius></Circle>")]
         public void Circle3DXml(string point, string axisString, double radius, string xml)
         {
             var center = Point3D.Parse(point);
             var axis = Direction.Parse(axisString);
-            var c = new Circle3D(center, axis, radius);
+            var c = new Circle(center, axis, radius);
             var result = AssertXml.XmlSerializerRoundTrip(c, xml);
             Assert.AreEqual(c, result);
         }
