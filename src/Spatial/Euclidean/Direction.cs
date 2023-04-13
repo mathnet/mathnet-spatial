@@ -100,12 +100,6 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Gets the cross product matrix
-        /// </summary>
-        [Pure]
-        internal Matrix<double> CrossProductMatrix => Matrix<double>.Build.Dense(3, 3, new[] { 0d, Z, -Y, -Z, 0d, X, Y, -X, 0d });
-
-        /// <summary>
         /// Returns a value that indicates whether each pair of elements in two specified vectors is equal.
         /// </summary>
         /// <param name="left">The first vector to compare</param>
@@ -484,13 +478,13 @@ namespace MathNet.Spatial.Euclidean
         /// Computes whether or not this vector is perpendicular to another vector using the dot product method and
         /// comparing it to within a specified tolerance
         /// </summary>
-        /// <param name="othervector">The other <see cref="Vector3D"/></param>
+        /// <param name="otherVector">The other <see cref="Vector3D"/></param>
         /// <param name="tolerance">A tolerance value for the dot product method.  Values below 2*Precision.DoublePrecision may cause issues.</param>
         /// <returns>true if the vector dot product is within the given tolerance of zero, false if not</returns>
         [Pure]
-        public bool IsPerpendicularTo(Vector3D othervector, double tolerance = 1e-10)
+        public bool IsPerpendicularTo(Vector3D otherVector, double tolerance = 1e-10)
         {
-            var other = othervector.Normalize();
+            var other = otherVector.Normalize();
             return Math.Abs(DotProduct(other)) < tolerance;
         }
 
@@ -498,13 +492,13 @@ namespace MathNet.Spatial.Euclidean
         /// Computes whether or not this vector is perpendicular to another vector using the dot product method and
         /// comparing it to within a specified tolerance
         /// </summary>
-        /// <param name="othervector">The other <see cref="Direction"/></param>
+        /// <param name="otherVector">The other <see cref="Direction"/></param>
         /// <param name="tolerance">A tolerance value for the dot product method.  Values below 2*Precision.DoublePrecision may cause issues.</param>
         /// <returns>true if the vector dot product is within the given tolerance of zero, false if not</returns>
         [Pure]
-        public bool IsPerpendicularTo(Direction othervector, double tolerance = 1e-10)
+        public bool IsPerpendicularTo(Direction otherVector, double tolerance = 1e-10)
         {
-            return Math.Abs(DotProduct(othervector)) < tolerance;
+            return Math.Abs(DotProduct(otherVector)) < tolerance;
         }
 
         /// <summary>
@@ -707,17 +701,6 @@ namespace MathNet.Spatial.Euclidean
         public Vector3D TransformBy(CoordinateSystem coordinateSystem)
         {
             return coordinateSystem.Transform(ToVector3D());
-        }
-
-        /// <summary>
-        /// Transforms a vector by multiplying it against a provided matrix
-        /// </summary>
-        /// <param name="m">The matrix to multiply</param>
-        /// <returns>A new transformed vector</returns>
-        [Pure]
-        public Vector3D TransformBy(Matrix<double> m)
-        {
-            return Vector3D.OfVector(m.Multiply(ToVector()));
         }
 
         /// <summary>
