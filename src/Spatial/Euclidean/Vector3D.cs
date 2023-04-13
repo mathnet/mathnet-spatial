@@ -354,8 +354,9 @@ namespace MathNet.Spatial.Euclidean
         [Pure]
         public Vector3D ProjectOn(Vector3D uv)
         {
-            var pd = this.DotProduct(uv.Normalize());
-            return pd * uv;
+            var direction = uv.Normalize();
+            var pd = this.DotProduct(direction);
+            return pd * direction;
         }
 
         /// <summary>

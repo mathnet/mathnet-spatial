@@ -233,7 +233,7 @@ namespace MathNet.Spatial.Tests.Euclidean
         public void XmlRoundtrip()
         {
             var v = new Point3D(1, 2);
-            AssertXml.XmlRoundTrips(v, "<Point3D><X>1</X><Y>2</Y></Point3D>", (e, a) => AssertGeometry.AreEqual(e, a));
+            AssertXml.XmlRoundTrips(v, "<Point3D><X>1</X><Y>2</Y><Z>0</Z></Point3D>", (e, a) => AssertGeometry.AreEqual(e, a));
         }
 
         [Test]
@@ -244,7 +244,7 @@ namespace MathNet.Spatial.Tests.Euclidean
                 Value1 = new Point3D(1, 2),
                 Value2 = new Point3D(3, 4)
             };
-            var expected = "<ContainerOfPoint3D><Value1><X>1</X><Y>2</Y></Value1><Value2><X>3</X><Y>4</Y></Value2></ContainerOfPoint3D>";
+            var expected = "<ContainerOfPoint3D><Value1><X>1</X><Y>2</Y><Z>0</Z></Value1><Value2><X>3</X><Y>4</Y><Z>0</Z></Value2></ContainerOfPoint3D>";
             var roundTrip = AssertXml.XmlSerializerRoundTrip(container, expected);
             AssertGeometry.AreEqual(container.Value1, roundTrip.Value1);
             AssertGeometry.AreEqual(container.Value2, roundTrip.Value2);
@@ -255,7 +255,7 @@ namespace MathNet.Spatial.Tests.Euclidean
         {
             var v = new Point3D(1, 2);
             var serializer = new XmlSerializer(typeof(Point3D));
-            AssertGeometry.AreEqual(v, (Point3D)serializer.Deserialize(new StringReader(@"<Point3D><X>1</X><Y>2</Y></Point3D>")));
+            AssertGeometry.AreEqual(v, (Point3D)serializer.Deserialize(new StringReader(@"<Point3D><X>1</X><Y>2</Y><Z>0</Z></Point3D>")));
         }
 
         [Test]
@@ -267,8 +267,8 @@ namespace MathNet.Spatial.Tests.Euclidean
                 Value2 = new Point3D(3, 4)
             };
             var xml = "<ContainerOfPoint3D>\r\n" +
-                      "  <Value1><X>1</X><Y>2</Y></Value1>\r\n" +
-                      "  <Value2><X>3</X><Y>4</Y></Value2>\r\n" +
+                      "  <Value1><X>1</X><Y>2</Y><Z>0</Z></Value1>\r\n" +
+                      "  <Value2><X>3</X><Y>4</Y><Z>0</Z></Value2>\r\n" +
                       "</ContainerOfPoint3D>";
             var serializer = new XmlSerializer(typeof(AssertXml.Container<Point3D>));
             var deserialized = (AssertXml.Container<Point3D>)serializer.Deserialize(new StringReader(xml));

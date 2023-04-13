@@ -408,8 +408,8 @@ namespace MathNet.Spatial.Tests.Euclidean
             Assert.Throws<ArgumentException>(() => v1.Equals(v2, -0.01));
         }
 
-        [TestCase("-2, 0", null, "(-2,\u00A00)")]
-        [TestCase("-2, 0", "N2", "(-2.00,\u00A00.00)")]
+        [TestCase("-2, 0", null, "(-2, 0, 0)")]
+        [TestCase("-2, 0", "N2", "(-2.00, 0.00, 0.00)")]
         public void ToString(string vs, string format, string expected)
         {
             var v = Vector3D.Parse(vs);
@@ -422,7 +422,7 @@ namespace MathNet.Spatial.Tests.Euclidean
         public void XmlRoundtrip()
         {
             var v = new Vector3D(1, 2);
-            AssertXml.XmlRoundTrips(v, "<Vector3D><X>1</X><Y>2</Y></Vector3D>", (e, a) => AssertGeometry.AreEqual(e, a));
+            AssertXml.XmlRoundTrips(v, "<Vector3D><X>1</X><Y>2</Y><Z>0</Z></Vector3D>", (e, a) => AssertGeometry.AreEqual(e, a));
         }
 
         [Test]
@@ -433,7 +433,7 @@ namespace MathNet.Spatial.Tests.Euclidean
                 Value1 = new Vector3D(1, 2),
                 Value2 = new Vector3D(3, 4)
             };
-            var expected = "<ContainerOfVector3D><Value1><X>1</X><Y>2</Y></Value1><Value2><X>3</X><Y>4</Y></Value2></ContainerOfVector3D>";
+            var expected = "<ContainerOfVector3D><Value1><X>1</X><Y>2</Y><Z>0</Z></Value1><Value2><X>3</X><Y>4</Y><Z>0</Z></Value2></ContainerOfVector3D>";
             var roundTrip = AssertXml.XmlSerializerRoundTrip(container, expected);
             AssertGeometry.AreEqual(container.Value1, roundTrip.Value1);
             AssertGeometry.AreEqual(container.Value2, roundTrip.Value2);
@@ -444,15 +444,15 @@ namespace MathNet.Spatial.Tests.Euclidean
         {
             var v = new Vector3D(1, 2);
             var serializer = new XmlSerializer(typeof(Vector3D));
-            AssertGeometry.AreEqual(v, (Vector3D)serializer.Deserialize(new StringReader(@"<Vector3D><X>1</X><Y>2</Y></Vector3D>")));
+            AssertGeometry.AreEqual(v, (Vector3D)serializer.Deserialize(new StringReader(@"<Vector3D><X>1</X><Y>2</Y><Z>0</Z></Vector3D>")));
         }
 
         [Test]
         public void XmlContainerElements()
         {
             var xml = "<ContainerOfVector3D>\r\n" +
-                      "  <Value1><X>1</X><Y>2</Y></Value1>\r\n" +
-                      "  <Value2><X>3</X><Y>4</Y></Value2>\r\n" +
+                      "  <Value1><X>1</X><Y>2</Y><Z>0</Z></Value1>\r\n" +
+                      "  <Value2><X>3</X><Y>4</Y><Z>0</Z></Value2>\r\n" +
                       "</ContainerOfVector3D>";
             var serializer = new XmlSerializer(typeof(AssertXml.Container<Vector3D>));
             var deserialized = (AssertXml.Container<Vector3D>)serializer.Deserialize(new StringReader(xml));
