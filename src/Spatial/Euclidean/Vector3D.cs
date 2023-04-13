@@ -5,6 +5,7 @@ using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 using MathNet.Numerics.LinearAlgebra;
+using MathNet.Numerics.LinearAlgebra.Double;
 using MathNet.Spatial.Internals;
 using MathNet.Spatial.Units;
 using HashCode = MathNet.Spatial.Internals.HashCode;
@@ -43,6 +44,24 @@ namespace MathNet.Spatial.Euclidean
             this.X = x;
             this.Y = y;
             this.Z = z;
+        }
+
+        /// <summary>
+        /// Creates a Vector from Polar coordinates
+        /// </summary>
+        /// <param name="radius">The distance of the point from the origin</param>
+        /// <param name="angle">The angle of the point as measured from the X Axis</param>
+        /// <returns>A vector.</returns>
+        public static Vector3D FromPolar(double radius, Angle angle)
+        {
+            if (radius < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(radius), radius, "Expected a radius greater than or equal to zero.");
+            }
+
+            return new Vector3D(
+                radius * angle.Cos,
+                radius * angle.Sin);
         }
 
         /// <summary>
@@ -156,6 +175,17 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
+        /// Multiplies a vector by a scalar
+        /// </summary>
+        /// <param name="d">A scalar</param>
+        /// <param name="v">A vector</param>
+        /// <returns>A scaled vector</returns>
+        public static Vector3D operator *(Vector3D v, double d)
+        {
+            return d * v;
+        }
+
+        /// <summary>
         /// Divides a vector by a scalar
         /// </summary>
         /// <param name="v">A vector</param>
@@ -164,6 +194,28 @@ namespace MathNet.Spatial.Euclidean
         public static Vector3D operator /(Vector3D v, double d)
         {
             return new Vector3D(v.X / d, v.Y / d, v.Z / d);
+        }
+
+        /// <summary>
+        /// Subtracts a vector from this vector.
+        /// </summary>
+        /// <param name="v">A vector to subtract</param>
+        /// <returns>A new vector which is the difference of the current vector and the provided vector</returns>
+        [Pure]
+        public Vector3D Subtract(Vector3D v)
+        {
+            return new Vector3D(X - v.X, Y - v.Y);
+        }
+
+        /// <summary>
+        /// Adds a vector to this vector
+        /// </summary>
+        /// <param name="v">A vector to add</param>
+        /// <returns>A new vector which is the sum of the existing vector and the provided vector</returns>
+        [Pure]
+        public Vector3D Add(Vector3D v)
+        {
+            return new Vector3D(X + v.X, Y + v.Y);
         }
 
         /// <summary>
@@ -282,12 +334,24 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// Returns the Dot product of the current vector and a unit vector
         /// </summary>
-        /// <param name="uv">A unit vector</param>
+        /// <param name="uv">A direction</param>
         /// <returns>Returns a new vector</returns>
         [Pure]
         public Vector3D ProjectOn(Direction uv)
         {
             var pd = this.DotProduct(uv);
+            return pd * uv;
+        }
+
+        /// <summary>
+        /// Returns the Dot product of the current vector and a vector
+        /// </summary>
+        /// <param name="uv">A unit vector</param>
+        /// <returns>Returns a new vector</returns>
+        [Pure]
+        public Vector3D ProjectOn(Vector3D uv)
+        {
+            var pd = this.DotProduct(uv.Normalize());
             return pd * uv;
         }
 
@@ -349,7 +413,7 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         /// <param name="other">The other <see cref="Vector3D"/></param>
         /// <param name="tolerance">A tolerance value for the dot product method.  Values below 2*Precision.DoublePrecision may cause issues.</param>
-        /// <returns>true if the vector dot product is within the given tolerance of zero, false if not</returns>
+        /// <returns>True if the vector dot product is within the given tolerance of zero, false if not</returns>
         [Pure]
         public bool IsPerpendicularTo(Vector3D other, double tolerance = 1e-6)
         {
@@ -357,16 +421,42 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Computes whether or not this vector is perpendicular to another vector using the dot product method and
+        /// Computes whether or not this vector is parallel to another vector within a given angle tolerance.
+        /// </summary>
+        /// <param name="other">The other <see cref="Vector3D"/></param>
+        /// <param name="tolerance">The tolerance for when vectors are said to be parallel</param>
+        /// <returns>True if the vectors are parallel within the angle tolerance, false if they are not</returns>
+        [Pure]
+        public bool IsPerpendicularTo(Vector3D other, Angle tolerance)
+        {
+            var angle = AngleTo(other);
+            return (angle - Angle.HalfPi).Abs < tolerance;
+        }
+
+        /// <summary>
+        /// Computes whether or not this vector is perpendicular to another direction using the dot product method and
         /// comparing it to within a specified tolerance
         /// </summary>
         /// <param name="other">The other <see cref="Direction"/></param>
         /// <param name="tolerance">A tolerance value for the dot product method.  Values below 2*Precision.DoublePrecision may cause issues.</param>
-        /// <returns>true if the vector dot product is within the given tolerance of zero, false if not</returns>
+        /// <returns>True if the vector dot product is within the given tolerance of zero, false if not</returns>
         [Pure]
         public bool IsPerpendicularTo(Direction other, double tolerance = 1e-6)
         {
             return Math.Abs(this.Normalize().DotProduct(other)) < tolerance;
+        }
+
+        /// <summary>
+        /// Computes whether or not this vector is parallel to another direction within a given angle tolerance.
+        /// </summary>
+        /// <param name="other">The other <see cref="Vector3D"/></param>
+        /// <param name="tolerance">A tolerance value for the dot product method.  Values below 2*Precision.DoublePrecision may cause issues.</param>
+        /// <returns>True if the vector dot product is within the given tolerance of zero, false if not</returns>
+        [Pure]
+        public bool IsPerpendicularTo(Direction other, Angle tolerance)
+        {
+            var angle = AngleTo(other);
+            return (angle - Angle.HalfPi).Abs < tolerance;
         }
 
         /// <summary>
@@ -458,6 +548,57 @@ namespace MathNet.Spatial.Euclidean
         public Angle SignedAngleTo(Vector3D v, Direction about)
         {
             return this.Normalize().SignedAngleTo(v.Normalize(), about);
+        }
+
+        /// <summary>
+        /// Compute the signed angle to another vector.
+        /// </summary>
+        /// <param name="other">The other <see cref="Vector3D"/></param>
+        /// <param name="clockWise">Positive in clockwise direction</param>
+        /// <param name="returnNegative">When true and the result is > 180° a negative value is returned</param>
+        /// <returns>The angle between the vectors.</returns>
+        [Pure]
+        public Angle SignedAngleTo(Vector3D other, bool clockWise = false, bool returnNegative = false)
+        {
+            if (Z != 0 || other.Z != 0)
+            {
+                throw new ArgumentException("Vectors do not lie on the XY plane");
+            }
+
+            var normalized = Normalize();
+            var otherNormalized = other.Normalize();
+
+            var matrix = new DenseMatrix(2)
+            {
+                [0, 0] = normalized.X,
+                [0, 1] = normalized.Y,
+
+                [1, 0] = normalized.Y,
+                [1, 1] = -normalized.X,
+            };
+
+            var rhs = new DenseVector(2)
+            {
+                [0] = otherNormalized.X,
+                [1] = otherNormalized.Y
+            };
+
+            var solution = matrix.Solve(rhs);
+
+            var a = -Math.Atan2(solution[1], solution[0]);
+            var sign = clockWise ? -1 : 1;
+            a *= sign;
+            if (a < 0 && !returnNegative)
+            {
+                a += 2 * Math.PI;
+            }
+
+            if (a > Math.PI && returnNegative)
+            {
+                a -= 2 * Math.PI;
+            }
+
+            return Angle.FromRadians(a);
         }
 
         /// <summary>

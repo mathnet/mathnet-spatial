@@ -14,7 +14,7 @@ namespace MathNet.Spatial.Tests.Euclidean
         public void ConstructorTest()
         {
             var polygon = TestPolygon1();
-            var checkList = new List<Point2D> { new Point2D(0, 0), new Point2D(0.25, 0.5), new Point2D(1, 1), new Point2D(-1, 1), new Point2D(0.5, -0.5) };
+            var checkList = new List<Point3D> { new Point3D(0, 0), new Point3D(0.25, 0.5), new Point3D(1, 1), new Point3D(-1, 1), new Point3D(0.5, -0.5) };
             CollectionAssert.AreEqual(checkList, polygon.Vertices);
         }
 
@@ -22,9 +22,9 @@ namespace MathNet.Spatial.Tests.Euclidean
         [TestCase("0,0;2,2;3,1;2,0", "-1,-1", "-1,-1;1,1;2,0;1,-1")]
         public void TranslatePolygon(string points, string vectorString, string expectedPolygon)
         {
-            var testElement = new Polygon2D(from x in points.Split(';') select Point2D.Parse(x));
-            var expected = new Polygon2D(from x in expectedPolygon.Split(';') select Point2D.Parse(x));
-            Vector2D vector = Vector2D.Parse(vectorString);
+            var testElement = new Polygon2D(from x in points.Split(';') select Point3D.Parse(x));
+            var expected = new Polygon2D(from x in expectedPolygon.Split(';') select Point3D.Parse(x));
+            Vector3D vector = Vector3D.Parse(vectorString);
             var result = testElement.TranslateBy(vector);
             Assert.AreEqual(expected, result);
         }
@@ -32,18 +32,18 @@ namespace MathNet.Spatial.Tests.Euclidean
         [TestCase("0,0;1,2;-1,2", Math.PI, "0,0;-1,-2;1,-2")]
         public void RotatePolygon(string points, double angle, string expectedPolygon)
         {
-            var testElement = new Polygon2D(from x in points.Split(';') select Point2D.Parse(x));
-            var expected = new Polygon2D(from x in expectedPolygon.Split(';') select Point2D.Parse(x));
+            var testElement = new Polygon2D(from x in points.Split(';') select Point3D.Parse(x));
+            var expected = new Polygon2D(from x in expectedPolygon.Split(';') select Point3D.Parse(x));
             Angle a = Angle.FromRadians(angle);
             var result = testElement.Rotate(a);
             Assert.IsTrue(expected.Equals(result, 0.001));
         }
 
         [TestCase("0,0;1,2;-1,2", "0,0:1,2;1,2:-1,2;-1,2:0,0")]
-        public void PolygonEdges(string stringpoints, string lines)
+        public void PolygonEdges(string stringPoints, string lines)
         {
-            List<Point2D> points = (from x in stringpoints.Split(';') select Point2D.Parse(x)).ToList();
-            var lineset = lines.Split(';').Select(t => LineSegment2D.Parse(t.Split(':').First(), t.Split(':').Last())).ToList();
+            List<Point3D> points = (from x in stringPoints.Split(';') select Point3D.Parse(x)).ToList();
+            var lineset = lines.Split(';').Select(t => LineSegment.Parse(t.Split(':').First(), t.Split(':').Last())).ToList();
 
             var poly = new Polygon2D(points);
             CollectionAssert.AreEquivalent(lineset, poly.Edges);
@@ -55,7 +55,7 @@ namespace MathNet.Spatial.Tests.Euclidean
             // Test to make sure that if the constructor point list is given to the polygon constructor with the first and last points
             // being duplicates, the point at the beginning of the list is removed
             var polygon = TestPolygon2();
-            var checkList = new List<Point2D> { new Point2D(0.25, 0.5), new Point2D(1, 1), new Point2D(-1, 1), new Point2D(0.5, -0.5), new Point2D(0, 0) };
+            var checkList = new List<Point3D> { new Point3D(0.25, 0.5), new Point3D(1, 1), new Point3D(-1, 1), new Point3D(0.5, -0.5), new Point3D(0, 0) };
             CollectionAssert.AreEqual(checkList, polygon.Vertices);
         }
 
@@ -71,7 +71,7 @@ namespace MathNet.Spatial.Tests.Euclidean
         [TestCase(1.5, 0, false)]
         public void IsPointInPolygonTest1(double x, double y, bool outcome)
         {
-            var testPoint = new Point2D(x, y);
+            var testPoint = new Point3D(x, y);
             var testPoly = TestPolygon3();
 
             Assert.AreEqual(outcome, testPoly.EnclosesPoint(testPoint));
@@ -89,7 +89,7 @@ namespace MathNet.Spatial.Tests.Euclidean
         [TestCase(1.5, 0, false)]
         public void IsPointInPolygonTest2(double x, double y, bool outcome)
         {
-            var testPoint = new Point2D(x, y);
+            var testPoint = new Point3D(x, y);
             var testPoly = TestPolygon4();
 
             Assert.AreEqual(outcome, testPoly.EnclosesPoint(testPoint));
@@ -104,30 +104,18 @@ namespace MathNet.Spatial.Tests.Euclidean
         [TestCase("-201.573,100.940;197.083,21.031;161.021,-29.414;114.223,-23.998;230.290,-68.246;-32.272,182.239;-173.345,72.736;-175.435,-176.273;90.810,-97.350;-196.942,216.594;67.759,-162.464;67.454,-174.844;-89.116,171.982;-18.421,11.935;73.816,-180.169;-103.560,-36.297;-233.800,194.296;-64.463,166.811;-17.182,83.403;-72.010,219.944", "-72.01,219.944;-196.942,216.594;-233.8,194.296;-175.435,-176.273;73.816,-180.169;230.29,-68.246;197.083,21.031")]
         public void ConvexHullTest(string points, string expected)
         {
-            var testPoints = (from x in points.Split(';') select Point2D.Parse(x)).ToList();
-            var expectedPoints = (from x in expected.Split(';') select Point2D.Parse(x)).ToList();
+            var testPoints = (from x in points.Split(';') select Point3D.Parse(x)).ToList();
+            var expectedPoints = (from x in expected.Split(';') select Point3D.Parse(x)).ToList();
 
             var hullClockwise = Polygon2D.GetConvexHullFromPoints(testPoints);
 
             var clockwiseVertices = hullClockwise.Vertices;
             CollectionAssert.AreEqual(expectedPoints, clockwiseVertices);
-            /*
-            for (var i = 0; i < hullClockwise.VertexCount; i++)
-            {
-                Assert.That(ClockwiseVerticies[i], Is.EqualTo(expectedPoints[i]));
-            }
-            */
 
             var hullCounterClockwise = Polygon2D.GetConvexHullFromPoints(testPoints, false);
-            var counterClockwiseVertices = hullCounterClockwise.Vertices;
+            var counterClockwiseVertices = hullCounterClockwise.Vertices.ToList();
             expectedPoints.Reverse();
             CollectionAssert.AreEqual(expectedPoints, counterClockwiseVertices);
-            /*
-            for (var i = 0; i < hullCounterClockwise.VertexCount; i++)
-            {
-                Assert.That(counterClockwiseVerticies[i], Is.EqualTo(expectedPoints[hullCounterClockwise.VertexCount - 1 - i]));
-            }
-            */
 
             var pointsNotOnConvexHull = testPoints.Except(hullCounterClockwise.Vertices);
             foreach (var pointNotOnConvexHull in pointsNotOnConvexHull)
@@ -151,8 +139,8 @@ namespace MathNet.Spatial.Tests.Euclidean
         [TestCase("0,0;0.4,0;0.5,0;0.6,0;1,0;1,.25;1,.75;1,1;0,1;0,0.5", "1,0;1,1;0,1;0,0")]
         public void ReduceComplexity(string points, string reduced)
         {
-            var testPoints = from x in points.Split(';') select Point2D.Parse(x);
-            var expectedPoints = from x in reduced.Split(';') select Point2D.Parse(x);
+            var testPoints = from x in points.Split(';') select Point3D.Parse(x);
+            var expectedPoints = from x in reduced.Split(';') select Point3D.Parse(x);
             var poly = new Polygon2D(testPoints);
             var expected = new Polygon2D(expectedPoints);
             var thinned = poly.ReduceComplexity(0.00001);
@@ -162,25 +150,25 @@ namespace MathNet.Spatial.Tests.Euclidean
 
         private static Polygon2D TestPolygon1()
         {
-            var points = from x in new[] { "0,0", "0.25,0.5", "1,1", "-1,1", "0.5,-0.5" } select Point2D.Parse(x);
+            var points = from x in new[] { "0,0", "0.25,0.5", "1,1", "-1,1", "0.5,-0.5" } select Point3D.Parse(x);
             return new Polygon2D(points);
         }
 
         private static Polygon2D TestPolygon2()
         {
-            var points = from x in new[] { "0,0", "0.25,0.5", "1,1", "-1,1", "0.5,-0.5", "0,0" } select Point2D.Parse(x);
+            var points = from x in new[] { "0,0", "0.25,0.5", "1,1", "-1,1", "0.5,-0.5", "0,0" } select Point3D.Parse(x);
             return new Polygon2D(points);
         }
 
         private static Polygon2D TestPolygon3()
         {
-            var points = from x in new[] { "0.25,0", "0.5,1", "1,-1" } select Point2D.Parse(x);
+            var points = from x in new[] { "0.25,0", "0.5,1", "1,-1" } select Point3D.Parse(x);
             return new Polygon2D(points);
         }
 
         private static Polygon2D TestPolygon4()
         {
-            var points = from x in new[] { "0.5,1", "1,-1", "0.25,0" } select Point2D.Parse(x);
+            var points = from x in new[] { "0.5,1", "1,-1", "0.25,0" } select Point3D.Parse(x);
             return new Polygon2D(points);
         }
     }

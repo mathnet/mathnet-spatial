@@ -23,7 +23,7 @@ namespace MathNet.Spatial.Tests.Serialization
         [Test]
         public void Point2DBinaryFormatter()
         {
-            var p = new Point2D(1, 2);
+            var p = new Point3D(1, 2);
             var result = BinaryFormaterRoundTrip(p);
             Assert.AreEqual(p, result);
         }
@@ -73,19 +73,19 @@ namespace MathNet.Spatial.Tests.Serialization
         [TestCase("1, 2, 3", "4, 5, 6")]
         public void LineSegment3DBinaryFormatter(string p1S, string p2S)
         {
-            Point3D p1 = Point3D.Parse(p1S);
-            Point3D p2 = Point3D.Parse(p2S);
-            var l = new LineSegment3D(p1, p2);
+            var p1 = Point3D.Parse(p1S);
+            var p2 = Point3D.Parse(p2S);
+            var l = new LineSegment(p1, p2);
             var result = BinaryFormaterRoundTrip(l);
             Assert.AreEqual(l, result);
         }
 
         [TestCase("1, 2", "4, 5")]
-        public void LineSegment2DBinaryFormatter(string p1S, string p2S)
+        public void LineSegmentBinaryFormatter(string p1S, string p2S)
         {
-            Point2D p1 = Point2D.Parse(p1S);
-            Point2D p2 = Point2D.Parse(p2S);
-            var l = new LineSegment2D(p1, p2);
+            var p1 = Point3D.Parse(p1S);
+            var p2 = Point3D.Parse(p2S);
+            var l = new LineSegment(p1, p2);
             var result = BinaryFormaterRoundTrip(l);
             Assert.AreEqual(l, result);
         }
@@ -93,7 +93,7 @@ namespace MathNet.Spatial.Tests.Serialization
         [Test]
         public void Vector2DBinaryFormatter()
         {
-            var v = new Vector2D(1, 2);
+            var v = new Vector3D(1, 2);
             var result = BinaryFormaterRoundTrip(v);
             Assert.AreEqual(v, result);
         }
@@ -127,7 +127,7 @@ namespace MathNet.Spatial.Tests.Serialization
         [Test]
         public void Polygon2DBinaryFormatter()
         {
-            var points = from x in new[] { "0.25,0", "0.5,1", "1,-1" } select Point2D.Parse(x);
+            var points = from x in new[] { "0.25,0", "0.5,1", "1,-1" } select Point3D.Parse(x);
             var p = new Polygon2D(points);
             var result = BinaryFormaterRoundTrip(p);
             Assert.AreEqual(p, result);
@@ -136,7 +136,7 @@ namespace MathNet.Spatial.Tests.Serialization
         [Test]
         public void PolyLine2DBinaryFormatter()
         {
-            var points = from x in new[] { "0.25,0", "0.5,1", "1,-1" } select Point2D.Parse(x);
+            var points = from x in new[] { "0.25,0", "0.5,1", "1,-1" } select Point3D.Parse(x);
             var p = new PolyLine2D(points);
             var result = BinaryFormaterRoundTrip(p);
             Assert.AreEqual(p, result);

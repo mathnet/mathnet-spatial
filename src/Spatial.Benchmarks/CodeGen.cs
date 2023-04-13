@@ -12,8 +12,6 @@ namespace Spatial.Benchmarks
     public class CodeGen
     {
         [Explicit("Script")]
-        [TestCase(typeof(Point2D))]
-        [TestCase(typeof(Vector2D))]
         [TestCase(typeof(Point3D))]
         [TestCase(typeof(Vector3D))]
         [TestCase(typeof(Direction))]

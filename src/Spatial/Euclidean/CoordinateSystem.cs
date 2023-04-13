@@ -396,9 +396,9 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         /// <param name="l">A line segment</param>
         /// <returns>The transformed line segment</returns>
-        public LineSegment3D Transform(LineSegment3D l)
+        public LineSegment Transform(LineSegment l)
         {
-            return new LineSegment3D(Transform(l.StartPoint), Transform(l.EndPoint));
+            return new LineSegment(Transform(l.StartPoint), Transform(l.EndPoint));
         }
 
         /// <summary>

@@ -142,7 +142,7 @@ namespace MathNet.Spatial.Euclidean
 
             for (var i = 0; i < VertexCount - 1; i++)
             {
-                var segment = new LineSegment3D(_points[i], _points[i + 1]);
+                var segment = new LineSegment(_points[i], _points[i + 1]);
                 var projected = segment.ClosestPointTo(p);
                 var error = p.DistanceTo(projected);
                 if (error < minError)

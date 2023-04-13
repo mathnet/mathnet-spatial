@@ -15,7 +15,7 @@ namespace Spatial.Benchmarks
         private static readonly Line Line = new Line(Point3D.Origin, Direction.ZAxis);
         private static readonly Vector3D Vector3D = new Vector3D(5, 6, 7);
         private static readonly Direction Direction = Direction.Create(0.2, 0.4, 0.7, 1);
-        private static readonly LineSegment3D LineSegment3D = new LineSegment3D(new Point3D(2, 3, 4), new Point3D(5, 6, 7));
+        private static readonly LineSegment LineSegment = new LineSegment(new Point3D(2, 3, 4), new Point3D(5, 6, 7));
 
         [Benchmark]
         public double A()
@@ -90,9 +90,9 @@ namespace Spatial.Benchmarks
         }
 
         [Benchmark]
-        public LineSegment3D ProjectLine3D()
+        public LineSegment ProjectLine3D()
         {
-            return Plane1.Project(LineSegment3D);
+            return Plane1.Project(LineSegment);
         }
 
         [Benchmark]
@@ -122,7 +122,7 @@ namespace Spatial.Benchmarks
         [Benchmark]
         public Point3D? IntersectionWithLine3D()
         {
-            return Plane1.IntersectionWith(LineSegment3D, 2);
+            return Plane1.IntersectionWith(LineSegment, 2);
         }
 
         [Benchmark]

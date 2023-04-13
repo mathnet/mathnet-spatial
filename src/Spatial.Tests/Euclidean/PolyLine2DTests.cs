@@ -13,8 +13,8 @@ namespace MathNet.Spatial.Tests.Euclidean
         [TestCase("0,0;1,1;2,2;3,3", 3, "3,3")]
         public void IndexAccessorTest(string points, int index, string expected)
         {
-            var testElement = new PolyLine2D(from x in points.Split(';') select Point2D.Parse(x));
-            var checkElement = Point2D.Parse(expected);
+            var testElement = new PolyLine2D(from x in points.Split(';') select Point3D.Parse(x));
+            var checkElement = Point3D.Parse(expected);
             AssertGeometry.AreEqual(checkElement, testElement.Vertices.Skip(index).First());
         }
 
@@ -23,7 +23,7 @@ namespace MathNet.Spatial.Tests.Euclidean
         [TestCase("0,-1.5;0,1;1,1", 3.5)]
         public void GetPolyLineLengthTests(string points, double expected)
         {
-            var testElement = new PolyLine2D(from x in points.Split(';') select Point2D.Parse(x));
+            var testElement = new PolyLine2D(from x in points.Split(';') select Point3D.Parse(x));
 
             Assert.AreEqual(expected, testElement.Length);
         }
@@ -36,8 +36,8 @@ namespace MathNet.Spatial.Tests.Euclidean
         public void GetPointAtFractionAlongCurve(string points, double fraction, string expected)
         {
             // Note that this method also tests GetPointAtLengthFromStart(...)
-            var testElement = new PolyLine2D(from x in points.Split(';') select Point2D.Parse(x));
-            var checkElement = Point2D.Parse(expected);
+            var testElement = new PolyLine2D(from x in points.Split(';') select Point3D.Parse(x));
+            var checkElement = Point3D.Parse(expected);
 
             Assert.AreEqual(checkElement, testElement.GetPointAtFractionAlongCurve(fraction));
         }
@@ -46,7 +46,7 @@ namespace MathNet.Spatial.Tests.Euclidean
         [TestCase("0,-1.5;0,1;1,1", -5, "0,-1.5")]
         public void GetPointAtFractionAlongCurveThrowsArgumentException(string points, double fraction, string expected)
         {
-            var testElement = new PolyLine2D(from x in points.Split(';') select Point2D.Parse(x));
+            var testElement = new PolyLine2D(from x in points.Split(';') select Point3D.Parse(x));
             Assert.Throws<ArgumentException>(() => { testElement.GetPointAtFractionAlongCurve(fraction); });
         }
 
@@ -62,9 +62,9 @@ namespace MathNet.Spatial.Tests.Euclidean
         [TestCase("0,0;0,1;1,1", "0.5,1.5", "0.5,1")] // Off curve
         public void ClosestPointToTest(string points, string testPoint, string expectedPoint)
         {
-            var testCurve = new PolyLine2D(from x in points.Split(';') select Point2D.Parse(x));
-            var test = Point2D.Parse(testPoint);
-            var expected = Point2D.Parse(expectedPoint);
+            var testCurve = new PolyLine2D(from x in points.Split(';') select Point3D.Parse(x));
+            var test = Point3D.Parse(testPoint);
+            var expected = Point3D.Parse(expectedPoint);
 
             Assert.AreEqual(expected, testCurve.ClosestPointTo(test));
         }

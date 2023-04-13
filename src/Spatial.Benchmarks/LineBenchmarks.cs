@@ -25,7 +25,7 @@ namespace Spatial.Benchmarks
         }
 
         [Benchmark]
-        public LineSegment3D LineTo()
+        public LineSegment LineTo()
         {
             return Line1.ShortestLineSegmentTo(Point3D);
         }

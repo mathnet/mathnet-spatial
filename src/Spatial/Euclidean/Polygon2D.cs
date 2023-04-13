@@ -21,19 +21,19 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// A list of vertices.
         /// </summary>
-        private ImmutableList<Point2D> _points;
+        private ImmutableList<Point3D> _points;
 
         /// <summary>
         /// A list of edges.  This list is lazy loaded on demand.
         /// </summary>
-        private ImmutableList<LineSegment2D> _edges;
+        private ImmutableList<LineSegment> _edges;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Polygon2D"/> class.
         /// At least three points are needed to construct a polygon.  If less are passed an ArgumentException is thrown.
         /// </summary>
         /// <param name="vertices">A list of vertices.</param>
-        public Polygon2D(IEnumerable<Point2D> vertices)
+        public Polygon2D(IEnumerable<Point3D> vertices)
             : this(vertices.ToArray())
         {
         }
@@ -43,7 +43,7 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         internal Polygon2D()
         {
-            _points = ImmutableList<Point2D>.Empty;
+            _points = ImmutableList<Point3D>.Empty;
         }
 
         /// <summary>
@@ -51,11 +51,20 @@ namespace MathNet.Spatial.Euclidean
         /// At least three points are needed to construct a polygon.  If less are passed an ArgumentException is thrown.
         /// </summary>
         /// <param name="vertices">A list of vertices.</param>
-        public Polygon2D(params Point2D[] vertices)
+        public Polygon2D(params Point3D[] vertices)
         {
             if (vertices.Length < 3)
             {
                 throw new ArgumentException("Cannot create a polygon out of less than three points");
+            }
+
+            var points = vertices.ToList();
+            foreach (var point in points)
+            {
+                if (point.Z != 0)
+                {
+                    throw new ArgumentException($"Point {point} does not lie on the XY plane");
+                }
             }
 
             if (vertices[0].Equals(vertices[vertices.Length - 1]))
@@ -71,7 +80,7 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// Gets a list of vertices
         /// </summary>
-        public IEnumerable<Point2D> Vertices
+        public IEnumerable<Point3D> Vertices
         {
             get
             {
@@ -85,7 +94,7 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// Gets a list of Edges
         /// </summary>
-        public IEnumerable<LineSegment2D> Edges
+        public IEnumerable<LineSegment> Edges
         {
             get
             {
@@ -143,7 +152,7 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Using algorithm from Ouellet - https://www.codeproject.com/Articles/1210225/Fast-and-improved-D-Convex-Hull-algorithm-and-its, take an IEnumerable of Point2Ds and computes the
+        /// Using algorithm from Ouellet - https://www.codeproject.com/Articles/1210225/Fast-and-improved-D-Convex-Hull-algorithm-and-its, take an IEnumerable of Point3Ds and computes the
         /// two dimensional convex hull, returning it as a Polygon2D object.
         /// </summary>
         /// <param name="pointList">A list of points</param>
@@ -152,7 +161,7 @@ namespace MathNet.Spatial.Euclidean
         /// If true, clockwise. Otherwise counter clockwise
         /// </param>
         /// <returns>A polygon.</returns>
-        public static Polygon2D GetConvexHullFromPoints(IEnumerable<Point2D> pointList, bool clockWise = true)
+        public static Polygon2D GetConvexHullFromPoints(IEnumerable<Point3D> pointList, bool clockWise = true)
         {
             int count = pointList.Count();
 
@@ -173,9 +182,9 @@ namespace MathNet.Spatial.Euclidean
             var hullPoints = chull.GetResultsAsArrayOfPoint();
 
             // Order the hull points by angle to the centroid
-            var centroid = Point2D.Centroid(hullPoints);
-            var xAxis = new Vector2D(1, 0);
-            var results = (from x in hullPoints select new Tuple<Angle, Point2D>(centroid.VectorTo(x).SignedAngleTo(xAxis, clockWise), x)).ToList();
+            var centroid = Point3D.Centroid(hullPoints);
+            var xAxis = new Vector3D(1, 0);
+            var results = (from x in hullPoints select new Tuple<Angle, Point3D>(centroid.VectorTo(x).SignedAngleTo(xAxis, clockWise), x)).ToList();
             results.Sort((a, b) => a.Item1.CompareTo(b.Item1));
 
             return new Polygon2D(from x in results select x.Item2);
@@ -187,7 +196,7 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         /// <param name="p">A point.</param>
         /// <returns>True if the point is inside the polygon; otherwise false.</returns>
-        public bool EnclosesPoint(Point2D p)
+        public bool EnclosesPoint(Point3D p)
         {
             var c = false;
             for (int i = 0, j = _points.Count - 1; i < _points.Count; j = i++)
@@ -219,7 +228,7 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>A new polygon that has been rotated.</returns>
         public Polygon2D Rotate(Angle angle)
         {
-            var rotated = _points.Select(t => Point2D.Origin + t.ToVector2D().Rotate(angle)).ToArray();
+            var rotated = _points.Select(t => Point3D.Origin + t.ToVector3D().Rotate(Direction.ZAxis, angle)).ToArray();
             return new Polygon2D(rotated);
         }
 
@@ -228,8 +237,13 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         /// <param name="vector">A vector.</param>
         /// <returns>A new polygon that has been translated.</returns>
-        public Polygon2D TranslateBy(Vector2D vector)
+        public Polygon2D TranslateBy(Vector3D vector)
         {
+            if (vector.Z != 0)
+            {
+                throw new ArgumentException($"Vector {vector} does not lie on the XY plane");
+            }
+
             var newPoints = from p in _points select p + vector;
             return new Polygon2D(newPoints);
         }
@@ -240,10 +254,15 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="angle">The angle by which to rotate</param>
         /// <param name="center">A point at which to rotate around</param>
         /// <returns>A new polygon that has been rotated.</returns>
-        public Polygon2D RotateAround(Angle angle, Point2D center)
+        public Polygon2D RotateAround(Angle angle, Point3D center)
         {
+            if (center.Z != 0)
+            {
+                throw new ArgumentException($"Center {center} does not lie on the XY plane");
+            }
+
             // Shift to the origin
-            var shiftVector = center.VectorTo(Point2D.Origin);
+            var shiftVector = center.VectorTo(Point3D.Origin);
             var tempPoly = TranslateBy(shiftVector);
 
             // Rotate
@@ -333,14 +352,14 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         private void PopulateEdgeList()
         {
-            var localEdges = new List<LineSegment2D>(_points.Count);
+            var localEdges = new List<LineSegment>(_points.Count);
             for (var i = 0; i < _points.Count - 1; i++)
             {
-                var edge = new LineSegment2D(_points[i], _points[i + 1]);
+                var edge = new LineSegment(_points[i], _points[i + 1]);
                 localEdges.Add(edge);
             }
 
-            localEdges.Add(new LineSegment2D(_points[_points.Count - 1], _points[0])); // complete loop
+            localEdges.Add(new LineSegment(_points[_points.Count - 1], _points[0])); // complete loop
             _edges = ImmutableList.Create(localEdges);
         }
 
@@ -355,7 +374,7 @@ namespace MathNet.Spatial.Euclidean
             {
                 var e = (XElement)XNode.ReadFrom(reader);
                 var xElements = e.ElementsNamed("Point");
-                var points = xElements.Select(x => Point2D.ReadFrom(x.CreateReader())).ToList();
+                var points = xElements.Select(x => Point3D.ReadFrom(x.CreateReader())).ToList();
                 _points = ImmutableList.Create(points);
                 reader.Skip();
                 return;
@@ -376,6 +395,7 @@ namespace MathNet.Spatial.Euclidean
             {
                 writer.WriteElement("Point", point);
             }
+
             writer.WriteEndElement();
         }
     }

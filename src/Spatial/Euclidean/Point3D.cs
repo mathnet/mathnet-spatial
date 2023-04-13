@@ -48,6 +48,25 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="Point3D"/> struct.
+        /// Creates a point r from origin rotated a counterclockwise from X-Axis
+        /// </summary>
+        /// <param name="radius">distance from origin</param>
+        /// <param name="angle">the angle</param>
+        /// <returns>The <see cref="Point3D"/></returns>
+        public static Point3D FromPolar(double radius, Angle angle)
+        {
+            if (radius < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(radius), radius, "Expected a radius greater than or equal to zero.");
+            }
+
+            return new Point3D(
+                radius * angle.Cos,
+                radius * angle.Sin);
+        }
+
+        /// <summary>
         /// Gets a point at the origin
         /// </summary>
         public static Point3D Origin { get; } = new Point3D(0, 0);

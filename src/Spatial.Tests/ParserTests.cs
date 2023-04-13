@@ -77,18 +77,18 @@ namespace MathNet.Spatial.Tests
         [TestCase("1,2;3,4", 1.2, 3.4)]
         [TestCase("1,2 3,4", 1.2, 3.4)]
         [TestCase("(,1 2,3e-4)", 0.1, 0.00023000000000000001)]
-        public void ParseSwedishVector2D(string text, double expectedX, double expectedY)
+        public void ParseSwedishVector3D(string text, double expectedX, double expectedY)
         {
             var culture = CultureInfo.GetCultureInfo("sv");
-            Assert.AreEqual(true, Vector2D.TryParse(text, culture, out var p));
+            Assert.AreEqual(true, Vector3D.TryParse(text, culture, out var p));
             Assert.AreEqual(expectedX, p.X);
             Assert.AreEqual(expectedY, p.Y);
 
-            p = Vector2D.Parse(text, culture);
+            p = Vector3D.Parse(text, culture);
             Assert.AreEqual(expectedX, p.X);
             Assert.AreEqual(expectedY, p.Y);
 
-            p = Vector2D.Parse(p.ToString(culture));
+            p = Vector3D.Parse(p.ToString(culture));
             Assert.AreEqual(expectedX, p.X);
             Assert.AreEqual(expectedY, p.Y);
         }
@@ -121,18 +121,18 @@ namespace MathNet.Spatial.Tests
         [TestCase("1,2 3,4", 1.2, 3.4)]
         [TestCase("1,2\u00A03,4", 1.2, 3.4)]
         [TestCase("(,1 2,3e-4)", 0.1, 0.00023000000000000001)]
-        public void ParseSwedishPoint2D(string text, double expectedX, double expectedY)
+        public void ParseSwedishPoint3D(string text, double expectedX, double expectedY)
         {
             var culture = CultureInfo.GetCultureInfo("sv");
-            Assert.AreEqual(true, Point2D.TryParse(text, culture, out var p));
+            Assert.AreEqual(true, Point3D.TryParse(text, culture, out var p));
             Assert.AreEqual(expectedX, p.X);
             Assert.AreEqual(expectedY, p.Y);
 
-            p = Point2D.Parse(text, culture);
+            p = Point3D.Parse(text, culture);
             Assert.AreEqual(expectedX, p.X);
             Assert.AreEqual(expectedY, p.Y);
 
-            p = Point2D.Parse(p.ToString(culture));
+            p = Point3D.Parse(p.ToString(culture));
             Assert.AreEqual(expectedX, p.X);
             Assert.AreEqual(expectedY, p.Y);
         }

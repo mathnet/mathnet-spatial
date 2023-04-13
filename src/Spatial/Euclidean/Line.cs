@@ -110,9 +110,9 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="point3D">A point.</param>
         /// <returns>A line segment from the point to the closest point on the line</returns>
         [Pure]
-        public LineSegment3D ShortestLineSegmentTo(Point3D point3D)
+        public LineSegment ShortestLineSegmentTo(Point3D point3D)
         {
-            return new LineSegment3D(PerpendicularFootTo(point3D), point3D);
+            return new LineSegment(PerpendicularFootTo(point3D), point3D);
         }
 
         /// <summary>

@@ -30,7 +30,7 @@ namespace MathNet.Spatial.Tests.Serialization
         [Test]
         public void Point2DProtoBuf()
         {
-            var p = new Point2D(1, 2);
+            var p = new Point3D(1, 2);
             var result = ProtobufRoundTrip(p);
             Assert.AreEqual(p, result);
         }
@@ -87,7 +87,7 @@ namespace MathNet.Spatial.Tests.Serialization
         {
             Point3D p1 = Point3D.Parse(p1s);
             Point3D p2 = Point3D.Parse(p2s);
-            var l = new LineSegment3D(p1, p2);
+            var l = new LineSegment(p1, p2);
             var result = ProtobufRoundTrip(l);
             Assert.AreEqual(l, result);
         }
@@ -96,9 +96,9 @@ namespace MathNet.Spatial.Tests.Serialization
         [TestCase("1, 2", "4, 5")]
         public void LineSegment2DProtoBuf(string p1s, string p2s)
         {
-            Point2D p1 = Point2D.Parse(p1s);
-            Point2D p2 = Point2D.Parse(p2s);
-            var l = new LineSegment2D(p1, p2);
+            var p1 = Point3D.Parse(p1s);
+            var p2 = Point3D.Parse(p2s);
+            var l = new LineSegment(p1, p2);
             var result = ProtobufRoundTrip(l);
             Assert.AreEqual(l, result);
         }
@@ -107,7 +107,7 @@ namespace MathNet.Spatial.Tests.Serialization
         [Test]
         public void Vector2DProtoBuf()
         {
-            var v = new Vector2D(1, 2);
+            var v = new Vector3D(1, 2);
             var result = ProtobufRoundTrip(v);
             Assert.AreEqual(v, result);
         }
@@ -145,7 +145,7 @@ namespace MathNet.Spatial.Tests.Serialization
         [Test]
         public void Polygon2DProtoBuf()
         {
-            var points = from x in new string[] { "0.25,0", "0.5,1", "1,-1" } select Point2D.Parse(x);
+            var points = from x in new string[] { "0.25,0", "0.5,1", "1,-1" } select Point3D.Parse(x);
             var p = new Polygon2D(points);
             var result = ProtobufRoundTrip(p);
             Assert.AreEqual(p, result);
@@ -155,7 +155,7 @@ namespace MathNet.Spatial.Tests.Serialization
         [Test]
         public void PolyLine2DProtoBuf()
         {
-            var points = from x in new string[] { "0.25,0", "0.5,1", "1,-1" } select Point2D.Parse(x);
+            var points = from x in new string[] { "0.25,0", "0.5,1", "1,-1" } select Point3D.Parse(x);
             var p = new PolyLine2D(points);
             var result = ProtobufRoundTrip(p);
             Assert.AreEqual(p, result);

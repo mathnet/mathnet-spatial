@@ -48,17 +48,6 @@ namespace MathNet.Spatial.Tests
             AreEqual(expected, actual.ToVector3D(), tolerance, message);
         }
 
-        public static void AreEqual(Vector2D expected, Vector2D actual, double tolerance = 1e-6, string message = "")
-        {
-            if (string.IsNullOrEmpty(message))
-            {
-                message = string.Format("Expected {0} but was {1}", expected, actual);
-            }
-
-            Assert.AreEqual(expected.X, actual.X, tolerance, message);
-            Assert.AreEqual(expected.Y, actual.Y, tolerance, message);
-        }
-
         public static void AreEqual(Point3D expected, Point3D actual, double tolerance = 1e-6, string message = "")
         {
             if (string.IsNullOrEmpty(message))
@@ -100,7 +89,7 @@ namespace MathNet.Spatial.Tests
             }
         }
 
-        public static void AreEqual(LineSegment3D expected, LineSegment3D actual, double tolerance = 1e-6)
+        public static void AreEqual(LineSegment expected, LineSegment actual, double tolerance = 1e-6)
         {
             AreEqual(expected.StartPoint, actual.StartPoint, tolerance);
             AreEqual(expected.EndPoint, actual.EndPoint, tolerance);
@@ -129,17 +118,6 @@ namespace MathNet.Spatial.Tests
             {
                 Assert.AreEqual(expectedRowWiseArray[i], actualRowWiseArray[i], tolerance);
             }
-        }
-
-        public static void AreEqual(Point2D expected, Point2D actual, double tolerance = 1e-6, string message = "")
-        {
-            if (string.IsNullOrEmpty(message))
-            {
-                message = string.Format("Expected {0} but was {1}", expected, actual);
-            }
-
-            Assert.AreEqual(expected.X, actual.X, tolerance, message);
-            Assert.AreEqual(expected.Y, actual.Y, tolerance, message);
         }
     }
 }

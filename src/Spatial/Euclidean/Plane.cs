@@ -281,14 +281,14 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// Projects a line onto the plane
         /// </summary>
-        /// <param name="line3DToProject">The line to project</param>
+        /// <param name="lineToProject">The line to project</param>
         /// <returns>A projected line</returns>
         [Pure]
-        public LineSegment3D Project(LineSegment3D line3DToProject)
+        public LineSegment Project(LineSegment lineToProject)
         {
-            var projectedStartPoint = Project(line3DToProject.StartPoint);
-            var projectedEndPoint = Project(line3DToProject.EndPoint);
-            return new LineSegment3D(projectedStartPoint, projectedEndPoint);
+            var projectedStartPoint = Project(lineToProject.StartPoint);
+            var projectedEndPoint = Project(lineToProject.EndPoint);
+            return new LineSegment(projectedStartPoint, projectedEndPoint);
         }
 
         /// <summary>
@@ -360,14 +360,14 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Find intersection between LineSegment3D and Plane
+        /// Find intersection between LineSegment and Plane
         /// http://geomalgorithms.com/a05-_intersect-1.html
         /// </summary>
         /// <param name="line">A line segment</param>
         /// <param name="tolerance">A tolerance (epsilon) to account for floating point error.</param>
         /// <returns>Intersection Point or null</returns>
         [Pure]
-        public Point3D? IntersectionWith(LineSegment3D line, double tolerance = float.Epsilon)
+        public Point3D? IntersectionWith(LineSegment line, double tolerance = float.Epsilon)
         {
             if (line.Direction.IsPerpendicularTo(Normal, tolerance))
             {

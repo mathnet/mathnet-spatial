@@ -38,7 +38,7 @@ namespace RoslynSandbox
         {
             var p1 = new Point3D(1, 2, 0);
             var p2 = new Point3D(3, 4, 0);
-            var line = new LineSegment3D(p1, p2);
+            var line = new LineSegment(p1, p2);
         }
     }
 }";

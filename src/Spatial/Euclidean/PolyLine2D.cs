@@ -22,16 +22,25 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// Internal storage for the points
         /// </summary>
-        private ReadOnlyCollection<Point2D> _points;
+        private ReadOnlyCollection<Point3D> _points;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PolyLine2D"/> class.
-        /// Creates a PolyLine2D from a pre-existing IEnumerable of Point2Ds
+        /// Creates a PolyLine2D from a pre-existing IEnumerable of Point3Ds
         /// </summary>
         /// <param name="points">A list of points.</param>
-        public PolyLine2D(IEnumerable<Point2D> points)
+        public PolyLine2D(IEnumerable<Point3D> points)
         {
-            _points = new List<Point2D>(points).AsReadOnly();
+            var list = new List<Point3D>(points);
+            foreach (var point in list)
+            {
+                if (point.Z != 0)
+                {
+                    throw new ArgumentException($"Point {point} does not lie on the XY plane");
+                }
+            }
+
+            _points = list.AsReadOnly();
         }
 
         /// <summary>
@@ -39,7 +48,7 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         internal PolyLine2D()
         {
-            _points = new List<Point2D>().AsReadOnly();
+            _points = new List<Point3D>().AsReadOnly();
         }
 
         /// <summary>
@@ -55,7 +64,7 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// Gets a list of vertices
         /// </summary>
-        public IReadOnlyList<Point2D> Vertices => _points;
+        public IReadOnlyList<Point3D> Vertices => _points;
 
         /// <summary>
         /// Returns a value that indicates whether each pair of elements in two specified lines is equal.
@@ -80,16 +89,24 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Reduce the complexity of a manifold of points represented as an IEnumerable of Point2D objects by
+        /// Reduce the complexity of a manifold of points represented as an IEnumerable of Point3D objects by
         /// iteratively removing all nonadjacent points which would each result in an error of less than the
         /// single step tolerance if removed.  Iterate until no further changes are made.
         /// </summary>
         /// <param name="points">A list of points.</param>
         /// <param name="singleStepTolerance">The tolerance (epsilon) for comparing sameness of line segments</param>
         /// <returns>A new PolyLine2D with same segments merged.</returns>
-        public static PolyLine2D ReduceComplexity(IEnumerable<Point2D> points, double singleStepTolerance)
+        public static PolyLine2D ReduceComplexity(IEnumerable<Point3D> points, double singleStepTolerance)
         {
             var manifold = points.ToList();
+            foreach (var point in manifold)
+            {
+                if (point.Z != 0)
+                {
+                    throw new ArgumentException($"Point {point} does not lie on the XY plane");
+                }
+            }
+
             var n = manifold.Count;
 
             manifold = ReduceComplexitySingleStep(manifold, singleStepTolerance).ToList();
@@ -111,7 +128,7 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         /// <param name="fraction">The fractional length at which to compute the point</param>
         /// <returns>A point a fraction of the way along the line.</returns>
-        public Point2D GetPointAtFractionAlongCurve(double fraction)
+        public Point3D GetPointAtFractionAlongCurve(double fraction)
         {
             if (fraction > 1 || fraction < 0)
             {
@@ -127,7 +144,7 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         /// <param name="lengthFromStart">The distance from the first point along the curve at which to return a point</param>
         /// <returns>A point which is the specified distance along the line</returns>
-        public Point2D GetPointAtLengthFromStart(double lengthFromStart)
+        public Point3D GetPointAtLengthFromStart(double lengthFromStart)
         {
             var length = Length;
             if (lengthFromStart >= length)
@@ -149,7 +166,7 @@ namespace MathNet.Spatial.Euclidean
                 {
                     var leftover = lengthFromStart - cumulativeLength;
                     var direction = _points[i].VectorTo(_points[i + 1]).Normalize();
-                    return _points[i] + (direction * leftover);
+                    return _points[i] + leftover * direction;
                 }
                 else
                 {
@@ -164,14 +181,19 @@ namespace MathNet.Spatial.Euclidean
         /// </summary>
         /// <param name="p">a point</param>
         /// <returns>A point which is the closest to the given point but still on the line.</returns>
-        public Point2D ClosestPointTo(Point2D p)
+        public Point3D ClosestPointTo(Point3D p)
         {
+            if (p.Z != 0)
+            {
+                throw new ArgumentException($"Point {p} does not lie on the XY plane");
+            }
+
             var minError = double.MaxValue;
-            var closest = default(Point2D);
+            var closest = default(Point3D);
 
             for (var i = 0; i < VertexCount - 1; i++)
             {
-                var segment = new LineSegment2D(_points[i], _points[i + 1]);
+                var segment = new LineSegment(_points[i], _points[i + 1]);
                 var projected = segment.ClosestPointTo(p);
                 var error = p.DistanceTo(projected);
                 if (error < minError)
@@ -245,7 +267,7 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Reduce the complexity of a manifold of points represented as an IEnumerable of Point2D objects.
+        /// Reduce the complexity of a manifold of points represented as an IEnumerable of Point3D objects.
         /// This algorithm goes through each point in the manifold and computes the error that would be introduced
         /// from the original if that point were removed.  Then it removes nonadjacent points to produce a
         /// reduced size manifold.
@@ -253,7 +275,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="points">A list of points</param>
         /// <param name="tolerance">Tolerance (Epsilon) to apply to determine if segments are to be merged.</param>
         /// <returns>A new list of points minus any segment which was merged.</returns>
-        private static IEnumerable<Point2D> ReduceComplexitySingleStep(IEnumerable<Point2D> points, double tolerance)
+        private static IEnumerable<Point3D> ReduceComplexitySingleStep(IEnumerable<Point3D> points, double tolerance)
         {
             var manifold = points.ToList();
             var errorByIndex = new double[manifold.Count];
@@ -268,14 +290,14 @@ namespace MathNet.Spatial.Euclidean
                 var v0 = manifold[i - 1];
                 var v1 = manifold[i];
                 var v2 = manifold[i + 1];
-                var projected = new LineSegment2D(v0, v2).ClosestPointTo(v1);
+                var projected = new LineSegment(v0, v2).ClosestPointTo(v1);
 
                 var error = v1.VectorTo(projected).Length;
                 errorByIndex[i] = error;
             }
 
             // Now go through the list of errors and remove nonadjacent points with less than the error tolerance
-            var thinnedPoints = new List<Point2D>();
+            var thinnedPoints = new List<Point3D>();
             var preserveMe = 0;
             for (var i = 0; i < errorByIndex.Length - 1; i++)
             {
@@ -327,8 +349,8 @@ namespace MathNet.Spatial.Euclidean
             {
                 var e = (XElement)XNode.ReadFrom(reader);
                 var xElements = e.ElementsNamed("Point");
-                var points = xElements.Select(x => Point2D.ReadFrom(x.CreateReader())).ToList();
-                _points = new List<Point2D>(points).AsReadOnly();
+                var points = xElements.Select(x => Point3D.ReadFrom(x.CreateReader())).ToList();
+                _points = new List<Point3D>(points).AsReadOnly();
                 reader.Skip();
                 return;
             }
@@ -348,6 +370,7 @@ namespace MathNet.Spatial.Euclidean
             {
                 writer.WriteElement("Point", point);
             }
+
             writer.WriteEndElement();
         }
     }
