@@ -28,7 +28,7 @@ namespace MathNet.Spatial.Tests.Serialization
             Assert.AreEqual(l, result);
         }
 
-        [TestCase("1, 2", "4, 5", "<LineSegment2D><StartPoint><X>1</X><Y>2</Y></StartPoint><EndPoint><X>4</X><Y>5</Y></EndPoint></LineSegment2D>")]
+        [TestCase("1, 2", "4, 5", "<LineSegment><StartPoint><X>1</X><Y>2</Y><Z>0</Z></StartPoint><EndPoint><X>4</X><Y>5</Y><Z>0</Z></EndPoint></LineSegment>")]
         public void LineSegment2DXml(string p1S, string p2S, string xml)
         {
             var p1 = Point3D.Parse(p1S);
@@ -42,7 +42,7 @@ namespace MathNet.Spatial.Tests.Serialization
         public void Vector2DXml()
         {
             var v = new Vector3D(1, 2);
-            const string xml = "<Vector2D><X>1</X><Y>2</Y></Vector2D>";
+            const string xml = "<Vector3D><X>1</X><Y>2</Y><Z>0</Z></Vector3D>";
             var result = AssertXml.XmlSerializerRoundTrip(v, xml);
             Assert.AreEqual(v, result);
         }
@@ -80,7 +80,7 @@ namespace MathNet.Spatial.Tests.Serialization
         {
             var points = from x in new[] { "0.25,0", "0.5,1", "1,-1" } select Point3D.Parse(x);
             var p = new Polygon2D(points);
-            const string xml = "<Polygon2D><Points><Point><X>0.25</X><Y>0</Y></Point><Point><X>0.5</X><Y>1</Y></Point><Point><X>1</X><Y>-1</Y></Point></Points></Polygon2D>";
+            const string xml = "<Polygon2D><Points><Point><X>0.25</X><Y>0</Y><Z>0</Z></Point><Point><X>0.5</X><Y>1</Y><Z>0</Z></Point><Point><X>1</X><Y>-1</Y><Z>0</Z></Point></Points></Polygon2D>";
             var result = AssertXml.XmlSerializerRoundTrip(p, xml);
             Assert.AreEqual(p, result);
         }
@@ -90,7 +90,7 @@ namespace MathNet.Spatial.Tests.Serialization
         {
             var points = from x in new[] { "0.25,0", "0.5,1", "1,-1" } select Point3D.Parse(x);
             var p = new PolyLine2D(points);
-            const string xml = "<PolyLine2D><Points><Point><X>0.25</X><Y>0</Y></Point><Point><X>0.5</X><Y>1</Y></Point><Point><X>1</X><Y>-1</Y></Point></Points></PolyLine2D>";
+            const string xml = "<PolyLine2D><Points><Point><X>0.25</X><Y>0</Y><Z>0</Z></Point><Point><X>0.5</X><Y>1</Y><Z>0</Z></Point><Point><X>1</X><Y>-1</Y><Z>0</Z></Point></Points></PolyLine2D>";
             var result = AssertXml.XmlSerializerRoundTrip(p, xml);
             Assert.AreEqual(p, result);
         }
@@ -126,7 +126,7 @@ namespace MathNet.Spatial.Tests.Serialization
         public void Point2DXml()
         {
             var p = new Point3D(1, 2);
-            const string xml = "<Point2D><X>1</X><Y>2</Y></Point2D>";
+            const string xml = "<Point3D><X>1</X><Y>2</Y><Z>0</Z></Point3D>";
             var result = AssertXml.XmlSerializerRoundTrip(p, xml);
             Assert.AreEqual(p, result);
         }

@@ -94,7 +94,7 @@ namespace MathNet.Spatial.Tests.Euclidean
             Assert.AreEqual(2, v.Y);
 
             Assert.Throws<ArgumentException>(() => Vector3D.OfVector(Vector<double>.Build.Dense(new[] { 1.0 })));
-            Assert.Throws<ArgumentException>(() => Vector3D.OfVector(Vector<double>.Build.Dense(new[] { 1.0, 2, 3 })));
+            Assert.Throws<ArgumentException>(() => Vector3D.OfVector(Vector<double>.Build.Dense(new[] { 1.0, 2, 3, 4 })));
         }
 
         [TestCase("-1,1", -1, 1)]
@@ -191,7 +191,7 @@ namespace MathNet.Spatial.Tests.Euclidean
         {
             var v = new Vector3D(1, 2);
             var actual = v.ToVector();
-            Assert.AreEqual(2, actual.Count);
+            Assert.AreEqual(3, actual.Count);
             Assert.AreEqual(1, actual[0]);
             Assert.AreEqual(2, actual[1]);
         }
@@ -361,7 +361,7 @@ namespace MathNet.Spatial.Tests.Euclidean
             var v1 = Vector3D.Parse(v1s);
             var v2 = Vector3D.Parse(v2s);
 
-            var cross = v1.CrossProduct(v2).Length;
+            var cross = v1.CrossProduct(v2).Z;
 
             Assert.AreEqual(expected, cross, 1e-3);
         }

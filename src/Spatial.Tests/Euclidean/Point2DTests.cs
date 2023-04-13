@@ -99,7 +99,7 @@ namespace MathNet.Spatial.Tests.Euclidean
         }
 
         [TestCase("1.2")]
-        [TestCase("1; 2; 3")]
+        [TestCase("1; 2; 3; 4")]
         public void ParseFails(string text)
         {
             Assert.AreEqual(false, Point3D.TryParse(text, out _));
@@ -121,7 +121,7 @@ namespace MathNet.Spatial.Tests.Euclidean
             Assert.AreEqual(1, p.X);
             Assert.AreEqual(2, p.Y);
 
-            Assert.Throws<ArgumentException>(() => Point3D.OfVector(DenseVector.OfArray(new[] { 1, 2, 3.0 })));
+            Assert.Throws<ArgumentException>(() => Point3D.OfVector(DenseVector.OfArray(new[] { 1, 2, 3.0, 4 })));
         }
 
         [Test]
@@ -129,7 +129,7 @@ namespace MathNet.Spatial.Tests.Euclidean
         {
             var p = new Point3D(1, 2);
             var v = p.ToVector();
-            Assert.AreEqual(2, v.Count);
+            Assert.AreEqual(3, v.Count);
             Assert.AreEqual(1, v[0]);
             Assert.AreEqual(2, v[1]);
         }
@@ -219,8 +219,8 @@ namespace MathNet.Spatial.Tests.Euclidean
             Assert.AreEqual(false, p1.Equals(null));
         }
 
-        [TestCase("-2, 0", null, "(-2,\u00A00)")]
-        [TestCase("-2, 0", "N2", "(-2.00,\u00A00.00)")]
+        [TestCase("-2, 0", null, "(-2, 0, 0)")]
+        [TestCase("-2, 0", "N2", "(-2.00, 0.00, 0.00)")]
         public void ToString(string vs, string format, string expected)
         {
             var v = Point3D.Parse(vs);

@@ -8,7 +8,6 @@ using MathNet.Spatial.Internals;
 using MathNet.Spatial.Units;
 using HashCode = MathNet.Spatial.Internals.HashCode;
 using MathNet.Numerics;
-using System.Drawing;
 
 namespace MathNet.Spatial.Euclidean
 {
@@ -334,8 +333,8 @@ namespace MathNet.Spatial.Euclidean
             var r = StartPoint.VectorTo(EndPoint);
             var s = other.StartPoint.VectorTo(other.EndPoint);
 
-            var t = (q - p).CrossProduct(s).Length / r.CrossProduct(s).Length;
-            var u = (p - q).CrossProduct(r).Length / s.CrossProduct(r).Length;
+            var t = (q - p).CrossProduct(s).Z / r.CrossProduct(s).Z;
+            var u = (p - q).CrossProduct(r).Z / s.CrossProduct(r).Z;
 
             var isIntersected = (0.0 <= t && t <= 1.0) && (0.0 <= u && u <= 1.0);
             if (isIntersected)

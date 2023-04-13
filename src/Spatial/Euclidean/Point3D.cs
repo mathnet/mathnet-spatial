@@ -206,12 +206,15 @@ namespace MathNet.Spatial.Euclidean
         /// <returns> A <see cref="Point3D"/></returns>
         public static Point3D OfVector(Vector<double> vector)
         {
-            if (vector.Count != 3)
+            if (vector.Count < 2 || vector.Count > 3)
             {
-                throw new ArgumentException("The vector length must be 3 in order to convert it to a Point3D");
+                throw new ArgumentException("The vector length must be 2 or 3 in order to convert it to a Point3D");
             }
 
-            return new Point3D(vector.At(0), vector.At(1), vector.At(2));
+            return new Point3D(
+                vector.At(0),
+                vector.At(1),
+                vector.Count == 3 ? vector.At(2) : 0);
         }
 
         /// <summary>
