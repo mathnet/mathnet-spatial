@@ -279,10 +279,10 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Projects a line onto the plane
+        /// Projects a line segment onto the plane
         /// </summary>
         /// <param name="lineToProject">The line to project</param>
-        /// <returns>A projected line</returns>
+        /// <returns>A projected line segment</returns>
         [Pure]
         public LineSegment Project(LineSegment lineToProject)
         {

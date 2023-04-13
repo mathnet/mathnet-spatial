@@ -49,7 +49,7 @@ namespace MathNet.Spatial.Euclidean
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Point3D"/> struct.
-        /// Creates a point r from origin rotated a counterclockwise from X-Axis
+        /// Creates a point r from origin rotated counterclockwise around the Z-Axis
         /// </summary>
         /// <param name="radius">distance from origin</param>
         /// <param name="angle">the angle</param>
