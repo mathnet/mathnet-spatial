@@ -9,7 +9,6 @@ using System.Xml.Serialization;
 using MathNet.Spatial.Internals;
 using MathNet.Spatial.Units;
 using HashCode = MathNet.Spatial.Internals.HashCode;
-using System.Drawing;
 
 namespace MathNet.Spatial.Euclidean
 {
