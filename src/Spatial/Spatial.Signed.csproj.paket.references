@@ -1,2 +1,3 @@
 MathNet.Numerics.Signed
 System.Diagnostics.Contracts
+Newtonsoft.Json

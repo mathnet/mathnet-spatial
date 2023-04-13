@@ -305,7 +305,7 @@ namespace MathNet.Spatial.Euclidean
         public bool IsPerpendicularTo(Vector2D other, Angle tolerance)
         {
             var angle = AngleTo(other);
-            return (angle - Angle.HalfPi).Abs() < tolerance;
+            return (angle - Angle.HalfPi).Abs < tolerance;
         }
 
         /// <summary>

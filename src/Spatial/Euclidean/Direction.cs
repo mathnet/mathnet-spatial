@@ -7,6 +7,7 @@ using System.Xml.Serialization;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Spatial.Internals;
 using MathNet.Spatial.Units;
+using Newtonsoft.Json;
 using HashCode = MathNet.Spatial.Internals.HashCode;
 
 namespace MathNet.Spatial.Euclidean
@@ -39,6 +40,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="x">The x component.</param>
         /// <param name="y">The y component.</param>
         /// <param name="z">The z component.</param>
+        [JsonConstructor]
         private Direction(double x, double y, double z)
         {
             if (double.IsNaN(x) || double.IsInfinity(x))
@@ -86,6 +88,7 @@ namespace MathNet.Spatial.Euclidean
         /// Gets a vector orthogonal to this
         /// </summary>
         [Pure]
+        [JsonIgnore]
         public Direction Orthogonal
         {
             get
@@ -812,19 +815,6 @@ namespace MathNet.Spatial.Euclidean
         /// <inheritdoc />
         void IXmlSerializable.ReadXml(XmlReader reader)
         {
-            bool TryGetUnitVector(double xv, double yv, double zv, out Direction result)
-            {
-                var temp = new Vector3D(xv, yv, zv);
-                if (Math.Abs(temp.Length - 1) < 1E-3)
-                {
-                    result = temp.Normalize();
-                    return true;
-                }
-
-                result = default(Direction);
-                return false;
-            }
-
             if (reader.TryReadAttributeAsDouble("X", out var x) &&
                 reader.TryReadAttributeAsDouble("Y", out var y) &&
                 reader.TryReadAttributeAsDouble("Z", out var z) &&
@@ -844,6 +834,19 @@ namespace MathNet.Spatial.Euclidean
             }
 
             throw new XmlException($"Could not read a {GetType()}");
+        }
+
+        private bool TryGetUnitVector(double xv, double yv, double zv, out Direction result)
+        {
+            var temp = new Vector3D(xv, yv, zv);
+            if (Math.Abs(temp.Length - 1) < 1E-3)
+            {
+                result = temp.Normalize();
+                return true;
+            }
+
+            result = default(Direction);
+            return false;
         }
 
         /// <inheritdoc />

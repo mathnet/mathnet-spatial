@@ -114,7 +114,7 @@ namespace MathNet.Spatial.Tests.Serialization
             Assert.AreEqual(v, result);
         }
 
-        [TestCase("0, 0", 3)]
+        [TestCase("1, 2", 3)]
         public void Circle2DJson(string point, double radius)
         {
             var center = Point3D.Parse(point);

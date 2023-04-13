@@ -4,6 +4,7 @@ using System.Xml.Schema;
 using System.Xml;
 using System.Xml.Serialization;
 using MathNet.Spatial.Internals;
+using Newtonsoft.Json;
 using HashCode = MathNet.Spatial.Internals.HashCode;
 
 namespace MathNet.Spatial.Euclidean
@@ -36,6 +37,7 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="center">The center of the circle</param>
         /// <param name="axis">The axis of the circle</param>
         /// <param name="radius">The radius of the circle</param>
+        [JsonConstructor]
         public Circle(Point3D center, Direction axis, double radius)
         {
             Center = center;
@@ -58,18 +60,21 @@ namespace MathNet.Spatial.Euclidean
         /// Gets the diameter of the circle
         /// </summary>
         [Pure]
+        [JsonIgnore]
         public double Diameter => 2 * Radius;
 
         /// <summary>
         /// Gets the circumference of the circle
         /// </summary>
         [Pure]
+        [JsonIgnore]
         public double Circumference => 2 * Math.PI * Radius;
 
         /// <summary>
         /// Gets the area of the circle
         /// </summary>
         [Pure]
+        [JsonIgnore]
         public double Area => Radius * Radius * Math.PI;
 
         /// <summary>
