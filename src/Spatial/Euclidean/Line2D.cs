@@ -1,12 +1,12 @@
-﻿using System;
-using System.Diagnostics.Contracts;
-using System.Xml.Schema;
-using System.Xml;
-using System.Xml.Serialization;
-using MathNet.Numerics;
+﻿using MathNet.Numerics;
 using MathNet.Spatial.Internals;
 using MathNet.Spatial.Units;
+using System;
+using System.Diagnostics.Contracts;
+using System.Xml;
 using System.Xml.Linq;
+using System.Xml.Schema;
+using System.Xml.Serialization;
 
 namespace MathNet.Spatial.Euclidean
 {
@@ -28,6 +28,21 @@ namespace MathNet.Spatial.Euclidean
         public Point2D EndPoint { get; private set; }
 
         /// <summary>
+        /// The parameter `a` in the line equation: ax + by + c = 0
+        /// </summary>
+        public double A { get; private set; }
+
+        /// <summary>
+        /// The parameter `b` in the line equation: ax + by + c = 0
+        /// </summary>
+        public double B { get; private set; }
+
+        /// <summary>
+        /// The parameter `c` in the line equation: ax + by + c = 0
+        /// </summary>
+        public double C { get; private set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="Line2D"/> struct.
         /// Throws an ArgumentException if the <paramref name="startPoint"/> is equal to the <paramref name="endPoint"/>.
         /// </summary>
@@ -40,8 +55,27 @@ namespace MathNet.Spatial.Euclidean
                 throw new ArgumentException("The Line2D starting and ending points cannot be identical");
             }
 
+            //substitution
+            //points
             StartPoint = startPoint;
             EndPoint = endPoint;
+
+            //doubles
+            var x1 = startPoint.X;
+            var x2 = endPoint.X;
+            var y1 = startPoint.Y;
+            var y2 = endPoint.Y;
+
+            //computation
+            var a = y2 - y1;
+            var b = x1 - x2;
+            var c = (x2 - x1) * y1 - (y2 - y1) * x1;
+
+            //normalize
+            var length = Math.Sqrt(a * a + b * b);
+            A = a / length;
+            B = b / length;
+            C = c / length;
         }
 
         /// <summary>
@@ -293,6 +327,27 @@ namespace MathNet.Spatial.Euclidean
         {
             writer.WriteElement("StartPoint", StartPoint);
             writer.WriteElement("EndPoint", EndPoint);
+        }
+
+        /// <summary>
+        /// Compute the signed distance from this `line` to the given point `p`. If the sign of the distance is positive, the normal vector from the line is in the same side to the point. 
+        /// </summary>
+        /// <param name="p"></param>
+        /// <returns></returns>
+        public double SignedDistanceTo(Point2D p)
+        {
+            var result = A * p.X + B * p.Y + C;
+            return result;
+        }
+
+        /// <summary>
+        /// Compute the absolute distance from this `line` to the given point `p`.
+        /// </summary>
+        /// <param name="p"></param>
+        /// <returns></returns>
+        public double DistanceTo(Point2D p)
+        {
+            return Math.Abs(SignedDistanceTo(p));
         }
     }
 }
