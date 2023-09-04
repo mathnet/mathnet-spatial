@@ -523,7 +523,7 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Returns a point equivalent to the vector
+        /// Returns a point, whose position vector is equal to the current vector
         /// </summary>
         /// <returns>A point</returns>
         public Point3D ToPoint3D()
