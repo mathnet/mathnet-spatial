@@ -476,6 +476,15 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
+        /// Returns a point, whose position vector is equal to the current vector
+        /// </summary>
+        /// <returns>A point</returns>
+        public Point2D ToPoint2D()
+        {
+            return new Point2D(this.X, this.Y);
+        }
+
+        /// <summary>
         /// Transforms a vector by multiplying it against a provided matrix
         /// </summary>
         /// <param name="m">The matrix to multiply</param>

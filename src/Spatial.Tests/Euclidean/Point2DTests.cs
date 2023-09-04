@@ -146,6 +146,13 @@ namespace MathNet.Spatial.Tests.Euclidean
             Assert.AreEqual(expected, p2.DistanceTo(p1));
         }
 
+        [TestCase("-1 ; 2")]
+        public void ToVectorAndBack(string ps)
+        {
+            var p = Point2D.Parse(ps);
+            AssertGeometry.AreEqual(p, p.ToVector2D().ToPoint2D(), 1e-9);
+        }
+
         [TestCase("0, 0", "1, 2", "0.5, 1")]
         [TestCase("-1, -2", "1, 2", "0, 0")]
         public void MidPoint(string p1s, string p2s, string eps)
