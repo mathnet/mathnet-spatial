@@ -161,9 +161,9 @@ namespace MathNet.Spatial.Euclidean
             get
             {
                 var matrix = Build.DenseOfColumnVectors(XAxis.ToVector(), YAxis.ToVector(), ZAxis.ToVector());
-                var cs = new CoordinateSystem(this);
-                cs.SetRotationSubMatrix(matrix.Transpose());
-                return cs;
+                var baseCs = new CoordinateSystem();
+                baseCs.SetRotationSubMatrix(matrix.Transpose());
+                return baseCs;
             }
         }
 
@@ -256,7 +256,7 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>A rotated coordinate system</returns>
         public static CoordinateSystem Rotation(Angle yaw, Angle pitch, Angle roll)
         {
-            var cs = new CoordinateSystem(); 
+            var cs = new CoordinateSystem();
             var cosY = yaw.Cos;
             var sinY = yaw.Sin;
             var cosP = pitch.Cos;
@@ -276,7 +276,7 @@ namespace MathNet.Spatial.Euclidean
             cs[1, 2] = sinY * sinP * cosR - cosY * sinR;
             cs[2, 2] = cosP * cosR;
 
-            return cs; 
+            return cs;
         }
         /// <summary>
         /// Rotates around Z
@@ -354,7 +354,7 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// Creates a rotating coordinate system
         /// </summary>
-        /// <param name="r">A 3×3 matrix with the rotation portion</param>
+        /// <param name="r">A 3ï¿½3 matrix with the rotation portion</param>
         /// <param name="coordinateSystem">A rotated coordinate system</param>
         /// <returns>A rotating coordinate system</returns>
         public static CoordinateSystem SetRotationSubMatrix(Matrix<double> r, CoordinateSystem coordinateSystem)
