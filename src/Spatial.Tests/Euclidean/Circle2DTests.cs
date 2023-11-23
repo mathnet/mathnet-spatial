@@ -58,5 +58,20 @@ namespace MathNet.Spatial.Tests.Euclidean
 
             Assert.Throws<ArgumentException>(() => { Circle2D.FromPoints(p1, p2, p3); });
         }
+
+        [TestCase("0,0", 1.41421356/*=sqrt(2)*/, "-1,-1", "+1,+1", "-1,-1", "+1,+1")]
+        [TestCase("0,0", 1, "-1,0", "+1,0", "-1,0", "+1,0")]
+        [TestCase("0,0", 1, "-1,0", "+1,0", "-1,0", "+1,0")]
+        public void CircleIntersectWithLine2D(string sc, double radius, string sps, string spe, string esp0, string esp1)
+        {
+            var circle = new Circle2D(Point2D.Parse(sc), radius);
+            var line = new Line2D(Point2D.Parse(sps), Point2D.Parse(spe));
+            var actual = circle.IntersectWith(line);
+            Assert.That(actual.Length, Is.EqualTo(2));
+
+            var expected = new [] { Point2D.Parse(esp0), Point2D.Parse(esp1) };
+            AssertGeometry.AreEqual(actual[0], expected[0]);
+            AssertGeometry.AreEqual(actual[1], expected[1]);
+        }
     }
 }

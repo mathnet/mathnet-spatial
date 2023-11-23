@@ -1,10 +1,12 @@
 ﻿using MathNet.Spatial.Internals;
 using System;
 using System.Diagnostics.Contracts;
+using System.Linq;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 using HashCode = MathNet.Spatial.Internals.HashCode;
+using MathNet.Spatial.Extensions;
 
 namespace MathNet.Spatial.Euclidean
 {
@@ -129,6 +131,52 @@ namespace MathNet.Spatial.Euclidean
             var radius = Math.Sqrt((d * d + e * e) / (4 * a * a) - f / a); // or radius = center.DistanceTo(pointA);
 
             return new Circle2D(center, radius);            
+        }
+
+        /// <summary>
+        /// Returns intersection as a point2D array if this circle and the given line have the intersections
+        /// </summary>
+        /// <param name="line">the given line</param>
+        /// <returns>intersections as a Point2D Array, depending on the count.</returns>
+        public Point2D[] IntersectWith(Line2D line)
+        {
+            // These 2 equations in vector form can be described
+            // (p-cc)^2=r^2 (eq1)
+            // p=s+t*d     (eq2)
+            // , where p is the point on the line and/or circle,
+            // cc is the center of the circle and
+            // r is the radius of the circle.
+            // Substituting (eq2) into (eq1) yields:
+            // ((s+t*d)-c)^2=r^2 (eq3)
+            // (eq3) reduces to the following quadratic equation: a*t^2 + b*t + c==0
+
+            var cc = Center.ToVector2D(); //center of circle
+            var s = line.StartPoint.ToVector2D();
+            var d = line.Direction;
+            var r = Radius;
+
+            var a = d.DotProduct(d);
+            var b = 2 * (s.DotProduct(d) - d.DotProduct(cc));
+            var c = (s-cc).DotProduct(s-cc) - r * r;
+
+            var discriminant = b * b - 4 * a * c;  
+            if (discriminant < 0)
+            {
+                return new Point2D[] { };   // no intersections found.
+            }
+
+            if (discriminant.IsNearlyEqualTo(0, 1e-6))
+            {
+                var t = -b / (2 * a);
+                return new[] { Point2D.OfVector((s + t * d).ToVector()) };
+            }
+
+
+            var t1 = (-b - Math.Sqrt(b * b - 4 * a * c)) / (2 * a);
+            var t2 = (-b + Math.Sqrt(b * b - 4 * a * c)) / (2 * a);
+            var ts = new double[] { t1, t2 };
+            var result = ts.Select(t => Point2D.OfVector((s + t * d).ToVector())).ToArray();
+            return result;
         }
 
         /// <summary>
