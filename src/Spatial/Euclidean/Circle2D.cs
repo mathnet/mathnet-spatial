@@ -134,7 +134,7 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Returns intersection as a point2D array if this circle and the given line have the intersections
+        /// Returns intersection a point2D array if this circle and the given line have the intersections
         /// </summary>
         /// <param name="line">the given line</param>
         /// <returns>intersections as a Point2D Array, depending on the count.</returns>
