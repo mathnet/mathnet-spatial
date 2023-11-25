@@ -1,10 +1,11 @@
-﻿using MathNet.Spatial.Internals;
+using MathNet.Spatial.Internals;
 using System;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
+using MathNet.Numerics;
 using HashCode = MathNet.Spatial.Internals.HashCode;
 using MathNet.Spatial.Extensions;
 
@@ -140,6 +141,15 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>intersections as a Point2D Array, depending on the count.</returns>
         public Point2D[] IntersectWith(Line2D line)
         {
+            var ts = this.findParameterTs(line);
+            var result = ts
+                .Select(t => line.StartPoint + t * line.Direction)
+                .ToArray();
+            return result;
+        }
+
+        private double[] findParameterTs(Line2D line)
+        {
             // These 2 equations in vector form can be described
             // (p-cc)^2=r^2 (eq1)
             // p=s+t*d     (eq2)
@@ -150,20 +160,22 @@ namespace MathNet.Spatial.Euclidean
             // ((s+t*d)-c)^2=r^2 (eq3)
             // (eq3) reduces to the following quadratic equation: a*t^2 + b*t + c==0
 
-            var cc = Center.ToVector2D(); //center of circle
+            var cc = this.Center.ToVector2D(); //center of circle
             var s = line.StartPoint.ToVector2D();
             var d = line.Direction;
-            var r = Radius;
+            var r = this.Radius;
 
             var a = d.DotProduct(d);
             var b = 2 * (s.DotProduct(d) - d.DotProduct(cc));
-            var c = (s-cc).DotProduct(s-cc) - r * r;
+            var c = (s - cc).DotProduct(s - cc) - r * r;
 
-            var discriminant = b * b - 4 * a * c;  
-            if (discriminant < 0)
-            {
-                return new Point2D[] { };   // no intersections found.
-            }
+            var soluions = FindRoots.Polynomial(new[] { c, b, a });
+            var ts = soluions
+                .Where(z => z.IsReal())
+                .Select(z => z.Real)
+                .ToArray();
+            return ts;
+        }
 
             if (discriminant.IsNearlyEqualTo(0, 1e-6))
             {
