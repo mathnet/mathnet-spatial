@@ -1,4 +1,4 @@
-using MathNet.Spatial.Internals;
+﻿using MathNet.Spatial.Internals;
 using System;
 using System.Diagnostics.Contracts;
 using System.Linq;
@@ -177,19 +177,19 @@ namespace MathNet.Spatial.Euclidean
             return ts;
         }
 
-            if (discriminant.IsNearlyEqualTo(0, 1e-6))
-            {
-                var t = -b / (2 * a);
-                return new[] { Point2D.OfVector((s + t * d).ToVector()) };
-            }
-
-
-            var t1 = (-b - Math.Sqrt(b * b - 4 * a * c)) / (2 * a);
-            var t2 = (-b + Math.Sqrt(b * b - 4 * a * c)) / (2 * a);
-            var ts = new double[] { t1, t2 };
-            var result = ts.Select(t => Point2D.OfVector((s + t * d).ToVector())).ToArray();
+        /// <summary>
+        /// Returns intersection a point2D array if this circle and the given line have the intersections
+        /// </summary>
+        /// <param name="line">the given line-segment</param>
+        /// <returns>intersections as a Point2D Array, depending on the count.</returns>
+        public Point2D[] IntersectWith(LineSegment2D line)
+        {
+            var ts = findParameterTs(line.ToLine2D())
+                .Where(t => 0 <= t && t <= line.Length);
+            var result = ts.Select(t => line.StartPoint + t * line.Direction).ToArray();
             return result;
         }
+
 
         /// <summary>
         /// Returns a value to indicate if a pair of circles are equal

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using MathNet.Spatial.Euclidean;
 using NUnit.Framework;
 
@@ -69,9 +69,23 @@ namespace MathNet.Spatial.Tests.Euclidean
             var actual = circle.IntersectWith(line);
             Assert.That(actual.Length, Is.EqualTo(2));
 
-            var expected = new [] { Point2D.Parse(esp0), Point2D.Parse(esp1) };
+            var expected = new[] { Point2D.Parse(esp0), Point2D.Parse(esp1) };
             AssertGeometry.AreEqual(actual[0], expected[0]);
             AssertGeometry.AreEqual(actual[1], expected[1]);
+        }
+
+        [TestCase("0,0", 1.41421356 /*=sqrt(2)*/, "0,0", "+1,+1", "+1,+1")]
+        [TestCase("0,0", 1, "0,0", "+1,0", "+1,0")]
+        [TestCase("0,0", 1, "0,0", "0,+1", "0,+1")]
+        public void CircleIntersectWithLineSegment2D(string sCenter, double radius, string sStart, string sEnd, string sExpected)
+        {
+            var circle = new Circle2D(Point2D.Parse(sCenter), radius);
+            var segment = new LineSegment2D(Point2D.Parse(sStart), Point2D.Parse(sEnd));
+            var actual = circle.IntersectWith(segment);
+            Assert.That(actual.Length, Is.EqualTo(1));
+
+            var expected = Point2D.Parse(sExpected);
+            AssertGeometry.AreEqual(actual[0], expected);
         }
     }
 }
