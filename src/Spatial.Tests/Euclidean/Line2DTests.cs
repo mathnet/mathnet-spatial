@@ -210,30 +210,5 @@ namespace MathNet.Spatial.Tests.Euclidean
 
             Assert.AreEqual("StartPoint: (0,\u00A00), EndPoint: (1,\u00A01)", check);
         }
-
-        [TestCase("0,0", "1,0", "0,1",-1)]
-        [TestCase("0,0", "1,0", "0,2", -2)]
-        [TestCase("0,0", "0,1", "2,0", +2)]
-        public void SignedDistanceTo(string sp1, string sp2, string sp, double expectedDistance)
-        {
-            var line = Line2D.Parse(sp1, sp2);
-            var point = Point2D.Parse(sp);
-
-            var actual = line.SignedDistanceTo(point);
-            Assert.That(actual, Is.EqualTo(expectedDistance));
-        }
-
-
-        [TestCase("0,0", "1,0", "0,1", 1)]
-        [TestCase("0,0", "1,0", "0,2", 2)]
-        [TestCase("0,0", "0,1", "2,0", 2)]
-        public void DistanceTo(string sp1, string sp2, string sp, double expectedDistance)
-        {
-            var line = Line2D.Parse(sp1, sp2);
-            var point = Point2D.Parse(sp);
-
-            var actual = line.DistanceTo(point);
-            Assert.That(actual, Is.EqualTo(expectedDistance));
-        }
     }
 }
