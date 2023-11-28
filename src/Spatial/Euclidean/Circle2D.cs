@@ -154,8 +154,11 @@ namespace MathNet.Spatial.Euclidean
             // (p-cc)^2=r^2 (eq1)
             // p=s+t*d     (eq2)
             // , where p is the point on the line and/or circle,
-            // cc is the center of the circle and
-            // r is the radius of the circle.
+            // c is the center of the circle,
+            // r is the radius of the circle,
+            // s is the starting point of the line,
+            // t is the parameter and
+            // d is the line direction.
             // Substituting (eq2) into (eq1) yields:
             // ((s+t*d)-c)^2=r^2 (eq3)
             // (eq3) reduces to the following quadratic equation: a*t^2 + b*t + c==0
