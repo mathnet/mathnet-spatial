@@ -7,7 +7,6 @@ using System.Xml.Schema;
 using System.Xml.Serialization;
 using MathNet.Numerics;
 using HashCode = MathNet.Spatial.Internals.HashCode;
-using MathNet.Spatial.Extensions;
 
 namespace MathNet.Spatial.Euclidean
 {
