@@ -168,7 +168,7 @@ namespace MathNet.Spatial.Euclidean
             var d = line.Direction;
             var r = this.Radius;
 
-            var a = d.DotProduct(d);
+            var a = 1d;
             var b = 2 * (s.DotProduct(d) - d.DotProduct(cc));
             var c = (s - cc).DotProduct(s - cc) - r * r;
 
