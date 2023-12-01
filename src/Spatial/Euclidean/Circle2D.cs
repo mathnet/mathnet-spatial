@@ -171,8 +171,8 @@ namespace MathNet.Spatial.Euclidean
             var b = 2 * (s.DotProduct(d) - d.DotProduct(cc));
             var c = (s - cc).DotProduct(s - cc) - r * r;
 
-            var soluions = FindRoots.Polynomial(new[] { c, b, a });
-            var ts = soluions
+            var solutions = FindRoots.Polynomial(new[] { c, b, a });
+            var ts = solutions
                 .Where(z => z.IsReal())
                 .Select(z => z.Real)
                 .ToArray();
