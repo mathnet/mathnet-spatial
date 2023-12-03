@@ -183,13 +183,13 @@ namespace MathNet.Spatial.Euclidean
         /// <summary>
         /// Returns the intersections of this circle with the given line segment, which lie within the segment.
         /// </summary>
-        /// <param name="line">the given line-segment</param>
+        /// <param name="segment">the given line-segment</param>
         /// <returns>intersections as a Point2D Array, depending on the count.</returns>
-        public Point2D[] IntersectWith(LineSegment2D line)
+        public Point2D[] IntersectWith(LineSegment2D segment)
         {
-            var ts = findParameterTs(line.ToLine2D())
-                .Where(t => 0 <= t && t <= line.Length);
-            var result = ts.Select(t => line.StartPoint + t * line.Direction).ToArray();
+            var ts = findParameterTs(segment.ToLine2D())
+                .Where(t => 0 <= t && t <= segment.Length);
+            var result = ts.Select(t => segment.StartPoint + t * segment.Direction).ToArray();
             return result;
         }
 
