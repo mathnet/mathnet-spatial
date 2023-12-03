@@ -73,6 +73,9 @@ namespace MathNet.Spatial.Tests.Euclidean
             var actual = circle.IntersectWith(line);
 
             Assert.That(actual.Count(), Is.EqualTo(expectedNumberOfIntersections));
+            //TODO: the intersection should be on the circle
+            Assert.That(actual.All(p => Math.Abs(circle.Center.DistanceTo(p) - circle.Radius) < 1e-6), Is.EqualTo(true), "distance between center and intersection");
+            //TODO: the intersection should be on the line
         }
 
         //segment contains the all intersections(same to the cases of circle and line)
