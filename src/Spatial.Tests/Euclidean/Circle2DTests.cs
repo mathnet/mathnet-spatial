@@ -75,18 +75,32 @@ namespace MathNet.Spatial.Tests.Euclidean
             Assert.That(actual.Count(), Is.EqualTo(expectedNumberOfIntersections));
         }
 
-        [TestCase("0,0", 1.41421356 /*=sqrt(2)*/, "0,0", "+1,+1", "+1,+1")]
-        [TestCase("0,0", 1, "0,0", "+1,0", "+1,0")]
-        [TestCase("0,0", 1, "0,0", "0,+1", "0,+1")]
-        public void CircleIntersectWithLineSegment2D(string sCenter, double radius, string sStart, string sEnd, string sExpected)
+        //segment contains the all intersections(same to the cases of circle and line)
+        [TestCase("0,0", 1, "-10,+10", "+10,+10", 0)]
+        [TestCase("0,0", 1, "-10,+1", "+10,+1", 1)]
+        [TestCase("0,0", 1, "-10,0", "+10,0", 2)]
+        [TestCase("0,0", 1, "-10,-1", "+10,-1", 1)]
+        [TestCase("0,0", 1, "-10,-10", "+10,-10", 0)]
+        //segments cross the circle's contour just 1 time
+        [TestCase("0,0", 1, "+0,+10", "+10,+10", 0)]
+        [TestCase("0,0", 1, "+0,+1", "+10,+1", 1)]
+        [TestCase("0,0", 1, "+0,0", "+10,0", 1)]
+        [TestCase("0,0", 1, "+0,-1", "+10,-1", 1)]
+        [TestCase("0,0", 1, "+0,-10", "+10,-10", 0)]
+        //segment contains no intersections(px of the startingPoint is too big to intersect with the circle)
+        [TestCase("0,0", 1, "+10,+10", "+100,+10", 0)]
+        [TestCase("0,0", 1, "+10,+01", "+100,+1", 0)]
+        [TestCase("0,0", 1, "+10,+00", "+100,0", 0)]
+        [TestCase("0,0", 1, "+10,-01", "+100,-1", 0)]
+        [TestCase("0,0", 1, "+10,-10", "+100,-10", 0)]
+        public void CircleIntersectWithLineSegment2D_NumberOfIntersections(string sCenter, double radius, string sStart, string sEnd, int expectedNumberOfIntersections)
         {
             var circle = new Circle2D(Point2D.Parse(sCenter), radius);
             var segment = new LineSegment2D(Point2D.Parse(sStart), Point2D.Parse(sEnd));
-            var actual = circle.IntersectWith(segment);
-            Assert.That(actual.Length, Is.EqualTo(1));
 
-            var expected = Point2D.Parse(sExpected);
-            AssertGeometry.AreEqual(actual[0], expected);
+            var actual = circle.IntersectWith(segment);
+
+            Assert.That(actual.Count(), Is.EqualTo(expectedNumberOfIntersections));
         }
     }
 }
