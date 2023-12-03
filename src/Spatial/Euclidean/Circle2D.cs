@@ -175,6 +175,7 @@ namespace MathNet.Spatial.Euclidean
             var ts = solutions
                 .Where(z => z.IsReal())
                 .Select(z => z.Real)
+                .Distinct()
                 .ToArray();
             return ts;
         }
