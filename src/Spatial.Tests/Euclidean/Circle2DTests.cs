@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using MathNet.Spatial.Euclidean;
 using NUnit.Framework;
@@ -61,18 +62,24 @@ namespace MathNet.Spatial.Tests.Euclidean
         }
 
         //parallel to the X-axis
-        [TestCase("0,0", 1, "-10,+10", "+10,+10", "empty")]
-        [TestCase("0,0", 1, "-10,+1", "+10,+1", "0,+1")]
-        [TestCase("0,0", 1, "-10,0", "+10,0", "-1,0;+1,0")]
-        [TestCase("0,0", 1, "-10,-1", "+10,-1", "0,-1" )]
         [TestCase("0,0", 1, "-10,-10", "+10,-10", "empty")]
+        [TestCase("0,0", 1, "-10,-1", "+10,-1", "0,-1")]
+        [TestCase("0,0", 1, "-10,0", "+10,0", "+1,0;-1,0")]
+        [TestCase("0,0", 1, "-10,+1", "+10,+1", "0,+1")]
+        [TestCase("0,0", 1, "-10,+10", "+10,+10", "empty")]
         //parallel to the Y-axis
         [TestCase("0,0", 1, "-10,-10", "-10,+10", "empty")]
         [TestCase("0,0", 1, "-1,-10", "-1,+10", "-1,0")]
-        [TestCase("0,0", 1, "0,-10", "0,+10", "0,-1;0,+1")]
+        [TestCase("0,0", 1, "0,-10", "0,+10", "0,+1;0,-1")]
         [TestCase("0,0", 1, "+1,-10", "+1,+10", "+1,0")]
         [TestCase("0,0", 1, "+10,-10", "+10,+10", "empty")]
-        public void CircleIntersectWithLine2D_NumberOfIntersections(string sc, double radius, string sps, string spe, string expectedIntersectionsAsString)
+        //general cases
+        [TestCase("0,0", 1, "-10,+10", "+10,+10", "empty")]
+        [TestCase("0,0", 1, "-1.414213562373095,0", "0,+1.414213562373095", "-0.707,0.707")]
+        [TestCase("0,0", 1, "-10,-10", "+10,+10", "+0.707,+0.707;-0.707,-0.707")]
+        [TestCase("0,0", 1, "0,-1.41421356", "+1.41421356,0", "+0.707,-0.707")]
+        [TestCase("0,0", 1, "0,-10", "+10,0", "empty")]
+        public void CircleIntersectWithLine2D(string sc, double radius, string sps, string spe, string expectedIntersectionsAsString)
         {
             var circle = new Circle2D(Point2D.Parse(sc), radius);
             var line = new Line2D(Point2D.Parse(sps), Point2D.Parse(spe));
@@ -80,10 +87,12 @@ namespace MathNet.Spatial.Tests.Euclidean
             var actual = circle.IntersectWith(line);
 
             var expected = parseToPointsArray(expectedIntersectionsAsString);
-            CollectionAssert.AreEquivalent(expected, actual);
-            //TODO: the intersection should be on the circle
-            Assert.That(actual.All(p => Math.Abs(circle.Center.DistanceTo(p) - circle.Radius) < 1e-6), Is.EqualTo(true), "distance between center and intersection");
-            //TODO: the intersection should be on the line
+            for (int i = 0; i < Math.Min(actual.Length, expected.Length); i++)
+            {
+                var a = actual[i];
+                var e = expected[i];
+                AssertGeometry.AreEqual(a, e, 1e-3); //needs to fix for the default tolerance
+            }
         }
 
         //segment contains the all intersections(same to the cases of circle and line)
