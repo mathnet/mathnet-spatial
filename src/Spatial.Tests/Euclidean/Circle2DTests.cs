@@ -60,11 +60,18 @@ namespace MathNet.Spatial.Tests.Euclidean
             Assert.Throws<ArgumentException>(() => { Circle2D.FromPoints(p1, p2, p3); });
         }
 
+        //parallel to the X-axis
         [TestCase("0,0", 1, "-10,+10", "+10,+10", "empty")]
         [TestCase("0,0", 1, "-10,+1", "+10,+1", "0,+1")]
         [TestCase("0,0", 1, "-10,0", "+10,0", "-1,0;+1,0")]
         [TestCase("0,0", 1, "-10,-1", "+10,-1", "0,-1" )]
         [TestCase("0,0", 1, "-10,-10", "+10,-10", "empty")]
+        //parallel to the Y-axis
+        [TestCase("0,0", 1, "-10,-10", "-10,+10", "empty")]
+        [TestCase("0,0", 1, "-1,-10", "-1,+10", "-1,0")]
+        [TestCase("0,0", 1, "0,-10", "0,+10", "0,-1;0,+1")]
+        [TestCase("0,0", 1, "+1,-10", "+1,+10", "+1,0")]
+        [TestCase("0,0", 1, "+10,-10", "+10,+10", "empty")]
         public void CircleIntersectWithLine2D_NumberOfIntersections(string sc, double radius, string sps, string spe, string expectedIntersectionsAsString)
         {
             var circle = new Circle2D(Point2D.Parse(sc), radius);
