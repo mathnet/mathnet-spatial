@@ -60,19 +60,20 @@ namespace MathNet.Spatial.Tests.Euclidean
             Assert.Throws<ArgumentException>(() => { Circle2D.FromPoints(p1, p2, p3); });
         }
 
-        [TestCase("0,0", 1, "-10,+10", "+10,+10", 0)]
-        [TestCase("0,0", 1, "-10,+1", "+10,+1", 1)]
-        [TestCase("0,0", 1, "-10,0", "+10,0", 2)]
-        [TestCase("0,0", 1, "-10,-1", "+10,-1", 1 )]
-        [TestCase("0,0", 1, "-10,-10", "+10,-10", 0)]
-        public void CircleIntersectWithLine2D_NumberOfIntersections(string sc, double radius, string sps, string spe, int expectedNumberOfIntersections)
+        [TestCase("0,0", 1, "-10,+10", "+10,+10", "empty")]
+        [TestCase("0,0", 1, "-10,+1", "+10,+1", "0,+1")]
+        [TestCase("0,0", 1, "-10,0", "+10,0", "-1,0;+1,0")]
+        [TestCase("0,0", 1, "-10,-1", "+10,-1", "0,-1" )]
+        [TestCase("0,0", 1, "-10,-10", "+10,-10", "empty")]
+        public void CircleIntersectWithLine2D_NumberOfIntersections(string sc, double radius, string sps, string spe, string expectedIntersectionsAsString)
         {
             var circle = new Circle2D(Point2D.Parse(sc), radius);
             var line = new Line2D(Point2D.Parse(sps), Point2D.Parse(spe));
 
             var actual = circle.IntersectWith(line);
 
-            Assert.That(actual.Count(), Is.EqualTo(expectedNumberOfIntersections));
+            var expected = parseToPointsArray(expectedIntersectionsAsString);
+            CollectionAssert.AreEquivalent(expected, actual);
             //TODO: the intersection should be on the circle
             Assert.That(actual.All(p => Math.Abs(circle.Center.DistanceTo(p) - circle.Radius) < 1e-6), Is.EqualTo(true), "distance between center and intersection");
             //TODO: the intersection should be on the line
