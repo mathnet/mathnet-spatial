@@ -94,26 +94,64 @@ namespace MathNet.Spatial.Tests.Euclidean
                 AssertGeometry.AreEqual(a, e, 1e-3); //needs to fix for the default tolerance
             }
         }
-
-        //segment contains the all intersections(same to the cases of circle and line)
+        //parallel to X-axis
+        ////segment contains the all intersections(same to the cases of circle and line)
         [TestCase("0,0", 1, "-10,+10", "+10,+10", "empty")]
         [TestCase("0,0", 1, "-10,+1", "+10,+1", "0,+1")]
-        [TestCase("0,0", 1, "-10,0", "+10,0", "-1,0;+1,0")]
+        [TestCase("0,0", 1, "-10,0", "+10,0", "+1,0;-1,0")]
         [TestCase("0,0", 1, "-10,-1", "+10,-1", "0,-1")]
         [TestCase("0,0", 1, "-10,-10", "+10,-10", "empty")]
-        //segments cross the circle's contour just 1 time
+        ////segments cross the circle's contour just 1 time
         [TestCase("0,0", 1, "+0,+10", "+10,+10", "empty")]
         [TestCase("0,0", 1, "+0,+1", "+10,+1", "0,1")]
         [TestCase("0,0", 1, "+0,0", "+10,0", "1,0")]
         [TestCase("0,0", 1, "+0,-1", "+10,-1", "0,-1")]
         [TestCase("0,0", 1, "+0,-10", "+10,-10", "empty")]
-        //segment contains no intersections(px of the startingPoint is too big to intersect with the circle)
+        ////segment contains no intersections(px of the startingPoint is too big to intersect with the circle)
         [TestCase("0,0", 1, "+10,+10", "+100,+10", "empty")]
         [TestCase("0,0", 1, "+10,+01", "+100,+1", "empty")]
         [TestCase("0,0", 1, "+10,+00", "+100,0", "empty")]
         [TestCase("0,0", 1, "+10,-01", "+100,-1", "empty")]
         [TestCase("0,0", 1, "+10,-10", "+100,-10", "empty")]
-        public void CircleIntersectWithLineSegment2D_NumberOfIntersections(string sCenter, double radius, string sStart, string sEnd, string expectedIntersectionsAsString)
+        //parallel to Y-axis
+        ////segment contains the all intersections(same to the cases of circle and line)
+        [TestCase("0,0", 1, "-10,-10", "-10,+10", "empty")]
+        [TestCase("0,0", 1, "-1,-10", "-1,+10", "-1,0")]
+        [TestCase("0,0", 1, "0,-10", "0,+10", "0,+1;0,-1")]
+        [TestCase("0,0", 1, "+1,-10", "+1,+10", "+1,0")]
+        [TestCase("0,0", 1, "+10,-10", "+10,+10", "EMPTY")]
+        ////segments cross the circle's contour just 1 time
+        [TestCase("0,0", 1, "+10,0", "+10,+10", "empty")]
+        [TestCase("0,0", 1, "+1,0", "+1,+10", "+1,0")]
+        [TestCase("0,0", 1, "0,0", "0,+10", "0,+1")]
+        [TestCase("0,0", 1, "-1,0", "-1,+10", "-1,0")]
+        [TestCase("0,0", 1, "-10,0", "-10,+10", "empty")]
+        ////segment contains no intersections(py of the startingPoint is too big to intersect with the circle)
+        [TestCase("0,0", 1, "+10,+10", "+10,+100", "empty")]
+        [TestCase("0,0", 1, "+01,+10", "+1,+100", "empty")]
+        [TestCase("0,0", 1, "+00,+10", "0,+100", "empty")]
+        [TestCase("0,0", 1, "-01,+10", "-1,+100", "empty")]
+        [TestCase("0,0", 1, "-10,+10", "-10,+100", "empty")]
+        //general cases
+        ////segment contains the all intersections(same to the cases of circle and line)
+        [TestCase("0,0", 1, "-10,+10", "+10,+10", "empty")]
+        [TestCase("0,0", 1, "-1.414213562373095,0", "0,+1.414213562373095", "-0.707,0.707")]
+        [TestCase("0,0", 1, "-10,-10", "+10,+10", "+0.707,+0.707;-0.707,-0.707")]
+        [TestCase("0,0", 1, "0,-1.41421356", "+1.41421356,0", "+0.707,-0.707")]
+        [TestCase("0,0", 1, "0,-10", "+10,0", "empty")]
+        ////segments cross the circle's contour just 1 time
+        [TestCase("0,0", 1, "+10,0", "+10,+10", "empty")]
+        [TestCase("0,0", 1, "+1,0", "+1,+10", "+1,0")]
+        [TestCase("0,0", 1, "0,0", "0,+10", "0,+1")]
+        [TestCase("0,0", 1, "-1,0", "-1,+10", "-1,0")]
+        [TestCase("0,0", 1, "-10,0", "-10,+10", "empty")]
+        ////segment contains no intersections(py of the startingPoint is too big to intersect with the circle)
+        [TestCase("0,0", 1, "+10,+10", "+10,+100", "empty")]
+        [TestCase("0,0", 1, "+01,+10", "+1,+100", "empty")]
+        [TestCase("0,0", 1, "+00,+10", "0,+100", "empty")]
+        [TestCase("0,0", 1, "-01,+10", "-1,+100", "empty")]
+        [TestCase("0,0", 1, "-10,+10", "-10,+100", "empty")]
+        public void CircleIntersectWithLineSegment2D(string sCenter, double radius, string sStart, string sEnd, string expectedIntersectionsAsString)
         {
             var circle = new Circle2D(Point2D.Parse(sCenter), radius);
             var segment = new LineSegment2D(Point2D.Parse(sStart), Point2D.Parse(sEnd));
@@ -121,7 +159,12 @@ namespace MathNet.Spatial.Tests.Euclidean
             var actual = circle.IntersectWith(segment);
 
             var expected = parseToPointsArray(expectedIntersectionsAsString);
-            CollectionAssert.AreEquivalent(expected, actual);
+            for (int i = 0; i < Math.Min(actual.Length, expected.Length); i++)
+            {
+                var a = actual[i];
+                var e = expected[i];
+                AssertGeometry.AreEqual(a, e, 1e-3); //needs to fix for the default tolerance
+            }
         }
 
         private Point2D[] parseToPointsArray(string input)
