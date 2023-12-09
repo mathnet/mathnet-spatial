@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using MathNet.Spatial.Euclidean;
 using NUnit.Framework;
@@ -62,31 +61,31 @@ namespace MathNet.Spatial.Tests.Euclidean
         }
 
         //parallel to the X-axis
-        [TestCase("0,0", 1, "-10,-10", "+10,-10", "empty")]
+        [TestCase("0,0", 1, "-10,-10", "+10,-10", null)]
         [TestCase("0,0", 1, "-10,-1", "+10,-1", "0,-1")]
         [TestCase("0,0", 1, "-10,0", "+10,0", "+1,0;-1,0")]
         [TestCase("0,0", 1, "-10,+1", "+10,+1", "0,+1")]
-        [TestCase("0,0", 1, "-10,+10", "+10,+10", "empty")]
+        [TestCase("0,0", 1, "-10,+10", "+10,+10", null)]
         //parallel to the Y-axis
-        [TestCase("0,0", 1, "-10,-10", "-10,+10", "empty")]
+        [TestCase("0,0", 1, "-10,-10", "-10,+10", null)]
         [TestCase("0,0", 1, "-1,-10", "-1,+10", "-1,0")]
         [TestCase("0,0", 1, "0,-10", "0,+10", "0,+1;0,-1")]
         [TestCase("0,0", 1, "+1,-10", "+1,+10", "+1,0")]
-        [TestCase("0,0", 1, "+10,-10", "+10,+10", "empty")]
+        [TestCase("0,0", 1, "+10,-10", "+10,+10", null)]
         //general cases
-        [TestCase("0,0", 1, "-10,+10", "+10,+10", "empty")]
+        [TestCase("0,0", 1, "-10,+10", "+10,+10", null)]
         [TestCase("0,0", 1, "-1.414213562373095,0", "0,+1.414213562373095", "-0.707,0.707")]
         [TestCase("0,0", 1, "-10,-10", "+10,+10", "+0.707,+0.707;-0.707,-0.707")]
         [TestCase("0,0", 1, "0,-1.41421356", "+1.41421356,0", "+0.707,-0.707")]
-        [TestCase("0,0", 1, "0,-10", "+10,0", "empty")]
-        public void CircleIntersectWithLine2D(string sc, double radius, string sps, string spe, string expectedIntersectionsAsString)
+        [TestCase("0,0", 1, "0,-10", "+10,0", null)]
+        public void CircleIntersectWithLine2D(string sc, double radius, string sps, string spe, string intersections)
         {
             var circle = new Circle2D(Point2D.Parse(sc), radius);
             var line = new Line2D(Point2D.Parse(sps), Point2D.Parse(spe));
 
             var actual = circle.IntersectWith(line);
 
-            var expected = parseToPointsArray(expectedIntersectionsAsString);
+            var expected = parseToPointsArray(intersections);
             for (int i = 0; i < Math.Min(actual.Length, expected.Length); i++)
             {
                 var a = actual[i];
@@ -96,69 +95,69 @@ namespace MathNet.Spatial.Tests.Euclidean
         }
         //parallel to X-axis
         ////segment contains the all intersections(same to the cases of circle and line)
-        [TestCase("0,0", 1, "-10,+10", "+10,+10", "empty")]
+        [TestCase("0,0", 1, "-10,+10", "+10,+10", null)]
         [TestCase("0,0", 1, "-10,+1", "+10,+1", "0,+1")]
         [TestCase("0,0", 1, "-10,0", "+10,0", "+1,0;-1,0")]
         [TestCase("0,0", 1, "-10,-1", "+10,-1", "0,-1")]
-        [TestCase("0,0", 1, "-10,-10", "+10,-10", "empty")]
+        [TestCase("0,0", 1, "-10,-10", "+10,-10", null)]
         ////segments cross the circle's contour just 1 time
-        [TestCase("0,0", 1, "+0,+10", "+10,+10", "empty")]
+        [TestCase("0,0", 1, "+0,+10", "+10,+10", null)]
         [TestCase("0,0", 1, "+0,+1", "+10,+1", "0,1")]
         [TestCase("0,0", 1, "+0,+0", "+10,+0", "1,0")]
         [TestCase("0,0", 1, "+0,-1", "+10,-1", "0,-1")]
-        [TestCase("0,0", 1, "+0,-10", "+10,-10", "empty")]
+        [TestCase("0,0", 1, "+0,-10", "+10,-10", null)]
         ////segment contains no intersections(px of the startingPoint is too big to intersect with the circle)
-        [TestCase("0,0", 1, "+10,+10", "+100,+10", "empty")]
-        [TestCase("0,0", 1, "+10,+1", "+100,+1", "empty")]
-        [TestCase("0,0", 1, "+10,+0", "+100,0", "empty")]
-        [TestCase("0,0", 1, "+10,-1", "+100,-1", "empty")]
-        [TestCase("0,0", 1, "+10,-10", "+100,-10", "empty")]
+        [TestCase("0,0", 1, "+10,+10", "+100,+10", null)]
+        [TestCase("0,0", 1, "+10,+1", "+100,+1", null)]
+        [TestCase("0,0", 1, "+10,+0", "+100,0", null)]
+        [TestCase("0,0", 1, "+10,-1", "+100,-1", null)]
+        [TestCase("0,0", 1, "+10,-10", "+100,-10", null)]
         //parallel to Y-axis
         ////segment contains the all intersections(same to the cases of circle and line)
-        [TestCase("0,0", 1, "-10,-10", "-10,+10", "empty")]
+        [TestCase("0,0", 1, "-10,-10", "-10,+10", null)]
         [TestCase("0,0", 1, "-1,-10", "-1,+10", "-1,0")]
         [TestCase("0,0", 1, "+0,-10", "+0,+10", "0,+1;0,-1")]
         [TestCase("0,0", 1, "+1,-10", "+1,+10", "+1,0")]
-        [TestCase("0,0", 1, "+10,-10", "+10,+10", "EMPTY")]
+        [TestCase("0,0", 1, "+10,-10", "+10,+10", null)]
         ////segments cross the circle's contour just 1 time
-        [TestCase("0,0", 1, "+10,0", "+10,+10", "empty")]
+        [TestCase("0,0", 1, "+10,0", "+10,+10", null)]
         [TestCase("0,0", 1, "+1,0", "+1,+10", "+1,0")]
         [TestCase("0,0", 1, "+0,0", "+0,+10", "0,+1")]
         [TestCase("0,0", 1, "-1,0", "-1,+10", "-1,0")]
-        [TestCase("0,0", 1, "-10,0", "-10,+10", "empty")]
+        [TestCase("0,0", 1, "-10,0", "-10,+10", null)]
         ////segment contains no intersections(py of the startingPoint is too big to intersect with the circle)
-        [TestCase("0,0", 1, "+10,+10", "+10,+100", "empty")]
-        [TestCase("0,0", 1, "+1,+10", "+1,+100", "empty")]
-        [TestCase("0,0", 1, "+0,+10", "+0,+100", "empty")]
-        [TestCase("0,0", 1, "-1,+10", "-1,+100", "empty")]
-        [TestCase("0,0", 1, "-10,+10", "-10,+100", "empty")]
+        [TestCase("0,0", 1, "+10,+10", "+10,+100", null)]
+        [TestCase("0,0", 1, "+1,+10", "+1,+100", null)]
+        [TestCase("0,0", 1, "+0,+10", "+0,+100", null)]
+        [TestCase("0,0", 1, "-1,+10", "-1,+100", null)]
+        [TestCase("0,0", 1, "-10,+10", "-10,+100", null)]
         //general cases
         ////segment contains the all intersections(same to the cases of circle and line)
-        [TestCase("0,0", 1, "-10,+10", "+10,+10", "empty")]
+        [TestCase("0,0", 1, "-10,+10", "+10,+10", null)]
         [TestCase("0,0", 1, "-1.414213562373095,0", "0,+1.414213562373095", "-0.707,0.707")]
         [TestCase("0,0", 1, "-10,-10", "+10,+10", "+0.707,+0.707;-0.707,-0.707")]
         [TestCase("0,0", 1, "0,-1.41421356", "+1.41421356,0", "+0.707,-0.707")]
-        [TestCase("0,0", 1, "0,-10", "+10,0", "empty")]
+        [TestCase("0,0", 1, "0,-10", "+10,0", null)]
         ////segments cross the circle's contour just 1 time
-        [TestCase("0,0", 1, "+10,0", "+10,+10", "empty")]
+        [TestCase("0,0", 1, "+10,0", "+10,+10", null)]
         [TestCase("0,0", 1, "+1,0", "+1,+10", "+1,0")]
         [TestCase("0,0", 1, "+0,0", "+0,+10", "0,+1")]
         [TestCase("0,0", 1, "-1,0", "-1,+10", "-1,0")]
-        [TestCase("0,0", 1, "-10,0", "-10,+10", "empty")]
+        [TestCase("0,0", 1, "-10,0", "-10,+10", null)]
         ////segment contains no intersections(py of the startingPoint is too big to intersect with the circle)
-        [TestCase("0,0", 1, "+10,+10", "+10,+100", "empty")]
-        [TestCase("0,0", 1, "+1,+10", "+1,+100", "empty")]
-        [TestCase("0,0", 1, "+0,+10", "+0,+100", "empty")]
-        [TestCase("0,0", 1, "-1,+10", "-1,+100", "empty")]
-        [TestCase("0,0", 1, "-10,+10", "-10,+100", "empty")]
-        public void CircleIntersectWithLineSegment2D(string sCenter, double radius, string sStart, string sEnd, string expectedIntersectionsAsString)
+        [TestCase("0,0", 1, "+10,+10", "+10,+100", null)]
+        [TestCase("0,0", 1, "+1,+10", "+1,+100", null)]
+        [TestCase("0,0", 1, "+0,+10", "+0,+100", null)]
+        [TestCase("0,0", 1, "-1,+10", "-1,+100", null)]
+        [TestCase("0,0", 1, "-10,+10", "-10,+100", null)]
+        public void CircleIntersectWithLineSegment2D(string sCenter, double radius, string sStart, string sEnd, string intersections)
         {
             var circle = new Circle2D(Point2D.Parse(sCenter), radius);
             var segment = new LineSegment2D(Point2D.Parse(sStart), Point2D.Parse(sEnd));
 
             var actual = circle.IntersectWith(segment);
 
-            var expected = parseToPointsArray(expectedIntersectionsAsString);
+            var expected = parseToPointsArray(intersections);
             for (int i = 0; i < Math.Min(actual.Length, expected.Length); i++)
             {
                 var a = actual[i];
@@ -169,7 +168,7 @@ namespace MathNet.Spatial.Tests.Euclidean
 
         private Point2D[] parseToPointsArray(string input)
         {
-            if (input.ToLower().Contains("empty"))
+            if (input == null)
             {
                 return new Point2D[] { };
             }
@@ -177,6 +176,7 @@ namespace MathNet.Spatial.Tests.Euclidean
             var result = input.Split(';')
                 .Select(s => Point2D.Parse(s))
                 .ToArray();
+
             return result;
         }
     }
