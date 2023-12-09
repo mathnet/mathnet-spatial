@@ -1,9 +1,11 @@
 ﻿using MathNet.Spatial.Internals;
 using System;
 using System.Diagnostics.Contracts;
+using System.Linq;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
+using MathNet.Numerics;
 using HashCode = MathNet.Spatial.Internals.HashCode;
 
 namespace MathNet.Spatial.Euclidean
@@ -130,6 +132,67 @@ namespace MathNet.Spatial.Euclidean
 
             return new Circle2D(center, radius);            
         }
+
+        /// <summary>
+        /// Returns the intersections of this circle with the given line.
+        /// </summary>
+        /// <param name="line">the given line</param>
+        /// <returns>intersections as a Point2D Array, depending on the count.</returns>
+        public Point2D[] IntersectWith(Line2D line)
+        {
+            var ts = this.findParameterTs(line);
+            var result = ts
+                .Select(t => line.StartPoint + t * line.Direction)
+                .ToArray();
+            return result;
+        }
+
+        private double[] findParameterTs(Line2D line)
+        {
+            // These 2 equations in vector form can be described
+            // (p-cc)^2=r^2 (eq1)
+            // p=s+t*d     (eq2)
+            // , where p is the point on the line and/or circle,
+            // cc is the center of the circle,
+            // r is the radius of the circle,
+            // s is the starting point of the line,
+            // t is the parameter and
+            // d is the line direction.
+            // Substituting (eq2) into (eq1) yields:
+            // ((s+t*d)-cc)^2=r^2 (eq3)
+            // (eq3) reduces to the following quadratic equation: a*t^2 + b*t + c==0
+
+            var cc = this.Center.ToVector2D(); //center of circle
+            var s = line.StartPoint.ToVector2D();
+            var d = line.Direction;
+            var r = this.Radius;
+
+            var a = 1.0;
+            var b = 2 * (s.DotProduct(d) - d.DotProduct(cc));
+            var c = (s - cc).DotProduct(s - cc) - r * r;
+
+            var solutions = FindRoots.Polynomial(new[] { c, b, a });
+            var ts = solutions
+                .Where(z => z.IsReal())
+                .Select(z => z.Real)
+                .Distinct()
+                .ToArray();
+            return ts;
+        }
+
+        /// <summary>
+        /// Returns the intersections of this circle with the given line segment, which lie within the segment.
+        /// </summary>
+        /// <param name="segment">the given line-segment</param>
+        /// <returns>intersections as a Point2D Array, depending on the count.</returns>
+        public Point2D[] IntersectWith(LineSegment2D segment)
+        {
+            var ts = findParameterTs(segment.ToLine2D())
+                .Where(t => 0 <= t && t <= segment.Length);
+            var result = ts.Select(t => segment.StartPoint + t * segment.Direction).ToArray();
+            return result;
+        }
+
 
         /// <summary>
         /// Returns a value to indicate if a pair of circles are equal

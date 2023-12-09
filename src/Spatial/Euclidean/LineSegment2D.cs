@@ -236,5 +236,9 @@ namespace MathNet.Spatial.Euclidean
             writer.WriteElement("StartPoint", StartPoint);
             writer.WriteElement("EndPoint", EndPoint);
         }
+
+        /// <summary>convert this to Line2D </summary>
+        /// <returns>converted Line2D object</returns>
+        public Line2D ToLine2D() => new Line2D(StartPoint, EndPoint);
     }
 }
