@@ -124,6 +124,19 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
+        /// Returns the straight line Distance to the given point.
+        /// </summary>
+        /// <param name="p">the given point</param>
+        /// <returns>a distance measure</returns>
+        [Pure]
+        public double DistanceTo(Point2D p)
+        {
+            var closestPoint = ClosestPointTo(p, false); // this is Line2D, not LineSegment2D.
+            var result = closestPoint.DistanceTo(p);
+            return result;
+        }
+
+        /// <summary>
         /// Returns the shortest line between this line and a point.
         /// </summary>
         /// <param name="p">the point to create a line to</param>

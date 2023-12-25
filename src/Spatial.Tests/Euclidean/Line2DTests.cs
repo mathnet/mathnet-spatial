@@ -56,6 +56,20 @@ namespace MathNet.Spatial.Tests.Euclidean
             AssertGeometry.AreEqual(ex, line.Direction);
         }
 
+        [TestCase("-1,+1", "+1,+1", "0,0", 1.0)]
+        [TestCase("-1,+1", "+1,+1", "0,3", 2.0)]
+        [TestCase("-1,0", "0,+1", "0,0", 0.70710678)]
+        [TestCase("+1,-1", "+1,+1", "0,0", 1.0)]
+        [TestCase("+1,-1", "+1,+1", "3,0", 2.0)]
+        public void DistanceFromLineToPoint(string p1s, string p2s, string ps, double expectedDistance)
+        {
+            var line = new Line2D(Point2D.Parse(p1s), Point2D.Parse(p2s));
+            var p = Point2D.Parse(ps);
+
+            var actual = line.DistanceTo(p);
+            Assert.That(actual, Is.EqualTo(expectedDistance).Within(1e-6));
+        }
+
         [TestCase("0,0", "10,10", "0,0", "10,10", true)]
         [TestCase("0,0", "10,10", "0,0", "10,11", false)]
         public void EqualityOperator(string p1s, string p2s, string p3s, string p4s, bool expected)
