@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using MathNet.Spatial.Euclidean;
 using MathNet.Spatial.Units;
 using NUnit.Framework;
@@ -56,17 +56,32 @@ namespace MathNet.Spatial.Tests.Euclidean
             AssertGeometry.AreEqual(ex, line.Direction);
         }
 
-        [TestCase("-1,+1", "+1,+1", "0,0", 1.0)]
-        [TestCase("-1,+1", "+1,+1", "0,3", 2.0)]
-        [TestCase("-1,+1", "+1,+1", "0,1", 0.0)]
-        [TestCase("-1,0", "0,+1", "0,0", 0.70710678)]
-        [TestCase("-1,0", "0,+1", "-0.5,0.5", 0.0)]
-        [TestCase("+1,-1", "+1,+1", "0,0", 1.0)]
-        [TestCase("+1,-1", "+1,+1", "1,0", 0.0)]
-        [TestCase("+1,-1", "+1,+1", "3,0", 2.0)]
-        public void DistanceFromLineToPoint(string p1s, string p2s, string ps, double expectedDistance)
+        public static object[] DistanceTestCases =
         {
-            var line = new Line2D(Point2D.Parse(p1s), Point2D.Parse(p2s));
+            new object[] { "-1,+1", "+1,+1", "0,0", 1.0 },
+            new object[] { "-1,+1", "+1,+1", "0,3", 2.0 },
+            new object[] { "-1,+1", "+1,+1", "0,1", 0.0 },
+            new object[] { "-1,0", "0,+1", "0,0", 0.70710678 },
+            new object[] { "-1,0", "0,+1", "-0.5,0.5", 0.0 },
+            new object[] { "+1,-1", "+1,+1", "0,0", 1.0 },
+            new object[] { "+1,-1", "+1,+1", "1,0", 0.0 },
+            new object[] { "+1,-1", "+1,+1", "3,0", 2.0 },
+        };
+
+        [TestCaseSource(nameof(DistanceTestCases))]
+        public void DistanceFromLineToPoint(string sp1, string sp2, string ps, double expectedDistance)
+        {
+            var line = new Line2D(Point2D.Parse(sp1), Point2D.Parse(sp2));
+            var p = Point2D.Parse(ps);
+
+            var actual = line.DistanceTo(p);
+            Assert.That(actual, Is.EqualTo(expectedDistance).Within(1e-6));
+        }
+
+        [TestCaseSource(nameof(DistanceTestCases))]
+        public void DistanceFromLineToPoint_SwappedP1sAndP2s(string sp1, string sp2, string ps, double expectedDistance)
+        {
+            var line = new Line2D(Point2D.Parse(sp2), Point2D.Parse(sp1)); // swapped
             var p = Point2D.Parse(ps);
 
             var actual = line.DistanceTo(p);
