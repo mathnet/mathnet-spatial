@@ -58,8 +58,11 @@ namespace MathNet.Spatial.Tests.Euclidean
 
         [TestCase("-1,+1", "+1,+1", "0,0", 1.0)]
         [TestCase("-1,+1", "+1,+1", "0,3", 2.0)]
+        [TestCase("-1,+1", "+1,+1", "0,1", 0.0)]
         [TestCase("-1,0", "0,+1", "0,0", 0.70710678)]
+        [TestCase("-1,0", "0,+1", "-0.5,0.5", 0.0)]
         [TestCase("+1,-1", "+1,+1", "0,0", 1.0)]
+        [TestCase("+1,-1", "+1,+1", "1,0", 0.0)]
         [TestCase("+1,-1", "+1,+1", "3,0", 2.0)]
         public void DistanceFromLineToPoint(string p1s, string p2s, string ps, double expectedDistance)
         {
