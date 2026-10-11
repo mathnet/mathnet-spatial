@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
+using System.Runtime.Serialization;
 using System.Xml.Linq;
 using System.Xml.Schema;
 using System.Xml.Serialization;
@@ -15,7 +16,7 @@ namespace MathNet.Spatial.Euclidean
     /// computing the length, direction, comparisons, and shifting by a vector.
     /// </summary>
     [Serializable]
-    public struct LineSegment3D : IEquatable<LineSegment3D>, IXmlSerializable
+    public struct LineSegment3D : IEquatable<LineSegment3D>, IXmlSerializable, ISerializable
     {
         /// <summary>
         /// The starting point of the line segment
@@ -328,6 +329,23 @@ namespace MathNet.Spatial.Euclidean
         {
             writer.WriteElement("StartPoint", StartPoint);
             writer.WriteElement("EndPoint", EndPoint);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LineSegment3D"/> struct from serialized data.
+        /// </summary>
+        /// <param name="info">The serialization info</param>
+        /// <param name="context">The streaming context</param>
+        private LineSegment3D(SerializationInfo info, StreamingContext context)
+            : this((Point3D)info.GetValue(nameof(StartPoint), typeof(Point3D)), (Point3D)info.GetValue(nameof(EndPoint), typeof(Point3D)))
+        {
+        }
+
+        /// <inheritdoc />
+        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue(nameof(StartPoint), StartPoint);
+            info.AddValue(nameof(EndPoint), EndPoint);
         }
     }
 }

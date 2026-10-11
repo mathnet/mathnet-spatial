@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
+using System.Runtime.Serialization;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
@@ -19,7 +20,7 @@ namespace MathNet.Spatial.Euclidean
     /// http://www.lce.hut.fi/~ssarkka/pub/quat.pdf
     /// </remarks>
     [Serializable]
-    public struct Quaternion : IEquatable<Quaternion>, IFormattable, IXmlSerializable
+    public struct Quaternion : IEquatable<Quaternion>, IFormattable, IXmlSerializable, ISerializable
     {
         /// <summary>
         /// Neutral element for multiplication
@@ -832,6 +833,25 @@ namespace MathNet.Spatial.Euclidean
             writer.WriteElement("X", x, "G17");
             writer.WriteElement("Y", y, "G17");
             writer.WriteElement("Z", z, "G17");
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Quaternion"/> struct from serialized data.
+        /// </summary>
+        /// <param name="info">The serialization info</param>
+        /// <param name="context">The streaming context</param>
+        private Quaternion(SerializationInfo info, StreamingContext context)
+            : this(info.GetDouble("W"), info.GetDouble("X"), info.GetDouble("Y"), info.GetDouble("Z"))
+        {
+        }
+
+        /// <inheritdoc />
+        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("W", w);
+            info.AddValue("X", x);
+            info.AddValue("Y", y);
+            info.AddValue("Z", z);
         }
     }
 }

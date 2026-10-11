@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
+using System.Runtime.Serialization;
 using System.Xml.Schema;
 using System.Xml;
 using System.Xml.Serialization;
@@ -12,7 +13,7 @@ namespace MathNet.Spatial.Euclidean
     /// Describes a 3 dimensional circle
     /// </summary>
     [Serializable]
-    public struct Circle3D : IEquatable<Circle3D>, IXmlSerializable
+    public struct Circle3D : IEquatable<Circle3D>, IXmlSerializable, ISerializable
     {
         /// <summary>
         /// The center of the circle
@@ -198,6 +199,24 @@ namespace MathNet.Spatial.Euclidean
             writer.WriteElement("CenterPoint", CenterPoint);
             writer.WriteElement("Axis", Axis);
             writer.WriteElement("Radius", Radius, "G17");
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Circle3D"/> struct from serialized data.
+        /// </summary>
+        /// <param name="info">The serialization info</param>
+        /// <param name="context">The streaming context</param>
+        private Circle3D(SerializationInfo info, StreamingContext context)
+            : this((Point3D)info.GetValue(nameof(CenterPoint), typeof(Point3D)), (UnitVector3D)info.GetValue(nameof(Axis), typeof(UnitVector3D)), info.GetDouble(nameof(Radius)))
+        {
+        }
+
+        /// <inheritdoc />
+        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue(nameof(CenterPoint), CenterPoint);
+            info.AddValue(nameof(Axis), Axis);
+            info.AddValue(nameof(Radius), Radius);
         }
     }
 }

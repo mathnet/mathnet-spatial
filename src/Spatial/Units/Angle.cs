@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Runtime.Serialization;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
@@ -12,7 +13,7 @@ namespace MathNet.Spatial.Units
     /// An angle
     /// </summary>
     [Serializable]
-    public struct Angle : IComparable<Angle>, IEquatable<Angle>, IFormattable, IXmlSerializable
+    public struct Angle : IComparable<Angle>, IEquatable<Angle>, IFormattable, IXmlSerializable, ISerializable
     {
         /// <summary>
         /// The value in radians
@@ -505,6 +506,22 @@ namespace MathNet.Spatial.Units
         void IXmlSerializable.WriteXml(XmlWriter writer)
         {
             writer.WriteElement("Value", Radians, "G17");
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Angle"/> struct from serialized data.
+        /// </summary>
+        /// <param name="info">The serialization info</param>
+        /// <param name="context">The streaming context</param>
+        private Angle(SerializationInfo info, StreamingContext context)
+            : this(info.GetDouble(nameof(Radians)))
+        {
+        }
+
+        /// <inheritdoc />
+        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue(nameof(Radians), Radians);
         }
     }
 }

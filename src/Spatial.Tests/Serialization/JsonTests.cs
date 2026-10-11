@@ -10,7 +10,6 @@ namespace MathNet.Spatial.Tests.Serialization
     {
         private const double Tolerance = 1e-6;
 
-        [Explicit("fix later")]
         [TestCase("15 °")]
         public void AngleJson(string vs)
         {
@@ -19,7 +18,6 @@ namespace MathNet.Spatial.Tests.Serialization
             Assert.AreEqual(angle.Radians, roundTrip.Radians, Tolerance);
         }
 
-        [Explicit("fix later")]
         [Test]
         public void Point2DJson()
         {
@@ -28,7 +26,6 @@ namespace MathNet.Spatial.Tests.Serialization
             Assert.AreEqual(p, result);
         }
 
-        [Explicit("fix later")]
         [Test]
         public void Point3DJson()
         {
@@ -37,7 +34,6 @@ namespace MathNet.Spatial.Tests.Serialization
             Assert.AreEqual(p, result);
         }
 
-        [Explicit("fix later")]
         [Test]
         public void QuaternionJson()
         {
@@ -55,7 +51,6 @@ namespace MathNet.Spatial.Tests.Serialization
             Assert.AreEqual(eulerAngles, result);
         }
 
-        [Explicit("fix later")]
         [TestCase("0, 0, 0", "0, 0, 1")]
         public void PlaneJson(string rootPoint, string unitVector)
         {
@@ -64,8 +59,7 @@ namespace MathNet.Spatial.Tests.Serialization
             Assert.AreEqual(plane, result);
         }
 
-        [Explicit("fix later")]
-        [TestCase("1, 2, 3", "-1, 2, 3", false)]
+        [TestCase("1, 2, 3", "-0.267261241912424, 0.534522483824849, 0.801783725737273", false)]
         public void Ray3DJson(string ps, string vs, bool asElements)
         {
             var ray = new Ray3D(Point3D.Parse(ps), UnitVector3D.Parse(vs));
@@ -74,7 +68,6 @@ namespace MathNet.Spatial.Tests.Serialization
             AssertGeometry.AreEqual(ray, result, 1e-6);
         }
 
-        [Explicit("fix later")]
         [TestCase("1, 2, 3", "4, 5, 6")]
         public void Line3DJson(string p1s, string p2s)
         {
@@ -85,7 +78,6 @@ namespace MathNet.Spatial.Tests.Serialization
             Assert.AreEqual(l, result);
         }
 
-        [Explicit("fix later")]
         [TestCase("1, 2", "4, 5")]
         public void Line2DJson(string p1s, string p2s)
         {
@@ -96,7 +88,6 @@ namespace MathNet.Spatial.Tests.Serialization
             Assert.AreEqual(l, result);
         }
 
-        [Explicit("fix later")]
         [TestCase("1, 2, 3", "4, 5, 6")]
         public void LineSegment3DJson(string p1s, string p2s)
         {
@@ -107,7 +98,6 @@ namespace MathNet.Spatial.Tests.Serialization
             Assert.AreEqual(l, result);
         }
 
-        [Explicit("fix later")]
         [TestCase("1, 2", "4, 5")]
         public void LineSegment2DJson(string p1s, string p2s)
         {
@@ -118,7 +108,6 @@ namespace MathNet.Spatial.Tests.Serialization
             Assert.AreEqual(l, result);
         }
 
-        [Explicit("fix later")]
         [Test]
         public void Vector2DJson()
         {
@@ -127,7 +116,6 @@ namespace MathNet.Spatial.Tests.Serialization
             Assert.AreEqual(v, result);
         }
 
-        [Explicit("fix later")]
         [Test]
         public void Vector3DJson()
         {
@@ -145,7 +133,6 @@ namespace MathNet.Spatial.Tests.Serialization
             Assert.AreEqual(c, result);
         }
 
-        [Explicit("fix later")]
         [TestCase("0, 0, 0", 2.5)]
         public void Circle3DJson(string point, double radius)
         {
@@ -155,7 +142,6 @@ namespace MathNet.Spatial.Tests.Serialization
             Assert.AreEqual(c, result);
         }
 
-        [Explicit("fix later")]
         [Test]
         public void Polygon2DJson()
         {
@@ -165,7 +151,6 @@ namespace MathNet.Spatial.Tests.Serialization
             Assert.AreEqual(p, result);
         }
 
-        [Explicit("fix later")]
         [Test]
         public void PolyLine2DJson()
         {
@@ -175,7 +160,6 @@ namespace MathNet.Spatial.Tests.Serialization
             Assert.AreEqual(p, result);
         }
 
-        [Explicit("fix later")]
         [Test]
         public void PolyLine3DJson()
         {
@@ -185,7 +169,6 @@ namespace MathNet.Spatial.Tests.Serialization
             Assert.AreEqual(p, result);
         }
 
-        [Explicit("fix later")]
         [Test]
         public void CoordinateSystemJson()
         {

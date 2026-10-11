@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Xml.Linq;
 using System.Xml.Schema;
 using System.Xml;
@@ -17,7 +18,7 @@ namespace MathNet.Spatial.Euclidean
     /// stored as a sequential list of 2D points.
     /// </summary>
     [Serializable]
-    public class PolyLine2D : IEquatable<PolyLine2D>, IXmlSerializable
+    public class PolyLine2D : IEquatable<PolyLine2D>, IXmlSerializable, ISerializable
     {
         /// <summary>
         /// Internal storage for the points
@@ -349,6 +350,22 @@ namespace MathNet.Spatial.Euclidean
                 writer.WriteElement("Point", point);
             }
             writer.WriteEndElement();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PolyLine2D"/> class from serialized data.
+        /// </summary>
+        /// <param name="info">The serialization info</param>
+        /// <param name="context">The streaming context</param>
+        private PolyLine2D(SerializationInfo info, StreamingContext context)
+            : this((Point2D[])info.GetValue(nameof(Vertices), typeof(Point2D[])))
+        {
+        }
+
+        /// <inheritdoc />
+        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue(nameof(Vertices), _points.ToArray());
         }
     }
 }
