@@ -293,6 +293,70 @@ namespace MathNet.Spatial.Tests.Euclidean
             AssertGeometry.AreEqual(expected, actual);
         }
 
+        // Translated only: local = world - origin
+        [TestCase("o:{1, 2, 3} x:{1, 0, 0} y:{0, 1, 0} z:{0, 0, 1}", "1, 2, 3", "0, 0, 0")]
+        [TestCase("o:{1, 2, 3} x:{1, 0, 0} y:{0, 1, 0} z:{0, 0, 1}", "2, 2, 3", "1, 0, 0")]
+        // Rotated only: local coordinates are the projections on the axes
+        [TestCase("o:{0, 0, 0} x:{0, 0, 1} y:{1, 0, 0} z:{0, 1, 0}", "1, 2, 3", "3, 1, 2")]
+        // Rotated 90° around Z and translated
+        [TestCase("o:{1, 0, 0} x:{0, 1, 0} y:{-1, 0, 0} z:{0, 0, 1}", "1, 1, 0", "1, 0, 0")]
+        [TestCase("o:{1, 0, 0} x:{0, 1, 0} y:{-1, 0, 0} z:{0, 0, 1}", "0, 0, 5", "0, 1, 5")]
+        // Scaled x axis
+        [TestCase("o:{1, 0, 0} x:{2, 0, 0} y:{0, 1, 0} z:{0, 0, 1}", "3, 0, 0", "1, 0, 0")]
+        // Skewed (non orthogonal) axes: (3, 2, 1) = origin + 1 * x + 1 * y
+        [TestCase("o:{1, 1, 1} x:{1, 0, 0} y:{1, 1, 0} z:{0, 0, 1}", "3, 2, 1", "1, 1, 0")]
+        public void TransformPointToAndFromCoordSys(string css, string worldPoint, string localPoint)
+        {
+            var cs = CoordinateSystem.Parse(css);
+            var world = Point3D.Parse(worldPoint);
+            var local = Point3D.Parse(localPoint);
+            AssertGeometry.AreEqual(local, cs.TransformToCoordSys(world), message: "TransformToCoordSys");
+            AssertGeometry.AreEqual(world, cs.TransformFromCoordSys(local), message: "TransformFromCoordSys");
+        }
+
+        // Rotated 90° around Z and translated
+        [TestCase("o:{1, 0, 0} x:{0, 1, 0} y:{-1, 0, 0} z:{0, 0, 1}", "1, 1, 0", "1, 0, 0", "1, 0, 0", "0, -1, 0")]
+        // Scaled x axis: the direction keeps pointing along x
+        [TestCase("o:{1, 0, 0} x:{2, 0, 0} y:{0, 1, 0} z:{0, 0, 1}", "3, 0, 0", "1, 0, 0", "1, 0, 0", "1, 0, 0")]
+        // Skewed axes: (0, 1, 0) = -1 * x + 1 * y, so the transposed axes would give the wrong direction (0, 1, 0)
+        [TestCase("o:{1, 1, 1} x:{1, 0, 0} y:{1, 1, 0} z:{0, 0, 1}", "3, 2, 1", "0, 1, 0", "1, 1, 0", "-1, 1, 0")]
+        public void TransformRayToAndFromCoordSys(string css, string worldPoint, string worldDirection, string localPoint, string localDirection)
+        {
+            var cs = CoordinateSystem.Parse(css);
+            var world = new Ray3D(Point3D.Parse(worldPoint), Vector3D.Parse(worldDirection));
+            var local = new Ray3D(Point3D.Parse(localPoint), Vector3D.Parse(localDirection));
+            AssertGeometry.AreEqual(local, cs.TransformToCoordSys(world), message: "TransformToCoordSys");
+            AssertGeometry.AreEqual(world, cs.TransformFromCoordSys(local), message: "TransformFromCoordSys");
+        }
+
+        [TestCase("o:{1, 2, -7} x:{10, 0.1, 0} y:{0, 1.2, 0.1} z:{0.1, 0, 1}", "0, 0, 0")]
+        [TestCase("o:{1, 2, -7} x:{10, 0.1, 0} y:{0, 1.2, 0.1} z:{0.1, 0, 1}", "1, 2, 3")]
+        [TestCase("o:{1, 2, -7} x:{10, 0.1, 0} y:{0, 1.2, 0.1} z:{0.1, 0, 1}", "-4.5, 0.3, 12")]
+        public void TransformToAndFromCoordSysRoundTrips(string css, string ps)
+        {
+            var cs = CoordinateSystem.Parse(css);
+            var p = Point3D.Parse(ps);
+            AssertGeometry.AreEqual(p, cs.TransformFromCoordSys(cs.TransformToCoordSys(p)));
+            AssertGeometry.AreEqual(p, cs.TransformToCoordSys(cs.TransformFromCoordSys(p)));
+        }
+
+        [Test]
+        public void BaseChangeMatrix()
+        {
+            // Rotated 90° around Z and translated by (1, 0, 0)
+            var cs = CoordinateSystem.Parse("o:{1, 0, 0} x:{0, 1, 0} y:{-1, 0, 0} z:{0, 0, 1}");
+
+            // The inverse rotates -90° around Z and moves the origin of the parent to (0, 1, 0)
+            AssertGeometry.AreEqual(
+                cs.BaseChangeMatrix,
+                new Point3D(0, 1, 0),
+                new Vector3D(0, -1, 0),
+                new Vector3D(1, 0, 0),
+                new Vector3D(0, 0, 1));
+            AssertGeometry.AreEqual(cs.Invert(), cs.BaseChangeMatrix);
+            AssertGeometry.AreEqual(new Point3D(1, 0, 0), cs.BaseChangeMatrix.Transform(new Point3D(1, 1, 0)));
+        }
+
         [Test]
         public void XmlRoundTrips()
         {
