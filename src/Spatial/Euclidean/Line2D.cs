@@ -124,6 +124,21 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
+        /// Returns the perpendicular distance from the given point to the infinite line through
+        /// <see cref="StartPoint"/> and <see cref="EndPoint"/>. The result is never negative and
+        /// does not depend on the order of the two points.
+        /// </summary>
+        /// <param name="p">the given point</param>
+        /// <returns>The perpendicular distance from the point to the line</returns>
+        [Pure]
+        public double DistanceTo(Point2D p)
+        {
+            var closestPoint = ClosestPointTo(p, false); // this is Line2D, not LineSegment2D.
+            var result = closestPoint.DistanceTo(p);
+            return result;
+        }
+
+        /// <summary>
         /// Returns the shortest line between this line and a point.
         /// </summary>
         /// <param name="p">the point to create a line to</param>

@@ -10,6 +10,11 @@ install:
    - ps: (New-Object System.Net.WebClient).DownloadFile($urlCurrent, $tempFileCurrent)
    - ps: Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::ExtractToDirectory($tempFileCurrent, $env:DOTNET_INSTALL_DIR)
    - ps: $env:Path = "$env:DOTNET_INSTALL_DIR;$env:Path"
+     # .NET Core 3.1 runtime for the netcoreapp3.1 tests (no longer on the AppVeyor image)
+   - ps: '[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12'
+   - ps: 'Invoke-WebRequest https://dot.net/v1/dotnet-install.ps1 -OutFile "$env:TEMP\dotnet-install.ps1"'
+   - ps: '& "$env:TEMP\dotnet-install.ps1" -Runtime dotnet -Version 3.1.32 -InstallDir $env:DOTNET_INSTALL_DIR -NoPath'
+   - ps: dotnet --list-runtimes
 build_script:
    - build.cmd Test quick
 test: off
