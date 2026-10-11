@@ -336,7 +336,7 @@ namespace MathNet.Spatial.Units
         /// <returns>A new instance of the <see cref="Angle"/> struct.</returns>
         public static Angle FromSexagesimal(int degrees, int minutes, double seconds)
         {
-            return FromDegrees(degrees + (minutes / 60.0F) + (seconds / 3600.0F));
+            return FromDegrees(degrees + (minutes / 60.0) + (seconds / 3600.0));
         }
 
         /// <summary>
