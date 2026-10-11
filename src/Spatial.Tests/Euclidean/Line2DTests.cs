@@ -72,6 +72,13 @@ namespace MathNet.Spatial.Tests.Euclidean
         [TestCase("+1,+1", "+1,-1", "0,0", 1.0)]
         [TestCase("+1,+1", "+1,-1", "1,0", 0.0)]
         [TestCase("+1,+1", "+1,-1", "3,0", 2.0)]
+        // The projection falls outside StartPoint-EndPoint: the distance is to the infinite line, not the segment
+        [TestCase("0,0", "1,0", "3,4", 4.0)]
+        [TestCase("1,0", "0,0", "3,4", 4.0)]
+        [TestCase("0,0", "1,0", "-2,-1", 1.0)]
+        [TestCase("1,0", "0,0", "-2,-1", 1.0)]
+        [TestCase("0,0", "1,1", "3,1", 1.41421356)]
+        [TestCase("1,1", "0,0", "3,1", 1.41421356)]
         public void DistanceFromLineToPoint(string p1s, string p2s, string ps, double expectedDistance)
         {
             var line = new Line2D(Point2D.Parse(p1s), Point2D.Parse(p2s));

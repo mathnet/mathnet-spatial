@@ -124,10 +124,12 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Returns the straight line Distance to the given point.
+        /// Returns the perpendicular distance from the given point to the infinite line through
+        /// <see cref="StartPoint"/> and <see cref="EndPoint"/>. The result is never negative and
+        /// does not depend on the order of the two points.
         /// </summary>
         /// <param name="p">the given point</param>
-        /// <returns>a distance measure</returns>
+        /// <returns>The perpendicular distance from the point to the line</returns>
         [Pure]
         public double DistanceTo(Point2D p)
         {
