@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.Serialization;
 using MathNet.Spatial.Euclidean;
 using MathNet.Spatial.Units;
 using Newtonsoft.Json;
@@ -10,7 +13,6 @@ namespace MathNet.Spatial.Tests.Serialization
     {
         private const double Tolerance = 1e-6;
 
-        [Explicit("fix later")]
         [TestCase("15 °")]
         public void AngleJson(string vs)
         {
@@ -19,7 +21,6 @@ namespace MathNet.Spatial.Tests.Serialization
             Assert.AreEqual(angle.Radians, roundTrip.Radians, Tolerance);
         }
 
-        [Explicit("fix later")]
         [Test]
         public void Point2DJson()
         {
@@ -28,7 +29,6 @@ namespace MathNet.Spatial.Tests.Serialization
             Assert.AreEqual(p, result);
         }
 
-        [Explicit("fix later")]
         [Test]
         public void Point3DJson()
         {
@@ -37,7 +37,6 @@ namespace MathNet.Spatial.Tests.Serialization
             Assert.AreEqual(p, result);
         }
 
-        [Explicit("fix later")]
         [Test]
         public void QuaternionJson()
         {
@@ -55,7 +54,6 @@ namespace MathNet.Spatial.Tests.Serialization
             Assert.AreEqual(eulerAngles, result);
         }
 
-        [Explicit("fix later")]
         [TestCase("0, 0, 0", "0, 0, 1")]
         public void PlaneJson(string rootPoint, string unitVector)
         {
@@ -64,8 +62,7 @@ namespace MathNet.Spatial.Tests.Serialization
             Assert.AreEqual(plane, result);
         }
 
-        [Explicit("fix later")]
-        [TestCase("1, 2, 3", "-1, 2, 3", false)]
+        [TestCase("1, 2, 3", "-0.267261241912424, 0.534522483824849, 0.801783725737273", false)]
         public void Ray3DJson(string ps, string vs, bool asElements)
         {
             var ray = new Ray3D(Point3D.Parse(ps), UnitVector3D.Parse(vs));
@@ -74,7 +71,6 @@ namespace MathNet.Spatial.Tests.Serialization
             AssertGeometry.AreEqual(ray, result, 1e-6);
         }
 
-        [Explicit("fix later")]
         [TestCase("1, 2, 3", "4, 5, 6")]
         public void Line3DJson(string p1s, string p2s)
         {
@@ -85,7 +81,6 @@ namespace MathNet.Spatial.Tests.Serialization
             Assert.AreEqual(l, result);
         }
 
-        [Explicit("fix later")]
         [TestCase("1, 2", "4, 5")]
         public void Line2DJson(string p1s, string p2s)
         {
@@ -96,7 +91,6 @@ namespace MathNet.Spatial.Tests.Serialization
             Assert.AreEqual(l, result);
         }
 
-        [Explicit("fix later")]
         [TestCase("1, 2, 3", "4, 5, 6")]
         public void LineSegment3DJson(string p1s, string p2s)
         {
@@ -107,7 +101,6 @@ namespace MathNet.Spatial.Tests.Serialization
             Assert.AreEqual(l, result);
         }
 
-        [Explicit("fix later")]
         [TestCase("1, 2", "4, 5")]
         public void LineSegment2DJson(string p1s, string p2s)
         {
@@ -118,7 +111,6 @@ namespace MathNet.Spatial.Tests.Serialization
             Assert.AreEqual(l, result);
         }
 
-        [Explicit("fix later")]
         [Test]
         public void Vector2DJson()
         {
@@ -127,7 +119,6 @@ namespace MathNet.Spatial.Tests.Serialization
             Assert.AreEqual(v, result);
         }
 
-        [Explicit("fix later")]
         [Test]
         public void Vector3DJson()
         {
@@ -145,7 +136,6 @@ namespace MathNet.Spatial.Tests.Serialization
             Assert.AreEqual(c, result);
         }
 
-        [Explicit("fix later")]
         [TestCase("0, 0, 0", 2.5)]
         public void Circle3DJson(string point, double radius)
         {
@@ -155,7 +145,6 @@ namespace MathNet.Spatial.Tests.Serialization
             Assert.AreEqual(c, result);
         }
 
-        [Explicit("fix later")]
         [Test]
         public void Polygon2DJson()
         {
@@ -165,7 +154,6 @@ namespace MathNet.Spatial.Tests.Serialization
             Assert.AreEqual(p, result);
         }
 
-        [Explicit("fix later")]
         [Test]
         public void PolyLine2DJson()
         {
@@ -175,7 +163,6 @@ namespace MathNet.Spatial.Tests.Serialization
             Assert.AreEqual(p, result);
         }
 
-        [Explicit("fix later")]
         [Test]
         public void PolyLine3DJson()
         {
@@ -185,7 +172,6 @@ namespace MathNet.Spatial.Tests.Serialization
             Assert.AreEqual(p, result);
         }
 
-        [Explicit("fix later")]
         [Test]
         public void CoordinateSystemJson()
         {
@@ -194,10 +180,58 @@ namespace MathNet.Spatial.Tests.Serialization
             AssertGeometry.AreEqual(cs, result);
         }
 
+        [TestCase("{\"X\":NaN,\"Y\":0.0,\"Z\":0.0}")]
+        [TestCase("{\"X\":Infinity,\"Y\":0.0,\"Z\":0.0}")]
+        [TestCase("{\"X\":2.0,\"Y\":0.0,\"Z\":0.0}")]
+        public void UnitVector3DJsonRejectsInvalidComponents(string json)
+        {
+            Assert.Throws<SerializationException>(() => JsonConvert.DeserializeObject<UnitVector3D>(json));
+        }
+
+        [Test]
+        public void UnitVector3DJsonNormalizesNearUnitComponents()
+        {
+            var result = JsonConvert.DeserializeObject<UnitVector3D>("{\"X\":1.0005,\"Y\":0.0,\"Z\":0.0}");
+            Assert.AreEqual(UnitVector3D.XAxis, result);
+        }
+
+        [Test]
+        public void DerivedPolyLine2DJson()
+        {
+            var p = new NamedPolyLine2D(new[] { new Point2D(0, 0), new Point2D(1, 1) }, "path");
+            var result = this.JsonRoundTrip(p);
+            Assert.AreEqual(p, result);
+            Assert.AreEqual(p.Name, result.Name);
+        }
+
         private T JsonRoundTrip<T>(T test)
         {
             string output = JsonConvert.SerializeObject(test);
             return JsonConvert.DeserializeObject<T>(output);
+        }
+
+        [Serializable]
+        private class NamedPolyLine2D : PolyLine2D
+        {
+            public NamedPolyLine2D(IEnumerable<Point2D> points, string name)
+                : base(points)
+            {
+                Name = name;
+            }
+
+            protected NamedPolyLine2D(SerializationInfo info, StreamingContext context)
+                : base(info, context)
+            {
+                Name = info.GetString(nameof(Name));
+            }
+
+            public string Name { get; }
+
+            protected override void GetObjectData(SerializationInfo info, StreamingContext context)
+            {
+                base.GetObjectData(info, context);
+                info.AddValue(nameof(Name), Name);
+            }
         }
     }
 }

@@ -230,10 +230,16 @@ namespace MathNet.Spatial.Tests.Units
             Assert.AreEqual(expected, Angle.FromRadians(radians).Radians);
         }
 
-        [TestCase(20, 33, 49, 0.35890270667277291)]
+        [TestCase(20, 33, 49, 0.35890271998857842)]
+        [TestCase(0, 0, 0, 0)]
+        [TestCase(90, 0, 0, Math.PI / 2)]
+        [TestCase(0, 30, 0, 0.5 * DegToRad)]
+        [TestCase(0, 33, 0, 0.55 * DegToRad)]
+        [TestCase(10, 0, 36, 10.01 * DegToRad)]
         public void FromSexagesimal(int degrees, int minutes, double seconds, double expected)
         {
-            Assert.AreEqual(expected, Angle.FromSexagesimal(degrees, minutes, seconds).Radians);
+            // Tolerance is far below the ~1e-8 error from summing degrees and minutes in single precision
+            Assert.AreEqual(expected, Angle.FromSexagesimal(degrees, minutes, seconds).Radians, 1e-15);
         }
 
         [TestCase("5 °", 5 * DegToRad)]

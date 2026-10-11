@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
@@ -17,7 +18,7 @@ namespace MathNet.Spatial.Euclidean
     /// A geometric plane
     /// </summary>
     [Serializable]
-    public struct Plane : IEquatable<Plane>, IXmlSerializable
+    public struct Plane : IEquatable<Plane>, IXmlSerializable, ISerializable
     {
         /// <summary>
         /// The normal vector of the Plane.
@@ -542,6 +543,24 @@ namespace MathNet.Spatial.Euclidean
         {
             writer.WriteElement("RootPoint", RootPoint);
             writer.WriteElement("Normal", Normal);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Plane"/> struct from serialized data.
+        /// </summary>
+        /// <param name="info">The serialization info</param>
+        /// <param name="context">The streaming context</param>
+        private Plane(SerializationInfo info, StreamingContext context)
+        {
+            Normal = (UnitVector3D)info.GetValue(nameof(Normal), typeof(UnitVector3D));
+            D = info.GetDouble(nameof(D));
+        }
+
+        /// <inheritdoc />
+        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue(nameof(Normal), Normal);
+            info.AddValue(nameof(D), D);
         }
     }
 }

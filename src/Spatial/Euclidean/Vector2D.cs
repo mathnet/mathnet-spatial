@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
 using System.Globalization;
+using System.Runtime.Serialization;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
@@ -16,7 +17,7 @@ namespace MathNet.Spatial.Euclidean
     /// A struct representing a vector in 2D space
     /// </summary>
     [Serializable]
-    public struct Vector2D : IXmlSerializable, IEquatable<Vector2D>, IFormattable
+    public struct Vector2D : IXmlSerializable, IEquatable<Vector2D>, IFormattable, ISerializable
     {
         /// <summary>
         /// The x component.
@@ -595,6 +596,23 @@ namespace MathNet.Spatial.Euclidean
         {
             writer.WriteElement("X", X, "G17");
             writer.WriteElement("Y", Y, "G17");
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Vector2D"/> struct from serialized data.
+        /// </summary>
+        /// <param name="info">The serialization info</param>
+        /// <param name="context">The streaming context</param>
+        private Vector2D(SerializationInfo info, StreamingContext context)
+            : this(info.GetDouble(nameof(X)), info.GetDouble(nameof(Y)))
+        {
+        }
+
+        /// <inheritdoc />
+        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue(nameof(X), X);
+            info.AddValue(nameof(Y), Y);
         }
     }
 }

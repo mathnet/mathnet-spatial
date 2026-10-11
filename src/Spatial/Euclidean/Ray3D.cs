@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics.Contracts;
 using System.Globalization;
+using System.Runtime.Serialization;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
@@ -14,7 +15,7 @@ namespace MathNet.Spatial.Euclidean
     /// A ray in 3D space
     /// </summary>
     [Serializable]
-    public struct Ray3D : IEquatable<Ray3D>, IXmlSerializable, IFormattable
+    public struct Ray3D : IEquatable<Ray3D>, IXmlSerializable, IFormattable, ISerializable
     {
         /// <summary>
         /// The start point of the ray
@@ -192,6 +193,23 @@ namespace MathNet.Spatial.Euclidean
         {
             writer.WriteElement("ThroughPoint", ThroughPoint);
             writer.WriteElement("Direction", Direction);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Ray3D"/> struct from serialized data.
+        /// </summary>
+        /// <param name="info">The serialization info</param>
+        /// <param name="context">The streaming context</param>
+        private Ray3D(SerializationInfo info, StreamingContext context)
+            : this((Point3D)info.GetValue(nameof(ThroughPoint), typeof(Point3D)), (UnitVector3D)info.GetValue(nameof(Direction), typeof(UnitVector3D)))
+        {
+        }
+
+        /// <inheritdoc />
+        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue(nameof(ThroughPoint), ThroughPoint);
+            info.AddValue(nameof(Direction), Direction);
         }
     }
 }
