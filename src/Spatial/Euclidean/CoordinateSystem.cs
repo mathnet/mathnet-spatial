@@ -344,11 +344,13 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Creates a rotating coordinate system
+        /// Returns a copy of a coordinate system with its rotation part replaced.
+        /// The given coordinate system is not modified.
         /// </summary>
-        /// <param name="r">A 3�3 matrix with the rotation portion</param>
-        /// <param name="coordinateSystem">A rotated coordinate system</param>
-        /// <returns>A rotating coordinate system</returns>
+        /// <param name="r">A 3x3 matrix with the rotation portion</param>
+        /// <param name="coordinateSystem">The coordinate system to copy</param>
+        /// <returns>A new coordinate system with the rotation portion <paramref name="r"/></returns>
+        [Pure]
         public static CoordinateSystem SetRotationSubMatrix(Matrix<double> r, CoordinateSystem coordinateSystem)
         {
             if (r.RowCount != 3 || r.ColumnCount != 3)
@@ -476,20 +478,24 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Creates a rotation submatrix
+        /// Returns a copy of this coordinate system with its rotation part replaced.
+        /// This coordinate system is not modified.
         /// </summary>
-        /// <param name="r">a matrix</param>
-        /// <returns>a coordinate system</returns>
+        /// <param name="r">A 3x3 matrix with the rotation portion</param>
+        /// <returns>A new coordinate system with the rotation portion <paramref name="r"/></returns>
+        [Pure]
         public CoordinateSystem SetRotationSubMatrix(Matrix<double> r)
         {
             return SetRotationSubMatrix(r, this);
         }
 
         /// <summary>
-        /// Returns a translation coordinate system
+        /// Returns a copy of this coordinate system with its origin moved to <paramref name="v"/>.
+        /// This coordinate system is not modified.
         /// </summary>
-        /// <param name="v">a vector</param>
-        /// <returns>a coordinate system</returns>
+        /// <param name="v">The position vector of the new origin</param>
+        /// <returns>A new coordinate system</returns>
+        [Pure]
         public CoordinateSystem SetTranslation(Vector3D v)
         {
             return new CoordinateSystem(v.ToPoint3D(), XAxis, YAxis, ZAxis);
