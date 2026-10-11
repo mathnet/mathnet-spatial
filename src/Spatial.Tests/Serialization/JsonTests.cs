@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.Serialization;
 using MathNet.Spatial.Euclidean;
 using MathNet.Spatial.Units;
 using Newtonsoft.Json;
@@ -177,10 +180,58 @@ namespace MathNet.Spatial.Tests.Serialization
             AssertGeometry.AreEqual(cs, result);
         }
 
+        [TestCase("{\"X\":NaN,\"Y\":0.0,\"Z\":0.0}")]
+        [TestCase("{\"X\":Infinity,\"Y\":0.0,\"Z\":0.0}")]
+        [TestCase("{\"X\":2.0,\"Y\":0.0,\"Z\":0.0}")]
+        public void UnitVector3DJsonRejectsInvalidComponents(string json)
+        {
+            Assert.Throws<SerializationException>(() => JsonConvert.DeserializeObject<UnitVector3D>(json));
+        }
+
+        [Test]
+        public void UnitVector3DJsonNormalizesNearUnitComponents()
+        {
+            var result = JsonConvert.DeserializeObject<UnitVector3D>("{\"X\":1.0005,\"Y\":0.0,\"Z\":0.0}");
+            Assert.AreEqual(UnitVector3D.XAxis, result);
+        }
+
+        [Test]
+        public void DerivedPolyLine2DJson()
+        {
+            var p = new NamedPolyLine2D(new[] { new Point2D(0, 0), new Point2D(1, 1) }, "path");
+            var result = this.JsonRoundTrip(p);
+            Assert.AreEqual(p, result);
+            Assert.AreEqual(p.Name, result.Name);
+        }
+
         private T JsonRoundTrip<T>(T test)
         {
             string output = JsonConvert.SerializeObject(test);
             return JsonConvert.DeserializeObject<T>(output);
+        }
+
+        [Serializable]
+        private class NamedPolyLine2D : PolyLine2D
+        {
+            public NamedPolyLine2D(IEnumerable<Point2D> points, string name)
+                : base(points)
+            {
+                Name = name;
+            }
+
+            protected NamedPolyLine2D(SerializationInfo info, StreamingContext context)
+                : base(info, context)
+            {
+                Name = info.GetString(nameof(Name));
+            }
+
+            public string Name { get; }
+
+            protected override void GetObjectData(SerializationInfo info, StreamingContext context)
+            {
+                base.GetObjectData(info, context);
+                info.AddValue(nameof(Name), Name);
+            }
         }
     }
 }

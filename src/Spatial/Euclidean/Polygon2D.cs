@@ -382,16 +382,25 @@ namespace MathNet.Spatial.Euclidean
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Polygon2D"/> class from serialized data.
+        /// Derived classes that are serializable must provide a constructor with the same signature that calls this one.
         /// </summary>
         /// <param name="info">The serialization info</param>
         /// <param name="context">The streaming context</param>
-        private Polygon2D(SerializationInfo info, StreamingContext context)
+        protected Polygon2D(SerializationInfo info, StreamingContext context)
             : this((Point2D[])info.GetValue(nameof(Vertices), typeof(Point2D[])))
         {
         }
 
         /// <inheritdoc />
-        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
+        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context) => GetObjectData(info, context);
+
+        /// <summary>
+        /// Populates a <see cref="SerializationInfo"/> with the data needed to serialize this instance.
+        /// Derived classes that add state should override this and call the base implementation.
+        /// </summary>
+        /// <param name="info">The serialization info</param>
+        /// <param name="context">The streaming context</param>
+        protected virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue(nameof(Vertices), _points.ToArray());
         }

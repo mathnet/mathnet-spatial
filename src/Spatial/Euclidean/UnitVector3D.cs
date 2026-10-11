@@ -885,13 +885,28 @@ namespace MathNet.Spatial.Euclidean
         /// <param name="context">The streaming context</param>
         private UnitVector3D(SerializationInfo info, StreamingContext context)
         {
-            X = info.GetDouble(nameof(X));
-            Y = info.GetDouble(nameof(Y));
-            Z = info.GetDouble(nameof(Z));
-            if (Math.Abs(Math.Sqrt((X * X) + (Y * Y) + (Z * Z)) - 1) > 1E-3)
+            var x = info.GetDouble(nameof(X));
+            var y = info.GetDouble(nameof(Y));
+            var z = info.GetDouble(nameof(Z));
+            var norm = Math.Sqrt((x * x) + (y * y) + (z * z));
+
+            // NaN fails every comparison, so test for the valid range rather than the invalid one
+            if (!(Math.Abs(norm - 1) <= 1E-3))
             {
                 throw new SerializationException($"Could not read a {nameof(UnitVector3D)}, the vector is not of unit length");
             }
+
+            // Keep components that are already unit length up to rounding as they are, so a round trip is exact
+            if (Math.Abs(norm - 1) > 1E-15)
+            {
+                x /= norm;
+                y /= norm;
+                z /= norm;
+            }
+
+            X = x;
+            Y = y;
+            Z = z;
         }
 
         /// <inheritdoc />
