@@ -95,7 +95,7 @@ namespace MathNet.Spatial.Tests.Euclidean
             Assert.AreEqual(outcome, testPoly.EnclosesPoint(testPoint));
         }
 
-        // These test cases were generated using scipy.spatial's ConvexHull method
+        // These counter-clockwise test cases were generated using scipy.spatial's ConvexHull method
         [TestCase("0.27,0.41;0.87,0.67;0.7,0.33;0.5,0.61;0.04,0.23;0.73,0.14;0.84,0.02;0.25,0.23;0.12,0.2;0.37,0.78", "0.87,0.67;0.37,0.78;0.04,0.23;0.12,0.2;0.84,0.02")]
         [TestCase("0.81,0.25;0.77,0.15;0.17,0.48;0.4,0.58;0.29,0.92;0.37,0.26;0.7,0.91;0.04,0.1;0.39,0.73;0.7,0.12", "0.7,0.91;0.29,0.92;0.04,0.1;0.7,0.12;0.77,0.15;0.81,0.25")]
         [TestCase("0.87,0.39;0.83,0.42;0.75,0.62;0.91,0.49;0.18,0.63;0.17,0.95;0.22,0.5;0.93,0.41;0.66,0.79;0.32,0.42", "0.66,0.79;0.17,0.95;0.18,0.63;0.22,0.5;0.32,0.42;0.87,0.39;0.93,0.41;0.91,0.49")]
@@ -107,27 +107,19 @@ namespace MathNet.Spatial.Tests.Euclidean
             var testPoints = (from x in points.Split(';') select Point2D.Parse(x)).ToList();
             var expectedPoints = (from x in expected.Split(';') select Point2D.Parse(x)).ToList();
 
-            var hullClockwise = Polygon2D.GetConvexHullFromPoints(testPoints, true);
-
-            var clockwiseVertices = hullClockwise.Vertices;
-            CollectionAssert.AreEqual(expectedPoints, clockwiseVertices);
-            /*
-            for (var i = 0; i < hullClockwise.VertexCount; i++)
-            {
-                Assert.That(ClockwiseVerticies[i], Is.EqualTo(expectedPoints[i]));
-            }
-            */
-
             var hullCounterClockwise = Polygon2D.GetConvexHullFromPoints(testPoints, false);
             var counterClockwiseVertices = hullCounterClockwise.Vertices;
-            expectedPoints.Reverse();
             CollectionAssert.AreEqual(expectedPoints, counterClockwiseVertices);
-            /*
-            for (var i = 0; i < hullCounterClockwise.VertexCount; i++)
-            {
-                Assert.That(counterClockwiseVerticies[i], Is.EqualTo(expectedPoints[hullCounterClockwise.VertexCount - 1 - i]));
-            }
-            */
+            Assert.That(SignedArea(hullCounterClockwise), Is.GreaterThan(0));
+
+            var hullClockwise = Polygon2D.GetConvexHullFromPoints(testPoints, true);
+            var clockwiseVertices = hullClockwise.Vertices;
+            expectedPoints.Reverse();
+            CollectionAssert.AreEqual(expectedPoints, clockwiseVertices);
+            Assert.That(SignedArea(hullClockwise), Is.LessThan(0));
+
+            var defaultHull = Polygon2D.GetConvexHullFromPoints(testPoints);
+            CollectionAssert.AreEqual(clockwiseVertices, defaultHull.Vertices);
 
             var pointsNotOnConvexHull = testPoints.Except(hullCounterClockwise.Vertices);
             foreach (var pointNotOnConvexHull in pointsNotOnConvexHull)
@@ -148,6 +140,28 @@ namespace MathNet.Spatial.Tests.Euclidean
             }
         }
 
+        [Test]
+        public void ConvexHullHonorsDirectionForTriangle()
+        {
+            var points = new[]
+            {
+                new Point2D(0, 0),
+                new Point2D(1, 0),
+                new Point2D(0, 1)
+            };
+
+            var defaultHull = Polygon2D.GetConvexHullFromPoints(points);
+            var clockwiseHull = Polygon2D.GetConvexHullFromPoints(points, true);
+            var counterClockwiseHull = Polygon2D.GetConvexHullFromPoints(points, false);
+
+            CollectionAssert.AreEquivalent(points, defaultHull.Vertices);
+            CollectionAssert.AreEquivalent(points, clockwiseHull.Vertices);
+            CollectionAssert.AreEquivalent(points, counterClockwiseHull.Vertices);
+            Assert.That(SignedArea(defaultHull), Is.LessThan(0));
+            Assert.That(SignedArea(clockwiseHull), Is.LessThan(0));
+            Assert.That(SignedArea(counterClockwiseHull), Is.GreaterThan(0));
+        }
+
         [TestCase("0,0;0.4,0;0.5,0;0.6,0;1,0;1,.25;1,.75;1,1;0,1;0,0.5", "1,0;1,1;0,1;0,0")]
         public void ReduceComplexity(string points, string reduced)
         {
@@ -164,6 +178,20 @@ namespace MathNet.Spatial.Tests.Euclidean
         {
             var points = from x in new[] { "0,0", "0.25,0.5", "1,1", "-1,1", "0.5,-0.5" } select Point2D.Parse(x);
             return new Polygon2D(points);
+        }
+
+        private static double SignedArea(Polygon2D polygon)
+        {
+            var vertices = polygon.Vertices.ToList();
+            double twiceArea = 0;
+            for (var i = 0; i < vertices.Count; i++)
+            {
+                var current = vertices[i];
+                var next = vertices[(i + 1) % vertices.Count];
+                twiceArea += (current.X * next.Y) - (next.X * current.Y);
+            }
+
+            return twiceArea / 2;
         }
 
         private static Polygon2D TestPolygon2()
