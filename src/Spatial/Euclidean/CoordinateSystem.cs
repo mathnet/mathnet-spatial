@@ -154,18 +154,10 @@ namespace MathNet.Spatial.Euclidean
         public Vector3D OffsetToBase => Origin.ToVector3D();
 
         /// <summary>
-        /// Gets the base change matrix
+        /// Gets the base change matrix, which maps coordinates expressed in the parent coordinate system
+        /// to coordinates expressed in this coordinate system. It is the inverse of this coordinate system.
         /// </summary>
-        public CoordinateSystem BaseChangeMatrix
-        {
-            get
-            {
-                var matrix = Build.DenseOfColumnVectors(XAxis.ToVector(), YAxis.ToVector(), ZAxis.ToVector());
-                var cs = new CoordinateSystem(this);
-                cs.SetRotationSubMatrix(matrix.Transpose());
-                return cs;
-            }
-        }
+        public CoordinateSystem BaseChangeMatrix => Invert();
 
         /// <summary>
         /// Returns a value that indicates whether each pair of elements in two specified coordinate system is equal.
@@ -256,7 +248,7 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>A rotated coordinate system</returns>
         public static CoordinateSystem Rotation(Angle yaw, Angle pitch, Angle roll)
         {
-            var cs = new CoordinateSystem(); 
+            var cs = new CoordinateSystem();
             var cosY = yaw.Cos;
             var sinY = yaw.Sin;
             var cosP = pitch.Cos;
@@ -276,7 +268,7 @@ namespace MathNet.Spatial.Euclidean
             cs[1, 2] = sinY * sinP * cosR - cosY * sinR;
             cs[2, 2] = cosP * cosR;
 
-            return cs; 
+            return cs;
         }
         /// <summary>
         /// Rotates around Z
@@ -352,11 +344,13 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Creates a rotating coordinate system
+        /// Returns a copy of a coordinate system with its rotation part replaced.
+        /// The given coordinate system is not modified.
         /// </summary>
-        /// <param name="r">A 3×3 matrix with the rotation portion</param>
-        /// <param name="coordinateSystem">A rotated coordinate system</param>
-        /// <returns>A rotating coordinate system</returns>
+        /// <param name="r">A 3x3 matrix with the rotation portion</param>
+        /// <param name="coordinateSystem">The coordinate system to copy</param>
+        /// <returns>A new coordinate system with the rotation portion <paramref name="r"/></returns>
+        [Pure]
         public static CoordinateSystem SetRotationSubMatrix(Matrix<double> r, CoordinateSystem coordinateSystem)
         {
             if (r.RowCount != 3 || r.ColumnCount != 3)
@@ -444,76 +438,64 @@ namespace MathNet.Spatial.Euclidean
         }
 
         /// <summary>
-        /// Transforms a ray according to this change matrix
+        /// Given a ray expressed in the parent coordinate system, returns the same ray expressed in this coordinate system
         /// </summary>
-        /// <param name="r">a ray</param>
-        /// <returns>a transformed ray</returns>
+        /// <param name="r">a ray expressed in the parent coordinate system</param>
+        /// <returns>the ray expressed in this coordinate system</returns>
         public Ray3D TransformToCoordSys(Ray3D r)
         {
-            var p = r.ThroughPoint;
-            var uv = r.Direction;
-
-            // The position and the vector are transformed
-            var baseChangeMatrix = BaseChangeMatrix;
-            var point = baseChangeMatrix.Transform(p) + OffsetToBase;
-            var direction = uv.TransformBy(baseChangeMatrix);
-            return new Ray3D(point, direction);
+            return BaseChangeMatrix.Transform(r);
         }
 
         /// <summary>
-        /// Transforms a point according to this change matrix
+        /// Given a point expressed in the parent coordinate system, returns the same point expressed in this coordinate system
         /// </summary>
-        /// <param name="p">a point</param>
-        /// <returns>a transformed point</returns>
+        /// <param name="p">a point expressed in the parent coordinate system</param>
+        /// <returns>the point expressed in this coordinate system</returns>
         public Point3D TransformToCoordSys(Point3D p)
         {
-            var baseChangeMatrix = BaseChangeMatrix;
-            var point = baseChangeMatrix.Transform(p) + OffsetToBase;
-            return point;
+            return BaseChangeMatrix.Transform(p);
         }
 
         /// <summary>
-        /// Transforms a ray according to the inverse of this change matrix
+        /// Given a ray expressed in this coordinate system, returns the same ray expressed in the parent coordinate system
         /// </summary>
-        /// <param name="r">a ray</param>
-        /// <returns>a transformed ray</returns>
+        /// <param name="r">a ray expressed in this coordinate system</param>
+        /// <returns>the ray expressed in the parent coordinate system</returns>
         public Ray3D TransformFromCoordSys(Ray3D r)
         {
-            var p = r.ThroughPoint;
-            var uv = r.Direction;
-
-            // The position and the vector are transformed
-            var point = BaseChangeMatrix.Invert().Transform(p) + OffsetToBase;
-            var direction = BaseChangeMatrix.Invert().Transform(uv);
-            return new Ray3D(point, direction);
+            return Transform(r);
         }
 
         /// <summary>
-        /// Transforms a point according to the inverse of this change matrix
+        /// Given a point expressed in this coordinate system, returns the same point expressed in the parent coordinate system
         /// </summary>
-        /// <param name="p">a point</param>
-        /// <returns>a transformed point</returns>
+        /// <param name="p">a point expressed in this coordinate system</param>
+        /// <returns>the point expressed in the parent coordinate system</returns>
         public Point3D TransformFromCoordSys(Point3D p)
         {
-            var point = BaseChangeMatrix.Invert().Transform(p) + OffsetToBase;
-            return point;
+            return Transform(p);
         }
 
         /// <summary>
-        /// Creates a rotation submatrix
+        /// Returns a copy of this coordinate system with its rotation part replaced.
+        /// This coordinate system is not modified.
         /// </summary>
-        /// <param name="r">a matrix</param>
-        /// <returns>a coordinate system</returns>
+        /// <param name="r">A 3x3 matrix with the rotation portion</param>
+        /// <returns>A new coordinate system with the rotation portion <paramref name="r"/></returns>
+        [Pure]
         public CoordinateSystem SetRotationSubMatrix(Matrix<double> r)
         {
             return SetRotationSubMatrix(r, this);
         }
 
         /// <summary>
-        /// Returns a translation coordinate system
+        /// Returns a copy of this coordinate system with its origin moved to <paramref name="v"/>.
+        /// This coordinate system is not modified.
         /// </summary>
-        /// <param name="v">a vector</param>
-        /// <returns>a coordinate system</returns>
+        /// <param name="v">The position vector of the new origin</param>
+        /// <returns>A new coordinate system</returns>
+        [Pure]
         public CoordinateSystem SetTranslation(Vector3D v)
         {
             return new CoordinateSystem(v.ToPoint3D(), XAxis, YAxis, ZAxis);
