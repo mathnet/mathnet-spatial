@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Xml.Linq;
 using System.Xml.Schema;
 using System.Xml;
@@ -17,7 +18,7 @@ namespace MathNet.Spatial.Euclidean
     /// stored as a sequential list of 2D points.
     /// </summary>
     [Serializable]
-    public class PolyLine2D : IEquatable<PolyLine2D>, IXmlSerializable
+    public class PolyLine2D : IEquatable<PolyLine2D>, IXmlSerializable, ISerializable
     {
         /// <summary>
         /// Internal storage for the points
@@ -349,6 +350,31 @@ namespace MathNet.Spatial.Euclidean
                 writer.WriteElement("Point", point);
             }
             writer.WriteEndElement();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PolyLine2D"/> class from serialized data.
+        /// Derived classes that are serializable must provide a constructor with the same signature that calls this one.
+        /// </summary>
+        /// <param name="info">The serialization info</param>
+        /// <param name="context">The streaming context</param>
+        protected PolyLine2D(SerializationInfo info, StreamingContext context)
+            : this((Point2D[])info.GetValue(nameof(Vertices), typeof(Point2D[])))
+        {
+        }
+
+        /// <inheritdoc />
+        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context) => GetObjectData(info, context);
+
+        /// <summary>
+        /// Populates a <see cref="SerializationInfo"/> with the data needed to serialize this instance.
+        /// Derived classes that add state should override this and call the base implementation.
+        /// </summary>
+        /// <param name="info">The serialization info</param>
+        /// <param name="context">The streaming context</param>
+        protected virtual void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue(nameof(Vertices), _points.ToArray());
         }
     }
 }

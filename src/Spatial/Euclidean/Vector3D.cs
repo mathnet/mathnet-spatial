@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics.Contracts;
 using System.Globalization;
+using System.Runtime.Serialization;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
@@ -15,7 +16,7 @@ namespace MathNet.Spatial.Euclidean
     /// A struct representing a vector in 3D space
     /// </summary>
     [Serializable]
-    public struct Vector3D : IXmlSerializable, IEquatable<Vector3D>, IEquatable<UnitVector3D>, IFormattable
+    public struct Vector3D : IXmlSerializable, IEquatable<Vector3D>, IEquatable<UnitVector3D>, IFormattable, ISerializable
     {
         /// <summary>
         /// The x component.
@@ -691,6 +692,24 @@ namespace MathNet.Spatial.Euclidean
             writer.WriteElement("X", this.X, "G17");
             writer.WriteElement("Y", this.Y, "G17");
             writer.WriteElement("Z", this.Z, "G17");
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Vector3D"/> struct from serialized data.
+        /// </summary>
+        /// <param name="info">The serialization info</param>
+        /// <param name="context">The streaming context</param>
+        private Vector3D(SerializationInfo info, StreamingContext context)
+            : this(info.GetDouble(nameof(X)), info.GetDouble(nameof(Y)), info.GetDouble(nameof(Z)))
+        {
+        }
+
+        /// <inheritdoc />
+        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue(nameof(X), X);
+            info.AddValue(nameof(Y), Y);
+            info.AddValue(nameof(Z), Z);
         }
     }
 }
