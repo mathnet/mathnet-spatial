@@ -68,5 +68,23 @@ namespace MathNet.Spatial.Tests.Euclidean
 
             AssertGeometry.AreEqual(expected, testCurve.ClosestPointTo(test), 1e-06);
         }
+
+        [Test]
+        public void EqualityOperatorsHandleNull()
+        {
+            PolyLine3D nothing = null;
+            PolyLine3D other = new PolyLine3D(new[] { new Point3D(0, 0, 0), new Point3D(1, 1, 1) });
+
+            Assert.IsTrue(nothing == null);
+            Assert.IsTrue(null == nothing);
+            Assert.IsFalse(nothing != null);
+            Assert.IsFalse(null != nothing);
+            Assert.IsFalse(nothing == other);
+            Assert.IsFalse(other == nothing);
+            Assert.IsTrue(nothing != other);
+            Assert.IsTrue(other != nothing);
+            Assert.IsFalse(other == null);
+            Assert.IsTrue(other != null);
+        }
     }
 }
