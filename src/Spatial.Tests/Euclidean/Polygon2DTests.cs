@@ -183,5 +183,23 @@ namespace MathNet.Spatial.Tests.Euclidean
             var points = from x in new[] { "0.5,1", "1,-1", "0.25,0" } select Point2D.Parse(x);
             return new Polygon2D(points);
         }
+
+        [Test]
+        public void EqualityOperatorsHandleNull()
+        {
+            Polygon2D nothing = null;
+            Polygon2D other = new Polygon2D(new[] { new Point2D(0, 0), new Point2D(1, 0), new Point2D(1, 1) });
+
+            Assert.IsTrue(nothing == null);
+            Assert.IsTrue(null == nothing);
+            Assert.IsFalse(nothing != null);
+            Assert.IsFalse(null != nothing);
+            Assert.IsFalse(nothing == other);
+            Assert.IsFalse(other == nothing);
+            Assert.IsTrue(nothing != other);
+            Assert.IsTrue(other != nothing);
+            Assert.IsFalse(other == null);
+            Assert.IsTrue(other != null);
+        }
     }
 }

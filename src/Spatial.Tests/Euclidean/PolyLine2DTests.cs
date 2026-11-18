@@ -68,5 +68,23 @@ namespace MathNet.Spatial.Tests.Euclidean
 
             Assert.AreEqual(expected, testCurve.ClosestPointTo(test));
         }
+
+        [Test]
+        public void EqualityOperatorsHandleNull()
+        {
+            PolyLine2D nothing = null;
+            PolyLine2D other = new PolyLine2D(new[] { new Point2D(0, 0), new Point2D(1, 1) });
+
+            Assert.IsTrue(nothing == null);
+            Assert.IsTrue(null == nothing);
+            Assert.IsFalse(nothing != null);
+            Assert.IsFalse(null != nothing);
+            Assert.IsFalse(nothing == other);
+            Assert.IsFalse(other == nothing);
+            Assert.IsTrue(nothing != other);
+            Assert.IsTrue(other != nothing);
+            Assert.IsFalse(other == null);
+            Assert.IsTrue(other != null);
+        }
     }
 }

@@ -64,7 +64,7 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>True if the lines are the same; otherwise false.</returns>
         public static bool operator ==(PolyLine3D left, PolyLine3D right)
         {
-            return left?.Equals(right) == true;
+            return ReferenceEquals(left, right) || (!ReferenceEquals(left, null) && left.Equals(right));
         }
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace MathNet.Spatial.Euclidean
         /// <returns>True if the lines are different; otherwise false.</returns>
         public static bool operator !=(PolyLine3D left, PolyLine3D right)
         {
-            return left?.Equals(right) != true;
+            return !(ReferenceEquals(left, right) || (!ReferenceEquals(left, null) && left.Equals(right)));
         }
 
         /// <summary>
